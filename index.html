@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Smart Class</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { 
+    margin: 0; 
+    font-family: 'Open Sans', sans-serif; 
+    background: #CFF5E4;
+    color: #1a1d2b; 
+    min-height: 100vh; 
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 70px 24px 30px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .hero-kicker {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    color: #a78bfa;
+    background: rgba(167,139,250,0.12);
+    padding: 6px 14px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    margin: 0 0 16px;
+    color: #1a1d2b;
+    line-height: 1.1;
+  }
+  .subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: #4a4f5e;
+    max-width: 540px;
+    margin: 0 auto 12px;
+  }
+  .subtitle b { color: #1a1d2b; font-weight: 700; }
+  
+  .cezanne-block {
+    margin: 28px auto 24px;
+    padding: 22px 28px 20px;
+    max-width: 540px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 12px;
+    border-left: 3px solid #c8a96e;
+    text-align: left;
+  }
+  .cezanne-quote {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1d2b;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .cezanne-attribution {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #c8a96e;
+    margin-bottom: 12px;
+  }
+  .cezanne-gloss {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #4a4f5e;
+    line-height: 1.6;
+  }
+  
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 26px;
+  }
+  .tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 13px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 18px;
+    color: #4a4f5e;
+  }
+  
+  .lessons-section {
+    max-width: 1140px;
+    margin: 30px auto 70px;
+    padding: 0 24px;
+  }
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: #a78bfa;
+    margin-bottom: 18px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 22px;
+  }
+  
+  .lesson-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 0;
+    text-decoration: none;
+    color: #1a1d2b;
+    position: relative;
+    transition: all 0.3s;
+    border: 1px solid rgba(0,0,0,0.05);
+    display: block;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(26,29,43,0.12);
+  }
+  
+  .lesson-card-visual {
+    position: relative;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FBF0C7 0%, #F0E4A8 100%);
+  }
+  .lesson-card.lesson-2 .lesson-card-visual {
+    background: linear-gradient(135deg, #E8E4FF 0%, #D5CEFB 100%);
+  }
+  .lesson-card.lesson-3 .lesson-card-visual {
+    background: linear-gradient(135deg, #DCEFFF 0%, #B8DBFF 100%);
+  }
+  .lesson-card.lesson-4 .lesson-card-visual {
+    background: linear-gradient(135deg, #FFE4E4 0%, #FFC9C9 100%);
+  }
+  
+  .lesson-icon {
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(26,29,43,0.85);
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+  }
+  
+  .lesson-status {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.95);
+  }
+  .lesson-status.free { color: #1d9e75; }
+  .lesson-status.members { color: #c8a96e; }
+  .lesson-status.coming { color: #4a4f5e; opacity: 0.7; }
+  
+  .lesson-card-body {
+    padding: 22px 22px 20px;
+  }
+  
+  .lesson-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
+    color: #a78bfa;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  
+  .lesson-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: #1a1d2b;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  
+  .lesson-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #4a4f5e;
+    margin-bottom: 16px;
+  }
+  
+  .lesson-badge-box {
+    background: #E8FBF0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #1d9e75;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  
+  .lesson-meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #8a8f9c;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  
+  .lesson-cta {
+    display: block;
+    width: 100%;
+    padding: 14px 18px;
+    background: #1a1d2b;
+    color: #fff;
+    border-radius: 30px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .lesson-card:hover .lesson-cta {
+    background: #2a2f42;
+    transform: scale(1.02);
+  }
+  .lesson-card.lesson-2 .lesson-cta {
+    background: #67e8f9;
+    color: #1a1d2b;
+  }
+  .lesson-card.lesson-2:hover .lesson-cta {
+    background: #4dd5e8;
+  }
+  
+  .lesson-card.coming-soon {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .lesson-card.coming-soon:hover {
+    transform: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .lesson-card.coming-soon .lesson-card-visual {
+    background: linear-gradient(135deg, #f0f0f0 0%, #d8d8d8 100%);
+  }
+  .lesson-card.coming-soon .lesson-cta {
+    background: #c0c0c0;
+    color: #fff;
+    cursor: default;
+  }
+  .lesson-card.coming-soon:hover .lesson-cta {
+    background: #c0c0c0;
+    transform: none;
+  }
+  
+  .footer {
+    background: #fff;
+    text-align: center;
+    padding: 36px 24px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .footer-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    color: #8a8f9c;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: #4a4f5e;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: #a78bfa; }
+  
+  @media (max-width: 600px) {
+    h1 { font-size: 34px; }
+    .hero { padding: 50px 20px 24px; }
+    .lesson-icon { font-size: 60px; }
+    .lesson-card-visual { height: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-kicker">FEI TEAMART · SMART CLASS</div>
+  <h1>Foundation of Sketch A</h1>
+  <p class="subtitle">
+    An honest skill training in the academic tradition of drawing. <b>Ten lessons</b> — sphere, cube, cylinder, and the basic forms that shape almost everything we draw.
+  </p>
+  <p class="subtitle" style="font-size: 14px; opacity: 0.85; margin-top: 8px;">
+    No promises beyond what training can give. Taste, vision, voice — those are yours to find.
+  </p>
+  
+  <div class="cezanne-block">
+    <div class="cezanne-quote">"Treat nature by means of the cylinder, the sphere, the cone."</div>
+    <div class="cezanne-attribution">— Cézanne, 1904</div>
+    <div class="cezanne-gloss">This series follows that idea. It's not a method. It's a tool. What you do with it — that's yours.</div>
+  </div>
+  
+  <div class="tag-row">
+    <span class="tag">📐 Skill training</span>
+    <span class="tag">💭 Critical thinking</span>
+    <span class="tag">🎨 LFC moments</span>
+    <span class="tag">🏆 Earn badges</span>
+  </div>
+</div>
+
+<div class="lessons-section">
+  <div class="section-label">✨ Available now</div>
+  
+  <div class="lesson-grid">
+    
+    <a href="lessons/lesson-1-sphere/" class="lesson-card lesson-1">
+      <div class="lesson-card-visual">
+        <div class="lesson-status free">Free</div>
+        <div class="lesson-icon">●</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 1</div>
+        <div class="lesson-title">The Sphere</div>
+        <div class="lesson-desc">Building form with value. The first foundation — how light wraps a curved surface, and how to draw it.</div>
+        <div class="lesson-badge-box">🏆 Earn badge: Sphere Master</div>
+        <div class="lesson-meta">
+          <span>⏱ ~45 min</span>
+          <span>·</span>
+          <span>🎨 2 LFC moments</span>
+        </div>
+        <div class="lesson-cta">Start lesson →</div>
+      </div>
+    </a>
+    
+    <a href="lessons/lesson-2-cube/" class="lesson-card lesson-2">
+      <div class="lesson-card-visual">
+        <div class="lesson-status members">Members</div>
+        <div class="lesson-icon">◼</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 2</div>
+        <div class="lesson-title">The Cube</div>
+        <div class="lesson-desc">Constructing form with perspective. Edges, planes, and the architecture of seeing.</div>
+        <div class="lesson-badge-box">🏆 Earn badge: Cube Architect</div>
+        <div class="lesson-meta">
+          <span>⏱ ~60 min</span>
+          <span>·</span>
+          <span>🎨 3 LFC moments</span>
+        </div>
+        <div class="lesson-cta">Preview lesson →</div>
+      </div>
+    </a>
+    
+  </div>
+  
+  <div class="section-label" style="margin-top: 60px;">⏭ Coming next</div>
+  
+  <div class="lesson-grid">
+    
+    <div class="lesson-card lesson-3 coming-soon">
+      <div class="lesson-card-visual">
+        <div class="lesson-status coming">Soon</div>
+        <div class="lesson-icon">⬭</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 3</div>
+        <div class="lesson-title">The Cylinder</div>
+        <div class="lesson-desc">Where curved meets straight. Round AND edged at once — light behaves in two directions.</div>
+        <div class="lesson-meta">
+          <span>Léger · Sheeler · Cragg</span>
+        </div>
+        <div class="lesson-cta">In development</div>
+      </div>
+    </div>
+    
+    <div class="lesson-card lesson-4 coming-soon">
+      <div class="lesson-card-visual">
+        <div class="lesson-status coming">Soon</div>
+        <div class="lesson-icon">▲</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 4</div>
+        <div class="lesson-title">The Pyramid</div>
+        <div class="lesson-desc">The form of monuments and tension. Three planes that all meet at one point.</div>
+        <div class="lesson-meta">
+          <span>+ 6 more lessons coming</span>
+        </div>
+        <div class="lesson-cta">In development</div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">FEI TeamArt · Burnaby BC · 2026</div>
+  <div class="footer-links">
+    <a href="https://www.feiteamart.com" target="_blank">Main site</a>
+    <a href="https://www.feiteamart.com/registration" target="_blank">LFC Registration</a>
+    <a href="https://www.feiteamart.com/about" target="_blank">About</a>
+  </div>
+</div>
+
+</body>
+</html>
