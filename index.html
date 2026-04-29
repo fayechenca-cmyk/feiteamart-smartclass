@@ -147,10 +147,11 @@
   
   .lesson-card-visual {
     position: relative;
-    height: 160px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     background: linear-gradient(135deg, #FBF0C7 0%, #F0E4A8 100%);
   }
   .lesson-card.lesson-2 .lesson-card-visual {
@@ -168,6 +169,18 @@
     line-height: 1;
     color: rgba(26,29,43,0.85);
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+  }
+  
+  /* Real artwork image inside the lesson card visual */
+  .lesson-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .lesson-card:hover .lesson-card-image {
+    transform: scale(1.04);
   }
   
   .lesson-status {
@@ -218,6 +231,7 @@
     margin-bottom: 16px;
   }
   
+  /* Old "Earn badge" pill — kept for any reverse compatibility */
   .lesson-badge-box {
     background: #E8FBF0;
     border-radius: 8px;
@@ -230,6 +244,22 @@
     text-transform: uppercase;
     text-align: center;
     margin-bottom: 14px;
+  }
+  
+  /* New: progress pill (replaces per-lesson badge in our progress-based model) */
+  .lesson-progress-pill {
+    background: rgba(167,139,250,0.10);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    color: #7c5fc7;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 14px;
+    border: 0.5px solid rgba(167,139,250,0.2);
   }
   
   .lesson-meta {
@@ -328,7 +358,7 @@
     h1 { font-size: 34px; }
     .hero { padding: 50px 20px 24px; }
     .lesson-icon { font-size: 60px; }
-    .lesson-card-visual { height: 130px; }
+    .lesson-card-visual { height: 160px; }
   }
 </style>
 </head>
@@ -366,17 +396,19 @@
     <a href="lessons/lesson-1-sphere/" class="lesson-card lesson-1">
       <div class="lesson-card-visual">
         <div class="lesson-status free">Free</div>
-        <div class="lesson-icon">●</div>
+        <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f24a6fd4879c197f6d19b2_a614cb7f-f749-4a4d-986a-69e40eba0186.png" 
+             alt="The Sphere" 
+             class="lesson-card-image">
       </div>
       <div class="lesson-card-body">
         <div class="lesson-num">Lesson 1</div>
         <div class="lesson-title">The Sphere</div>
         <div class="lesson-desc">Building form with value. The first foundation — how light wraps a curved surface, and how to draw it.</div>
-        <div class="lesson-badge-box">🏆 Earn badge: Sphere Master</div>
+        <div class="lesson-progress-pill">📐 1 of 10 · Foundation A</div>
         <div class="lesson-meta">
           <span>⏱ ~45 min</span>
           <span>·</span>
-          <span>🎨 2 LFC moments</span>
+          <span>+100 XP</span>
         </div>
         <div class="lesson-cta">Start lesson →</div>
       </div>
@@ -385,17 +417,19 @@
     <a href="lessons/lesson-2-cube/" class="lesson-card lesson-2">
       <div class="lesson-card-visual">
         <div class="lesson-status members">Members</div>
-        <div class="lesson-icon">◼</div>
+        <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f24799be993424f4fc6db5_2950e9f1-3183-484b-814e-61330bcb7846.png" 
+             alt="The Cube" 
+             class="lesson-card-image">
       </div>
       <div class="lesson-card-body">
         <div class="lesson-num">Lesson 2</div>
         <div class="lesson-title">The Cube</div>
         <div class="lesson-desc">Constructing form with perspective. Edges, planes, and the architecture of seeing.</div>
-        <div class="lesson-badge-box">🏆 Earn badge: Cube Architect</div>
+        <div class="lesson-progress-pill">📐 2 of 10 · Foundation A</div>
         <div class="lesson-meta">
           <span>⏱ ~60 min</span>
           <span>·</span>
-          <span>🎨 3 LFC moments</span>
+          <span>+100 XP</span>
         </div>
         <div class="lesson-cta">Preview lesson →</div>
       </div>
