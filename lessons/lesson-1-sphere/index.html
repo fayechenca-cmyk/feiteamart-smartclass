@@ -100,6 +100,28 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .vc-bar-fill { position: absolute; left: 0; top: 0; height: 100%; width: 34%; background: var(--accent); border-radius: 2px; }
 .vc-time { font-family: 'Open Sans', sans-serif; font-size: 10px; color: rgba(255,255,255,0.9); font-weight: 600; }
 
+/* Demo video frame — actually embeds YouTube iframe (no overlay) */
+.demo-video-frame { cursor: default; }
+.demo-video-frame iframe { display: block; }
+
+/* Video meta line below the iframe */
+.video-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: -8px 0 14px;
+  padding: 0 4px;
+}
+.video-meta-time { color: var(--gold); font-weight: 800; }
+.video-meta-dot { color: var(--ink-muted); opacity: 0.5; }
+.video-meta-tip { font-weight: 600; opacity: 0.85; text-transform: none; letter-spacing: 0.3px; font-size: 11px; }
+
 /* PRO TIP */
 .pro-tip { background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border-left: 3px solid var(--gold); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 14px; margin-bottom: 16px; }
 .pro-tip-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 900; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
@@ -216,6 +238,175 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   padding: 6px 14px;
   border-radius: 20px;
   margin-bottom: 18px;
+}
+
+/* ═══ LESSON COMPLETE (replaces per-lesson badge with progress bar) ═══ */
+/* PRODUCT PHILOSOPHY: badges are reserved for course-completion (10 lessons).
+   Per-lesson reward = progress + XP. Email gate still essential for lead capture. */
+
+.lesson-complete-gate { 
+  display: block; 
+  text-align: center; 
+  padding: 24px 16px; 
+}
+.lesson-complete-celebration {
+  display: block;
+  text-align: center;
+  padding: 32px 18px 24px;
+  background: linear-gradient(180deg, #fbf9f4 0%, #f0ebe0 100%);
+  border-radius: var(--radius-xl);
+}
+
+.lesson-complete-kicker {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: var(--green);
+  background: rgba(29,158,117,0.10);
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 22px;
+}
+
+.lesson-complete-emoji-big {
+  font-size: 64px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.lesson-complete-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+  margin-bottom: 4px;
+}
+.lesson-complete-subtitle {
+  font-size: 14px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+/* Progress block — the heart of the new model */
+.lesson-complete-progress-block {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  border: 1px solid rgba(200,169,110,0.18);
+  margin-bottom: 18px;
+  text-align: left;
+}
+.lesson-complete-progress-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 2.2px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.lesson-complete-progress-bar-wrap {
+  height: 12px;
+  background: rgba(200,169,110,0.12);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
+}
+.lesson-complete-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, #d4b67a 100%);
+  border-radius: 6px;
+  transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 8px rgba(200,169,110,0.4);
+}
+.lesson-complete-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.lesson-complete-progress-count {
+  color: var(--ink);
+}
+.lesson-complete-progress-pct {
+  color: var(--gold);
+  font-weight: 900;
+}
+.lesson-complete-progress-note {
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Stats: XP, thoughts, steps */
+.lesson-complete-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.lesson-complete-stat {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  padding: 12px 8px;
+  border: 0.5px solid var(--border);
+  text-align: center;
+}
+.lesson-complete-stat-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: -0.3px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.lesson-complete-stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Email block (renamed from badge-form) */
+.lesson-complete-email-block {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 20px 18px;
+  border: 1px solid var(--border);
+  text-align: left;
+  margin-bottom: 0;
+}
+.lesson-complete-email-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+  text-align: center;
+}
+.lesson-complete-email-sub {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .lesson-complete-stats { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .lesson-complete-stat-num { font-size: 18px; }
+  .lesson-complete-stat-label { font-size: 8px; }
+  .lesson-complete-progress-block { padding: 14px 16px; }
 }
 
 .badge-preview-container { margin-bottom: 22px; }
@@ -1468,7 +1659,20 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .bubble-close { position: absolute; top: 4px; right: 8px; color: var(--ink-muted); font-size: 14px; cursor: pointer; font-weight: 800; }
 
 /* CHAT */
-.chat { display: none; position: absolute; bottom: 18px; right: 18px; width: calc(100% - 36px); max-width: 340px; background: #fff; border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(0,0,0,0.18); z-index: 200; overflow: hidden; border: 0.5px solid var(--border); }
+.chat { 
+  display: none; 
+  position: fixed;     /* fixed to viewport, not relative to .app */
+  bottom: 18px; 
+  right: 18px; 
+  width: calc(100vw - 36px);   /* respect viewport, not parent */
+  max-width: 360px; 
+  background: #fff; 
+  border-radius: var(--radius-lg); 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18); 
+  z-index: 200; 
+  overflow: hidden; 
+  border: 0.5px solid var(--border); 
+}
 .chat.show { display: block; animation: slideUp .35s ease; }
 .chat-head { padding: 14px 16px; background: linear-gradient(135deg, var(--ink) 0%, #374151 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
 .chat-head-info b { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; }
@@ -1504,7 +1708,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   .app { max-width: 540px; }
   .artchi { width: 90px; height: 90px; right: 22px; bottom: 22px; }
   .artchi svg { width: 90px; height: 90px; }
-  .chat { max-width: 380px; }
+  .chat { max-width: 380px; width: calc(100vw - 40px); }
 }
 
 /* =============================================================
@@ -1611,7 +1815,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   .artchi-info { display: none !important; }
   
   .bubble { right: 28px; bottom: 138px; max-width: 260px; }
-  .chat { right: 28px; bottom: 28px; max-width: 380px; }
+  .chat { right: 28px; bottom: 28px; max-width: 400px; width: calc(100vw - 56px); }
   
   /* Reference grid can be bigger on desktop */
   .ref-grid { grid-template-columns: 1fr 1fr 1fr; }
@@ -4774,7 +4978,7 @@ const CLOSING_LFC = {
     afterthought: "We won't answer that for you. That's the kind of question that only matures through a lifetime of looking."
   },
   
-  cta: 'Claim my badge →'
+  cta: 'See my progress →'
 };
 
 
@@ -4786,15 +4990,27 @@ const LESSON = {
   fullyFree: true,   // Lesson 1 is our free "flagship" — all parts open, no paywall. Badge still requires email.
   badge: { name: 'Sphere master', emoji: '●', desc: 'You understand how light wraps around curved form.' },
   video: {
-    url: 'YOUR_VIDEO_URL_HERE',
+    // YouTube video ID for the combined Foundation A demo video
+    // (this video covers Sphere + Cylinder + Cube — Lesson 1 only plays the sphere portion)
+    youtubeId: 'boQBzxq534U',
+    
+    // Sphere portion: 0:00 – 7:33 (453 seconds)
+    // Today's setup: all 6 demo steps share this same range as a starting point.
+    // To refine later: give each step its own start/end timestamps within 0–453.
+    sphereStart: 0,
+    sphereEnd: 453,
+    
+    // Per-step segment metadata (display only, for now)
+    // All steps currently use the full sphere range (0–7:33).
+    // When you have time to watch the video and provide step-by-step timestamps,
+    // update each segment's start/end below for finer per-step playback.
     segments: {
-      intro:       { start: '0:00', end: '1:30' },
-      circle:      { start: '1:30', end: '3:45' },
-      terminator:  { start: '3:45', end: '5:20' },
-      coreShadow:  { start: '5:20', end: '7:10' },
-      halftones:   { start: '7:10', end: '9:00' },
-      reflected:   { start: '9:00', end: '10:30' },
-      grounding:   { start: '10:30', end: '12:00' }
+      circle:      { start: '0:00', end: '7:33', startSec: 0, endSec: 453 },
+      terminator:  { start: '0:00', end: '7:33', startSec: 0, endSec: 453 },
+      coreShadow:  { start: '0:00', end: '7:33', startSec: 0, endSec: 453 },
+      halftones:   { start: '0:00', end: '7:33', startSec: 0, endSec: 453 },
+      reflected:   { start: '0:00', end: '7:33', startSec: 0, endSec: 453 },
+      grounding:   { start: '0:00', end: '7:33', startSec: 0, endSec: 453 }
     }
   },
   steps: [
@@ -6470,23 +6686,35 @@ function selectPlan(tier) {
 }
 
 function renderDemo(step) {
-  const seg = LESSON.video.segments[step.videoSeg] || { start: '0:00', end: '0:00' };
+  const seg = LESSON.video.segments[step.videoSeg] || { start: '0:00', end: '0:00', startSec: 0, endSec: 0 };
+  const youtubeId = LESSON.video.youtubeId;
+  
+  // Build YouTube embed URL with start/end parameters
+  // Note: rel=0 limits related videos to same channel
+  //       modestbranding=1 reduces YouTube logo
+  //       playsinline=1 keeps video inline on iOS
+  const embedUrl = `https://www.youtube.com/embed/${youtubeId}?start=${seg.startSec}&end=${seg.endSec}&rel=0&modestbranding=1&playsinline=1`;
+  
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame" onclick="playVideo()">
-        <div class="video-placeholder">
-          <div class="video-icon">▶</div>
-          <div class="video-caption">Demo · watch then draw</div>
-          <div class="video-timestamp">${seg.start} → ${seg.end} · ~ ${diffMin(seg)} min</div>
-        </div>
-        <div class="video-controls">
-          <button class="vc-btn">▶</button>
-          <div class="vc-bar"><div class="vc-bar-fill"></div></div>
-          <div class="vc-time">${seg.start} / ${seg.end}</div>
-        </div>
+      <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
+        <iframe 
+          width="100%" 
+          height="100%" 
+          style="position: absolute; inset: 0; border: none;"
+          src="${embedUrl}"
+          title="Demo video — ${step.title}"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+      
+      <div class="video-meta">
+        <span class="video-meta-time">⏱ ${seg.start} → ${seg.end}</span>
+        <span class="video-meta-dot">·</span>
+        <span class="video-meta-tip">Watch then draw at your own pace</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
@@ -6531,59 +6759,78 @@ function renderFinalSubmit(step) {
 }
 
 function renderBadgeUnlock() {
-  // If already upgraded to free_intro (email given), show unlocked state
+  // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
+  // Each lesson does NOT give a badge. Badges are reserved for completing
+  // an entire course (e.g. "Basic Sketch" badge = all 10 Foundation A lessons).
+  // 
+  // Per-lesson reward = progress + XP (not badge).
+  // 
+  // This function is now actually a "Lesson Complete" gate that:
+  //   1. Shows progress (1 of 10) and XP earned
+  //   2. Collects email (still essential lead capture)
+  //   3. Invites to Lesson 2
+  
+  // If already upgraded to free_intro (email given), show completion state
   const profile = UserProfile.current();
   if (profile && profile.tier !== 'guest') {
-    return renderBadgeUnlocked(profile);
+    return renderLessonComplete(profile);
   }
   
-  // BUG FIX #1+2: count only thoughts from THIS course, not global
   const courseThoughtCount = JournalStorage.count(AccessControl.currentCourseId);
   const studentName = profile?.name || '';
   
-  // Track analytics — badge gate viewed (not yet unlocked)
-  Analytics.track('badge_gate_viewed', { 
+  Analytics.track('lesson_complete_gate_viewed', { 
     xp_earned: state.xp,
     thought_count_this_course: courseThoughtCount,
     steps_completed: state.completedSteps.length,
     age_group: AccessControl.ageGroup
   });
   
-  // Fresh user — show email gate (name already collected from welcome page)
+  // For Foundation A (10 lessons total), show progress: this is lesson 1 of 10.
+  const TOTAL_LESSONS = 10;
+  const COMPLETED_LESSONS = 1;  // This is lesson 1, just completed.
+  const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
+  
   return `
-    <div class="step-card badge-gate show">
-      <div class="badge-gate-kicker">🎉 ${studentName ? studentName.toUpperCase() + ", " : ''}YOU'RE AT THE FINISH LINE</div>
+    <div class="step-card lesson-complete-gate show">
+      <div class="lesson-complete-kicker">🌱 ${studentName ? studentName.toUpperCase() + ", " : ''}LESSON 1 COMPLETE</div>
       
-      <div class="badge-preview-container">
-        <div class="badge-big-locked">
-          <span class="badge-lock-icon">🔒</span>
-          <span class="badge-emoji-behind">${LESSON.badge.emoji}</span>
+      <!-- Progress visualization -->
+      <div class="lesson-complete-progress-block">
+        <div class="lesson-complete-progress-label">FOUNDATION A · BASIC SKETCH</div>
+        <div class="lesson-complete-progress-bar-wrap">
+          <div class="lesson-complete-progress-bar" style="width: ${progressPct}%"></div>
         </div>
-        <div class="badge-title-locked">${LESSON.badge.name}</div>
-        <div class="badge-desc-locked">${LESSON.badge.desc}</div>
+        <div class="lesson-complete-progress-meta">
+          <span class="lesson-complete-progress-count">${COMPLETED_LESSONS} of ${TOTAL_LESSONS} complete</span>
+          <span class="lesson-complete-progress-pct">${progressPct}%</span>
+        </div>
+        <div class="lesson-complete-progress-note">
+          The "Basic Sketch" badge unlocks when you complete all ${TOTAL_LESSONS} Foundation A lessons.
+        </div>
       </div>
       
-      <div class="badge-unlock-form">
-        <div class="badge-form-header">
-          <div class="badge-form-title">One last step — claim your badge</div>
-          <div class="badge-form-sub">
-            Leave your email so we can let you know when Lesson 2 (Cube) opens. Your badge unlocks right here on your screen.
-          </div>
+      <!-- XP & Stats -->
+      <div class="lesson-complete-stats">
+        <div class="lesson-complete-stat">
+          <div class="lesson-complete-stat-num">+${state.xp}</div>
+          <div class="lesson-complete-stat-label">XP earned</div>
         </div>
-        
-        <div class="badge-form-stats">
-          <div class="badge-form-stat">
-            <div class="badge-form-stat-num">${state.xp}</div>
-            <div class="badge-form-stat-label">XP earned</div>
-          </div>
-          <div class="badge-form-stat">
-            <div class="badge-form-stat-num">${courseThoughtCount}</div>
-            <div class="badge-form-stat-label">Thoughts saved</div>
-          </div>
-          <div class="badge-form-stat">
-            <div class="badge-form-stat-num">${state.completedSteps.length}</div>
-            <div class="badge-form-stat-label">Steps done</div>
-          </div>
+        <div class="lesson-complete-stat">
+          <div class="lesson-complete-stat-num">${courseThoughtCount}</div>
+          <div class="lesson-complete-stat-label">Thoughts saved</div>
+        </div>
+        <div class="lesson-complete-stat">
+          <div class="lesson-complete-stat-num">${state.completedSteps.length}</div>
+          <div class="lesson-complete-stat-label">Steps done</div>
+        </div>
+      </div>
+      
+      <!-- Email gate (still essential — lead capture for Lesson 2 unlock) -->
+      <div class="lesson-complete-email-block">
+        <div class="lesson-complete-email-title">Like to be notified when Lesson 2 unlocks?</div>
+        <div class="lesson-complete-email-sub">
+          Drop your email — we'll let you know when The Cube is ready, plus other thoughtful updates.
         </div>
         
         <div class="badge-form-body">
@@ -6606,66 +6853,93 @@ function renderBadgeUnlock() {
                   id="badge-submit-btn" 
                   onclick="submitBadgeEmail()" 
                   disabled>
-            <span class="glyph">◈</span> Claim my badge →
+            <span class="glyph">◈</span> Save my progress →
           </button>
           
           <div class="badge-form-error" id="badge-form-error"></div>
         </div>
         
         <div class="privacy-note" style="margin-top: 12px;">
-          🔒 Your thinking journal stays on your device. We only use your email for Lesson updates.
+          🔒 Your thinking journal stays on your device. We only use your email for lesson updates.
         </div>
       </div>
       
-      <!-- Optional: skip without email (but lose badge) -->
+      <!-- Optional: skip without email -->
       <div style="text-align: center; margin-top: 14px;">
-        <a href="#" onclick="skipBadgeGate(event)" class="badge-skip-link">Not today — I'll skip the badge</a>
+        <a href="#" onclick="skipBadgeGate(event)" class="badge-skip-link">Not today — I'll continue without an email</a>
       </div>
     </div>`;
 }
 
-function renderBadgeUnlocked(profileOrLead) {
-  // Support both profile objects and lead objects (backwards compat)
+// Renamed from renderBadgeUnlocked() — same function, progress-based copy
+function renderLessonComplete(profileOrLead) {
   const name = profileOrLead?.name || '';
   const greeting = name ? `${name}, ` : '';
-  // BUG FIX #1: course-specific thought count, not global
   const courseThoughtCount = JournalStorage.count(AccessControl.currentCourseId);
+  
+  const TOTAL_LESSONS = 10;
+  const COMPLETED_LESSONS = 1;
+  const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
+  
   return `
-    <div class="step-card badge-unlock show">
-      <div class="badge-celebration">
-        <div class="badge-big">${LESSON.badge.emoji}</div>
-        <div class="badge-pulse-rings">
-          <div class="badge-ring"></div>
-          <div class="badge-ring"></div>
-          <div class="badge-ring"></div>
+    <div class="step-card lesson-complete-celebration show">
+      <div class="lesson-complete-emoji-big">🌱</div>
+      <div class="lesson-complete-title">Lesson 1 complete</div>
+      <div class="lesson-complete-subtitle">You finished the sphere.</div>
+      
+      <!-- Progress bar -->
+      <div class="lesson-complete-progress-block" style="max-width: 380px; margin: 22px auto;">
+        <div class="lesson-complete-progress-label">FOUNDATION A · BASIC SKETCH</div>
+        <div class="lesson-complete-progress-bar-wrap">
+          <div class="lesson-complete-progress-bar" style="width: ${progressPct}%"></div>
+        </div>
+        <div class="lesson-complete-progress-meta">
+          <span class="lesson-complete-progress-count">${COMPLETED_LESSONS} of ${TOTAL_LESSONS} complete</span>
+          <span class="lesson-complete-progress-pct">${progressPct}%</span>
         </div>
       </div>
-      <div class="badge-title">${LESSON.badge.name}</div>
-      <div class="badge-desc">${LESSON.badge.desc}</div>
       
-      <div class="quote" style="max-width: 340px; margin: 18px auto;">
+      <div class="quote" style="max-width: 360px; margin: 18px auto;">
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Lesson 2 Teaser -->
+      <!-- Lesson 2 invitation -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
-        <div class="lesson2-teaser-title">Lesson 2: The Cube</div>
+        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 2</div>
+        <div class="lesson2-teaser-title">The Cube</div>
         <div class="lesson2-teaser-sub">
-          You mastered the sphere — a form without edges. Next we face edges, planes, and perspective. Same Artchi. Deeper LFC. We'll meet you there.
+          You finished a curved form. Next: edges, planes, perspective. The architecture of seeing.
         </div>
-        <div class="lesson2-teaser-artists">
-          Featuring works by <b>Cézanne</b> · <b>Giorgio de Chirico</b> · <b>Rachel Whiteread</b>
-        </div>
-        <div class="lesson2-teaser-status">🔒 Preview available, full lesson for members</div>
+        <div class="lesson2-teaser-status">Members area · 9 lessons remaining</div>
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="openMyJourney()"><span class="glyph">◈</span> View my thinking journey</button>
-        <button class="btn btn-secondary" onclick="alert('In the real app: share to Community Showcase');">Share my badge</button>
+        <button class="btn btn-primary" onclick="goToLesson2()"><span class="glyph">◈</span> Continue to Lesson 2 →</button>
+        <button class="btn btn-secondary" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
     </div>`;
+}
+
+// Backwards-compat alias — old code paths may still call renderBadgeUnlocked
+function renderBadgeUnlocked(profileOrLead) {
+  return renderLessonComplete(profileOrLead);
+}
+
+// Navigate to Lesson 2 (relative URL — works on local server + GitHub Pages)
+function goToLesson2() {
+  Analytics.track('continue_to_lesson_2_clicked', {
+    from_lesson: LESSON.id,
+    xp_earned: state.xp
+  });
+  // Save progress before navigating
+  UserProfile.update({
+    currentLesson: 'cube',
+    currentStepIdx: 0,
+    totalXP: state.xp
+  });
+  // Relative URL — works whether on file://, localhost, or GitHub Pages
+  window.location.href = '../lesson-2-cube/';
 }
 
 // ─── Email gate validation & submission ──────────────────────
