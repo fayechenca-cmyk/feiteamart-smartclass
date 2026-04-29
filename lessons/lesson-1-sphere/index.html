@@ -83,6 +83,46 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 /* PENCIL GUIDE */
 .pencil-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
 .pencil-item { display: flex; gap: 14px; align-items: center; padding: 12px; background: linear-gradient(135deg, #fef3f7 0%, #fafaf8 100%); border-radius: var(--radius-sm); }
+
+/* Quick reference box — which pencil for which job */
+.pencil-reference-box {
+  background: rgba(200,169,110,0.08);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.pencil-reference-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.pencil-reference-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pencil-ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+}
+.pencil-ref-label {
+  color: var(--ink-soft);
+}
+.pencil-ref-tools {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
 .pencil-icon { flex-shrink: 0; }
 .pencil-text h4 { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; color: var(--ink); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
 .pencil-text p { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
@@ -6551,7 +6591,43 @@ function renderTools(step) {
           </svg>
           <div class="pencil-text">
             <h4>HB pencil</h4>
-            <p>Your workhorse. Use for construction lines, terminator, core shadow, halftones.</p>
+            <p>For initial construction lines and light contour work. Your everyday pencil.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#d97706" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#1a1d2b"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">2B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>2B pencil</h4>
+            <p>Slightly darker for confident contour lines. Works alongside HB for line work.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#7c2d12" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#1a1d2b"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">3B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>3B pencil</h4>
+            <p>For shadow zones — core shadow and the deep tones inside the dark side.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#1f2937" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#1a1d2b"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">4B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>4B pencil</h4>
+            <p>For your darkest darks — cast shadow and the deepest part of the core shadow.</p>
           </div>
         </div>
         <div class="pencil-item">
@@ -6563,7 +6639,7 @@ function renderTools(step) {
           </svg>
           <div class="pencil-text">
             <h4>2H pencil</h4>
-            <p>Lighter and harder. Only for the light-side "thin veil" over halftones at the end.</p>
+            <p>Hard and light — for the brightest highlight areas and the thinnest veil over halftones.</p>
           </div>
         </div>
         <div class="pencil-item">
@@ -6574,6 +6650,25 @@ function renderTools(step) {
           <div class="pencil-text">
             <h4>Blending stump · optional</h4>
             <p>Only inside shadow zones. Never drag across the terminator into the light.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick reference: which pencil for which job -->
+      <div class="pencil-reference-box">
+        <div class="pencil-reference-title">📐 Quick reference</div>
+        <div class="pencil-reference-grid">
+          <div class="pencil-ref-row">
+            <span class="pencil-ref-label">Line work</span>
+            <span class="pencil-ref-tools">HB, 2B</span>
+          </div>
+          <div class="pencil-ref-row">
+            <span class="pencil-ref-label">Shadows</span>
+            <span class="pencil-ref-tools">3B, 4B</span>
+          </div>
+          <div class="pencil-ref-row">
+            <span class="pencil-ref-label">Highlight area</span>
+            <span class="pencil-ref-tools">2H</span>
           </div>
         </div>
       </div>
@@ -6596,7 +6691,8 @@ function renderReady(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="check-list" id="ready-checks">
-        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I have an HB pencil and blank paper</div></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I have my pencils ready: HB, 2B, 3B, 4B, 2H</div></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I have blank paper and an eraser</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I understand the six zones of light</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I'm in a comfortable seat with good lighting</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I'm ready to practice patiently — no rush</div></div>
