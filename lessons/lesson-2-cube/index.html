@@ -2868,12 +2868,13 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
     </div>
     
     <!-- ═══ PRIMARY ACTION: BUY NOW (Stripe) ═══ -->
-    <!-- Real <a> link — works even if JavaScript breaks. JS handler 
-         enhances with analytics + profile save, but href is the truth. -->
+    <!-- Pure <a> link, no JavaScript interception. Maximum compatibility. -->
+    <!-- We use target="_top" to break out of any iframe context. -->
     <div class="members-lock-buy-block">
       <a href="https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e" 
-         class="btn btn-primary members-lock-buy-btn" 
-         onclick="goToStripeCheckout(); return true;">
+         target="_top"
+         rel="noopener"
+         class="btn btn-primary members-lock-buy-btn">
         <span class="glyph">◈</span> Become a member →
       </a>
       <div class="members-lock-buy-note">
