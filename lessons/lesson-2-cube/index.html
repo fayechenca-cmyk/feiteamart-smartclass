@@ -90,6 +90,22 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 /* DEMO / VIDEO AREA */
 .video-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #1a1d2b 0%, #374151 100%); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 14px; cursor: pointer; }
 .video-placeholder { text-align: center; color: #fff; }
+
+/* Upload drop zone — clickable with hover feedback */
+.upload-drop-zone { transition: all 0.25s ease; }
+.upload-drop-zone:hover {
+  background: linear-gradient(135deg, #fdebf2 0%, #e7f3ff 100%) !important;
+  border-color: #b89456 !important;
+  transform: scale(1.01);
+  box-shadow: 0 8px 28px rgba(200,169,110,0.25);
+}
+.upload-drop-zone:active {
+  transform: scale(0.99);
+}
+.upload-drop-zone:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
 .video-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 22px; transition: transform .2s; }
 .video-frame:hover .video-icon { transform: scale(1.1); background: rgba(103,232,249,0.3); }
 .video-caption { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
@@ -1211,6 +1227,9 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   margin-bottom: 18px;
 }
 .members-lock-buy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   font-size: 14px;
   padding: 14px 22px;
@@ -1220,10 +1239,21 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   letter-spacing: 0.5px;
   border: none;
   margin-bottom: 8px;
+  text-decoration: none;       /* in case it's an <a> */
+  cursor: pointer;
+  border-radius: 30px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.2s;
 }
 .members-lock-buy-btn:hover {
   background: linear-gradient(135deg, #d4b67a 0%, var(--gold) 100%);
   transform: translateY(-1px);
+  text-decoration: none;
+  color: var(--ink);
+}
+.members-lock-buy-btn:visited {
+  color: var(--ink);
+  text-decoration: none;
 }
 .members-lock-buy-note {
   font-family: 'Open Sans', sans-serif;
@@ -1504,14 +1534,9 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   .side-action-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
   .side-action-btn.primary .side-action-btn-ico { color: var(--accent); }
   
-  /* Chat in side panel — inline, not floating */
-  .chat {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    max-width: 100%;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  }
+  /* CHAT on desktop — KEEP fixed positioning (don't make it inline).
+     Old "inline in side panel" override broke because chat is in document body. */
+  /* (Old override removed.) */
   
   /* Upload FAB: on wide screens, we use the side panel's Upload button instead */
   .upload-fab { display: none !important; }
@@ -2843,11 +2868,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
     </div>
     
     <!-- ═══ PRIMARY ACTION: BUY NOW (Stripe) ═══ -->
+    <!-- Real <a> link — works even if JavaScript breaks. JS handler 
+         enhances with analytics + profile save, but href is the truth. -->
     <div class="members-lock-buy-block">
-      <button class="btn btn-primary members-lock-buy-btn" 
-              onclick="goToStripeCheckout()">
+      <a href="https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e" 
+         class="btn btn-primary members-lock-buy-btn" 
+         onclick="goToStripeCheckout(); return true;">
         <span class="glyph">◈</span> Become a member →
-      </button>
+      </a>
       <div class="members-lock-buy-note">
         Secure payment via Stripe · You'll come right back to this lesson after.
       </div>
@@ -5974,21 +6002,26 @@ function renderFinalSubmit(step) {
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame" style="aspect-ratio: 1; background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border: 2px dashed #c8a96e;">
+      <div class="video-frame upload-drop-zone" 
+           style="aspect-ratio: 1; background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
+           onclick="submitFinal()"
+           role="button"
+           tabindex="0"
+           onkeypress="if(event.key==='Enter'||event.key===' ')submitFinal()">
         <div class="video-placeholder" style="color: #1a1d2b;">
           <div class="video-icon" style="background: #c8a96e; color: #fff;">📸</div>
-          <div class="video-caption" style="color: #c8a96e;">Upload final drawing</div>
-          <div class="video-timestamp" style="color: #94a3b8;">Tap to submit your sphere</div>
+          <div class="video-caption" style="color: #c8a96e;">Tap here to upload your cube</div>
+          <div class="video-timestamp" style="color: #94a3b8;">Photo or scan — JPG, PNG</div>
         </div>
       </div>
       
       <div class="pro-tip">
         <div class="pro-tip-label">Before submitting</div>
-        <div class="pro-tip-text">Check: Can you see 5 distinct value zones? Is your reflected light darker than your halftones? Does the sphere feel grounded?</div>
+        <div class="pro-tip-text">Check: Are your perspective lines clean? Do the three planes have distinct values? Does the cast shadow ground the cube?</div>
       </div>
       
       <div class="btn-stack">
-        <button class="btn btn-gold" onclick="submitFinal()"><span style="margin-right: 6px;">🏆</span> Submit &amp; unlock badge</button>
+        <button class="btn btn-gold" onclick="submitFinal()"><span style="margin-right: 6px;">📸</span> Upload my drawing</button>
         <button class="btn btn-ghost" onclick="nextStep()">Skip — I'll submit later</button>
       </div>
     </div>`;
@@ -7112,22 +7145,39 @@ function showMembersLock() {
 const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e';
 
 function goToStripeCheckout() {
-  Analytics.track('stripe_checkout_clicked', {
-    lesson_id: LESSON.id,
-    from_step: state.currentStepIndex
-  });
+  // Robust version with multiple fallbacks.
+  // We MUST get the user to Stripe even if some upstream code fails.
   
-  // Save profile state before navigating away (so progress persists)
-  const profile = UserProfile.current();
-  if (profile) {
-    UserProfile.update({
-      currentLesson: LESSON.id,
-      currentStepIdx: state.currentStepIndex
+  try {
+    Analytics.track('stripe_checkout_clicked', {
+      lesson_id: LESSON.id,
+      from_step: state.currentStepIndex
     });
+  } catch (e) {
+    console.warn('[Stripe] Analytics track failed (non-fatal)', e);
   }
   
-  // Open Stripe checkout in same window — user comes back via ?paid=true
-  window.location.href = STRIPE_CHECKOUT_URL;
+  try {
+    const profile = UserProfile.current();
+    if (profile) {
+      UserProfile.update({
+        currentLesson: LESSON.id,
+        currentStepIdx: state.currentStepIndex
+      });
+    }
+  } catch (e) {
+    console.warn('[Stripe] Profile save failed (non-fatal)', e);
+  }
+  
+  // Always navigate, regardless of what happened above
+  // Use window.location.assign for explicit navigation (slightly more compatible)
+  try {
+    window.location.assign(STRIPE_CHECKOUT_URL);
+  } catch (e) {
+    console.error('[Stripe] window.location.assign failed', e);
+    // Final fallback: open in new tab
+    window.open(STRIPE_CHECKOUT_URL, '_blank');
+  }
 }
 
 function onMembersLockInputChange() {
