@@ -115,4 +115,4 @@ Local development requires `localhost` (not `file://`) for Formspree to work.
 
 ## 👤 Created by
 
-Faye Chen · FEI TeamArt · Burnaby BC · 2026
+Faye Chen · FEI TeamArt · Vancouver BC · 2026
