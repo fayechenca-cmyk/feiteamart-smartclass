@@ -1206,6 +1206,60 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   margin-bottom: 18px;
 }
 
+/* ═══ STRIPE BUY BLOCK (primary CTA) ═══ */
+.members-lock-buy-block {
+  margin-bottom: 18px;
+}
+.members-lock-buy-btn {
+  width: 100%;
+  font-size: 14px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, var(--gold) 0%, #d4b67a 100%);
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: none;
+  margin-bottom: 8px;
+}
+.members-lock-buy-btn:hover {
+  background: linear-gradient(135deg, #d4b67a 0%, var(--gold) 100%);
+  transform: translateY(-1px);
+}
+.members-lock-buy-note {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* "OR" divider between Buy Now and Waitlist */
+.members-lock-divider {
+  position: relative;
+  text-align: center;
+  margin: 18px 0;
+}
+.members-lock-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+.members-lock-divider-text {
+  position: relative;
+  display: inline-block;
+  background: #fff;
+  padding: 0 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--ink-muted);
+}
+
 .members-lock-form {
   text-align: left;
   margin-bottom: 14px;
@@ -1315,7 +1369,20 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .bubble-close { position: absolute; top: 4px; right: 8px; color: var(--ink-muted); font-size: 14px; cursor: pointer; font-weight: 800; }
 
 /* CHAT */
-.chat { display: none; position: absolute; bottom: 18px; right: 18px; width: calc(100% - 36px); max-width: 340px; background: #fff; border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(0,0,0,0.18); z-index: 200; overflow: hidden; border: 0.5px solid var(--border); }
+.chat { 
+  display: none; 
+  position: fixed; 
+  bottom: 18px; 
+  right: 18px; 
+  width: calc(100vw - 36px); 
+  max-width: 360px; 
+  background: #fff; 
+  border-radius: var(--radius-lg); 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18); 
+  z-index: 200; 
+  overflow: hidden; 
+  border: 0.5px solid var(--border); 
+}
 .chat.show { display: block; animation: slideUp .35s ease; }
 .chat-head { padding: 14px 16px; background: linear-gradient(135deg, var(--ink) 0%, #374151 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
 .chat-head-info b { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; }
@@ -1351,7 +1418,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   .app { max-width: 540px; }
   .artchi { width: 90px; height: 90px; right: 22px; bottom: 22px; }
   .artchi svg { width: 90px; height: 90px; }
-  .chat { max-width: 380px; }
+  .chat { max-width: 380px; width: calc(100vw - 40px); }
 }
 
 /* =============================================================
@@ -1458,7 +1525,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   .artchi-info { display: none !important; }
   
   .bubble { right: 28px; bottom: 138px; max-width: 260px; }
-  .chat { right: 28px; bottom: 28px; max-width: 380px; }
+  .chat { right: 28px; bottom: 28px; max-width: 400px; width: calc(100vw - 56px); }
   
   /* Reference grid can be bigger on desktop */
   .ref-grid { grid-template-columns: 1fr 1fr 1fr; }
@@ -2748,41 +2815,52 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 <div class="members-lock-backdrop" id="members-lock-backdrop">
   <div class="members-lock-card">
     
-    <div class="members-lock-kicker">🔒 MEMBERS-ONLY · PREVIEW</div>
+    <div class="members-lock-kicker">🔒 CONTINUE WITH MEMBERSHIP</div>
     
     <div class="members-lock-icon-large">◼</div>
     
-    <div class="members-lock-title">Lesson 2: The Cube</div>
-    <div class="members-lock-subtitle">Edges, planes, and the architecture of seeing.</div>
+    <div class="members-lock-title">Continue Lesson 2: The Cube</div>
+    <div class="members-lock-subtitle">You've seen the welcome and the structure. To draw alongside us, become a member.</div>
     
-    <!-- Preview of what's inside -->
+    <!-- What's inside membership -->
     <div class="members-lock-preview">
       <div class="members-lock-preview-row">
-        <span class="members-lock-preview-ico">🎨</span>
-        <span><b>3 LFC Moments</b> with Cézanne, de Chirico, Whiteread</span>
+        <span class="members-lock-preview-ico">📐</span>
+        <span><b>Lesson 2-10</b> · all of Foundation A (cube, cylinder, and more)</span>
       </div>
       <div class="members-lock-preview-row">
-        <span class="members-lock-preview-ico">🌟</span>
-        <span><b>Cross-lesson reflection</b> — your sphere meets your cube</span>
+        <span class="members-lock-preview-ico">🎬</span>
+        <span><b>All demo videos</b> — step-by-step drawing with Faye</span>
       </div>
       <div class="members-lock-preview-row">
-        <span class="members-lock-preview-ico">💭</span>
-        <span><b>3-layer Thinking Quest</b> — guided critical thinking</span>
+        <span class="members-lock-preview-ico">🌱</span>
+        <span><b>Cross-lesson progress</b> — your thoughts carry forward</span>
       </div>
       <div class="members-lock-preview-row">
-        <span class="members-lock-preview-ico">🏛️</span>
-        <span><b>Cube architect badge</b> — your second milestone</span>
+        <span class="members-lock-preview-ico">🏆</span>
+        <span><b>"Basic Sketch" badge</b> when you complete all 10 lessons</span>
       </div>
     </div>
     
-    <div class="members-lock-pricing-hint">
-      Lesson 2-10 are part of the FEI TeamArt Foundation membership.<br>
-      <b>Pricing opens later in 2026.</b> Join the waitlist to be first.
+    <!-- ═══ PRIMARY ACTION: BUY NOW (Stripe) ═══ -->
+    <div class="members-lock-buy-block">
+      <button class="btn btn-primary members-lock-buy-btn" 
+              onclick="goToStripeCheckout()">
+        <span class="glyph">◈</span> Become a member →
+      </button>
+      <div class="members-lock-buy-note">
+        Secure payment via Stripe · You'll come right back to this lesson after.
+      </div>
     </div>
     
-    <!-- Waitlist form -->
+    <!-- Divider -->
+    <div class="members-lock-divider">
+      <span class="members-lock-divider-text">OR</span>
+    </div>
+    
+    <!-- Secondary: Waitlist for those not ready to commit -->
     <div class="members-lock-form">
-      <div class="members-lock-form-label">Want first access when Lesson 2 opens?</div>
+      <div class="members-lock-form-label">Not ready yet? Just remind me later.</div>
       
       <input type="email" 
              id="members-lock-email" 
@@ -2793,14 +2871,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
       
       <label class="members-lock-consent">
         <input type="checkbox" id="members-lock-consent" onchange="onMembersLockInputChange()">
-        <span>Notify me when Lesson 2 opens for members. No spam.</span>
+        <span>Email me a reminder. No spam.</span>
       </label>
       
-      <button class="btn btn-primary members-lock-submit" 
+      <button class="btn btn-secondary members-lock-submit" 
               id="members-lock-submit" 
               onclick="submitMembersLockWaitlist()" 
               disabled>
-        <span class="glyph">◈</span> Hold my spot →
+        Save my spot
       </button>
       
       <div class="members-lock-error" id="members-lock-error"></div>
@@ -6245,18 +6323,49 @@ function nextStep() {
   const nextStepObj = LESSON.steps[curr + 1];
   
   // ═══════════════════════════════════════════════════════════════
-  // ACCESS CONTROL GATE (data-driven, not hardcoded)
+  // PAYWALL TRIGGER (v2 — preview-then-paywall model)
+  // 
+  // If this lesson is members-only AND user is not paid AND the NEXT step
+  // is beyond the preview (i.e. anything other than openingLFC/reference),
+  // show the paywall.
+  // 
+  // Per Faye's spec: paywall fires when leaving Reference step → entering Tools.
+  // ═══════════════════════════════════════════════════════════════
+  if (LESSON.membersOnly 
+      && !isMemberOrPaid()
+      && nextStepObj 
+      && !isPreviewStep(nextStepObj)) {
+    
+    // Mark current step done so progress shows
+    if (!state.completedSteps.includes(curr)) {
+      state.completedSteps.push(curr);
+      state.xp += LESSON.steps[curr].xp || 0;
+    }
+    renderRailDots();
+    
+    Analytics.track('paywall_triggered_at_step', {
+      lesson_id: LESSON.id,
+      from_step: currStep?.type,
+      to_step: nextStepObj?.type,
+      step_index: curr
+    });
+    
+    showMembersLock();
+    return;
+  }
+  
+  // ═══════════════════════════════════════════════════════════════
+  // ACCESS CONTROL GATE (data-driven, legacy demo gate)
   //   LESSON.fullyFree = true  →  this lesson is free flagship (no paywall)
   //   LESSON.fullyFree = false →  paywall kicks in on paid-feature steps
   // 
-  // Future: when you add Lesson 2 (paid), just set fullyFree: false on that LESSON.
-  // nextStep() will automatically gate on demo/premium steps without code changes.
+  // Kept as backup for any future demo-specific gating.
   // ═══════════════════════════════════════════════════════════════
   if (!LESSON.fullyFree 
       && nextStepObj 
       && nextStepObj.type === 'demo'
-      && !AccessControl.hasAccess(AccessControl.currentUser, AccessControl.currentCourseId, 'demo')) {
-    // Mark current step done so progress shows
+      && !AccessControl.hasAccess(AccessControl.currentUser, AccessControl.currentCourseId, 'demo')
+      && !isMemberOrPaid()) {
     if (!state.completedSteps.includes(curr)) {
       state.completedSteps.push(curr);
       state.xp += LESSON.steps[curr].xp || 0;
@@ -6894,12 +7003,80 @@ let welcomeSelectedAge = null;
 // Lesson 1 graduates, since paid membership doesn't exist yet.
 // ═══════════════════════════════════════════════════════════════
 
-function shouldShowMembersLock() {
-  if (!LESSON.membersOnly) return false;       // free lessons skip this
+// ═══════════════════════════════════════════════════════════════
+// PAYWALL ACCESS LOGIC (v2 — preview-then-paywall model)
+// 
+// PRODUCT PHILOSOPHY (per Faye, Apr 2026):
+// Don't block students at the door. Let them experience the Honest Welcome
+// and the Reference step (six zones of light on a cube) — that's where
+// they feel the value. Then trigger paywall before practical work begins.
+// 
+// PREVIEW STEPS (free for all):
+//   - openingLFC (Honest Welcome)
+//   - reference (Six zones of light)
+// 
+// PAYWALL STEPS (require member tier or ?paid=true URL param):
+//   - tools, ready, warmup, all demo steps, finalSubmit, closingLFC, badgeUnlock
+// 
+// To unlock: pay via Stripe → land on /?paid=true → auto-promote to member.
+// ═══════════════════════════════════════════════════════════════
+
+// Steps that are FREE PREVIEW — accessible to everyone, no email even needed.
+const PREVIEW_STEP_TYPES = new Set(['openingLFC', 'reference']);
+
+function isPreviewStep(step) {
+  return step && PREVIEW_STEP_TYPES.has(step.type);
+}
+
+// Has the URL parameter ?paid=true? (Stripe redirect target)
+function hasPaidUrlParam() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('paid') === 'true';
+  } catch (e) {
+    return false;
+  }
+}
+
+// Has the user been granted member access (either by ?paid=true URL or earlier upgrade)?
+function isMemberOrPaid() {
+  if (hasPaidUrlParam()) return true;       // Stripe redirect → instant unlock
   const profile = UserProfile.current();
-  if (!profile) return true;                    // no profile → blocked
-  if (profile.tier === 'member') return false;  // real member → in
-  return true;                                   // guest or free_intro → blocked
+  if (!profile) return false;
+  return profile.tier === 'member';
+}
+
+// On lesson load: if URL has ?paid=true, promote to member tier and clean URL.
+function applyPaidUrlIfPresent() {
+  if (!hasPaidUrlParam()) return false;
+  
+  const profile = UserProfile.current();
+  if (profile && profile.tier !== 'member') {
+    UserProfile.update({ tier: 'member' });
+  } else if (!profile) {
+    // No profile yet — defer; will be promoted after Welcome page collects name
+    UserProfile.update({ tier: 'member' });
+  }
+  
+  Analytics.track('paid_url_promotion', {
+    lesson_id: LESSON.id,
+    had_profile: !!profile,
+    prior_tier: profile?.tier || 'none'
+  });
+  
+  // Clean the URL so refresh doesn't re-trigger (and so it looks tidier)
+  try {
+    const cleanUrl = window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+  } catch (e) { /* ignore */ }
+  
+  return true;
+}
+
+// LEGACY: kept for backwards compat with older code paths
+function shouldShowMembersLock() {
+  if (!LESSON.membersOnly) return false;
+  return !isMemberOrPaid();
 }
 
 function showMembersLock() {
@@ -6920,6 +7097,37 @@ function showMembersLock() {
   
   document.getElementById('members-lock-backdrop').classList.add('show');
   onMembersLockInputChange();  // initial state of submit button
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STRIPE CHECKOUT
+// 
+// Stripe payment link, configured to redirect back to Lesson 2 with 
+// ?paid=true on successful payment. The redirect is configured in the 
+// Stripe dashboard under "After payment" → "Don't show confirmation page".
+// 
+// Configure in Stripe dashboard:
+//   Redirect URL: https://fayechenca-cmyk.github.io/feiteamart-smartclass/lessons/lesson-2-cube/?paid=true
+// ═══════════════════════════════════════════════════════════════
+const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e';
+
+function goToStripeCheckout() {
+  Analytics.track('stripe_checkout_clicked', {
+    lesson_id: LESSON.id,
+    from_step: state.currentStepIndex
+  });
+  
+  // Save profile state before navigating away (so progress persists)
+  const profile = UserProfile.current();
+  if (profile) {
+    UserProfile.update({
+      currentLesson: LESSON.id,
+      currentStepIdx: state.currentStepIndex
+    });
+  }
+  
+  // Open Stripe checkout in same window — user comes back via ?paid=true
+  window.location.href = STRIPE_CHECKOUT_URL;
 }
 
 function onMembersLockInputChange() {
@@ -7392,15 +7600,13 @@ if (_existingProfile) {
 renderStep();
 resetSleep();
 
-// Startup flow:
-//   1. If lesson is members-only AND user is not a member → show MembersLock
-//   2. Otherwise → show WelcomePage (new or returning)
+// Startup flow (v2 — preview-then-paywall model):
+//   1. Apply ?paid=true URL param if present (from Stripe redirect)
+//   2. Show Welcome page (always — no startup lock)
+//   3. Paywall now triggers in nextStep() when leaving Reference → Tools
+applyPaidUrlIfPresent();
 setTimeout(() => {
-  if (shouldShowMembersLock()) {
-    showMembersLock();
-  } else {
-    showWelcomePage();
-  }
+  showWelcomePage();
 }, 200);
 </script>
 
