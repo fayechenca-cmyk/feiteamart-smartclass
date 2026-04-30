@@ -106,6 +106,119 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   outline: 3px solid var(--gold);
   outline-offset: 2px;
 }
+
+/* ═══ Upload modal: file picker ═══ */
+.upload-file-block {
+  margin: 14px 0;
+}
+
+/* Preview disclosure banner — transparent that this is mock */
+.upload-preview-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  background: linear-gradient(135deg, rgba(167,139,250,0.10) 0%, rgba(103,232,249,0.08) 100%);
+  border: 1px dashed rgba(167,139,250,0.35);
+  border-radius: var(--radius-sm);
+}
+.upload-preview-banner-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.upload-preview-banner-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.upload-preview-banner-text b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.upload-file-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 18px;
+  background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%);
+  border: 2px dashed var(--gold);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.upload-file-label:hover {
+  background: linear-gradient(135deg, #fdebf2 0%, #e7f3ff 100%);
+  border-color: #b89456;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(200,169,110,0.2);
+}
+.upload-file-icon {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.upload-file-text-main {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.upload-file-text-sub {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.upload-file-preview {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.upload-file-preview-img {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  background: #f5f3ee;
+}
+.upload-file-preview-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--paper);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.upload-file-replace {
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.upload-file-replace:hover { color: #b89456; }
+
+/* Paid-tier choice (visually distinct from soft-lead) */
+.choice-paid-tier {
+  border: 1.5px dashed rgba(200,169,110,0.4) !important;
+  background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, rgba(255,255,255,0.5) 100%) !important;
+}
+.choice-paid-tier:hover {
+  border-color: var(--gold) !important;
+  background: linear-gradient(135deg, rgba(200,169,110,0.10) 0%, rgba(255,255,255,0.7) 100%) !important;
+}
 .video-icon { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 22px; transition: transform .2s; }
 .video-frame:hover .video-icon { transform: scale(1.1); background: rgba(103,232,249,0.3); }
 .video-caption { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; font-weight: 800; }
@@ -555,6 +668,176 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .onboard-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; }
 .onboard-backdrop.show { display: flex; animation: fadeIn .35s ease; }
 .onboard-card { background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%); border-radius: var(--radius-xl); padding: 28px 24px; max-width: 360px; width: 100%; position: relative; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); text-align: center; }
+
+/* ═══════════════════════════════════════════════════════════════
+   PLAY WITH THE LIGHT — Smart Class signature interaction
+   Drag the sun, see the sphere/cube respond in real time.
+   ═══════════════════════════════════════════════════════════════ */
+.play-light-card {
+  background: linear-gradient(180deg, #fdfcf8 0%, #f7f4ec 100%);
+  border-radius: var(--radius-xl);
+  padding: 22px 20px 24px;
+  border: 1px solid rgba(200,169,110,0.18);
+}
+
+.play-light-kicker {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  background: rgba(200,169,110,0.10);
+  padding: 6px 12px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+.play-light-stage {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #fcfaf5 0%, #f0ece2 60%, #c8c0b4 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 14px 0 16px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.play-light-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+
+/* Hint pill — visible until first drag */
+.play-light-hint {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26,29,43,0.92);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  animation: playLightHintBounce 1.6s ease-in-out infinite;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.play-light-hint-arrow {
+  font-size: 16px;
+  display: inline-block;
+  animation: playLightHintArrow 1.2s ease-in-out infinite;
+}
+@keyframes playLightHintBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+@keyframes playLightHintArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* Sun cursor effect on hover */
+.pl-sun:hover .pl-sun-glow,
+.pl-sun:active .pl-sun-glow { 
+  fill: rgba(252,211,77,0.7);
+  r: 26; 
+}
+
+/* Readout — shows current zone description */
+.play-light-readout {
+  background: rgba(255,255,255,0.7);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.play-light-readout-zone {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.play-light-readout-hint {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Insights list — revealed as student plays */
+.play-light-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.play-light-insight-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(29,158,117,0.06) 0%, rgba(207,245,228,0.4) 100%);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.play-light-insight-card.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.play-light-insight-icon {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--green);
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border: 2px solid var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.play-light-insight-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 3px;
+  line-height: 1.35;
+}
+.play-light-insight-desc {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+@media (max-width: 520px) {
+  .play-light-card { padding: 18px 16px 20px; }
+  .play-light-readout { padding: 10px 12px; }
+  .play-light-readout-zone { font-size: 13px; }
+  .play-light-readout-hint { font-size: 11.5px; }
+  .play-light-insight-card { padding: 10px 12px; }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    OPENING LFC — Honest Welcome
@@ -4608,6 +4891,21 @@ const LESSON = {
       intro: 'Before we draw, let\'s understand the cube. Three visible faces. Twelve edges that meet in pairs. Eight corners that anchor the form. Every cube you draw will use these landmarks.',
       xp: 0
     },
+    // ═══════════════════════════════════════════════════════════════
+    // PLAY WITH THE LIGHT — interactive cube
+    // 
+    // Same Smart Class signature interaction as Lesson 1, but on a cube.
+    // Students see how a cube's THREE planes shade independently — 
+    // very different from the sphere's smooth gradient.
+    // ═══════════════════════════════════════════════════════════════
+    {
+      part: 'A',
+      partLabel: '✨ Play with the light',
+      type: 'playLight',
+      title: 'Now feel it — drag the sun',
+      intro: 'A cube has three visible faces, each catching light differently. Move the sun and watch the planes shift. Notice how unlike the sphere, the cube\'s shadow has hard edges.',
+      xp: 5
+    },
     {
       part: 'A',
       partLabel: 'Part a · preparation',
@@ -4812,6 +5110,10 @@ function renderStep() {
     case 'lfcMoment':   el.innerHTML = renderLFCMoment(step); break;
     
     case 'reference':   el.innerHTML = renderReference(step); break;
+    case 'playLight':   el.innerHTML = renderPlayLight(step); 
+                        // Lesson 2 = cube version
+                        setTimeout(() => initPlayLight('cube'), 50);
+                        break;
     case 'tools':       el.innerHTML = renderTools(step); break;
     case 'ready':       el.innerHTML = renderReady(step); break;
     case 'warmup':      el.innerHTML = renderWarmup(step); break;
@@ -5667,6 +5969,620 @@ function onClosingLFCComplete() {
     studentText: 'Received the closing reflection and the open question.'
   });
   nextStep();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PLAY WITH THE LIGHT — Smart Class signature interaction
+// 
+// Students drag a sun around a sphere/cube and watch the 6 light zones 
+// recompute in real time. This is the moment reading turns into discovering.
+// 
+// Design decisions:
+// - Pure SVG (no canvas) — sharp on retina, simple to manipulate
+// - Physics is a simplified Lambertian shader (good enough for teaching)
+// - Light zones are *labeled* on hover so students can match what they read
+//   in Reference to what they're seeing
+// - Touch + mouse both supported (works on iPad/phone/laptop)
+// - "Reset" button so students can always come back to a canonical position
+// 
+// Variants:
+//   shape='sphere'  →  Lesson 1, smooth gradient + 6 zones
+//   shape='cube'    →  Lesson 2, faceted (3 visible faces) + cast shadow
+// ═══════════════════════════════════════════════════════════════════════════
+
+function renderPlayLight(step) {
+  return `
+    <div class="step-card play-light-card">
+      <div class="play-light-kicker">✨ INTERACTIVE</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-intro">${step.intro}</div>
+      
+      <!-- The interactive stage — populated by initPlayLight() -->
+      <div class="play-light-stage" id="play-light-stage">
+        <svg class="play-light-svg" 
+             id="play-light-svg" 
+             viewBox="0 0 400 320" 
+             preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg">
+          <!-- Filled by initPlayLight() based on shape -->
+        </svg>
+        
+        <!-- Hint pill (shows once until student drags) -->
+        <div class="play-light-hint" id="play-light-hint">
+          <span class="play-light-hint-arrow">↓</span>
+          <span>Drag the sun</span>
+        </div>
+      </div>
+      
+      <!-- Currently-detected zone label — appears when student hovers/touches -->
+      <div class="play-light-readout" id="play-light-readout">
+        <div class="play-light-readout-zone" id="play-light-readout-zone">Move the light to begin</div>
+        <div class="play-light-readout-hint" id="play-light-readout-hint">Notice how the bright side and dark side flip when you cross the center.</div>
+      </div>
+      
+      <!-- Insight cards revealed as student plays -->
+      <div class="play-light-insights" id="play-light-insights">
+        <!-- Filled progressively by trackPlayLightInsight() -->
+      </div>
+      
+      <div class="btn-stack" style="margin-top: 18px;">
+        <button class="btn btn-secondary" onclick="resetPlayLight()">↻ Reset</button>
+        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Got it — let's draw</button>
+      </div>
+    </div>`;
+}
+
+// ─── Play Light state ──────────────────────────────────────────────
+const PlayLight = {
+  shape: 'sphere',
+  // Light angle in degrees (0 = right, 90 = bottom, 180 = left, 270 = top)
+  // Default: top-left lighting (classical drawing convention)
+  lightAngleDeg: 225,
+  // Distance of light from center (affects shadow length)
+  lightDistance: 150,
+  // Sphere/cube center
+  centerX: 200,
+  centerY: 145,
+  // Form radius / cube half-edge
+  size: 75,
+  // Has student dragged yet?
+  hasInteracted: false,
+  // Insights revealed (track which the student has 'discovered')
+  insightsShown: new Set(),
+  
+  // Compute light source position from angle + distance
+  lightPos() {
+    const rad = this.lightAngleDeg * Math.PI / 180;
+    return {
+      x: this.centerX + Math.cos(rad) * this.lightDistance,
+      y: this.centerY + Math.sin(rad) * this.lightDistance
+    };
+  },
+  
+  // Light direction unit vector (from form center toward light)
+  lightDir() {
+    const rad = this.lightAngleDeg * Math.PI / 180;
+    return { x: Math.cos(rad), y: Math.sin(rad) };
+  }
+};
+
+// Initialize the interaction for a given shape
+function initPlayLight(shape) {
+  PlayLight.shape = shape;
+  PlayLight.lightAngleDeg = 225;  // top-left
+  PlayLight.lightDistance = 150;
+  PlayLight.hasInteracted = false;
+  PlayLight.insightsShown = new Set();
+  
+  const svg = document.getElementById('play-light-svg');
+  if (!svg) return;
+  
+  // Build the SVG structure based on shape
+  if (shape === 'sphere') {
+    svg.innerHTML = `
+      <!-- Background: subtle grid for spatial sense -->
+      <defs>
+        <radialGradient id="pl-sphere-grad">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="50%" stop-color="#c8b8a0"/>
+          <stop offset="100%" stop-color="#3a2a20"/>
+        </radialGradient>
+        <radialGradient id="pl-shadow-grad">
+          <stop offset="0%" stop-color="rgba(0,0,0,0.55)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+        <linearGradient id="pl-floor-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e8e4dc"/>
+          <stop offset="100%" stop-color="#c8c0b4"/>
+        </linearGradient>
+      </defs>
+      
+      <!-- Floor / ground plane -->
+      <rect class="pl-floor" x="0" y="220" width="400" height="100" fill="url(#pl-floor-grad)"/>
+      
+      <!-- Cast shadow (will be transformed by updatePlayLight) -->
+      <ellipse class="pl-cast-shadow" id="pl-cast-shadow" 
+               cx="200" cy="225" rx="90" ry="14" 
+               fill="rgba(0,0,0,0.35)"
+               style="filter: blur(2px);"/>
+      
+      <!-- The sphere (gradient is dynamically positioned) -->
+      <circle class="pl-sphere" id="pl-sphere" 
+              cx="200" cy="145" r="75" 
+              fill="url(#pl-sphere-grad)"/>
+      
+      <!-- Subtle reflected light arc (rim on shadow side) -->
+      <path class="pl-reflected" id="pl-reflected" 
+            d="" 
+            fill="none" 
+            stroke="rgba(255,255,255,0.12)" 
+            stroke-width="3"/>
+      
+      <!-- Highlight overlay (small bright spot) -->
+      <circle class="pl-highlight" id="pl-highlight" 
+              cx="180" cy="125" r="9" 
+              fill="rgba(255,255,255,0.85)"
+              style="filter: blur(2px);"/>
+      
+      <!-- The draggable sun -->
+      <g class="pl-sun" id="pl-sun" transform="translate(94, 39)" 
+         style="cursor: grab;">
+        <circle class="pl-sun-glow" cx="0" cy="0" r="22" 
+                fill="rgba(252,211,77,0.4)"
+                style="filter: blur(4px);"/>
+        <circle class="pl-sun-core" cx="0" cy="0" r="14" 
+                fill="#fbbf24" 
+                stroke="#f59e0b" 
+                stroke-width="1.5"/>
+        <text x="0" y="5" 
+              text-anchor="middle" 
+              font-size="16" 
+              style="user-select:none; pointer-events:none;">☀️</text>
+      </g>
+    `;
+  } else if (shape === 'cube') {
+    // For Lesson 2 — three visible cube faces, faceted shading
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="pl-floor-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e8e4dc"/>
+          <stop offset="100%" stop-color="#c8c0b4"/>
+        </linearGradient>
+      </defs>
+      
+      <rect class="pl-floor" x="0" y="220" width="400" height="100" fill="url(#pl-floor-grad)"/>
+      
+      <!-- Cast shadow polygon — recomputed by updatePlayLight -->
+      <polygon class="pl-cast-shadow" id="pl-cast-shadow"
+               points="160,225 240,225 260,235 140,235"
+               fill="rgba(0,0,0,0.35)"
+               style="filter: blur(2px);"/>
+      
+      <!-- Cube faces: top, left, right (drawn separately so they can shade independently) -->
+      <polygon class="pl-cube-face pl-cube-top" id="pl-cube-top"
+               points="135,90 200,60 265,90 200,120"
+               fill="#aaa" 
+               stroke="#1a1d2b" stroke-width="1.5"/>
+      <polygon class="pl-cube-face pl-cube-left" id="pl-cube-left"
+               points="135,90 135,200 200,230 200,120"
+               fill="#777" 
+               stroke="#1a1d2b" stroke-width="1.5"/>
+      <polygon class="pl-cube-face pl-cube-right" id="pl-cube-right"
+               points="265,90 265,200 200,230 200,120"
+               fill="#888" 
+               stroke="#1a1d2b" stroke-width="1.5"/>
+      
+      <!-- The draggable sun -->
+      <g class="pl-sun" id="pl-sun" transform="translate(94, 39)" 
+         style="cursor: grab;">
+        <circle class="pl-sun-glow" cx="0" cy="0" r="22" 
+                fill="rgba(252,211,77,0.4)"
+                style="filter: blur(4px);"/>
+        <circle class="pl-sun-core" cx="0" cy="0" r="14" 
+                fill="#fbbf24" 
+                stroke="#f59e0b" 
+                stroke-width="1.5"/>
+        <text x="0" y="5" 
+              text-anchor="middle" 
+              font-size="16" 
+              style="user-select:none; pointer-events:none;">☀️</text>
+      </g>
+    `;
+  }
+  
+  // Wire up dragging
+  attachPlayLightDrag();
+  
+  // Initial render
+  updatePlayLight();
+}
+
+// Attach drag handlers to the sun (works for both mouse and touch)
+function attachPlayLightDrag() {
+  const sun = document.getElementById('pl-sun');
+  const svg = document.getElementById('play-light-svg');
+  const stage = document.getElementById('play-light-stage');
+  if (!sun || !svg || !stage) return;
+  
+  let dragging = false;
+  
+  // Convert client (page) coords to SVG coords
+  function clientToSvg(clientX, clientY) {
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    const transformed = pt.matrixTransform(ctm.inverse());
+    return { x: transformed.x, y: transformed.y };
+  }
+  
+  // Update light angle/distance from a pointer position (in SVG coords)
+  function updateFromPoint(svgX, svgY) {
+    const dx = svgX - PlayLight.centerX;
+    const dy = svgY - PlayLight.centerY;
+    const dist = Math.max(60, Math.min(200, Math.sqrt(dx*dx + dy*dy)));
+    const angleDeg = Math.atan2(dy, dx) * 180 / Math.PI;
+    PlayLight.lightAngleDeg = angleDeg;
+    PlayLight.lightDistance = dist;
+    
+    // Mark interaction
+    if (!PlayLight.hasInteracted) {
+      PlayLight.hasInteracted = true;
+      const hint = document.getElementById('play-light-hint');
+      if (hint) hint.style.opacity = '0';
+      Analytics.track('play_light_first_drag', { 
+        shape: PlayLight.shape,
+        lesson_id: LESSON.id 
+      });
+    }
+    
+    updatePlayLight();
+  }
+  
+  // ─── Mouse handlers ───
+  sun.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    dragging = true;
+    sun.style.cursor = 'grabbing';
+    document.body.style.userSelect = 'none';
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const { x, y } = clientToSvg(e.clientX, e.clientY);
+    updateFromPoint(x, y);
+  });
+  
+  document.addEventListener('mouseup', () => {
+    if (dragging) {
+      dragging = false;
+      sun.style.cursor = 'grab';
+      document.body.style.userSelect = '';
+    }
+  });
+  
+  // ─── Touch handlers (iPad / phone) ───
+  sun.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dragging = true;
+  }, { passive: false });
+  
+  document.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const t = e.touches[0];
+    if (!t) return;
+    const { x, y } = clientToSvg(t.clientX, t.clientY);
+    updateFromPoint(x, y);
+    e.preventDefault();
+  }, { passive: false });
+  
+  document.addEventListener('touchend', () => { dragging = false; });
+}
+
+// Recompute and apply visual update based on current light state
+function updatePlayLight() {
+  if (PlayLight.shape === 'sphere') {
+    updatePlayLightSphere();
+  } else if (PlayLight.shape === 'cube') {
+    updatePlayLightCube();
+  }
+  
+  updatePlayLightReadout();
+  trackPlayLightInsights();
+}
+
+// ─── Sphere shading update ────────────────────────────────────────
+function updatePlayLightSphere() {
+  const lightPos = PlayLight.lightPos();
+  const dir = PlayLight.lightDir();
+  
+  // Move the sun
+  const sun = document.getElementById('pl-sun');
+  if (sun) {
+    sun.setAttribute('transform', `translate(${lightPos.x}, ${lightPos.y})`);
+  }
+  
+  // Move the highlight on the sphere
+  // Highlight position: 0.55× radius offset from sphere center toward light
+  const hl = document.getElementById('pl-highlight');
+  if (hl) {
+    const hlOffset = PlayLight.size * 0.55;
+    hl.setAttribute('cx', PlayLight.centerX + dir.x * hlOffset);
+    hl.setAttribute('cy', PlayLight.centerY + dir.y * hlOffset);
+  }
+  
+  // Update sphere gradient to follow the light
+  // We do this by updating the radialGradient's cx/cy attributes
+  const grad = document.querySelector('#pl-sphere-grad');
+  if (grad) {
+    // Convert dir to gradient-space (0..1, where center is 0.5,0.5)
+    // Highlight at offset 0% should be at light position relative to circle bounds
+    const gx = 0.5 + dir.x * 0.4;  // 0.4 brings it close to edge but not off
+    const gy = 0.5 + dir.y * 0.4;
+    grad.setAttribute('cx', `${gx * 100}%`);
+    grad.setAttribute('cy', `${gy * 100}%`);
+    grad.setAttribute('r', '70%');
+  }
+  
+  // Reflected light: a thin arc on the *shadow* side of the sphere
+  // It runs perpendicular to the light direction, on the dark side
+  const refl = document.getElementById('pl-reflected');
+  if (refl) {
+    const oppositeDir = { x: -dir.x, y: -dir.y };
+    const arcStart = {
+      x: PlayLight.centerX + oppositeDir.x * PlayLight.size * 0.85 + (-oppositeDir.y) * PlayLight.size * 0.5,
+      y: PlayLight.centerY + oppositeDir.y * PlayLight.size * 0.85 + ( oppositeDir.x) * PlayLight.size * 0.5
+    };
+    const arcEnd = {
+      x: PlayLight.centerX + oppositeDir.x * PlayLight.size * 0.85 - (-oppositeDir.y) * PlayLight.size * 0.5,
+      y: PlayLight.centerY + oppositeDir.y * PlayLight.size * 0.85 - ( oppositeDir.x) * PlayLight.size * 0.5
+    };
+    refl.setAttribute('d', 
+      `M ${arcStart.x} ${arcStart.y} A ${PlayLight.size * 0.85} ${PlayLight.size * 0.85} 0 0 1 ${arcEnd.x} ${arcEnd.y}`);
+  }
+  
+  // Cast shadow on the floor — elongated ellipse, away from light direction
+  const cast = document.getElementById('pl-cast-shadow');
+  if (cast) {
+    // Floor is at y=220 (under sphere)
+    // Shadow center: project from sphere base in opposite direction of light
+    const floorY = 225;
+    const shadowDir = { x: -dir.x, y: 0 };  // shadow only in horizontal plane
+    
+    // Shadow length depends on how high the light is (more horizontal = longer shadow)
+    const lightHorizontality = Math.abs(dir.x);
+    const baseRx = 75;
+    const stretchedRx = baseRx + lightHorizontality * 80;
+    
+    // Shadow X offset
+    const shadowOffsetX = -dir.x * 50;
+    
+    // Shadow opacity: lower if light is from above (steeper)
+    const opacity = 0.25 + Math.abs(dir.y) * 0.2;
+    
+    cast.setAttribute('cx', PlayLight.centerX + shadowOffsetX);
+    cast.setAttribute('cy', floorY);
+    cast.setAttribute('rx', stretchedRx);
+    cast.setAttribute('ry', 14);
+    cast.setAttribute('fill', `rgba(0,0,0,${opacity})`);
+    
+    // If light is below floor level, hide cast shadow (light is "underneath")
+    if (dir.y > 0.6) {
+      cast.style.opacity = Math.max(0, 1 - dir.y * 1.2);
+    } else {
+      cast.style.opacity = 1;
+    }
+  }
+}
+
+// ─── Cube shading update ──────────────────────────────────────────
+function updatePlayLightCube() {
+  const lightPos = PlayLight.lightPos();
+  const dir = PlayLight.lightDir();
+  
+  // Move the sun
+  const sun = document.getElementById('pl-sun');
+  if (sun) {
+    sun.setAttribute('transform', `translate(${lightPos.x}, ${lightPos.y})`);
+  }
+  
+  // Each cube face has a normal direction (pointing outward)
+  // Top face:    normal = up      = (0, -1)
+  // Left face:   normal = left    = (-0.7, 0.3) (tilted in our isometric view)
+  // Right face:  normal = right   = (0.7, 0.3)
+  // 
+  // Brightness = max(0, dot(normal, lightDirection))
+  // Where lightDirection points FROM surface TOWARD light
+  
+  const lightFromSurface = { x: dir.x, y: dir.y };  // already toward light
+  
+  // For our top-down 2D representation, light angle effects:
+  //   - Top face brighter if light is more vertical (dir.y < 0)
+  //   - Left face brighter if light comes from left (dir.x < 0)
+  //   - Right face brighter if light comes from right (dir.x > 0)
+  
+  // Face normals (in our viewing plane)
+  const normals = {
+    top:   { x: 0,    y: -1   },
+    left:  { x: -0.7, y: 0.3  },
+    right: { x: 0.7,  y: 0.3  }
+  };
+  
+  function brightness(normal) {
+    const dot = normal.x * lightFromSurface.x + normal.y * lightFromSurface.y;
+    return Math.max(0.08, Math.min(1, dot));  // clamp to avoid pure black
+  }
+  
+  // Apply colors
+  const topB = brightness(normals.top);
+  const leftB = brightness(normals.left);
+  const rightB = brightness(normals.right);
+  
+  function brightnessToColor(b) {
+    // b in [0.08, 1] → a gray value
+    const v = Math.round(40 + b * 200);
+    return `rgb(${v}, ${v}, ${v})`;
+  }
+  
+  const topEl = document.getElementById('pl-cube-top');
+  const leftEl = document.getElementById('pl-cube-left');
+  const rightEl = document.getElementById('pl-cube-right');
+  if (topEl) topEl.setAttribute('fill', brightnessToColor(topB));
+  if (leftEl) leftEl.setAttribute('fill', brightnessToColor(leftB));
+  if (rightEl) rightEl.setAttribute('fill', brightnessToColor(rightB));
+  
+  // Cast shadow polygon — projected away from light along ground plane
+  const cast = document.getElementById('pl-cast-shadow');
+  if (cast) {
+    // Cube base corners (in our isometric view, the bottom edges):
+    //   bottom-left:  (135, 200)
+    //   bottom-front: (200, 230)
+    //   bottom-right: (265, 200)
+    // Project these away from light onto floor
+    
+    const baseCorners = [
+      { x: 135, y: 200 },
+      { x: 200, y: 230 },
+      { x: 265, y: 200 }
+    ];
+    
+    // Shadow direction is opposite to light (and clamped to floor plane)
+    const lightHorizontality = Math.abs(dir.x);
+    const projectionLength = 40 + lightHorizontality * 80;
+    const shadowDir = { x: -dir.x, y: Math.max(0, -dir.y * 0.5) };
+    
+    const projected = baseCorners.map(c => ({
+      x: c.x + shadowDir.x * projectionLength,
+      y: Math.max(225, c.y + Math.abs(shadowDir.y) * projectionLength)
+    }));
+    
+    // Build polygon: original corners + projected (going around)
+    const points = [
+      `${baseCorners[0].x},${baseCorners[0].y}`,
+      `${baseCorners[1].x},${baseCorners[1].y}`,
+      `${baseCorners[2].x},${baseCorners[2].y}`,
+      `${projected[2].x},${projected[2].y}`,
+      `${projected[1].x},${projected[1].y}`,
+      `${projected[0].x},${projected[0].y}`
+    ].join(' ');
+    
+    cast.setAttribute('points', points);
+    
+    // Hide if light is below
+    if (dir.y > 0.6) {
+      cast.style.opacity = Math.max(0, 1 - dir.y * 1.2);
+    } else {
+      cast.style.opacity = 0.5 + Math.abs(dir.x) * 0.3;
+    }
+  }
+}
+
+// ─── Update the readout text ──────────────────────────────────────
+function updatePlayLightReadout() {
+  const dir = PlayLight.lightDir();
+  const zoneEl = document.getElementById('play-light-readout-zone');
+  const hintEl = document.getElementById('play-light-readout-hint');
+  if (!zoneEl || !hintEl) return;
+  
+  if (!PlayLight.hasInteracted) {
+    zoneEl.textContent = 'Move the light to begin';
+    hintEl.textContent = 'Drag the sun ☀️ in any direction.';
+    return;
+  }
+  
+  // Describe the current lighting setup based on direction
+  let description = '';
+  let hint = '';
+  
+  // Vertical position
+  if (dir.y < -0.5) {
+    description = 'Light from above';
+    hint = 'Top of the form is brightest. Cast shadow is short and tucked underneath.';
+  } else if (dir.y > 0.5) {
+    description = 'Light from below';
+    hint = 'Unusual! Cast shadow disappears or flips upward. Hard to find in nature — except firelight.';
+  } else if (dir.x < -0.5) {
+    description = 'Light from the left';
+    hint = 'Highlight on the left, shadow on the right. Classical Vermeer lighting.';
+  } else if (dir.x > 0.5) {
+    description = 'Light from the right';
+    hint = 'Highlight on the right, shadow on the left.';
+  } else {
+    description = 'Light is angled';
+    hint = 'Notice the terminator line — where light meets dark.';
+  }
+  
+  zoneEl.textContent = description;
+  hintEl.textContent = hint;
+}
+
+// ─── Track which insights the student has 'discovered' ───────────
+function trackPlayLightInsights() {
+  if (!PlayLight.hasInteracted) return;
+  
+  const dir = PlayLight.lightDir();
+  const insights = [];
+  
+  // Insight 1: tried light from multiple sides
+  // (We track this by seeing if angles span enough range)
+  if (PlayLight.insightsShown.has('first_drag') === false) {
+    PlayLight.insightsShown.add('first_drag');
+    insights.push({
+      icon: '✓',
+      label: 'You moved the light. The shadow followed.',
+      description: 'This is the most fundamental rule in shading: every shadow has a source.'
+    });
+  }
+  
+  // Insight 2: tried backlight (light from below or behind)
+  if (Math.abs(dir.y) > 0.6 && !PlayLight.insightsShown.has('extreme_angle')) {
+    PlayLight.insightsShown.add('extreme_angle');
+    insights.push({
+      icon: '✓',
+      label: 'Extreme angle — what happened to the cast shadow?',
+      description: 'Shadow length depends on how horizontal the light is. Top-down light = short shadow. Side light = long shadow.'
+    });
+  }
+  
+  // Insight 3: tried left vs right
+  if (Math.abs(dir.x) > 0.7 && !PlayLight.insightsShown.has('horizontal_light')) {
+    PlayLight.insightsShown.add('horizontal_light');
+    insights.push({
+      icon: '✓',
+      label: 'Side light reveals the most form.',
+      description: 'When you draw, lighting from one side (45° is classic) gives you the most distinct light/shadow zones to work with.'
+    });
+  }
+  
+  // Render any new insights
+  if (insights.length > 0) {
+    const container = document.getElementById('play-light-insights');
+    if (container) {
+      insights.forEach(ins => {
+        const card = document.createElement('div');
+        card.className = 'play-light-insight-card';
+        card.innerHTML = `
+          <div class="play-light-insight-icon">${ins.icon}</div>
+          <div class="play-light-insight-text">
+            <div class="play-light-insight-label">${escapeHtml(ins.label)}</div>
+            <div class="play-light-insight-desc">${escapeHtml(ins.description)}</div>
+          </div>
+        `;
+        container.appendChild(card);
+        // Animate in
+        setTimeout(() => card.classList.add('revealed'), 50);
+      });
+    }
+  }
+}
+
+// Reset to canonical position
+function resetPlayLight() {
+  Analytics.track('play_light_reset', { shape: PlayLight.shape });
+  PlayLight.lightAngleDeg = 225;
+  PlayLight.lightDistance = 150;
+  updatePlayLight();
 }
 
 function renderReference(step) {
@@ -6657,29 +7573,61 @@ function openUploadModal() {
   
   // Build modal based on tier — single source of truth, no fallback overrides
   if (tier === 'explorer') {
-    // EXPLORER: AI feedback (default), but offer "real teacher" as lead-capture soft entry
+    // EXPLORER (Lesson 2 members): AI feedback + real teacher option (PRICED).
+    // Real teacher review is only for Master combo ($260) — clearly labeled.
+    // Upload is OPTIONAL.
     content.innerHTML = `
-      <div class="modal-title">How would you like feedback on this?</div>
-      <div class="modal-sub">Pick the style that fits you today.</div>
+      <div class="modal-title">Show your work</div>
+      <div class="modal-sub">Optional — share your cube if you'd like feedback.</div>
+      
+      <!-- Preview disclosure (transparent: AI feedback is mock for now) -->
+      <div class="upload-preview-banner">
+        <div class="upload-preview-banner-icon">🚧</div>
+        <div class="upload-preview-banner-text">
+          <b>Preview mode.</b> AI feedback is launching soon — for now, your upload is just for show.
+        </div>
+      </div>
+      
+      <!-- File picker — actual image upload -->
+      <div class="upload-file-block">
+        <label for="upload-file-input" class="upload-file-label" id="upload-file-label">
+          <div class="upload-file-icon">📷</div>
+          <div class="upload-file-text">
+            <div class="upload-file-text-main">Tap to choose photo</div>
+            <div class="upload-file-text-sub">JPG or PNG · From your device</div>
+          </div>
+        </label>
+        <input type="file" 
+               id="upload-file-input" 
+               accept="image/*" 
+               style="display:none"
+               onchange="onUploadFileSelected(event)">
+        <div class="upload-file-preview" id="upload-file-preview" style="display:none"></div>
+      </div>
+      
+      <!-- Two feedback options for members: free AI, paid teacher -->
+      <div class="modal-sub" style="margin-top: 18px;">Pick how you'd like feedback:</div>
       <div class="choice-list">
         <div class="choice selected" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>AI feedback (instant)</h5>
-            <p>Artchi reviews shading, form, and value balance — ready in seconds</p>
+            <h5>AI feedback <span class="choice-soft-badge" style="background: rgba(29,158,117,0.12); color: var(--green);">Included · Coming soon</span></h5>
+            <p>Once live, Artchi reviews shading, form, and value balance — ready in seconds</p>
           </div>
         </div>
-        <div class="choice choice-soft-lead" onclick="selectChoice(this, 'teacher_interest')">
+        <div class="choice choice-paid-tier" onclick="selectChoice(this, 'teacher_interest')">
           <div class="choice-icon">👩‍🎨</div>
           <div class="choice-body">
-            <h5>Real teacher review <span class="choice-soft-badge">Early access</span></h5>
-            <p>Tell us you want this — we'll notify you the moment human teacher reviews open</p>
+            <h5>Real teacher review <span class="choice-soft-badge" style="background: rgba(200,169,110,0.18); color: var(--gold);">Master combo · $260</span></h5>
+            <p>Faye personally reviews your drawing within 48h — included with the Master combo (10-lesson + portfolio mentorship)</p>
           </div>
         </div>
       </div>
-      <div class="btn-stack" style="margin: 12px 0 0;">
+      
+      <div class="btn-stack" style="margin: 16px 0 0;">
         <button class="btn btn-gold" onclick="submitUpload()">Send it ✓</button>
-        <button class="btn btn-ghost" onclick="closeUploadModal()">Cancel</button>
+        <button class="btn btn-ghost" onclick="skipUpload()">Skip for now — I'll come back later</button>
+        <button class="btn btn-ghost" onclick="closeUploadModal()" style="opacity: 0.7;">Cancel</button>
       </div>
     `;
     state.uploadChoice = 'ai';  // default
@@ -6761,6 +7709,7 @@ function openUploadModal() {
 function closeUploadModal() {
   document.getElementById('upload-modal').classList.remove('show');
   state.uploadChoice = null;
+  state.uploadedFile = null;
 }
 
 function selectChoice(el, kind) {
@@ -6769,10 +7718,74 @@ function selectChoice(el, kind) {
   state.uploadChoice = kind;
 }
 
+// ═══════════════════════════════════════════════════════════════
+// File picker handler — shows preview of selected image
+// (Currently saves locally; future: send to AI backend / cloud storage)
+// ═══════════════════════════════════════════════════════════════
+function onUploadFileSelected(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  
+  if (!file.type.startsWith('image/')) {
+    showBubble('Please pick an image file (JPG or PNG)', 3000);
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showBubble('Image is too large (max 10MB). Try a smaller photo.', 3500);
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = document.getElementById('upload-file-preview');
+    const label = document.getElementById('upload-file-label');
+    if (preview) {
+      preview.innerHTML = `
+        <img src="${e.target.result}" alt="Your drawing" class="upload-file-preview-img">
+        <div class="upload-file-preview-meta">
+          <span>✓ ${escapeHtml(file.name)}</span>
+          <span class="upload-file-replace" onclick="document.getElementById('upload-file-input').click()">Replace</span>
+        </div>
+      `;
+      preview.style.display = 'block';
+    }
+    if (label) label.style.display = 'none';
+    
+    state.uploadedFile = {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      dataUrl: e.target.result
+    };
+    
+    Analytics.track('upload_file_selected', { 
+      file_size: file.size, 
+      file_type: file.type 
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+// Student chose to skip upload — track and continue, no judgment.
+function skipUpload() {
+  Analytics.track('upload_skipped', {
+    lesson_id: LESSON.id,
+    step_index: state.currentStepIndex
+  });
+  closeUploadModal();
+  showBubble("No worries! You can come back and upload anytime.", 2400);
+  setTimeout(() => nextStep(), 400);
+}
+
 function submitUpload() {
   if (!state.uploadChoice) { showBubble("Pick a feedback option first!", 2500); return; }
   const choice = state.uploadChoice;
-  Analytics.track('artwork_uploaded', { feedback_type: choice });
+  Analytics.track('artwork_uploaded', { 
+    feedback_type: choice,
+    has_file: !!state.uploadedFile,
+    file_size: state.uploadedFile?.size || 0,
+    skipped: !state.uploadedFile
+  });
   
   closeUploadModal();
   
