@@ -95,8 +95,8 @@ const artworkLibrary = {
 
 export const runtimePrototypeLesson = {
   lesson: {
-    lessonId: "lfc054-surreal-worlds-prototype",
-    slug: "lfc054-surreal-worlds-prototype",
+    lessonId: "lfc054-surreal-worlds",
+    slug: "lfc054-surreal-worlds",
     title: "Surreal Worlds",
     shortTitle: "LFC054",
     lessonFamily: "lfc",
@@ -418,7 +418,7 @@ export const runtimePrototypeLesson = {
 
 export const runtimePrototypeInitialRunState = {
   learnerId: "",
-  lessonId: "lfc054-surreal-worlds-prototype",
+  lessonId: "lfc054-surreal-worlds",
   ageGroup: "teen",
   currentStep: 1,
   currentScreenId: "look-see-the-strange",
