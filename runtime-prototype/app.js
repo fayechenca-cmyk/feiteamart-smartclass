@@ -8,7 +8,7 @@ const appRoot = document.querySelector("[data-app]");
 
 const analytics = {
   track(eventName, payload = {}) {
-    console.info("[runtime-prototype]", eventName, payload);
+    console.info("[lfc054-prototype]", eventName, payload);
   },
 };
 
@@ -27,16 +27,17 @@ function button(label, options = {}) {
 }
 
 function pickAssistantMode(screen) {
-  switch (screen.stepNumber) {
-    case 1:
-    case 2:
-      return { label: "LFC Guide", note: "Visual noticing before explanation." };
-    case 3:
-    case 4:
-      return { label: "Making Coach", note: "Borrow the move, then build your own image." };
-    default:
-      return { label: "Journey Companion", note: "Keep the thought, not just the answer." };
+  if (screen.stepNumber === 3) {
+    return {
+      label: "Guided making",
+      note: "Recorded teacher guidance leads each move. Between segments, the lesson keeps the focus quiet and practical.",
+    };
   }
+
+  return {
+    label: "LFC guide",
+    note: "The lesson teaches through artworks, artist choices, and visual logic before making begins.",
+  };
 }
 
 function stateSummary(state) {
@@ -52,7 +53,30 @@ function getProgressPercent(lessonMeta, screen) {
   return Math.round((screen.stepNumber / lessonMeta.totalSteps) * 100);
 }
 
-function createArtGrid(items, selectedId, onSelect) {
+function createProgressSteps(lessonMeta, state) {
+  const wrap = document.createElement("div");
+  wrap.className = "progress-steps";
+
+  lessonMeta.screens.forEach((screen) => {
+    const step = document.createElement("div");
+    step.className = `progress-step${state.currentScreenId === screen.screenId ? " is-active" : ""}${
+      state.completedScreenIds.includes(screen.screenId) ? " is-done" : ""
+    }`;
+
+    const title = document.createElement("strong");
+    title.textContent = screen.partLabel;
+
+    const label = document.createElement("span");
+    label.textContent = screen.title;
+
+    step.append(title, label);
+    wrap.append(step);
+  });
+
+  return wrap;
+}
+
+function createArtworkGrid(items, selectedId, onSelect) {
   const grid = document.createElement("div");
   grid.className = "art-grid";
 
@@ -70,15 +94,19 @@ function createArtGrid(items, selectedId, onSelect) {
     const copy = document.createElement("div");
     copy.className = "art-card-copy";
 
-    const label = document.createElement("p");
-    label.className = "art-card-label";
-    label.textContent = item.label;
+    const kicker = document.createElement("p");
+    kicker.className = "art-card-kicker";
+    kicker.textContent = item.artist;
 
     const title = document.createElement("p");
     title.className = "art-card-title";
-    title.textContent = item.alt;
+    title.textContent = item.title;
 
-    copy.append(label, title);
+    const label = document.createElement("p");
+    label.className = "art-card-meta";
+    label.textContent = item.alt;
+
+    copy.append(kicker, title, label);
     card.append(image, copy);
     grid.append(card);
   });
@@ -102,37 +130,37 @@ function createChipRow(items, selectedValues, onToggle) {
   return row;
 }
 
-function createOptionRow(items, selectedId, onSelect) {
+function createEffectRow(items, selectedId, onSelect) {
   const row = document.createElement("div");
-  row.className = "option-grid";
+  row.className = "effect-row";
 
   items.forEach((item) => {
-    const option = button(item.label, {
-      className: `option-button${selectedId === item.id ? " is-active" : ""}`,
+    const effect = button(item.label, {
+      className: `effect-button${selectedId === item.id ? " is-active" : ""}`,
       onClick: () => onSelect(item.id),
     });
-    option.setAttribute("aria-pressed", String(selectedId === item.id));
-    row.append(option);
+    effect.setAttribute("aria-pressed", String(selectedId === item.id));
+    row.append(effect);
   });
 
   return row;
 }
 
-function createProgressNodes(lessonMeta, state) {
+function createDrawSegmentNodes(segments, state) {
   const wrap = document.createElement("div");
-  wrap.className = "progress-nodes";
+  wrap.className = "segment-nodes";
 
-  lessonMeta.screens.forEach((screen) => {
+  segments.forEach((segment, index) => {
     const node = document.createElement("div");
-    const isDone = state.completedScreenIds.includes(screen.screenId);
-    const isActive = state.currentScreenId === screen.screenId;
-    node.className = `progress-node${isDone ? " is-done" : ""}${isActive ? " is-active" : ""}`;
+    const isActive = state.responses.draw.activeSegmentIndex === index;
+    const isComplete = state.responses.draw.completedSegmentIds.includes(segment.segmentId);
+    node.className = `segment-node${isActive ? " is-active" : ""}${isComplete ? " is-complete" : ""}`;
 
     const title = document.createElement("strong");
-    title.textContent = `${screen.stepNumber}`;
+    title.textContent = `${index + 1}`;
 
     const label = document.createElement("span");
-    label.textContent = screen.partLabel;
+    label.textContent = segment.title;
 
     node.append(title, label);
     wrap.append(node);
@@ -141,267 +169,278 @@ function createProgressNodes(lessonMeta, state) {
   return wrap;
 }
 
-function renderScreenBody({ lessonApp, lessonMeta, screen, state, resolveAgeVariant }) {
-  const ageGroup = state.ageGroup;
-  const stage = document.createElement("div");
-  stage.className = "visual-grid";
+function renderLookStage({ lessonApp, screen, state, resolveAgeVariant }) {
+  const wrap = document.createElement("div");
+  wrap.className = "stage-layout";
 
-  if (screen.stepNumber === 1) {
-    stage.append(
-      createArtGrid(
-        screen.blocks.artworkChoice.items,
-        state.responses.screen1.artworkChoiceId,
-        (artworkChoiceId) => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            draft.responses.screen1.artworkChoiceId = artworkChoiceId;
-            draft.progressState = screen.progressOnComplete;
-            return draft;
-          });
-        },
-      ),
-    );
-
-    const textCard = document.createElement("div");
-    textCard.className = "teacher-pulse";
-    textCard.innerHTML = `
-      <p class="micro-kicker">Teacher pulse</p>
-      <p>${resolveAgeVariant(screen.blocks.teacherPulse.line, ageGroup)}</p>
-    `;
-    stage.append(textCard);
-
-    stage.append(
-      createChipRow(
-        screen.blocks.artworkChoice.reasonChips,
-        state.responses.screen1.reasonChipIds,
-        (chipId) => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            const selected = draft.responses.screen1.reasonChipIds;
-            draft.responses.screen1.reasonChipIds = selected.includes(chipId)
-              ? selected.filter((item) => item !== chipId)
-              : [...selected, chipId];
-            return draft;
-          });
-        },
-      ),
-    );
-  }
-
-  if (screen.stepNumber === 2) {
-    const studyStage = document.createElement("div");
-    studyStage.className = "study-stage";
-
-    const art = document.createElement("div");
-    art.className = "study-art";
-
-    const image = document.createElement("img");
-    image.src = screen.blocks.artworkStudy.artwork.imageSrc;
-    image.alt = screen.blocks.artworkStudy.artwork.alt;
-    art.append(image);
-
-    const hotspotLayer = document.createElement("div");
-    hotspotLayer.className = "hotspot-layer";
-
-    screen.blocks.artworkStudy.hotspots.forEach((hotspot, index) => {
-      const revealed = state.responses.screen2.hotspotIdsViewed.includes(hotspot.id);
-      const buttonNode = button(`${index + 1}`, {
-        className: `hotspot-button${revealed ? " is-active" : ""}`,
-        onClick: () => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            const seen = draft.responses.screen2.hotspotIdsViewed;
-            if (!seen.includes(hotspot.id)) {
-              draft.responses.screen2.hotspotIdsViewed = [...seen, hotspot.id];
-            }
-            return draft;
-          });
-        },
-      });
-      buttonNode.style.left = `${hotspot.x}%`;
-      buttonNode.style.top = `${hotspot.y}%`;
-      buttonNode.style.transform = "translate(-50%, -50%)";
-      hotspotLayer.append(buttonNode);
-    });
-
-    art.append(hotspotLayer);
-
-    const side = document.createElement("div");
-    side.className = "study-side";
-
-    const insight = document.createElement("div");
-    insight.className = "insight-card";
-
-    const latestHotspot =
-      screen.blocks.artworkStudy.hotspots.find((hotspot) =>
-        state.responses.screen2.hotspotIdsViewed.includes(hotspot.id),
-      ) ?? screen.blocks.artworkStudy.hotspots[0];
-
-    insight.innerHTML = `
-      <p class="micro-kicker">Latest clue</p>
-      <p>${latestHotspot.revealText}</p>
-    `;
-
-    const moveOptions = createOptionRow(
-      screen.blocks.artworkStudy.moveOptions,
-      state.responses.screen2.selectedMoveId,
-      (selectedMoveId) => {
+  wrap.append(
+    createArtworkGrid(
+      screen.blocks.artworkSelection.items,
+      state.responses.look.selectedArtworkId,
+      (selectedArtworkId) => {
         lessonApp.saveInteraction(screen.screenId, (draft) => {
-          draft.responses.screen2.selectedMoveId = selectedMoveId;
+          draft.responses.look.selectedArtworkId = selectedArtworkId;
           draft.progressState = screen.progressOnComplete;
           return draft;
         });
       },
-    );
+    ),
+  );
 
-    side.append(insight, moveOptions);
-    studyStage.append(art, side);
-    stage.append(studyStage);
-  }
+  wrap.append(
+    createChipRow(
+      screen.blocks.artworkSelection.reactionChips,
+      state.responses.look.reactionChipIds,
+      (chipId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          const selected = draft.responses.look.reactionChipIds;
+          draft.responses.look.reactionChipIds = selected.includes(chipId)
+            ? selected.filter((item) => item !== chipId)
+            : [...selected, chipId];
+          return draft;
+        });
+      },
+    ),
+  );
 
-  if (screen.stepNumber === 3) {
-    const subjectCard = document.createElement("div");
-    subjectCard.className = "concept-card";
-    subjectCard.innerHTML = `<p class="concept-title">${screen.blocks.subjectOptions.label}</p>`;
-    subjectCard.append(
-      createOptionRow(
-        screen.blocks.subjectOptions.options,
-        state.responses.screen3.subjectId,
-        (subjectId) => {
+  const note = document.createElement("div");
+  note.className = "teacher-note";
+  note.innerHTML = `
+    <p class="micro-kicker">${screen.blocks.recordedTeacherIntro.label}</p>
+    <p>${resolveAgeVariant(screen.blocks.recordedTeacherIntro.line, state.ageGroup)}</p>
+  `;
+  wrap.append(note);
+
+  return wrap;
+}
+
+function renderUnderstandStage({ lessonApp, screen, state, resolveAgeVariant }) {
+  const layout = document.createElement("div");
+  layout.className = "understand-layout";
+
+  const compare = document.createElement("div");
+  compare.className = "compare-card";
+
+  const image = document.createElement("img");
+  image.className = "compare-image";
+  image.src = screen.blocks.visualCompare.mainArtwork.imageSrc;
+  image.alt = screen.blocks.visualCompare.mainArtwork.alt;
+
+  const copy = document.createElement("div");
+  copy.className = "compare-copy";
+
+  screen.blocks.visualCompare.compareNotes.forEach((note) => {
+    const pair = document.createElement("div");
+    pair.className = "compare-pair";
+
+    const label = document.createElement("p");
+    label.className = "compare-label";
+    label.textContent = note.label;
+
+    const text = document.createElement("p");
+    text.textContent = note.text;
+
+    pair.append(label, text);
+    copy.append(pair);
+  });
+
+  compare.append(image, copy);
+
+  const side = document.createElement("div");
+  side.className = "main-column";
+
+  const effectCard = document.createElement("div");
+  effectCard.className = "draw-side-card";
+  effectCard.innerHTML = `
+    <p class="micro-kicker">Choose the effect</p>
+    <p style="margin:8px 0 12px;">Use the image, not a long explanation, to decide.</p>
+  `;
+  effectCard.append(
+    createEffectRow(
+      screen.blocks.effectChoice.options,
+      state.responses.understand.selectedEffectId,
+      (selectedEffectId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.understand.selectedEffectId = selectedEffectId;
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+
+  const insight = document.createElement("div");
+  insight.className = "micro-insight-card";
+  insight.innerHTML = `
+    <p class="micro-kicker">${screen.blocks.microInsight.label}</p>
+    <p>${resolveAgeVariant(screen.blocks.microInsight.line, state.ageGroup)}</p>
+  `;
+
+  side.append(effectCard, insight);
+  layout.append(compare, side);
+
+  return layout;
+}
+
+function renderDrawStage({ lessonApp, screen, state }) {
+  const wrap = document.createElement("div");
+  wrap.className = "stage-layout";
+
+  const segments = screen.blocks.drawSegments;
+  const activeIndex = state.responses.draw.activeSegmentIndex;
+  const activeSegment = segments[activeIndex] ?? segments.at(-1);
+  const checkpointDone = state.responses.draw.acknowledgedCheckpointIds.includes(activeSegment.segmentId);
+
+  const progress = document.createElement("div");
+  progress.className = "segment-progress";
+  progress.innerHTML = `
+    <p class="micro-kicker">Making sequence</p>
+  `;
+  progress.append(createDrawSegmentNodes(segments, state));
+
+  const layout = document.createElement("div");
+  layout.className = "draw-layout";
+
+  const media = document.createElement("div");
+  media.className = "draw-main";
+
+  const mediaHeader = document.createElement("div");
+  mediaHeader.className = "media-header";
+  mediaHeader.innerHTML = `
+    <div>
+      <p class="micro-kicker">${activeSegment.teacherMedia.label}</p>
+      <p class="media-title">${activeSegment.title}</p>
+    </div>
+    <p class="mini-label">${activeSegment.teacherMedia.durationLabel}</p>
+  `;
+
+  const mediaFrame = document.createElement("div");
+  mediaFrame.className = "media-frame";
+  const mediaImage = document.createElement("img");
+  mediaImage.src = activeSegment.teacherMedia.imageSrc;
+  mediaImage.alt = activeSegment.teacherMedia.title;
+  mediaFrame.append(mediaImage);
+
+  const mediaCopy = document.createElement("div");
+  mediaCopy.className = "media-copy";
+  mediaCopy.innerHTML = `
+    <p class="micro-kicker">${activeSegment.teacherMedia.title}</p>
+    <p>${activeSegment.teacherMedia.caption}</p>
+  `;
+
+  media.append(mediaHeader, mediaFrame, mediaCopy);
+
+  const side = document.createElement("div");
+  side.className = "draw-side";
+
+  const action = document.createElement("div");
+  action.className = "draw-side-card";
+  action.innerHTML = `
+    <p class="micro-kicker">${activeSegment.pausePoint.label}</p>
+    <p class="side-card-title">${activeSegment.pausePoint.title}</p>
+    <p>${activeSegment.pausePoint.instruction}</p>
+  `;
+
+  const companion = document.createElement("div");
+  companion.className = "draw-side-card";
+  companion.innerHTML = `
+    <p class="micro-kicker">${activeSegment.companionPrompt.label}</p>
+    <p>${activeSegment.companionPrompt.text}</p>
+  `;
+
+  const checkpoint = document.createElement("div");
+  checkpoint.className = "draw-side-card";
+  checkpoint.innerHTML = `
+    <p class="micro-kicker">${activeSegment.checkpoint.label}</p>
+    <p class="side-card-title">${activeSegment.checkpoint.question}</p>
+  `;
+  checkpoint.append(
+    button(checkpointDone ? "Checkpoint saved" : "I checked this", {
+      className: "mini-action checkpoint-toggle",
+      onClick: () => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          const saved = draft.responses.draw.acknowledgedCheckpointIds;
+          if (!saved.includes(activeSegment.segmentId)) {
+            draft.responses.draw.acknowledgedCheckpointIds = [...saved, activeSegment.segmentId];
+          }
+          return draft;
+        });
+      },
+    }),
+  );
+
+  const controls = document.createElement("div");
+  controls.className = "draw-side-card";
+  controls.innerHTML = `
+    <p class="micro-kicker">Self-paced controls</p>
+  `;
+
+  const controlRow = document.createElement("div");
+  controlRow.className = "mini-action-row";
+  controlRow.append(
+    button("Replay move", {
+      className: "mini-action",
+      onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+    }),
+  );
+  controlRow.append(
+    button("I need more time", {
+      className: "mini-action",
+      onClick: () => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.progressState = "drawing";
+          return draft;
+        });
+      },
+    }),
+  );
+  controlRow.append(
+    button(
+      activeIndex === segments.length - 1 ? "Finish this stage" : "Next segment",
+      {
+        className: "mini-action",
+        onClick: () => {
           lessonApp.saveInteraction(screen.screenId, (draft) => {
-            draft.responses.screen3.subjectId = subjectId;
-            const subject = screen.blocks.subjectOptions.options.find((item) => item.id === subjectId);
-            const strategy = screen.blocks.strategyOptions.options.find(
-              (item) => item.id === draft.responses.screen3.strategyId,
-            );
-            draft.responses.screen3.conceptPreview =
-              subject && strategy ? `${subject.label} + ${strategy.label}` : "";
-            if (draft.responses.screen3.strategyId) {
-              draft.progressState = screen.progressOnComplete;
+            const completed = draft.responses.draw.completedSegmentIds;
+            if (!completed.includes(activeSegment.segmentId)) {
+              draft.responses.draw.completedSegmentIds = [...completed, activeSegment.segmentId];
             }
+            if (draft.responses.draw.activeSegmentIndex < segments.length - 1) {
+              draft.responses.draw.activeSegmentIndex += 1;
+            }
+            draft.progressState = screen.progressOnComplete;
             return draft;
           });
         },
-      ),
-    );
+      },
+    ),
+  );
+  controls.append(controlRow);
 
-    const strategyCard = document.createElement("div");
-    strategyCard.className = "concept-card";
-    strategyCard.innerHTML = `<p class="concept-title">${screen.blocks.strategyOptions.label}</p>`;
-    strategyCard.append(
-      createOptionRow(
-        screen.blocks.strategyOptions.options,
-        state.responses.screen3.strategyId,
-        (strategyId) => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            draft.responses.screen3.strategyId = strategyId;
-            const subject = screen.blocks.subjectOptions.options.find(
-              (item) => item.id === draft.responses.screen3.subjectId,
-            );
-            const strategy = screen.blocks.strategyOptions.options.find((item) => item.id === strategyId);
-            draft.responses.screen3.conceptPreview =
-              subject && strategy ? `${subject.label} + ${strategy.label}` : "";
-            if (draft.responses.screen3.subjectId) {
-              draft.progressState = screen.progressOnComplete;
-            }
-            return draft;
-          });
-        },
-      ),
-    );
+  const continuity = document.createElement("div");
+  continuity.className = "continuity-card";
+  continuity.innerHTML = `
+    <p class="micro-kicker">${screen.blocks.futureContinuity.label}</p>
+    <p>${screen.blocks.futureContinuity.aiScan}</p>
+    <p style="margin-top:8px;">${screen.blocks.futureContinuity.teacherReview}</p>
+    <p style="margin-top:8px;">${screen.blocks.futureContinuity.journey}</p>
+  `;
 
-    const preview = document.createElement("div");
-    preview.className = "concept-card";
-    preview.innerHTML = `
-      <p class="micro-kicker">${screen.blocks.conceptPreview.prefix}</p>
-      <p>${state.responses.screen3.conceptPreview || "Choose one subject and one move to build the idea."}</p>
-    `;
+  side.append(action, companion, checkpoint, controls, continuity);
+  layout.append(media, side);
 
-    stage.append(subjectCard, strategyCard, preview);
+  wrap.append(progress, layout);
+  return wrap;
+}
+
+function renderStageBody({ lessonApp, screen, state, resolveAgeVariant }) {
+  if (screen.stepNumber === 1) {
+    return renderLookStage({ lessonApp, screen, state, resolveAgeVariant });
   }
-
-  if (screen.stepNumber === 4) {
-    const checklistCard = document.createElement("div");
-    checklistCard.className = "concept-card";
-    checklistCard.innerHTML = `<p class="concept-title">Keep these visible while drawing</p>`;
-    checklistCard.append(
-      createChipRow(
-        screen.blocks.buildChecklist.items,
-        state.responses.screen4.checklistIds,
-        (itemId) => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            const selected = draft.responses.screen4.checklistIds;
-            draft.responses.screen4.checklistIds = selected.includes(itemId)
-              ? selected.filter((value) => value !== itemId)
-              : [...selected, itemId];
-            if (draft.responses.screen4.checklistIds.length >= 2) {
-              draft.progressState = screen.progressOnComplete;
-            }
-            return draft;
-          });
-        },
-      ),
-    );
-
-    const pulse = document.createElement("div");
-    pulse.className = "teacher-pulse";
-    pulse.innerHTML = `
-      <p class="micro-kicker">Teacher pulse</p>
-      <p>${resolveAgeVariant(screen.blocks.teacherPulse.line, ageGroup)}</p>
-    `;
-
-    stage.append(checklistCard, pulse);
+  if (screen.stepNumber === 2) {
+    return renderUnderstandStage({ lessonApp, screen, state, resolveAgeVariant });
   }
-
-  if (screen.stepNumber === 5) {
-    const reflection = document.createElement("div");
-    reflection.className = "reflection-card";
-    reflection.innerHTML = `<p class="concept-title">Leave a trace in your journey</p>`;
-    reflection.append(
-      createChipRow(
-        screen.blocks.reflection.chips,
-        state.responses.screen5.reflectionChipIds,
-        (chipId) => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            const selected = draft.responses.screen5.reflectionChipIds;
-            draft.responses.screen5.reflectionChipIds = selected.includes(chipId)
-              ? selected.filter((value) => value !== chipId)
-              : [...selected, chipId];
-            if (draft.responses.screen5.reflectionChipIds.length > 0) {
-              draft.reflectionState = "partial";
-            }
-            return draft;
-          });
-        },
-      ),
-    );
-
-    const field = document.createElement("textarea");
-    field.className = "reflection-input";
-    field.placeholder = resolveAgeVariant(screen.blocks.reflection.responseField.placeholder, ageGroup);
-    field.maxLength = screen.blocks.reflection.responseField.maxLength ?? 180;
-    field.value = state.responses.screen5.reflectionText;
-    field.addEventListener("input", (event) => {
-      lessonApp.saveInteraction(screen.screenId, (draft) => {
-        draft.responses.screen5.reflectionText = event.target.value;
-        draft.reflectionState = event.target.value.trim() ? "partial" : draft.reflectionState;
-        return draft;
-      });
-    });
-    reflection.append(field);
-    stage.append(reflection);
-
-    if (state.badgeState === "earned") {
-      const done = document.createElement("div");
-      done.className = "future-card";
-      done.innerHTML = `
-        <p class="micro-kicker">Prototype result</p>
-        <strong>${screen.blocks.completion.title}</strong>
-        <p>${screen.blocks.completion.message}</p>
-        <p style="margin-top:8px;">${screen.blocks.completion.journeySaveMessage}</p>
-      `;
-      stage.append(done);
-    }
-  }
-
-  return stage;
+  return renderDrawStage({ lessonApp, screen, state, resolveAgeVariant });
 }
 
 function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
@@ -423,15 +462,14 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
 
   const hero = document.createElement("section");
   hero.className = "surface hero";
-
   hero.innerHTML = `
     <div class="hero-top">
       <div>
-        <p class="hero-kicker"><span class="hero-kicker-dot"></span>FEI Smart Class Runtime Prototype</p>
+        <p class="hero-kicker"><span class="hero-kicker-dot"></span>FEI TeamArt · Smart Art Class</p>
         <h1 class="hero-title">${lessonMeta.title}</h1>
         <p class="hero-subtitle">
-          A visual, interaction-first LFC lesson running through the shared Codex runtime.
-          The lesson is intentionally light on explanation and heavy on looking, choosing, and making.
+          A creation-oriented LFC lesson where real artworks lead the thinking, visual logic stays central,
+          and drawing unfolds through recorded guidance, pause points, and self-paced making.
         </p>
       </div>
     </div>
@@ -454,55 +492,52 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   });
   hero.querySelector(".hero-top").append(ageSwitcher);
 
-  const bottom = document.createElement("div");
-  bottom.className = "hero-bottom";
+  const heroBottom = document.createElement("div");
+  heroBottom.className = "hero-bottom";
 
   const progressWrap = document.createElement("div");
   progressWrap.className = "progress-wrap";
   progressWrap.innerHTML = `
     <div class="progress-topline">
-      <p class="progress-title">Step ${screen.stepNumber} of ${lessonMeta.totalSteps} · ${screen.partLabel}</p>
-      <p class="save-line">${completionReady ? screen.saveMessage : "Interaction-first: choose, notice, build, reflect."}</p>
+      <p class="progress-title">Stage ${screen.stepNumber} of ${lessonMeta.totalSteps} · ${screen.partLabel}</p>
+      <p class="save-line">${completionReady ? screen.saveMessage : "Image first. Guidance second. Text stays light."}</p>
     </div>
     <div class="progress-track"><div class="progress-fill" style="width:${progressPercent}%"></div></div>
   `;
-  progressWrap.append(createProgressNodes(lessonMeta, state));
+  progressWrap.append(createProgressSteps(lessonMeta, state));
 
   const stats = document.createElement("div");
   stats.className = "hero-stats";
   stats.innerHTML = `
     <div class="hero-stat">
       <p class="hero-stat-num">${state.currentLessonXP}</p>
-      <p class="mini-stat-label">XP in lesson</p>
+      <p class="mini-label">XP this pass</p>
     </div>
     <div class="hero-stat">
       <p class="hero-stat-num">${progressPercent}%</p>
-      <p class="mini-stat-label">Runtime progress</p>
+      <p class="mini-label">Stage progress</p>
     </div>
   `;
 
-  bottom.append(progressWrap, stats);
-  hero.append(bottom);
+  heroBottom.append(progressWrap, stats);
+  hero.append(heroBottom);
 
   const content = document.createElement("section");
   content.className = "surface content-card";
 
   const contentTop = document.createElement("div");
   contentTop.className = "content-top";
-
-  const copy = document.createElement("div");
-  copy.innerHTML = `
-    <h2 class="content-title">${screen.title}</h2>
-    <p class="content-prompt">${resolveAgeVariant(screen.prompt, ageGroup)}</p>
-    <p class="content-helper">${resolveAgeVariant(screen.helperText, ageGroup)}</p>
+  contentTop.innerHTML = `
+    <div>
+      <p class="stage-label">${screen.partLabel}</p>
+      <h2 class="content-title">${screen.title}</h2>
+      <p class="content-prompt">${resolveAgeVariant(screen.prompt, ageGroup)}</p>
+      <p class="content-helper">${resolveAgeVariant(screen.helperText, ageGroup)}</p>
+    </div>
+    <div class="stage-pill"><p class="stage-label">LFC remains central</p></div>
   `;
 
-  const stagePill = document.createElement("div");
-  stagePill.className = "stage-pill";
-  stagePill.innerHTML = `<p class="stage-label">${screen.partLabel} · interaction-led</p>`;
-
-  contentTop.append(copy, stagePill);
-  content.append(contentTop, renderScreenBody({ lessonApp, lessonMeta, screen, state, resolveAgeVariant }));
+  content.append(contentTop, renderStageBody({ lessonApp, screen, state, resolveAgeVariant }));
 
   const footer = document.createElement("section");
   footer.className = "surface footer-card";
@@ -510,23 +545,21 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const footerCopy = document.createElement("div");
   footerCopy.className = "footer-copy";
   footerCopy.innerHTML = `
-    <p class="save-line">${completionReady ? screen.saveMessage : "Keep the lesson moving through choices, not long reading."}</p>
+    <p class="save-line">${completionReady ? screen.saveMessage : "This prototype tests the lesson surface first. Shared portal features can attach later."}</p>
     <p class="footer-state">${stateSummary(state)}</p>
   `;
 
   const footerActions = document.createElement("div");
   footerActions.className = "footer-actions";
-
   footerActions.append(
-    button("Continue", {
+    button(screen.stepNumber === lessonMeta.totalSteps ? "Finish this prototype pass" : "Continue", {
       className: "footer-button primary",
       disabled: !completionReady,
       onClick: () => lessonApp.completeScreen(screen.screenId),
     }),
   );
-
   footerActions.append(
-    button("Reset lesson", {
+    button("Reset pass", {
       className: "footer-button",
       onClick: () => window.location.reload(),
     }),
@@ -535,64 +568,40 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   footer.append(footerCopy, footerActions);
 
   const assistant = document.createElement("section");
-  assistant.className = "assistant-card";
+  assistant.className = "surface assistant-card";
   assistant.innerHTML = `
     <div class="assistant-head">
       <div class="assistant-avatar">🧚</div>
       <div>
-        <p class="assistant-title">Artchi-ready runtime</p>
+        <p class="assistant-title">Assistant continuity</p>
         <div class="assistant-mode">
           <span class="assistant-mode-dot"></span>
           <p class="assistant-mode-label">${assistantMode.label}</p>
         </div>
       </div>
     </div>
-    <p>
-      This prototype keeps a dedicated assistant zone separate from lesson content,
-      so the shared Artchi layer can plug into one runtime context instead of a lesson-local widget.
-    </p>
-    <div class="assistant-callout">
-      <p>${assistantMode.note}</p>
-    </div>
-    <div class="assistant-actions">
-      <button class="ghost-button" type="button">Ask about this step</button>
-      <button class="ghost-button" type="button">Open My Journey</button>
+    <p>${assistantMode.note}</p>
+    <div class="mini-action-row">
+      <button class="ghost-button" type="button">Ask about this image</button>
+      <button class="ghost-button" type="button">Save to My Journey later</button>
     </div>
   `;
 
   const status = document.createElement("section");
-  status.className = "status-card";
+  status.className = "surface status-card";
   status.innerHTML = `
-    <p class="micro-kicker">Runtime compatibility</p>
-    <div class="status-card-grid">
-      <div class="mini-stat">
-        <span>Shared profile/runtime</span>
-        <strong>yes</strong>
-      </div>
-      <div class="mini-stat">
-        <span>LFC family shape</span>
-        <strong>yes</strong>
-      </div>
-      <div class="mini-stat">
-        <span>Artwork backend ready</span>
-        <strong>next</strong>
-      </div>
-      <div class="mini-stat">
-        <span>Portal hooks</span>
-        <strong>ready</strong>
-      </div>
-    </div>
+    <p class="micro-kicker">This prototype checks</p>
+    <div class="mini-stat"><span>FEI tone</span><strong>yes</strong></div>
+    <div class="mini-stat"><span>LFC centrality</span><strong>yes</strong></div>
+    <div class="mini-stat"><span>Visual understand stage</span><strong>yes</strong></div>
+    <div class="mini-stat"><span>Asynchronous draw model</span><strong>yes</strong></div>
   `;
 
   const future = document.createElement("section");
-  future.className = "future-card";
+  future.className = "surface future-card";
   future.innerHTML = `
-    <p class="micro-kicker">Why this prototype exists</p>
-    <strong>Test the runtime, not just the lesson copy.</strong>
-    <p>
-      This surface is meant to show a Codex version that stays visual, interaction-first,
-      and structurally compatible with the larger FEI Smart Class ecosystem.
-    </p>
+    <p class="micro-kicker">Future continuity</p>
+    <p>AI scan, premium teacher review, My Journey, and badge continuity can attach later without changing the lesson’s visual logic.</p>
   `;
 
   main.append(hero, content, footer);
