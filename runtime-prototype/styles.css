@@ -1,24 +1,26 @@
 :root {
-  --paper: #f6f2eb;
-  --paper-deep: #efe7da;
-  --paper-edge: #e7dfd2;
-  --surface: rgba(255, 253, 249, 0.96);
-  --surface-strong: #fffdf9;
-  --surface-soft: rgba(255, 255, 255, 0.82);
+  --paper: #f7f7fb;
+  --paper-deep: #edf5f6;
+  --paper-edge: #e3e8f0;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-strong: rgba(255, 255, 255, 0.96);
+  --surface-soft: rgba(255, 255, 255, 0.78);
   --ink: #1a1d2b;
-  --ink-soft: #566070;
-  --ink-muted: #8790a0;
-  --line: rgba(26, 29, 43, 0.08);
-  --line-strong: rgba(26, 29, 43, 0.14);
+  --ink-soft: #59657a;
+  --ink-muted: #8f98ab;
+  --line: rgba(26, 29, 43, 0.07);
+  --line-strong: rgba(26, 29, 43, 0.12);
   --gold: #c8a96e;
   --gold-soft: rgba(200, 169, 110, 0.11);
-  --mint: #dff2ea;
+  --mint: #d7f3e9;
   --mint-strong: #1d9e75;
-  --aqua: #d9eef0;
-  --purple: #d9d2f1;
-  --rose: #f5e9eb;
-  --shadow-lg: 0 8px 22px rgba(37, 29, 23, 0.04);
-  --shadow-md: 0 3px 10px rgba(37, 29, 23, 0.03);
+  --aqua: #d8f3f7;
+  --cyan: #67d8ee;
+  --purple: #ddd4fb;
+  --purple-strong: #a78bfa;
+  --rose: #f6edf5;
+  --shadow-lg: 0 10px 26px rgba(73, 78, 110, 0.06);
+  --shadow-md: 0 4px 12px rgba(73, 78, 110, 0.04);
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
@@ -40,8 +42,7 @@ body {
   font-family: "Open Sans", sans-serif;
   color: var(--ink);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0) 140px),
-    linear-gradient(180deg, #f8f5ef 0%, var(--paper) 58%, var(--paper-deep) 100%);
+    linear-gradient(135deg, rgba(221, 212, 251, 0.82) 0%, rgba(214, 244, 237, 0.8) 52%, rgba(216, 243, 247, 0.92) 100%);
 }
 
 button,
@@ -82,6 +83,7 @@ button {
   border-radius: var(--radius-xl);
   background: var(--surface);
   box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
 }
 
 .hero {
@@ -116,8 +118,8 @@ button {
   align-items: center;
   padding: 7px 12px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(26, 29, 43, 0.05);
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(167, 139, 250, 0.12);
 }
 
 .hero-kicker-dot {
@@ -132,7 +134,7 @@ button {
   margin: 14px 0 10px;
   font-family: "Montserrat", sans-serif;
   font-size: clamp(2.2rem, 4.8vw, 3.7rem);
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -0.04em;
 }
@@ -174,7 +176,7 @@ button {
 .mini-action {
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.84);
   color: var(--ink);
   cursor: pointer;
 }
@@ -193,8 +195,8 @@ button {
 .effect-button.is-active,
 .art-card.is-active,
 .segment-node.is-active {
-  border-color: rgba(26, 29, 43, 0.18);
-  background: #fffefb;
+  border-color: rgba(167, 139, 250, 0.26);
+  background: rgba(255, 255, 255, 0.98);
   box-shadow: var(--shadow-md);
 }
 
@@ -235,7 +237,7 @@ button {
 .progress-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--gold) 0%, #d7cfed 100%);
+  background: linear-gradient(90deg, #1d9e75 0%, #67d8ee 52%, #cfc2ff 100%);
 }
 
 .progress-steps {
@@ -253,12 +255,12 @@ button {
 }
 
 .progress-step.is-active {
-  border-color: rgba(200, 169, 110, 0.3);
+  border-color: rgba(167, 139, 250, 0.24);
   background: rgba(255, 255, 255, 0.95);
 }
 
 .progress-step.is-done {
-  background: rgba(223, 242, 234, 0.85);
+  background: rgba(215, 243, 233, 0.92);
 }
 
 .progress-step strong {
@@ -281,7 +283,7 @@ button {
   min-width: 102px;
   padding: 12px 14px 11px;
   border-radius: var(--radius-lg);
-  background: rgba(255,255,255,0.56);
+  background: rgba(255,255,255,0.6);
   border: 1px solid var(--line);
   text-align: center;
 }
@@ -334,8 +336,8 @@ button {
 .stage-pill {
   padding: 9px 12px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(200, 169, 110, 0.14);
+  background: rgba(227, 217, 255, 0.44);
+  border: 1px solid rgba(167, 139, 250, 0.18);
   white-space: nowrap;
 }
 
@@ -377,7 +379,7 @@ button {
   width: 100%;
   aspect-ratio: 1.1;
   object-fit: cover;
-  background: linear-gradient(180deg, #efeadf 0%, #ddd4c5 100%);
+  background: linear-gradient(135deg, rgba(221, 212, 251, 0.7) 0%, rgba(215, 243, 233, 0.68) 52%, rgba(216, 243, 247, 0.78) 100%);
 }
 
 .art-card-copy {
@@ -484,7 +486,7 @@ button {
   width: 100%;
   aspect-ratio: 1.2;
   object-fit: cover;
-  background: linear-gradient(180deg, #efeadf 0%, #ddd4c5 100%);
+  background: linear-gradient(135deg, rgba(221, 212, 251, 0.68) 0%, rgba(215, 243, 233, 0.68) 54%, rgba(216, 243, 247, 0.78) 100%);
 }
 
 .compare-copy {
@@ -533,7 +535,7 @@ button {
 }
 
 .segment-node.is-complete {
-  background: rgba(223, 242, 234, 0.85);
+  background: rgba(215, 243, 233, 0.92);
 }
 
 .segment-node strong {
@@ -570,7 +572,7 @@ button {
   aspect-ratio: 1.18;
   object-fit: cover;
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, #efeadf 0%, #ddd4c5 100%);
+  background: linear-gradient(135deg, rgba(221, 212, 251, 0.72) 0%, rgba(216, 243, 247, 0.84) 100%);
 }
 
 .media-copy {
@@ -644,6 +646,10 @@ button {
   border-color: var(--ink);
 }
 
+.footer-button:not(.primary) {
+  background: rgba(255, 255, 255, 0.75);
+}
+
 .footer-button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -655,7 +661,7 @@ button {
 .future-card {
   display: grid;
   gap: 12px;
-  background: rgba(255, 253, 249, 0.88);
+  background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.72));
   border-color: rgba(26, 29, 43, 0.07);
 }
 
@@ -672,7 +678,7 @@ button {
   display: grid;
   place-items: center;
   font-size: 1.4rem;
-  background: rgba(217, 210, 241, 0.28);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.24), rgba(103, 216, 238, 0.18));
   border: 1px solid rgba(167, 139, 250, 0.16);
 }
 
@@ -688,15 +694,15 @@ button {
   align-items: center;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(26, 29, 43, 0.06);
+  background: rgba(227, 217, 255, 0.36);
+  border: 1px solid rgba(167, 139, 250, 0.15);
 }
 
 .assistant-mode-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #b7abc8;
+  background: var(--purple-strong);
 }
 
 .ghost-button {
