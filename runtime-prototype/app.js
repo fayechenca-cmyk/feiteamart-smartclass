@@ -8,7 +8,7 @@ const appRoot = document.querySelector("[data-app]");
 
 const analytics = {
   track(eventName, payload = {}) {
-    console.info("[lfc054-prototype]", eventName, payload);
+    console.info("[lfc054-surreal-worlds]", eventName, payload);
   },
 };
 
@@ -29,14 +29,14 @@ function button(label, options = {}) {
 function pickAssistantMode(screen) {
   if (screen.stepNumber === 3) {
     return {
-      label: "Guided making",
-      note: "Recorded teacher guidance leads each move. Between segments, the lesson keeps the focus quiet and practical.",
+      label: "Smart companion",
+      note: "Artchi stays with the making process quietly. Recorded teacher guidance leads the move, and the lesson keeps the next check simple.",
     };
   }
 
   return {
     label: "LFC guide",
-    note: "The lesson teaches through artworks, artist choices, and visual logic before making begins.",
+    note: "Artchi helps you look more carefully. The lesson teaches through artworks, artist choices, and visual logic before making begins.",
   };
 }
 
@@ -545,21 +545,21 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const footerCopy = document.createElement("div");
   footerCopy.className = "footer-copy";
   footerCopy.innerHTML = `
-    <p class="save-line">${completionReady ? screen.saveMessage : "This prototype tests the lesson surface first. Shared portal features can attach later."}</p>
+    <p class="save-line">${completionReady ? screen.saveMessage : "This lesson stays ready for My Journey, feedback, and portal continuity."}</p>
     <p class="footer-state">${stateSummary(state)}</p>
   `;
 
   const footerActions = document.createElement("div");
   footerActions.className = "footer-actions";
   footerActions.append(
-    button(screen.stepNumber === lessonMeta.totalSteps ? "Finish this prototype pass" : "Continue", {
+    button(screen.stepNumber === lessonMeta.totalSteps ? "Finish this stage" : "Continue", {
       className: "footer-button primary",
       disabled: !completionReady,
       onClick: () => lessonApp.completeScreen(screen.screenId),
     }),
   );
   footerActions.append(
-    button("Reset pass", {
+    button("Start again", {
       className: "footer-button",
       onClick: () => window.location.reload(),
     }),
@@ -571,9 +571,24 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   assistant.className = "surface assistant-card";
   assistant.innerHTML = `
     <div class="assistant-head">
-      <div class="assistant-avatar">🧚</div>
+      <div class="assistant-avatar" aria-hidden="true">
+        <div class="artchi-figure">
+          <span class="artchi-wing artchi-wing-left"></span>
+          <span class="artchi-wing artchi-wing-right"></span>
+          <span class="artchi-crown"></span>
+          <span class="artchi-body"></span>
+          <span class="artchi-face">
+            <span class="artchi-eye artchi-eye-left"></span>
+            <span class="artchi-eye artchi-eye-right"></span>
+            <span class="artchi-smile"></span>
+            <span class="artchi-blush artchi-blush-left"></span>
+            <span class="artchi-blush artchi-blush-right"></span>
+          </span>
+          <span class="artchi-palette"></span>
+        </div>
+      </div>
       <div>
-        <p class="assistant-title">Assistant continuity</p>
+        <p class="assistant-title">Artchi lives in the corner</p>
         <div class="assistant-mode">
           <span class="assistant-mode-dot"></span>
           <p class="assistant-mode-label">${assistantMode.label}</p>
@@ -582,15 +597,15 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     </div>
     <p>${assistantMode.note}</p>
     <div class="mini-action-row">
-      <button class="ghost-button" type="button">Ask about this image</button>
-      <button class="ghost-button" type="button">Save to My Journey later</button>
+      <button class="ghost-button" type="button">Ask Artchi about this image</button>
+      <button class="ghost-button" type="button">Save this step to My Journey</button>
     </div>
   `;
 
   const status = document.createElement("section");
   status.className = "surface status-card";
   status.innerHTML = `
-    <p class="micro-kicker">This prototype checks</p>
+    <p class="micro-kicker">Lesson qualities</p>
     <div class="mini-stat"><span>FEI tone</span><strong>yes</strong></div>
     <div class="mini-stat"><span>LFC centrality</span><strong>yes</strong></div>
     <div class="mini-stat"><span>Visual understand stage</span><strong>yes</strong></div>
@@ -602,6 +617,22 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   future.innerHTML = `
     <p class="micro-kicker">Future continuity</p>
     <p>AI scan, premium teacher review, My Journey, and badge continuity can attach later without changing the lesson’s visual logic.</p>
+    <div class="future-mascot" aria-hidden="true">
+      <div class="artchi-figure artchi-figure-small">
+        <span class="artchi-wing artchi-wing-left"></span>
+        <span class="artchi-wing artchi-wing-right"></span>
+        <span class="artchi-crown"></span>
+        <span class="artchi-body"></span>
+        <span class="artchi-face">
+          <span class="artchi-eye artchi-eye-left"></span>
+          <span class="artchi-eye artchi-eye-right"></span>
+          <span class="artchi-smile"></span>
+          <span class="artchi-blush artchi-blush-left"></span>
+          <span class="artchi-blush artchi-blush-right"></span>
+        </span>
+        <span class="artchi-palette"></span>
+      </div>
+    </div>
   `;
 
   main.append(hero, content, footer);
