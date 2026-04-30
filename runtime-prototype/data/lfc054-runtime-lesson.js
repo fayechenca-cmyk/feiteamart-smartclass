@@ -1,4 +1,4 @@
-const createPlaceholderArtwork = (label, start, end, accent, note) => {
+const createArtworkPanel = (label, start, end, accent, note) => {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="${label}">
       <defs>
@@ -8,12 +8,12 @@ const createPlaceholderArtwork = (label, start, end, accent, note) => {
         </linearGradient>
       </defs>
       <rect width="1200" height="900" fill="url(#bg)" />
-      <ellipse cx="840" cy="260" rx="240" ry="170" fill="${accent}" fill-opacity="0.16" />
-      <ellipse cx="300" cy="640" rx="210" ry="160" fill="${accent}" fill-opacity="0.12" />
-      <path d="M742 256C798 214 888 216 952 292C1008 360 980 468 892 516C816 555 720 530 674 462C639 412 633 332 690 281C704 268 721 261 742 256Z" fill="#f8f1e7" fill-opacity="0.88" />
-      <rect x="232" y="182" width="370" height="470" rx="34" fill="#fff7ee" fill-opacity="0.82" />
-      <text x="78" y="112" fill="#1f1a17" font-family="Fraunces, serif" font-size="64">${label}</text>
-      <text x="78" y="170" fill="#4f4a45" font-family="Manrope, sans-serif" font-size="28">${note}</text>
+      <ellipse cx="870" cy="240" rx="250" ry="170" fill="${accent}" fill-opacity="0.18" />
+      <ellipse cx="280" cy="650" rx="210" ry="160" fill="${accent}" fill-opacity="0.12" />
+      <rect x="190" y="170" width="400" height="500" rx="38" fill="#fff7f0" fill-opacity="0.86" />
+      <path d="M744 250C808 208 894 220 952 292C1006 359 990 468 907 525C816 588 691 561 650 467C623 405 639 310 706 268C717 262 730 255 744 250Z" fill="#f8f0e6" fill-opacity="0.92" />
+      <text x="76" y="108" fill="#1a1d2b" font-family="Montserrat, sans-serif" font-size="58" font-weight="800">${label}</text>
+      <text x="76" y="164" fill="#4a4f5e" font-family="Open Sans, sans-serif" font-size="28">${note}</text>
     </svg>
   `;
 
@@ -21,50 +21,92 @@ const createPlaceholderArtwork = (label, start, end, accent, note) => {
 };
 
 const artworkLibrary = {
-  orchard: {
-    artworkId: "art-runtime-a",
-    title: "Orchard With Impossible Scale",
-    artist: "Placeholder Surreal Reference",
-    imageSrc: createPlaceholderArtwork("Orchard", "#efe7dd", "#d8cabd", "#6e8c78", "Large fruit suspended above a small field."),
-    alt: "A calm orchard scene interrupted by an object at the wrong scale.",
+  magritte: {
+    artworkId: "magritte-scale",
+    label: "Magritte",
+    title: "Ordinary Room, Impossible Scale",
+    artist: "René Magritte",
+    imageSrc: createArtworkPanel(
+      "Magritte",
+      "#efe9df",
+      "#d8cdc0",
+      "#82938f",
+      "An ordinary world interrupted by one impossible change."
+    ),
+    alt: "A Magritte-inspired scene where scale changes ordinary reality.",
   },
-  hallway: {
-    artworkId: "art-runtime-b",
-    title: "Hallway With Floating Bird",
-    artist: "Placeholder Surreal Reference",
-    imageSrc: createPlaceholderArtwork("Hallway", "#f1ebe5", "#dfd3c7", "#8d6f6f", "A bird appears indoors where it should not belong."),
-    alt: "An interior hallway with a bird placed in an impossible context.",
+  dali: {
+    artworkId: "dali-dream",
+    label: "Dalí",
+    title: "Dream Logic in a Familiar Space",
+    artist: "Salvador Dalí",
+    imageSrc: createArtworkPanel(
+      "Dalí",
+      "#f3ebe3",
+      "#decec3",
+      "#a78666",
+      "Dream logic softens and distorts what should feel stable."
+    ),
+    alt: "A Dalí-inspired surreal image where a dreamlike transformation changes the scene.",
   },
-  window: {
-    artworkId: "art-runtime-c",
-    title: "Window Becoming Ocean",
-    artist: "Placeholder Surreal Reference",
-    imageSrc: createPlaceholderArtwork("Window", "#efece7", "#d7d0cb", "#6d7fa5", "An ordinary window opens into something unreal."),
-    alt: "A familiar window scene transformed into an impossible environment.",
+  varo: {
+    artworkId: "varo-world",
+    label: "Varo",
+    title: "A World Built on Uncanny Logic",
+    artist: "Remedios Varo",
+    imageSrc: createArtworkPanel(
+      "Varo",
+      "#eee9e5",
+      "#d7d2cf",
+      "#7a73a3",
+      "The world feels internally coherent, but its logic is no longer ordinary."
+    ),
+    alt: "A Varo-inspired surreal image where the whole world feels transformed.",
   },
   study: {
-    artworkId: "art-runtime-study",
-    title: "Study Image",
-    artist: "Placeholder Surreal Reference",
-    imageSrc: createPlaceholderArtwork("Study", "#efe9e0", "#ddd2c4", "#a38464", "One image, one move, one clue at a time."),
-    alt: "A surreal artwork suitable for hotspot analysis.",
+    artworkId: "study-magritte",
+    label: "Study Image",
+    title: "One Move Under the Microscope",
+    artist: "Surrealist Study",
+    imageSrc: createArtworkPanel(
+      "Study",
+      "#efe6dc",
+      "#dfd0c2",
+      "#8d705b",
+      "One altered element changes the whole emotional logic."
+    ),
+    alt: "A surreal study image focused on a single impossible change.",
+  },
+  teacherFrame: {
+    artworkId: "teacher-draw-frame",
+    label: "Teacher Demo",
+    title: "Recorded Demonstration Frame",
+    artist: "FEI Teacher Media",
+    imageSrc: createArtworkPanel(
+      "Draw Frame",
+      "#ede9e2",
+      "#d7d0c5",
+      "#6f8fa2",
+      "Recorded making guidance, one move at a time."
+    ),
+    alt: "A still frame representing a recorded teacher drawing demonstration.",
   },
 };
 
 export const runtimePrototypeLesson = {
   lesson: {
-    lessonId: "LFC054-runtime-prototype",
-    slug: "lfc054-runtime-prototype",
+    lessonId: "lfc054-surreal-worlds-prototype",
+    slug: "lfc054-surreal-worlds-prototype",
     title: "Surreal Worlds",
-    shortTitle: "LFC054 Prototype",
+    shortTitle: "LFC054",
     lessonFamily: "lfc",
     ageGroups: ["kids", "teen", "adult"],
-    totalSteps: 5,
+    totalSteps: 3,
     badge: {
       badgeId: "creative-transformer",
       badgeName: "Creative Transformer",
       badgeCategory: "creative_thinking",
-      badgeMessage: "You used a surreal move to create your own visual idea.",
+      badgeMessage: "You turned artist logic into your own image.",
     },
   },
   accessConfig: {
@@ -74,7 +116,7 @@ export const runtimePrototypeLesson = {
   defaults: {
     ageGroup: "teen",
     currentStep: 1,
-    currentScreenId: "screen-1-see-the-strange",
+    currentScreenId: "look-see-the-strange",
     progressState: "not_started",
     reflectionState: "not_started",
     badgeState: "locked",
@@ -82,225 +124,292 @@ export const runtimePrototypeLesson = {
   artworkLibrary,
   screens: [
     {
-      screenId: "screen-1-see-the-strange",
+      screenId: "look-see-the-strange",
       stepNumber: 1,
       title: "See the Strange",
       partLabel: "Look",
-      xpValue: 10,
-      progressOnComplete: "started",
+      xpValue: 20,
+      progressOnComplete: "looking",
       saveMessage: "First instinct saved",
       completionRule: {
         type: "single_choice_with_optional_chips",
-        field: "responses.screen1.artworkChoiceId",
+        field: "responses.look.selectedArtworkId",
       },
       prompt: {
-        kids: "Which picture feels the most strange or dream-like?",
-        teen: "Which image feels the most surreal to you right away?",
-        adult: "Which image disrupts ordinary reality most clearly at first glance?",
+        kids: "Which image feels the most strange or dream-like?",
+        teen: "Which image feels the most surreal to you first?",
+        adult: "Which image disrupts ordinary reality most strongly at first glance?",
       },
       helperText: {
-        kids: "Pick fast. Trust your eyes before you explain.",
-        teen: "Start with instinct before analysis.",
+        kids: "Choose first. Explain later.",
+        teen: "Trust the first image that shifts your sense of reality.",
         adult: "Let visual instinct lead before interpretation.",
       },
       blocks: {
-        artworkChoice: {
+        artworkSelection: {
           items: [
-            { id: "orchard", label: "Orchard", imageSrc: artworkLibrary.orchard.imageSrc, alt: artworkLibrary.orchard.alt },
-            { id: "hallway", label: "Hallway", imageSrc: artworkLibrary.hallway.imageSrc, alt: artworkLibrary.hallway.alt },
-            { id: "window", label: "Window", imageSrc: artworkLibrary.window.imageSrc, alt: artworkLibrary.window.alt },
+            {
+              id: "magritte",
+              label: artworkLibrary.magritte.label,
+              artist: artworkLibrary.magritte.artist,
+              title: artworkLibrary.magritte.title,
+              imageSrc: artworkLibrary.magritte.imageSrc,
+              alt: artworkLibrary.magritte.alt,
+            },
+            {
+              id: "dali",
+              label: artworkLibrary.dali.label,
+              artist: artworkLibrary.dali.artist,
+              title: artworkLibrary.dali.title,
+              imageSrc: artworkLibrary.dali.imageSrc,
+              alt: artworkLibrary.dali.alt,
+            },
+            {
+              id: "varo",
+              label: artworkLibrary.varo.label,
+              artist: artworkLibrary.varo.artist,
+              title: artworkLibrary.varo.title,
+              imageSrc: artworkLibrary.varo.imageSrc,
+              alt: artworkLibrary.varo.alt,
+            },
           ],
-          reasonChips: [
-            { id: "scale", label: "Wrong scale" },
-            { id: "place", label: "Wrong place" },
-            { id: "dream", label: "Dream feeling" },
-            { id: "mixed", label: "Mixed realities" },
+          reactionChips: [
+            { id: "wrong-scale", label: "Wrong scale" },
+            { id: "wrong-place", label: "Wrong place" },
+            { id: "dream-logic", label: "Dream logic" },
+            { id: "hard-to-explain", label: "Hard to explain" },
           ],
         },
-        teacherPulse: {
+        recordedTeacherIntro: {
+          label: "Recorded teacher note",
           line: {
-            kids: "You do not need the right answer. You only need the one that catches you first.",
-            teen: "The first reaction matters. That is where noticing starts.",
-            adult: "The lesson begins with perception, not explanation.",
+            kids: "You do not need the right answer. You only need the image that catches you first.",
+            teen: "Do not solve it yet. Just notice which image bends reality most strongly for you.",
+            adult: "Begin with perception, not explanation. Let the image strike before you interpret it.",
           },
         },
       },
     },
     {
-      screenId: "screen-2-spot-the-move",
+      screenId: "understand-why-it-works",
       stepNumber: 2,
-      title: "Spot the Move",
-      partLabel: "Notice",
-      xpValue: 15,
-      progressOnComplete: "in_progress",
-      saveMessage: "Surreal move identified",
+      title: "Why It Works",
+      partLabel: "Understand",
+      xpValue: 25,
+      progressOnComplete: "understanding",
+      saveMessage: "Visual logic captured",
       completionRule: {
         type: "single_choice",
-        field: "responses.screen2.selectedMoveId",
+        field: "responses.understand.selectedEffectId",
       },
       prompt: {
-        kids: "What did the artist change from normal life?",
-        teen: "What visual move makes this image feel uncanny?",
-        adult: "Which deliberate move pushes this image beyond realism?",
+        kids: "What feeling does this change create?",
+        teen: "What effect does this impossible change create in the image?",
+        adult: "What visual effect emerges when one part stays ordinary and one part breaks reality?",
       },
       helperText: {
-        kids: "Tap clues. Then choose the move.",
-        teen: "Open one or two clues, then name the artist's move.",
-        adult: "Reveal details, then identify the primary surreal intervention.",
+        kids: "Look first. Then choose the effect.",
+        teen: "Use the image, not a long explanation, to decide.",
+        adult: "Stay with the visual logic. Choose the effect the image produces.",
       },
       blocks: {
-        artworkStudy: {
-          artwork: artworkLibrary.study,
-          hotspots: [
-            { id: "scale", x: 40, y: 30, revealText: "A familiar thing has the wrong size." },
-            { id: "place", x: 70, y: 62, revealText: "The subject appears where it should not exist." },
+        visualCompare: {
+          mainArtwork: {
+            imageSrc: artworkLibrary.study.imageSrc,
+            alt: artworkLibrary.study.alt,
+            artist: "René Magritte",
+            title: "The studied surreal move",
+          },
+          compareNotes: [
+            {
+              label: "What stays ordinary",
+              text: "The room, its edges, and the calm setting remain believable.",
+            },
+            {
+              label: "What breaks reality",
+              text: "One object changes scale beyond what ordinary life allows.",
+            },
           ],
-          moveOptions: [
-            { id: "changed-size", label: "Changed the size" },
-            { id: "wrong-place", label: "Put it in the wrong place" },
-            { id: "mixed-realities", label: "Mixed two realities" },
-            { id: "transformed-object", label: "Transformed the object" },
+        },
+        effectChoice: {
+          options: [
+            { id: "uncanny", label: "Uncanny" },
+            { id: "funny", label: "Funny" },
+            { id: "dreamlike", label: "Dreamlike" },
+            { id: "tense", label: "Tense" },
           ],
+        },
+        microInsight: {
+          label: "Visual logic",
+          line: {
+            kids: "When one part stays normal and one part changes too much, the picture can feel strange.",
+            teen: "When most of the world stays ordinary and one part breaks reality, the image becomes uncanny.",
+            adult: "A single impossible change grows more powerful when the surrounding world remains calm and believable.",
+          },
         },
       },
     },
     {
-      screenId: "screen-3-choose-your-twist",
+      screenId: "draw-guided-making",
       stepNumber: 3,
-      title: "Choose Your Twist",
-      partLabel: "Make",
-      xpValue: 20,
-      progressOnComplete: "building",
-      saveMessage: "Your idea is locked in",
-      completionRule: {
-        type: "required_pair",
-        fields: ["responses.screen3.subjectId", "responses.screen3.strategyId"],
-      },
-      prompt: {
-        kids: "Pick one ordinary thing. Then give it one strange change.",
-        teen: "Choose a normal subject, then choose one surreal twist.",
-        adult: "Choose a familiar subject and apply one controlled surreal intervention.",
-      },
-      helperText: {
-        kids: "Borrow the move, not the whole artwork.",
-        teen: "Take the move. Make the idea yours.",
-        adult: "Borrow the visual logic, not the image itself.",
-      },
-      blocks: {
-        subjectOptions: {
-          label: "Choose a subject",
-          options: [
-            { id: "face", label: "Face" },
-            { id: "bird", label: "Bird" },
-            { id: "house", label: "House" },
-            { id: "tree", label: "Tree" },
-            { id: "cup", label: "Cup" },
-            { id: "clock", label: "Clock" },
-          ],
-        },
-        strategyOptions: {
-          label: "Choose a surreal move",
-          options: [
-            { id: "huge", label: "Make it huge" },
-            { id: "tiny", label: "Make it tiny" },
-            { id: "wrong-place", label: "Put it in a strange place" },
-            { id: "merge", label: "Merge it with something else" },
-            { id: "transform", label: "Let it become something new" },
-          ],
-        },
-        conceptPreview: {
-          prefix: "Your direction",
-        },
-      },
-    },
-    {
-      screenId: "screen-4-build-the-image",
-      stepNumber: 4,
-      title: "Build the Image",
+      title: "Asynchronous Guided Making",
       partLabel: "Draw",
-      xpValue: 25,
+      xpValue: 35,
       progressOnComplete: "drawing",
-      saveMessage: "Build plan saved",
+      saveMessage: "Current segment saved",
       completionRule: {
         type: "min_checks",
-        field: "responses.screen4.checklistIds",
-        minRequired: 2,
+        field: "responses.draw.completedSegmentIds",
+        minRequired: 5,
       },
       prompt: {
-        kids: "What needs to be in your drawing so the strange part feels clear?",
-        teen: "What needs to stay normal so the surreal change stands out?",
-        adult: "What visual structure will keep the surreal intervention readable?",
+        kids: "Watch one move, stop, do it, then continue when you are ready.",
+        teen: "Recorded teacher guidance leads the move. The smart system keeps you focused between clips.",
+        adult: "This is asynchronous guided making: short teacher media, pause points, system prompts, and self-paced action.",
       },
       helperText: {
-        kids: "Check the parts you want to remember while you draw.",
-        teen: "Choose the anchors that will keep the image legible.",
-        adult: "Select the stabilizing elements that give the surreal move force.",
+        kids: "You are not alone, but you are not being rushed.",
+        teen: "The teacher demonstrates. The system accompanies. You make.",
+        adult: "The clip demonstrates one move. The companion prompt sharpens the action. You proceed at your own pace.",
       },
       blocks: {
-        buildChecklist: {
-          items: [
-            { id: "clear-subject", label: "Make the main subject easy to recognize" },
-            { id: "single-move", label: "Keep one surreal move dominant" },
-            { id: "normal-anchor", label: "Leave part of the world normal" },
-            { id: "strong-silhouette", label: "Use a clear silhouette" },
-          ],
-        },
-        teacherPulse: {
-          line: {
-            kids: "The strange part works better when some things stay normal.",
-            teen: "Surreal images are strongest when one move leads and the rest supports it.",
-            adult: "Restraint increases force. Preserve enough normality to sharpen the rupture.",
-          },
-        },
-      },
-    },
-    {
-      screenId: "screen-5-reflect-and-keep",
-      stepNumber: 5,
-      title: "Reflect and Keep",
-      partLabel: "Keep",
-      xpValue: 30,
-      progressOnComplete: "completed",
-      saveMessage: "Saved to My Journey",
-      completionRule: {
-        type: "reflection_submit",
-        chipField: "responses.screen5.reflectionChipIds",
-        textField: "responses.screen5.reflectionText",
-      },
-      prompt: {
-        kids: "What kind of strange feeling did your picture end up with?",
-        teen: "What happened to your idea once you made it your own?",
-        adult: "What changed when the borrowed move became your image?",
-      },
-      helperText: {
-        kids: "Choose a feeling, then add one sentence.",
-        teen: "Choose one lens, then leave a short trace in your journey.",
-        adult: "Mark the shift between influence and authorship.",
-      },
-      blocks: {
-        reflection: {
-          chips: [
-            { id: "dreamy", label: "Dreamy" },
-            { id: "funny", label: "Funny" },
-            { id: "unsettling", label: "Unsettling" },
-            { id: "quiet", label: "Quiet" },
-          ],
-          responseField: {
-            placeholder: {
-              kids: "Mine felt strange because…",
-              teen: "My image changed when…",
-              adult: "The move became mine when…",
+        drawSegments: [
+          {
+            segmentId: "ordinary-anchor",
+            title: "Set the Ordinary World",
+            goal: "Place the ordinary subject and its stable setting first.",
+            teacherMedia: {
+              label: "Recorded teacher guidance",
+              durationLabel: "0:48",
+              imageSrc: artworkLibrary.teacherFrame.imageSrc,
+              title: "Place the ordinary world",
+              caption: "The teacher blocks in the normal subject and the calm setting before introducing any surreal change.",
             },
-            maxLength: 180,
+            pausePoint: {
+              label: "Now it’s your turn",
+              title: "Place your anchor",
+              instruction: "Draw the ordinary version first. Keep it readable before making it strange.",
+            },
+            companionPrompt: {
+              label: "Smart companion",
+              type: "logic_reminder",
+              text: "The surreal move works better if the normal part is clear first.",
+            },
+            checkpoint: {
+              label: "Quick check",
+              question: "Can you still recognize the subject in one glance?",
+            },
           },
-        },
-        completion: {
-          title: "Prototype badge unlocked",
-          message: "This prototype saves the visual decision, not just the answer. That is the direction for the larger LFC system.",
-          journeySaveMessage: "Future-ready: this reflection can connect to My Journey, badges, and shared learner history.",
-          badge: {
-            badgeName: "Creative Transformer",
+          {
+            segmentId: "break-reality-once",
+            title: "Break Reality Once",
+            goal: "Introduce one impossible change and let it stay dominant.",
+            teacherMedia: {
+              label: "Recorded teacher guidance",
+              durationLabel: "0:56",
+              imageSrc: artworkLibrary.teacherFrame.imageSrc,
+              title: "Add one impossible change",
+              caption: "The teacher changes scale or placement in one decisive move rather than scattering surreal details everywhere.",
+            },
+            pausePoint: {
+              label: "Now it’s your turn",
+              title: "Add the impossible change",
+              instruction: "Change only the part you chose. Keep the rest of the world stable.",
+            },
+            companionPrompt: {
+              label: "Smart companion",
+              type: "warning",
+              text: "Do not add a second surreal move yet. One change should lead the image.",
+            },
+            checkpoint: {
+              label: "Quick check",
+              question: "Is the surreal change already visible without explanation?",
+            },
           },
+          {
+            segmentId: "strengthen-contrast",
+            title: "Strengthen the Contrast",
+            goal: "Make the normal and strange read against each other clearly.",
+            teacherMedia: {
+              label: "Recorded teacher guidance",
+              durationLabel: "0:44",
+              imageSrc: artworkLibrary.teacherFrame.imageSrc,
+              title: "Clarify the difference",
+              caption: "The teacher strengthens the relationship between ordinary logic and impossible logic so the surreal move reads immediately.",
+            },
+            pausePoint: {
+              label: "Now it’s your turn",
+              title: "Clarify the contrast",
+              instruction: "Adjust the drawing so the ordinary part and the strange part feel deliberately different.",
+            },
+            companionPrompt: {
+              label: "Smart companion",
+              type: "compare",
+              text: "What still feels ordinary? What now feels impossible?",
+            },
+            checkpoint: {
+              label: "Quick check",
+              question: "Does the normal part make the strange part stronger?",
+            },
+          },
+          {
+            segmentId: "refine-main-idea",
+            title: "Refine the Main Idea",
+            goal: "Add only what strengthens the main surreal logic.",
+            teacherMedia: {
+              label: "Recorded teacher guidance",
+              durationLabel: "0:51",
+              imageSrc: artworkLibrary.teacherFrame.imageSrc,
+              title: "Refine without overloading",
+              caption: "The teacher sharpens silhouette and focal clarity while resisting unnecessary extra details.",
+            },
+            pausePoint: {
+              label: "Now it’s your turn",
+              title: "Refine carefully",
+              instruction: "Add only what makes the main idea clearer.",
+            },
+            companionPrompt: {
+              label: "Smart companion",
+              type: "focus",
+              text: "If a detail does not strengthen the surreal idea, leave it out.",
+            },
+            checkpoint: {
+              label: "Quick check",
+              question: "Is the main idea clearer now than before?",
+            },
+          },
+          {
+            segmentId: "step-back-stop",
+            title: "Step Back and Stop",
+            goal: "Check clarity, then stop before the image becomes crowded.",
+            teacherMedia: {
+              label: "Recorded teacher guidance",
+              durationLabel: "0:35",
+              imageSrc: artworkLibrary.teacherFrame.imageSrc,
+              title: "Know when to stop",
+              caption: "The teacher steps back, checks the image’s logic, and stops before overworking the drawing.",
+            },
+            pausePoint: {
+              label: "Now it’s your turn",
+              title: "Step back",
+              instruction: "Look at the whole image once more. Then stop before it gets crowded.",
+            },
+            companionPrompt: {
+              label: "Smart companion",
+              type: "check",
+              text: "Can someone feel the surreal logic without needing you to explain it?",
+            },
+            checkpoint: {
+              label: "Quick check",
+              question: "Is there still one dominant surreal move in the final image?",
+            },
+          },
+        ],
+        futureContinuity: {
+          label: "Future continuity",
+          aiScan: "Next in the full lesson: AI artwork scan feedback.",
+          teacherReview: "Premium path: asynchronous teacher review.",
+          journey: "My Journey and badge continuity will attach at Submit.",
         },
       },
     },
@@ -309,10 +418,10 @@ export const runtimePrototypeLesson = {
 
 export const runtimePrototypeInitialRunState = {
   learnerId: "",
-  lessonId: "LFC054-runtime-prototype",
+  lessonId: "lfc054-surreal-worlds-prototype",
   ageGroup: "teen",
   currentStep: 1,
-  currentScreenId: "screen-1-see-the-strange",
+  currentScreenId: "look-see-the-strange",
   progressState: "not_started",
   reflectionState: "not_started",
   badgeState: "locked",
@@ -320,26 +429,17 @@ export const runtimePrototypeInitialRunState = {
   currentLessonXP: 0,
   isLessonComplete: false,
   responses: {
-    screen1: {
-      artworkChoiceId: "",
-      reasonChipIds: [],
+    look: {
+      selectedArtworkId: "",
+      reactionChipIds: [],
     },
-    screen2: {
-      hotspotIdsViewed: [],
-      selectedMoveId: "",
+    understand: {
+      selectedEffectId: "",
     },
-    screen3: {
-      subjectId: "",
-      strategyId: "",
-      conceptPreview: "",
-    },
-    screen4: {
-      checklistIds: [],
-    },
-    screen5: {
-      reflectionChipIds: [],
-      reflectionText: "",
-      completedAt: "",
+    draw: {
+      activeSegmentIndex: 0,
+      completedSegmentIds: [],
+      acknowledgedCheckpointIds: [],
     },
   },
   badge: {
