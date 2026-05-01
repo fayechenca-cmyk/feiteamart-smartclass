@@ -61,33 +61,54 @@ function getScreenSupportModel(screen) {
 
   if (hooks.aiMode) {
     items.push({
-      label: "AI mode",
-      value: formatHookLabel(hooks.aiMode),
+      label: "AI help",
+      value:
+        hooks.aiMode === "making_companion"
+          ? "Drawing support"
+          : hooks.aiMode === "idea_builder"
+            ? "Idea support"
+            : "Artwork support",
     });
   }
 
   if (hooks.thinkingQuest) {
     items.push({
-      label: "Critical thinking",
-      value: formatHookLabel(hooks.thinkingQuest),
+      label: "Thinking",
+      value: "Available here",
     });
   }
 
   if (hooks.uploadPoint) {
     items.push({
-      label: "Upload point",
-      value: formatHookLabel(hooks.uploadPoint),
+      label: "Share work",
+      value:
+        hooks.uploadPoint === "final_upload"
+          ? "Final upload"
+          : "Work in progress",
     });
   }
 
   if (hooks.teacherHelp) {
     items.push({
-      label: "Teacher path",
-      value: formatHookLabel(hooks.teacherHelp),
+      label: "Teacher help",
+      value: "Available",
     });
   }
 
   return items;
+}
+
+function getStudentProgressLabel(screen, lessonMeta) {
+  if (screen.uiKind === "welcome") {
+    return "Lesson introduction";
+  }
+  if (screen.uiKind === "draw") {
+    return `Drawing step ${Math.max(1, screen.stepNumber - 7)} of 6`;
+  }
+  if (screen.uiKind === "reflection" || screen.uiKind === "continue") {
+    return "Final reflection";
+  }
+  return `${screen.partLabel} lesson step`;
 }
 
 function composeJourneyDraft(state) {
@@ -1137,39 +1158,7 @@ function createJourneyDraftCard(state) {
 }
 
 function createWritebackReviewCard() {
-  const envelope = readWritebackEnvelope();
-  const card = document.createElement("section");
-  card.className = "surface future-card";
-  card.innerHTML = `
-    <p class="micro-kicker">Writeback review</p>
-    <p>${envelope ? "Current local lesson envelope is active and reviewable." : "No local writeback envelope has been written yet."}</p>
-  `;
-
-  if (!envelope) {
-    return card;
-  }
-
-  const stats = document.createElement("div");
-  stats.className = "journey-summary-block";
-  stats.innerHTML = `
-    <div class="mini-stat"><span>Lesson</span><strong>${envelope.lessonId}</strong></div>
-    <div class="mini-stat"><span>Age group</span><strong>${envelope.ageGroup}</strong></div>
-    <div class="mini-stat"><span>Screens done</span><strong>${(envelope.lessonProgress?.completedScreenIds ?? []).length}</strong></div>
-    <div class="mini-stat"><span>Judgment cards</span><strong>${(envelope.judgmentCards ?? []).length}</strong></div>
-    <div class="mini-stat"><span>Uploads</span><strong>${(envelope.uploads ?? []).length}</strong></div>
-    <div class="mini-stat"><span>Draw steps</span><strong>${(envelope.drawProgress?.completedSegmentIds ?? []).length}</strong></div>
-  `;
-  card.append(stats);
-
-  const preview = document.createElement("div");
-  preview.className = "writeback-preview";
-  preview.innerHTML = `
-    <p class="micro-kicker">Envelope preview</p>
-    <pre>${JSON.stringify(envelope, null, 2)}</pre>
-  `;
-  card.append(preview);
-
-  return card;
+  return null;
 }
 
 function renderDrawStage({ lessonApp, screen, state }) {
@@ -1386,6 +1375,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const progressPercent = getProgressPercent(lessonMeta, screen);
   const completionReady = lessonApp.getScreenCompletion(screen.screenId);
   const assistantMode = pickAssistantMode(screen);
+  const progressLabel = getStudentProgressLabel(screen, lessonMeta);
 
   const shell = document.createElement("div");
   shell.className = "app-shell";
@@ -1435,7 +1425,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   progressWrap.className = "progress-wrap";
   progressWrap.innerHTML = `
     <div class="progress-topline">
-      <p class="progress-title">Screen ${screen.stepNumber} of ${lessonMeta.totalSteps} · ${screen.partLabel}</p>
+      <p class="progress-title">${progressLabel}</p>
       <p class="save-line">${completionReady ? screen.saveMessage : "Image first. Guidance second. Text stays light."}</p>
     </div>
     <div class="progress-track"><div class="progress-fill" style="width:${progressPercent}%"></div></div>
@@ -1543,7 +1533,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const status = document.createElement("section");
   status.className = "surface status-card";
   status.innerHTML = `
-    <p class="micro-kicker">Current screen system hooks</p>
+    <p class="micro-kicker">Available in this lesson step</p>
   `;
   const supportItems = getScreenSupportModel(screen);
   if (supportItems.length) {
@@ -1563,8 +1553,8 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const future = document.createElement("section");
   future.className = "surface future-card";
   future.innerHTML = `
-    <p class="micro-kicker">Writeback</p>
-    <p>${(screen.systemHooks?.journeyWriteback ?? []).length ? screen.systemHooks.journeyWriteback.join(" · ") : "This screen can still save into My Journey continuity."}</p>
+    <p class="micro-kicker">Coming with your full FEI path</p>
+    <p>My Journey, AI review, teacher help, and lesson continuity can all stay connected as this course grows.</p>
     <div class="future-mascot" aria-hidden="true">
       <div class="artchi-figure artchi-figure-small">
         <span class="artchi-wing artchi-wing-left"></span>
@@ -1584,7 +1574,12 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   `;
 
   main.append(hero, content, footer);
-  side.append(assistant, status, createJourneyDraftCard(state), createWritebackReviewCard(), future);
+  const writebackCard = createWritebackReviewCard();
+  side.append(assistant, status, createJourneyDraftCard(state));
+  if (writebackCard) {
+    side.append(writebackCard);
+  }
+  side.append(future);
   shell.append(main, side);
   root.replaceChildren(shell);
 }
