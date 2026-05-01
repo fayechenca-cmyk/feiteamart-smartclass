@@ -196,9 +196,11 @@ button {
 .effect-button.is-active,
 .art-card.is-active,
 .segment-node.is-active {
-  border-color: rgba(167, 139, 250, 0.26);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(29, 158, 117, 0.44);
+  background: rgba(255, 255, 255, 1);
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 3px rgba(29, 158, 117, 0.12);
 }
 
 .hero-bottom {
@@ -243,7 +245,7 @@ button {
 
 .progress-steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
   gap: 12px;
 }
 
@@ -256,8 +258,9 @@ button {
 }
 
 .progress-step.is-active {
-  border-color: rgba(167, 139, 250, 0.24);
-  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(167, 139, 250, 0.42);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.14);
 }
 
 .progress-step.is-done {
@@ -440,6 +443,7 @@ button {
 .ghost-button:hover,
 .mini-action:hover {
   transform: translateY(-1px);
+  border-color: rgba(29, 158, 117, 0.24);
 }
 
 .art-card img {
@@ -477,6 +481,18 @@ button {
   color: var(--ink-soft);
   font-size: 0.84rem;
   line-height: 1.55;
+}
+
+.art-card-credit,
+.art-card-source {
+  margin: 8px 0 0;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.art-card-source {
+  margin-top: 4px;
 }
 
 .chip-row,
@@ -524,7 +540,8 @@ button {
 .quest-card,
 .upload-card,
 .draw-side-card,
-.continuity-card {
+.continuity-card,
+.continue-card {
   padding: 18px 20px;
   box-shadow: none;
 }
@@ -599,6 +616,19 @@ button {
   padding: 20px 22px 22px;
   display: grid;
   gap: 16px;
+}
+
+.compare-credit {
+  padding: 0 22px 20px;
+  display: grid;
+  gap: 4px;
+}
+
+.compare-credit p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  line-height: 1.45;
 }
 
 .compare-pair {
@@ -685,6 +715,21 @@ button {
   display: grid;
   gap: 8px;
   padding: 0 22px 24px;
+}
+
+.media-note {
+  margin: 0 22px 22px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(26, 29, 43, 0.08);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.media-note p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.55;
 }
 
 .media-title {
@@ -966,6 +1011,30 @@ button {
   background: rgba(255, 255, 255, 0.96);
 }
 
+.continue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.continue-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  display: grid;
+  gap: 10px;
+}
+
+.continue-card.is-emphasis {
+  border-color: rgba(29, 158, 117, 0.2);
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,252,248,0.98) 100%);
+}
+
+.continue-card .ghost-button,
+.continue-card .footer-button {
+  justify-self: start;
+}
+
 .status-card .mini-stat,
 .future-card p,
 .assistant-card p,
@@ -1013,7 +1082,8 @@ button {
   .app-shell,
   .understand-layout,
   .draw-layout,
-  .hero-bottom {
+  .hero-bottom,
+  .continue-grid {
     grid-template-columns: 1fr;
   }
 
