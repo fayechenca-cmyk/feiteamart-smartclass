@@ -566,7 +566,7 @@ function createArtworkGrid(items, selectedId, onSelect) {
 
     const label = document.createElement("p");
     label.className = "art-card-meta";
-    label.textContent = item.alt;
+    label.textContent = [item.medium, item.year].filter(Boolean).join(" · ");
 
     const credit = document.createElement("p");
     credit.className = "art-card-credit";
@@ -576,7 +576,11 @@ function createArtworkGrid(items, selectedId, onSelect) {
     source.className = "art-card-source";
     source.textContent = item.sourceLine ?? "";
 
-    copy.append(kicker, title, label, credit, source);
+    copy.append(kicker, title);
+    if (label.textContent) {
+      copy.append(label);
+    }
+    copy.append(credit, source);
     card.append(image, copy);
     grid.append(card);
   });
@@ -1411,6 +1415,7 @@ function createScreenActions(screen) {
 }
 
 function createJourneyDraftCard(state) {
+  return null;
   const lines = composeJourneyDraft(state);
   const summary = buildJourneySummary(state);
   const card = document.createElement("section");
@@ -1769,21 +1774,22 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
 
   const contentTop = document.createElement("div");
   contentTop.className = "content-top";
+  const helperMarkup =
+    screen.uiKind === "look"
+      ? ""
+      : `<p class="content-helper">${resolveAgeVariant(screen.helperText, ageGroup)}</p>`;
+
   contentTop.innerHTML = `
     <div>
       <p class="stage-label">${screen.partLabel}</p>
       <h2 class="content-title">${screen.title}</h2>
       <p class="content-prompt">${resolveAgeVariant(screen.prompt, ageGroup)}</p>
-      <p class="content-helper">${resolveAgeVariant(screen.helperText, ageGroup)}</p>
+      ${helperMarkup}
     </div>
     <div class="stage-pill"><p class="stage-label">LFC remains central</p></div>
   `;
 
   content.append(contentTop);
-  const supportStrip = createSupportStrip(screen);
-  if (supportStrip) {
-    content.append(supportStrip);
-  }
   content.append(renderStageBody({ lessonApp, screen, state, resolveAgeVariant }));
 
   const footer = document.createElement("section");
@@ -1793,7 +1799,6 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   footerCopy.className = "footer-copy";
   footerCopy.innerHTML = `
     <p class="save-line">${completionReady ? screen.saveMessage : "This lesson stays ready for My Journey, feedback, and portal continuity."}</p>
-    <p class="footer-state">${stateSummary(state)}</p>
   `;
 
   const footerActions = document.createElement("div");
@@ -1861,58 +1866,13 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     </div>
     <p>${assistantMode.note}</p>
   `;
-  assistant.append(createScreenActions(screen));
-
-  const status = document.createElement("section");
-  status.className = "surface status-card";
-  status.innerHTML = `
-    <p class="micro-kicker">Available in this lesson step</p>
-  `;
-  const supportItems = getScreenSupportModel(screen);
-  if (supportItems.length) {
-    supportItems.forEach((item) => {
-      const stat = document.createElement("div");
-      stat.className = "mini-stat";
-      stat.innerHTML = `<span>${item.label}</span><strong>${item.value}</strong>`;
-      status.append(stat);
-    });
-  } else {
-    const stat = document.createElement("div");
-    stat.className = "mini-stat";
-    stat.innerHTML = `<span>Journey continuity</span><strong>active</strong>`;
-    status.append(stat);
-  }
-
-  const future = document.createElement("section");
-  future.className = "surface future-card";
-  future.innerHTML = `
-    <p class="micro-kicker">Coming with your full FEI path</p>
-    <p>My Journey, AI review, teacher help, and lesson continuity can all stay connected as this course grows.</p>
-    <div class="future-mascot" aria-hidden="true">
-      <div class="artchi-figure artchi-figure-small">
-        <span class="artchi-wing artchi-wing-left"></span>
-        <span class="artchi-wing artchi-wing-right"></span>
-        <span class="artchi-crown"></span>
-        <span class="artchi-body"></span>
-        <span class="artchi-face">
-          <span class="artchi-eye artchi-eye-left"></span>
-          <span class="artchi-eye artchi-eye-right"></span>
-          <span class="artchi-smile"></span>
-          <span class="artchi-blush artchi-blush-left"></span>
-          <span class="artchi-blush artchi-blush-right"></span>
-        </span>
-        <span class="artchi-palette"></span>
-      </div>
-    </div>
-  `;
 
   main.append(hero, content, footer);
   const writebackCard = createWritebackReviewCard();
-  side.append(assistant, status, createJourneyDraftCard(state));
+  side.append(assistant);
   if (writebackCard) {
     side.append(writebackCard);
   }
-  side.append(future);
   shell.append(main, side);
   root.replaceChildren(shell);
 }
