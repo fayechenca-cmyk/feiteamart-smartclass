@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6088,10 +6089,10 @@ function initPlayLight(shape) {
       <!-- Background: subtle grid for spatial sense -->
       <defs>
         <radialGradient id="pl-sphere-grad">
-          <stop offset="0%" stop-color="#fff8ec"/>
-          <stop offset="35%" stop-color="#d4c4a0"/>
-          <stop offset="75%" stop-color="#5a4a5e"/>
-          <stop offset="100%" stop-color="#2a1f3a"/>
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="40%" stop-color="#dad6d0"/>
+          <stop offset="75%" stop-color="#6a6878"/>
+          <stop offset="100%" stop-color="#3c3a48"/>
         </radialGradient>
         <radialGradient id="pl-shadow-grad">
           <stop offset="0%" stop-color="rgba(40,30,60,0.55)"/>
@@ -6319,36 +6320,70 @@ function updatePlayLightSphere() {
   const lightPos = PlayLight.lightPos();
   const dir = PlayLight.lightDir();
   
+  // ─── Distance physics (NEW) ──────────────────────────────────
+  // distance is clamped 60..200 in updateFromPoint().
+  // We map it to a 0..1 "closeness" value where:
+  //   1 = very close (60)  → strong, harsh light, sharp highlight, hard shadow
+  //   0 = very far (200)   → weak, diffused light, soft glow, soft shadow
+  const dist = PlayLight.lightDistance;
+  const closeness = 1 - (dist - 60) / (200 - 60);   // 0..1
+  
+  // Light intensity affects how dark the shadow side gets
+  // Close light = more contrast (brighter highlights, deeper shadows)
+  // Far light = compressed range (everything more medium-toned)
+  const intensity = 0.55 + closeness * 0.45;        // 0.55..1.0
+  
   // Move the sun
   const sun = document.getElementById('pl-sun');
   if (sun) {
     sun.setAttribute('transform', `translate(${lightPos.x}, ${lightPos.y})`);
+    
+    // Sun glow scales with closeness (bigger and brighter when near)
+    const glowOuter = sun.querySelector('.pl-sun-glow-outer');
+    const glowInner = sun.querySelector('.pl-sun-glow');
+    if (glowOuter) {
+      glowOuter.setAttribute('r', 30 + closeness * 18);  // 30..48
+    }
+    if (glowInner) {
+      glowInner.setAttribute('r', 18 + closeness * 10);  // 18..28
+      glowInner.setAttribute('fill', `rgba(252,211,77,${0.4 + closeness * 0.4})`);
+    }
   }
   
   // Move the highlight on the sphere
   // Highlight position: 0.55× radius offset from sphere center toward light
+  // Highlight SIZE shrinks when light is closer (sharper specular)
   const hl = document.getElementById('pl-highlight');
   if (hl) {
     const hlOffset = PlayLight.size * 0.55;
     hl.setAttribute('cx', PlayLight.centerX + dir.x * hlOffset);
     hl.setAttribute('cy', PlayLight.centerY + dir.y * hlOffset);
+    hl.setAttribute('r', 6 + (1 - closeness) * 8);  // 6..14 (smaller when close)
+    hl.setAttribute('fill', `rgba(255,255,255,${0.7 + closeness * 0.25})`);
   }
   
   // Update sphere gradient to follow the light
-  // We do this by updating the radialGradient's cx/cy attributes
+  // The gradient's "spread" (radius) tightens as light gets closer 
+  // — close light = sharper transition; far light = softer wrapping
   const grad = document.querySelector('#pl-sphere-grad');
   if (grad) {
-    // Convert dir to gradient-space (0..1, where center is 0.5,0.5)
-    // Highlight at offset 0% should be at light position relative to circle bounds
-    const gx = 0.5 + dir.x * 0.4;  // 0.4 brings it close to edge but not off
+    const gx = 0.5 + dir.x * 0.4;
     const gy = 0.5 + dir.y * 0.4;
     grad.setAttribute('cx', `${gx * 100}%`);
     grad.setAttribute('cy', `${gy * 100}%`);
-    grad.setAttribute('r', '70%');
+    // Closer light → smaller radius → tighter highlight, more dramatic falloff
+    // Farther light → larger radius → softer, more diffuse
+    grad.setAttribute('r', `${65 + (1 - closeness) * 25}%`);  // 65%..90%
+  }
+  
+  // Apply intensity to sphere (overall darkening when light is far)
+  const sphere = document.getElementById('pl-sphere');
+  if (sphere) {
+    sphere.style.opacity = intensity;
   }
   
   // Reflected light: a thin arc on the *shadow* side of the sphere
-  // It runs perpendicular to the light direction, on the dark side
+  // Reflected light is STRONGER when light is far (more ambient bouncing back)
   const refl = document.getElementById('pl-reflected');
   if (refl) {
     const oppositeDir = { x: -dir.x, y: -dir.y };
@@ -6362,32 +6397,36 @@ function updatePlayLightSphere() {
     };
     refl.setAttribute('d', 
       `M ${arcStart.x} ${arcStart.y} A ${PlayLight.size * 0.85} ${PlayLight.size * 0.85} 0 0 1 ${arcEnd.x} ${arcEnd.y}`);
+    // Reflected light gets stronger when main light is weaker (far)
+    refl.setAttribute('stroke', `rgba(207,250,254,${0.12 + (1 - closeness) * 0.18})`);
   }
   
   // Cast shadow on the floor — elongated ellipse, away from light direction
+  // Distance affects: shadow darkness (close=darker) AND blur (close=harder)
   const cast = document.getElementById('pl-cast-shadow');
   if (cast) {
-    // Floor is at y=220 (under sphere)
-    // Shadow center: project from sphere base in opposite direction of light
     const floorY = 225;
-    const shadowDir = { x: -dir.x, y: 0 };  // shadow only in horizontal plane
-    
-    // Shadow length depends on how high the light is (more horizontal = longer shadow)
     const lightHorizontality = Math.abs(dir.x);
     const baseRx = 75;
     const stretchedRx = baseRx + lightHorizontality * 80;
-    
-    // Shadow X offset
     const shadowOffsetX = -dir.x * 50;
     
-    // Shadow opacity: lower if light is from above (steeper)
-    const opacity = 0.25 + Math.abs(dir.y) * 0.2;
+    // Shadow opacity affected by light angle AND distance
+    // Close light = darker, more defined shadow
+    // Far light = lighter, more diffuse shadow
+    const baseOpacity = 0.18 + Math.abs(dir.y) * 0.12;
+    const distanceBoost = closeness * 0.20;
+    const opacity = baseOpacity + distanceBoost;
     
     cast.setAttribute('cx', PlayLight.centerX + shadowOffsetX);
     cast.setAttribute('cy', floorY);
     cast.setAttribute('rx', stretchedRx);
-    cast.setAttribute('ry', 14);
-    cast.setAttribute('fill', `rgba(0,0,0,${opacity})`);
+    cast.setAttribute('ry', 14 + (1 - closeness) * 8);  // farther = wider/softer
+    cast.setAttribute('fill', `rgba(40,30,60,${opacity})`);
+    
+    // Blur grows with distance — far light = soft shadow edges
+    const blurAmount = 2 + (1 - closeness) * 4;  // 2px..6px
+    cast.style.filter = `blur(${blurAmount}px)`;
     
     // If light is below floor level, hide cast shadow (light is "underneath")
     if (dir.y > 0.6) {
@@ -6403,28 +6442,33 @@ function updatePlayLightCube() {
   const lightPos = PlayLight.lightPos();
   const dir = PlayLight.lightDir();
   
-  // Move the sun
+  // Distance physics — same as sphere
+  const dist = PlayLight.lightDistance;
+  const closeness = 1 - (dist - 60) / (200 - 60);
+  const intensity = 0.55 + closeness * 0.45;
+  
+  // Move the sun (and scale glow)
   const sun = document.getElementById('pl-sun');
   if (sun) {
     sun.setAttribute('transform', `translate(${lightPos.x}, ${lightPos.y})`);
+    const glowOuter = sun.querySelector('.pl-sun-glow-outer');
+    const glowInner = sun.querySelector('.pl-sun-glow');
+    if (glowOuter) glowOuter.setAttribute('r', 30 + closeness * 18);
+    if (glowInner) {
+      glowInner.setAttribute('r', 18 + closeness * 10);
+      glowInner.setAttribute('fill', `rgba(252,211,77,${0.4 + closeness * 0.4})`);
+    }
   }
   
   // Each cube face has a normal direction (pointing outward)
   // Top face:    normal = up      = (0, -1)
-  // Left face:   normal = left    = (-0.7, 0.3) (tilted in our isometric view)
+  // Left face:   normal = left    = (-0.7, 0.3)
   // Right face:  normal = right   = (0.7, 0.3)
   // 
   // Brightness = max(0, dot(normal, lightDirection))
-  // Where lightDirection points FROM surface TOWARD light
   
-  const lightFromSurface = { x: dir.x, y: dir.y };  // already toward light
+  const lightFromSurface = { x: dir.x, y: dir.y };
   
-  // For our top-down 2D representation, light angle effects:
-  //   - Top face brighter if light is more vertical (dir.y < 0)
-  //   - Left face brighter if light comes from left (dir.x < 0)
-  //   - Right face brighter if light comes from right (dir.x > 0)
-  
-  // Face normals (in our viewing plane)
   const normals = {
     top:   { x: 0,    y: -1   },
     left:  { x: -0.7, y: 0.3  },
@@ -6433,16 +6477,15 @@ function updatePlayLightCube() {
   
   function brightness(normal) {
     const dot = normal.x * lightFromSurface.x + normal.y * lightFromSurface.y;
-    return Math.max(0.08, Math.min(1, dot));  // clamp to avoid pure black
+    // intensity (close vs far) modulates the dot product, expanding/compressing range
+    return Math.max(0.08, Math.min(1, dot * intensity));
   }
   
-  // Apply colors
   const topB = brightness(normals.top);
   const leftB = brightness(normals.left);
   const rightB = brightness(normals.right);
   
   function brightnessToColor(b) {
-    // b in [0.08, 1] → a gray value
     const v = Math.round(40 + b * 200);
     return `rgb(${v}, ${v}, ${v})`;
   }
@@ -6457,19 +6500,12 @@ function updatePlayLightCube() {
   // Cast shadow polygon — projected away from light along ground plane
   const cast = document.getElementById('pl-cast-shadow');
   if (cast) {
-    // Cube base corners (in our isometric view, the bottom edges):
-    //   bottom-left:  (135, 200)
-    //   bottom-front: (200, 230)
-    //   bottom-right: (265, 200)
-    // Project these away from light onto floor
-    
     const baseCorners = [
       { x: 135, y: 200 },
       { x: 200, y: 230 },
       { x: 265, y: 200 }
     ];
     
-    // Shadow direction is opposite to light (and clamped to floor plane)
     const lightHorizontality = Math.abs(dir.x);
     const projectionLength = 40 + lightHorizontality * 80;
     const shadowDir = { x: -dir.x, y: Math.max(0, -dir.y * 0.5) };
@@ -6479,7 +6515,6 @@ function updatePlayLightCube() {
       y: Math.max(225, c.y + Math.abs(shadowDir.y) * projectionLength)
     }));
     
-    // Build polygon: original corners + projected (going around)
     const points = [
       `${baseCorners[0].x},${baseCorners[0].y}`,
       `${baseCorners[1].x},${baseCorners[1].y}`,
@@ -6490,6 +6525,15 @@ function updatePlayLightCube() {
     ].join(' ');
     
     cast.setAttribute('points', points);
+    
+    // Distance affects shadow opacity AND blur (close = sharp dark; far = soft light)
+    const baseOpacity = 0.20 + Math.abs(dir.y) * 0.10;
+    const distanceBoost = closeness * 0.20;
+    const opacity = baseOpacity + distanceBoost;
+    cast.setAttribute('fill', `rgba(40,30,60,${opacity})`);
+    
+    const blurAmount = 2 + (1 - closeness) * 4;
+    cast.style.filter = `blur(${blurAmount}px)`;
     
     // Hide if light is below
     if (dir.y > 0.6) {
@@ -6509,34 +6553,45 @@ function updatePlayLightReadout() {
   
   if (!PlayLight.hasInteracted) {
     zoneEl.textContent = 'Move the light to begin';
-    hintEl.textContent = 'Drag the sun ☀️ in any direction.';
+    hintEl.textContent = 'Drag the sun ☀️ in any direction. Pull it close or far — both matter.';
     return;
   }
   
-  // Describe the current lighting setup based on direction
-  let description = '';
-  let hint = '';
+  // ─── Describe the current lighting setup ──
+  // Two factors: angle (where) + distance (how strong)
   
-  // Vertical position
-  if (dir.y < -0.5) {
-    description = 'Light from above';
-    hint = 'Top of the form is brightest. Cast shadow is short and tucked underneath.';
-  } else if (dir.y > 0.5) {
-    description = 'Light from below';
-    hint = 'Unusual! Cast shadow disappears or flips upward. Hard to find in nature — except firelight.';
-  } else if (dir.x < -0.5) {
-    description = 'Light from the left';
-    hint = 'Highlight on the left, shadow on the right. Classical Vermeer lighting.';
-  } else if (dir.x > 0.5) {
-    description = 'Light from the right';
-    hint = 'Highlight on the right, shadow on the left.';
+  let direction = '';
+  if (dir.y < -0.5) direction = 'Light from above';
+  else if (dir.y > 0.5) direction = 'Light from below';
+  else if (dir.x < -0.5) direction = 'Light from the left';
+  else if (dir.x > 0.5) direction = 'Light from the right';
+  else direction = 'Light at an angle';
+  
+  // Distance closeness (0..1 normalized)
+  const dist = PlayLight.lightDistance;
+  const closeness = 1 - (dist - 60) / (200 - 60);
+  let distanceLabel = '';
+  let distanceHint = '';
+  if (closeness > 0.7) {
+    distanceLabel = ', close in';
+    distanceHint = 'Strong light: sharp highlight, deep shadow, hard edges.';
+  } else if (closeness < 0.3) {
+    distanceLabel = ', far away';
+    distanceHint = 'Soft light: diffuse highlight, gentle shadow, soft edges. Reflected light is more visible now.';
   } else {
-    description = 'Light is angled';
-    hint = 'Notice the terminator line — where light meets dark.';
+    distanceLabel = ', medium distance';
+    distanceHint = 'Balanced lighting — what most still-life setups use.';
   }
   
-  zoneEl.textContent = description;
-  hintEl.textContent = hint;
+  // Add angle-specific hint
+  let angleHint = '';
+  if (dir.y < -0.5) angleHint = 'Top of the form is brightest. Cast shadow is short, tucked underneath.';
+  else if (dir.y > 0.5) angleHint = 'Unusual! Hard to find in nature — except firelight.';
+  else if (Math.abs(dir.x) > 0.7) angleHint = 'Side light reveals the most form. The classic art studio choice.';
+  else angleHint = 'Notice the terminator — where light meets dark.';
+  
+  zoneEl.textContent = direction + distanceLabel;
+  hintEl.textContent = distanceHint + ' ' + angleHint;
 }
 
 // ─── Track which insights the student has 'discovered' ───────────
@@ -6574,6 +6629,26 @@ function trackPlayLightInsights() {
       icon: '✓',
       label: 'Side light reveals the most form.',
       description: 'When you draw, lighting from one side (45° is classic) gives you the most distinct light/shadow zones to work with.'
+    });
+  }
+  
+  // Insight 4: distance — pulled close or far
+  const dist = PlayLight.lightDistance;
+  const closeness = 1 - (dist - 60) / (200 - 60);
+  if (closeness > 0.85 && !PlayLight.insightsShown.has('close_light')) {
+    PlayLight.insightsShown.add('close_light');
+    insights.push({
+      icon: '✓',
+      label: 'Close light = sharp, dramatic.',
+      description: 'A nearby light source makes the highlight tight and crisp, the shadow deep and hard-edged. Think candle. Think spotlight.'
+    });
+  }
+  if (closeness < 0.15 && !PlayLight.insightsShown.has('far_light')) {
+    PlayLight.insightsShown.add('far_light');
+    insights.push({
+      icon: '✓',
+      label: 'Far light = soft, atmospheric.',
+      description: 'A distant light source spreads softly. Highlights diffuse, shadows blur. Reflected light becomes more visible because the main light is weaker.'
     });
   }
   
