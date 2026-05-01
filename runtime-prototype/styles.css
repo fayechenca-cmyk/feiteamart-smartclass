@@ -304,6 +304,72 @@ button {
   padding: 26px;
 }
 
+.support-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.support-pill {
+  min-width: 148px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(26, 29, 43, 0.07);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.support-pill-value {
+  margin: 8px 0 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.journey-draft-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.journey-summary-block {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.journey-summary-note {
+  margin-top: 14px;
+  padding: 14px 15px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(26, 29, 43, 0.07);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.journey-summary-note p + p {
+  margin-top: 8px;
+}
+
+.writeback-preview {
+  margin-top: 14px;
+  padding: 14px 15px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(26, 29, 43, 0.07);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.writeback-preview pre {
+  margin: 10px 0 0;
+  max-height: 220px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
 .content-top {
   display: flex;
   justify-content: space-between;
@@ -443,6 +509,8 @@ button {
 .teacher-note,
 .compare-card,
 .micro-insight-card,
+.quest-card,
+.upload-card,
 .draw-main,
 .draw-side-card,
 .continuity-card {
@@ -453,10 +521,29 @@ button {
 
 .teacher-note,
 .micro-insight-card,
+.quest-card,
+.upload-card,
 .draw-side-card,
 .continuity-card {
   padding: 18px 20px;
   box-shadow: none;
+}
+
+.reflection-textarea {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(26, 29, 43, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  resize: vertical;
+  min-height: 110px;
+}
+
+.reflection-textarea:focus {
+  outline: 2px solid rgba(167, 139, 250, 0.18);
+  border-color: rgba(167, 139, 250, 0.32);
 }
 
 .teacher-note {
@@ -467,11 +554,26 @@ button {
 .teacher-note p,
 .compare-card p,
 .micro-insight-card p,
+.quest-card p,
+.upload-card p,
 .draw-side-card p,
 .continuity-card p {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.55;
+}
+
+.quest-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.96) 100%);
+}
+
+.upload-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 252, 250, 0.96) 100%);
+}
+
+.quest-followup {
+  margin-top: 12px !important;
+  color: var(--ink-soft);
 }
 
 .understand-layout {
