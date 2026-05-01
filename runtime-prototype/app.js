@@ -1292,6 +1292,7 @@ function renderContinueStage({ screen }) {
   const writeback = readWritebackEnvelope();
   const portalMapping = writeback?.portalMapping ?? {};
   const illustrationTrack = portalMapping.track_progress?.illustration ?? null;
+  const illustrationBadge = portalMapping.badge_progress?.storyteller ?? null;
   const lessonProgress =
     portalMapping.lesson_progress?.["lfc054-surreal-worlds"] ?? null;
 
@@ -1309,8 +1310,8 @@ function renderContinueStage({ screen }) {
   statusGrid.className = "journey-summary-block";
   statusGrid.innerHTML = `
     <div class="mini-stat"><span>Lesson</span><strong>${lessonProgress?.completed ? "Completed" : "Saved in progress"}</strong></div>
-    <div class="mini-stat"><span>Identity</span><strong>${context.mode === "portal_code" ? (context.displayName || context.studentId || "Student") : "Guest mode"}</strong></div>
-    <div class="mini-stat"><span>Track</span><strong>${illustrationTrack ? `${illustrationTrack.count} / ${illustrationTrack.target}` : "Illustration path not linked yet"}</strong></div>
+    <div class="mini-stat"><span>Illustration path</span><strong>${illustrationTrack ? `${illustrationTrack.count} / ${illustrationTrack.target}` : "1 lesson started"}</strong></div>
+    <div class="mini-stat"><span>Badge progress</span><strong>${illustrationBadge ? `${illustrationBadge.count} / ${illustrationBadge.target}` : "Not linked yet"}</strong></div>
     <div class="mini-stat"><span>Next lesson</span><strong>${illustrationTrack?.next_lesson_id || "Coming next"}</strong></div>
   `;
   card.append(statusGrid);
@@ -1324,23 +1325,25 @@ function renderContinueStage({ screen }) {
       title: context.mode === "portal_code" ? "Open your student portal" : "Student portal later",
       body:
         context.mode === "portal_code"
-          ? "Your student identity is already recognized. This lesson can connect to your path progress and badge journey."
-          : "If you later enter through your student portal code, this lesson can connect to your personal report and badge path.",
+          ? "Your lesson can continue into your personal path progress and badge record."
+          : "If you enter later through your student portal code, this lesson can connect to your personal report and badge path.",
       action: context.mode === "portal_code" ? "Go to Student Portal" : "Portal not linked yet",
       emphasis: context.mode === "portal_code",
     },
     {
       kicker: "Journey",
       title: "Keep this in My Journey",
-      body: "Your surreal move, reflection, uploads, and drawing checkpoints are already being shaped into a reusable journey summary.",
+      body: "Your choices, drawing steps, and reflection can stay connected in My Journey as this path grows.",
       action: "Open My Journey",
       emphasis: true,
     },
     {
-      kicker: "Support",
-      title: "Ask for feedback",
-      body: "You can continue with AI review now, or save this lesson for future teacher feedback and portfolio thinking.",
-      action: "Ask AI for Review",
+      kicker: "Badge",
+      title: "Grow your illustration badge",
+      body: illustrationBadge
+        ? `This lesson counts toward your illustration badge. You are currently ${illustrationBadge.count} out of ${illustrationBadge.target} steps into that path.`
+        : "This lesson can become part of a longer illustration badge path.",
+      action: "Keep growing this badge",
       emphasis: false,
     },
     {
