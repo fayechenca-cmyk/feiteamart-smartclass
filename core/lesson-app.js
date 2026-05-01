@@ -78,6 +78,8 @@ function evaluateCompletionRule(screen, state) {
   const rule = screen.completionRule ?? {};
 
   switch (rule.type) {
+    case "always":
+      return true;
     case "single_choice":
     case "single_choice_with_optional_chips":
       return Boolean(getValueAtPath(state, rule.field));
