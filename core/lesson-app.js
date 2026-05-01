@@ -387,6 +387,62 @@ export function createLessonApp({
     return true;
   }
 
+  function skipScreen(screenId) {
+    const nextScreenId = getNextScreenId(normalizedLesson.lessonMeta, screenId);
+    analytics.track("screen_skipped", {
+      lessonId: normalizedLesson.lessonMeta.lessonId,
+      familyId: normalizedLesson.lessonMeta.familyId,
+      screenId,
+    });
+
+    if (!nextScreenId) {
+      completeLesson();
+      return true;
+    }
+
+    goToScreen(nextScreenId);
+    return true;
+  }
+
+  function resetLesson() {
+    const currentState = getLessonState();
+    const profileSnapshot = getProfile();
+    const firstScreenId = normalizedLesson.lessonMeta.screens[0].screenId;
+    const baseProfile = profileSnapshot ?? {
+      learnerId: currentState.learnerId,
+      ageGroup: currentState.ageGroup,
+      currentLessonId: normalizedLesson.lessonMeta.lessonId,
+      currentScreenId: firstScreenId,
+    };
+
+    const resetState = createInitialLessonState({
+      lessonMeta: normalizedLesson.lessonMeta,
+      initialRunState,
+      profile: {
+        ...baseProfile,
+        ageGroup: currentState.ageGroup ?? baseProfile.ageGroup,
+        currentLessonId: normalizedLesson.lessonMeta.lessonId,
+        currentScreenId: firstScreenId,
+      },
+      accessState: getAccessState({
+        lessonMeta: normalizedLesson.lessonMeta,
+        accessConfig: normalizedLesson.accessConfig,
+        profile: baseProfile,
+      }),
+    });
+
+    store.update(() => resetState);
+    updateProfile({
+      currentLessonId: normalizedLesson.lessonMeta.lessonId,
+      currentScreenId: firstScreenId,
+    });
+    analytics.track("lesson_reset", {
+      lessonId: normalizedLesson.lessonMeta.lessonId,
+      familyId: normalizedLesson.lessonMeta.familyId,
+    });
+    return getLessonState();
+  }
+
   return {
     loadLesson,
     getLessonState,
@@ -398,7 +454,9 @@ export function createLessonApp({
     goToScreen,
     saveInteraction,
     completeScreen,
+    skipScreen,
     completeLesson,
+    resetLesson,
     subscribe: store.subscribe,
   };
 }
