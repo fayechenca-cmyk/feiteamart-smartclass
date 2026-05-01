@@ -29,6 +29,17 @@ function toSelectionItem(record, fallbackKey = "study") {
     label: record.artist,
     artist: record.artist,
     title: record.title,
+    year: record.year,
+    medium: record.medium,
+    sourceType: record.sourceType,
+    sourceFloor: record.sourceFloor,
+    creditLine: `${record.artist} · ${record.title}${record.year ? ` · ${record.year}` : ""}`,
+    sourceLine:
+      record.sourceFloor != null
+        ? `Source: LFC Gallery Floor ${record.sourceFloor}`
+        : record.sourceType === "lesson_original"
+          ? "Source: FEI lesson reference"
+          : "Source: lesson reference",
     imageSrc:
       record.img || createFallbackArtworkImage(record) || legacyArtworkLibrary[fallbackKey].imageSrc,
     alt: `${record.title} by ${record.artist}`,
@@ -61,7 +72,7 @@ function createWelcomeScreen(index) {
   return {
     ...makeScreenId(index, "welcome"),
     uiKind: "welcome",
-    title: "Surreal Worlds",
+    title: "Illustration Through Surrealism",
     partLabel: "Start",
     xpValue: 0,
     progressOnComplete: "started",
@@ -69,8 +80,8 @@ function createWelcomeScreen(index) {
     completionRule: { type: "always" },
     prompt: {
       kids: "Start from a normal world, then change one rule.",
-      teen: "This lesson begins with artworks, then moves toward your own surreal image.",
-      adult: "Begin with visual logic, then carry one altered rule into your own image-making.",
+      teen: "This lesson begins with artworks, then moves toward your own surreal illustration.",
+      adult: "Begin with visual logic, then carry one altered rule into your own illustration-making.",
     },
     helperText: {
       kids: "You will look, choose, and draw one clear strange change.",
@@ -80,8 +91,8 @@ function createWelcomeScreen(index) {
     blocks: {
       heroMessage: {
         eyebrow: "LFC054",
-        title: "Surreal Worlds",
-        body: "Start from the real world. Change one rule. Build a surreal image through artworks, visual logic, and guided colored-pencil making.",
+        title: "Illustration Through Surrealism",
+        body: "Start from a real scene. Change one rule. Build a surreal illustration through artworks, visual logic, and guided colored-pencil making.",
       },
     },
     systemHooks: createSystemHooks({
@@ -100,6 +111,7 @@ function createLookScreen(index, screenId, title, partLabel, poolBinding, saveMe
     title,
     partLabel,
     xpValue: 8,
+    skipAllowed: true,
     progressOnComplete: "looking",
     saveMessage,
     completionRule: {
@@ -155,6 +167,7 @@ function createUnderstandScreen(index) {
     title: "How Surreal Enters an Image",
     partLabel: "Understand",
     xpValue: 10,
+    skipAllowed: true,
     progressOnComplete: "understanding",
     saveMessage: "Visual logic captured",
     completionRule: {
@@ -178,6 +191,12 @@ function createUnderstandScreen(index) {
           alt: compareRecord ? `${compareRecord.title} by ${compareRecord.artist}` : legacyArtworkLibrary.study.alt,
           artist: compareRecord?.artist || "LFC Reference",
           title: compareRecord?.title || "Surreal move study",
+          year: compareRecord?.year || "",
+          medium: compareRecord?.medium || "",
+          sourceLine:
+            compareRecord?.sourceFloor != null
+              ? `Source: LFC Gallery Floor ${compareRecord.sourceFloor}`
+              : "Source: lesson reference",
         },
         compareNotes: [
           {
@@ -224,6 +243,7 @@ function createChoiceScreen(index, config) {
     title: config.title,
     partLabel: config.partLabel,
     xpValue: config.xpValue,
+    skipAllowed: true,
     progressOnComplete: config.progressOnComplete,
     saveMessage: config.saveMessage,
     completionRule: {
@@ -255,6 +275,7 @@ function createPairChoiceScreen(index) {
     title: "Add the Strange",
     partLabel: "Plan",
     xpValue: 8,
+    skipAllowed: true,
     progressOnComplete: "planning",
     saveMessage: "Surreal idea captured",
     completionRule: {
@@ -319,6 +340,7 @@ function createChecklistScreen(index) {
     title: "Prepare Materials",
     partLabel: "Prepare",
     xpValue: 3,
+    skipAllowed: true,
     progressOnComplete: "ready",
     saveMessage: "Materials ready",
     completionRule: {
@@ -327,14 +349,14 @@ function createChecklistScreen(index) {
       minRequired: 3,
     },
     prompt: {
-      kids: "Get your materials ready before drawing starts.",
-      teen: "Prepare your materials so the making stage can stay calm and focused.",
-      adult: "Set the working conditions before the recorded guidance begins.",
+      kids: "Get your materials ready before your surreal illustration starts.",
+      teen: "Prepare the materials for this surreal illustration before the drawing stage begins.",
+      adult: "Set the materials for this surreal illustration before the recorded guidance begins.",
     },
     helperText: {
-      kids: "You need colored pencils and sketch paper. No eraser is necessary.",
-      teen: "Colored pencils and sketch paper are enough. Keep the first lines light.",
-      adult: "The lesson uses colored pencils and sketch paper. Early lines should stay provisional.",
+      kids: "This lesson is shown with colored pencils and sketch paper. Other materials are okay too.",
+      teen: "This example is mainly demonstrated with colored pencils and sketch paper, though other materials are allowed.",
+      adult: "This lesson is primarily demonstrated with colored pencils on sketch paper, though learners may adapt the process to other materials.",
     },
     blocks: {
       checklist: {
@@ -344,6 +366,19 @@ function createChecklistScreen(index) {
           { id: "sketch-paper", label: "Sketch paper" },
           { id: "no-eraser-needed", label: "I know I do not need an eraser" },
         ],
+      },
+      materialsNote: {
+        title: "Main tools for this lesson",
+        body: {
+          kids: "We will mainly use colored pencils and sketch paper in this surreal illustration example.",
+          teen: "The main tools in this lesson example are colored pencils and sketch paper.",
+          adult: "This demonstration is built around colored pencil illustration on sketch paper.",
+        },
+        extra: {
+          kids: "If you want to try another material, that is fine.",
+          teen: "You may still use other materials if you prefer, but the teaching example follows colored pencil steps.",
+          adult: "Other materials remain possible, but the pacing, layering, and finish in this lesson are demonstrated through colored pencil handling.",
+        },
       },
     },
     systemHooks: createSystemHooks({
@@ -401,6 +436,7 @@ function createReflectionScreen(index) {
     title: "Reflection and Journey",
     partLabel: "Reflect",
     xpValue: 6,
+    skipAllowed: true,
     progressOnComplete: "reflecting",
     saveMessage: "Reflection saved",
     completionRule: {
@@ -485,11 +521,12 @@ function createDrawSegments() {
       segmentId: "draw-sketch-real-scene",
       title: "Sketch the Real Scene",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:48",
         imageSrc: teacherFrame,
         title: "Build the real world first",
         caption: "The teacher lightly places the ordinary scene before any surreal shift enters.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
@@ -510,11 +547,12 @@ function createDrawSegments() {
       segmentId: "draw-place-the-change",
       title: "Choose Where the Change Enters",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:42",
         imageSrc: teacherFrame,
         title: "Choose one point of entry",
         caption: "The teacher decides exactly where reality changes instead of spreading strangeness everywhere.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
@@ -535,11 +573,12 @@ function createDrawSegments() {
       segmentId: "draw-make-the-strange-visible",
       title: "Draw the Strange Move",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:56",
         imageSrc: teacherFrame,
         title: "Push the strange move clearly",
         caption: "The teacher draws the surreal change decisively while keeping part of the subject recognizable.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
@@ -560,11 +599,12 @@ function createDrawSegments() {
       segmentId: "draw-connect-real-and-strange",
       title: "Connect the Real and the Strange",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:51",
         imageSrc: teacherFrame,
         title: "Connect the space",
         caption: "The teacher uses edge, contact, and direction to make the impossible feel placed inside one world.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
@@ -585,11 +625,12 @@ function createDrawSegments() {
       segmentId: "draw-color-the-mood",
       title: "Color the Mood",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:44",
         imageSrc: teacherFrame,
         title: "Color the feeling",
         caption: "The teacher uses color to support mood instead of decorating randomly.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
@@ -610,11 +651,12 @@ function createDrawSegments() {
       segmentId: "draw-final-push",
       title: "Final Push and Stop",
       teacherMedia: {
-        label: "Recorded teacher guidance",
+        label: "Recorded video lesson",
         durationLabel: "0:35",
         imageSrc: teacherFrame,
         title: "Know when to stop",
         caption: "The teacher checks whether the idea reads clearly, strengthens what matters, then stops.",
+        sourceLine: "Video slot: your recorded teaching clip for this step appears here.",
       },
       pausePoint: {
         label: "Now it’s your turn",
