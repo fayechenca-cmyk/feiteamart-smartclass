@@ -134,9 +134,9 @@ button {
   margin: 14px 0 10px;
   font-family: "Montserrat", sans-serif;
   font-size: clamp(2rem, 4.4vw, 3.35rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 }
 
 .hero-subtitle {
@@ -385,7 +385,7 @@ button {
   margin: 0;
   font-family: "Montserrat", sans-serif;
   font-size: clamp(1.5rem, 3.5vw, 2.1rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.08;
 }
