@@ -97,7 +97,7 @@ export const runtimePrototypeLesson = {
   lesson: {
     lessonId: "lfc054-surreal-worlds",
     slug: "lfc054-surreal-worlds",
-    title: "Surreal Worlds",
+    title: "Illustration Through Surrealism",
     shortTitle: "LFC054",
     lessonFamily: "lfc",
     ageGroups: ["kids", "teen", "adult"],
