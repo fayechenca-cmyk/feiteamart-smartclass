@@ -421,9 +421,13 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .art-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
   padding: 0;
   border: 1px solid var(--line);
@@ -449,12 +453,15 @@ button {
 .art-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 1.1;
+  aspect-ratio: 1.08;
   object-fit: cover;
   background: linear-gradient(135deg, rgba(221, 212, 251, 0.7) 0%, rgba(215, 243, 233, 0.68) 52%, rgba(216, 243, 247, 0.78) 100%);
 }
 
 .art-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 16px 16px 18px;
 }
 
@@ -474,10 +481,11 @@ button {
   font-size: 1rem;
   font-weight: 800;
   line-height: 1.35;
+  min-height: 2.7em;
 }
 
 .art-card-meta {
-  margin: 0;
+  margin: 0 0 2px;
   color: var(--ink-soft);
   font-size: 0.84rem;
   line-height: 1.55;
@@ -493,6 +501,11 @@ button {
 
 .art-card-source {
   margin-top: 4px;
+}
+
+.art-card-source:last-child {
+  margin-top: auto;
+  padding-top: 6px;
 }
 
 .chip-row,
