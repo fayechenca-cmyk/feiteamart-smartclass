@@ -13,6 +13,17 @@ const analytics = {
   },
 };
 
+const LESSON_WRITEBACK_KEY = "lfc054_writeback_v1";
+const JUDGMENT_CARD_KEY = "lfc_cards_v1";
+const IDENTITY_KEY = "fei.identity.v1";
+const DEFAULT_LEARNER_CONTEXT = {
+  mode: "guest",
+  studentId: null,
+  portalCodeVerified: false,
+  memberId: null,
+  displayName: null,
+};
+
 function button(label, options = {}) {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -26,6 +37,70 @@ function button(label, options = {}) {
   }
   return btn;
 }
+
+function getCurrentLearnerContext() {
+  try {
+    const raw = window.localStorage.getItem(IDENTITY_KEY);
+    if (!raw) {
+      return { ...DEFAULT_LEARNER_CONTEXT };
+    }
+
+    const parsed = JSON.parse(raw);
+    return {
+      ...DEFAULT_LEARNER_CONTEXT,
+      ...parsed,
+    };
+  } catch (error) {
+    return { ...DEFAULT_LEARNER_CONTEXT };
+  }
+}
+
+function persistLearnerContext(contextPatch) {
+  try {
+    const next = {
+      ...getCurrentLearnerContext(),
+      ...contextPatch,
+      updatedAt: new Date().toISOString(),
+    };
+    window.localStorage.setItem(IDENTITY_KEY, JSON.stringify(next));
+    return next;
+  } catch (error) {
+    return {
+      ...DEFAULT_LEARNER_CONTEXT,
+      ...contextPatch,
+    };
+  }
+}
+
+function ensureGuestLearnerContext() {
+  const current = getCurrentLearnerContext();
+  if (!current.mode) {
+    return persistLearnerContext(DEFAULT_LEARNER_CONTEXT);
+  }
+  if (current.mode === "guest" || current.mode === "portal_code" || current.mode === "member") {
+    return current;
+  }
+  return persistLearnerContext(DEFAULT_LEARNER_CONTEXT);
+}
+
+function canSyncToCloud(context = getCurrentLearnerContext()) {
+  return context.mode === "member";
+}
+
+window.getCurrentLearnerContext = getCurrentLearnerContext;
+window.setPortalLearnerContext = function setPortalLearnerContext(student) {
+  return persistLearnerContext({
+    mode: "portal_code",
+    studentId: student?.id ?? null,
+    portalCodeVerified: Boolean(student?.id),
+    memberId: null,
+    displayName: student?.display_name ?? student?.displayName ?? null,
+  });
+};
+window.clearLearnerContext = function clearLearnerContext() {
+  return persistLearnerContext(DEFAULT_LEARNER_CONTEXT);
+};
+window.canSyncToCloud = canSyncToCloud;
 
 function pickAssistantMode(screen) {
   if (screen.uiKind === "draw") {
@@ -185,8 +260,92 @@ function buildJourneySummary(state) {
   return summary;
 }
 
+function buildPortalCompletionMapping(state, identity) {
+  const reflection = state.responses.reflection ?? {};
+  const uploadsSaved = Object.values(state.responses.uploads ?? {}).filter(
+    (item) => item?.saved,
+  ).length;
+  const judgmentCards = state.responses.judgmentCards ?? [];
+  const completedAt = new Date().toISOString();
+  const lessonId = state.lessonId;
+  const trackId = "illustration";
+  const trackTitle = "Illustration Path";
+  const target = 8;
+  const badgeId = "storyteller";
+  const nextLessonId = "lfc055-surreal-variation";
+
+  const lessonProgress = {
+    [lessonId]: {
+      completed: Boolean(state.isLessonComplete),
+      completed_at: state.isLessonComplete ? completedAt : null,
+      family: state.familyId ?? "lfc",
+      track: trackId,
+      xp: state.currentLessonXP ?? 0,
+      reflection_saved: Boolean((reflection.text ?? "").trim() || reflection.chips?.length),
+      uploads_count: uploadsSaved,
+      judgment_cards_count: judgmentCards.length,
+      student_id: identity.studentId,
+      member_id: identity.memberId,
+    },
+  };
+
+  const priorTrack = state.portalTrackProgress?.[trackId] ?? null;
+  const priorLessons = Array.isArray(priorTrack?.completed_lessons)
+    ? priorTrack.completed_lessons
+    : [];
+  const completedLessons = Array.from(
+    new Set(
+      state.isLessonComplete
+        ? [...priorLessons, lessonId]
+        : priorLessons,
+    ),
+  );
+  const count = completedLessons.length;
+  const trackStatus = count >= target ? "completed" : count > 0 ? "in_progress" : "not_started";
+  const badgeStatus = count >= target ? "unlocked" : count > 0 ? "in_progress" : "not_started";
+
+  const trackProgress = {
+    [trackId]: {
+      title: trackTitle,
+      count,
+      target,
+      completed_lessons: completedLessons,
+      status: trackStatus,
+      badge_id: badgeId,
+      next_lesson_id: count >= target ? null : nextLessonId,
+    },
+  };
+
+  const badgeProgress = {
+    [badgeId]: {
+      source_track: trackId,
+      count,
+      target,
+      status: badgeStatus,
+    },
+  };
+
+  const achievementCandidate =
+    count >= target
+      ? {
+          badge_id: badgeId,
+          date: completedAt.slice(0, 10),
+          source_track: trackId,
+        }
+      : null;
+
+  return {
+    lesson_progress: lessonProgress,
+    track_progress: trackProgress,
+    badge_progress: badgeProgress,
+    achievement_candidate: achievementCandidate,
+  };
+}
+
 function buildWritebackEnvelope(state) {
   const visitorId = createLfcVisitorId();
+  const identity = ensureGuestLearnerContext();
+  const portalMapping = buildPortalCompletionMapping(state, identity);
   const uploads = Object.entries(state.responses.uploads ?? {})
     .filter(([, value]) => value)
     .map(([screenId, value]) => ({
@@ -204,10 +363,13 @@ function buildWritebackEnvelope(state) {
   return {
     lessonId: state.lessonId,
     visitorId,
+    identity,
     ageGroup: state.ageGroup,
     lessonProgress: {
       lessonId: state.lessonId,
       learnerId: state.learnerId ?? "",
+      studentId: identity.studentId,
+      memberId: identity.memberId,
       visitorId,
       ageGroup: state.ageGroup,
       currentScreenId: state.currentScreenId,
@@ -219,12 +381,14 @@ function buildWritebackEnvelope(state) {
     },
     buildIdea: {
       lessonId: state.lessonId,
+      studentId: identity.studentId,
       visitorId,
       ...(state.responses.buildIdea ?? {}),
       updatedAt: Date.now(),
     },
     drawProgress: {
       lessonId: state.lessonId,
+      studentId: identity.studentId,
       visitorId,
       completedSegmentIds: [...(state.responses.draw?.completedSegmentIds ?? [])],
       acknowledgedCheckpointIds: [...(state.responses.draw?.acknowledgedCheckpointIds ?? [])],
@@ -233,6 +397,7 @@ function buildWritebackEnvelope(state) {
     },
     reflection: {
       lessonId: state.lessonId,
+      studentId: identity.studentId,
       visitorId,
       chips: [...(state.responses.reflection?.chips ?? [])],
       text: state.responses.reflection?.text ?? "",
@@ -242,19 +407,20 @@ function buildWritebackEnvelope(state) {
     uploads,
     journeySummary: {
       lessonId: state.lessonId,
+      studentId: identity.studentId,
       visitorId,
       ...buildJourneySummary(state),
       updatedAt: Date.now(),
     },
+    portalMapping,
     updatedAt: Date.now(),
   };
 }
 
 function persistWritebackEnvelope(state) {
   try {
-    const key = "lfc054_writeback_v1";
     const envelope = buildWritebackEnvelope(state);
-    window.localStorage.setItem(key, JSON.stringify(envelope));
+    window.localStorage.setItem(LESSON_WRITEBACK_KEY, JSON.stringify(envelope));
   } catch (error) {
     console.warn("[lfc054] writeback envelope local save failed", error);
   }
@@ -262,10 +428,22 @@ function persistWritebackEnvelope(state) {
 
 function readWritebackEnvelope() {
   try {
-    const raw = window.localStorage.getItem("lfc054_writeback_v1");
+    const raw = window.localStorage.getItem(LESSON_WRITEBACK_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch (error) {
     return null;
+  }
+}
+
+function clearLessonDraftData(lessonMeta) {
+  try {
+    window.localStorage.removeItem(LESSON_WRITEBACK_KEY);
+    const lessonScreenIds = new Set((lessonMeta?.screens ?? []).map((screen) => screen.screenId));
+    const existingCards = JSON.parse(window.localStorage.getItem(JUDGMENT_CARD_KEY) || "[]");
+    const filteredCards = existingCards.filter((item) => !lessonScreenIds.has(item.screenId));
+    window.localStorage.setItem(JUDGMENT_CARD_KEY, JSON.stringify(filteredCards));
+  } catch (error) {
+    console.warn("[lfc054] lesson draft reset failed", error);
   }
 }
 
@@ -314,12 +492,14 @@ function getQuestCardSummary(level) {
 }
 
 function stateSummary(state) {
+  const context = getCurrentLearnerContext();
   return [
-    `Tier: guest`,
+    `Mode: ${context.mode}`,
+    context.studentId ? `Student: ${context.studentId}` : null,
     `Age: ${state.ageGroup}`,
     `Progress: ${state.progressState}`,
     `Badge: ${state.badgeState}`,
-  ].join(" • ");
+  ].filter(Boolean).join(" • ");
 }
 
 function getProgressPercent(lessonMeta, screen) {
@@ -329,20 +509,29 @@ function getProgressPercent(lessonMeta, screen) {
 function createProgressSteps(lessonMeta, state) {
   const wrap = document.createElement("div");
   wrap.className = "progress-steps";
+  const groupedSteps = lessonMeta.screens.reduce((groups, screen) => {
+    const existing = groups.find((item) => item.partLabel === screen.partLabel);
+    if (existing) {
+      existing.screenIds.push(screen.screenId);
+      return groups;
+    }
+    groups.push({
+      partLabel: screen.partLabel,
+      screenIds: [screen.screenId],
+    });
+    return groups;
+  }, []);
 
-  lessonMeta.screens.forEach((screen) => {
+  groupedSteps.forEach((group) => {
+    const isActive = group.screenIds.includes(state.currentScreenId);
+    const isDone = group.screenIds.some((screenId) => state.completedScreenIds.includes(screenId));
     const step = document.createElement("div");
-    step.className = `progress-step${state.currentScreenId === screen.screenId ? " is-active" : ""}${
-      state.completedScreenIds.includes(screen.screenId) ? " is-done" : ""
-    }`;
+    step.className = `progress-step${isActive ? " is-active" : ""}${isDone ? " is-done" : ""}`;
 
     const title = document.createElement("strong");
-    title.textContent = screen.partLabel;
+    title.textContent = group.partLabel;
 
-    const label = document.createElement("span");
-    label.textContent = screen.title;
-
-    step.append(title, label);
+    step.append(title);
     wrap.append(step);
   });
 
@@ -379,7 +568,15 @@ function createArtworkGrid(items, selectedId, onSelect) {
     label.className = "art-card-meta";
     label.textContent = item.alt;
 
-    copy.append(kicker, title, label);
+    const credit = document.createElement("p");
+    credit.className = "art-card-credit";
+    credit.textContent = item.creditLine ?? "";
+
+    const source = document.createElement("p");
+    source.className = "art-card-source";
+    source.textContent = item.sourceLine ?? "";
+
+    copy.append(kicker, title, label, credit, source);
     card.append(image, copy);
     grid.append(card);
   });
@@ -435,6 +632,15 @@ function createEffectRow(items, selectedId, onSelect) {
   return row;
 }
 
+function bindTextareaPersistence(input, onSave) {
+  const persist = (event) => {
+    onSave(event.target.value);
+  };
+
+  input.addEventListener("change", persist);
+  input.addEventListener("blur", persist);
+}
+
 function createSupportStrip(screen) {
   const supportItems = getScreenSupportModel(screen);
   if (!supportItems.length) {
@@ -463,6 +669,10 @@ function getQuestPromptPack(screen, ageGroup) {
     return null;
   }
 
+  if (ageGroup === "kids" && questKey !== "light_kids_compare") {
+    return null;
+  }
+
   const quest = lfc054PromptPackDraft.thinkingQuestAdapters[questKey];
   if (!quest?.prompts) {
     return null;
@@ -476,6 +686,8 @@ function createThinkingQuestCard({ lessonApp, screen, state, ageGroup }) {
   if (!questPrompt) {
     return null;
   }
+  const isKidsLightQuest =
+    ageGroup === "kids" && screen.systemHooks?.thinkingQuest === "light_kids_compare";
 
   const screenQuestState = state.responses.quest?.[screen.screenId] ?? {
     choice: "",
@@ -486,7 +698,7 @@ function createThinkingQuestCard({ lessonApp, screen, state, ageGroup }) {
   const card = document.createElement("div");
   card.className = "quest-card";
   card.innerHTML = `
-    <p class="micro-kicker">Thinking Quest</p>
+    <p class="micro-kicker">${isKidsLightQuest ? "Quick choice" : "Thinking Quest"}</p>
     <p class="side-card-title">${questPrompt.question}</p>
   `;
 
@@ -502,110 +714,114 @@ function createThinkingQuestCard({ lessonApp, screen, state, ageGroup }) {
     }),
   );
 
-  if (questPrompt.followUp) {
+  if (questPrompt.followUp && !isKidsLightQuest) {
     const followUp = document.createElement("p");
     followUp.className = "quest-followup";
     followUp.textContent = questPrompt.followUp;
     card.append(followUp);
   }
 
-  const input = document.createElement("textarea");
-  input.className = "reflection-textarea";
-  input.rows = 3;
-  input.placeholder = "Optional: add one sentence of your own observation.";
-  input.value = screenQuestState.text;
-  input.addEventListener("input", (event) => {
-    lessonApp.saveInteraction(screen.screenId, (draft) => {
-      draft.responses.quest[screen.screenId] = {
-        ...(draft.responses.quest[screen.screenId] ?? { choice: "", text: "", saved: false }),
-        text: event.target.value,
-      };
-      return draft;
+  if (!isKidsLightQuest) {
+    const input = document.createElement("textarea");
+    input.className = "reflection-textarea";
+    input.rows = 3;
+    input.placeholder = "Optional: add one sentence of your own observation.";
+    input.value = screenQuestState.text;
+    bindTextareaPersistence(input, (value) => {
+      lessonApp.saveInteraction(screen.screenId, (draft) => {
+        draft.responses.quest[screen.screenId] = {
+          ...(draft.responses.quest[screen.screenId] ?? { choice: "", text: "", saved: false }),
+          text: value,
+        };
+        return draft;
+      });
     });
-  });
-  card.append(input);
+    card.append(input);
+  }
 
-  const actions = document.createElement("div");
-  actions.className = "mini-action-row";
-  actions.append(
-    button(screenQuestState.saved ? "Judgment Card saved" : "Save Judgment Card", {
-      className: "mini-action checkpoint-toggle",
-      onClick: () => {
-        const currentState = lessonApp.getLessonState();
-        const currentQuest = currentState.responses.quest?.[screen.screenId] ?? {
-          choice: "",
-          text: "",
-          saved: false,
-        };
-
-        if (!currentQuest.choice && !(currentQuest.text ?? "").trim()) {
-          return;
-        }
-
-        const level =
-          screen.systemHooks?.thinkingQuest === "level2_choice_change"
-            ? 2
-            : 1;
-        const visitorId = createLfcVisitorId();
-        const existingCards = currentState.responses.judgmentCards ?? [];
-        const title = getQuestCardTitle(level, existingCards, screen.screenId);
-        const summary = getQuestCardSummary(level);
-
-        const cardRecord = {
-          id: `card_${Date.now()}`,
-          visitorId,
-          screenId: screen.screenId,
-          artworkId: screen.screenId,
-          artworkTitle: screen.title,
-          artworkMeta: screen.partLabel,
-          artworkImg: "",
-          cardType: level === 1 ? "sight" : "choice_change",
-          title,
-          summary,
-          chapter: 1,
-          level,
-          group: ageGroup,
-          createdAt: Date.now(),
-          timestamp: Date.now(),
-          responses: {
-            choice: currentQuest.choice,
-            text: (currentQuest.text ?? "").trim(),
-          },
-        };
-
-        lessonApp.saveInteraction(screen.screenId, (draft) => {
-          draft.responses.quest[screen.screenId] = {
-            ...(draft.responses.quest[screen.screenId] ?? {
-              choice: "",
-              text: "",
-              saved: false,
-            }),
-            saved: true,
+  if (!isKidsLightQuest) {
+    const actions = document.createElement("div");
+    actions.className = "mini-action-row";
+    actions.append(
+      button(screenQuestState.saved ? "Judgment Card saved" : "Save Judgment Card", {
+        className: "mini-action checkpoint-toggle",
+        onClick: () => {
+          const currentState = lessonApp.getLessonState();
+          const currentQuest = currentState.responses.quest?.[screen.screenId] ?? {
+            choice: "",
+            text: "",
+            saved: false,
           };
-          draft.responses.judgmentCards = [
-            ...(draft.responses.judgmentCards ?? []).filter(
-              (item) => item.screenId !== screen.screenId,
-            ),
-            cardRecord,
-          ];
-          return draft;
-        });
 
-        try {
-          const key = "lfc_cards_v1";
-          const existing = JSON.parse(window.localStorage.getItem(key) || "[]");
-          const next = [
-            ...existing.filter((item) => item.screenId !== screen.screenId),
-            cardRecord,
-          ];
-          window.localStorage.setItem(key, JSON.stringify(next));
-        } catch (error) {
-          console.warn("[lfc054] judgment card local save failed", error);
-        }
-      },
-    }),
-  );
-  card.append(actions);
+          if (!currentQuest.choice && !(currentQuest.text ?? "").trim()) {
+            return;
+          }
+
+          const level =
+            screen.systemHooks?.thinkingQuest === "level2_choice_change"
+              ? 2
+              : 1;
+          const visitorId = createLfcVisitorId();
+          const existingCards = currentState.responses.judgmentCards ?? [];
+          const title = getQuestCardTitle(level, existingCards, screen.screenId);
+          const summary = getQuestCardSummary(level);
+
+          const cardRecord = {
+            id: `card_${Date.now()}`,
+            lessonId: currentState.lessonId,
+            visitorId,
+            screenId: screen.screenId,
+            artworkId: screen.screenId,
+            artworkTitle: screen.title,
+            artworkMeta: screen.partLabel,
+            artworkImg: "",
+            cardType: level === 1 ? "sight" : "choice_change",
+            title,
+            summary,
+            chapter: 1,
+            level,
+            group: ageGroup,
+            createdAt: Date.now(),
+            timestamp: Date.now(),
+            responses: {
+              choice: currentQuest.choice,
+              text: (currentQuest.text ?? "").trim(),
+            },
+          };
+
+          lessonApp.saveInteraction(screen.screenId, (draft) => {
+            draft.responses.quest[screen.screenId] = {
+              ...(draft.responses.quest[screen.screenId] ?? {
+                choice: "",
+                text: "",
+                saved: false,
+              }),
+              saved: true,
+            };
+            draft.responses.judgmentCards = [
+              ...(draft.responses.judgmentCards ?? []).filter(
+                (item) => item.screenId !== screen.screenId,
+              ),
+              cardRecord,
+            ];
+            return draft;
+          });
+
+          try {
+            const existing = JSON.parse(window.localStorage.getItem(JUDGMENT_CARD_KEY) || "[]");
+            const next = [
+              ...existing.filter((item) => item.screenId !== screen.screenId),
+              cardRecord,
+            ];
+            window.localStorage.setItem(JUDGMENT_CARD_KEY, JSON.stringify(next));
+          } catch (error) {
+            console.warn("[lfc054] judgment card local save failed", error);
+          }
+        },
+      }),
+    );
+    card.append(actions);
+  }
 
   return card;
 }
@@ -624,9 +840,9 @@ function createUploadCard({ lessonApp, screen, state }) {
   const card = document.createElement("div");
   card.className = "upload-card";
   card.innerHTML = `
-    <p class="micro-kicker">Upload point</p>
+    <p class="micro-kicker">Share work</p>
     <p class="side-card-title">${formatHookLabel(uploadPoint)}</p>
-    <p>This is the lesson handoff point where a sketch, midpoint, or final image can be saved for AI review, teacher review, or Journey continuity.</p>
+    <p>Save a sketch note here if you want feedback, want to remember this moment, or want to come back later.</p>
   `;
 
   const input = document.createElement("textarea");
@@ -634,18 +850,18 @@ function createUploadCard({ lessonApp, screen, state }) {
   input.rows = 3;
   input.placeholder = "Optional note: what are you uploading or checking at this point?";
   input.value = uploadState.note;
-  input.addEventListener("input", (event) => {
-        lessonApp.saveInteraction(screen.screenId, (draft) => {
-          draft.responses.uploads[screen.screenId] = {
-            ...(draft.responses.uploads[screen.screenId] ?? {
-              saved: false,
-              note: "",
-              uploadPoint,
-              createdAt: Date.now(),
-            }),
-            note: event.target.value,
-          };
-          return draft;
+  bindTextareaPersistence(input, (value) => {
+    lessonApp.saveInteraction(screen.screenId, (draft) => {
+      draft.responses.uploads[screen.screenId] = {
+        ...(draft.responses.uploads[screen.screenId] ?? {
+          saved: false,
+          note: "",
+          uploadPoint,
+          createdAt: Date.now(),
+        }),
+        note: value,
+      };
+      return draft;
     });
   });
   card.append(input);
@@ -653,7 +869,7 @@ function createUploadCard({ lessonApp, screen, state }) {
   const actions = document.createElement("div");
   actions.className = "mini-action-row";
   actions.append(
-    button(uploadState.saved ? "Upload saved" : "Save upload point", {
+    button(uploadState.saved ? "Check-in saved" : "Save this check-in", {
       className: "mini-action checkpoint-toggle",
       onClick: () => {
         lessonApp.saveInteraction(screen.screenId, (draft) => {
@@ -673,13 +889,13 @@ function createUploadCard({ lessonApp, screen, state }) {
     }),
   );
   actions.append(
-    button("Ask AI about this upload", {
+    button("Ask AI about this step", {
       className: "mini-action",
     }),
   );
   if (screen.systemHooks?.teacherHelp) {
     actions.append(
-      button("Send to teacher path", {
+      button("Save for teacher help", {
         className: "mini-action",
       }),
     );
@@ -788,6 +1004,15 @@ function renderUnderstandStage({ lessonApp, screen, state, resolveAgeVariant }) 
   });
 
   compare.append(image, copy);
+
+  const credit = document.createElement("div");
+  credit.className = "compare-credit";
+  credit.innerHTML = `
+    <p>${screen.blocks.visualCompare.mainArtwork.artist} · ${screen.blocks.visualCompare.mainArtwork.title}${screen.blocks.visualCompare.mainArtwork.year ? ` · ${screen.blocks.visualCompare.mainArtwork.year}` : ""}</p>
+    <p>${screen.blocks.visualCompare.mainArtwork.medium || ""}</p>
+    <p>${screen.blocks.visualCompare.mainArtwork.sourceLine || ""}</p>
+  `;
+  compare.append(credit);
 
   const side = document.createElement("div");
   side.className = "main-column";
@@ -944,9 +1169,9 @@ function renderPairChoiceStage({ lessonApp, screen, state }) {
   input.value = state.responses.buildIdea.conceptSentence;
   input.rows = 4;
   input.placeholder = "A quiet room where one object becomes impossibly large.";
-  input.addEventListener("input", (event) => {
+  bindTextareaPersistence(input, (value) => {
     lessonApp.saveInteraction(screen.screenId, (draft) => {
-      draft.responses.buildIdea.conceptSentence = event.target.value;
+      draft.responses.buildIdea.conceptSentence = value;
       return draft;
     });
   });
@@ -960,7 +1185,7 @@ function renderPairChoiceStage({ lessonApp, screen, state }) {
   return wrap;
 }
 
-function renderChecklistStage({ lessonApp, screen, state }) {
+function renderChecklistStage({ lessonApp, screen, state, resolveAgeVariant }) {
   const wrap = document.createElement("div");
   wrap.className = "main-column";
 
@@ -987,6 +1212,22 @@ function renderChecklistStage({ lessonApp, screen, state }) {
       },
     ),
   );
+
+  const helper = document.createElement("p");
+  helper.className = "content-helper";
+  helper.textContent = resolveAgeVariant(screen.helperText, state.ageGroup);
+  card.append(helper);
+
+  if (screen.blocks.materialsNote) {
+    const note = document.createElement("div");
+    note.className = "teacher-note";
+    note.innerHTML = `
+      <p class="micro-kicker">${screen.blocks.materialsNote.title}</p>
+      <p>${resolveAgeVariant(screen.blocks.materialsNote.body, state.ageGroup)}</p>
+      <p class="content-helper">${resolveAgeVariant(screen.blocks.materialsNote.extra, state.ageGroup)}</p>
+    `;
+    card.append(note);
+  }
 
   wrap.append(card);
   return wrap;
@@ -1030,9 +1271,9 @@ function renderReflectionStage({ lessonApp, screen, state }) {
   input.value = state.responses.reflection.text;
   input.rows = 5;
   input.placeholder = "I changed the scale of one ordinary thing so the whole room started to feel dreamlike.";
-  input.addEventListener("input", (event) => {
+  bindTextareaPersistence(input, (value) => {
     lessonApp.saveInteraction(screen.screenId, (draft) => {
-      draft.responses.reflection.text = event.target.value;
+      draft.responses.reflection.text = value;
       return draft;
     });
   });
@@ -1043,23 +1284,89 @@ function renderReflectionStage({ lessonApp, screen, state }) {
 }
 
 function renderContinueStage({ screen }) {
+  const context = getCurrentLearnerContext();
+  const writeback = readWritebackEnvelope();
+  const portalMapping = writeback?.portalMapping ?? {};
+  const illustrationTrack = portalMapping.track_progress?.illustration ?? null;
+  const lessonProgress =
+    portalMapping.lesson_progress?.["lfc054-surreal-worlds"] ?? null;
+
   const wrap = document.createElement("div");
   wrap.className = "main-column";
 
   const card = document.createElement("div");
   card.className = "continuity-card";
   card.innerHTML = `
-    <p class="micro-kicker">Continue through FEI TeamArt</p>
+    <p class="micro-kicker">Your lesson is saved</p>
     <p>${screen.prompt.teen}</p>
   `;
 
-  const list = document.createElement("div");
-  list.className = "mini-action-row";
-  screen.blocks.continuation.items.forEach((item) => {
-    list.append(button(item, { className: "ghost-button" }));
+  const statusGrid = document.createElement("div");
+  statusGrid.className = "journey-summary-block";
+  statusGrid.innerHTML = `
+    <div class="mini-stat"><span>Lesson</span><strong>${lessonProgress?.completed ? "Completed" : "Saved in progress"}</strong></div>
+    <div class="mini-stat"><span>Identity</span><strong>${context.mode === "portal_code" ? (context.displayName || context.studentId || "Student") : "Guest mode"}</strong></div>
+    <div class="mini-stat"><span>Track</span><strong>${illustrationTrack ? `${illustrationTrack.count} / ${illustrationTrack.target}` : "Illustration path not linked yet"}</strong></div>
+    <div class="mini-stat"><span>Next lesson</span><strong>${illustrationTrack?.next_lesson_id || "Coming next"}</strong></div>
+  `;
+  card.append(statusGrid);
+
+  const destinationGrid = document.createElement("div");
+  destinationGrid.className = "continue-grid";
+
+  const destinations = [
+    {
+      kicker: "Portal",
+      title: context.mode === "portal_code" ? "Open your student portal" : "Student portal later",
+      body:
+        context.mode === "portal_code"
+          ? "Your student identity is already recognized. This lesson can connect to your path progress and badge journey."
+          : "If you later enter through your student portal code, this lesson can connect to your personal report and badge path.",
+      action: context.mode === "portal_code" ? "Go to Student Portal" : "Portal not linked yet",
+      emphasis: context.mode === "portal_code",
+    },
+    {
+      kicker: "Journey",
+      title: "Keep this in My Journey",
+      body: "Your surreal move, reflection, uploads, and drawing checkpoints are already being shaped into a reusable journey summary.",
+      action: "Open My Journey",
+      emphasis: true,
+    },
+    {
+      kicker: "Support",
+      title: "Ask for feedback",
+      body: "You can continue with AI review now, or save this lesson for future teacher feedback and portfolio thinking.",
+      action: "Ask AI for Review",
+      emphasis: false,
+    },
+    {
+      kicker: "Next Path",
+      title: "Continue the illustration path",
+      body: illustrationTrack
+        ? `You are currently ${illustrationTrack.count} out of ${illustrationTrack.target} lessons into the Illustration Path.`
+        : "This lesson is designed to become one step inside a longer illustration learning path.",
+      action: illustrationTrack?.next_lesson_id || "Next lesson coming soon",
+      emphasis: false,
+    },
+  ];
+
+  destinations.forEach((item) => {
+    const block = document.createElement("div");
+    block.className = `continue-card${item.emphasis ? " is-emphasis" : ""}`;
+    block.innerHTML = `
+      <p class="micro-kicker">${item.kicker}</p>
+      <p class="side-card-title">${item.title}</p>
+      <p>${item.body}</p>
+    `;
+    block.append(
+      button(item.action, {
+        className: item.emphasis ? "footer-button primary" : "ghost-button",
+      }),
+    );
+    destinationGrid.append(block);
   });
-  card.append(list);
-  wrap.append(card);
+
+  wrap.append(card, destinationGrid);
   return wrap;
 }
 
@@ -1207,6 +1514,14 @@ function renderDrawStage({ lessonApp, screen, state }) {
   `;
 
   media.append(mediaHeader, mediaFrame, mediaCopy);
+
+  const mediaNote = document.createElement("div");
+  mediaNote.className = "media-note";
+  mediaNote.innerHTML = `
+    <p class="micro-kicker">Video placement</p>
+    <p>${activeSegment.teacherMedia.sourceLine || "Your recorded teacher video for this drawing step appears here."}</p>
+  `;
+  media.append(mediaNote);
 
   const side = document.createElement("div");
   side.className = "draw-side";
@@ -1374,6 +1689,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const ageGroup = state.ageGroup;
   const progressPercent = getProgressPercent(lessonMeta, screen);
   const completionReady = lessonApp.getScreenCompletion(screen.screenId);
+  const canSkip = Boolean(screen.skipAllowed);
   const assistantMode = pickAssistantMode(screen);
   const progressLabel = getStudentProgressLabel(screen, lessonMeta);
 
@@ -1485,14 +1801,31 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   footerActions.append(
     button(screen.stepNumber === lessonMeta.totalSteps ? "Finish this stage" : "Continue", {
       className: "footer-button primary",
-      disabled: !completionReady,
-      onClick: () => lessonApp.completeScreen(screen.screenId),
+      disabled: !completionReady && !canSkip,
+      onClick: () => {
+        if (completionReady) {
+          lessonApp.completeScreen(screen.screenId);
+          return;
+        }
+        lessonApp.skipScreen(screen.screenId);
+      },
     }),
   );
+  if (!completionReady && canSkip) {
+    footerActions.append(
+      button("Skip for now", {
+        className: "footer-button",
+        onClick: () => lessonApp.skipScreen(screen.screenId),
+      }),
+    );
+  }
   footerActions.append(
-    button("Start again", {
+    button("Start over from beginning", {
       className: "footer-button",
-      onClick: () => window.location.reload(),
+      onClick: () => {
+        clearLessonDraftData(lessonMeta);
+        lessonApp.resetLesson();
+      },
     }),
   );
 
@@ -1519,7 +1852,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
         </div>
       </div>
       <div>
-        <p class="assistant-title">Artchi lives in the corner</p>
+        <p class="assistant-title">Artchi stays nearby</p>
         <div class="assistant-mode">
           <span class="assistant-mode-dot"></span>
           <p class="assistant-mode-label">${assistantMode.label}</p>
@@ -1591,3 +1924,5 @@ bootstrapApp({
   render: renderPrototype,
   analytics,
 });
+
+ensureGuestLearnerContext();
