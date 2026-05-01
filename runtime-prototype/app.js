@@ -1,8 +1,9 @@
 import { bootstrapApp } from "../core/app.js";
 import {
-  runtimePrototypeInitialRunState,
-  runtimePrototypeLesson,
-} from "./data/lfc054-runtime-lesson.js";
+  adaptedLfc054InitialRunState,
+  adaptedLfc054LessonPackage,
+} from "./data/lfc054-lesson-adapter.js";
+import { lfc054PromptPackDraft } from "./data/lfc054-prompt-pack.js";
 
 const appRoot = document.querySelector("[data-app]");
 
@@ -27,10 +28,17 @@ function button(label, options = {}) {
 }
 
 function pickAssistantMode(screen) {
-  if (screen.stepNumber === 3) {
+  if (screen.uiKind === "draw") {
     return {
       label: "Smart companion",
       note: "Artchi stays with the making process quietly. Recorded teacher guidance leads the move, and the lesson keeps the next check simple.",
+    };
+  }
+
+  if (screen.uiKind === "reflection" || screen.uiKind === "continue") {
+    return {
+      label: "Journey companion",
+      note: "Artchi helps you name what changed, what worked, and how this lesson can continue through My Journey and later support paths.",
     };
   }
 
@@ -38,6 +46,250 @@ function pickAssistantMode(screen) {
     label: "LFC guide",
     note: "Artchi helps you look more carefully. The lesson teaches through artworks, artist choices, and visual logic before making begins.",
   };
+}
+
+function formatHookLabel(value) {
+  if (!value) return "";
+  return String(value)
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getScreenSupportModel(screen) {
+  const hooks = screen.systemHooks ?? {};
+  const items = [];
+
+  if (hooks.aiMode) {
+    items.push({
+      label: "AI mode",
+      value: formatHookLabel(hooks.aiMode),
+    });
+  }
+
+  if (hooks.thinkingQuest) {
+    items.push({
+      label: "Critical thinking",
+      value: formatHookLabel(hooks.thinkingQuest),
+    });
+  }
+
+  if (hooks.uploadPoint) {
+    items.push({
+      label: "Upload point",
+      value: formatHookLabel(hooks.uploadPoint),
+    });
+  }
+
+  if (hooks.teacherHelp) {
+    items.push({
+      label: "Teacher path",
+      value: formatHookLabel(hooks.teacherHelp),
+    });
+  }
+
+  return items;
+}
+
+function composeJourneyDraft(state) {
+  const lines = [];
+  const buildIdea = state.responses.buildIdea ?? {};
+  const reflection = state.responses.reflection ?? {};
+  const questEntries = Object.entries(state.responses.quest ?? {}).filter(
+    ([, value]) => value && (value.choice || (value.text ?? "").trim()),
+  );
+  const uploadEntries = Object.entries(state.responses.uploads ?? {}).filter(
+    ([, value]) => value && value.saved,
+  );
+  const judgmentCards = state.responses.judgmentCards ?? [];
+
+  if (buildIdea.selectedSceneId) {
+    lines.push(`Real scene: ${formatHookLabel(buildIdea.selectedSceneId)}`);
+  }
+  if (buildIdea.selectedMoodId) {
+    lines.push(`Mood: ${formatHookLabel(buildIdea.selectedMoodId)}`);
+  }
+  if (buildIdea.selectedMoveId) {
+    lines.push(`Surreal move: ${formatHookLabel(buildIdea.selectedMoveId)}`);
+  }
+  if (buildIdea.selectedStorySeedId) {
+    lines.push(`Story seed: ${formatHookLabel(buildIdea.selectedStorySeedId)}`);
+  }
+  if ((buildIdea.conceptSentence ?? "").trim()) {
+    lines.push(`Concept: ${buildIdea.conceptSentence.trim()}`);
+  }
+  if ((state.responses.draw?.completedSegmentIds ?? []).length) {
+    lines.push(`Draw checkpoints: ${state.responses.draw.completedSegmentIds.length}`);
+  }
+  if (uploadEntries.length) {
+    lines.push(`Uploads saved: ${uploadEntries.length}`);
+  }
+  if (judgmentCards.length) {
+    lines.push(`Judgment cards: ${judgmentCards.length}`);
+  }
+  if (questEntries.length) {
+    lines.push(`Quest cards: ${questEntries.length}`);
+  }
+  if (reflection.chips?.length) {
+    lines.push(`Reflection tags: ${reflection.chips.map(formatHookLabel).join(", ")}`);
+  }
+  if ((reflection.text ?? "").trim()) {
+    lines.push(`Reflection: ${reflection.text.trim()}`);
+  }
+
+  return lines;
+}
+
+function buildJourneySummary(state) {
+  const buildIdea = state.responses.buildIdea ?? {};
+  const reflection = state.responses.reflection ?? {};
+  const judgmentCards = state.responses.judgmentCards ?? [];
+  const uploadsSaved = Object.values(state.responses.uploads ?? {}).filter(
+    (item) => item?.saved,
+  ).length;
+  const drawSteps = (state.responses.draw?.completedSegmentIds ?? []).length;
+
+  const summary = {
+    currentFocus: "Surreal image building",
+    surrealMove: buildIdea.selectedMoveId ? formatHookLabel(buildIdea.selectedMoveId) : "Not chosen yet",
+    realScene: buildIdea.selectedSceneId ? formatHookLabel(buildIdea.selectedSceneId) : "Not chosen yet",
+    mood: buildIdea.selectedMoodId ? formatHookLabel(buildIdea.selectedMoodId) : "Not chosen yet",
+    concept: (buildIdea.conceptSentence ?? "").trim() || "No concept sentence saved yet.",
+    drawSteps,
+    judgmentCards: judgmentCards.length,
+    uploadsSaved,
+    reflection:
+      (reflection.text ?? "").trim() || "No reflection saved yet.",
+  };
+
+  return summary;
+}
+
+function buildWritebackEnvelope(state) {
+  const visitorId = createLfcVisitorId();
+  const uploads = Object.entries(state.responses.uploads ?? {})
+    .filter(([, value]) => value)
+    .map(([screenId, value]) => ({
+      checkpointId: screenId,
+      lessonId: state.lessonId,
+      visitorId,
+      uploadPoint: value.uploadPoint ?? screenId,
+      note: value.note ?? "",
+      saved: Boolean(value.saved),
+      createdAt: value.createdAt ?? Date.now(),
+      updatedAt: Date.now(),
+      status: value.saved ? "saved" : "draft",
+    }));
+
+  return {
+    lessonId: state.lessonId,
+    visitorId,
+    ageGroup: state.ageGroup,
+    lessonProgress: {
+      lessonId: state.lessonId,
+      learnerId: state.learnerId ?? "",
+      visitorId,
+      ageGroup: state.ageGroup,
+      currentScreenId: state.currentScreenId,
+      completedScreenIds: [...(state.completedScreenIds ?? [])],
+      progressState: state.progressState,
+      currentLessonXP: state.currentLessonXP,
+      isLessonComplete: state.isLessonComplete,
+      updatedAt: Date.now(),
+    },
+    buildIdea: {
+      lessonId: state.lessonId,
+      visitorId,
+      ...(state.responses.buildIdea ?? {}),
+      updatedAt: Date.now(),
+    },
+    drawProgress: {
+      lessonId: state.lessonId,
+      visitorId,
+      completedSegmentIds: [...(state.responses.draw?.completedSegmentIds ?? [])],
+      acknowledgedCheckpointIds: [...(state.responses.draw?.acknowledgedCheckpointIds ?? [])],
+      activeSegmentIndex: state.responses.draw?.activeSegmentIndex ?? 0,
+      updatedAt: Date.now(),
+    },
+    reflection: {
+      lessonId: state.lessonId,
+      visitorId,
+      chips: [...(state.responses.reflection?.chips ?? [])],
+      text: state.responses.reflection?.text ?? "",
+      updatedAt: Date.now(),
+    },
+    judgmentCards: [...(state.responses.judgmentCards ?? [])],
+    uploads,
+    journeySummary: {
+      lessonId: state.lessonId,
+      visitorId,
+      ...buildJourneySummary(state),
+      updatedAt: Date.now(),
+    },
+    updatedAt: Date.now(),
+  };
+}
+
+function persistWritebackEnvelope(state) {
+  try {
+    const key = "lfc054_writeback_v1";
+    const envelope = buildWritebackEnvelope(state);
+    window.localStorage.setItem(key, JSON.stringify(envelope));
+  } catch (error) {
+    console.warn("[lfc054] writeback envelope local save failed", error);
+  }
+}
+
+function readWritebackEnvelope() {
+  try {
+    const raw = window.localStorage.getItem("lfc054_writeback_v1");
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function createLfcVisitorId() {
+  const key = "lfc_visitor_id";
+  try {
+    let id = window.localStorage.getItem(key);
+    if (!id) {
+      id = `v_${Math.random().toString(36).slice(2, 10)}`;
+      window.localStorage.setItem(key, id);
+    }
+    return id;
+  } catch (error) {
+    return "unknown";
+  }
+}
+
+function getQuestCardTitle(level, history, screenId) {
+  const sameScreenCount = history.filter(
+    (item) => item.level === level && item.screenId === screenId,
+  ).length;
+
+  if (level === 1) {
+    if (sameScreenCount === 0) return "First Pause";
+    if (sameScreenCount === 1) return "Returning Gaze";
+    return "Learning to Stay";
+  }
+
+  if (level === 2) {
+    return "Making a Stand";
+  }
+
+  return "Judgment Recorded";
+}
+
+function getQuestCardSummary(level) {
+  if (level === 1) {
+    return "You paused and stayed with an artwork instead of rushing past it.";
+  }
+
+  if (level === 2) {
+    return "You made a conscious visual choice and reflected on how it changes the image.";
+  }
+
+  return "You reflected on an artwork.";
 }
 
 function stateSummary(state) {
@@ -114,6 +366,22 @@ function createArtworkGrid(items, selectedId, onSelect) {
   return grid;
 }
 
+function createOptionGrid(items, selectedId, onSelect) {
+  const grid = document.createElement("div");
+  grid.className = "effect-row";
+
+  items.forEach((item) => {
+    const choice = button(item.label, {
+      className: `effect-button${selectedId === item.id ? " is-active" : ""}`,
+      onClick: () => onSelect(item.id),
+    });
+    choice.setAttribute("aria-pressed", String(selectedId === item.id));
+    grid.append(choice);
+  });
+
+  return grid;
+}
+
 function createChipRow(items, selectedValues, onToggle) {
   const row = document.createElement("div");
   row.className = "chip-row";
@@ -146,6 +414,260 @@ function createEffectRow(items, selectedId, onSelect) {
   return row;
 }
 
+function createSupportStrip(screen) {
+  const supportItems = getScreenSupportModel(screen);
+  if (!supportItems.length) {
+    return null;
+  }
+
+  const strip = document.createElement("div");
+  strip.className = "support-strip";
+
+  supportItems.forEach((item) => {
+    const pill = document.createElement("div");
+    pill.className = "support-pill";
+    pill.innerHTML = `
+      <p class="micro-kicker">${item.label}</p>
+      <p class="support-pill-value">${item.value}</p>
+    `;
+    strip.append(pill);
+  });
+
+  return strip;
+}
+
+function getQuestPromptPack(screen, ageGroup) {
+  const questKey = screen.systemHooks?.thinkingQuest;
+  if (!questKey || questKey === "age_variant_optional") {
+    return null;
+  }
+
+  const quest = lfc054PromptPackDraft.thinkingQuestAdapters[questKey];
+  if (!quest?.prompts) {
+    return null;
+  }
+
+  return quest.prompts[ageGroup] ?? quest.prompts.teen ?? quest.prompts.adult ?? quest.prompts.kids ?? null;
+}
+
+function createThinkingQuestCard({ lessonApp, screen, state, ageGroup }) {
+  const questPrompt = getQuestPromptPack(screen, ageGroup);
+  if (!questPrompt) {
+    return null;
+  }
+
+  const screenQuestState = state.responses.quest?.[screen.screenId] ?? {
+    choice: "",
+    text: "",
+    saved: false,
+  };
+
+  const card = document.createElement("div");
+  card.className = "quest-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Thinking Quest</p>
+    <p class="side-card-title">${questPrompt.question}</p>
+  `;
+
+  card.append(
+    createOptionGrid(questPrompt.choices.map((choice) => ({ id: choice, label: choice })), screenQuestState.choice, (selectedId) => {
+      lessonApp.saveInteraction(screen.screenId, (draft) => {
+        draft.responses.quest[screen.screenId] = {
+          ...(draft.responses.quest[screen.screenId] ?? { choice: "", text: "" }),
+          choice: selectedId,
+        };
+        return draft;
+      });
+    }),
+  );
+
+  if (questPrompt.followUp) {
+    const followUp = document.createElement("p");
+    followUp.className = "quest-followup";
+    followUp.textContent = questPrompt.followUp;
+    card.append(followUp);
+  }
+
+  const input = document.createElement("textarea");
+  input.className = "reflection-textarea";
+  input.rows = 3;
+  input.placeholder = "Optional: add one sentence of your own observation.";
+  input.value = screenQuestState.text;
+  input.addEventListener("input", (event) => {
+    lessonApp.saveInteraction(screen.screenId, (draft) => {
+      draft.responses.quest[screen.screenId] = {
+        ...(draft.responses.quest[screen.screenId] ?? { choice: "", text: "", saved: false }),
+        text: event.target.value,
+      };
+      return draft;
+    });
+  });
+  card.append(input);
+
+  const actions = document.createElement("div");
+  actions.className = "mini-action-row";
+  actions.append(
+    button(screenQuestState.saved ? "Judgment Card saved" : "Save Judgment Card", {
+      className: "mini-action checkpoint-toggle",
+      onClick: () => {
+        const currentState = lessonApp.getLessonState();
+        const currentQuest = currentState.responses.quest?.[screen.screenId] ?? {
+          choice: "",
+          text: "",
+          saved: false,
+        };
+
+        if (!currentQuest.choice && !(currentQuest.text ?? "").trim()) {
+          return;
+        }
+
+        const level =
+          screen.systemHooks?.thinkingQuest === "level2_choice_change"
+            ? 2
+            : 1;
+        const visitorId = createLfcVisitorId();
+        const existingCards = currentState.responses.judgmentCards ?? [];
+        const title = getQuestCardTitle(level, existingCards, screen.screenId);
+        const summary = getQuestCardSummary(level);
+
+        const cardRecord = {
+          id: `card_${Date.now()}`,
+          visitorId,
+          screenId: screen.screenId,
+          artworkId: screen.screenId,
+          artworkTitle: screen.title,
+          artworkMeta: screen.partLabel,
+          artworkImg: "",
+          cardType: level === 1 ? "sight" : "choice_change",
+          title,
+          summary,
+          chapter: 1,
+          level,
+          group: ageGroup,
+          createdAt: Date.now(),
+          timestamp: Date.now(),
+          responses: {
+            choice: currentQuest.choice,
+            text: (currentQuest.text ?? "").trim(),
+          },
+        };
+
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.quest[screen.screenId] = {
+            ...(draft.responses.quest[screen.screenId] ?? {
+              choice: "",
+              text: "",
+              saved: false,
+            }),
+            saved: true,
+          };
+          draft.responses.judgmentCards = [
+            ...(draft.responses.judgmentCards ?? []).filter(
+              (item) => item.screenId !== screen.screenId,
+            ),
+            cardRecord,
+          ];
+          return draft;
+        });
+
+        try {
+          const key = "lfc_cards_v1";
+          const existing = JSON.parse(window.localStorage.getItem(key) || "[]");
+          const next = [
+            ...existing.filter((item) => item.screenId !== screen.screenId),
+            cardRecord,
+          ];
+          window.localStorage.setItem(key, JSON.stringify(next));
+        } catch (error) {
+          console.warn("[lfc054] judgment card local save failed", error);
+        }
+      },
+    }),
+  );
+  card.append(actions);
+
+  return card;
+}
+
+function createUploadCard({ lessonApp, screen, state }) {
+  const uploadPoint = screen.systemHooks?.uploadPoint;
+  if (!uploadPoint) {
+    return null;
+  }
+
+  const uploadState = state.responses.uploads?.[screen.screenId] ?? {
+    saved: false,
+    note: "",
+  };
+
+  const card = document.createElement("div");
+  card.className = "upload-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Upload point</p>
+    <p class="side-card-title">${formatHookLabel(uploadPoint)}</p>
+    <p>This is the lesson handoff point where a sketch, midpoint, or final image can be saved for AI review, teacher review, or Journey continuity.</p>
+  `;
+
+  const input = document.createElement("textarea");
+  input.className = "reflection-textarea";
+  input.rows = 3;
+  input.placeholder = "Optional note: what are you uploading or checking at this point?";
+  input.value = uploadState.note;
+  input.addEventListener("input", (event) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.uploads[screen.screenId] = {
+            ...(draft.responses.uploads[screen.screenId] ?? {
+              saved: false,
+              note: "",
+              uploadPoint,
+              createdAt: Date.now(),
+            }),
+            note: event.target.value,
+          };
+          return draft;
+    });
+  });
+  card.append(input);
+
+  const actions = document.createElement("div");
+  actions.className = "mini-action-row";
+  actions.append(
+    button(uploadState.saved ? "Upload saved" : "Save upload point", {
+      className: "mini-action checkpoint-toggle",
+      onClick: () => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.uploads[screen.screenId] = {
+            ...(draft.responses.uploads[screen.screenId] ?? {
+              saved: false,
+              note: "",
+              uploadPoint,
+              createdAt: Date.now(),
+            }),
+            saved: true,
+            uploadPoint,
+          };
+          return draft;
+        });
+      },
+    }),
+  );
+  actions.append(
+    button("Ask AI about this upload", {
+      className: "mini-action",
+    }),
+  );
+  if (screen.systemHooks?.teacherHelp) {
+    actions.append(
+      button("Send to teacher path", {
+        className: "mini-action",
+      }),
+    );
+  }
+  card.append(actions);
+
+  return card;
+}
+
 function createDrawSegmentNodes(segments, state) {
   const wrap = document.createElement("div");
   wrap.className = "segment-nodes";
@@ -176,10 +698,10 @@ function renderLookStage({ lessonApp, screen, state, resolveAgeVariant }) {
   wrap.append(
     createArtworkGrid(
       screen.blocks.artworkSelection.items,
-      state.responses.look.selectedArtworkId,
+      state.responses[screen.screenId].selectedArtworkId,
       (selectedArtworkId) => {
         lessonApp.saveInteraction(screen.screenId, (draft) => {
-          draft.responses.look.selectedArtworkId = selectedArtworkId;
+          draft.responses[screen.screenId].selectedArtworkId = selectedArtworkId;
           draft.progressState = screen.progressOnComplete;
           return draft;
         });
@@ -190,11 +712,11 @@ function renderLookStage({ lessonApp, screen, state, resolveAgeVariant }) {
   wrap.append(
     createChipRow(
       screen.blocks.artworkSelection.reactionChips,
-      state.responses.look.reactionChipIds,
+      state.responses[screen.screenId].reactionChipIds,
       (chipId) => {
         lessonApp.saveInteraction(screen.screenId, (draft) => {
-          const selected = draft.responses.look.reactionChipIds;
-          draft.responses.look.reactionChipIds = selected.includes(chipId)
+          const selected = draft.responses[screen.screenId].reactionChipIds;
+          draft.responses[screen.screenId].reactionChipIds = selected.includes(chipId)
             ? selected.filter((item) => item !== chipId)
             : [...selected, chipId];
           return draft;
@@ -277,9 +799,377 @@ function renderUnderstandStage({ lessonApp, screen, state, resolveAgeVariant }) 
   `;
 
   side.append(effectCard, insight);
+  const questCard = createThinkingQuestCard({
+    lessonApp,
+    screen,
+    state,
+    ageGroup: state.ageGroup,
+  });
+  if (questCard) {
+    side.append(questCard);
+  }
   layout.append(compare, side);
 
   return layout;
+}
+
+function renderChoiceStage({ lessonApp, screen, state }) {
+  const layout = document.createElement("div");
+  layout.className = "main-column";
+
+  const choiceCard = document.createElement("div");
+  choiceCard.className = "draw-side-card";
+  choiceCard.innerHTML = `
+    <p class="micro-kicker">Choose one</p>
+    <p class="side-card-title">${screen.title}</p>
+  `;
+  choiceCard.append(
+    createOptionGrid(
+      screen.blocks.choiceGrid.options,
+      state.responses.buildIdea[screen.blocks.choiceGrid.field.split(".").at(-1)],
+      (selectedId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.buildIdea[screen.blocks.choiceGrid.field.split(".").at(-1)] = selectedId;
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+  layout.append(choiceCard);
+
+  if (screen.blocks.reflectionPrompt) {
+    const promptCard = document.createElement("div");
+    promptCard.className = "draw-side-card";
+    promptCard.innerHTML = `
+      <p class="micro-kicker">${screen.blocks.reflectionPrompt.label}</p>
+      <p>${screen.blocks.reflectionPrompt.prompt}</p>
+    `;
+
+    if (screen.blocks.reflectionPrompt.options) {
+      promptCard.append(
+        createOptionGrid(
+          screen.blocks.reflectionPrompt.options,
+          state.responses.buildIdea[screen.blocks.reflectionPrompt.field.split(".").at(-1)],
+          (selectedId) => {
+            lessonApp.saveInteraction(screen.screenId, (draft) => {
+              draft.responses.buildIdea[screen.blocks.reflectionPrompt.field.split(".").at(-1)] = selectedId;
+              return draft;
+            });
+          },
+        ),
+      );
+    }
+
+    layout.append(promptCard);
+  }
+
+  return layout;
+}
+
+function renderPairChoiceStage({ lessonApp, screen, state }) {
+  const layout = document.createElement("div");
+  layout.className = "draw-layout";
+
+  const left = document.createElement("div");
+  left.className = "draw-side-card";
+  left.innerHTML = `
+    <p class="micro-kicker">Surreal move</p>
+    <p class="side-card-title">${screen.blocks.pairChoice.left.label}</p>
+  `;
+  left.append(
+    createOptionGrid(
+      screen.blocks.pairChoice.left.options,
+      state.responses.buildIdea.selectedMoveId,
+      (selectedId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.buildIdea.selectedMoveId = selectedId;
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+
+  const right = document.createElement("div");
+  right.className = "draw-side-card";
+  right.innerHTML = `
+    <p class="micro-kicker">Story seed</p>
+    <p class="side-card-title">${screen.blocks.pairChoice.right.label}</p>
+  `;
+  right.append(
+    createOptionGrid(
+      screen.blocks.pairChoice.right.options,
+      state.responses.buildIdea.selectedStorySeedId,
+      (selectedId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          draft.responses.buildIdea.selectedStorySeedId = selectedId;
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+
+  const reflection = document.createElement("div");
+  reflection.className = "draw-side-card";
+  reflection.innerHTML = `
+    <p class="micro-kicker">${screen.blocks.reflectionPrompt.label}</p>
+    <p>${screen.blocks.reflectionPrompt.prompt}</p>
+  `;
+
+  const input = document.createElement("textarea");
+  input.className = "reflection-textarea";
+  input.value = state.responses.buildIdea.conceptSentence;
+  input.rows = 4;
+  input.placeholder = "A quiet room where one object becomes impossibly large.";
+  input.addEventListener("input", (event) => {
+    lessonApp.saveInteraction(screen.screenId, (draft) => {
+      draft.responses.buildIdea.conceptSentence = event.target.value;
+      return draft;
+    });
+  });
+  reflection.append(input);
+
+  layout.append(left, right);
+
+  const wrap = document.createElement("div");
+  wrap.className = "main-column";
+  wrap.append(layout, reflection);
+  return wrap;
+}
+
+function renderChecklistStage({ lessonApp, screen, state }) {
+  const wrap = document.createElement("div");
+  wrap.className = "main-column";
+
+  const card = document.createElement("div");
+  card.className = "draw-side-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Ready check</p>
+    <p class="side-card-title">${screen.title}</p>
+  `;
+
+  card.append(
+    createChipRow(
+      screen.blocks.checklist.items,
+      state.responses.materials.readyIds,
+      (itemId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          const selected = draft.responses.materials.readyIds;
+          draft.responses.materials.readyIds = selected.includes(itemId)
+            ? selected.filter((value) => value !== itemId)
+            : [...selected, itemId];
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+
+  wrap.append(card);
+  return wrap;
+}
+
+function renderReflectionStage({ lessonApp, screen, state }) {
+  const wrap = document.createElement("div");
+  wrap.className = "main-column";
+
+  const chipCard = document.createElement("div");
+  chipCard.className = "draw-side-card";
+  chipCard.innerHTML = `
+    <p class="micro-kicker">Name the move</p>
+    <p class="side-card-title">${screen.blocks.reflection.promptLabel}</p>
+  `;
+  chipCard.append(
+    createChipRow(
+      screen.blocks.reflection.chips,
+      state.responses.reflection.chips,
+      (chipId) => {
+        lessonApp.saveInteraction(screen.screenId, (draft) => {
+          const selected = draft.responses.reflection.chips;
+          draft.responses.reflection.chips = selected.includes(chipId)
+            ? selected.filter((value) => value !== chipId)
+            : [...selected, chipId];
+          draft.progressState = screen.progressOnComplete;
+          return draft;
+        });
+      },
+    ),
+  );
+
+  const textCard = document.createElement("div");
+  textCard.className = "draw-side-card";
+  textCard.innerHTML = `
+    <p class="micro-kicker">My Journey note</p>
+    <p>${screen.blocks.reflection.prompt}</p>
+  `;
+  const input = document.createElement("textarea");
+  input.className = "reflection-textarea";
+  input.value = state.responses.reflection.text;
+  input.rows = 5;
+  input.placeholder = "I changed the scale of one ordinary thing so the whole room started to feel dreamlike.";
+  input.addEventListener("input", (event) => {
+    lessonApp.saveInteraction(screen.screenId, (draft) => {
+      draft.responses.reflection.text = event.target.value;
+      return draft;
+    });
+  });
+  textCard.append(input);
+
+  wrap.append(chipCard, textCard);
+  return wrap;
+}
+
+function renderContinueStage({ screen }) {
+  const wrap = document.createElement("div");
+  wrap.className = "main-column";
+
+  const card = document.createElement("div");
+  card.className = "continuity-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Continue through FEI TeamArt</p>
+    <p>${screen.prompt.teen}</p>
+  `;
+
+  const list = document.createElement("div");
+  list.className = "mini-action-row";
+  screen.blocks.continuation.items.forEach((item) => {
+    list.append(button(item, { className: "ghost-button" }));
+  });
+  card.append(list);
+  wrap.append(card);
+  return wrap;
+}
+
+function createScreenActions(screen) {
+  const hooks = screen.systemHooks ?? {};
+  const row = document.createElement("div");
+  row.className = "mini-action-row";
+
+  if (hooks.aiMode) {
+    row.append(
+      button(`Ask AI · ${formatHookLabel(hooks.aiMode)}`, {
+        className: "ghost-button",
+      }),
+    );
+  }
+
+  if (hooks.uploadPoint) {
+    row.append(
+      button(`Upload · ${formatHookLabel(hooks.uploadPoint)}`, {
+        className: "ghost-button",
+      }),
+    );
+  }
+
+  if (hooks.teacherHelp) {
+    row.append(
+      button(`Teacher · ${formatHookLabel(hooks.teacherHelp)}`, {
+        className: "ghost-button",
+      }),
+    );
+  }
+
+  if (!row.childNodes.length) {
+    row.append(
+      button("Save this step to My Journey", {
+        className: "ghost-button",
+      }),
+    );
+  }
+
+  return row;
+}
+
+function createJourneyDraftCard(state) {
+  const lines = composeJourneyDraft(state);
+  const summary = buildJourneySummary(state);
+  const card = document.createElement("section");
+  card.className = "surface future-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Journey draft</p>
+    <p>${lines.length ? "This is the current lesson data that can later write into My Journey." : "As you choose, think, and draw, this lesson will begin forming a Journey draft."}</p>
+  `;
+
+  const summaryBlock = document.createElement("div");
+  summaryBlock.className = "journey-summary-block";
+  summaryBlock.innerHTML = `
+    <div class="mini-stat"><span>Current focus</span><strong>${summary.currentFocus}</strong></div>
+    <div class="mini-stat"><span>Real scene</span><strong>${summary.realScene}</strong></div>
+    <div class="mini-stat"><span>Surreal move</span><strong>${summary.surrealMove}</strong></div>
+    <div class="mini-stat"><span>Mood</span><strong>${summary.mood}</strong></div>
+    <div class="mini-stat"><span>Draw steps</span><strong>${summary.drawSteps}</strong></div>
+    <div class="mini-stat"><span>Judgment cards</span><strong>${summary.judgmentCards}</strong></div>
+    <div class="mini-stat"><span>Uploads</span><strong>${summary.uploadsSaved}</strong></div>
+  `;
+  card.append(summaryBlock);
+
+  const conceptCard = document.createElement("div");
+  conceptCard.className = "journey-summary-note";
+  conceptCard.innerHTML = `
+    <p class="micro-kicker">Concept sentence</p>
+    <p>${summary.concept}</p>
+  `;
+  card.append(conceptCard);
+
+  const reflectionCard = document.createElement("div");
+  reflectionCard.className = "journey-summary-note";
+  reflectionCard.innerHTML = `
+    <p class="micro-kicker">Reflection preview</p>
+    <p>${summary.reflection}</p>
+  `;
+  card.append(reflectionCard);
+
+  if (lines.length) {
+    const list = document.createElement("div");
+    list.className = "journey-draft-list";
+    lines.slice(0, 6).forEach((line) => {
+      const row = document.createElement("div");
+      row.className = "mini-stat";
+      row.innerHTML = `<span>${line}</span><strong>saved</strong>`;
+      list.append(row);
+    });
+    card.append(list);
+  }
+
+  return card;
+}
+
+function createWritebackReviewCard() {
+  const envelope = readWritebackEnvelope();
+  const card = document.createElement("section");
+  card.className = "surface future-card";
+  card.innerHTML = `
+    <p class="micro-kicker">Writeback review</p>
+    <p>${envelope ? "Current local lesson envelope is active and reviewable." : "No local writeback envelope has been written yet."}</p>
+  `;
+
+  if (!envelope) {
+    return card;
+  }
+
+  const stats = document.createElement("div");
+  stats.className = "journey-summary-block";
+  stats.innerHTML = `
+    <div class="mini-stat"><span>Lesson</span><strong>${envelope.lessonId}</strong></div>
+    <div class="mini-stat"><span>Age group</span><strong>${envelope.ageGroup}</strong></div>
+    <div class="mini-stat"><span>Screens done</span><strong>${(envelope.lessonProgress?.completedScreenIds ?? []).length}</strong></div>
+    <div class="mini-stat"><span>Judgment cards</span><strong>${(envelope.judgmentCards ?? []).length}</strong></div>
+    <div class="mini-stat"><span>Uploads</span><strong>${(envelope.uploads ?? []).length}</strong></div>
+    <div class="mini-stat"><span>Draw steps</span><strong>${(envelope.drawProgress?.completedSegmentIds ?? []).length}</strong></div>
+  `;
+  card.append(stats);
+
+  const preview = document.createElement("div");
+  preview.className = "writeback-preview";
+  preview.innerHTML = `
+    <p class="micro-kicker">Envelope preview</p>
+    <pre>${JSON.stringify(envelope, null, 2)}</pre>
+  `;
+  card.append(preview);
+
+  return card;
 }
 
 function renderDrawStage({ lessonApp, screen, state }) {
@@ -287,8 +1177,7 @@ function renderDrawStage({ lessonApp, screen, state }) {
   wrap.className = "stage-layout";
 
   const segments = screen.blocks.drawSegments;
-  const activeIndex = state.responses.draw.activeSegmentIndex;
-  const activeSegment = segments[activeIndex] ?? segments.at(-1);
+  const activeSegment = segments[0];
   const checkpointDone = state.responses.draw.acknowledgedCheckpointIds.includes(activeSegment.segmentId);
 
   const progress = document.createElement("div");
@@ -396,7 +1285,7 @@ function renderDrawStage({ lessonApp, screen, state }) {
   );
   controlRow.append(
     button(
-      activeIndex === segments.length - 1 ? "Finish this stage" : "Next segment",
+      "Finish this stage",
       {
         className: "mini-action",
         onClick: () => {
@@ -404,9 +1293,6 @@ function renderDrawStage({ lessonApp, screen, state }) {
             const completed = draft.responses.draw.completedSegmentIds;
             if (!completed.includes(activeSegment.segmentId)) {
               draft.responses.draw.completedSegmentIds = [...completed, activeSegment.segmentId];
-            }
-            if (draft.responses.draw.activeSegmentIndex < segments.length - 1) {
-              draft.responses.draw.activeSegmentIndex += 1;
             }
             draft.progressState = screen.progressOnComplete;
             return draft;
@@ -417,6 +1303,8 @@ function renderDrawStage({ lessonApp, screen, state }) {
   );
   controls.append(controlRow);
 
+  const uploadCard = createUploadCard({ lessonApp, screen, state });
+
   const continuity = document.createElement("div");
   continuity.className = "continuity-card";
   continuity.innerHTML = `
@@ -426,7 +1314,20 @@ function renderDrawStage({ lessonApp, screen, state }) {
     <p style="margin-top:8px;">${screen.blocks.futureContinuity.journey}</p>
   `;
 
-  side.append(action, companion, checkpoint, controls, continuity);
+  side.append(action, companion, checkpoint, controls);
+  if (uploadCard) {
+    side.append(uploadCard);
+  }
+  side.append(continuity);
+  const questCard = createThinkingQuestCard({
+    lessonApp,
+    screen,
+    state,
+    ageGroup: state.ageGroup,
+  });
+  if (questCard) {
+    side.append(questCard);
+  }
   layout.append(media, side);
 
   wrap.append(progress, layout);
@@ -434,17 +1335,52 @@ function renderDrawStage({ lessonApp, screen, state }) {
 }
 
 function renderStageBody({ lessonApp, screen, state, resolveAgeVariant }) {
-  if (screen.stepNumber === 1) {
-    return renderLookStage({ lessonApp, screen, state, resolveAgeVariant });
+  if (screen.uiKind === "welcome") {
+    const card = document.createElement("div");
+    card.className = "teacher-note";
+    card.innerHTML = `
+      <p class="micro-kicker">${screen.blocks.heroMessage.eyebrow}</p>
+      <p>${screen.blocks.heroMessage.body}</p>
+    `;
+    return card;
   }
-  if (screen.stepNumber === 2) {
+  if (screen.uiKind === "look") {
+    const stage = renderLookStage({ lessonApp, screen, state, resolveAgeVariant });
+    const questCard = createThinkingQuestCard({
+      lessonApp,
+      screen,
+      state,
+      ageGroup: state.ageGroup,
+    });
+    if (questCard) {
+      stage.append(questCard);
+    }
+    return stage;
+  }
+  if (screen.uiKind === "understand") {
     return renderUnderstandStage({ lessonApp, screen, state, resolveAgeVariant });
+  }
+  if (screen.uiKind === "choice") {
+    return renderChoiceStage({ lessonApp, screen, state, resolveAgeVariant });
+  }
+  if (screen.uiKind === "pair_choice") {
+    return renderPairChoiceStage({ lessonApp, screen, state, resolveAgeVariant });
+  }
+  if (screen.uiKind === "checklist") {
+    return renderChecklistStage({ lessonApp, screen, state, resolveAgeVariant });
+  }
+  if (screen.uiKind === "reflection") {
+    return renderReflectionStage({ lessonApp, screen, state, resolveAgeVariant });
+  }
+  if (screen.uiKind === "continue") {
+    return renderContinueStage({ screen });
   }
   return renderDrawStage({ lessonApp, screen, state, resolveAgeVariant });
 }
 
 function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const state = lessonApp.getLessonState();
+  persistWritebackEnvelope(state);
   const screen = lessonApp.getCurrentScreen();
   const ageGroup = state.ageGroup;
   const progressPercent = getProgressPercent(lessonMeta, screen);
@@ -499,7 +1435,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   progressWrap.className = "progress-wrap";
   progressWrap.innerHTML = `
     <div class="progress-topline">
-      <p class="progress-title">Stage ${screen.stepNumber} of ${lessonMeta.totalSteps} · ${screen.partLabel}</p>
+      <p class="progress-title">Screen ${screen.stepNumber} of ${lessonMeta.totalSteps} · ${screen.partLabel}</p>
       <p class="save-line">${completionReady ? screen.saveMessage : "Image first. Guidance second. Text stays light."}</p>
     </div>
     <div class="progress-track"><div class="progress-fill" style="width:${progressPercent}%"></div></div>
@@ -537,7 +1473,12 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     <div class="stage-pill"><p class="stage-label">LFC remains central</p></div>
   `;
 
-  content.append(contentTop, renderStageBody({ lessonApp, screen, state, resolveAgeVariant }));
+  content.append(contentTop);
+  const supportStrip = createSupportStrip(screen);
+  if (supportStrip) {
+    content.append(supportStrip);
+  }
+  content.append(renderStageBody({ lessonApp, screen, state, resolveAgeVariant }));
 
   const footer = document.createElement("section");
   footer.className = "surface footer-card";
@@ -596,27 +1537,34 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
       </div>
     </div>
     <p>${assistantMode.note}</p>
-    <div class="mini-action-row">
-      <button class="ghost-button" type="button">Ask Artchi about this image</button>
-      <button class="ghost-button" type="button">Save this step to My Journey</button>
-    </div>
   `;
+  assistant.append(createScreenActions(screen));
 
   const status = document.createElement("section");
   status.className = "surface status-card";
   status.innerHTML = `
-    <p class="micro-kicker">Lesson qualities</p>
-    <div class="mini-stat"><span>FEI tone</span><strong>yes</strong></div>
-    <div class="mini-stat"><span>LFC centrality</span><strong>yes</strong></div>
-    <div class="mini-stat"><span>Visual understand stage</span><strong>yes</strong></div>
-    <div class="mini-stat"><span>Asynchronous draw model</span><strong>yes</strong></div>
+    <p class="micro-kicker">Current screen system hooks</p>
   `;
+  const supportItems = getScreenSupportModel(screen);
+  if (supportItems.length) {
+    supportItems.forEach((item) => {
+      const stat = document.createElement("div");
+      stat.className = "mini-stat";
+      stat.innerHTML = `<span>${item.label}</span><strong>${item.value}</strong>`;
+      status.append(stat);
+    });
+  } else {
+    const stat = document.createElement("div");
+    stat.className = "mini-stat";
+    stat.innerHTML = `<span>Journey continuity</span><strong>active</strong>`;
+    status.append(stat);
+  }
 
   const future = document.createElement("section");
   future.className = "surface future-card";
   future.innerHTML = `
-    <p class="micro-kicker">Future continuity</p>
-    <p>AI scan, premium teacher review, My Journey, and badge continuity can attach later without changing the lesson’s visual logic.</p>
+    <p class="micro-kicker">Writeback</p>
+    <p>${(screen.systemHooks?.journeyWriteback ?? []).length ? screen.systemHooks.journeyWriteback.join(" · ") : "This screen can still save into My Journey continuity."}</p>
     <div class="future-mascot" aria-hidden="true">
       <div class="artchi-figure artchi-figure-small">
         <span class="artchi-wing artchi-wing-left"></span>
@@ -636,15 +1584,15 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   `;
 
   main.append(hero, content, footer);
-  side.append(assistant, status, future);
+  side.append(assistant, status, createJourneyDraftCard(state), createWritebackReviewCard(), future);
   shell.append(main, side);
   root.replaceChildren(shell);
 }
 
 bootstrapApp({
   root: appRoot,
-  lessonPackage: runtimePrototypeLesson,
-  initialRunState: runtimePrototypeInitialRunState,
+  lessonPackage: adaptedLfc054LessonPackage,
+  initialRunState: adaptedLfc054InitialRunState,
   render: renderPrototype,
   analytics,
 });
