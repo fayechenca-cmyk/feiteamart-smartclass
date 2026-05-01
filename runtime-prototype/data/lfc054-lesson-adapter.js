@@ -35,11 +35,12 @@ function toSelectionItem(record, fallbackKey = "study") {
     sourceFloor: record.sourceFloor,
     creditLine: `${record.artist} · ${record.title}${record.year ? ` · ${record.year}` : ""}`,
     sourceLine:
-      record.sourceFloor != null
+      record.sourceLine ||
+      (record.sourceFloor != null
         ? `Source: LFC Gallery Floor ${record.sourceFloor}`
         : record.sourceType === "lesson_original"
           ? "Source: FEI lesson reference"
-          : "Source: lesson reference",
+          : "Source: lesson reference"),
     imageSrc:
       record.img || createFallbackArtworkImage(record) || legacyArtworkLibrary[fallbackKey].imageSrc,
     alt: `${record.title} by ${record.artist}`,
@@ -682,7 +683,7 @@ screens.push(
   createLookScreen(
     screens.length,
     "what-is-surrealism",
-    "What Is Surrealism?",
+    "How Does a Surreal Image Begin?",
     "Look",
     "what-is-surrealism",
     "First observation saved",
@@ -692,7 +693,7 @@ screens.push(
   createLookScreen(
     screens.length,
     "meet-the-artists",
-    "Meet the Artists",
+    "Master, Teacher, Student",
     "Look",
     "meet-the-artists",
     "Reference artist saved",
