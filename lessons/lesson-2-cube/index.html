@@ -12,7 +12,7 @@
   --ink-soft: #475569;
   --ink-muted: #94a3b8;
   --border: #e8ecf2;
-  --paper: #fafaf8;
+  --paper: #faf8ff;
   --accent: #67e8f9;
   --gold: #c8a96e;
   --green: #1d9e75;
@@ -23,8 +23,8 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
 }
-body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg, #f1f5f9 0%, #fef3f7 100%); min-height: 100vh; padding: 24px; display: flex; justify-content: center; color: var(--ink); -webkit-font-smoothing: antialiased; }
-.app { position: relative; width: 100%; max-width: 480px; background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.12); min-height: 900px; }
+body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg, #e9d8fd 0%, #d4e6ff 50%, #cffafe 100%); background-attachment: fixed; min-height: 100vh; padding: 24px; display: flex; justify-content: center; color: var(--ink); -webkit-font-smoothing: antialiased; }
+.app { position: relative; width: 100%; max-width: 480px; background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); border-radius: var(--radius-xl); overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.12); min-height: 900px; }
 
 /* Side panel hidden by default (mobile/tablet portrait); shown on wide screens */
 .side-panel { display: none; }
@@ -67,7 +67,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 
 /* REFERENCE IMAGES GRID */
 .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.ref-card { background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 100%); border-radius: var(--radius-sm); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; border: 0.5px solid var(--border); }
+.ref-card { background: linear-gradient(135deg, #faf8ff 0%, #ecfeff 100%); border-radius: var(--radius-sm); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; border: 0.5px solid var(--border); }
 .ref-card:hover { transform: scale(1.02); }
 .ref-card.wide { grid-column: span 2; aspect-ratio: 16/9; }
 .ref-label { position: absolute; bottom: 8px; left: 8px; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--ink); background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; }
@@ -82,7 +82,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 
 /* PENCIL GUIDE */
 .pencil-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
-.pencil-item { display: flex; gap: 14px; align-items: center; padding: 12px; background: linear-gradient(135deg, #fef3f7 0%, #fafaf8 100%); border-radius: var(--radius-sm); }
+.pencil-item { display: flex; gap: 14px; align-items: center; padding: 12px; background: linear-gradient(135deg, #faf8ff 0%, #f5f3ff 100%); border-radius: var(--radius-sm); }
 .pencil-icon { flex-shrink: 0; }
 .pencil-text h4 { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; color: var(--ink); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
 .pencil-text p { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
@@ -144,7 +144,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
   align-items: center;
   gap: 14px;
   padding: 18px 18px;
-  background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%);
+  background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%);
   border: 2px dashed var(--gold);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -230,7 +230,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .vc-time { font-family: 'Open Sans', sans-serif; font-size: 10px; color: rgba(255,255,255,0.9); font-weight: 600; }
 
 /* PRO TIP */
-.pro-tip { background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border-left: 3px solid var(--gold); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 14px; margin-bottom: 16px; }
+.pro-tip { background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border-left: 3px solid var(--gold); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 14px; margin-bottom: 16px; }
 .pro-tip-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 900; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
 .pro-tip-text { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
 .pro-tip-text b { color: var(--ink); }
@@ -295,7 +295,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .fb-ico { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; margin-top: 1px; }
 .fb-ico.ok { background: #dcfce7; color: #15803d; }
 .fb-ico.warn { background: #fef3c7; color: #b45309; }
-.fb-suggest { padding: 12px 14px; background: linear-gradient(135deg, #f0f9ff 0%, #fef3f7 100%); border-radius: var(--radius-sm); font-size: 12px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 14px; }
+.fb-suggest { padding: 12px 14px; background: linear-gradient(135deg, #ecfeff 0%, #f5f3ff 100%); border-radius: var(--radius-sm); font-size: 12px; line-height: 1.65; color: var(--ink-soft); margin-bottom: 14px; }
 .fb-suggest b { color: var(--ink); }
 
 /* CELEBRATION */
@@ -389,7 +389,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 }
 
 .badge-unlock-form {
-  background: linear-gradient(180deg, #fff 0%, #fef9fb 100%);
+  background: linear-gradient(180deg, #fff 0%, #f5f3ff 100%);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   padding: 20px 18px;
@@ -667,7 +667,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 /* ONBOARDING CARD (首次登录的介绍卡) */
 .onboard-backdrop { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; }
 .onboard-backdrop.show { display: flex; animation: fadeIn .35s ease; }
-.onboard-card { background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%); border-radius: var(--radius-xl); padding: 28px 24px; max-width: 360px; width: 100%; position: relative; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); text-align: center; }
+.onboard-card { background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); border-radius: var(--radius-xl); padding: 28px 24px; max-width: 360px; width: 100%; position: relative; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); text-align: center; }
 
 /* ═══════════════════════════════════════════════════════════════
    PLAY WITH THE LIGHT — Smart Class signature interaction
@@ -696,11 +696,16 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 .play-light-stage {
   position: relative;
   width: 100%;
-  background: linear-gradient(180deg, #fcfaf5 0%, #f0ece2 60%, #c8c0b4 100%);
+  background: linear-gradient(180deg, 
+    #f5f3ff 0%,
+    #ecfeff 40%,
+    #e0e7ff 75%,
+    #c7d2fe 100%
+  );
   border-radius: var(--radius-lg);
   overflow: hidden;
   margin: 14px 0 16px;
-  border: 1px solid rgba(0,0,0,0.04);
+  border: 1px solid rgba(167,139,250,0.15);
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
 }
 
@@ -1182,7 +1187,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 }
 
 .welcome-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%);
   border-radius: var(--radius-xl);
   padding: 32px 28px 26px;
   max-width: 460px;
@@ -1406,7 +1411,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 }
 
 .members-lock-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%);
   border-radius: var(--radius-xl);
   padding: 32px 28px 26px;
   max-width: 480px;
@@ -1764,7 +1769,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
     grid-row: 1 / span 10;
     position: sticky;
     top: 20px;
-    background: linear-gradient(180deg, #fafaf8 0%, #fef9fb 100%);
+    background: linear-gradient(180deg, #faf8ff 0%, #f5f3ff 100%);
     border-radius: var(--radius-lg);
     border: 0.5px solid var(--border);
     padding: 20px 18px;
@@ -1962,7 +1967,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 }
 
 /* WARMUP OFFER */
-.warmup-offer { background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; text-align: center; border: 1px dashed var(--purple); }
+.warmup-offer { background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; text-align: center; border: 1px dashed var(--purple); }
 .warmup-offer h4 { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
 .warmup-offer p { font-size: 11px; color: var(--ink-soft); margin-bottom: 12px; }
 
@@ -2287,7 +2292,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 
 /* ═══ ECHO RESPONSE — the "thinking mirror" after Quest completes ═══ */
 .echo-container {
-  background: linear-gradient(180deg, #fff 0%, #fef9fb 100%);
+  background: linear-gradient(180deg, #fff 0%, #f5f3ff 100%);
   border-radius: var(--radius-lg);
   padding: 22px 20px 20px;
   border: 0.5px solid rgba(167,139,250,0.25);
@@ -2786,7 +2791,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 }
 
 /* TIER UPGRADE HINT (shown to Explorer users in upload modal) */
-.tier-upgrade-hint { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: linear-gradient(135deg, #fef3f7 0%, #fefce8 100%); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); margin-top: 12px; font-size: 11px; line-height: 1.5; color: var(--ink-soft); }
+.tier-upgrade-hint { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: linear-gradient(135deg, #f5f3ff 0%, #faf8ff 100%); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); margin-top: 12px; font-size: 11px; line-height: 1.5; color: var(--ink-soft); }
 .tier-upgrade-ico { font-size: 16px; flex-shrink: 0; }
 .tier-upgrade-hint a { color: var(--gold); font-weight: 800; text-decoration: underline; }
 .tier-upgrade-hint a:hover { color: var(--ink); }
@@ -2856,7 +2861,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 
 /* PAYWALL — using brand mint + cream colors from existing feiteamart.com pricing */
 .paywall-backdrop { padding: 20px 16px; overflow-y: auto; align-items: flex-start; }
-.paywall-modal { position: relative; background: linear-gradient(180deg, #ffffff 0%, #fef9fb 100%); border-radius: var(--radius-xl); padding: 36px 28px 28px; max-width: 920px; width: 100%; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); margin: auto; }
+.paywall-modal { position: relative; background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); border-radius: var(--radius-xl); padding: 36px 28px 28px; max-width: 920px; width: 100%; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); margin: auto; }
 .paywall-close { position: absolute; top: 16px; right: 18px; width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 0.5px solid var(--border); color: var(--ink); font-size: 22px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: all .2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .paywall-close:hover { background: var(--ink); color: #fff; transform: rotate(90deg); }
 
@@ -2913,7 +2918,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(180deg,
 /* PAUSE OVERLAY (on top of YouTube iframe) — upgraded: clear "your turn" feel */
 .pause-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.9) 100%); backdrop-filter: blur(14px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
 .pause-overlay.show { display: flex; animation: fadeIn .3s ease; }
-.pause-card { background: linear-gradient(180deg, #fff 0%, #fef9fb 100%); border-radius: var(--radius-lg); padding: 26px 22px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: slideUp .4s ease; position: relative; }
+.pause-card { background: linear-gradient(180deg, #fff 0%, #f5f3ff 100%); border-radius: var(--radius-lg); padding: 26px 22px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: slideUp .4s ease; position: relative; }
 .pause-kicker { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green); background: rgba(29,158,117,0.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; border: 0.5px solid rgba(29,158,117,0.2); }
 .pause-ico { font-size: 40px; margin-bottom: 10px; animation: pauseIcoBreathe 2s ease-in-out infinite; }
 @keyframes pauseIcoBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
@@ -6083,18 +6088,24 @@ function initPlayLight(shape) {
       <!-- Background: subtle grid for spatial sense -->
       <defs>
         <radialGradient id="pl-sphere-grad">
-          <stop offset="0%" stop-color="#fff"/>
-          <stop offset="50%" stop-color="#c8b8a0"/>
-          <stop offset="100%" stop-color="#3a2a20"/>
+          <stop offset="0%" stop-color="#fff8ec"/>
+          <stop offset="35%" stop-color="#d4c4a0"/>
+          <stop offset="75%" stop-color="#5a4a5e"/>
+          <stop offset="100%" stop-color="#2a1f3a"/>
         </radialGradient>
         <radialGradient id="pl-shadow-grad">
-          <stop offset="0%" stop-color="rgba(0,0,0,0.55)"/>
-          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="0%" stop-color="rgba(40,30,60,0.55)"/>
+          <stop offset="100%" stop-color="rgba(40,30,60,0)"/>
         </radialGradient>
         <linearGradient id="pl-floor-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#e8e4dc"/>
-          <stop offset="100%" stop-color="#c8c0b4"/>
+          <stop offset="0%" stop-color="#dde4f5"/>
+          <stop offset="100%" stop-color="#b8c2db"/>
         </linearGradient>
+        <radialGradient id="pl-sun-glow-grad">
+          <stop offset="0%" stop-color="rgba(252,211,77,0.7)"/>
+          <stop offset="50%" stop-color="rgba(252,176,77,0.35)"/>
+          <stop offset="100%" stop-color="rgba(167,139,250,0.0)"/>
+        </radialGradient>
       </defs>
       
       <!-- Floor / ground plane -->
@@ -6103,7 +6114,7 @@ function initPlayLight(shape) {
       <!-- Cast shadow (will be transformed by updatePlayLight) -->
       <ellipse class="pl-cast-shadow" id="pl-cast-shadow" 
                cx="200" cy="225" rx="90" ry="14" 
-               fill="rgba(0,0,0,0.35)"
+               fill="rgba(40,30,60,0.32)"
                style="filter: blur(2px);"/>
       
       <!-- The sphere (gradient is dynamically positioned) -->
@@ -6115,7 +6126,7 @@ function initPlayLight(shape) {
       <path class="pl-reflected" id="pl-reflected" 
             d="" 
             fill="none" 
-            stroke="rgba(255,255,255,0.12)" 
+            stroke="rgba(207,250,254,0.18)" 
             stroke-width="3"/>
       
       <!-- Highlight overlay (small bright spot) -->
@@ -6127,9 +6138,12 @@ function initPlayLight(shape) {
       <!-- The draggable sun -->
       <g class="pl-sun" id="pl-sun" transform="translate(94, 39)" 
          style="cursor: grab;">
+        <circle class="pl-sun-glow-outer" cx="0" cy="0" r="36" 
+                fill="url(#pl-sun-glow-grad)"
+                style="filter: blur(2px); pointer-events: none;"/>
         <circle class="pl-sun-glow" cx="0" cy="0" r="22" 
-                fill="rgba(252,211,77,0.4)"
-                style="filter: blur(4px);"/>
+                fill="rgba(252,211,77,0.5)"
+                style="filter: blur(4px); pointer-events: none;"/>
         <circle class="pl-sun-core" cx="0" cy="0" r="14" 
                 fill="#fbbf24" 
                 stroke="#f59e0b" 
@@ -6145,9 +6159,14 @@ function initPlayLight(shape) {
     svg.innerHTML = `
       <defs>
         <linearGradient id="pl-floor-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#e8e4dc"/>
-          <stop offset="100%" stop-color="#c8c0b4"/>
+          <stop offset="0%" stop-color="#dde4f5"/>
+          <stop offset="100%" stop-color="#b8c2db"/>
         </linearGradient>
+        <radialGradient id="pl-sun-glow-grad">
+          <stop offset="0%" stop-color="rgba(252,211,77,0.7)"/>
+          <stop offset="50%" stop-color="rgba(252,176,77,0.35)"/>
+          <stop offset="100%" stop-color="rgba(167,139,250,0.0)"/>
+        </radialGradient>
       </defs>
       
       <rect class="pl-floor" x="0" y="220" width="400" height="100" fill="url(#pl-floor-grad)"/>
@@ -6155,7 +6174,7 @@ function initPlayLight(shape) {
       <!-- Cast shadow polygon — recomputed by updatePlayLight -->
       <polygon class="pl-cast-shadow" id="pl-cast-shadow"
                points="160,225 240,225 260,235 140,235"
-               fill="rgba(0,0,0,0.35)"
+               fill="rgba(40,30,60,0.32)"
                style="filter: blur(2px);"/>
       
       <!-- Cube faces: top, left, right (drawn separately so they can shade independently) -->
@@ -6175,9 +6194,12 @@ function initPlayLight(shape) {
       <!-- The draggable sun -->
       <g class="pl-sun" id="pl-sun" transform="translate(94, 39)" 
          style="cursor: grab;">
+        <circle class="pl-sun-glow-outer" cx="0" cy="0" r="36" 
+                fill="url(#pl-sun-glow-grad)"
+                style="filter: blur(2px); pointer-events: none;"/>
         <circle class="pl-sun-glow" cx="0" cy="0" r="22" 
-                fill="rgba(252,211,77,0.4)"
-                style="filter: blur(4px);"/>
+                fill="rgba(252,211,77,0.5)"
+                style="filter: blur(4px); pointer-events: none;"/>
         <circle class="pl-sun-core" cx="0" cy="0" r="14" 
                 fill="#fbbf24" 
                 stroke="#f59e0b" 
@@ -6920,7 +6942,7 @@ function renderFinalSubmit(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="video-frame upload-drop-zone" 
-           style="aspect-ratio: 1; background: linear-gradient(135deg, #fef3f7 0%, #f0f9ff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
+           style="aspect-ratio: 1; background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
            onclick="submitFinal()"
            role="button"
            tabindex="0"
