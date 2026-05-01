@@ -10,7 +10,10 @@
   body { 
     margin: 0; 
     font-family: 'Open Sans', sans-serif; 
-    background: #CFF5E4;
+    /* Brand-unified gradient — same family as LFC Classics, Self-Learning,
+       and Surreal Worlds pages. Smart Class = Smart, fresh, contemporary. */
+    background: linear-gradient(135deg, #e9d8fd 0%, #d4e6ff 50%, #cffafe 100%);
+    background-attachment: fixed;
     color: #1a1d2b; 
     min-height: 100vh; 
   }
@@ -152,16 +155,19 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background: linear-gradient(135deg, #FBF0C7 0%, #F0E4A8 100%);
+    /* Sphere card: warm amber → soft purple (transitions warm-to-cool, 
+       echoing the "warm light, cool shadow" principle of the lesson) */
+    background: linear-gradient(135deg, #fff4d4 0%, #e9d8fd 100%);
   }
   .lesson-card.lesson-2 .lesson-card-visual {
-    background: linear-gradient(135deg, #E8E4FF 0%, #D5CEFB 100%);
+    /* Cube card: soft purple → cyan (cooler, more architectural) */
+    background: linear-gradient(135deg, #e9d8fd 0%, #cffafe 100%);
   }
   .lesson-card.lesson-3 .lesson-card-visual {
-    background: linear-gradient(135deg, #DCEFFF 0%, #B8DBFF 100%);
+    background: linear-gradient(135deg, #cffafe 0%, #d4e6ff 100%);
   }
   .lesson-card.lesson-4 .lesson-card-visual {
-    background: linear-gradient(135deg, #FFE4E4 0%, #FFC9C9 100%);
+    background: linear-gradient(135deg, #fce7f3 0%, #e9d8fd 100%);
   }
   
   .lesson-icon {
