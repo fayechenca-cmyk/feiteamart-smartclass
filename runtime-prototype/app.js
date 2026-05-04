@@ -31,6 +31,35 @@ const AGE_GROUP_OPTIONS = [
   { id: "adult", label: "Adult", ages: "Ages 18+", icon: "🖼️" },
 ];
 
+function getStudentPortalUrl() {
+  const fromWindow = window.FEI_STUDENT_PORTAL_URL;
+  if (typeof fromWindow === "string" && fromWindow.trim()) {
+    return fromWindow.trim();
+  }
+
+  const fromQuery = new URL(window.location.href).searchParams.get("portalUrl");
+  if (fromQuery && fromQuery.trim()) {
+    return fromQuery.trim();
+  }
+
+  return "";
+}
+
+function openStudentPortal() {
+  if (typeof window.openStudentPortal === "function") {
+    window.openStudentPortal(getCurrentLearnerContext());
+    return;
+  }
+
+  const portalUrl = getStudentPortalUrl();
+  if (portalUrl) {
+    window.location.href = portalUrl;
+    return;
+  }
+
+  window.alert("Student Portal link is not connected yet.");
+}
+
 function button(label, options = {}) {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -41,6 +70,9 @@ function button(label, options = {}) {
   }
   if (options.onClick) {
     btn.addEventListener("click", options.onClick);
+  }
+  if (options.title) {
+    btn.title = options.title;
   }
   return btn;
 }
@@ -1542,6 +1574,7 @@ function renderContinueStage({ screen }) {
           : "If you enter later through your student portal code, this lesson can connect to your personal report and badge path.",
       action: context.mode === "portal_code" ? "Go to Student Portal" : "Portal not linked yet",
       emphasis: context.mode === "portal_code",
+      onClick: () => openStudentPortal(),
     },
     {
       kicker: "Portal",
@@ -1549,6 +1582,7 @@ function renderContinueStage({ screen }) {
       body: "Your choices, drawing steps, and reflection can stay connected in your Student Portal as this path grows.",
       action: "Open Student Portal",
       emphasis: true,
+      onClick: () => openStudentPortal(),
     },
     {
       kicker: "Badge",
@@ -1581,6 +1615,7 @@ function renderContinueStage({ screen }) {
     block.append(
       button(item.action, {
         className: item.emphasis ? "footer-button primary" : "ghost-button",
+        onClick: item.onClick,
       }),
     );
     destinationGrid.append(block);
@@ -1623,6 +1658,7 @@ function createScreenActions(screen) {
     row.append(
       button("Save this step to Student Portal", {
         className: "ghost-button",
+        onClick: () => openStudentPortal(),
       }),
     );
   }
@@ -2032,6 +2068,12 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
       },
     }),
   );
+  footerActions.append(
+    button("Student Portal", {
+      className: "footer-button",
+      onClick: () => openStudentPortal(),
+    }),
+  );
 
   footer.append(footerCopy, footerActions);
 
@@ -2065,6 +2107,15 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     </div>
     <p>${assistantMode.note}</p>
   `;
+  const assistantActions = document.createElement("div");
+  assistantActions.className = "mini-action-row";
+  assistantActions.append(
+    button("Open Student Portal", {
+      className: "ghost-button",
+      onClick: () => openStudentPortal(),
+    }),
+  );
+  assistant.append(assistantActions);
 
   main.append(hero, content, footer);
   const writebackCard = createWritebackReviewCard();
