@@ -175,6 +175,7 @@ function renderLessonGate({ root, onSuccess }) {
   let currentCode = "";
   let status = "idle";
   let isSubmitting = false;
+  let gateErrorMessage = "";
 
   const renderGate = () => {
     const ageButtons = AGE_GROUP_OPTIONS.map((option) => `
@@ -195,6 +196,10 @@ function renderLessonGate({ root, onSuccess }) {
       status === "invalid"
         ? `<div class="lesson-gate-error">That code doesn’t match. Please check the code and try again.</div>`
         : "";
+    const launchErrorBlock =
+      status === "launch_error" && gateErrorMessage
+        ? `<div class="lesson-gate-error">${gateErrorMessage}</div>`
+        : "";
 
     card.innerHTML = `
       <div class="lesson-gate-kicker">✨ About to Begin</div>
@@ -214,6 +219,7 @@ function renderLessonGate({ root, onSuccess }) {
       />
       <p class="lesson-gate-hint">Use your student access code to enter this class.</p>
       ${invalidBlock}
+      ${launchErrorBlock}
 
       <p class="lesson-gate-label">How old is the learner?</p>
       <div class="lesson-gate-age-grid">${ageButtons}</div>
@@ -237,8 +243,9 @@ function renderLessonGate({ root, onSuccess }) {
 
     input.addEventListener("input", (event) => {
       currentCode = event.target.value;
-      if (status === "invalid") {
+      if (status === "invalid" || status === "launch_error") {
         status = "idle";
+        gateErrorMessage = "";
         input.classList.remove("is-invalid");
         card.querySelector(".lesson-gate-error")?.remove();
       }
@@ -249,6 +256,7 @@ function renderLessonGate({ root, onSuccess }) {
       buttonElement.addEventListener("click", () => {
         selectedAgeGroup = buttonElement.getAttribute("data-age") ?? "";
         status = "idle";
+        gateErrorMessage = "";
         renderGate();
       });
     });
@@ -260,10 +268,21 @@ function renderLessonGate({ root, onSuccess }) {
 
       isSubmitting = true;
       renderGate();
-      const result = applyLessonGateAccess({
-        code: currentCode,
-        ageGroup: selectedAgeGroup,
-      });
+      let result;
+      try {
+        result = applyLessonGateAccess({
+          code: currentCode,
+          ageGroup: selectedAgeGroup,
+        });
+      } catch (error) {
+        isSubmitting = false;
+        status = "launch_error";
+        gateErrorMessage = error?.message
+          ? String(error.message)
+          : "The class could not open yet.";
+        renderGate();
+        return;
+      }
 
       if (!result.ok) {
         isSubmitting = false;
@@ -274,7 +293,16 @@ function renderLessonGate({ root, onSuccess }) {
 
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
-          onSuccess();
+          try {
+            onSuccess();
+          } catch (error) {
+            isSubmitting = false;
+            status = "launch_error";
+            gateErrorMessage = error?.message
+              ? String(error.message)
+              : "The class could not open yet.";
+            renderGate();
+          }
         });
       });
     });
