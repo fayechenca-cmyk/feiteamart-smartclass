@@ -169,6 +169,7 @@ function renderLessonGate({ root, onSuccess }) {
   let selectedAgeGroup = storedIdentity.ageGroup ?? "";
   let currentCode = "";
   let status = "idle";
+  let isSubmitting = false;
 
   const renderGate = () => {
     const ageButtons = AGE_GROUP_OPTIONS.map((option) => `
@@ -187,7 +188,7 @@ function renderLessonGate({ root, onSuccess }) {
 
     const invalidBlock =
       status === "invalid"
-        ? `<div class="lesson-gate-error">Hmm, that code doesn’t match. Check your welcome email or message Faye for help.</div>`
+        ? `<div class="lesson-gate-error">That code doesn’t match. Please check the code and try again.</div>`
         : "";
 
     card.innerHTML = `
@@ -200,13 +201,13 @@ function renderLessonGate({ root, onSuccess }) {
       <input
         id="studentAccessCode"
         class="lesson-gate-input${status === "invalid" ? " is-invalid" : ""}"
-        placeholder="e.g. REGINA-16"
+        placeholder="e.g. FEI-2048"
         value="${currentCode}"
         autocomplete="off"
         autocapitalize="characters"
         spellcheck="false"
       />
-      <p class="lesson-gate-hint">Find this in your welcome email, or ask Faye.</p>
+      <p class="lesson-gate-hint">Use your student access code to enter this class.</p>
       ${invalidBlock}
 
       <p class="lesson-gate-label">How old is the learner?</p>
@@ -215,9 +216,9 @@ function renderLessonGate({ root, onSuccess }) {
       <button
         type="button"
         class="lesson-gate-submit"
-        ${!currentCode.trim() || !selectedAgeGroup ? "disabled" : ""}
+        ${!currentCode.trim() || !selectedAgeGroup || isSubmitting ? "disabled" : ""}
       >
-        ✧ Let’s Begin →
+        ${isSubmitting ? "Opening..." : "✧ Let’s Begin →"}
       </button>
 
       <p class="lesson-gate-note">🔒 Your progress saves to this device only.</p>
@@ -226,7 +227,7 @@ function renderLessonGate({ root, onSuccess }) {
     const input = card.querySelector("#studentAccessCode");
     const submitButton = card.querySelector(".lesson-gate-submit");
     const syncSubmitState = () => {
-      submitButton.disabled = !currentCode.trim() || !selectedAgeGroup;
+      submitButton.disabled = !currentCode.trim() || !selectedAgeGroup || isSubmitting;
     };
 
     input.addEventListener("input", (event) => {
@@ -248,12 +249,19 @@ function renderLessonGate({ root, onSuccess }) {
     });
 
     card.querySelector(".lesson-gate-submit")?.addEventListener("click", () => {
+      if (isSubmitting) {
+        return;
+      }
+
+      isSubmitting = true;
+      syncSubmitState();
       const result = applyLessonGateAccess({
         code: currentCode,
         ageGroup: selectedAgeGroup,
       });
 
       if (!result.ok) {
+        isSubmitting = false;
         status = "invalid";
         renderGate();
         return;
