@@ -97,7 +97,7 @@ export const lfc054PromptPackDraft = {
       starterPrompts: [
         "Help me describe my surreal change.",
         "What is working best in this image?",
-        "How can I summarize my idea for My Journey?",
+        "How can I summarize my idea for Student Portal?",
       ],
     },
   },
