@@ -65,16 +65,18 @@ button {
   display: grid;
   place-items: center;
   padding: 24px 0;
+  touch-action: manipulation;
 }
 
 .lesson-gate-card {
-  width: min(900px, calc(100vw - 40px));
-  padding: 40px 36px 34px;
+  width: min(760px, calc(100vw - 32px));
+  padding: 32px 30px 28px;
   border-radius: 32px;
   border: 1px solid rgba(26, 29, 43, 0.08);
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 24px 60px rgba(73, 78, 110, 0.12);
   backdrop-filter: blur(14px);
+  touch-action: manipulation;
 }
 
 .lesson-gate-kicker {
@@ -93,33 +95,33 @@ button {
 }
 
 .lesson-gate-lesson {
-  margin: 22px 0 8px;
+  margin: 18px 0 6px;
   color: #4f5b75;
   font-family: "Montserrat", sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .lesson-gate-title {
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   font-family: "Montserrat", sans-serif;
-  font-size: clamp(2.35rem, 4vw, 3.9rem);
+  font-size: clamp(2.1rem, 3.6vw, 3.35rem);
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: -0.04em;
 }
 
 .lesson-gate-copy {
-  margin: 0 0 24px;
-  max-width: 24ch;
+  margin: 0 0 18px;
+  max-width: 22ch;
   color: var(--ink-soft);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.95rem;
+  line-height: 1.45;
 }
 
 .lesson-gate-label {
   display: block;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   font-family: "Montserrat", sans-serif;
   font-size: 0.88rem;
   font-weight: 800;
@@ -129,7 +131,7 @@ button {
 
 .lesson-gate-input {
   width: 100%;
-  padding: 18px 22px;
+  padding: 16px 20px;
   border-radius: 18px;
   border: 2px solid #d8dfea;
   background: rgba(255, 255, 255, 0.96);
@@ -151,19 +153,19 @@ button {
 
 .lesson-gate-hint,
 .lesson-gate-note {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: #8ca0bf;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-style: italic;
 }
 
 .lesson-gate-error {
-  margin: 12px 0 18px;
-  padding: 14px 16px;
+  margin: 10px 0 14px;
+  padding: 12px 14px;
   border-radius: 14px;
   background: #fdecec;
   color: #8a2d2d;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.45;
 }
 
@@ -171,7 +173,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .lesson-gate-age {
@@ -179,7 +181,7 @@ button {
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 16px 14px;
+  padding: 14px 12px;
   border-radius: 16px;
   border: 2px solid #d8dfea;
   background: rgba(255, 255, 255, 0.96);
@@ -190,6 +192,7 @@ button {
     background-color 180ms ease,
     transform 180ms ease,
     box-shadow 180ms ease;
+  touch-action: manipulation;
 }
 
 .lesson-gate-age:hover {
@@ -204,7 +207,7 @@ button {
 }
 
 .lesson-gate-age-icon {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .lesson-gate-age-copy {
@@ -214,29 +217,30 @@ button {
 
 .lesson-gate-age-copy strong {
   font-family: "Montserrat", sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
 }
 
 .lesson-gate-age-copy span {
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.84rem;
 }
 
 .lesson-gate-submit {
   width: 100%;
-  padding: 18px 20px;
+  padding: 16px 18px;
   border: 0;
   border-radius: 18px;
   background: linear-gradient(90deg, #b7c7fb 0%, #67d8ee 100%);
   color: var(--ink);
   font-family: "Montserrat", sans-serif;
-  font-size: 1rem;
+  font-size: 0.96rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease;
+  touch-action: manipulation;
 }
 
 .lesson-gate-submit:hover:not(:disabled) {
@@ -1206,6 +1210,56 @@ button {
 .ghost-button {
   background: transparent;
   color: var(--ink-soft);
+}
+
+.portal-entry-card {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(247, 248, 252, 0.96), rgba(238, 244, 250, 0.92));
+  border: 1px solid rgba(26, 29, 43, 0.08);
+}
+
+.portal-entry-kicker {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.portal-entry-note {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.portal-cta-button {
+  width: 100%;
+  justify-content: center;
+  padding: 14px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 12px;
+  background: var(--ink);
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(26, 29, 43, 0.16);
+}
+
+.portal-cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(26, 29, 43, 0.18);
+  filter: brightness(1.03);
 }
 
 .ghost-button:hover,
