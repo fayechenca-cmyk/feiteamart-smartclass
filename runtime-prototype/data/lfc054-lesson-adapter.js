@@ -418,7 +418,7 @@ function createDrawScreen(index, segment, minRequired) {
         label: "Support paths",
         aiScan: "AI help can respond to your sketch or current drawing step.",
         teacherReview: "Teacher help can appear as a premium path at sketch, midpoint, and final review.",
-        journey: "My Journey can later save your surreal move, reflection, and final image continuity.",
+        journey: "Student Portal can later save your surreal move, reflection, and final image continuity.",
       },
     },
     systemHooks: createSystemHooks({
@@ -434,7 +434,7 @@ function createReflectionScreen(index) {
   return {
     ...makeScreenId(index, "reflection-and-journey"),
     uiKind: "reflection",
-    title: "Reflection and Journey",
+    title: "Reflection and Student Portal",
     partLabel: "Reflect",
     xpValue: 6,
     skipAllowed: true,
@@ -464,7 +464,7 @@ function createReflectionScreen(index) {
           { id: "wrong_place", label: "Wrong place" },
           { id: "dream_combination", label: "Dream combination" },
         ],
-        promptLabel: "My Journey note",
+        promptLabel: "Student Portal note",
         prompt: "Write one short reflection about what rule of reality you changed and what feeling the image now creates.",
       },
     },
@@ -489,17 +489,17 @@ function createContinueScreen(index) {
     prompt: {
       kids: "You finished your surreal world.",
       teen: "Your surreal image, reflections, and next support paths can now continue through FEI TeamArt.",
-      adult: "This lesson can now connect into Journey, AI review, and premium critique paths.",
+      adult: "This lesson can now connect into Student Portal, AI review, and premium critique paths.",
     },
     helperText: {
-      kids: "You can keep going with Artchi, My Journey, and the next lesson later.",
-      teen: "My Journey, AI feedback, and teacher help can continue from here.",
+      kids: "You can keep going with Artchi, Student Portal, and the next lesson later.",
+      teen: "Student Portal, AI feedback, and teacher help can continue from here.",
       adult: "The image can now continue into reflection, review, and ecosystem continuity.",
     },
     blocks: {
       continuation: {
         items: [
-          "Open My Journey",
+          "Open Student Portal",
           "Ask AI for review",
           "Book Artist Mentor",
           "Book Human Curator",
