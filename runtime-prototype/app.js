@@ -94,6 +94,14 @@ function canSyncToCloud(context = getCurrentLearnerContext()) {
   return context.mode === "member";
 }
 
+function normalizeStudentAccessCode(value) {
+  return String(value ?? "")
+    .trim()
+    .toUpperCase()
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    .replace(/\s+/g, "");
+}
+
 window.getCurrentLearnerContext = getCurrentLearnerContext;
 window.setPortalLearnerContext = function setPortalLearnerContext(student) {
   return persistLearnerContext({
@@ -110,9 +118,13 @@ window.clearLearnerContext = function clearLearnerContext() {
 window.canSyncToCloud = canSyncToCloud;
 
 function findStudentAccessRecord(code) {
-  const normalizedCode = String(code ?? "").trim().toUpperCase();
+  const normalizedCode = normalizeStudentAccessCode(code);
   if (!normalizedCode) return null;
-  return studentAccessCodes.find((entry) => entry.id.toUpperCase() === normalizedCode) ?? null;
+  return (
+    studentAccessCodes.find(
+      (entry) => normalizeStudentAccessCode(entry.id) === normalizedCode,
+    ) ?? null
+  );
 }
 
 function applyLessonGateAccess({ code, ageGroup }) {
