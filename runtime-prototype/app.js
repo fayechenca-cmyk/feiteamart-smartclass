@@ -2114,15 +2114,19 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     </div>
     <p>${assistantMode.note}</p>
   `;
-  const assistantActions = document.createElement("div");
-  assistantActions.className = "mini-action-row";
-  assistantActions.append(
-    button("Open Student Portal", {
-      className: "ghost-button",
-      onClick: () => openStudentPortal(),
-    }),
-  );
-  assistant.append(assistantActions);
+  const portalPanel = document.createElement("div");
+  portalPanel.className = "portal-entry-card";
+  portalPanel.innerHTML = `
+    <p class="portal-entry-kicker">Student Portal</p>
+    <p class="portal-entry-note">Open your saved progress, feedback, badges, and report in one place.</p>
+  `;
+  const portalButton = button("Open Student Portal", {
+    className: "portal-cta-button",
+    onClick: () => openStudentPortal(),
+  });
+  portalButton.title = "Open saved progress, badges, feedback, and your student report.";
+  portalPanel.append(portalButton);
+  assistant.append(portalPanel);
 
   main.append(hero, content, footer);
   const writebackCard = createWritebackReviewCard();
