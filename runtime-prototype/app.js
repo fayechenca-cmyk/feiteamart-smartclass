@@ -1,9 +1,11 @@
 import { bootstrapApp } from "../core/app.js";
+import { clearProfile, updateProfile } from "../core/profile.js";
 import {
   adaptedLfc054InitialRunState,
   adaptedLfc054LessonPackage,
 } from "./data/lfc054-lesson-adapter.js";
 import { lfc054PromptPackDraft } from "./data/lfc054-prompt-pack.js";
+import { studentAccessCodes } from "./data/student-access-codes.js";
 
 const appRoot = document.querySelector("[data-app]");
 
@@ -23,6 +25,11 @@ const DEFAULT_LEARNER_CONTEXT = {
   memberId: null,
   displayName: null,
 };
+const AGE_GROUP_OPTIONS = [
+  { id: "kids", label: "Kids", ages: "Ages 4-10", icon: "🎈" },
+  { id: "teen", label: "Teen", ages: "Ages 11-17", icon: "🎨" },
+  { id: "adult", label: "Adult", ages: "Ages 18+", icon: "🖼️" },
+];
 
 function button(label, options = {}) {
   const btn = document.createElement("button");
@@ -101,6 +108,155 @@ window.clearLearnerContext = function clearLearnerContext() {
   return persistLearnerContext(DEFAULT_LEARNER_CONTEXT);
 };
 window.canSyncToCloud = canSyncToCloud;
+
+function findStudentAccessRecord(code) {
+  const normalizedCode = String(code ?? "").trim().toUpperCase();
+  if (!normalizedCode) return null;
+  return studentAccessCodes.find((entry) => entry.id.toUpperCase() === normalizedCode) ?? null;
+}
+
+function applyLessonGateAccess({ code, ageGroup }) {
+  const matchedStudent = findStudentAccessRecord(code);
+  if (!matchedStudent) {
+    return { ok: false, reason: "invalid_code" };
+  }
+
+  const currentContext = getCurrentLearnerContext();
+  if (currentContext.studentId && currentContext.studentId !== matchedStudent.id) {
+    clearProfile();
+    clearLessonDraftData(adaptedLfc054LessonPackage.lessonMeta);
+  }
+
+  updateProfile({
+    name: matchedStudent.displayName,
+    ageGroup,
+    tier: "member",
+    currentLessonId: adaptedLfc054LessonPackage.lessonMeta.lessonId,
+  });
+
+  persistLearnerContext({
+    mode: "portal_code",
+    studentId: matchedStudent.id,
+    portalCodeVerified: true,
+    memberId: null,
+    displayName: matchedStudent.displayName,
+    ageGroup,
+  });
+
+  return { ok: true, student: matchedStudent };
+}
+
+function renderLessonGate({ root, onSuccess }) {
+  const shell = document.createElement("section");
+  shell.className = "lesson-gate-shell";
+
+  const card = document.createElement("div");
+  card.className = "lesson-gate-card";
+
+  const storedIdentity = getCurrentLearnerContext();
+  let selectedAgeGroup = storedIdentity.ageGroup ?? "";
+  let currentCode = "";
+  let status = "idle";
+
+  const renderGate = () => {
+    const ageButtons = AGE_GROUP_OPTIONS.map((option) => `
+      <button
+        type="button"
+        class="lesson-gate-age${selectedAgeGroup === option.id ? " is-active" : ""}"
+        data-age="${option.id}"
+      >
+        <span class="lesson-gate-age-icon">${option.icon}</span>
+        <span class="lesson-gate-age-copy">
+          <strong>${option.label}</strong>
+          <span>${option.ages}</span>
+        </span>
+      </button>
+    `).join("");
+
+    const invalidBlock =
+      status === "invalid"
+        ? `<div class="lesson-gate-error">Hmm, that code doesn’t match. Check your welcome email or message Faye for help.</div>`
+        : "";
+
+    card.innerHTML = `
+      <div class="lesson-gate-kicker">✨ About to Begin</div>
+      <p class="lesson-gate-lesson">Illustration Lab</p>
+      <h1 class="lesson-gate-title">Welcome —</h1>
+      <p class="lesson-gate-copy">Enter your student code to begin. Smart Class is currently for FEI students only.</p>
+
+      <label class="lesson-gate-label" for="studentAccessCode">Student Code</label>
+      <input
+        id="studentAccessCode"
+        class="lesson-gate-input${status === "invalid" ? " is-invalid" : ""}"
+        placeholder="e.g. REGINA-16"
+        value="${currentCode}"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+      />
+      <p class="lesson-gate-hint">Find this in your welcome email, or ask Faye.</p>
+      ${invalidBlock}
+
+      <p class="lesson-gate-label">How old is the learner?</p>
+      <div class="lesson-gate-age-grid">${ageButtons}</div>
+
+      <button
+        type="button"
+        class="lesson-gate-submit"
+        ${!currentCode.trim() || !selectedAgeGroup ? "disabled" : ""}
+      >
+        ✧ Let’s Begin →
+      </button>
+
+      <p class="lesson-gate-note">🔒 Your progress saves to this device only.</p>
+    `;
+
+    const input = card.querySelector("#studentAccessCode");
+    const submitButton = card.querySelector(".lesson-gate-submit");
+    const syncSubmitState = () => {
+      submitButton.disabled = !currentCode.trim() || !selectedAgeGroup;
+    };
+
+    input.addEventListener("input", (event) => {
+      currentCode = event.target.value;
+      if (status === "invalid") {
+        status = "idle";
+        input.classList.remove("is-invalid");
+        card.querySelector(".lesson-gate-error")?.remove();
+      }
+      syncSubmitState();
+    });
+
+    card.querySelectorAll("[data-age]").forEach((buttonElement) => {
+      buttonElement.addEventListener("click", () => {
+        selectedAgeGroup = buttonElement.getAttribute("data-age") ?? "";
+        status = "idle";
+        renderGate();
+      });
+    });
+
+    card.querySelector(".lesson-gate-submit")?.addEventListener("click", () => {
+      const result = applyLessonGateAccess({
+        code: currentCode,
+        ageGroup: selectedAgeGroup,
+      });
+
+      if (!result.ok) {
+        status = "invalid";
+        renderGate();
+        return;
+      }
+
+      onSuccess();
+    });
+
+    syncSubmitState();
+  };
+
+  renderGate();
+  shell.append(card);
+  root.replaceChildren(shell);
+}
 
 function pickAssistantMode(screen) {
   if (screen.uiKind === "draw") {
@@ -1725,23 +1881,6 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
     </div>
   `;
 
-  const ageSwitcher = document.createElement("div");
-  ageSwitcher.className = "age-switcher";
-  lessonMeta.ageGroups.forEach((group) => {
-    ageSwitcher.append(
-      button(group[0].toUpperCase() + group.slice(1), {
-        className: `age-button${group === ageGroup ? " is-active" : ""}`,
-        onClick: () => {
-          lessonApp.saveInteraction(screen.screenId, (draft) => {
-            draft.ageGroup = group;
-            return draft;
-          });
-        },
-      }),
-    );
-  });
-  hero.querySelector(".hero-top").append(ageSwitcher);
-
   const heroBottom = document.createElement("div");
   heroBottom.className = "hero-bottom";
 
@@ -1880,12 +2019,19 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   root.replaceChildren(shell);
 }
 
-bootstrapApp({
+function startLessonApp() {
+  bootstrapApp({
+    root: appRoot,
+    lessonPackage: adaptedLfc054LessonPackage,
+    initialRunState: adaptedLfc054InitialRunState,
+    render: renderPrototype,
+    analytics,
+  });
+}
+
+renderLessonGate({
   root: appRoot,
-  lessonPackage: adaptedLfc054LessonPackage,
-  initialRunState: adaptedLfc054InitialRunState,
-  render: renderPrototype,
-  analytics,
+  onSuccess: startLessonApp,
 });
 
 ensureGuestLearnerContext();
