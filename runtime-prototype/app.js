@@ -5,7 +5,7 @@ import {
   adaptedLfc054LessonPackage,
 } from "./data/lfc054-lesson-adapter.js";
 import { lfc054PromptPackDraft } from "./data/lfc054-prompt-pack.js";
-import { studentAccessCodes } from "./core/student-access-codes.js";
+import { studentAccessCodes } from "../core/student-access-codes.js";
 
 const appRoot = document.querySelector("[data-app]");
 
