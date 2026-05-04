@@ -133,17 +133,22 @@ function applyLessonGateAccess({ code, ageGroup }) {
     return { ok: false, reason: "invalid_code" };
   }
 
+  const lessonMetaForGate = {
+    lessonId: adaptedLfc054LessonPackage.lesson?.lessonId,
+    screens: adaptedLfc054LessonPackage.screens ?? [],
+  };
+
   const currentContext = getCurrentLearnerContext();
   if (currentContext.studentId && currentContext.studentId !== matchedStudent.id) {
     clearProfile();
-    clearLessonDraftData(adaptedLfc054LessonPackage.lessonMeta);
+    clearLessonDraftData(lessonMetaForGate);
   }
 
   updateProfile({
     name: matchedStudent.displayName,
     ageGroup,
     tier: "member",
-    currentLessonId: adaptedLfc054LessonPackage.lessonMeta.lessonId,
+    currentLessonId: lessonMetaForGate.lessonId,
   });
 
   persistLearnerContext({
