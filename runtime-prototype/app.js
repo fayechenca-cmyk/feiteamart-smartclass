@@ -46,14 +46,28 @@ function getStudentPortalUrl() {
 }
 
 function openStudentPortal() {
+  const learner = getCurrentLearnerContext();
+
   if (typeof window.openStudentPortal === "function") {
-    window.openStudentPortal(getCurrentLearnerContext());
+    window.openStudentPortal(learner);
     return;
   }
 
   const portalUrl = getStudentPortalUrl();
   if (portalUrl) {
-    window.location.href = portalUrl;
+    const url = new URL(portalUrl, window.location.href);
+    if (learner.studentId) {
+      url.searchParams.set("studentId", learner.studentId);
+    }
+    if (learner.displayName) {
+      url.searchParams.set("displayName", learner.displayName);
+    }
+    if (learner.ageGroup) {
+      url.searchParams.set("ageGroup", learner.ageGroup);
+    }
+    url.searchParams.set("sourceLesson", adaptedLfc054LessonPackage.lesson.lessonId);
+    url.searchParams.set("sourceFamily", adaptedLfc054LessonPackage.lesson.lessonFamily);
+    window.location.href = url.toString();
     return;
   }
 
@@ -2068,13 +2082,6 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
       },
     }),
   );
-  footerActions.append(
-    button("Student Portal", {
-      className: "footer-button",
-      onClick: () => openStudentPortal(),
-    }),
-  );
-
   footer.append(footerCopy, footerActions);
 
   const assistant = document.createElement("section");
