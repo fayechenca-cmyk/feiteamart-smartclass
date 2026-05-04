@@ -254,7 +254,7 @@ function renderLessonGate({ root, onSuccess }) {
       }
 
       isSubmitting = true;
-      syncSubmitState();
+      renderGate();
       const result = applyLessonGateAccess({
         code: currentCode,
         ageGroup: selectedAgeGroup,
@@ -267,7 +267,11 @@ function renderLessonGate({ root, onSuccess }) {
         return;
       }
 
-      onSuccess();
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          onSuccess();
+        });
+      });
     });
 
     syncSubmitState();
@@ -2040,13 +2044,35 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
 }
 
 function startLessonApp() {
-  bootstrapApp({
-    root: appRoot,
-    lessonPackage: adaptedLfc054LessonPackage,
-    initialRunState: adaptedLfc054InitialRunState,
-    render: renderPrototype,
-    analytics,
-  });
+  try {
+    bootstrapApp({
+      root: appRoot,
+      lessonPackage: adaptedLfc054LessonPackage,
+      initialRunState: adaptedLfc054InitialRunState,
+      render: renderPrototype,
+      analytics,
+    });
+  } catch (error) {
+    console.error("[lfc054] lesson launch failed", error);
+
+    const shell = document.createElement("section");
+    shell.className = "lesson-gate-shell";
+
+    const card = document.createElement("div");
+    card.className = "lesson-gate-card";
+    card.innerHTML = `
+      <div class="lesson-gate-kicker">Launch paused</div>
+      <p class="lesson-gate-lesson">Illustration Lab</p>
+      <h1 class="lesson-gate-title">This lesson needs one more fix.</h1>
+      <div class="lesson-gate-error">
+        ${error?.message ? String(error.message) : "The lesson could not open."}
+      </div>
+      <p class="lesson-gate-hint">Please refresh once. If it still stops here, send this message to FEI TeamArt.</p>
+    `;
+
+    shell.append(card);
+    appRoot.replaceChildren(shell);
+  }
 }
 
 renderLessonGate({
