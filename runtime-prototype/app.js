@@ -325,8 +325,8 @@ function pickAssistantMode(screen) {
 
   if (screen.uiKind === "reflection" || screen.uiKind === "continue") {
     return {
-      label: "Journey companion",
-      note: "Artchi helps you name what changed, what worked, and how this lesson can continue through My Journey and later support paths.",
+      label: "Portal companion",
+      note: "Artchi helps you name what changed, what worked, and how this lesson can continue through your Student Portal and later support paths.",
     };
   }
 
@@ -1480,7 +1480,7 @@ function renderReflectionStage({ lessonApp, screen, state }) {
   const textCard = document.createElement("div");
   textCard.className = "draw-side-card";
   textCard.innerHTML = `
-    <p class="micro-kicker">My Journey note</p>
+    <p class="micro-kicker">Student Portal note</p>
     <p>${screen.blocks.reflection.prompt}</p>
   `;
   const input = document.createElement("textarea");
@@ -1544,10 +1544,10 @@ function renderContinueStage({ screen }) {
       emphasis: context.mode === "portal_code",
     },
     {
-      kicker: "Journey",
-      title: "Keep this in My Journey",
-      body: "Your choices, drawing steps, and reflection can stay connected in My Journey as this path grows.",
-      action: "Open My Journey",
+      kicker: "Portal",
+      title: "Keep this in Student Portal",
+      body: "Your choices, drawing steps, and reflection can stay connected in your Student Portal as this path grows.",
+      action: "Open Student Portal",
       emphasis: true,
     },
     {
@@ -1621,7 +1621,7 @@ function createScreenActions(screen) {
 
   if (!row.childNodes.length) {
     row.append(
-      button("Save this step to My Journey", {
+      button("Save this step to Student Portal", {
         className: "ghost-button",
       }),
     );
@@ -1997,7 +1997,7 @@ function renderPrototype({ root, lessonApp, lessonMeta, resolveAgeVariant }) {
   const footerCopy = document.createElement("div");
   footerCopy.className = "footer-copy";
   footerCopy.innerHTML = `
-    <p class="save-line">${completionReady ? screen.saveMessage : "This lesson stays ready for My Journey, feedback, and portal continuity."}</p>
+    <p class="save-line">${completionReady ? screen.saveMessage : "This lesson stays ready for Student Portal, feedback, and portal continuity."}</p>
   `;
 
   const footerActions = document.createElement("div");
