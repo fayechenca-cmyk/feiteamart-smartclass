@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3390,23 +3389,25 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 
 <div class="welcome-backdrop" id="welcome-backdrop">
   
-  <!-- NEW VISITOR state: name + age group -->
+  <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
     <div class="welcome-lesson-label">Lesson 1: The Sphere</div>
-    <div class="welcome-title">Before we start —</div>
-    <div class="welcome-sub">tell me about yourself. This keeps your thinking journey personal.</div>
+    <div class="welcome-title">Welcome —</div>
+    <div class="welcome-sub">enter your student code to begin. Smart Class is for FEI students only.</div>
     
     <div class="welcome-field">
-      <label class="welcome-label" for="welcome-name-input">What should we call you?</label>
+      <label class="welcome-label" for="welcome-name-input">Student Code</label>
       <input type="text" 
              id="welcome-name-input" 
              class="welcome-input" 
-             placeholder="e.g. Amy"
-             autocomplete="given-name"
-             maxlength="40"
+             placeholder="e.g. REGINA-16"
+             autocomplete="off"
+             autocapitalize="characters"
+             maxlength="20"
+             style="font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase;"
              oninput="onWelcomeInputChange()">
-      <div class="welcome-input-hint">Just your first name — we'll say hi properly ✨</div>
+      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask Faye ✨</div>
     </div>
     
     <div class="welcome-field">
@@ -3438,7 +3439,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </button>
     
     <div class="privacy-note" style="margin-top: 14px;">
-      🔒 We only save this on your device. No account needed yet.
+      🔒 Your progress saves on this device only.
     </div>
   </div>
   
@@ -4171,6 +4172,27 @@ const UserProfile = {
     return profile;
   },
   
+  /** Create a member profile from a validated student code (preferred entry point) */
+  createMember(studentCode, displayName, ageGroup) {
+    const profile = {
+      id: studentCode,                       // e.g. "REGINA-16" — same ID as Portal
+      studentCode: studentCode,              // explicit field for clarity
+      name: displayName.trim(),              // e.g. "Regina"
+      ageGroup: ageGroup,
+      tier: 'member',                        // members-only: no more 'guest' tier
+      email: null,
+      memberSince: Date.now(),
+      currentLesson: 'sphere',
+      currentStepIdx: 0,
+      completedLessons: [],
+      totalXP: 0,
+      createdAt: Date.now(),
+      lastSeenAt: Date.now()
+    };
+    this._save(profile);
+    return profile;
+  },
+  
   /** Upgrade guest → free_intro when they submit email at Badge Gate */
   upgradeToFreeIntro(email) {
     const profile = this.current();
@@ -4255,6 +4277,88 @@ const UserProfile = {
 };
 
 // (end of SECTION 1a)
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  SECTION 1a-2 · STUDENT ROSTER (validated members list)
+ *  
+ *  Smart Class is members-only. Only IDs in valid-students.json can enter.
+ *  Source of truth: /valid-students.json in the Smart Class GitHub repo.
+ *  
+ *  USAGE:
+ *    await StudentRoster.load();              // fetches valid-students.json
+ *    StudentRoster.isValid('REGINA-16');      // true / false
+ *    StudentRoster.getDisplayName('REGINA-16'); // 'Regina' or null
+ *  
+ *  ═══════════════════════════════════════════════════════════════════════════ */
+
+const StudentRoster = {
+  // In-memory cache after first load
+  _students: null,           // Map<id, displayName>
+  _loadingPromise: null,     // dedupe concurrent loads
+  
+  // Path to the SHARED student access codes file.
+  // Same file Codex's Illustration lesson uses — single source of truth.
+  // Lesson 1 is at /lessons/lesson-1-sphere/index.html
+  // The shared file lives at /core/student-access-codes.js (root of the repo)
+  rosterPath: '../../core/student-access-codes.js',
+  
+  /** Load the shared roster. Returns when ready. */
+  async load() {
+    if (this._students !== null) return this._students;
+    if (this._loadingPromise) return this._loadingPromise;
+    
+    this._loadingPromise = (async () => {
+      try {
+        const response = await fetch(this.rosterPath, { cache: 'no-cache' });
+        if (!response.ok) throw new Error('Roster not found (HTTP ' + response.status + ')');
+        const text = await response.text();
+        const map = new Map();
+        
+        // Parse the JS module's array entries (don't import as ES module — Sphere/Cube load as plain HTML).
+        // Match objects like:  { id: "REGINA-16", displayName: "Regina" },
+        // Tolerates variations: single/double quotes, extra whitespace, trailing commas.
+        const entryRegex = /\{\s*id\s*:\s*["']([^"']+)["']\s*,\s*displayName\s*:\s*["']([^"']+)["']\s*\}/g;
+        let match;
+        while ((match = entryRegex.exec(text)) !== null) {
+          const id = match[1].trim();
+          const displayName = match[2].trim();
+          if (id && displayName) {
+            // Normalize ID to uppercase for case-insensitive matching
+            map.set(id.toUpperCase(), displayName);
+          }
+        }
+        
+        this._students = map;
+        console.log('[StudentRoster] Loaded ' + map.size + ' valid student codes from /core/student-access-codes.js');
+        return map;
+      } catch (err) {
+        console.warn('[StudentRoster] Failed to load shared roster:', err);
+        this._students = new Map();   // empty map on failure → all codes will be invalid
+        return this._students;
+      }
+    })();
+    
+    return this._loadingPromise;
+  },
+  
+  /** Check if a code matches a valid student (case-insensitive) */
+  isValid(code) {
+    if (!this._students || !code) return false;
+    return this._students.has(code.trim().toUpperCase());
+  },
+  
+  /** Get the display_name for a code, or null if invalid */
+  getDisplayName(code) {
+    if (!this._students || !code) return null;
+    return this._students.get(code.trim().toUpperCase()) || null;
+  },
+  
+  /** Returns a normalized version of the code (uppercase, trimmed) */
+  normalize(code) {
+    return (code || '').trim().toUpperCase();
+  }
+};
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -9022,7 +9126,18 @@ function showWelcomePage() {
       completed_lessons: profile.completedLessons?.length || 0
     });
   } else {
-    // NEW VISITOR
+    // NEW VISITOR — check for ?code= URL param to auto-fill
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeFromUrl = urlParams.get('code');
+    if (codeFromUrl) {
+      const codeInput = document.getElementById('welcome-name-input');
+      if (codeInput) {
+        codeInput.value = StudentRoster.normalize(codeFromUrl);
+        // Trigger the change handler so button enables when age is also picked
+        onWelcomeInputChange();
+      }
+      Analytics.track('welcome_url_code_prefill', {});
+    }
     newState.style.display = 'block';
     returningState.style.display = 'none';
     Analytics.track('welcome_new_visitor_viewed', {});
@@ -9077,28 +9192,58 @@ function selectWelcomeAge(age, el) {
 }
 
 function onWelcomeInputChange() {
-  const nameInput = document.getElementById('welcome-name-input');
+  const codeInput = document.getElementById('welcome-name-input');
   const btn = document.getElementById('welcome-begin-btn');
-  if (!nameInput || !btn) return;
-  const nameValid = nameInput.value.trim().length >= 1;
-  btn.disabled = !(nameValid && welcomeSelectedAge);
+  const hint = document.getElementById('welcome-input-hint');
+  if (!codeInput || !btn) return;
+  
+  const code = codeInput.value.trim();
+  const codeFilled = code.length >= 3;   // Most IDs are 5+ chars; 3 is generous min
+  btn.disabled = !(codeFilled && welcomeSelectedAge);
+  
+  // Reset any prior error styling as the user types
+  codeInput.style.borderColor = '';
+  codeInput.style.background = '';
+  if (hint) {
+    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.style.color = '';
+  }
 }
 
 function submitWelcome() {
-  const nameInput = document.getElementById('welcome-name-input');
-  const name = nameInput.value.trim();
-  if (!name || !welcomeSelectedAge) return;
+  const codeInput = document.getElementById('welcome-name-input');
+  const hint = document.getElementById('welcome-input-hint');
+  const rawCode = codeInput.value.trim();
+  if (!rawCode || !welcomeSelectedAge) return;
   
-  // Create the guest profile
-  const profile = UserProfile.createGuest(name, welcomeSelectedAge);
+  const code = StudentRoster.normalize(rawCode);
+  
+  // Validate against the roster
+  if (!StudentRoster.isValid(code)) {
+    // Show invalid-code feedback
+    codeInput.style.borderColor = '#e57373';
+    codeInput.style.background = '#fef2f2';
+    if (hint) {
+      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message Faye for help.";
+      hint.style.color = '#b91c1c';
+    }
+    Analytics.track('welcome_invalid_code', { code_length: code.length });
+    playTone(220, 0.18);   // gentle "no" tone
+    return;
+  }
+  
+  // Valid code → create member profile using display_name from roster
+  const displayName = StudentRoster.getDisplayName(code);
+  const profile = UserProfile.createMember(code, displayName, welcomeSelectedAge);
   
   // Sync to AccessControl for legacy code compatibility
   AccessControl.ageGroup = profile.ageGroup;
   AccessControl.currentUser = { id: profile.id, name: profile.name };
+  AccessControl.mode = 'unlocked';   // members get full lesson access
   
-  Analytics.track('profile_created', { 
-    age_group: profile.ageGroup, 
-    has_name: true 
+  Analytics.track('member_welcomed', { 
+    student_code: code,
+    age_group: profile.ageGroup
   });
   
   // Hide welcome, begin the lesson
@@ -9192,8 +9337,17 @@ function switchProfile(event) {
   welcomeSelectedAge = null;
   
   // Reset form
-  const nameInput = document.getElementById('welcome-name-input');
-  if (nameInput) nameInput.value = '';
+  const codeInput = document.getElementById('welcome-name-input');
+  if (codeInput) {
+    codeInput.value = '';
+    codeInput.style.borderColor = '';
+    codeInput.style.background = '';
+  }
+  const hint = document.getElementById('welcome-input-hint');
+  if (hint) {
+    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.style.color = '';
+  }
   document.querySelectorAll('.welcome-age-card').forEach(c => c.classList.remove('selected'));
   const btn = document.getElementById('welcome-begin-btn');
   if (btn) btn.disabled = true;
@@ -9360,10 +9514,12 @@ if (_existingProfile) {
 renderStep();
 resetSleep();
 
-// Show Welcome Page (handles both new + returning visitor cases)
-setTimeout(() => {
-  showWelcomePage();
-}, 200);
+// Load student roster early, then show Welcome Page (handles both new + returning visitor cases)
+StudentRoster.load().finally(() => {
+  setTimeout(() => {
+    showWelcomePage();
+  }, 200);
+});
 </script>
 
 </body>
