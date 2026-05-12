@@ -5052,13 +5052,63 @@ const LESSON = {
       intro: 'Quick check before we begin.',
       xp: 10
     },
-    // ===== PART B · WARM-UP (OPTIONAL) =====
+    // ===== PART B · TEACHER VIDEOS (5 segments) =====
+    // These are the cube teaching videos from FEI TeamArt YouTube.
+    // Each video has its own step — students see them sequentially.
+    // Pause points to be added later (WARMUP_PAUSES per video config).
     {
       part: 'B',
-      partLabel: 'Part b · warm-up · optional',
-      type: 'warmup',
-      title: 'Warm up your hand',
-      intro: 'Quick straight-line drills loosen the wrist. Cubes punish a stiff hand — this 4-minute warmup makes a real difference.',
+      partLabel: 'Part b · teacher demo · video 1 of 5',
+      type: 'videoSegment',
+      videoId: 'SeMsKjs6GLc',       // cube 1 (5:37)
+      videoNumber: 1,
+      videoTitle: 'Cube · Part 1',
+      title: 'Watch Faye begin the cube',
+      intro: 'In this first segment, Faye introduces the cube and shows the foundation lines. Have your paper and pencil ready — you\'ll be drawing along.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 2 of 5',
+      type: 'videoSegment',
+      videoId: 'BDnpaF--suM',       // cube 02 (3:29)
+      videoNumber: 2,
+      videoTitle: 'Cube · Part 2',
+      title: 'Building the structure',
+      intro: 'Faye continues the construction. Watch how the lines connect to suggest 3D form. Pause whenever you need to.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 3 of 5',
+      type: 'videoSegment',
+      videoId: 'Hp_j4AxraAE',       // cube 3 (3:47)
+      videoNumber: 3,
+      videoTitle: 'Cube · Part 3',
+      title: 'Refining the form',
+      intro: 'The cube starts to take shape. Notice the subtle adjustments Faye makes — small corrections lead to big differences.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 5',
+      type: 'videoSegment',
+      videoId: 'NtsjlyIfYiA',       // cube 4 (4:20)
+      videoNumber: 4,
+      videoTitle: 'Cube · Part 4',
+      title: 'Light and shadow on the cube',
+      intro: 'Now the magic begins — how light defines the cube\'s three planes. Each face catches light differently.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 5 of 5',
+      type: 'videoSegment',
+      videoId: 'hEsj7W-Qvt8',       // cube 5 (3:17)
+      videoNumber: 5,
+      videoTitle: 'Cube · Part 5',
+      title: 'Finishing the cube',
+      intro: 'The final touches. Watch how Faye brings the cube to completion — the difference between "drawn" and "alive".',
       xp: 5
     },
     // (LFC moment "beforeDemo" removed — Lesson 2 follows the same 
@@ -5247,6 +5297,10 @@ function renderStep() {
     case 'tools':       el.innerHTML = renderTools(step); break;
     case 'ready':       el.innerHTML = renderReady(step); break;
     case 'warmup':      el.innerHTML = renderWarmup(step); break;
+    case 'videoSegment': el.innerHTML = renderVideoSegment(step);
+                         // Auto-initialize the YouTube player for this segment
+                         setTimeout(() => initVideoSegment(step), 100);
+                         break;
     case 'demo':        el.innerHTML = renderDemo(step); break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -7000,7 +7054,83 @@ function renderWarmup(step) {
 }
 
 function demoPauseInLocalMode() {
-  triggerPause(WARMUP_PAUSES[0]);
+  // Defensive: WARMUP_PAUSES is now empty (no pause points configured yet)
+  if (WARMUP_PAUSES.length > 0) {
+    triggerPause(WARMUP_PAUSES[0]);
+  } else {
+    console.log('[demoPauseInLocalMode] No pause points configured yet');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  VIDEO SEGMENT RENDERER (Cube: 5 videos in sequence)
+ *  
+ *  Each video segment is one step. Plays inline (no jump to YouTube).
+ *  Currently no pause points configured — future enhancement:
+ *  - Define VIDEO_PAUSES[videoId] = [{time, title, text, duration}, ...]
+ *  - Modify startPauseWatcher to read pauses for the current videoId
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+function renderVideoSegment(step) {
+  const partOf = `${step.videoNumber} of 5`;
+  return `
+    <div class="step-card">
+      <div class="step-title">${step.title}</div>
+      <div class="step-intro">${step.intro}</div>
+      
+      <div class="video-segment-meta" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
+        <span>📹 ${step.videoTitle}</span>
+        <span>${partOf}</span>
+      </div>
+      
+      <div class="video-frame" style="background:#000; cursor:default; padding:0;">
+        <iframe id="yt-player-${step.videoNumber}" width="100%" height="100%" style="position:absolute; inset:0; border:none;"
+          src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+        
+        <!-- Pause overlay (same UI as warmup — ready for future pause points) -->
+        <div class="pause-overlay" id="pause-overlay-${step.videoNumber}">
+          <div class="pause-card">
+            <div class="pause-kicker">⏸ Your turn</div>
+            <div class="pause-ico">✨</div>
+            <div class="pause-title" id="pause-title-${step.videoNumber}">Pause</div>
+            <div class="pause-text" id="pause-text-${step.videoNumber}">Take a moment</div>
+            <div class="pause-timer">
+              <div class="pause-timer-bar" id="pause-timer-bar-${step.videoNumber}"></div>
+            </div>
+            <div class="pause-timer-label">Video resumes automatically</div>
+            <div class="pause-actions">
+              <button class="btn btn-primary" onclick="skipPause()"><span class="glyph">◈</span> I'm ready — continue now</button>
+              <button class="btn btn-ghost" onclick="skipPauseAndKeepPaused()">Keep video paused, I need more time</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pro-tip" style="margin-top:14px;">
+        <div class="pro-tip-label">Watch & follow along</div>
+        <div class="pro-tip-text">Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.</div>
+      </div>
+      
+      <div class="btn-stack" style="margin-top:18px;">
+        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> ${step.videoNumber < 5 ? `Continue to Video ${step.videoNumber + 1}` : "I've watched all 5 — let's draw"} →</button>
+      </div>
+    </div>`;
+}
+
+function initVideoSegment(step) {
+  // Each video segment gets its own YT.Player instance.
+  // For now: no pause points (WARMUP_PAUSES stays [] — future enhancement).
+  // Just load the YouTube API if needed; the iframe loads on its own.
+  if (!window.YT || !window.YT.Player) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+  // Note: We don't init a controlled YT.Player here because pause points
+  // aren't configured yet. When pause points are added per video, init
+  // similar to startWarmup() but read from VIDEO_PAUSES[step.videoId].
 }
 
 function checkLocalMode() {
@@ -7630,12 +7760,11 @@ function toggleCheck(row) {
  *  To change video: update iframe src in renderWarmup() + WARMUP_PAUSES array.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-const WARMUP_PAUSES = [
-  { time: 14,  duration: 5, title: 'Get ready! 📝', text: 'Make sure you have paper, pencil, and good light. Ready? The video will continue in a moment.' },
-  { time: 75,  duration: 5, title: 'Quick break 💫', text: 'Shake out your hand. Next set coming up.' },
-  { time: 128, duration: 5, title: 'How does it feel? ✨', text: 'Notice how the teacher holds the pencil — loose grip, from the shoulder. Observe and breathe.' },
-  { time: 185, duration: 3, title: 'Almost done! 🎉', text: 'Great work. Wrapping up in a second.' }
-];
+// Pause points (empty for now — to be configured later when Faye 
+// provides per-video pause specs).
+// Each pause: { time: <seconds>, duration: <seconds>, title: <string>, text: <string> }
+// Future: convert to VIDEO_PAUSES[videoId] = [...] for per-video configs.
+const WARMUP_PAUSES = [];
 
 let ytPlayer = null;
 let ytPlayerReady = false;
