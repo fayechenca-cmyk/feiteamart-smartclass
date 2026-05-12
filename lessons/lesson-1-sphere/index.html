@@ -4172,14 +4172,15 @@ const UserProfile = {
     return profile;
   },
   
-  /** Create a member profile from a validated student code (preferred entry point) */
-  createMember(studentCode, displayName, ageGroup) {
+  /** Create a member or trial profile from a validated student code (preferred entry point) */
+  createMember(studentCode, displayName, ageGroup, isTrial = false) {
     const profile = {
-      id: studentCode,                       // e.g. "REGINA-16" — same ID as Portal
+      id: studentCode,                       // e.g. "REGINA-16" or "TRYNEW"
       studentCode: studentCode,              // explicit field for clarity
-      name: displayName.trim(),              // e.g. "Regina"
+      name: displayName.trim(),              // e.g. "Regina" or "Friend"
       ageGroup: ageGroup,
-      tier: 'member',                        // members-only: no more 'guest' tier
+      tier: isTrial ? 'trial' : 'member',   // 'trial' = free preview (Lesson 1 only)
+                                             // 'member' = full Foundation A access
       email: null,
       memberSince: Date.now(),
       currentLesson: 'sphere',
@@ -4316,21 +4317,37 @@ const StudentRoster = {
         const map = new Map();
         
         // Parse the JS module's array entries (don't import as ES module — Sphere/Cube load as plain HTML).
-        // Match objects like:  { id: "REGINA-16", displayName: "Regina" },
-        // Tolerates variations: single/double quotes, extra whitespace, trailing commas.
-        const entryRegex = /\{\s*id\s*:\s*["']([^"']+)["']\s*,\s*displayName\s*:\s*["']([^"']+)["']\s*\}/g;
-        let match;
-        while ((match = entryRegex.exec(text)) !== null) {
-          const id = match[1].trim();
-          const displayName = match[2].trim();
+        // Match objects like: { id: "X", displayName: "Y" } or { id: "X", displayName: "Y", isTrial: true }
+        // 
+        // We use a flexible two-pass approach:
+        //  Pass 1: find every `{ ... }` block in the array (greedy entry detection)
+        //  Pass 2: for each block, extract id, displayName, and optionally isTrial
+        //
+        // This handles future fields gracefully (e.g. ageGroup, joinedDate) without breaking.
+        const blockRegex = /\{[^{}]*\}/g;
+        let block;
+        while ((block = blockRegex.exec(text)) !== null) {
+          const blockText = block[0];
+          
+          const idMatch       = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+          const nameMatch     = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+          const trialMatch    = blockText.match(/isTrial\s*:\s*(true|false)/);
+          
+          if (!idMatch || !nameMatch) continue;  // skip malformed entries
+          
+          const id = idMatch[1].trim();
+          const displayName = nameMatch[1].trim();
+          const isTrial = trialMatch ? (trialMatch[1] === 'true') : false;
+          
           if (id && displayName) {
-            // Normalize ID to uppercase for case-insensitive matching
-            map.set(id.toUpperCase(), displayName);
+            map.set(id.toUpperCase(), { displayName, isTrial });
           }
         }
         
         this._students = map;
-        console.log('[StudentRoster] Loaded ' + map.size + ' valid student codes from /core/student-access-codes.js');
+        const trialCount = [...map.values()].filter(s => s.isTrial).length;
+        const memberCount = map.size - trialCount;
+        console.log('[StudentRoster] Loaded ' + map.size + ' codes (' + memberCount + ' members + ' + trialCount + ' trial) from /core/student-access-codes.js');
         return map;
       } catch (err) {
         console.warn('[StudentRoster] Failed to load shared roster:', err);
@@ -4351,7 +4368,15 @@ const StudentRoster = {
   /** Get the display_name for a code, or null if invalid */
   getDisplayName(code) {
     if (!this._students || !code) return null;
-    return this._students.get(code.trim().toUpperCase()) || null;
+    const entry = this._students.get(code.trim().toUpperCase());
+    return entry ? entry.displayName : null;
+  },
+  
+  /** Check whether this code is a TRIAL code (free preview, limited access) */
+  isTrial(code) {
+    if (!this._students || !code) return false;
+    const entry = this._students.get(code.trim().toUpperCase());
+    return entry ? Boolean(entry.isTrial) : false;
   },
   
   /** Returns a normalized version of the code (uppercase, trimmed) */
@@ -8145,18 +8170,18 @@ function renderLessonComplete(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Lesson 2 invitation -->
+      <!-- Lesson 2 invitation (now Sphere Realworld — placeholder) -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 2</div>
-        <div class="lesson2-teaser-title">The Cube</div>
+        <div class="lesson2-teaser-title">Sphere in the Real World</div>
         <div class="lesson2-teaser-sub">
-          You finished a curved form. Next: edges, planes, perspective. The architecture of seeing.
+          You drew an abstract sphere. Now: pick a real spherical object and apply what you've learned.
         </div>
-        <div class="lesson2-teaser-status">Members area · 9 lessons remaining</div>
+        <div class="lesson2-teaser-status">Coming soon · 9 lessons remaining</div>
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="goToLesson2()"><span class="glyph">◈</span> Continue to Lesson 2 →</button>
+        <button class="btn btn-primary" onclick="goToLesson2()" disabled style="opacity: 0.5; cursor: not-allowed;"><span class="glyph">◯</span> Lesson 2 coming soon</button>
         <button class="btn btn-secondary" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
@@ -8169,6 +8194,8 @@ function renderBadgeUnlocked(profileOrLead) {
 }
 
 // Navigate to Lesson 2 (relative URL — works on local server + GitHub Pages)
+// Lesson 2 is now "Sphere in the Real World" (placeholder).
+// When the real Lesson 2 content is built, point this to '../lesson-2-sphere-realworld/'.
 function goToLesson2() {
   Analytics.track('continue_to_lesson_2_clicked', {
     from_lesson: LESSON.id,
@@ -8176,12 +8203,13 @@ function goToLesson2() {
   });
   // Save progress before navigating
   UserProfile.update({
-    currentLesson: 'cube',
+    currentLesson: 'sphere_realworld',
     currentStepIdx: 0,
     totalXP: state.xp
   });
-  // Relative URL — works whether on file://, localhost, or GitHub Pages
-  window.location.href = '../lesson-2-cube/';
+  // Lesson 2 not yet built — show a friendly notice
+  alert('Lesson 2: Sphere in the Real World is coming soon!\n\nWhen ready, you\'ll be able to pick a real spherical object (like an apple or orange) and apply what you learned in Lesson 1.\n\nFor now, you can replay Lesson 1 or view your thinking journey.');
+  // window.location.href = '../lesson-2-sphere-realworld/';  // ← uncomment when ready
 }
 
 // ─── Email gate validation & submission ──────────────────────
@@ -9232,14 +9260,15 @@ function submitWelcome() {
     return;
   }
   
-  // Valid code → create member profile using display_name from roster
+  // Valid code → create member or trial profile using display_name from roster
   const displayName = StudentRoster.getDisplayName(code);
-  const profile = UserProfile.createMember(code, displayName, welcomeSelectedAge);
+  const isTrial = StudentRoster.isTrial(code);
+  const profile = UserProfile.createMember(code, displayName, welcomeSelectedAge, isTrial);
   
   // Sync to AccessControl for legacy code compatibility
   AccessControl.ageGroup = profile.ageGroup;
   AccessControl.currentUser = { id: profile.id, name: profile.name };
-  AccessControl.mode = 'unlocked';   // members get full lesson access
+  AccessControl.mode = 'unlocked';   // members AND trial users get full Lesson 1 access
   
   Analytics.track('member_welcomed', { 
     student_code: code,
