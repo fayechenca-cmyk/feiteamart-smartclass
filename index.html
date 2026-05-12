@@ -6,12 +6,30 @@
 <title>FEI TeamArt · Smart Class</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ════════════════════════════════════════════════════════════════
+     FEI TeamArt · Smart Class · Directory Page
+     ════════════════════════════════════════════════════════════════
+     This is the entry point users see when they:
+     - Open feiteamart.com/100-classes-catalog (Webflow iframe target)
+     - Visit fayechenca-cmyk.github.io/feiteamart-smartclass/
+     
+     v2.0 (May 2026): Updated for new "geometric + real-world pair" 
+     pedagogy. Lessons alternate between abstract forms (odd) and 
+     real-world objects (even).
+     
+     Lesson status as of May 2026:
+       ✅ Lesson 1: Sphere (live)
+       ⏳ Lesson 2: Sphere Realworld (placeholder)
+       ✅ Lesson 3: Cube (live, renumbered from old Lesson 2)
+       ⏳ Lesson 4: Cube Realworld (coming)
+       ✅ Lesson 5: Cylinder (live, renumbered from old Lesson 3)
+       ⏳ Lesson 6: Cylinder Realworld (coming)
+       ⏳ Lessons 7-10: TBD
+     ═══════════════════════════════════════════════════════════════ */
   * { box-sizing: border-box; }
   body { 
     margin: 0; 
     font-family: 'Open Sans', sans-serif; 
-    /* Brand-unified gradient — same family as LFC Classics, Self-Learning,
-       and Surreal Worlds pages. Smart Class = Smart, fresh, contemporary. */
     background: linear-gradient(135deg, #e9d8fd 0%, #d4e6ff 50%, #cffafe 100%);
     background-attachment: fixed;
     color: #1a1d2b; 
@@ -155,19 +173,28 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    /* Sphere card: warm amber → soft purple (transitions warm-to-cool, 
-       echoing the "warm light, cool shadow" principle of the lesson) */
+    /* Default: warm amber → soft purple (Lesson 1 Sphere) */
     background: linear-gradient(135deg, #fff4d4 0%, #e9d8fd 100%);
   }
+  /* Lesson 2 (Sphere Realworld): soft pink → amber (real-world warmth) */
   .lesson-card.lesson-2 .lesson-card-visual {
-    /* Cube card: soft purple → cyan (cooler, more architectural) */
+    background: linear-gradient(135deg, #fce7f3 0%, #fff4d4 100%);
+  }
+  /* Lesson 3 (Cube): soft purple → cyan (cooler, architectural) */
+  .lesson-card.lesson-3 .lesson-card-visual {
     background: linear-gradient(135deg, #e9d8fd 0%, #cffafe 100%);
   }
-  .lesson-card.lesson-3 .lesson-card-visual {
+  /* Lesson 4 (Cube Realworld) */
+  .lesson-card.lesson-4 .lesson-card-visual {
+    background: linear-gradient(135deg, #d4e6ff 0%, #fce7f3 100%);
+  }
+  /* Lesson 5 (Cylinder) */
+  .lesson-card.lesson-5 .lesson-card-visual {
     background: linear-gradient(135deg, #cffafe 0%, #d4e6ff 100%);
   }
-  .lesson-card.lesson-4 .lesson-card-visual {
-    background: linear-gradient(135deg, #fce7f3 0%, #e9d8fd 100%);
+  /* Lesson 6 (Cylinder Realworld) */
+  .lesson-card.lesson-6 .lesson-card-visual {
+    background: linear-gradient(135deg, #fce7f3 0%, #d4e6ff 100%);
   }
   
   .lesson-icon {
@@ -205,6 +232,7 @@
   .lesson-status.free { color: #1d9e75; }
   .lesson-status.members { color: #c8a96e; }
   .lesson-status.coming { color: #4a4f5e; opacity: 0.7; }
+  .lesson-status.preview { color: #a78bfa; }
   
   .lesson-card-body {
     padding: 22px 22px 20px;
@@ -237,22 +265,6 @@
     margin-bottom: 16px;
   }
   
-  /* Old "Earn badge" pill — kept for any reverse compatibility */
-  .lesson-badge-box {
-    background: #E8FBF0;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    color: #1d9e75;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 14px;
-  }
-  
-  /* New: progress pill (replaces per-lesson badge in our progress-based model) */
   .lesson-progress-pill {
     background: rgba(167,139,250,0.10);
     border-radius: 8px;
@@ -299,12 +311,31 @@
     background: #2a2f42;
     transform: scale(1.02);
   }
-  .lesson-card.lesson-2 .lesson-cta {
+  
+  /* Members-only CTA color (Cube) */
+  .lesson-card.lesson-3 .lesson-cta {
     background: #67e8f9;
     color: #1a1d2b;
   }
-  .lesson-card.lesson-2:hover .lesson-cta {
+  .lesson-card.lesson-3:hover .lesson-cta {
     background: #4dd5e8;
+  }
+  /* Members-only CTA color (Cylinder) */
+  .lesson-card.lesson-5 .lesson-cta {
+    background: #67e8f9;
+    color: #1a1d2b;
+  }
+  .lesson-card.lesson-5:hover .lesson-cta {
+    background: #4dd5e8;
+  }
+  
+  /* Preview lesson (Lesson 2 placeholder) styling */
+  .lesson-card.preview-soon .lesson-cta {
+    background: rgba(167,139,250,0.85);
+    color: #fff;
+  }
+  .lesson-card.preview-soon:hover .lesson-cta {
+    background: #a78bfa;
   }
   
   .lesson-card.coming-soon {
@@ -327,6 +358,31 @@
     background: #c0c0c0;
     transform: none;
   }
+  
+  .pedagogy-note {
+    max-width: 720px;
+    margin: 40px auto 0;
+    padding: 18px 24px;
+    background: rgba(167,139,250,0.08);
+    border-left: 3px solid #a78bfa;
+    border-radius: 0 12px 12px 0;
+    text-align: left;
+  }
+  .pedagogy-note-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #a78bfa;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .pedagogy-note-text {
+    font-size: 13px;
+    color: #4a4f5e;
+    line-height: 1.65;
+  }
+  .pedagogy-note-text b { color: #1a1d2b; }
   
   .footer {
     background: #fff;
@@ -374,7 +430,7 @@
   <div class="hero-kicker">FEI TEAMART · SMART CLASS</div>
   <h1>Foundation of Sketch A</h1>
   <p class="subtitle">
-    An honest skill training in the academic tradition of drawing. <b>Ten lessons</b> — sphere, cube, cylinder, and the basic forms that shape almost everything we draw.
+    An honest skill training in the academic tradition of drawing. <b>Ten lessons</b> — geometric forms alternating with their real-world echoes. The sphere, the apple. The cube, the box. The cylinder, the cup.
   </p>
   <p class="subtitle" style="font-size: 14px; opacity: 0.85; margin-top: 8px;">
     No promises beyond what training can give. Taste, vision, voice — those are yours to find.
@@ -383,7 +439,7 @@
   <div class="cezanne-block">
     <div class="cezanne-quote">"Treat nature by means of the cylinder, the sphere, the cone."</div>
     <div class="cezanne-attribution">— Cézanne, 1904</div>
-    <div class="cezanne-gloss">This series follows that idea. It's not a method. It's a tool. What you do with it — that's yours.</div>
+    <div class="cezanne-gloss">This series follows that idea. Each abstract form is paired with its real-world appearance — because what you draw in the studio, you'll see again on your kitchen table.</div>
   </div>
   
   <div class="tag-row">
@@ -399,6 +455,7 @@
   
   <div class="lesson-grid">
     
+    <!-- LESSON 1: SPHERE (live) -->
     <a href="lessons/lesson-1-sphere/" class="lesson-card lesson-1">
       <div class="lesson-card-visual">
         <div class="lesson-status free">Free</div>
@@ -407,7 +464,7 @@
              class="lesson-card-image">
       </div>
       <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 1</div>
+        <div class="lesson-num">Lesson 1 · Geometric</div>
         <div class="lesson-title">The Sphere</div>
         <div class="lesson-desc">Building form with value. The first foundation — how light wraps a curved surface, and how to draw it.</div>
         <div class="lesson-progress-pill">📐 1 of 10 · Foundation A</div>
@@ -420,7 +477,28 @@
       </div>
     </a>
     
-    <a href="lessons/lesson-2-cube/" class="lesson-card lesson-2">
+    <!-- LESSON 2: SPHERE REALWORLD (placeholder, preview available) -->
+    <a href="lessons/lesson-2-sphere-realworld/" class="lesson-card lesson-2 preview-soon">
+      <div class="lesson-card-visual">
+        <div class="lesson-status preview">Preview</div>
+        <div class="lesson-icon">🍎</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 2 · Real-world</div>
+        <div class="lesson-title">Sphere in the Real World</div>
+        <div class="lesson-desc">You drew an abstract sphere. Now: pick a real spherical object — an apple, an orange — and apply what you've learned.</div>
+        <div class="lesson-progress-pill">📐 2 of 10 · Foundation A</div>
+        <div class="lesson-meta">
+          <span>⏱ Coming soon</span>
+          <span>·</span>
+          <span>Preview ready</span>
+        </div>
+        <div class="lesson-cta">View preview →</div>
+      </div>
+    </a>
+    
+    <!-- LESSON 3: CUBE (live, renumbered from old Lesson 2) -->
+    <a href="lessons/lesson-3-cube/" class="lesson-card lesson-3">
       <div class="lesson-card-visual">
         <div class="lesson-status members">Members</div>
         <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f24799be993424f4fc6db5_2950e9f1-3183-484b-814e-61330bcb7846.png" 
@@ -428,10 +506,30 @@
              class="lesson-card-image">
       </div>
       <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 2</div>
+        <div class="lesson-num">Lesson 3 · Geometric</div>
         <div class="lesson-title">The Cube</div>
         <div class="lesson-desc">Constructing form with perspective. Edges, planes, and the architecture of seeing.</div>
-        <div class="lesson-progress-pill">📐 2 of 10 · Foundation A</div>
+        <div class="lesson-progress-pill">📐 3 of 10 · Foundation A</div>
+        <div class="lesson-meta">
+          <span>⏱ ~60 min</span>
+          <span>·</span>
+          <span>+100 XP</span>
+        </div>
+        <div class="lesson-cta">Preview lesson →</div>
+      </div>
+    </a>
+    
+    <!-- LESSON 5: CYLINDER (live, renumbered from old Lesson 3) -->
+    <a href="lessons/lesson-5-cylinder/" class="lesson-card lesson-5">
+      <div class="lesson-card-visual">
+        <div class="lesson-status members">Members</div>
+        <div class="lesson-icon">⬭</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 5 · Geometric</div>
+        <div class="lesson-title">The Cylinder</div>
+        <div class="lesson-desc">Where curved meets straight. Round AND edged at once — light behaves in two directions.</div>
+        <div class="lesson-progress-pill">📐 5 of 10 · Foundation A</div>
         <div class="lesson-meta">
           <span>⏱ ~60 min</span>
           <span>·</span>
@@ -447,38 +545,64 @@
   
   <div class="lesson-grid">
     
-    <div class="lesson-card lesson-3 coming-soon">
-      <div class="lesson-card-visual">
-        <div class="lesson-status coming">Soon</div>
-        <div class="lesson-icon">⬭</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 3</div>
-        <div class="lesson-title">The Cylinder</div>
-        <div class="lesson-desc">Where curved meets straight. Round AND edged at once — light behaves in two directions.</div>
-        <div class="lesson-meta">
-          <span>Léger · Sheeler · Cragg</span>
-        </div>
-        <div class="lesson-cta">In development</div>
-      </div>
-    </div>
-    
+    <!-- LESSON 4: CUBE REALWORLD (placeholder, no link) -->
     <div class="lesson-card lesson-4 coming-soon">
       <div class="lesson-card-visual">
         <div class="lesson-status coming">Soon</div>
-        <div class="lesson-icon">▲</div>
+        <div class="lesson-icon">📦</div>
       </div>
       <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 4</div>
-        <div class="lesson-title">The Pyramid</div>
-        <div class="lesson-desc">The form of monuments and tension. Three planes that all meet at one point.</div>
+        <div class="lesson-num">Lesson 4 · Real-world</div>
+        <div class="lesson-title">Cube in the Real World</div>
+        <div class="lesson-desc">A gift box, a book, a phone — the cube in your hand. Apply edges + perspective to what you actually own.</div>
         <div class="lesson-meta">
-          <span>+ 6 more lessons coming</span>
+          <span>In development</span>
         </div>
         <div class="lesson-cta">In development</div>
       </div>
     </div>
     
+    <!-- LESSON 6: CYLINDER REALWORLD (placeholder) -->
+    <div class="lesson-card lesson-6 coming-soon">
+      <div class="lesson-card-visual">
+        <div class="lesson-status coming">Soon</div>
+        <div class="lesson-icon">☕</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lesson 6 · Real-world</div>
+        <div class="lesson-title">Cylinder in the Real World</div>
+        <div class="lesson-desc">A coffee cup, a vase, a candle. Where the cylinder lives — and what light tells you about it.</div>
+        <div class="lesson-meta">
+          <span>In development</span>
+        </div>
+        <div class="lesson-cta">In development</div>
+      </div>
+    </div>
+    
+    <!-- LESSONS 7-10 (one combined card) -->
+    <div class="lesson-card coming-soon" style="grid-column: 1 / -1; max-width: none;">
+      <div class="lesson-card-visual" style="height: 120px;">
+        <div class="lesson-status coming">Soon</div>
+        <div class="lesson-icon" style="font-size: 50px;">▲ ⬡ ◆ ◯</div>
+      </div>
+      <div class="lesson-card-body">
+        <div class="lesson-num">Lessons 7 — 10</div>
+        <div class="lesson-title">More forms + their real-world pairs</div>
+        <div class="lesson-desc">Pyramid, cone, ellipse, and the rest of Foundation A. Each geometric form paired with how it appears in everyday life.</div>
+        <div class="lesson-meta">
+          <span>4 more lessons coming through 2026</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Pedagogy note -->
+  <div class="pedagogy-note">
+    <div class="pedagogy-note-label">Why pair geometric + real-world?</div>
+    <p class="pedagogy-note-text">
+      Learning shapes in isolation is useful. Seeing the same shape in everyday objects is transformation. <b>The sphere isn't just on the page — it's on your kitchen counter, in the garden, in the fruit bowl.</b> Once you see it, you can't un-see it. Foundation A teaches both: the form, and where it lives.
+    </p>
   </div>
 </div>
 
@@ -488,6 +612,7 @@
     <a href="https://www.feiteamart.com" target="_blank">Main site</a>
     <a href="https://www.feiteamart.com/registration" target="_blank">LFC Registration</a>
     <a href="https://www.feiteamart.com/about" target="_blank">About</a>
+    <a href="https://www.feiteamart.com/reports" target="_blank">Student Portal</a>
   </div>
 </div>
 
