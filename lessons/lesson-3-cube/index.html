@@ -3143,7 +3143,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🎬</span>
-        <span><b>All demo videos</b> — step-by-step drawing with Faye</span>
+        <span><b>All 5 video segments</b> — step-by-step drawing with Mrs. Dawn</span>
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🌱</span>
@@ -5063,8 +5063,9 @@ const LESSON = {
       videoId: 'SeMsKjs6GLc',       // cube 1 (5:37)
       videoNumber: 1,
       videoTitle: 'Cube · Part 1',
-      title: 'Watch Faye begin the cube',
-      intro: 'In this first segment, Faye introduces the cube and shows the foundation lines. Have your paper and pencil ready — you\'ll be drawing along.',
+      teacher: 'Mrs. Dawn',
+      title: 'Watch Mrs. Dawn begin the cube',
+      intro: 'In this first segment, Mrs. Dawn introduces the cube and shows the foundation lines. Have your paper and pencil ready — you\'ll be drawing along.',
       xp: 5
     },
     {
@@ -5074,8 +5075,9 @@ const LESSON = {
       videoId: 'BDnpaF--suM',       // cube 02 (3:29)
       videoNumber: 2,
       videoTitle: 'Cube · Part 2',
+      teacher: 'Mrs. Dawn',
       title: 'Building the structure',
-      intro: 'Faye continues the construction. Watch how the lines connect to suggest 3D form. Pause whenever you need to.',
+      intro: 'Mrs. Dawn continues the construction. Watch how the lines connect to suggest 3D form. Pause whenever you need to.',
       xp: 5
     },
     {
@@ -5085,8 +5087,9 @@ const LESSON = {
       videoId: 'Hp_j4AxraAE',       // cube 3 (3:47)
       videoNumber: 3,
       videoTitle: 'Cube · Part 3',
+      teacher: 'Mrs. Dawn',
       title: 'Refining the form',
-      intro: 'The cube starts to take shape. Notice the subtle adjustments Faye makes — small corrections lead to big differences.',
+      intro: 'The cube starts to take shape. Notice the subtle adjustments Mrs. Dawn makes — small corrections lead to big differences.',
       xp: 5
     },
     {
@@ -5096,6 +5099,7 @@ const LESSON = {
       videoId: 'NtsjlyIfYiA',       // cube 4 (4:20)
       videoNumber: 4,
       videoTitle: 'Cube · Part 4',
+      teacher: 'Mrs. Dawn',
       title: 'Light and shadow on the cube',
       intro: 'Now the magic begins — how light defines the cube\'s three planes. Each face catches light differently.',
       xp: 5
@@ -5107,8 +5111,9 @@ const LESSON = {
       videoId: 'hEsj7W-Qvt8',       // cube 5 (3:17)
       videoNumber: 5,
       videoTitle: 'Cube · Part 5',
+      teacher: 'Mrs. Dawn',
       title: 'Finishing the cube',
-      intro: 'The final touches. Watch how Faye brings the cube to completion — the difference between "drawn" and "alive".',
+      intro: 'The final touches. Watch how Mrs. Dawn brings the cube to completion — the difference between "drawn" and "alive".',
       xp: 5
     },
     // (LFC moment "beforeDemo" removed — Lesson 2 follows the same 
@@ -5119,7 +5124,7 @@ const LESSON = {
     // (Paywall modal triggers here automatically — Lesson 2 is members-only)
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'perspective',
       title: 'Set up your perspective',
@@ -5130,7 +5135,7 @@ const LESSON = {
     },
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'construction',
       title: 'Construct the cube',
@@ -5141,7 +5146,7 @@ const LESSON = {
     },
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'planes',
       title: 'Identify the three values',
@@ -5152,7 +5157,7 @@ const LESSON = {
     },
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'shading',
       title: 'Shade each plane evenly',
@@ -5163,7 +5168,7 @@ const LESSON = {
     },
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'cast_shadow',
       title: 'Cast shadow + edge attack',
@@ -5174,7 +5179,7 @@ const LESSON = {
     },
     {
       part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
+      partLabel: 'Part c · your turn to draw',
       type: 'demo',
       videoSeg: 'finishing',
       title: 'Final adjustments',
@@ -6868,45 +6873,63 @@ function renderReference(step) {
       
       <div class="ref-grid">
         <div class="ref-card wide" style="background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 50%, #fef3f7 100%);">
-          <svg width="100%" height="100%" viewBox="0 0 400 220" style="max-width: 320px;">
+          <svg width="100%" height="100%" viewBox="0 0 400 240" style="max-width: 340px;">
             <defs>
-              <radialGradient id="sphereRef" cx="35%" cy="30%" r="65%">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="20%" stop-color="#f1f5f9"/>
-                <stop offset="45%" stop-color="#94a3b8"/>
-                <stop offset="75%" stop-color="#334155"/>
-                <stop offset="92%" stop-color="#475569"/>
+              <linearGradient id="cubeRefTop" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f8fafc"/>
+                <stop offset="100%" stop-color="#cbd5e1"/>
+              </linearGradient>
+              <linearGradient id="cubeRefFront" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#94a3b8"/>
                 <stop offset="100%" stop-color="#64748b"/>
-              </radialGradient>
+              </linearGradient>
+              <linearGradient id="cubeRefSide" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#475569"/>
+                <stop offset="100%" stop-color="#1e293b"/>
+              </linearGradient>
             </defs>
-            <ellipse cx="200" cy="190" rx="100" ry="14" fill="#475569" opacity="0.3"/>
-            <ellipse cx="210" cy="188" rx="70" ry="8" fill="#1e293b" opacity="0.5"/>
-            <circle cx="200" cy="110" r="80" fill="url(#sphereRef)"/>
-            <circle cx="170" cy="85" r="14" fill="#ffffff" opacity="0.7"/>
-            <line x1="170" y1="85" x2="80" y2="40" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="78" y="38" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">1 HIGHLIGHT</text>
-            <line x1="200" y1="70" x2="320" y2="38" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="322" y="36" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">2 HALFTONE</text>
-            <line x1="240" y1="130" x2="340" y2="120" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="342" y="122" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">3 TERMINATOR</text>
-            <line x1="255" y1="150" x2="340" y2="165" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="342" y="168" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">4 CORE SHADOW</text>
-            <line x1="275" y1="130" x2="60" y2="165" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="168" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">5 REFLECTED LIGHT</text>
-            <line x1="260" y1="195" x2="60" y2="205" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="208" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">6 CAST SHADOW</text>
+            
+            <!-- Cast shadow under cube -->
+            <polygon points="60,200 220,200 310,170 150,170" fill="#1e293b" opacity="0.25"/>
+            
+            <!-- Cube body: 3 visible planes in standard 3/4 view -->
+            <!-- Top plane (lightest) -->
+            <polygon points="100,90 200,60 280,90 180,120" fill="url(#cubeRefTop)" stroke="#1a1d2b" stroke-width="1.2"/>
+            <!-- Front plane (mid value) -->
+            <polygon points="100,90 180,120 180,200 100,170" fill="url(#cubeRefFront)" stroke="#1a1d2b" stroke-width="1.2"/>
+            <!-- Side plane (darkest) -->
+            <polygon points="180,120 280,90 280,170 180,200" fill="url(#cubeRefSide)" stroke="#1a1d2b" stroke-width="1.2"/>
+            
+            <!-- Label callouts -->
+            <line x1="190" y1="80" x2="320" y2="40" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="322" y="42" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">1 TOP PLANE</text>
+            
+            <line x1="140" y1="155" x2="60" y2="120" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="58" y="118" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">2 FRONT PLANE</text>
+            
+            <line x1="240" y1="155" x2="350" y2="135" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="352" y="137" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">3 SIDE PLANE</text>
+            
+            <line x1="180" y1="120" x2="60" y2="80" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="58" y="78" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">4 EDGE</text>
+            
+            <line x1="180" y1="200" x2="60" y2="220" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="58" y="222" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">5 CORNER</text>
+            
+            <line x1="220" y1="200" x2="340" y2="225" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="342" y="227" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">6 CAST SHADOW</text>
           </svg>
-          <div class="ref-label">Example · labeled zones</div>
+          <div class="ref-label">The cube · labeled anatomy</div>
         </div>
       </div>
       
       <div class="vocab">
-        <div class="vocab-row"><div class="vocab-num">1</div><div class="vocab-body"><div class="vocab-term">Highlight</div><div class="vocab-def">The brightest area — where the light reflects most directly. Leave the paper white here.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">2</div><div class="vocab-body"><div class="vocab-term">Halftone</div><div class="vocab-def">The lit side that's not directly in the highlight — the gentle transition zone.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">3</div><div class="vocab-body"><div class="vocab-term">Terminator</div><div class="vocab-def">The distinct belt where the lit side turns into shadow. This is where form "turns".</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">4</div><div class="vocab-body"><div class="vocab-term">Core shadow</div><div class="vocab-def">The darkest part on the form itself — just inside the terminator.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">5</div><div class="vocab-body"><div class="vocab-term">Reflected light</div><div class="vocab-def">Subtle bounce-light from the surroundings. Must be darker than halftones — or the form looks metallic!</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">6</div><div class="vocab-body"><div class="vocab-term">Cast shadow</div><div class="vocab-def">The shadow the form casts on surfaces around it. Anchors the object to the ground.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">1</div><div class="vocab-body"><div class="vocab-term">Top plane</div><div class="vocab-def">The lightest face — catches the most light when the source is above. Notice the gentle gradient: lighter at the front edge, slightly darker toward the back.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">2</div><div class="vocab-body"><div class="vocab-term">Front plane</div><div class="vocab-def">The mid-value face — receives indirect light. This is your reference middle tone for the whole drawing.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">3</div><div class="vocab-body"><div class="vocab-term">Side plane</div><div class="vocab-def">The darkest visible face — turned away from the light source. Should be distinctly darker than the front plane for the cube to "feel" 3D.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">4</div><div class="vocab-body"><div class="vocab-term">Edge</div><div class="vocab-def">Where two planes meet. The cube has 12 edges total, but you only see 9 of them from any angle. Edges are crisp on a cube — no soft gradients, no curves.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">5</div><div class="vocab-body"><div class="vocab-term">Corner</div><div class="vocab-def">Where three planes meet at a single point. The cube has 8 corners; you see 7 from a standard 3/4 view. These anchor your construction.</div></div></div>
+        <div class="vocab-row"><div class="vocab-num">6</div><div class="vocab-body"><div class="vocab-term">Cast shadow</div><div class="vocab-def">The shadow the cube throws onto the ground. Has crisp edges close to the cube (because the cube has sharp edges) — unlike the sphere's softer cast shadow.</div></div></div>
       </div>
       
       <div class="btn-stack">
@@ -7085,7 +7108,7 @@ function renderVideoSegment(step) {
       
       <div class="video-frame" style="background:#000; cursor:default; padding:0;">
         <iframe id="yt-player-${step.videoNumber}" width="100%" height="100%" style="position:absolute; inset:0; border:none;"
-          src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1"
+          src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&fs=1&playsinline=1&color=white&disablekb=0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         
@@ -7230,24 +7253,16 @@ function selectPlan(tier) {
 }
 
 function renderDemo(step) {
-  const seg = LESSON.video.segments[step.videoSeg] || { start: '0:00', end: '0:00' };
+  // NOTE (May 2026): Removed fake video-frame placeholder.
+  // Previously each demo step showed a non-functional "video segment" 
+  // referencing the old single warmup video. Now that Cube has 5 real
+  // teaching videos (rendered as videoSegment steps), the demo steps
+  // serve as **written drawing guidance** that students follow while
+  // drawing their own cube.
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
-      <div class="video-frame" onclick="playVideo()">
-        <div class="video-placeholder">
-          <div class="video-icon">▶</div>
-          <div class="video-caption">Demo · watch then draw</div>
-          <div class="video-timestamp">${seg.start} → ${seg.end} · ~ ${diffMin(seg)} min</div>
-        </div>
-        <div class="video-controls">
-          <button class="vc-btn">▶</button>
-          <div class="vc-bar"><div class="vc-bar-fill"></div></div>
-          <div class="vc-time">${seg.start} / ${seg.end}</div>
-        </div>
-      </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
       
