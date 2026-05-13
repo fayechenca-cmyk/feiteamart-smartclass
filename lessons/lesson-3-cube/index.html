@@ -5072,7 +5072,7 @@ const LESSON = {
       part: 'B',
       partLabel: 'Part b · teacher demo · video 1 of 5',
       type: 'videoSegment',
-      videoId: 'SeMsKjs6GLc',       // cube 1 (5:37)
+      videoId: '9da68fb322c273cf67a707be97c9d7f7',  // cube 1 (5:37) — Cloudflare Stream UID
       videoNumber: 1,
       videoTitle: 'Cube · Part 1',
       teacher: 'Mrs. Dawn',
@@ -5084,7 +5084,7 @@ const LESSON = {
       part: 'B',
       partLabel: 'Part b · teacher demo · video 2 of 5',
       type: 'videoSegment',
-      videoId: 'BDnpaF--suM',       // cube 02 (3:29)
+      videoId: '1f907944da6d234ac8da34fcd5e2a98d',  // cube 02 (3:29) — Cloudflare Stream UID
       videoNumber: 2,
       videoTitle: 'Cube · Part 2',
       teacher: 'Mrs. Dawn',
@@ -5096,7 +5096,7 @@ const LESSON = {
       part: 'B',
       partLabel: 'Part b · teacher demo · video 3 of 5',
       type: 'videoSegment',
-      videoId: 'Hp_j4AxraAE',       // cube 3 (3:47)
+      videoId: 'c4de5ce55e5109dc622cd010300d2b16',  // cube 3 (3:47) — Cloudflare Stream UID
       videoNumber: 3,
       videoTitle: 'Cube · Part 3',
       teacher: 'Mrs. Dawn',
@@ -5108,7 +5108,7 @@ const LESSON = {
       part: 'B',
       partLabel: 'Part b · teacher demo · video 4 of 5',
       type: 'videoSegment',
-      videoId: 'NtsjlyIfYiA',       // cube 4 (4:20)
+      videoId: '6d946c502719811ef5235137cbbb6bdb',  // cube 4 (4:20) — Cloudflare Stream UID
       videoNumber: 4,
       videoTitle: 'Cube · Part 4',
       teacher: 'Mrs. Dawn',
@@ -5120,7 +5120,7 @@ const LESSON = {
       part: 'B',
       partLabel: 'Part b · teacher demo · video 5 of 5',
       type: 'videoSegment',
-      videoId: 'hEsj7W-Qvt8',       // cube 5 (3:17)
+      videoId: 'af20cfc9c1313d4313b332e50be4a17b',  // cube 5 (3:17) — Cloudflare Stream UID
       videoNumber: 5,
       videoTitle: 'Cube · Part 5',
       teacher: 'Mrs. Dawn',
@@ -7123,10 +7123,12 @@ function renderVideoSegment(step) {
       
       <!-- Video frame with image overlay capability -->
       <div class="video-frame" id="video-frame-${step.videoNumber}" style="background:#000; cursor:default; padding:0; position:relative;">
-        <iframe id="yt-player-${step.videoNumber}" width="100%" height="100%" style="position:absolute; inset:0; border:none;"
-          src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&fs=1&playsinline=1&color=white&disablekb=0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+        <iframe id="yt-player-${step.videoNumber}" 
+          src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${step.videoId}/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F${step.videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+          loading="lazy"
+          style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"></iframe>
         
         <!-- Image overlay: covers video 100% during pause, clickable to enlarge -->
         <div id="vp-image-overlay-${step.videoNumber}"
@@ -7238,7 +7240,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-label">${hasPauses ? 'Watch with key moments' : 'Watch & follow along'}</div>
         <div class="pro-tip-text">${
           hasPauses 
-            ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically — no need to touch the video player.`
+            ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
             : 'Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.'
         }</div>
       </div>
@@ -7256,8 +7258,8 @@ function renderVideoSegment(step) {
 // Only ONE video segment plays at a time (since they're sequential steps).
 
 const vsState = {
-  player: null,           // current YT.Player instance
-  videoId: null,          // currently loaded video ID
+  player: null,           // current Cloudflare Stream player instance
+  videoId: null,          // currently loaded video UID
   videoNumber: null,      // 1..5
   pauses: [],             // pause point array for current video
   triggered: new Set(),   // pause times already fired (don't repeat)
@@ -7265,7 +7267,8 @@ const vsState = {
   countdown: null,        // countdown setInterval handle
   countdownEnds: 0,       // timestamp when countdown ends
   paused: false,          // currently in pause overlay?
-  currentPauseIdx: -1     // which pause is showing
+  currentPauseIdx: -1,    // which pause is showing
+  currentTime: 0          // cached from Stream's timeupdate event
 };
 
 function initVideoSegment(step) {
@@ -7276,6 +7279,7 @@ function initVideoSegment(step) {
   vsState.triggered = new Set();
   vsState.paused = false;
   vsState.currentPauseIdx = -1;
+  vsState.currentTime = 0;
   
   // Clear any previous watchers
   if (vsState.watcher) { clearInterval(vsState.watcher); vsState.watcher = null; }
@@ -7287,12 +7291,18 @@ function initVideoSegment(step) {
     return;
   }
   
-  // Load YouTube IFrame API if not loaded
-  if (!window.YT || !window.YT.Player) {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = () => createVSPlayer(step);
+  // Load Cloudflare Stream SDK if not loaded
+  if (!window.Stream) {
+    const existingScript = document.querySelector('script[src*="cloudflarestream.com/embed/sdk"]');
+    if (!existingScript) {
+      const tag = document.createElement('script');
+      tag.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+      tag.onload = () => createVSPlayer(step);
+      document.head.appendChild(tag);
+      return;
+    }
+    // Script tag exists but SDK not yet ready — wait briefly
+    setTimeout(() => createVSPlayer(step), 200);
     return;
   }
   createVSPlayer(step);
@@ -7300,22 +7310,43 @@ function initVideoSegment(step) {
 
 function createVSPlayer(step) {
   try {
-    vsState.player = new YT.Player(`yt-player-${step.videoNumber}`, {
-      events: {
-        onReady: () => {
-          console.log('[VideoSegment] Player ready for', step.videoId);
-          startVSWatcher();
-        },
-        onStateChange: (e) => {
-          // When user manually resumes after we paused — clear overlay if still showing
-          if (e.data === YT.PlayerState.PLAYING && vsState.paused) {
-            hideVPOverlay();
-          }
-        }
+    const iframe = document.getElementById(`yt-player-${step.videoNumber}`);
+    if (!iframe) {
+      console.warn('[VideoSegment] iframe not found for', step.videoNumber);
+      return;
+    }
+    
+    // Cloudflare Stream SDK attaches to the iframe element
+    vsState.player = window.Stream(iframe);
+    
+    // Track currentTime via the timeupdate event
+    vsState.player.addEventListener('timeupdate', () => {
+      try {
+        vsState.currentTime = vsState.player.currentTime || 0;
+      } catch (e) {}
+    });
+    
+    // When user manually resumes after we paused (clicked native play),
+    // hide our pause overlay
+    vsState.player.addEventListener('play', () => {
+      if (vsState.paused) {
+        hideVPOverlay();
+        vsState.paused = false;
       }
     });
+    
+    // Start watching for pause points
+    vsState.player.addEventListener('loadedmetadata', () => {
+      console.log('[VideoSegment] Stream player ready for', step.videoId);
+      startVSWatcher();
+    });
+    
+    // Fallback: start watcher anyway after 1.5s in case loadedmetadata is slow
+    setTimeout(() => {
+      if (!vsState.watcher) startVSWatcher();
+    }, 1500);
   } catch (err) {
-    console.warn('[VideoSegment] Failed to attach YT.Player:', err);
+    console.warn('[VideoSegment] Failed to attach Stream player:', err);
   }
 }
 
@@ -7323,8 +7354,9 @@ function startVSWatcher() {
   if (vsState.watcher) clearInterval(vsState.watcher);
   vsState.watcher = setInterval(() => {
     if (!vsState.player || vsState.paused) return;
-    let t;
-    try { t = vsState.player.getCurrentTime(); } catch (e) { return; }
+    
+    // Read currentTime cached from the timeupdate event
+    const t = vsState.currentTime;
     if (typeof t !== 'number') return;
     
     // Check if any pause point should trigger
@@ -7350,8 +7382,8 @@ function triggerVSPause(idx) {
   vsState.currentPauseIdx = idx;
   vsState.paused = true;
   
-  // Pause the video
-  try { vsState.player.pauseVideo(); } catch (e) {}
+  // Pause the video (Cloudflare Stream API)
+  try { vsState.player.pause(); } catch (e) {}
   
   const n = vsState.videoNumber;
   
@@ -7427,14 +7459,19 @@ function vpResume(videoNumber) {
   hideVPOverlay();
   vsState.paused = false;
   
-  // Force-resume video playback — multiple attempts to bypass any browser/YT quirks.
+  // Force-resume video playback — multiple attempts to bypass any browser quirks.
   // This is what makes the experience feel "smart" instead of "YouTube".
+  // Cloudflare Stream API: player.play() returns a Promise.
   const tryPlay = () => {
     if (!vsState.player) return;
     try {
-      vsState.player.playVideo();
+      const promise = vsState.player.play();
+      // .play() returns a Promise in modern browsers
+      if (promise && typeof promise.then === 'function') {
+        promise.catch(e => console.warn('[vpResume] play promise rejected:', e));
+      }
     } catch (e) {
-      console.warn('[vpResume] playVideo failed:', e);
+      console.warn('[vpResume] play failed:', e);
     }
   };
   
@@ -7499,28 +7536,38 @@ function openImageLightbox(videoNumber) {
       display: none; flex-direction: column; align-items: center; 
       padding: 16px; backdrop-filter: blur(8px);
       overflow-y: auto;
+      cursor: zoom-out;
     `;
+    // CLICK ANYWHERE TO CLOSE — including the dark background
+    lb.onclick = closeImageLightbox;
+    
     lb.innerHTML = `
-      <!-- Close button (top right) -->
-      <button onclick="closeImageLightbox()" 
-              style="position:fixed; top:14px; right:14px; padding:8px 16px; 
-                     background:rgba(255,255,255,0.18); color:#fff; 
-                     border:1px solid rgba(255,255,255,0.35);
-                     border-radius:20px; font-family:'Montserrat',sans-serif; font-size:11px; 
+      <!-- Close button (top right, prominent) -->
+      <button onclick="event.stopPropagation(); closeImageLightbox()" 
+              style="position:fixed; top:14px; right:14px; padding:10px 18px; 
+                     background:#fff; color:#1a1d2b; 
+                     border:none; border-radius:24px; 
+                     font-family:'Montserrat',sans-serif; font-size:12px; 
                      font-weight:800; letter-spacing:0.8px; cursor:pointer; z-index:10002;
-                     backdrop-filter:blur(8px);">
+                     box-shadow:0 4px 14px rgba(0,0,0,0.3);
+                     transition:transform 0.15s;"
+              onmouseover="this.style.transform='scale(1.05)'"
+              onmouseout="this.style.transform='scale(1)'">
         ✕ Close
       </button>
       
-      <!-- Image container -->
+      <!-- Image container — also clickable to close -->
       <div style="flex:1; display:flex; align-items:center; justify-content:center; width:100%; max-width:1400px; padding:32px 16px 16px;">
         <img id="img-lightbox-img" src="" alt="" 
+             onclick="event.stopPropagation(); closeImageLightbox()"
              style="max-width:100%; max-height:65vh; object-fit:contain; 
-                    box-shadow:0 8px 40px rgba(0,0,0,0.6); border-radius:8px; background:#fff;">
+                    box-shadow:0 8px 40px rgba(0,0,0,0.6); border-radius:8px; background:#fff;
+                    cursor: zoom-out;">
       </div>
       
       <!-- Teaching text (BELOW the image, stays visible) -->
-      <div style="width:100%; max-width:720px; padding:20px 24px 32px; flex-shrink:0;">
+      <div style="width:100%; max-width:720px; padding:20px 24px 32px; flex-shrink:0;"
+           onclick="event.stopPropagation()">
         <h3 id="img-lightbox-title"
             style="color:#fff; font-family:'Montserrat',sans-serif; font-size:18px;
                    font-weight:800; margin:0 0 10px; line-height:1.3;">
@@ -7531,24 +7578,36 @@ function openImageLightbox(videoNumber) {
         </p>
         <div style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.15);
                     font-family:'Montserrat',sans-serif; font-size:11px; 
-                    color:rgba(255,255,255,0.55); letter-spacing:1px; text-transform:uppercase;
+                    color:rgba(255,255,255,0.7); letter-spacing:1px; text-transform:uppercase;
                     text-align:center;">
-          Tap ✕ Close to return to the video
+          ✨ Tap anywhere to close
         </div>
       </div>
     `;
     document.body.appendChild(lb);
+    
+    // ESC key closes lightbox
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lb.style.display !== 'none') {
+        closeImageLightbox();
+      }
+    });
   }
   
   document.getElementById('img-lightbox-img').src = imageUrl;
   document.getElementById('img-lightbox-title').textContent = title;
   document.getElementById('img-lightbox-text').textContent = text;
   lb.style.display = 'flex';
+  
+  // Prevent body scroll behind the lightbox
+  document.body.style.overflow = 'hidden';
 }
 
 function closeImageLightbox() {
   const lb = document.getElementById('img-lightbox');
   if (lb) lb.style.display = 'none';
+  // Restore body scroll
+  document.body.style.overflow = '';
 }
 
 function checkLocalMode() {
@@ -8036,14 +8095,21 @@ function nextStep() {
   // ─────────────────────────────────────────────────────────────
   // Cleanup: if leaving a video segment, tear down the player + watcher
   // so the next videoSegment can init cleanly.
+  // Stream Player has no explicit destroy() — it dies when its iframe is removed.
   // ─────────────────────────────────────────────────────────────
   if (currStep && currStep.type === 'videoSegment') {
     if (vsState.watcher) { clearInterval(vsState.watcher); vsState.watcher = null; }
     if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
-    try { if (vsState.player && vsState.player.destroy) vsState.player.destroy(); } catch (e) {}
+    // Try to pause it before disposing, just to be polite
+    try { 
+      if (vsState.player && typeof vsState.player.pause === 'function') {
+        vsState.player.pause(); 
+      }
+    } catch (e) {}
     vsState.player = null;
     vsState.videoId = null;
     vsState.videoNumber = null;
+    vsState.currentTime = 0;
     vsState.paused = false;
     vsState.triggered = new Set();
   }
@@ -8204,7 +8270,8 @@ function toggleCheck(row) {
 
 const VIDEO_PAUSES = {
   // ═══ Cube Video 1 (5:37) — 5 pause points by Faye + Mrs. Dawn ═══
-  'SeMsKjs6GLc': [
+  // Keyed by Cloudflare Stream video UID (changed from YouTube ID on migration)
+  '9da68fb322c273cf67a707be97c9d7f7': [
     {
       time: 22,           // 0:22
       duration: 60,
@@ -8242,10 +8309,10 @@ const VIDEO_PAUSES = {
     }
   ]
   // Future entries (when Mrs. Dawn + Faye define):
-  //   'BDnpaF--suM': [...]   // cube 2
-  //   'Hp_j4AxraAE': [...]   // cube 3
-  //   'NtsjlyIfYiA': [...]   // cube 4
-  //   'hEsj7W-Qvt8': [...]   // cube 5
+  //   '1f907944da6d234ac8da34fcd5e2a98d': [...]   // cube 2
+  //   'c4de5ce55e5109dc622cd010300d2b16': [...]   // cube 3
+  //   '6d946c502719811ef5235137cbbb6bdb': [...]   // cube 4
+  //   'af20cfc9c1313d4313b332e50be4a17b': [...]   // cube 5
 };
 
 // Legacy variable name retained for backward compatibility
