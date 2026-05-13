@@ -7096,6 +7096,9 @@ function demoPauseInLocalMode() {
 
 function renderVideoSegment(step) {
   const partOf = `${step.videoNumber} of 5`;
+  const pauses = VIDEO_PAUSES[step.videoId] || [];
+  const hasPauses = pauses.length > 0;
+  
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
@@ -7103,37 +7106,93 @@ function renderVideoSegment(step) {
       
       <div class="video-segment-meta" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
         <span>📹 ${step.videoTitle}</span>
-        <span>${partOf}</span>
+        <span>${partOf}${hasPauses ? ` · ${pauses.length} key moments` : ''}</span>
       </div>
       
-      <div class="video-frame" style="background:#000; cursor:default; padding:0;">
+      <div class="video-frame" id="video-frame-${step.videoNumber}" style="background:#000; cursor:default; padding:0; position:relative;">
         <iframe id="yt-player-${step.videoNumber}" width="100%" height="100%" style="position:absolute; inset:0; border:none;"
           src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&fs=1&playsinline=1&color=white&disablekb=0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         
-        <!-- Pause overlay (same UI as warmup — ready for future pause points) -->
-        <div class="pause-overlay" id="pause-overlay-${step.videoNumber}">
-          <div class="pause-card">
-            <div class="pause-kicker">⏸ Your turn</div>
-            <div class="pause-ico">✨</div>
-            <div class="pause-title" id="pause-title-${step.videoNumber}">Pause</div>
-            <div class="pause-text" id="pause-text-${step.videoNumber}">Take a moment</div>
-            <div class="pause-timer">
-              <div class="pause-timer-bar" id="pause-timer-bar-${step.videoNumber}"></div>
+        <!-- Pause overlay (shown when video auto-pauses at a key moment) -->
+        <div class="video-pause-overlay" id="vp-overlay-${step.videoNumber}" 
+             style="display:none; position:absolute; inset:0; background:rgba(20,15,40,0.94); 
+                    backdrop-filter:blur(12px); z-index:50; padding:18px; overflow-y:auto;
+                    flex-direction:column; align-items:center; justify-content:flex-start;">
+          
+          <!-- Header strip -->
+          <div style="width:100%; display:flex; justify-content:space-between; align-items:center; 
+                      color:rgba(255,255,255,0.65); font-family:'Montserrat',sans-serif; 
+                      font-size:10px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                      margin-bottom:14px; flex-shrink:0;">
+            <span id="vp-counter-${step.videoNumber}">⏸ Key moment 1 of 5</span>
+            <span id="vp-timer-${step.videoNumber}">60s</span>
+          </div>
+          
+          <!-- Image (full bleed, clickable for lightbox) -->
+          <div id="vp-image-wrap-${step.videoNumber}" 
+               style="width:100%; max-width:560px; aspect-ratio:16/9; background:#fafaf8;
+                      border-radius:10px; overflow:hidden; cursor:zoom-in; flex-shrink:0;
+                      box-shadow:0 4px 20px rgba(0,0,0,0.3);"
+               onclick="openImageLightbox(document.getElementById('vp-image-${step.videoNumber}').src)">
+            <img id="vp-image-${step.videoNumber}" src="" alt="Reference"
+                 style="width:100%; height:100%; object-fit:contain; display:block;"
+                 onerror="this.style.opacity='0.3'; this.alt='Image loading...';">
+          </div>
+          
+          <!-- Title + body text -->
+          <div style="width:100%; max-width:560px; margin-top:14px; flex-shrink:0;">
+            <h3 id="vp-title-${step.videoNumber}" 
+                style="color:#fff; font-family:'Montserrat',sans-serif; font-size:17px; 
+                       font-weight:800; margin:0 0 8px; line-height:1.3; letter-spacing:-0.2px;">
+              Pause title
+            </h3>
+            <p id="vp-text-${step.videoNumber}" 
+               style="color:rgba(255,255,255,0.88); font-family:'Open Sans',sans-serif; 
+                      font-size:13.5px; line-height:1.55; margin:0;">
+              Pause text
+            </p>
+          </div>
+          
+          <!-- Countdown progress bar -->
+          <div style="width:100%; max-width:560px; margin-top:16px; flex-shrink:0;">
+            <div style="height:4px; background:rgba(255,255,255,0.18); border-radius:999px; overflow:hidden;">
+              <div id="vp-bar-${step.videoNumber}" 
+                   style="height:100%; background:linear-gradient(90deg,#a78bfa,#67e8f9); 
+                          width:100%; transition:width 0.2s linear; border-radius:999px;"></div>
             </div>
-            <div class="pause-timer-label">Video resumes automatically</div>
-            <div class="pause-actions">
-              <button class="btn btn-primary" onclick="skipPause()"><span class="glyph">◈</span> I'm ready — continue now</button>
-              <button class="btn btn-ghost" onclick="skipPauseAndKeepPaused()">Keep video paused, I need more time</button>
-            </div>
+          </div>
+          
+          <!-- Action buttons -->
+          <div style="display:flex; gap:10px; margin-top:16px; width:100%; max-width:560px; 
+                      flex-wrap:wrap; flex-shrink:0;">
+            <button onclick="vpResume(${step.videoNumber})" 
+                    style="flex:1; min-width:180px; padding:12px 16px; background:#fff; color:#1a1d2b;
+                           border:none; border-radius:24px; font-family:'Montserrat',sans-serif;
+                           font-weight:800; font-size:12px; letter-spacing:0.8px; text-transform:uppercase;
+                           cursor:pointer; transition:transform 0.2s;">
+              ✨ I'm ready — continue
+            </button>
+            <button onclick="vpKeepPaused(${step.videoNumber})"
+                    style="flex:1; min-width:180px; padding:12px 16px; background:transparent; 
+                           color:rgba(255,255,255,0.85); border:1px solid rgba(255,255,255,0.3); 
+                           border-radius:24px; font-family:'Montserrat',sans-serif;
+                           font-weight:700; font-size:11.5px; letter-spacing:0.6px; 
+                           cursor:pointer;">
+              Need more time
+            </button>
           </div>
         </div>
       </div>
       
       <div class="pro-tip" style="margin-top:14px;">
-        <div class="pro-tip-label">Watch & follow along</div>
-        <div class="pro-tip-text">Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.</div>
+        <div class="pro-tip-label">${hasPauses ? 'Watch with key moments' : 'Watch & follow along'}</div>
+        <div class="pro-tip-text">${
+          hasPauses 
+            ? `This video has ${pauses.length} key moments where it will pause automatically to show you reference images and teaching notes. You can pause manually anytime, too.`
+            : 'Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.'
+        }</div>
       </div>
       
       <div class="btn-stack" style="margin-top:18px;">
@@ -7142,18 +7201,235 @@ function renderVideoSegment(step) {
     </div>`;
 }
 
+// ─────────────────────────────────────────────────────────────────────
+// VIDEO SEGMENT PLAYER (per-step YT controller)
+// ─────────────────────────────────────────────────────────────────────
+// State for the currently-active video segment.
+// Only ONE video segment plays at a time (since they're sequential steps).
+
+const vsState = {
+  player: null,           // current YT.Player instance
+  videoId: null,          // currently loaded video ID
+  videoNumber: null,      // 1..5
+  pauses: [],             // pause point array for current video
+  triggered: new Set(),   // pause times already fired (don't repeat)
+  watcher: null,          // setInterval handle
+  countdown: null,        // countdown setInterval handle
+  countdownEnds: 0,       // timestamp when countdown ends
+  paused: false,          // currently in pause overlay?
+  currentPauseIdx: -1     // which pause is showing
+};
+
 function initVideoSegment(step) {
-  // Each video segment gets its own YT.Player instance.
-  // For now: no pause points (WARMUP_PAUSES stays [] — future enhancement).
-  // Just load the YouTube API if needed; the iframe loads on its own.
+  // Reset state for this video
+  vsState.videoId = step.videoId;
+  vsState.videoNumber = step.videoNumber;
+  vsState.pauses = VIDEO_PAUSES[step.videoId] || [];
+  vsState.triggered = new Set();
+  vsState.paused = false;
+  vsState.currentPauseIdx = -1;
+  
+  // Clear any previous watchers
+  if (vsState.watcher) { clearInterval(vsState.watcher); vsState.watcher = null; }
+  if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
+  
+  // If this video has no pauses, do nothing fancy — just let it play
+  if (vsState.pauses.length === 0) {
+    console.log('[VideoSegment] No pauses for', step.videoId, '— playing straight through');
+    return;
+  }
+  
+  // Load YouTube IFrame API if not loaded
   if (!window.YT || !window.YT.Player) {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
+    window.onYouTubeIframeAPIReady = () => createVSPlayer(step);
+    return;
   }
-  // Note: We don't init a controlled YT.Player here because pause points
-  // aren't configured yet. When pause points are added per video, init
-  // similar to startWarmup() but read from VIDEO_PAUSES[step.videoId].
+  createVSPlayer(step);
+}
+
+function createVSPlayer(step) {
+  try {
+    vsState.player = new YT.Player(`yt-player-${step.videoNumber}`, {
+      events: {
+        onReady: () => {
+          console.log('[VideoSegment] Player ready for', step.videoId);
+          startVSWatcher();
+        },
+        onStateChange: (e) => {
+          // When user manually resumes after we paused — clear overlay if still showing
+          if (e.data === YT.PlayerState.PLAYING && vsState.paused) {
+            hideVPOverlay();
+          }
+        }
+      }
+    });
+  } catch (err) {
+    console.warn('[VideoSegment] Failed to attach YT.Player:', err);
+  }
+}
+
+function startVSWatcher() {
+  if (vsState.watcher) clearInterval(vsState.watcher);
+  vsState.watcher = setInterval(() => {
+    if (!vsState.player || vsState.paused) return;
+    let t;
+    try { t = vsState.player.getCurrentTime(); } catch (e) { return; }
+    if (typeof t !== 'number') return;
+    
+    // Check if any pause point should trigger
+    for (let i = 0; i < vsState.pauses.length; i++) {
+      const p = vsState.pauses[i];
+      if (vsState.triggered.has(i)) continue;            // already fired
+      if (t < p.time) continue;                          // not there yet
+      if (t > p.time + 2) {                              // user scrubbed past — mark fired, don't trigger
+        vsState.triggered.add(i);
+        continue;
+      }
+      // Trigger this pause
+      triggerVSPause(i);
+      break;
+    }
+  }, 250);
+}
+
+function triggerVSPause(idx) {
+  const p = vsState.pauses[idx];
+  if (!p) return;
+  vsState.triggered.add(idx);
+  vsState.currentPauseIdx = idx;
+  vsState.paused = true;
+  
+  // Pause the video
+  try { vsState.player.pauseVideo(); } catch (e) {}
+  
+  // Populate overlay fields
+  const n = vsState.videoNumber;
+  document.getElementById(`vp-counter-${n}`).textContent = `⏸ Key moment ${idx + 1} of ${vsState.pauses.length}`;
+  document.getElementById(`vp-title-${n}`).textContent = p.title;
+  document.getElementById(`vp-text-${n}`).textContent = p.text;
+  document.getElementById(`vp-image-${n}`).src = p.image;
+  document.getElementById(`vp-bar-${n}`).style.width = '100%';
+  document.getElementById(`vp-timer-${n}`).textContent = `${p.duration || 60}s`;
+  
+  // Show overlay
+  const overlay = document.getElementById(`vp-overlay-${n}`);
+  overlay.style.display = 'flex';
+  
+  // Start countdown
+  startVSCountdown(p.duration || 60);
+  
+  // Analytics
+  if (typeof Analytics !== 'undefined' && Analytics.track) {
+    Analytics.track('video_pause_shown', {
+      videoId: vsState.videoId,
+      videoNumber: n,
+      pauseIdx: idx,
+      title: p.title
+    });
+  }
+}
+
+function startVSCountdown(duration) {
+  if (vsState.countdown) clearInterval(vsState.countdown);
+  
+  vsState.countdownEnds = Date.now() + duration * 1000;
+  const n = vsState.videoNumber;
+  
+  vsState.countdown = setInterval(() => {
+    const remaining = Math.max(0, vsState.countdownEnds - Date.now());
+    const seconds = Math.ceil(remaining / 1000);
+    const pct = (remaining / (duration * 1000)) * 100;
+    
+    const bar = document.getElementById(`vp-bar-${n}`);
+    const timer = document.getElementById(`vp-timer-${n}`);
+    if (bar) bar.style.width = pct + '%';
+    if (timer) timer.textContent = `${seconds}s`;
+    
+    if (remaining <= 0) {
+      clearInterval(vsState.countdown);
+      vsState.countdown = null;
+      // Auto-resume video
+      vpResume(n);
+    }
+  }, 200);
+}
+
+function vpResume(videoNumber) {
+  // Resume video + hide overlay
+  if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
+  hideVPOverlay();
+  vsState.paused = false;
+  try { vsState.player.playVideo(); } catch (e) {}
+  
+  if (typeof Analytics !== 'undefined' && Analytics.track) {
+    Analytics.track('video_pause_continued', {
+      videoNumber,
+      pauseIdx: vsState.currentPauseIdx
+    });
+  }
+}
+
+function vpKeepPaused(videoNumber) {
+  // Hide overlay but DON'T resume — student wants to think longer
+  if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
+  hideVPOverlay();
+  vsState.paused = false;
+  // Video stays paused; student presses play manually when ready
+  
+  if (typeof Analytics !== 'undefined' && Analytics.track) {
+    Analytics.track('video_pause_kept_paused', {
+      videoNumber,
+      pauseIdx: vsState.currentPauseIdx
+    });
+  }
+}
+
+function hideVPOverlay() {
+  if (vsState.videoNumber == null) return;
+  const overlay = document.getElementById(`vp-overlay-${vsState.videoNumber}`);
+  if (overlay) overlay.style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// IMAGE LIGHTBOX — click pause image to see it bigger
+// ─────────────────────────────────────────────────────────────────────
+
+function openImageLightbox(imageUrl) {
+  // Create lightbox on demand
+  let lb = document.getElementById('img-lightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'img-lightbox';
+    lb.style.cssText = `
+      position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000;
+      display: none; align-items: center; justify-content: center;
+      cursor: zoom-out; padding: 20px; backdrop-filter: blur(8px);
+    `;
+    lb.onclick = closeImageLightbox;
+    lb.innerHTML = `
+      <button onclick="closeImageLightbox()" 
+              style="position:absolute; top:16px; right:16px; padding:8px 16px; 
+                     background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3);
+                     border-radius:20px; font-family:'Montserrat',sans-serif; font-size:11px; 
+                     font-weight:700; letter-spacing:0.8px; cursor:pointer; z-index:10001;">
+        ✕ Close
+      </button>
+      <img id="img-lightbox-img" src="" alt="" 
+           style="max-width:96%; max-height:92%; object-fit:contain; 
+                  box-shadow:0 8px 32px rgba(0,0,0,0.5); border-radius:8px;">
+    `;
+    document.body.appendChild(lb);
+  }
+  document.getElementById('img-lightbox-img').src = imageUrl;
+  lb.style.display = 'flex';
+}
+
+function closeImageLightbox() {
+  const lb = document.getElementById('img-lightbox');
+  if (lb) lb.style.display = 'none';
 }
 
 function checkLocalMode() {
@@ -7638,6 +7914,21 @@ function nextStep() {
   const currStep = LESSON.steps[curr];
   const nextStepObj = LESSON.steps[curr + 1];
   
+  // ─────────────────────────────────────────────────────────────
+  // Cleanup: if leaving a video segment, tear down the player + watcher
+  // so the next videoSegment can init cleanly.
+  // ─────────────────────────────────────────────────────────────
+  if (currStep && currStep.type === 'videoSegment') {
+    if (vsState.watcher) { clearInterval(vsState.watcher); vsState.watcher = null; }
+    if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
+    try { if (vsState.player && vsState.player.destroy) vsState.player.destroy(); } catch (e) {}
+    vsState.player = null;
+    vsState.videoId = null;
+    vsState.videoNumber = null;
+    vsState.paused = false;
+    vsState.triggered = new Set();
+  }
+  
   // ═══════════════════════════════════════════════════════════════
   // PAYWALL TRIGGER (v2 — preview-then-paywall model)
   // 
@@ -7775,10 +8066,71 @@ function toggleCheck(row) {
  *  To change video: update iframe src in renderWarmup() + WARMUP_PAUSES array.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-// Pause points (empty for now — to be configured later when Faye 
-// provides per-video pause specs).
-// Each pause: { time: <seconds>, duration: <seconds>, title: <string>, text: <string> }
-// Future: convert to VIDEO_PAUSES[videoId] = [...] for per-video configs.
+// ═════════════════════════════════════════════════════════════════════
+// VIDEO PAUSE POINTS
+// ═════════════════════════════════════════════════════════════════════
+// Per-video pause configuration. Each entry:
+//   {
+//     time:    <seconds>     when in the video to pause
+//     duration:<seconds>     countdown before auto-continue (default 60)
+//     title:   <string>      headline shown to student
+//     text:    <string>      teaching message
+//     image:   <URL>         photo/illustration shown (full bleed)
+//   }
+//
+// Pause points are ONLY for videos that have configured arrays.
+// Videos without entries (or empty arrays) play straight through.
+// Future: Faye + Mrs. Dawn to spec pause points for cube 2-5.
+// ─────────────────────────────────────────────────────────────────────
+
+const VIDEO_PAUSES = {
+  // ═══ Cube Video 1 (5:37) — 5 pause points by Faye + Mrs. Dawn ═══
+  'SeMsKjs6GLc': [
+    {
+      time: 22,           // 0:22
+      duration: 60,
+      title: 'Position your drawing on the page',
+      text: 'Notice how Mrs. Dawn places small marks for the cube\'s four outer edges before she draws anything else. The distance from these marks to the edge of the paper matters — too close to the edge feels cramped, too centered feels stiff. Take a moment: do you have your paper ready, with room around where the cube will sit?',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f996a56d6b7cdcc29216_p1.jpg'
+    },
+    {
+      time: 97,           // 1:37
+      duration: 60,
+      title: 'Use your pencil as a measuring tool',
+      text: 'Mrs. Dawn holds her pencil at arm\'s length to measure the cube\'s height. This is one of the most important habits in observational drawing — your pencil becomes a ruler. Try holding your pencil this way now: arm fully extended, one eye closed. Mark the height before you commit to any lines.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993454e01962ef9193a_p2.jpg'
+    },
+    {
+      time: 198,          // 3:18  ⭐ most important
+      duration: 60,
+      title: 'The top plane — parallel FIRST, then perspective',
+      text: 'This is where most students go wrong. The top of the cube tilts away from us — but you need to draw it parallel first, then gently apply perspective. Don\'t try to "see the angle" right away. Draw the top edges horizontal, then carefully tilt them inward. Look at Mrs. Dawn\'s example: notice how subtle the perspective actually is.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f9931ca22f928ac4816c_p3.jpg'
+    },
+    {
+      time: 291,          // 4:51
+      duration: 60,
+      title: 'See through the cube — internal framework',
+      text: 'Mrs. Dawn draws the cube as if it were transparent — showing the edges you can\'t actually see. This isn\'t for show. Understanding the internal framework helps you feel the cube\'s 3D space. The back corners must align with the front corners. If your hidden edges look wrong, the visible ones will too.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993b2c2154e2309f76f_p4.jpg'
+    },
+    {
+      time: 319,          // 5:19
+      duration: 60,
+      title: 'Perspective lines: parallel before they converge',
+      text: 'Same rule as the top plane — keep your perspective lines (and any diagonal/background lines) parallel first. THEN gently bring them inward toward the vanishing point. Going straight to "angled" without "parallel" first makes the cube look wonky. Slow it down. Parallel first. Tilt second.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993c57249a31c768659_p5.jpg'
+    }
+  ]
+  // Future entries (when Mrs. Dawn + Faye define):
+  //   'BDnpaF--suM': [...]   // cube 2
+  //   'Hp_j4AxraAE': [...]   // cube 3
+  //   'NtsjlyIfYiA': [...]   // cube 4
+  //   'hEsj7W-Qvt8': [...]   // cube 5
+};
+
+// Legacy variable name retained for backward compatibility
+// (some demo/preview functions still reference it)
 const WARMUP_PAUSES = [];
 
 let ytPlayer = null;
