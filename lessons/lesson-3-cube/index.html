@@ -60,6 +60,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(167,139,250,0.5); }
   50%      { transform: scale(1.06); box-shadow: 0 6px 22px rgba(167,139,250,0.75); }
 }
+@keyframes vpImageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes vpPanelSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* PART INDICATOR */
 .part-badge { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); background: var(--ink); padding: 6px 12px; border-radius: 20px; margin-bottom: 16px; }
@@ -7113,112 +7121,116 @@ function renderVideoSegment(step) {
         <span>${partOf}${hasPauses ? ` · ${pauses.length} key moments` : ''}</span>
       </div>
       
-      <!-- Video frame (clean, no overlay on top) -->
+      <!-- Video frame with image overlay capability -->
       <div class="video-frame" id="video-frame-${step.videoNumber}" style="background:#000; cursor:default; padding:0; position:relative;">
         <iframe id="yt-player-${step.videoNumber}" width="100%" height="100%" style="position:absolute; inset:0; border:none;"
           src="https://www.youtube.com/embed/${step.videoId}?enablejsapi=1&rel=0&modestbranding=1&iv_load_policy=3&fs=1&playsinline=1&color=white&disablekb=0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
         
-        <!-- Small "video paused" hint shown ON the video (subtle, just a pulse) -->
-        <div id="vp-video-hint-${step.videoNumber}"
-             style="display:none; position:absolute; top:12px; left:12px; z-index:5;
-                    background:rgba(167,139,250,0.95); color:#fff;
-                    padding:6px 12px; border-radius:14px;
-                    font-family:'Montserrat',sans-serif; font-size:10px;
-                    font-weight:800; letter-spacing:1px; text-transform:uppercase;
-                    box-shadow:0 4px 14px rgba(167,139,250,0.5);
-                    animation: vpHintPulse 1.4s ease-in-out infinite;">
-          ⏸ Paused — see below ↓
+        <!-- Image overlay: covers video 100% during pause, clickable to enlarge -->
+        <div id="vp-image-overlay-${step.videoNumber}"
+             style="display:none; position:absolute; inset:0; z-index:10;
+                    background:#fff; cursor:zoom-in;
+                    animation: vpImageFadeIn 0.3s ease-out;"
+             onclick="openImageLightbox('${step.videoNumber}')">
+          <img id="vp-image-${step.videoNumber}" src="" alt="Reference"
+               style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;"
+               onerror="this.style.opacity='0.3'; this.alt='Image loading...';">
+          
+          <!-- Zoom hint corner -->
+          <div style="position:absolute; bottom:12px; right:12px; 
+                      background:rgba(26,29,43,0.85); color:#fff; padding:6px 12px;
+                      border-radius:14px; font-family:'Montserrat',sans-serif;
+                      font-size:10px; font-weight:800; letter-spacing:1px;
+                      text-transform:uppercase; pointer-events:none;
+                      backdrop-filter:blur(6px);">
+            🔍 Tap to enlarge
+          </div>
+          
+          <!-- "Key moment N of 5" badge top-left -->
+          <div style="position:absolute; top:12px; left:12px; 
+                      background:linear-gradient(135deg,#a78bfa,#67e8f9); color:#fff; 
+                      padding:6px 14px; border-radius:14px; 
+                      font-family:'Montserrat',sans-serif; font-size:10px; 
+                      font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                      pointer-events:none; box-shadow:0 3px 10px rgba(167,139,250,0.4);">
+            <span id="vp-counter-badge-${step.videoNumber}">⏸ Key moment 1 of 5</span>
+          </div>
         </div>
       </div>
       
-      <!-- Pause content panel (BELOW the video, not overlay) -->
+      <!-- Teaching panel BELOW video (text + countdown + buttons) -->
       <div id="vp-panel-${step.videoNumber}" 
-           style="display:none; margin-top:18px; padding:0; border-radius:16px; 
-                  overflow:hidden; background:#fff;
-                  box-shadow:0 4px 20px rgba(167,139,250,0.18);
-                  border:1px solid rgba(167,139,250,0.2);">
+           style="display:none; margin-top:14px; padding:18px 20px; 
+                  border-radius:14px; background:#fff;
+                  box-shadow:0 4px 18px rgba(167,139,250,0.16);
+                  border:1px solid rgba(167,139,250,0.2);
+                  animation: vpPanelSlideUp 0.35s ease-out;">
         
-        <!-- Header bar -->
-        <div style="background:linear-gradient(135deg,#a78bfa,#67e8f9); 
-                    padding:10px 16px; display:flex; justify-content:space-between; 
-                    align-items:center; color:#fff;
-                    font-family:'Montserrat',sans-serif; font-size:10px; 
-                    font-weight:800; letter-spacing:1.5px; text-transform:uppercase;">
-          <span id="vp-counter-${step.videoNumber}">⏸ Key moment 1 of 5</span>
-          <span id="vp-timer-${step.videoNumber}">60s</span>
+        <!-- Header strip -->
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:12px; padding-bottom:10px;
+                    border-bottom:1px solid rgba(167,139,250,0.15);">
+          <span id="vp-counter-${step.videoNumber}"
+                style="font-family:'Montserrat',sans-serif; font-size:10px;
+                       font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                       color:#7c5fc7;">
+            ⏸ Key moment 1 of 5
+          </span>
+          <span id="vp-timer-${step.videoNumber}"
+                style="font-family:'Montserrat',sans-serif; font-size:11px;
+                       font-weight:800; color:#a78bfa; letter-spacing:0.5px;">
+            60s
+          </span>
         </div>
         
-        <!-- Content -->
-        <div style="padding:18px;">
-          
-          <!-- Image (clear, no overlay, full bleed) -->
-          <div id="vp-image-wrap-${step.videoNumber}" 
-               style="width:100%; aspect-ratio:16/9; background:#fafaf8;
-                      border-radius:10px; overflow:hidden; cursor:zoom-in;
-                      border:1px solid rgba(0,0,0,0.05); margin-bottom:14px;"
-               onclick="openImageLightbox('${step.videoNumber}')">
-            <img id="vp-image-${step.videoNumber}" src="" alt="Reference"
-                 style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;"
-                 onerror="this.style.opacity='0.3'; this.alt='Image loading...';">
-          </div>
-          
-          <!-- Title + body text -->
-          <div>
-            <h3 id="vp-title-${step.videoNumber}" 
-                style="color:#1a1d2b; font-family:'Montserrat',sans-serif; font-size:17px; 
-                       font-weight:800; margin:0 0 8px; line-height:1.3; letter-spacing:-0.2px;">
-              Pause title
-            </h3>
-            <p id="vp-text-${step.videoNumber}" 
-               style="color:#4a4f5e; font-family:'Open Sans',sans-serif; 
-                      font-size:14px; line-height:1.6; margin:0;">
-              Pause text
-            </p>
-          </div>
-          
-          <!-- Countdown progress bar -->
-          <div style="margin-top:16px;">
-            <div style="height:4px; background:rgba(167,139,250,0.15); border-radius:999px; overflow:hidden;">
-              <div id="vp-bar-${step.videoNumber}" 
-                   style="height:100%; background:linear-gradient(90deg,#a78bfa,#67e8f9); 
-                          width:100%; transition:width 0.2s linear; border-radius:999px;"></div>
-            </div>
-            <div style="margin-top:6px; font-family:'Montserrat',sans-serif; font-size:10px;
-                        color:#8a8f9c; letter-spacing:0.8px; text-align:center;">
-              Auto-resumes when timer reaches zero
-            </div>
-          </div>
-          
-          <!-- Action buttons -->
-          <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-            <button onclick="vpResume(${step.videoNumber})" 
-                    style="flex:1; min-width:170px; padding:12px 16px; 
-                           background:#1a1d2b; color:#fff;
-                           border:none; border-radius:24px; 
-                           font-family:'Montserrat',sans-serif;
-                           font-weight:800; font-size:12px; letter-spacing:0.8px; 
-                           text-transform:uppercase; cursor:pointer; 
-                           transition:transform 0.2s, background 0.2s;"
-                    onmouseover="this.style.background='#2a2f42'"
-                    onmouseout="this.style.background='#1a1d2b'">
-              ✨ I'm ready — continue
-            </button>
-            <button onclick="vpKeepPaused(${step.videoNumber})"
-                    style="flex:1; min-width:170px; padding:12px 16px; 
-                           background:#fff; color:#4a4f5e; 
-                           border:1px solid rgba(0,0,0,0.12); 
-                           border-radius:24px; 
-                           font-family:'Montserrat',sans-serif;
-                           font-weight:700; font-size:11.5px; letter-spacing:0.6px; 
-                           cursor:pointer;
-                           transition:background 0.2s;"
-                    onmouseover="this.style.background='#f5f5f7'"
-                    onmouseout="this.style.background='#fff'">
-              Need more time
-            </button>
-          </div>
+        <!-- Title + body -->
+        <h3 id="vp-title-${step.videoNumber}" 
+            style="color:#1a1d2b; font-family:'Montserrat',sans-serif; font-size:17px; 
+                   font-weight:800; margin:0 0 8px; line-height:1.3; letter-spacing:-0.2px;">
+          Pause title
+        </h3>
+        <p id="vp-text-${step.videoNumber}" 
+           style="color:#4a4f5e; font-family:'Open Sans',sans-serif; 
+                  font-size:14px; line-height:1.6; margin:0 0 16px;">
+          Pause text
+        </p>
+        
+        <!-- Countdown bar -->
+        <div style="height:4px; background:rgba(167,139,250,0.15); border-radius:999px; overflow:hidden; margin-bottom:14px;">
+          <div id="vp-bar-${step.videoNumber}" 
+               style="height:100%; background:linear-gradient(90deg,#a78bfa,#67e8f9); 
+                      width:100%; transition:width 0.2s linear; border-radius:999px;"></div>
+        </div>
+        
+        <!-- Action buttons -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button onclick="vpResume(${step.videoNumber})" 
+                  style="flex:1; min-width:170px; padding:12px 16px; 
+                         background:#1a1d2b; color:#fff;
+                         border:none; border-radius:24px; 
+                         font-family:'Montserrat',sans-serif;
+                         font-weight:800; font-size:12px; letter-spacing:0.8px; 
+                         text-transform:uppercase; cursor:pointer; 
+                         transition:transform 0.2s, background 0.2s;"
+                  onmouseover="this.style.background='#2a2f42'"
+                  onmouseout="this.style.background='#1a1d2b'">
+            ✨ I'm ready — continue
+          </button>
+          <button onclick="vpKeepPaused(${step.videoNumber})"
+                  style="flex:1; min-width:170px; padding:12px 16px; 
+                         background:#fff; color:#4a4f5e; 
+                         border:1px solid rgba(0,0,0,0.12); 
+                         border-radius:24px; 
+                         font-family:'Montserrat',sans-serif;
+                         font-weight:700; font-size:11.5px; letter-spacing:0.6px; 
+                         cursor:pointer;
+                         transition:background 0.2s;"
+                  onmouseover="this.style.background='#f5f5f7'"
+                  onmouseout="this.style.background='#fff'">
+            Need more time
+          </button>
         </div>
       </div>
       
@@ -7226,7 +7238,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-label">${hasPauses ? 'Watch with key moments' : 'Watch & follow along'}</div>
         <div class="pro-tip-text">${
           hasPauses 
-            ? `This video has ${pauses.length} key moments. The video will pause automatically and show a reference image + teaching note <b>below the video</b>. You can click any image to enlarge it. You can pause manually anytime, too.`
+            ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically — no need to touch the video player.`
             : 'Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.'
         }</div>
       </div>
@@ -7341,26 +7353,31 @@ function triggerVSPause(idx) {
   // Pause the video
   try { vsState.player.pauseVideo(); } catch (e) {}
   
-  // Populate panel fields
   const n = vsState.videoNumber;
+  
+  // Update text panel below
   document.getElementById(`vp-counter-${n}`).textContent = `⏸ Key moment ${idx + 1} of ${vsState.pauses.length}`;
+  document.getElementById(`vp-counter-badge-${n}`).textContent = `⏸ Key moment ${idx + 1} of ${vsState.pauses.length}`;
   document.getElementById(`vp-title-${n}`).textContent = p.title;
   document.getElementById(`vp-text-${n}`).textContent = p.text;
   document.getElementById(`vp-image-${n}`).src = p.image;
   document.getElementById(`vp-bar-${n}`).style.width = '100%';
   document.getElementById(`vp-timer-${n}`).textContent = `${p.duration || 60}s`;
   
-  // Show the below-video panel
+  // Show image overlay (covers video 100%)
+  const imageOverlay = document.getElementById(`vp-image-overlay-${n}`);
+  if (imageOverlay) imageOverlay.style.display = 'block';
+  
+  // Show text panel below video
   const panel = document.getElementById(`vp-panel-${n}`);
-  panel.style.display = 'block';
+  if (panel) panel.style.display = 'block';
   
-  // Show the small pulsing hint badge on top of the video
-  const hint = document.getElementById(`vp-video-hint-${n}`);
-  if (hint) hint.style.display = 'inline-block';
-  
-  // Scroll the panel into view so student doesn't miss it
+  // Scroll so both image and panel are visible
   setTimeout(() => {
-    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const videoFrame = document.getElementById(`video-frame-${n}`);
+    if (videoFrame) {
+      videoFrame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }, 200);
   
   // Start countdown
@@ -7403,11 +7420,31 @@ function startVSCountdown(duration) {
 }
 
 function vpResume(videoNumber) {
-  // Resume video + hide overlay
+  // Clear countdown
   if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
+  
+  // Hide overlay + panel
   hideVPOverlay();
   vsState.paused = false;
-  try { vsState.player.playVideo(); } catch (e) {}
+  
+  // Force-resume video playback — multiple attempts to bypass any browser/YT quirks.
+  // This is what makes the experience feel "smart" instead of "YouTube".
+  const tryPlay = () => {
+    if (!vsState.player) return;
+    try {
+      vsState.player.playVideo();
+    } catch (e) {
+      console.warn('[vpResume] playVideo failed:', e);
+    }
+  };
+  
+  // Immediate attempt (synchronous with the click — within the user gesture)
+  tryPlay();
+  
+  // Backup attempts in case the first didn't take
+  setTimeout(tryPlay, 50);
+  setTimeout(tryPlay, 200);
+  setTimeout(tryPlay, 500);
   
   if (typeof Analytics !== 'undefined' && Analytics.track) {
     Analytics.track('video_pause_continued', {
@@ -7418,11 +7455,12 @@ function vpResume(videoNumber) {
 }
 
 function vpKeepPaused(videoNumber) {
-  // Hide overlay but DON'T resume — student wants to think longer
+  // Hide overlay + panel but DON'T resume — student wants to think longer
   if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
   hideVPOverlay();
   vsState.paused = false;
   // Video stays paused; student presses play manually when ready
+  // (YouTube's ▶ button will appear — that's the only way without their gesture)
   
   if (typeof Analytics !== 'undefined' && Analytics.track) {
     Analytics.track('video_pause_kept_paused', {
@@ -7434,10 +7472,10 @@ function vpKeepPaused(videoNumber) {
 
 function hideVPOverlay() {
   if (vsState.videoNumber == null) return;
+  const imageOverlay = document.getElementById(`vp-image-overlay-${vsState.videoNumber}`);
+  if (imageOverlay) imageOverlay.style.display = 'none';
   const panel = document.getElementById(`vp-panel-${vsState.videoNumber}`);
   if (panel) panel.style.display = 'none';
-  const hint = document.getElementById(`vp-video-hint-${vsState.videoNumber}`);
-  if (hint) hint.style.display = 'none';
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -8172,35 +8210,35 @@ const VIDEO_PAUSES = {
       duration: 60,
       title: 'Position your drawing on the page',
       text: 'Notice how Mrs. Dawn places small marks for the cube\'s four outer edges before she draws anything else. The distance from these marks to the edge of the paper matters — too close to the edge feels cramped, too centered feels stiff. Take a moment: do you have your paper ready, with room around where the cube will sit?',
-      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f996a56d6b7cdcc29216_p1.jpg'
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342a12023d9ed451645_1.png'
     },
     {
       time: 97,           // 1:37
       duration: 60,
       title: 'Use your pencil as a measuring tool',
       text: 'Mrs. Dawn holds her pencil at arm\'s length to measure the cube\'s height. This is one of the most important habits in observational drawing — your pencil becomes a ruler. Try holding your pencil this way now: arm fully extended, one eye closed. Mark the height before you commit to any lines.',
-      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993454e01962ef9193a_p2.jpg'
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b343fa449b3052f53feb_2.png'
     },
     {
       time: 198,          // 3:18  ⭐ most important
       duration: 60,
       title: 'The top plane — parallel FIRST, then perspective',
       text: 'This is where most students go wrong. The top of the cube tilts away from us — but you need to draw it parallel first, then gently apply perspective. Don\'t try to "see the angle" right away. Draw the top edges horizontal, then carefully tilt them inward. Look at Mrs. Dawn\'s example: notice how subtle the perspective actually is.',
-      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f9931ca22f928ac4816c_p3.jpg'
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342b6d054fab010d11a_3.png'
     },
     {
       time: 291,          // 4:51
       duration: 60,
       title: 'See through the cube — internal framework',
       text: 'Mrs. Dawn draws the cube as if it were transparent — showing the edges you can\'t actually see. This isn\'t for show. Understanding the internal framework helps you feel the cube\'s 3D space. The back corners must align with the front corners. If your hidden edges look wrong, the visible ones will too.',
-      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993b2c2154e2309f76f_p4.jpg'
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342a1dbf80f2ea9154a_4.png'
     },
     {
       time: 319,          // 5:19
       duration: 60,
       title: 'Perspective lines: parallel before they converge',
       text: 'Same rule as the top plane — keep your perspective lines (and any diagonal/background lines) parallel first. THEN gently bring them inward toward the vanishing point. Going straight to "angled" without "parallel" first makes the cube look wonky. Slow it down. Parallel first. Tilt second.',
-      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a03f993c57249a31c768659_p5.jpg'
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b343a8167f148de17720_5.png'
     }
   ]
   // Future entries (when Mrs. Dawn + Faye define):
