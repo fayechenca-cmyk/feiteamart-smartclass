@@ -7190,14 +7190,37 @@ function renderVideoSegment(step) {
         <!-- Title + body -->
         <h3 id="vp-title-${step.videoNumber}" 
             style="color:#1a1d2b; font-family:'Montserrat',sans-serif; font-size:17px; 
-                   font-weight:800; margin:0 0 8px; line-height:1.3; letter-spacing:-0.2px;">
+                   font-weight:800; margin:0 0 6px; line-height:1.3; letter-spacing:-0.2px;">
           Pause title
         </h3>
+        
+        <!-- Short prompt (optional, italic tagline under title) -->
+        <p id="vp-shortprompt-${step.videoNumber}"
+           style="display:none; color:#7c5fc7; font-family:'Open Sans',sans-serif;
+                  font-size:13px; font-style:italic; font-weight:600;
+                  margin:0 0 10px; line-height:1.4;">
+        </p>
+        
         <p id="vp-text-${step.videoNumber}" 
            style="color:#4a4f5e; font-family:'Open Sans',sans-serif; 
-                  font-size:14px; line-height:1.6; margin:0 0 16px;">
+                  font-size:14px; line-height:1.6; margin:0 0 14px;">
           Pause text
         </p>
+        
+        <!-- Learner action (optional, "Try this:" box highlighted in gold) -->
+        <div id="vp-action-${step.videoNumber}"
+             style="display:none; background:#fffbf0; border-left:3px solid #c8a96e;
+                    padding:12px 14px; border-radius:0 8px 8px 0; margin-bottom:14px;">
+          <div style="font-family:'Montserrat',sans-serif; font-size:10px;
+                      font-weight:800; letter-spacing:1.5px; color:#c8a96e;
+                      text-transform:uppercase; margin-bottom:4px;">
+            ✏️ Try this now
+          </div>
+          <div id="vp-action-text-${step.videoNumber}"
+               style="color:#1a1d2b; font-family:'Open Sans',sans-serif;
+                      font-size:13.5px; line-height:1.5; font-weight:600;">
+          </div>
+        </div>
         
         <!-- Countdown bar -->
         <div style="height:4px; background:rgba(167,139,250,0.15); border-radius:999px; overflow:hidden; margin-bottom:14px;">
@@ -7208,7 +7231,8 @@ function renderVideoSegment(step) {
         
         <!-- Action buttons -->
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button onclick="vpResume(${step.videoNumber})" 
+          <button id="vp-resume-btn-${step.videoNumber}" 
+                  onclick="vpResume(${step.videoNumber})" 
                   style="flex:1; min-width:170px; padding:12px 16px; 
                          background:#1a1d2b; color:#fff;
                          border:none; border-radius:24px; 
@@ -7396,6 +7420,35 @@ function triggerVSPause(idx) {
   document.getElementById(`vp-bar-${n}`).style.width = '100%';
   document.getElementById(`vp-timer-${n}`).textContent = `${p.duration || 60}s`;
   
+  // shortPrompt — optional brief tagline shown right under the title
+  const shortPromptEl = document.getElementById(`vp-shortprompt-${n}`);
+  if (shortPromptEl) {
+    if (p.shortPrompt) {
+      shortPromptEl.textContent = p.shortPrompt;
+      shortPromptEl.style.display = 'block';
+    } else {
+      shortPromptEl.style.display = 'none';
+    }
+  }
+  
+  // learnerAction — optional "Try this:" box (highlighted in gold)
+  const actionEl = document.getElementById(`vp-action-${n}`);
+  if (actionEl) {
+    if (p.learnerAction) {
+      document.getElementById(`vp-action-text-${n}`).textContent = p.learnerAction;
+      actionEl.style.display = 'block';
+    } else {
+      actionEl.style.display = 'none';
+    }
+  }
+  
+  // resumeLabel — customize the continue button text
+  const resumeBtn = document.getElementById(`vp-resume-btn-${n}`);
+  if (resumeBtn) {
+    const label = p.resumeLabel || "I'm ready — continue";
+    resumeBtn.innerHTML = `✨ ${label}`;
+  }
+  
   // Show image overlay (covers video 100%)
   const imageOverlay = document.getElementById(`vp-image-overlay-${n}`);
   if (imageOverlay) imageOverlay.style.display = 'block';
@@ -7414,6 +7467,10 @@ function triggerVSPause(idx) {
   
   // Start countdown
   startVSCountdown(p.duration || 60);
+  
+  // TODO (future): if p.audioUrl exists, play it
+  // const audio = new Audio(p.audioUrl);
+  // audio.play().catch(e => console.warn('audio failed', e));
   
   // Analytics
   if (typeof Analytics !== 'undefined' && Analytics.track) {
@@ -8306,6 +8363,101 @@ const VIDEO_PAUSES = {
       title: 'Perspective lines: parallel before they converge',
       text: 'Same rule as the top plane — keep your perspective lines (and any diagonal/background lines) parallel first. THEN gently bring them inward toward the vanishing point. Going straight to "angled" without "parallel" first makes the cube look wonky. Slow it down. Parallel first. Tilt second.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b343a8167f148de17720_5.png'
+    }
+  ],
+  
+  // ═══ Cube Video 2 (3:29) — 8 pause points by Faye + Mrs. Dawn ═══
+  // Shading the cube: 4B (dark) → edge → cast shadow → 2B (light) → HB unify → blend
+  // Each pause includes: image, title, teachNote, shortPrompt, learnerAction,
+  // voiceoverEn (for future ElevenLabs cloned voice mp3 generation)
+  '1f907944da6d234ac8da34fcd5e2a98d': [
+    {
+      time: 4,
+      duration: 60,
+      title: '4B: Start from the darkest plane',
+      shortPrompt: 'Use 4B and begin from the darkest side.',
+      text: 'Lay in the darkest plane first. Keep the strokes moving in one direction so the tone stays clean and controlled.',
+      learnerAction: 'Shade the darkest plane using one-direction strokes.',
+      voiceoverEn: 'Start with a 4B pencil and build the darkest plane first. Keep all of your strokes moving in one direction so the shading feels clean and organized.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f4704f730da9877066a6_p2-1.png'
+    },
+    {
+      time: 23,
+      duration: 60,
+      title: 'Change direction',
+      shortPrompt: 'Overlay a second layer to build gradation.',
+      text: 'Change the stroke direction and overlay the first layer. This creates a smoother gradation and a stronger sense of 3D depth.',
+      learnerAction: 'Add a second layer in a new direction.',
+      voiceoverEn: 'Now change direction and add a second layer over the first shading. This helps build a smoother transition and gives the form stronger depth.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f4703e1fe71df2decc22_p2-3.png'
+    },
+    {
+      time: 60,
+      duration: 60,
+      title: 'Fully apply the dark plane',
+      shortPrompt: 'Cover the whole dark side evenly.',
+      text: 'Fully apply the dark tone across the entire plane. Keep the surface clean so the dark side feels solid and unified.',
+      learnerAction: 'Evenly fill the full dark plane.',
+      voiceoverEn: 'Now fully cover the dark plane. Try to keep the tone even across the whole side so it feels complete and well controlled.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f470169b052337d30862_p2-2.png'
+    },
+    {
+      time: 64,
+      duration: 60,
+      title: 'Strengthen the light-dark edge',
+      shortPrompt: 'Emphasize the boundary for stronger depth.',
+      text: 'Darken the boundary between the light and dark planes. This edge makes the cube feel more solid and spatial.',
+      learnerAction: 'Reinforce the light-dark boundary.',
+      voiceoverEn: 'Strengthen the edge between the light side and the dark side. This boundary is what helps the cube feel sharper and more three-dimensional.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f4659ca8e49b9a520721_p2-6.png'
+    },
+    {
+      time: 87,
+      duration: 60,
+      title: 'Add the cast shadow',
+      shortPrompt: 'Draw the shadow with clean, controlled strokes.',
+      text: 'Add the cast shadow beside the cube and keep the shading direction consistent so the shadow feels tidy and believable.',
+      learnerAction: 'Shade the cast shadow in one direction.',
+      voiceoverEn: 'Now add the cast shadow. Keep the strokes moving in one direction here too, so the shadow stays clean and controlled.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f46524a220fc2f42416f_p2-5.png'
+    },
+    {
+      time: 125,
+      duration: 60,
+      title: '2B: Add the light-gray plane',
+      shortPrompt: 'Use a lighter touch on the light-gray side.',
+      text: 'Switch to a 2B pencil and lightly shade the lighter plane. Build contrast with the dark plane while keeping the transition smooth.',
+      learnerAction: 'Lightly shade the light-gray plane with 2B.',
+      voiceoverEn: 'Switch to a 2B pencil and shade the light gray plane with a lighter touch. Create contrast, but keep the transition into the dark plane soft.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f4650382bc20884e6248_p2-4.png'
+    },
+    {
+      time: 182,
+      duration: 60,
+      title: 'HB: Unify the surface',
+      shortPrompt: 'Sweep lightly to harmonize the tone.',
+      text: 'Use HB to lightly sweep over the surface and unify the texture. This helps clean up rough marks and harmonize the plane.',
+      learnerAction: 'Lightly sweep across the plane with HB.',
+      voiceoverEn: 'Use an HB pencil to lightly sweep over the surface. This helps clean up rough strokes and makes the tone feel more unified.',
+      resumeLabel: 'Continue',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f465679207cccf817563_p2-8.png'
+    },
+    {
+      time: 198,
+      duration: 60,
+      title: 'Blend lightly',
+      shortPrompt: 'Use a tissue or blender to soften the tone.',
+      text: 'Use a tissue or blender to soften the graphite and create a smoother transition, while still keeping the form clear.',
+      learnerAction: 'Blend the surface gently without losing the edges.',
+      voiceoverEn: 'Now use a tissue or a blender to soften the graphite. Blend lightly so the tones transition smoothly, while the shape of the cube stays clear.',
+      resumeLabel: 'Finish step',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04f46563d95e451ef8c02b_p2-7.png'
     }
   ]
   // Future entries (when Mrs. Dawn + Faye define):
