@@ -3401,7 +3401,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
       <input type="text" 
              id="welcome-name-input" 
              class="welcome-input" 
-             placeholder="e.g. REGINA-16"
+             placeholder="e.g. LILY-01"
              autocomplete="off"
              autocapitalize="characters"
              maxlength="20"
@@ -4175,7 +4175,7 @@ const UserProfile = {
   /** Create a member or trial profile from a validated student code (preferred entry point) */
   createMember(studentCode, displayName, ageGroup, isTrial = false) {
     const profile = {
-      id: studentCode,                       // e.g. "REGINA-16" or "TRYNEW"
+      id: studentCode,                       // e.g. "LILY-01" or "TRYNEW"
       studentCode: studentCode,              // explicit field for clarity
       name: displayName.trim(),              // e.g. "Regina" or "Friend"
       ageGroup: ageGroup,
@@ -4288,8 +4288,8 @@ const UserProfile = {
  *  
  *  USAGE:
  *    await StudentRoster.load();              // fetches valid-students.json
- *    StudentRoster.isValid('REGINA-16');      // true / false
- *    StudentRoster.getDisplayName('REGINA-16'); // 'Regina' or null
+ *    StudentRoster.isValid('LILY-01');      // true / false
+ *    StudentRoster.getDisplayName('LILY-01'); // 'Lily' or null
  *  
  *  ═══════════════════════════════════════════════════════════════════════════ */
 
