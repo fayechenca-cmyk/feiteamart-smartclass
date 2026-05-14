@@ -5576,6 +5576,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'circle',
+      videoId: 'cddd24e7b238689489c4506b2f6c682e',  // Sphere 1 — Cloudflare Stream UID
       title: 'Ghost the circle',
       intro: 'Mark four tick points, then "ghost" overlapping loops until a clean circle emerges. Don\'t aim for perfection on the first pass.',
       quote: 'Let these light passes average out into a clean circle. If you see a bulge, correct it with another gentle pass.',
@@ -5587,6 +5588,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'terminator',
+      videoId: 'b05a527d319caec065da12e98a48a5e7',  // Sphere 2 — Cloudflare Stream UID
       title: 'Map terminator &amp; cast shadow',
       intro: 'With light coming from the upper left, lightly mark the terminator (the belt where sphere turns into shadow) and sketch the elliptical cast shadow on the ground.',
       quote: 'The cast shadow anchors the sphere so it doesn\'t float.',
@@ -5598,6 +5600,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'coreShadow',
+      videoId: 'f659c6889bc7c19d027ba2bf2d3ba4e6',  // Sphere 3 — Cloudflare Stream UID
       title: 'Build your core shadow',
       intro: 'Shade inside the terminator line with curved strokes that wrap around the form. Build up the darkest value just inside the terminator — this is your core shadow.',
       quote: 'Pencil strokes should curve to wrap around the form, reinforcing its roundness.',
@@ -5609,6 +5612,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'halftones',
+      videoId: '193d127866f1ace07a7667af81f14961',  // Sphere 4 — Cloudflare Stream UID
       title: 'Fade into halftones',
       intro: 'Create a smooth transition from the core shadow into the light. Soften your pencil pressure with an almost weightless touch.',
       quote: 'Think fade, not fill.',
@@ -5620,6 +5624,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'reflected',
+      videoId: 'd5946a2e904d80e19874913b034ec5b9',  // Sphere 5 — Cloudflare Stream UID
       title: 'Add reflected light (carefully!)',
       intro: 'On the shadow side, allow a thin band of reflected light to show — but only a little. This is the most-broken rule in beginner drawings.',
       quote: 'Reflected light must remain darker than your halftones to maintain a matte appearance.',
@@ -5631,6 +5636,7 @@ const LESSON = {
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
       videoSeg: 'grounding',
+      videoId: '32345bcf74493208f3f83616f8af4d42',  // Sphere 6 — Cloudflare Stream UID
       title: 'Ground your sphere',
       intro: 'Reinforce the darkest point where the sphere touches the ground (ambient occlusion). Let the cast shadow fade as it moves away from the form.',
       quote: 'This gradient suggests how light spills and spreads across the ground plane.',
@@ -7948,14 +7954,14 @@ function selectPlan(tier) {
 }
 
 function renderDemo(step) {
-  const seg = LESSON.video.segments[step.videoSeg] || { start: '0:00', end: '0:00', startSec: 0, endSec: 0 };
-  const youtubeId = LESSON.video.youtubeId;
+  // Cloudflare Stream migration: each demo step now has its own videoId.
+  // Falls back gracefully if a step somehow has no videoId.
+  const videoId = step.videoId;
+  const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   
-  // Build YouTube embed URL with start/end parameters
-  // Note: rel=0 limits related videos to same channel
-  //       modestbranding=1 reduces YouTube logo
-  //       playsinline=1 keeps video inline on iOS
-  const embedUrl = `https://www.youtube.com/embed/${youtubeId}?start=${seg.startSec}&end=${seg.endSec}&rel=0&modestbranding=1&playsinline=1`;
+  const embedUrl = videoId
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    : '';
   
   return `
     <div class="step-card">
@@ -7963,20 +7969,18 @@ function renderDemo(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        <iframe 
-          width="100%" 
-          height="100%" 
-          style="position: absolute; inset: 0; border: none;"
+        ${videoId ? `<iframe 
           src="${embedUrl}"
+          loading="lazy"
           title="Demo video — ${step.title}"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+          style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"></iframe>` 
+        : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
       </div>
       
       <div class="video-meta">
-        <span class="video-meta-time">⏱ ${seg.start} → ${seg.end}</span>
-        <span class="video-meta-dot">·</span>
-        <span class="video-meta-tip">Watch then draw at your own pace</span>
+        <span class="video-meta-tip">Watch, then draw at your own pace</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
