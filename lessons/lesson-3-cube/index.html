@@ -6079,46 +6079,18 @@ function renderOpeningLFC(step) {
         ${escapeHtml(data.title)}
       </h1>
       
-      <!-- Audio player (primary) OR coming-soon placeholder -->
-      <div style="margin-bottom: 24px;">
-        ${audioUrl ? `
-          <!-- Real audio player (ElevenLabs mp3) -->
-          <audio id="opening-audio" src="${audioUrl}" preload="auto" style="display:none;"></audio>
-          <button onclick="toggleOpeningAudio()" id="opening-audio-btn"
-                  style="width: 80px; height: 80px; border-radius: 50%;
-                         background: linear-gradient(135deg, #a78bfa, #67e8f9);
-                         border: none; cursor: pointer; font-size: 32px;
-                         box-shadow: 0 8px 24px rgba(167,139,250,0.45);
-                         transition: transform 0.2s, box-shadow 0.2s;
-                         display: flex; align-items: center; justify-content: center;
-                         margin: 0 auto 12px;"
-                  onmouseover="this.style.transform='scale(1.08)'"
-                  onmouseout="this.style.transform='scale(1)'">
-            ▶
-          </button>
-          <div style="font-family:'Montserrat',sans-serif; font-size:11px; 
-                      font-weight:700; color:#7c5fc7; letter-spacing:1.5px;
-                      text-transform:uppercase;">
-            Listen to the welcome
-          </div>
-        ` : `
-          <!-- Placeholder — audio coming soon via ElevenLabs -->
-          <div style="width: 80px; height: 80px; border-radius: 50%;
-                      background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(103,232,249,0.2));
-                      border: 2px dashed rgba(167,139,250,0.4);
-                      display: flex; align-items: center; justify-content: center;
-                      margin: 0 auto 12px; font-size: 28px; opacity: 0.7;">
-            🎙️
-          </div>
-          <div style="font-family:'Montserrat',sans-serif; font-size:11px;
-                      font-weight:700; color:#a78bfa; letter-spacing:1.5px;
-                      text-transform:uppercase; margin-bottom: 4px;">
-            Voice welcome coming soon
-          </div>
-          <div style="font-size:11px; color:#94a3b8; font-style:italic;">
-            Mrs. Dawn will greet you here in her own voice
-          </div>
-        `}
+      <!-- Opening welcome video (Cloudflare Stream — has voice + music + visuals) -->
+      <div style="margin-bottom: 24px; border-radius: 16px; overflow: hidden;
+                  box-shadow: 0 12px 32px rgba(167,139,250,0.25);">
+        <div style="position: relative; padding-top: 56.25%;">
+          <iframe
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/d866fd9e2d2daec8e5dd52b2512d5f06/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fd866fd9e2d2daec8e5dd52b2512d5f06%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            loading="lazy"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true">
+          </iframe>
+        </div>
       </div>
       
       <!-- 3 essential sentences only (not the full text) -->
