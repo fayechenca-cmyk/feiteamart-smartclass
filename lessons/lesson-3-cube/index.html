@@ -5238,6 +5238,17 @@ const LESSON = {
       intro: 'Take a photo of your finished drawing. Your teacher (or AI) will review it.',
       xp: 10
     },
+    // ===== OPTIONAL FINISH — Go Further =====
+    // NOT part of the main completion line.
+    // For students who want to refine beyond the core lesson.
+    // Can be skipped entirely — lesson completion is already granted before this.
+    {
+      part: 'OPT',
+      partLabel: '🎯 Optional challenge',
+      type: 'optionalFinish',
+      title: 'Go Further',
+      xp: 0  // does not count toward main lesson XP
+    },
     // ===== CLOSING LFC — Take it home (with cross-lesson sphere reflection)
     // 
     // LFC PRINCIPLE: A mindset, not a content type.
@@ -5349,6 +5360,7 @@ function renderStep() {
                          break;
     case 'demo':        el.innerHTML = renderDemo(step); break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
+    case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
   }
   
@@ -7941,9 +7953,190 @@ function renderFinalSubmit(step) {
       
       <div class="btn-stack">
         <button class="btn btn-gold" onclick="submitFinal()"><span style="margin-right: 6px;">📸</span> Upload my drawing</button>
-        <button class="btn btn-ghost" onclick="nextStep()">Skip — I'll submit later</button>
+        <button class="btn btn-ghost" onclick="showLessonCompleteFork()">Skip — I'll submit later</button>
+      </div>
+      
+      <!-- Lesson complete fork — shown after upload via showLessonCompleteFork() -->
+      <div id="lesson-complete-fork" style="display: none; margin-top: 24px;">
+        
+        <!-- Completion announcement -->
+        <div style="text-align: center; padding: 24px 16px 20px;
+                    background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
+                    border-radius: 16px; border: 1px solid rgba(29,158,117,0.2);
+                    margin-bottom: 16px;">
+          <div style="font-size: 40px; margin-bottom: 10px;">✨</div>
+          <div style="font-family:'Montserrat',sans-serif; font-size:20px; 
+                      font-weight:900; color:#1a1d2b; margin-bottom:8px;">
+            Your cube is working.
+          </div>
+          <div style="font-family:'Montserrat',sans-serif; font-size:11px;
+                      font-weight:800; letter-spacing:2px; text-transform:uppercase;
+                      color:#1d9e75; margin-bottom:12px;">
+            Core lesson complete
+          </div>
+          <p style="font-family:'Open Sans',sans-serif; font-size:13px;
+                    color:#4a4f5e; line-height:1.6; margin:0; max-width:280px; margin: 0 auto;">
+            You've drawn all five steps with Mrs. Dawn.
+            The structure is there. The light and shadow read.
+            You can move on.
+          </p>
+        </div>
+        
+        <!-- Two-button fork -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          
+          <!-- Button A: Finish Lesson -->
+          <button onclick="nextStep()"
+                  style="padding: 18px 14px; border-radius: 14px;
+                         background: #1a1d2b; color: #fff; border: none;
+                         font-family:'Montserrat',sans-serif; font-weight:800;
+                         font-size:12px; letter-spacing:0.8px; cursor:pointer;
+                         transition: all 0.2s; text-align:center; line-height:1.4;"
+                  onmouseover="this.style.background='#2a2f42'"
+                  onmouseout="this.style.background='#1a1d2b'">
+            <div style="font-size:22px; margin-bottom:8px;">◈</div>
+            <div style="text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">
+              Finish Lesson
+            </div>
+            <div style="font-size:10px; font-weight:600; opacity:0.7; text-transform:none; letter-spacing:0;">
+              Get your progress mark
+            </div>
+          </button>
+          
+          <!-- Button B: Go Further -->
+          <button onclick="goToOptionalFinish()"
+                  style="padding: 18px 14px; border-radius: 14px;
+                         background: #fff; color: #1a1d2b;
+                         border: 1.5px solid rgba(200,169,110,0.5);
+                         font-family:'Montserrat',sans-serif; font-weight:800;
+                         font-size:12px; letter-spacing:0.8px; cursor:pointer;
+                         transition: all 0.2s; text-align:center; line-height:1.4;"
+                  onmouseover="this.style.borderColor='#c8a96e'; this.style.background='#fffbf5'"
+                  onmouseout="this.style.borderColor='rgba(200,169,110,0.5)'; this.style.background='#fff'">
+            <div style="font-size:22px; margin-bottom:8px;">🎯</div>
+            <div style="text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px; color:#c8a96e;">
+              Go Further
+            </div>
+            <div style="font-size:10px; font-weight:600; opacity:0.7; text-transform:none; letter-spacing:0; color:#4a4f5e;">
+              Optional finishing challenge
+            </div>
+          </button>
+        </div>
       </div>
     </div>`;
+}
+
+// Show the lesson-complete fork (called after upload or skip)
+function showLessonCompleteFork() {
+  const fork = document.getElementById('lesson-complete-fork');
+  if (fork) {
+    fork.style.display = 'block';
+    fork.style.animation = 'slideUp 0.4s ease';
+    setTimeout(() => {
+      fork.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }
+  Analytics.track('lesson_complete_fork_shown', { lesson_id: LESSON.id });
+}
+
+// Navigate to the optionalFinish step (skips closingLFC for now — goes after it)
+function goToOptionalFinish() {
+  Analytics.track('optional_finish_chosen', { lesson_id: LESSON.id });
+  const optIdx = LESSON.steps.findIndex(s => s.type === 'optionalFinish');
+  if (optIdx !== -1) {
+    goToStep(optIdx);
+  }
+}
+
+// renderOptionalFinish — the Go Further challenge screen
+function renderOptionalFinish(step) {
+  return `
+    <div class="step-card">
+      
+      <!-- Header: clearly marked as optional -->
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
+        <div style="background: rgba(200,169,110,0.12); border: 1.5px solid rgba(200,169,110,0.4);
+                    border-radius: 20px; padding: 5px 14px;
+                    font-family:'Montserrat',sans-serif; font-size:10px;
+                    font-weight:900; letter-spacing:2px; color:#c8a96e;
+                    text-transform:uppercase; white-space:nowrap;">
+          🎯 Optional
+        </div>
+        <div style="font-family:'Montserrat',sans-serif; font-size:10px;
+                    font-weight:700; color:#94a3b8; letter-spacing:1px;
+                    text-transform:uppercase;">
+          Not required for completion
+        </div>
+      </div>
+      
+      <div class="step-title" style="margin-bottom:8px;">Refine Your Cube</div>
+      
+      <!-- What this is -->
+      <div style="background: rgba(200,169,110,0.07); border-left: 3px solid #c8a96e;
+                  border-radius: 0 10px 10px 0; padding: 14px 16px; margin-bottom: 20px;">
+        <div style="font-family:'Montserrat',sans-serif; font-size:10px; font-weight:900;
+                    letter-spacing:2px; color:#c8a96e; text-transform:uppercase; margin-bottom:8px;">
+          What this is
+        </div>
+        <p style="font-family:'Open Sans',sans-serif; font-size:13.5px; color:#4a4f5e;
+                  line-height:1.65; margin:0 0 10px;">
+          Your core cube drawing is complete. This section is for students who want to push further.
+        </p>
+        <p style="font-family:'Open Sans',sans-serif; font-size:13.5px; color:#4a4f5e;
+                  line-height:1.65; margin:0; font-style:italic;">
+          These steps won't change your completion status. They will change how the drawing feels.
+        </p>
+      </div>
+      
+      <!-- What you can do -->
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:22px;">
+        ${[
+          ['🌑', 'Deepen the background tone', 'Add value behind the cube so it reads against its environment.'],
+          ['⚡', 'Strengthen the light-dark boundary', 'Push the terminator one step darker to sharpen the 3D effect.'],
+          ['🌫️', 'Soften edge transitions', 'Let the outer edges dissolve gently into the background.'],
+          ['✋', 'Final blending pass', 'Use a tissue or blender to unify the surface and smooth transitions.']
+        ].map(([icon, title, desc]) => `
+          <div style="display:flex; gap:12px; align-items:flex-start; padding:12px 14px;
+                      background:#fafaf8; border-radius:10px; border:0.5px solid #e8ecf2;">
+            <span style="font-size:18px; flex-shrink:0; margin-top:2px;">${icon}</span>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif; font-size:12px; font-weight:800;
+                          color:#1a1d2b; margin-bottom:3px;">${title}</div>
+              <div style="font-family:'Open Sans',sans-serif; font-size:12px;
+                          color:#4a4f5e; line-height:1.5;">${desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <!-- Video placeholder — Mrs. Dawn's optional refinement demo -->
+      <div style="background: linear-gradient(135deg, #1a1d2b, #2a2f42);
+                  border-radius: 14px; padding: 24px; text-align:center;
+                  margin-bottom: 20px; border: 1px solid rgba(200,169,110,0.2);">
+        <div style="font-size:32px; margin-bottom:10px;">🎬</div>
+        <div style="font-family:'Montserrat',sans-serif; font-size:12px; font-weight:800;
+                    color:#c8a96e; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;">
+          Refinement demo — coming soon
+        </div>
+        <div style="font-family:'Open Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.6);">
+          Mrs. Dawn will walk through each refinement step here.
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="btn-stack">
+        <button class="btn btn-gold" onclick="submitFinal()">
+          📸 Upload my refined drawing
+        </button>
+        <button class="btn btn-primary" onclick="nextStep()">
+          <span class="glyph">◈</span> I'm done — finish lesson →
+        </button>
+        <button class="btn btn-ghost" onclick="nextStep()">
+          Skip optional — mark complete
+        </button>
+      </div>
+    </div>
+  `;
 }
 
 function renderBadgeUnlock() {
@@ -8850,7 +9043,22 @@ function playVideo() {
 }
 
 function submitFinal() {
+  // Open upload modal — after upload completes, showLessonCompleteFork() is called
+  // (see submitUpload() which already calls nextStep() for finalSubmit steps —
+  // we override that here by showing the fork instead)
   openUploadModal();
+  // After modal closes (upload or skip), show the completion fork
+  // We use a small delay to let the modal animate out first
+  const checkClosed = setInterval(() => {
+    const modal = document.getElementById('upload-modal');
+    if (modal && !modal.classList.contains('show')) {
+      clearInterval(checkClosed);
+      const currStep = LESSON.steps[state.currentStepIndex];
+      if (currStep && currStep.type === 'finalSubmit') {
+        showLessonCompleteFork();
+      }
+    }
+  }, 300);
 }
 
 function randomEncouragement() {
