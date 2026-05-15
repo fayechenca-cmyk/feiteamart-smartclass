@@ -5817,7 +5817,7 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); setTimeout(() => initDemoVideoComplete(step), 100); break;
+    case 'demo':       el.innerHTML = renderDemo(step); setTimeout(() => { initDemoVideoComplete(step); initSpherePauses(step); }, 100); break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -8096,6 +8096,8 @@ function renderDemo(step) {
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   const safeSeg = step.videoSeg || 'demo';
+  const pauses = (typeof SPHERE_VIDEO_PAUSES !== 'undefined' && SPHERE_VIDEO_PAUSES[videoId]) || [];
+  const hasPauses = pauses.length > 0;
   
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
@@ -8106,7 +8108,15 @@ function renderDemo(step) {
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame demo-video-frame" id="demo-video-frame-${safeSeg}" style="background: #000; cursor: default; padding: 0;">
+      ${hasPauses ? `
+        <div class="video-segment-meta" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
+          <span>📹 ${step.title}</span>
+          <span>${pauses.length} key moments</span>
+        </div>
+      ` : ''}
+      
+      <!-- Video frame with image overlay capability -->
+      <div class="video-frame demo-video-frame" id="demo-video-frame-${safeSeg}" style="background: #000; cursor: default; padding: 0; position: relative;">
         ${videoId ? `<iframe id="demo-iframe-${safeSeg}"
           src="${embedUrl}"
           loading="lazy"
@@ -8115,21 +8125,124 @@ function renderDemo(step) {
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
           allowfullscreen="true"></iframe>` 
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
+        
+        <!-- Image overlay for pause points -->
+        <div id="sp-image-overlay-${safeSeg}"
+             style="display:none; position:absolute; inset:0; z-index:10;
+                    background:#fff; cursor:zoom-in;
+                    animation: vpImageFadeIn 0.3s ease-out;"
+             onclick="openSphereImageLightbox('${safeSeg}')">
+          <img id="sp-image-${safeSeg}" src="" alt="Reference"
+               style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;">
+          <div style="position:absolute; bottom:12px; right:12px; 
+                      background:rgba(26,29,43,0.85); color:#fff; padding:6px 12px;
+                      border-radius:14px; font-family:'Montserrat',sans-serif;
+                      font-size:10px; font-weight:800; letter-spacing:1px;
+                      text-transform:uppercase; pointer-events:none;">
+            🔍 Tap to enlarge
+          </div>
+          <div style="position:absolute; top:12px; left:12px; 
+                      background:linear-gradient(135deg,#a78bfa,#67e8f9); color:#fff; 
+                      padding:6px 14px; border-radius:14px; 
+                      font-family:'Montserrat',sans-serif; font-size:10px; 
+                      font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                      pointer-events:none; box-shadow:0 3px 10px rgba(167,139,250,0.4);">
+            <span id="sp-counter-badge-${safeSeg}">⏸ Key moment 1</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Teaching panel BELOW video -->
+      <div id="sp-panel-${safeSeg}" 
+           style="display:none; margin-top:14px; padding:18px 20px; 
+                  border-radius:14px; background:#fff;
+                  box-shadow:0 4px 18px rgba(167,139,250,0.16);
+                  border:1px solid rgba(167,139,250,0.2);
+                  animation: vpPanelSlideUp 0.35s ease-out;">
+        
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:12px; padding-bottom:10px;
+                    border-bottom:1px solid rgba(167,139,250,0.15);">
+          <span id="sp-counter-${safeSeg}"
+                style="font-family:'Montserrat',sans-serif; font-size:10px;
+                       font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                       color:#7c5fc7;">
+            ⏸ Key moment 1
+          </span>
+          <span id="sp-timer-${safeSeg}" 
+                style="font-family:'Montserrat',sans-serif; font-size:11px;
+                       font-weight:800; color:#1d9e75;">60s</span>
+        </div>
+        
+        <div id="sp-bar-wrap-${safeSeg}" 
+             style="height:3px; background:rgba(167,139,250,0.15); border-radius:2px;
+                    margin-bottom:14px; overflow:hidden;">
+          <div id="sp-bar-${safeSeg}" 
+               style="height:100%; width:100%; 
+                      background:linear-gradient(90deg,#a78bfa,#67e8f9);
+                      transition:width 0.3s linear;"></div>
+        </div>
+        
+        <div id="sp-title-${safeSeg}" 
+             style="font-family:'Montserrat',sans-serif; font-size:15px;
+                    font-weight:800; color:#1a1d2b; margin-bottom:6px;
+                    line-height:1.4;"></div>
+        
+        <div id="sp-shortprompt-${safeSeg}"
+             style="display:none; font-family:'Open Sans',sans-serif; font-size:13px;
+                    font-style:italic; color:#7c5fc7; margin-bottom:10px;
+                    line-height:1.5;"></div>
+        
+        <div id="sp-text-${safeSeg}"
+             style="font-family:'Open Sans',sans-serif; font-size:13px;
+                    color:#4a4f5e; line-height:1.6; margin-bottom:14px;"></div>
+        
+        <!-- Stage indicator for multi-image pauses (A/B) -->
+        <div id="sp-stage-${safeSeg}"
+             style="display:none; font-family:'Montserrat',sans-serif; font-size:10px;
+                    font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                    color:#c8a96e; margin-bottom:10px;"></div>
+        
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="sp-resume-btn-${safeSeg}" 
+                  onclick="spResume('${safeSeg}')" 
+                  style="flex:1; min-width:170px; padding:12px 16px; 
+                         background:#1a1d2b; color:#fff;
+                         border:none; border-radius:24px; 
+                         font-family:'Montserrat',sans-serif;
+                         font-weight:800; font-size:12px; letter-spacing:0.8px; 
+                         text-transform:uppercase; cursor:pointer;"
+                  onmouseover="this.style.background='#2a2f42'"
+                  onmouseout="this.style.background='#1a1d2b'">
+            ✨ Continue
+          </button>
+          <button onclick="spKeepPaused('${safeSeg}')"
+                  style="flex:1; min-width:170px; padding:12px 16px; 
+                         background:#fff; color:#4a4f5e; 
+                         border:1px solid rgba(0,0,0,0.12); 
+                         border-radius:24px; 
+                         font-family:'Montserrat',sans-serif;
+                         font-weight:700; font-size:11.5px; letter-spacing:0.6px; 
+                         cursor:pointer;"
+                  onmouseover="this.style.background='#f5f5f7'"
+                  onmouseout="this.style.background='#fff'">
+            Need more time
+          </button>
+        </div>
       </div>
       
       <div class="video-meta">
-        <span class="video-meta-tip">Watch, then draw at your own pace</span>
+        <span class="video-meta-tip">${hasPauses ? `Video has ${pauses.length} key moments — pauses with reference images` : 'Watch, then draw at your own pace'}</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
       
-      <div class="pro-tip">
+      ${step.tip ? `<div class="pro-tip">
         <div class="pro-tip-label">Pro tip</div>
         <div class="pro-tip-text">${step.tip}</div>
-      </div>
+      </div>` : ''}
       
       <div class="btn-stack">
-        <!-- Video complete hint (hidden until video ends) -->
         <div id="demo-complete-hint-${safeSeg}"
              style="display:none; text-align:center; margin-bottom:8px;
                     font-family:'Montserrat',sans-serif; font-size:11px;
@@ -8143,6 +8256,344 @@ function renderDemo(step) {
         <button class="btn btn-ghost" onclick="nextStep()">Skip this step →</button>
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SPHERE VIDEO PAUSE SYSTEM
+// Mirrors Cube's VIDEO_PAUSES — adds multi-image (A/B) support.
+// Each pause: {time, duration, title, shortPrompt, text, image} for single image
+// Or: {time, duration, title, shortPrompt, text, imageA, imageB, ...} for two-stage
+// ═══════════════════════════════════════════════════════════════
+const SPHERE_VIDEO_PAUSES = {
+  // ═══ Sphere Video 1 (Ghost the circle) — 7 pause points ═══
+  'cddd24e7b238689489c4506b2f6c682e': [
+    {
+      time: 27,
+      duration: 60,
+      title: 'Define the sphere placement',
+      shortPrompt: 'Mark top, bottom, left, right — plus paper margin.',
+      text: 'Start by ghosting four light marks where the sphere will sit. These four marks define the size and position. Leave breathing room around the edges of your paper.',
+      imageA: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3774a029cd437a70f_sphere-p1-1-A.PNG',
+      imageB: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f304e5b89e889a0b49_sphere-p1-1-B.PNG'
+    },
+    {
+      time: 49,
+      duration: 60,
+      title: 'Measure left and right',
+      shortPrompt: 'Use your pencil to compare distances from the center.',
+      text: 'Hold your pencil horizontally. Measure from the center to the left mark, then to the right mark. They should be equal — if not, adjust.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3263f5c484d920b88_sphere-p1-2.PNG'
+    },
+    {
+      time: 82,
+      duration: 60,
+      title: 'Measure top and bottom',
+      shortPrompt: 'Now check vertically — same pencil method.',
+      text: 'Rotate your pencil vertically. Compare distance from center to top, then to bottom. Equal distances = a true sphere, not an oval.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3f703985a58e5e0fc_sphere-p1-3.PNG'
+    },
+    {
+      time: 124,
+      duration: 60,
+      title: 'Find the diagonal points',
+      shortPrompt: 'Same radius — now on the diagonals.',
+      text: 'Use the same pencil-radius to locate four diagonal guide points (NE, NW, SE, SW). These eight points together define the circle.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f8cff549172e4a3156_sphere-p1-4.PNG'
+    },
+    {
+      time: 158,
+      duration: 60,
+      title: 'See the full framework',
+      shortPrompt: 'Center cross + diameter + radius + 8 guide points.',
+      text: 'This is the scaffolding underneath every well-drawn sphere. The cross gives you center. The eight points give you the curve. Trust the structure.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f8d3e0f538d9a44618_sphere-p1-5.PNG'
+    },
+    {
+      time: 169,
+      duration: 60,
+      title: 'Cut with straight tangents first',
+      shortPrompt: 'Connect points with short straight lines — not curves yet.',
+      text: 'Beginner mistake: drawing a curve straight away. Instead, connect your eight points with short straight lines first. A circle is just many small straight cuts.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3b6ed3822d1c72b35_sphere-p1-6.PNG'
+    },
+    {
+      time: 254,
+      duration: 60,
+      title: 'Refine into a clean curve',
+      shortPrompt: 'Now soften the straight cuts into a smooth circle.',
+      text: 'Once your tangent cuts are right, gently round the corners. Don\'t force perfection — let the curve emerge from the geometry you built.',
+      imageA: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f340fdd86811d3e04c_sphere-p1-7-A.PNG',
+      imageB: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f381aaee0e8382341c_sphere-p1-7-B.PNG'
+    }
+  ]
+  // Future: pause points for Sphere videos 2-6 when designed
+};
+
+// Sphere pause-system state — keyed by videoSeg (not videoNumber like Cube)
+const spState = {
+  player: null,
+  videoSeg: null,
+  videoId: null,
+  pauses: [],
+  triggered: new Set(),
+  watcher: null,
+  countdown: null,
+  countdownEnds: 0,
+  paused: false,
+  currentPauseIdx: -1,
+  currentStage: 'A',  // for multi-image pauses: 'A' or 'B'
+  currentTime: 0
+};
+
+// Init Cloudflare Stream pause system for a demo step.
+// Called from initDemoVideoComplete — must not conflict with that.
+function initSpherePauses(step) {
+  if (!step || !step.videoId || !step.videoSeg) return;
+  const pauses = SPHERE_VIDEO_PAUSES[step.videoId];
+  if (!pauses || pauses.length === 0) return;  // no pauses for this video
+  
+  // Reset state
+  spState.videoSeg = step.videoSeg;
+  spState.videoId = step.videoId;
+  spState.pauses = pauses;
+  spState.triggered = new Set();
+  spState.paused = false;
+  spState.currentPauseIdx = -1;
+  spState.currentStage = 'A';
+  spState.currentTime = 0;
+  if (spState.watcher) { clearInterval(spState.watcher); spState.watcher = null; }
+  if (spState.countdown) { clearInterval(spState.countdown); spState.countdown = null; }
+  
+  loadDemoStreamSDK(() => {
+    setTimeout(() => {
+      const iframe = document.getElementById(`demo-iframe-${step.videoSeg}`);
+      if (!iframe || !window.Stream) return;
+      try {
+        spState.player = window.Stream(iframe);
+        spState.player.addEventListener('timeupdate', () => {
+          try { spState.currentTime = spState.player.currentTime || 0; } catch (e) {}
+        });
+        spState.player.addEventListener('play', () => {
+          if (spState.paused) {
+            hideSPOverlay();
+            spState.paused = false;
+          }
+        });
+        spState.player.addEventListener('loadedmetadata', () => {
+          startSPWatcher();
+        });
+        setTimeout(() => { if (!spState.watcher) startSPWatcher(); }, 1500);
+      } catch (err) {
+        console.warn('[Sphere pauses] Stream attach failed:', err);
+      }
+    }, 350);
+  });
+}
+
+function startSPWatcher() {
+  if (spState.watcher) clearInterval(spState.watcher);
+  spState.watcher = setInterval(() => {
+    if (!spState.player || spState.paused) return;
+    const t = spState.currentTime;
+    if (typeof t !== 'number') return;
+    for (let i = 0; i < spState.pauses.length; i++) {
+      const p = spState.pauses[i];
+      if (spState.triggered.has(i)) continue;
+      if (t < p.time) continue;
+      if (t > p.time + 2) { spState.triggered.add(i); continue; }
+      triggerSPPause(i);
+      break;
+    }
+  }, 250);
+}
+
+function triggerSPPause(idx) {
+  const p = spState.pauses[idx];
+  if (!p) return;
+  spState.triggered.add(idx);
+  spState.currentPauseIdx = idx;
+  spState.paused = true;
+  
+  try { spState.player.pause(); } catch (e) {}
+  
+  const seg = spState.videoSeg;
+  const total = spState.pauses.length;
+  const isMulti = !!(p.imageA && p.imageB);
+  
+  // Reset to stage A for multi-image
+  spState.currentStage = 'A';
+  
+  // Update counter / badge
+  const counterText = `⏸ Key moment ${idx + 1} of ${total}`;
+  document.getElementById(`sp-counter-${seg}`).textContent = counterText;
+  document.getElementById(`sp-counter-badge-${seg}`).textContent = counterText;
+  
+  // Update title + text
+  document.getElementById(`sp-title-${seg}`).textContent = p.title;
+  document.getElementById(`sp-text-${seg}`).textContent = p.text;
+  
+  // shortPrompt
+  const shortPromptEl = document.getElementById(`sp-shortprompt-${seg}`);
+  if (shortPromptEl) {
+    if (p.shortPrompt) {
+      shortPromptEl.textContent = p.shortPrompt;
+      shortPromptEl.style.display = 'block';
+    } else {
+      shortPromptEl.style.display = 'none';
+    }
+  }
+  
+  // Set first image (A for multi, plain image for single)
+  const imgEl = document.getElementById(`sp-image-${seg}`);
+  if (imgEl) imgEl.src = isMulti ? p.imageA : p.image;
+  
+  // Stage indicator for multi-image
+  const stageEl = document.getElementById(`sp-stage-${seg}`);
+  if (stageEl) {
+    if (isMulti) {
+      stageEl.textContent = '◐ Tip 1 of 2';
+      stageEl.style.display = 'block';
+    } else {
+      stageEl.style.display = 'none';
+    }
+  }
+  
+  // Resume button label: "Next Tip" for multi-image stage A, otherwise "Continue"
+  const resumeBtn = document.getElementById(`sp-resume-btn-${seg}`);
+  if (resumeBtn) {
+    if (isMulti) {
+      resumeBtn.innerHTML = '✨ Next Tip →';
+    } else {
+      resumeBtn.innerHTML = '✨ Continue';
+    }
+  }
+  
+  // Show overlay + panel
+  const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);
+  if (imageOverlay) imageOverlay.style.display = 'block';
+  const panel = document.getElementById(`sp-panel-${seg}`);
+  if (panel) panel.style.display = 'block';
+  
+  // Scroll into view
+  setTimeout(() => {
+    const frame = document.getElementById(`demo-video-frame-${seg}`);
+    if (frame) frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+  
+  // Start countdown
+  startSPCountdown(p.duration || 60);
+  
+  // Analytics
+  if (typeof Analytics !== 'undefined' && Analytics.track) {
+    Analytics.track('sphere_pause_shown', {
+      videoId: spState.videoId,
+      videoSeg: seg,
+      pauseIdx: idx,
+      title: p.title
+    });
+  }
+}
+
+function startSPCountdown(duration) {
+  if (spState.countdown) clearInterval(spState.countdown);
+  spState.countdownEnds = Date.now() + duration * 1000;
+  const seg = spState.videoSeg;
+  
+  spState.countdown = setInterval(() => {
+    const remaining = Math.max(0, spState.countdownEnds - Date.now());
+    const seconds = Math.ceil(remaining / 1000);
+    const pct = (remaining / (duration * 1000)) * 100;
+    const bar = document.getElementById(`sp-bar-${seg}`);
+    const timer = document.getElementById(`sp-timer-${seg}`);
+    if (bar) bar.style.width = pct + '%';
+    if (timer) timer.textContent = `${seconds}s`;
+    
+    if (remaining <= 0) {
+      clearInterval(spState.countdown);
+      spState.countdown = null;
+      spResume(seg);
+    }
+  }, 200);
+}
+
+// Resume — handles both multi-image stage advance AND final resume
+function spResume(seg) {
+  const idx = spState.currentPauseIdx;
+  const p = spState.pauses[idx];
+  if (!p) return;
+  const isMulti = !!(p.imageA && p.imageB);
+  
+  // Multi-image: stage A → stage B (not resume yet)
+  if (isMulti && spState.currentStage === 'A') {
+    spState.currentStage = 'B';
+    
+    // Switch image to B
+    const imgEl = document.getElementById(`sp-image-${seg}`);
+    if (imgEl) imgEl.src = p.imageB;
+    
+    // Update stage indicator
+    const stageEl = document.getElementById(`sp-stage-${seg}`);
+    if (stageEl) stageEl.textContent = '◑ Tip 2 of 2';
+    
+    // Change button to Continue
+    const resumeBtn = document.getElementById(`sp-resume-btn-${seg}`);
+    if (resumeBtn) resumeBtn.innerHTML = '✨ Continue';
+    
+    // Restart countdown for stage B
+    if (spState.countdown) { clearInterval(spState.countdown); spState.countdown = null; }
+    startSPCountdown(p.duration || 60);
+    return;
+  }
+  
+  // Otherwise: full resume
+  if (spState.countdown) { clearInterval(spState.countdown); spState.countdown = null; }
+  hideSPOverlay();
+  spState.paused = false;
+  
+  // Resume Cloudflare Stream playback
+  try {
+    spState.player.play();
+    setTimeout(() => { try { spState.player.play(); } catch (e) {} }, 150);
+    setTimeout(() => { try { spState.player.play(); } catch (e) {} }, 400);
+  } catch (e) {
+    console.warn('[Sphere pauses] resume failed:', e);
+  }
+  
+  if (typeof Analytics !== 'undefined' && Analytics.track) {
+    Analytics.track('sphere_pause_resumed', { 
+      videoId: spState.videoId, 
+      pauseIdx: idx 
+    });
+  }
+}
+
+function spKeepPaused(seg) {
+  if (spState.countdown) { clearInterval(spState.countdown); spState.countdown = null; }
+  const timer = document.getElementById(`sp-timer-${seg}`);
+  if (timer) timer.textContent = '∞';
+  const bar = document.getElementById(`sp-bar-${seg}`);
+  if (bar) bar.style.width = '100%';
+}
+
+function hideSPOverlay() {
+  const seg = spState.videoSeg;
+  if (!seg) return;
+  const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);
+  if (imageOverlay) imageOverlay.style.display = 'none';
+  const panel = document.getElementById(`sp-panel-${seg}`);
+  if (panel) panel.style.display = 'none';
+}
+
+// Image lightbox — reuses lesson's existing lightbox if available
+function openSphereImageLightbox(seg) {
+  const imgEl = document.getElementById(`sp-image-${seg}`);
+  if (!imgEl || !imgEl.src) return;
+  // If there's an existing openImageLightbox, try it
+  if (typeof openImageLightbox === 'function') {
+    try { openImageLightbox(seg); return; } catch (e) {}
+  }
+  // Fallback: open image in new tab
+  window.open(imgEl.src, '_blank');
 }
 
 function renderFinalSubmit(step) {
