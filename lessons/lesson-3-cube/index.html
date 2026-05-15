@@ -85,6 +85,37 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   80%  { opacity: 1; transform: translate(-50%, -40px); }
   100% { opacity: 0; transform: translate(-50%, -60px); }
 }
+@keyframes videoCompleteBorderSpin {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+@keyframes videoCompleteBorderPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+@keyframes continueBtnBounce {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-6px); }
+  60%      { transform: translateY(-3px); }
+}
+@keyframes videoCompleteHintFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Video frame "complete" state — glowing gradient border */
+.video-frame-complete {
+  border-radius: var(--radius-md);
+  padding: 3px !important;
+  background: linear-gradient(
+    90deg,
+    #1d9e75, #67e8f9, #c8a96e, #a78bfa, #1d9e75, #67e8f9, #c8a96e, #a78bfa, #1d9e75
+  );
+  background-size: 400% 400%;
+  animation: videoCompleteBorderSpin 2s linear forwards,
+             videoCompleteBorderPulse 2s ease-in-out 2s infinite;
+  box-shadow: 0 0 20px rgba(103,232,249,0.35), 0 0 40px rgba(167,139,250,0.2);
+}
 
 /* PART INDICATOR */
 .part-badge { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); background: var(--ink); padding: 6px 12px; border-radius: 20px; margin-bottom: 16px; }
@@ -7389,7 +7420,16 @@ function renderVideoSegment(step) {
       </div>
       
       <div class="btn-stack" style="margin-top:18px;">
-        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> ${getNextVideoButtonLabel(step)} →</button>
+        <!-- Video complete hint (hidden by default — fades in when video ends) -->
+        <div id="video-complete-hint-${step.videoNumber}"
+             style="display:none; text-align:center; margin-bottom:10px;
+                    font-family:'Montserrat',sans-serif; font-size:11px;
+                    font-weight:700; color:#1d9e75; letter-spacing:1px;
+                    text-transform:uppercase;
+                    animation: videoCompleteHintFadeIn 0.5s ease-out forwards;">
+          ✓ Video complete — ready for the next step?
+        </div>
+        <button class="btn btn-primary" id="vs-continue-btn-${step.videoNumber}" onclick="nextStep()"><span class="glyph">◈</span> ${getNextVideoButtonLabel(step)} →</button>
       </div>
     </div>`;
 }
@@ -7502,6 +7542,12 @@ function createVSPlayer(step) {
       startVSWatcher();
     });
     
+    // When video finishes playing → trigger complete animation
+    vsState.player.addEventListener('ended', () => {
+      console.log('[VideoSegment] Video ended for', step.videoId);
+      triggerVideoCompleteAnimation();
+    });
+    
     // Fallback: start watcher anyway after 1.5s in case loadedmetadata is slow
     setTimeout(() => {
       if (!vsState.watcher) startVSWatcher();
@@ -7509,6 +7555,44 @@ function createVSPlayer(step) {
   } catch (err) {
     console.warn('[VideoSegment] Failed to attach Stream player:', err);
   }
+}
+
+// Triggered when a video segment finishes playing.
+// Adds gradient border glow to video frame + bounce/fade-in hint near Continue button.
+// The student still clicks Continue manually (no auto-advance).
+function triggerVideoCompleteAnimation() {
+  if (!vsState.videoNumber) return;
+  
+  // 1. Add glowing gradient border to the video frame
+  const frame = document.getElementById(`video-frame-${vsState.videoNumber}`);
+  if (frame && !frame.classList.contains('video-frame-complete')) {
+    frame.classList.add('video-frame-complete');
+  }
+  
+  // 2. Fade in the "ready for next step" hint
+  const hint = document.getElementById(`video-complete-hint-${vsState.videoNumber}`);
+  if (hint) {
+    hint.style.display = 'block';
+  }
+  
+  // 3. Make Continue button bounce subtly to draw eye
+  const btn = document.getElementById(`vs-continue-btn-${vsState.videoNumber}`);
+  if (btn) {
+    btn.style.animation = 'continueBtnBounce 1.2s ease-in-out 0.3s 3';
+    btn.style.boxShadow = '0 8px 24px rgba(167,139,250,0.35)';
+  }
+  
+  // 4. Play a gentle completion chime
+  try {
+    playTone(880, 0.15);
+    setTimeout(() => playTone(1320, 0.2), 130);
+  } catch (e) {}
+  
+  // 5. Analytics
+  Analytics.track('video_segment_completed', { 
+    lesson_id: LESSON.id, 
+    video_number: vsState.videoNumber 
+  });
 }
 
 function startVSWatcher() {
