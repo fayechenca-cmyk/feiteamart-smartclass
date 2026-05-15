@@ -68,6 +68,23 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes stepCompleteRingExpand {
+  0%   { transform: translate(-50%,-50%) scale(0.4); opacity: 0.9; }
+  70%  { transform: translate(-50%,-50%) scale(1.1); opacity: 0.6; }
+  100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; }
+}
+@keyframes stepCompleteCheckPop {
+  0%   { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+  60%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+  80%  { transform: translate(-50%,-50%) scale(0.92); }
+  100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+}
+@keyframes stepCompleteXPFloat {
+  0%   { opacity: 0; transform: translate(-50%, 0); }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; transform: translate(-50%, -40px); }
+  100% { opacity: 0; transform: translate(-50%, -60px); }
+}
 
 /* PART INDICATOR */
 .part-badge { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); background: var(--ink); padding: 6px 12px; border-radius: 20px; margin-bottom: 16px; }
@@ -3749,6 +3766,13 @@ const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
   title: 'Lesson 2 — the cube',
   
+  // ElevenLabs audio URL — fill in when mp3 is ready.
+  // Script for Mrs. Dawn's cloned voice (30-40 sec):
+  // "You've drawn the sphere. Today — the cube. Three planes, one light.
+  //  The top catches it most. The side catches less. The face that turns away — almost nothing.
+  //  That's the whole lesson. Let's draw it."
+  audioUrl: null,  // e.g. 'https://cdn.prod.website-files.com/.../welcome-cube.mp3'
+
   sections: [
     {
       type: 'prose',
@@ -6034,44 +6058,133 @@ function changeAgeGroup(e) {
 // ═══════════════════════════════════════════════════════════════════════════
 function renderOpeningLFC(step) {
   const data = HONEST_WELCOME;
-  const sectionsHtml = data.sections.map(section => {
-    if (section.type === 'prose') {
-      return section.paragraphs.map(p => 
-        `<p class="opening-lfc-prose">${escapeHtml(p)}</p>`
-      ).join('');
-    }
-    if (section.type === 'heading') {
-      return `<div class="opening-lfc-heading">${escapeHtml(section.label)}</div>`;
-    }
-    if (section.type === 'list') {
-      return `<ul class="opening-lfc-list">${
-        section.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')
-      }</ul>`;
-    }
-    if (section.type === 'cezanne') {
-      return `
-        <div class="opening-lfc-cezanne">
-          <div class="opening-lfc-cezanne-quote">${escapeHtml(section.quote)}</div>
-          <div class="opening-lfc-cezanne-attr">— ${escapeHtml(section.attribution)}</div>
-          <div class="opening-lfc-cezanne-gloss">${escapeHtml(section.gloss)}</div>
-        </div>
-      `;
-    }
-    return '';
-  }).join('');
+  
+  // Audio URL — set this when ElevenLabs mp3 is ready.
+  // Format: 'https://cdn.prod.website-files.com/...mp3'
+  const audioUrl = data.audioUrl || null;
+  
+  // Cézanne quote (the one essential text element — too good to remove)
+  const cezanneSection = data.sections.find(s => s.type === 'cezanne');
   
   return `
-    <div class="step-card opening-lfc show">
-      <div class="opening-lfc-kicker">✨ ${escapeHtml(data.kicker)}</div>
-      <h1 class="opening-lfc-title">${escapeHtml(data.title)}</h1>
-      <div class="opening-lfc-body">${sectionsHtml}</div>
+    <div class="step-card opening-lfc show" style="text-align: center; padding: 28px 22px;">
+      
+      <!-- Kicker -->
+      <div class="opening-lfc-kicker" style="margin-bottom: 20px;">
+        ✨ ${escapeHtml(data.kicker)}
+      </div>
+      
+      <!-- Title -->
+      <h1 class="opening-lfc-title" style="font-size: 26px; margin-bottom: 24px;">
+        ${escapeHtml(data.title)}
+      </h1>
+      
+      <!-- Audio player (primary) OR coming-soon placeholder -->
+      <div style="margin-bottom: 24px;">
+        ${audioUrl ? `
+          <!-- Real audio player (ElevenLabs mp3) -->
+          <audio id="opening-audio" src="${audioUrl}" preload="auto" style="display:none;"></audio>
+          <button onclick="toggleOpeningAudio()" id="opening-audio-btn"
+                  style="width: 80px; height: 80px; border-radius: 50%;
+                         background: linear-gradient(135deg, #a78bfa, #67e8f9);
+                         border: none; cursor: pointer; font-size: 32px;
+                         box-shadow: 0 8px 24px rgba(167,139,250,0.45);
+                         transition: transform 0.2s, box-shadow 0.2s;
+                         display: flex; align-items: center; justify-content: center;
+                         margin: 0 auto 12px;"
+                  onmouseover="this.style.transform='scale(1.08)'"
+                  onmouseout="this.style.transform='scale(1)'">
+            ▶
+          </button>
+          <div style="font-family:'Montserrat',sans-serif; font-size:11px; 
+                      font-weight:700; color:#7c5fc7; letter-spacing:1.5px;
+                      text-transform:uppercase;">
+            Listen to the welcome
+          </div>
+        ` : `
+          <!-- Placeholder — audio coming soon via ElevenLabs -->
+          <div style="width: 80px; height: 80px; border-radius: 50%;
+                      background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(103,232,249,0.2));
+                      border: 2px dashed rgba(167,139,250,0.4);
+                      display: flex; align-items: center; justify-content: center;
+                      margin: 0 auto 12px; font-size: 28px; opacity: 0.7;">
+            🎙️
+          </div>
+          <div style="font-family:'Montserrat',sans-serif; font-size:11px;
+                      font-weight:700; color:#a78bfa; letter-spacing:1.5px;
+                      text-transform:uppercase; margin-bottom: 4px;">
+            Voice welcome coming soon
+          </div>
+          <div style="font-size:11px; color:#94a3b8; font-style:italic;">
+            Mrs. Dawn will greet you here in her own voice
+          </div>
+        `}
+      </div>
+      
+      <!-- 3 essential sentences only (not the full text) -->
+      <div style="background: rgba(167,139,250,0.06); border-radius: 12px;
+                  padding: 16px 18px; margin-bottom: 20px; text-align: left;">
+        <p style="font-family:'Open Sans',sans-serif; font-size:14px; 
+                  color:#4a4f5e; line-height:1.7; margin:0 0 10px;">
+          You've drawn the sphere. You've drawn the cube. Today: the cylinder —
+          where curve and flat meet.
+        </p>
+        <p style="font-family:'Open Sans',sans-serif; font-size:14px;
+                  color:#4a4f5e; line-height:1.7; margin:0;">
+          We're teaching grammar. What you say with it is up to you.
+        </p>
+      </div>
+      
+      <!-- Cézanne micro-quote (kept — it's the soul of LFC) -->
+      ${cezanneSection ? `
+        <div style="border-left: 3px solid #c8a96e; padding: 12px 16px; 
+                    background: rgba(200,169,110,0.07); border-radius: 0 10px 10px 0;
+                    text-align: left; margin-bottom: 24px;">
+          <div style="font-family:'Montserrat',sans-serif; font-size:15px; 
+                      font-weight:600; color:#1a1d2b; font-style:italic; 
+                      line-height:1.5; margin-bottom:6px;">
+            "${escapeHtml(cezanneSection.quote)}"
+          </div>
+          <div style="font-family:'Montserrat',sans-serif; font-size:10px;
+                      font-weight:800; color:#c8a96e; letter-spacing:1.5px;">
+            — ${escapeHtml(cezanneSection.attribution)}
+          </div>
+        </div>
+      ` : ''}
+      
+      <!-- CTA -->
       <div class="opening-lfc-action">
-        <button class="btn btn-primary" onclick="onOpeningLFCComplete()">
+        <button class="btn btn-primary" onclick="onOpeningLFCComplete()" 
+                style="min-width: 200px; font-size: 13px;">
           <span class="glyph">◈</span> ${escapeHtml(data.cta)}
         </button>
       </div>
     </div>
   `;
+}
+
+// Toggle the opening audio play/pause
+function toggleOpeningAudio() {
+  const audio = document.getElementById('opening-audio');
+  const btn = document.getElementById('opening-audio-btn');
+  if (!audio || !btn) return;
+  
+  if (audio.paused) {
+    audio.play().catch(e => console.warn('Audio play failed:', e));
+    btn.textContent = '⏸';
+    btn.style.boxShadow = '0 8px 32px rgba(167,139,250,0.65)';
+    Analytics.track('opening_audio_played', { lesson_id: LESSON.id });
+  } else {
+    audio.pause();
+    btn.textContent = '▶';
+    btn.style.boxShadow = '0 8px 24px rgba(167,139,250,0.45)';
+  }
+  
+  // When audio ends, reset button
+  audio.onended = () => {
+    btn.textContent = '▶';
+    btn.style.boxShadow = '0 8px 24px rgba(167,139,250,0.45)';
+  };
 }
 
 function onOpeningLFCComplete() {
@@ -8281,41 +8394,115 @@ function nextStep() {
       currentStepIdx: curr + 1,  // where they'll be on next visit
       totalXP: state.xp 
     });
-    playTone(660, 0.12);
-    setTimeout(() => playTone(880, 0.15), 110);
+    // ✨ Step completion ritual — brief animation before advancing
+    showStepCompleteRitual(currStep, () => {
+      if (curr < LESSON.steps.length - 1) {
+        goToStep(curr + 1);
+        showBubble(randomEncouragement(), 3000);
+        resetSleep();
+      } else {
+        // End of lesson — reached badge gate (not yet claimed)
+        // BUG FIX #7: This fires when user REACHES the badge area, not when they CLAIM the badge.
+        // True badge claim fires 'badge_email_submitted' inside submitBadgeEmail().
+        Analytics.track('lesson_completed', { 
+          lesson_id: LESSON.id,
+          badge_name: LESSON.badge.name, 
+          total_xp: state.xp,
+          steps_completed: state.completedSteps.length,
+          thought_count_this_course: JournalStorage.count(AccessControl.currentCourseId)
+        });
+        // Mark lesson as complete in profile (survives across devices when Supabase enabled)
+        UserProfile.completeLesson(LESSON.id);
+        celebrate();
+        playTone(660, 0.15);
+        setTimeout(() => playTone(880, 0.15), 120);
+        setTimeout(() => playTone(1320, 0.3), 280);
+        setTimeout(() => playTone(1760, 0.4), 500);
+        showBubble("🎉 You did it! Badge unlocked!", 5000);
+        const a = document.getElementById('artchi');
+        a.classList.add('excited');
+        setTimeout(() => a.classList.remove('excited'), 1800);
+        const el = document.getElementById('step-content');
+        el.innerHTML = renderBadgeUnlock();
+        document.getElementById('part-badge').innerHTML = 'Part e · achievement unlocked';
+        document.getElementById('upload-fab').classList.add('hidden');
+        renderRailDots();
+      }
+    }); // end showStepCompleteRitual callback
   }
-  if (curr < LESSON.steps.length - 1) {
-    goToStep(curr + 1);
-    showBubble(randomEncouragement(), 3000);
-    resetSleep();
-  } else {
-    // End of lesson — reached badge gate (not yet claimed)
-    // BUG FIX #7: This fires when user REACHES the badge area, not when they CLAIM the badge.
-    // True badge claim fires 'badge_email_submitted' inside submitBadgeEmail().
-    Analytics.track('lesson_completed', { 
-      lesson_id: LESSON.id,
-      badge_name: LESSON.badge.name, 
-      total_xp: state.xp,
-      steps_completed: state.completedSteps.length,
-      thought_count_this_course: JournalStorage.count(AccessControl.currentCourseId)
-    });
-    // Mark lesson as complete in profile (survives across devices when Supabase enabled)
-    UserProfile.completeLesson(LESSON.id);
-    celebrate();
-    playTone(660, 0.15);
-    setTimeout(() => playTone(880, 0.15), 120);
-    setTimeout(() => playTone(1320, 0.3), 280);
-    setTimeout(() => playTone(1760, 0.4), 500);
-    showBubble("🎉 You did it! Badge unlocked!", 5000);
-    const a = document.getElementById('artchi');
-    a.classList.add('excited');
-    setTimeout(() => a.classList.remove('excited'), 1800);
-    const el = document.getElementById('step-content');
-    el.innerHTML = renderBadgeUnlock();
-    document.getElementById('part-badge').innerHTML = 'Part e · achievement unlocked';
-    document.getElementById('upload-fab').classList.add('hidden');
-    renderRailDots();
+}
+
+// ✨ Step completion ritual — lightweight green ring + XP pop + sound
+// Shows briefly then calls onDone() to advance.
+// Skipped for steps that earn 0 XP (intro/reference type steps).
+function showStepCompleteRitual(step, onDone) {
+  const xpEarned = step?.xp || 0;
+  
+  // For 0-XP steps (reference, tools etc.), skip animation — just advance
+  if (xpEarned === 0) {
+    playTone(660, 0.1);
+    setTimeout(() => playTone(880, 0.12), 90);
+    setTimeout(onDone, 180);
+    return;
   }
+  
+  // Sound: ascending ding ✓
+  playTone(660, 0.12);
+  setTimeout(() => playTone(880, 0.15), 100);
+  setTimeout(() => playTone(1320, 0.2), 220);
+  
+  // Build overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 5000;
+    pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+  `;
+  
+  // Ring
+  const ring = document.createElement('div');
+  ring.style.cssText = `
+    position: absolute; top: 50%; left: 50%;
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 4px solid #1d9e75;
+    animation: stepCompleteRingExpand 0.7s ease-out forwards;
+  `;
+  
+  // Check circle
+  const check = document.createElement('div');
+  check.style.cssText = `
+    position: absolute; top: 50%; left: 50%;
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #1d9e75;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; color: #fff;
+    box-shadow: 0 8px 24px rgba(29,158,117,0.45);
+    animation: stepCompleteCheckPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  `;
+  check.textContent = '✓';
+  
+  // XP label
+  const xpLabel = document.createElement('div');
+  xpLabel.style.cssText = `
+    position: absolute; top: calc(50% + 46px); left: 50%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px; font-weight: 900;
+    color: #c8a96e; letter-spacing: 1px;
+    animation: stepCompleteXPFloat 1s ease-out 0.2s forwards;
+    opacity: 0;
+  `;
+  xpLabel.textContent = `+${xpEarned} XP`;
+  
+  overlay.appendChild(ring);
+  overlay.appendChild(check);
+  overlay.appendChild(xpLabel);
+  document.body.appendChild(overlay);
+  
+  // Remove overlay and advance after animation finishes
+  setTimeout(() => {
+    overlay.remove();
+    onDone();
+  }, 900);
 }
 
 function toggleCheck(row) {
