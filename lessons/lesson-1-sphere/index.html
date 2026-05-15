@@ -344,6 +344,53 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+@keyframes stepCompleteRingExpand {
+  0%   { transform: translate(-50%,-50%) scale(0.4); opacity: 0.9; }
+  70%  { transform: translate(-50%,-50%) scale(1.1); opacity: 0.6; }
+  100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; }
+}
+@keyframes stepCompleteCheckPop {
+  0%   { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+  60%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+  80%  { transform: translate(-50%,-50%) scale(0.92); }
+  100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+}
+@keyframes stepCompleteXPFloat {
+  0%   { opacity: 0; transform: translate(-50%, 0); }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; transform: translate(-50%, -40px); }
+  100% { opacity: 0; transform: translate(-50%, -60px); }
+}
+@keyframes videoCompleteBorderSpin {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+@keyframes videoCompleteBorderPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+@keyframes continueBtnBounce {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-6px); }
+  60%      { transform: translateY(-3px); }
+}
+@keyframes videoCompleteHintFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.video-frame-complete {
+  padding: 3px !important;
+  background: linear-gradient(
+    90deg,
+    #1d9e75, #67e8f9, #c8a96e, #a78bfa, #1d9e75, #67e8f9, #c8a96e, #a78bfa, #1d9e75
+  );
+  background-size: 400% 400%;
+  animation: videoCompleteBorderSpin 2s linear forwards,
+             videoCompleteBorderPulse 2s ease-in-out 2s infinite;
+  box-shadow: 0 0 20px rgba(103,232,249,0.35), 0 0 40px rgba(167,139,250,0.2);
+}
+
+
 /* AI FEEDBACK CARD */
 .fb-card { position: relative; background: #fff; border-radius: var(--radius-lg); padding: 20px 18px; margin-bottom: 16px; box-shadow: 0 4px 28px rgba(0,0,0,0.08); border: 0.5px solid var(--border); }
 .fb-badge { position: absolute; top: -11px; left: 20px; background: linear-gradient(90deg, var(--green), #0f6e56); color: #fff; padding: 5px 14px; border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
@@ -5770,7 +5817,7 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); break;
+    case 'demo':       el.innerHTML = renderDemo(step); setTimeout(() => initDemoVideoComplete(step), 100); break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -7692,6 +7739,63 @@ function renderReference(step) {
     </div>`;
 }
 
+
+// ═══ Demo video Cloudflare Stream init — enables video-complete animation ═══
+// Loaded lazily when a demo step renders.
+let demoStreamSDKLoaded = false;
+let demoCurrentVideoSeg = null;
+
+function loadDemoStreamSDK(cb) {
+  if (window.Stream) { demoStreamSDKLoaded = true; if (cb) cb(); return; }
+  if (demoStreamSDKLoaded) { if (cb) cb(); return; }
+  const script = document.createElement('script');
+  script.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  script.async = true;
+  script.onload = () => { demoStreamSDKLoaded = true; if (cb) cb(); };
+  document.head.appendChild(script);
+}
+
+function initDemoVideoComplete(step) {
+  if (!step || !step.videoId || !step.videoSeg) return;
+  demoCurrentVideoSeg = step.videoSeg;
+  loadDemoStreamSDK(() => {
+    setTimeout(() => {
+      const iframe = document.getElementById(`demo-iframe-${step.videoSeg}`);
+      if (!iframe || !window.Stream) return;
+      try {
+        const player = window.Stream(iframe);
+        player.addEventListener('ended', () => {
+          triggerDemoVideoComplete(step.videoSeg);
+        });
+      } catch (e) {
+        console.warn('[Demo] Stream attach failed:', e);
+      }
+    }, 300);
+  });
+}
+
+function triggerDemoVideoComplete(seg) {
+  const frame = document.getElementById(`demo-video-frame-${seg}`);
+  if (frame && !frame.classList.contains('video-frame-complete')) {
+    frame.classList.add('video-frame-complete');
+  }
+  const hint = document.getElementById(`demo-complete-hint-${seg}`);
+  if (hint) hint.style.display = 'block';
+  const btn = document.getElementById(`demo-continue-btn-${seg}`);
+  if (btn) {
+    btn.style.animation = 'continueBtnBounce 1.2s ease-in-out 0.3s 3';
+    btn.style.boxShadow = '0 8px 24px rgba(167,139,250,0.35)';
+  }
+  try {
+    playTone(880, 0.15);
+    setTimeout(() => playTone(1320, 0.2), 130);
+  } catch (e) {}
+  if (typeof Analytics !== 'undefined') {
+    Analytics.track('demo_video_completed', { lesson_id: LESSON.id, segment: seg });
+  }
+}
+
+
 function renderTools(step) {
   return `
     <div class="step-card">
@@ -7991,6 +8095,7 @@ function renderDemo(step) {
   // Falls back gracefully if a step somehow has no videoId.
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
+  const safeSeg = step.videoSeg || 'demo';
   
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
@@ -8001,8 +8106,8 @@ function renderDemo(step) {
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        ${videoId ? `<iframe 
+      <div class="video-frame demo-video-frame" id="demo-video-frame-${safeSeg}" style="background: #000; cursor: default; padding: 0;">
+        ${videoId ? `<iframe id="demo-iframe-${safeSeg}"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
@@ -8024,7 +8129,16 @@ function renderDemo(step) {
       </div>
       
       <div class="btn-stack">
-        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Done — next step</button>
+        <!-- Video complete hint (hidden until video ends) -->
+        <div id="demo-complete-hint-${safeSeg}"
+             style="display:none; text-align:center; margin-bottom:8px;
+                    font-family:'Montserrat',sans-serif; font-size:11px;
+                    font-weight:700; color:#1d9e75; letter-spacing:1px;
+                    text-transform:uppercase;
+                    animation: videoCompleteHintFadeIn 0.5s ease-out forwards;">
+          ✓ Video complete — ready for the next step?
+        </div>
+        <button class="btn btn-primary" id="demo-continue-btn-${safeSeg}" onclick="nextStep()"><span class="glyph">◈</span> Done — next step</button>
         <button class="btn btn-secondary" onclick="openChat()">Ask Artchi a question</button>
         <button class="btn btn-ghost" onclick="nextStep()">Skip this step →</button>
       </div>
