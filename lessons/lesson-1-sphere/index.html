@@ -8416,8 +8416,88 @@ const SPHERE_VIDEO_PAUSES = {
       text: 'Finish by strengthening the shadow nearest to us, then gradate it lighter as it moves away. This near-to-far gradation stretches the perception of space — the shadow becomes the tool that pulls the eye into depth.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a07a6bba8a9875aa404df9c_sphere-p3-5.PNG'
     }
+  ],
+  
+  // ═══ Sphere Video 4 (Fade into halftones) — 9 pause points ═══
+  // Includes 1 double-image pause (A+B), 1 text-only pause (audio narration)
+  '193d127866f1ace07a7667af81f14961': [
+    {
+      time: 80,           // 1:20 — DOUBLE image, 10s each
+      duration: 10,
+      title: 'Build the light-gray halftone band',
+      shortPrompt: 'Wrap a light gray band from terminator into the light side.',
+      text: 'This is the halftone area — a band of value that extends from the terminator into the light side. Wrap it gently around the whole sphere. Switch to a lighter pencil (HB or 2H) — this is not a line, it\'s an entire surface that helps the light side transition naturally.',
+      imageA: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99eea9a3646fb7becee1_sphere-p4-3.png',
+      imageB: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee0be6d55a1d541fec_sphere-p4-1B.png'
+    },
+    {
+      time: 99,           // 1:39
+      duration: 45,
+      title: 'Cross-hatch to unify the tones',
+      shortPrompt: 'Hatch against your previous stroke direction to blend values.',
+      text: 'When you tone over your own strokes in the same direction, the result can feel rigid. Mrs. Dawn now adds strokes in the opposite direction — cross-hatching. This blending pass unifies the earlier tones into a softer, more continuous surface.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99f4fb4b33348d568a3f_sphere-p4-2.png'
+    },
+    {
+      time: 141,          // 2:21
+      duration: 45,
+      title: 'Soften the terminator into the shadow',
+      shortPrompt: 'Don\'t leave the terminator as a hard line — connect it to the dark side.',
+      text: 'A common mistake: drawing the terminator as a sharp, rigid line or block. Mrs. Dawn pushes that area repeatedly — not just darkening it, but also blending it gradually into the shadow side. The terminator should feel like a natural transition, not a wall.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a9e0b6b3f24f341be69c6_sphere-p4-3.png'
+    },
+    {
+      time: 173,          // 2:53
+      duration: 45,
+      title: 'It\'s a terminator BAND, not a line',
+      shortPrompt: 'The dark-light boundary is a surface, not an edge.',
+      text: 'Look carefully — Mrs. Dawn defines a clear terminator AREA, not a terminator line. This band acts as a bridge between the light side and the shadow side. It\'s what makes the sphere pop forward in 3D, and it\'s the key visual link between the two value zones.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99f482d04d82fecc18c9_sphere-p4-4.png'
+    },
+    {
+      time: 203,          // 3:23
+      duration: 45,
+      title: 'Switch to 2B for stronger work',
+      shortPrompt: 'Change pencils — now 2B for the deeper details.',
+      text: 'Mrs. Dawn explicitly switches to a 2B pencil. The HB has carried you this far; the 2B will let you push the values that need to feel firmer and richer.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee884daf4240df791c_sphere-p4-5.png'
+    },
+    {
+      time: 248,          // 4:08
+      duration: 45,
+      title: 'Radiate from the terminator outward',
+      shortPrompt: 'Use 2B to spread values from the terminator into both light and dark.',
+      text: 'With 2B, Mrs. Dawn strengthens transitions in both directions — from the terminator toward the light side, and from the terminator toward the dark side. This radiating gradient is what gives the sphere strong perspective. She also strengthens the cast shadow with the same pencil.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee8add156140f4c24b_sphere-p4-6.png'
+    },
+    {
+      time: 316,          // 5:16
+      duration: 45,
+      title: 'Bring out the blender',
+      shortPrompt: 'Blender / tissue / napkin — softens the whole surface.',
+      text: 'Mrs. Dawn introduces a blending tool — a blending stump if you have one, or a tissue or napkin works fine. This tool unifies and softens all the tones you\'ve built up. The drawing should feel more like a smooth surface than a series of pencil strokes.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee48a20b4c5c83e9a4_sphere-p4-7.png'
+    },
+    {
+      time: 337,          // 5:37 — TEXT-ONLY (voice narration coming)
+      duration: 45,
+      textOnly: true,
+      icon: '✋',
+      audioUrl: null,     // ← when ElevenLabs mp3 is ready, paste URL here
+      title: 'Follow your stroke direction',
+      shortPrompt: 'Blend along the direction of your strokes — never randomly.',
+      text: 'Important: when blending, follow the direction of your pencil strokes. Sweep gently in the same direction. Do not press hard, and do not blend randomly across the surface — that creates a muddy, dirty drawing. Light, directional sweeps only.'
+    },
+    {
+      time: 362,          // 6:02
+      duration: 45,
+      title: 'Optional: re-touch with HB',
+      shortPrompt: 'Press strong tones back into the paper with light HB strokes.',
+      text: 'This step is optional but recommended. Mrs. Dawn returns to the HB pencil and gently presses the strongest tones back into the paper. This subtly tightens the whole drawing and makes it feel more natural — less like raw pencil, more like a unified surface.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a9efc9225802f312bdc0b_sphere-p4-8.png'
+    }
   ]
-  // Future: pause points for Sphere videos 4-6 when designed
+  // Future: pause points for Sphere videos 5-6 when designed
 };
 
 // Sphere pause-system state — keyed by videoSeg (not videoNumber like Cube)
@@ -8433,7 +8513,8 @@ const spState = {
   paused: false,
   currentPauseIdx: -1,
   currentStage: 'A',  // for multi-image pauses: 'A' or 'B'
-  currentTime: 0
+  currentTime: 0,
+  audioEl: null       // for text-only pauses with audio narration
 };
 
 // Init Cloudflare Stream pause system for a demo step.
@@ -8510,6 +8591,7 @@ function triggerSPPause(idx) {
   const seg = spState.videoSeg;
   const total = spState.pauses.length;
   const isMulti = !!(p.imageA && p.imageB);
+  const isTextOnly = !!p.textOnly;  // NEW: pure text overlay (no image)
   
   // Reset to stage A for multi-image
   spState.currentStage = 'A';
@@ -8534,9 +8616,74 @@ function triggerSPPause(idx) {
     }
   }
   
-  // Set first image (A for multi, plain image for single)
-  const imgEl = document.getElementById(`sp-image-${seg}`);
-  if (imgEl) imgEl.src = isMulti ? p.imageA : p.image;
+  // Image overlay setup (skip for text-only pauses)
+  const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);
+  if (isTextOnly) {
+    // Build/refresh a TEXT-ONLY overlay card on top of the video
+    let textOverlay = document.getElementById(`sp-text-overlay-${seg}`);
+    if (!textOverlay) {
+      textOverlay = document.createElement('div');
+      textOverlay.id = `sp-text-overlay-${seg}`;
+      textOverlay.style.cssText = `
+        display:none; position:absolute; inset:0; z-index:10;
+        background: linear-gradient(135deg, rgba(167,139,250,0.96), rgba(103,232,249,0.92));
+        padding: 28px; box-sizing: border-box;
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        text-align:center; color:#fff;
+        animation: vpImageFadeIn 0.3s ease-out;
+      `;
+      const frame = document.getElementById(`demo-video-frame-${seg}`);
+      if (frame) frame.appendChild(textOverlay);
+    }
+    textOverlay.innerHTML = `
+      <div style="position:absolute; top:12px; left:12px; 
+                  background:rgba(26,29,43,0.6); color:#fff; 
+                  padding:6px 14px; border-radius:14px; 
+                  font-family:'Montserrat',sans-serif; font-size:10px; 
+                  font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                  box-shadow:0 3px 10px rgba(0,0,0,0.25);">
+        💡 ${counterText}
+      </div>
+      <div style="font-size:42px; margin-bottom:14px;">${p.icon || '💡'}</div>
+      <div style="font-family:'Montserrat',sans-serif; font-size:18px; font-weight:800;
+                  margin-bottom:14px; line-height:1.3; max-width:80%;">
+        ${p.title}
+      </div>
+      <div style="font-family:'Open Sans',sans-serif; font-size:14px; line-height:1.6;
+                  max-width:85%; text-shadow:0 1px 2px rgba(0,0,0,0.15);">
+        ${p.text}
+      </div>
+      ${p.audioUrl ? `
+        <button onclick="event.stopPropagation(); spPlayPauseAudio('${seg}', '${p.audioUrl}', this)"
+                style="margin-top:18px; padding:10px 22px; border:none;
+                       background:#fff; color:#7c5fc7; border-radius:24px; cursor:pointer;
+                       font-family:'Montserrat',sans-serif; font-weight:800; font-size:12px;
+                       letter-spacing:0.8px; text-transform:uppercase;
+                       box-shadow:0 4px 14px rgba(0,0,0,0.18);">
+          🔊 Listen
+        </button>
+      ` : `
+        <div style="margin-top:18px; padding:6px 16px; 
+                    background:rgba(255,255,255,0.18); border-radius:18px;
+                    font-family:'Montserrat',sans-serif; font-size:10px; font-weight:700;
+                    letter-spacing:1.2px; text-transform:uppercase; opacity:0.85;">
+          🎙️ Voice narration coming soon
+        </div>
+      `}
+    `;
+    // Hide image overlay, show text overlay
+    if (imageOverlay) imageOverlay.style.display = 'none';
+    textOverlay.style.display = 'flex';
+  } else {
+    // Hide any previous text overlay
+    const textOverlay = document.getElementById(`sp-text-overlay-${seg}`);
+    if (textOverlay) textOverlay.style.display = 'none';
+    
+    // Set first image (A for multi, plain image for single)
+    const imgEl = document.getElementById(`sp-image-${seg}`);
+    if (imgEl) imgEl.src = isMulti ? p.imageA : p.image;
+    if (imageOverlay) imageOverlay.style.display = 'block';
+  }
   
   // Stage indicator for multi-image
   const stageEl = document.getElementById(`sp-stage-${seg}`);
@@ -8559,9 +8706,7 @@ function triggerSPPause(idx) {
     }
   }
   
-  // Show overlay + panel
-  const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);
-  if (imageOverlay) imageOverlay.style.display = 'block';
+  // Show panel
   const panel = document.getElementById(`sp-panel-${seg}`);
   if (panel) panel.style.display = 'block';
   
@@ -8671,8 +8816,38 @@ function hideSPOverlay() {
   if (!seg) return;
   const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);
   if (imageOverlay) imageOverlay.style.display = 'none';
+  const textOverlay = document.getElementById(`sp-text-overlay-${seg}`);
+  if (textOverlay) textOverlay.style.display = 'none';
   const panel = document.getElementById(`sp-panel-${seg}`);
   if (panel) panel.style.display = 'none';
+  // Stop any playing audio
+  if (spState.audioEl) {
+    try { spState.audioEl.pause(); } catch (e) {}
+    spState.audioEl = null;
+  }
+}
+
+// Play/pause inline audio for a text-only pause point (uses ElevenLabs mp3 URL)
+function spPlayPauseAudio(seg, audioUrl, btn) {
+  if (!audioUrl) return;
+  // Stop any existing audio
+  if (spState.audioEl && spState.audioEl.src.indexOf(audioUrl) === -1) {
+    try { spState.audioEl.pause(); } catch (e) {}
+    spState.audioEl = null;
+  }
+  if (!spState.audioEl) {
+    spState.audioEl = new Audio(audioUrl);
+    spState.audioEl.onended = () => {
+      if (btn) btn.innerHTML = '🔊 Listen';
+    };
+  }
+  if (spState.audioEl.paused) {
+    spState.audioEl.play().catch(e => console.warn('Audio play failed:', e));
+    if (btn) btn.innerHTML = '⏸ Pause';
+  } else {
+    spState.audioEl.pause();
+    if (btn) btn.innerHTML = '🔊 Listen';
+  }
 }
 
 // Image lightbox — reuses lesson's existing lightbox if available
