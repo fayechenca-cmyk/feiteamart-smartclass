@@ -7946,11 +7946,13 @@ function renderWarmup(step) {
       </div>
       
       <div id="warmup-video-wrap" style="display: none;">
-        <div class="video-frame" style="background: #000; cursor: default; padding: 0;">
-          <iframe id="yt-player" width="100%" height="100%" style="position: absolute; inset: 0; border: none;"
-            src="https://www.youtube.com/embed/W6EGT-6kXrM?enablejsapi=1&rel=0&modestbranding=1"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+        <div class="video-frame" id="warmup-video-frame" style="background: #000; cursor: default; padding: 0; position: relative;">
+          <iframe id="warmup-stream-iframe"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            loading="lazy"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true"></iframe>
           
           <div class="pause-overlay" id="pause-overlay">
             <div class="pause-card">
@@ -9203,11 +9205,13 @@ const WARMUP_PAUSES = [
   { time: 185, duration: 3, title: 'Almost done! 🎉', text: 'Great work. Wrapping up in a second.' }
 ];
 
-let ytPlayer = null;
-let ytPlayerReady = false;
-let ytCheckInterval = null;
-let ytPauseTimer = null;
-let ytTriggeredPauses = [];
+// Warm-up pause-system state (Cloudflare Stream version)
+let warmupStreamPlayer = null;
+let warmupCurrentTime = 0;
+let warmupWatcher = null;
+let warmupPaused = false;
+let warmupTriggered = new Set();
+let ytPauseTimer = null;  // re-used as the auto-resume timer
 
 function startWarmup() {
   document.getElementById('warmup-start-card').style.display = 'none';
@@ -9216,54 +9220,83 @@ function startWarmup() {
   Analytics.track('warmup_started', {});
   checkLocalMode();
   
-  // Load YouTube iframe API if not already loaded
-  if (!window.YT || !window.YT.Player) {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = initYTPlayer;
+  // Reset state
+  warmupTriggered = new Set();
+  warmupPaused = false;
+  warmupCurrentTime = 0;
+  if (warmupWatcher) { clearInterval(warmupWatcher); warmupWatcher = null; }
+  
+  // Load Cloudflare Stream SDK (shared with demo system)
+  if (window.Stream) {
+    initWarmupStreamPlayer();
+  } else if (typeof loadDemoStreamSDK === 'function') {
+    loadDemoStreamSDK(initWarmupStreamPlayer);
   } else {
-    initYTPlayer();
+    const script = document.createElement('script');
+    script.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+    script.async = true;
+    script.onload = initWarmupStreamPlayer;
+    document.head.appendChild(script);
   }
 }
 
-function initYTPlayer() {
-  ytPlayer = new YT.Player('yt-player', {
-    events: {
-      'onReady': () => {
-        ytPlayerReady = true;
-        ytTriggeredPauses = [];
-        startPauseWatcher();
-      },
-      'onStateChange': (event) => {
-        if (event.data === YT.PlayerState.PLAYING) {
-          startPauseWatcher();
-        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-          stopPauseWatcher();
-        }
-      }
+function initWarmupStreamPlayer() {
+  setTimeout(() => {
+    const iframe = document.getElementById('warmup-stream-iframe');
+    if (!iframe || !window.Stream) {
+      console.warn('[Warmup] Stream SDK or iframe not ready');
+      return;
     }
-  });
+    try {
+      warmupStreamPlayer = window.Stream(iframe);
+      
+      warmupStreamPlayer.addEventListener('timeupdate', () => {
+        try { warmupCurrentTime = warmupStreamPlayer.currentTime || 0; } catch (e) {}
+      });
+      
+      warmupStreamPlayer.addEventListener('play', () => {
+        if (warmupPaused) {
+          hidePauseOverlay();
+          warmupPaused = false;
+        }
+      });
+      
+      warmupStreamPlayer.addEventListener('loadedmetadata', () => {
+        console.log('[Warmup] Stream ready, starting pause watcher');
+        startWarmupPauseWatcher();
+      });
+      
+      // Fallback: start watcher anyway after 1.5s
+      setTimeout(() => {
+        if (!warmupWatcher) startWarmupPauseWatcher();
+      }, 1500);
+    } catch (err) {
+      console.warn('[Warmup] Failed to attach Stream player:', err);
+    }
+  }, 300);
 }
 
-function startPauseWatcher() {
-  clearInterval(ytCheckInterval);
-  ytCheckInterval = setInterval(() => {
-    if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-    const t = ytPlayer.getCurrentTime();
-    WARMUP_PAUSES.forEach(p => {
-      if (ytTriggeredPauses.includes(p.time)) return;
-      if (t >= p.time && t < p.time + 1) {
-        triggerPause(p);
-        ytTriggeredPauses.push(p.time);
-      }
-    });
-  }, 400);
+function startWarmupPauseWatcher() {
+  if (warmupWatcher) clearInterval(warmupWatcher);
+  warmupWatcher = setInterval(() => {
+    if (!warmupStreamPlayer || warmupPaused) return;
+    const t = warmupCurrentTime;
+    if (typeof t !== 'number') return;
+    for (let i = 0; i < WARMUP_PAUSES.length; i++) {
+      const p = WARMUP_PAUSES[i];
+      if (warmupTriggered.has(i)) continue;
+      if (t < p.time) continue;
+      if (t > p.time + 2) { warmupTriggered.add(i); continue; }
+      warmupTriggered.add(i);
+      triggerPause(p);
+      break;
+    }
+  }, 250);
 }
 
-function stopPauseWatcher() {
-  clearInterval(ytCheckInterval);
-}
+// Backwards-compat: keep old name in case anything references it
+function startPauseWatcher() { startWarmupPauseWatcher(); }
+function stopPauseWatcher() { if (warmupWatcher) { clearInterval(warmupWatcher); warmupWatcher = null; } }
 
 function triggerPause(p) {
   Analytics.track('warmup_pause_triggered', { 
@@ -9271,8 +9304,9 @@ function triggerPause(p) {
     pause_title: p.title,
     pause_duration: p.duration 
   });
-  if (ytPlayer && ytPlayer.pauseVideo) {
-    try { ytPlayer.pauseVideo(); } catch(e) {}
+  warmupPaused = true;
+  if (warmupStreamPlayer) {
+    try { warmupStreamPlayer.pause(); } catch(e) {}
   }
   const overlay = document.getElementById('pause-overlay');
   const bar = document.getElementById('pause-timer-bar');
@@ -9311,10 +9345,19 @@ function skipPauseAndKeepPaused() {
   playTone(660, 0.1);
 }
 
+function hidePauseOverlay() {
+  const overlay = document.getElementById('pause-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
 function resumeFromPause() {
-  document.getElementById('pause-overlay').classList.remove('show');
-  if (ytPlayer && ytPlayer.playVideo) {
-    try { ytPlayer.playVideo(); } catch(e) {}
+  hidePauseOverlay();
+  warmupPaused = false;
+  // Resume Cloudflare Stream playback (with retries in case mobile blocks first attempt)
+  if (warmupStreamPlayer) {
+    try { warmupStreamPlayer.play(); } catch(e) {}
+    setTimeout(() => { try { warmupStreamPlayer.play(); } catch(e) {} }, 150);
+    setTimeout(() => { try { warmupStreamPlayer.play(); } catch(e) {} }, 400);
   }
   playTone(880, 0.1);
 }
