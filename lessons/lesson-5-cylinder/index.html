@@ -5937,66 +5937,48 @@ const LESSON = {
       part: 'C',
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
-      videoSeg: 'cylinder_outline',
-      title: 'Block in the cylinder',
-      intro: 'Lightly draw the outer rectangle — the height and width of the cylinder. Mark the center vertical line. This is your construction frame, not a finished line.',
+      videoSeg: 'construction',
+      videoId: 'ba31784be13c1abc6875e4ce3c576502',  // Cylinder 1 — Cloudflare Stream
+      title: 'Build the cylinder',
+      intro: 'Start with the outer rectangle — height and width of the cylinder. Mark the center line. Find the top and bottom ellipses. Construction first, finished form second.',
       quote: 'Most beginners skip the construction frame. That\'s why their cylinders lean. Build the box first, then carve the curves out of it.',
-      tip: 'Keep these lines very light. They will guide the curves but should disappear under your final shading.',
+      tip: 'Keep these lines very light. They will guide the form but should disappear under your final shading.',
       xp: 10
     },
     {
       part: 'C',
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
-      videoSeg: 'side_gradient',
-      title: 'Carve the curved side',
-      intro: 'With light from the upper left, the side of the cylinder gradates from light on the lit side, through halftones, to a darker band where the curve turns away. This belt where light fades is the cylinder\'s "terminator" — but instead of a circle, it\'s a vertical strip.',
-      quote: 'Think of the side as if you were looking at a slice of a sphere — the same light logic, but stretched into a single direction.',
-      tip: 'Curve your pencil strokes vertically along the side, following the form, not against it.',
+      videoSeg: 'terminator_and_shadow',
+      videoId: '7041b79d8a1c9260ff1edafe698c3803',  // Cylinder 2 — Cloudflare Stream
+      title: 'Find the terminator + shadow',
+      intro: 'Locate the terminator — the vertical band where the curved side turns from light to shadow. At the same time, map the cast shadow that falls from the cylinder. The form and the shadow are built together — one connected system.',
+      quote: 'The cylinder\'s terminator is a vertical strip, not a circle. Treat the shadow as part of the form, not an afterthought.',
+      tip: 'Mark both the terminator on the form and the edges of the cast shadow before you start filling tone. They give you the map.',
       xp: 10
     },
     {
       part: 'C',
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
-      videoSeg: 'top_face',
-      title: 'Shade the flat top',
-      intro: 'Now the ellipse on top. Unlike the side, the top is FLAT — it\'s one value. Shade it evenly, slightly darker if the light is glancing, brighter if the light is more directly above.',
-      quote: 'The top is a flat plane catching one angle of light. No gradient — just one tone, evenly applied.',
-      tip: 'If your top has darker patches in the middle, you\'re unconsciously shading it like a curved surface. Step back and check: is it really gradating, or just inconsistent pressure?',
-      xp: 10
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
-      type: 'demo',
-      videoSeg: 'edge_transition',
-      title: 'Where curve meets flat',
-      intro: 'The most challenging zone: where the curved side meets the flat top. This edge is sharp but the values around it are different. The top is one flat tone; the side gradates. They meet at a clean line.',
-      quote: 'A cylinder lives or dies on this edge. Treat it as a real seam between two different geometries — not a soft blur.',
-      tip: 'If your top blends into your side, you\'ve lost the cylinder. The form needs that edge to read as cylindrical and not like an egg.',
+      videoSeg: 'shadow_tone',
+      videoId: '9add7a539ac67b520577be264a5a0efb',  // Cylinder 3 — Cloudflare Stream
+      title: 'Tone the dark side together',
+      intro: 'Fill the shadow zone — both the dark side of the cylinder AND the cast shadow — as a single value family. They belong together. Curve your pencil strokes vertically along the form on the side.',
+      quote: 'Sphere and shadow, cylinder and shadow — always the same family. Develop them together so they feel unified.',
+      tip: 'Don\'t make the cylinder dark and then the shadow dark separately. Tone across both areas in passes — they need to share atmosphere.',
       xp: 15
     },
     {
       part: 'C',
       partLabel: 'Part c · demo &amp; draw',
       type: 'demo',
-      videoSeg: 'core_and_reflected',
-      title: 'Core shadow + reflected light',
-      intro: 'Push the core shadow band on the side a touch darker — that\'s where the curve turns furthest from the light. Then on the very edge of the shadow side, add a thin lift of reflected light. Just a touch.',
-      quote: 'Reflected light must stay darker than the lit side\'s halftones — otherwise the cylinder turns metallic.',
-      tip: 'Many beginners overdo the reflected light. If your shadow side glows, your cylinder reads as polished metal, not plaster.',
-      xp: 15
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
-      type: 'demo',
-      videoSeg: 'grounding',
-      title: 'Ground your cylinder',
-      intro: 'Where the cylinder sits on the ground, the contact line is darkest (ambient occlusion). The cast shadow on the floor stretches away from the light, fading as it gets further from the form.',
-      quote: 'This dark seam at the base is what tells the viewer your cylinder has weight — that it\'s sitting, not floating.',
-      tip: 'A grounded cylinder feels heavy and real. Without that dark contact line, even a perfect cylinder shape will look like it\'s hovering.',
+      videoSeg: 'finalize_form',
+      videoId: '7f14e8ccbc6831ec6710578bf58f3d6c',  // Cylinder 4 — Cloudflare Stream
+      title: 'Finalize the light side',
+      intro: 'Now bring the light side up to its final state. Refine the halftones, keep the flat top a single tone, and check the edge where curve meets flat. After this step, your cylinder is complete.',
+      quote: 'A cylinder lives or dies on the edge where the curved side meets the flat top. Keep it crisp — they\'re two different geometries.',
+      tip: 'Step back. Does the cylinder read as a solid form sitting in space? If yes — you\'re done. The next step is optional.',
       xp: 15
     },
     // ===== PART E · FINAL SUBMISSION =====
@@ -8608,14 +8590,13 @@ function selectPlan(tier) {
 }
 
 function renderDemo(step) {
-  const seg = LESSON.video.segments[step.videoSeg] || { start: '0:00', end: '0:00', startSec: 0, endSec: 0 };
-  const youtubeId = LESSON.video.youtubeId;
+  // Cloudflare Stream migration: each demo step now has its own videoId.
+  const videoId = step.videoId;
+  const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   
-  // Build YouTube embed URL with start/end parameters
-  // Note: rel=0 limits related videos to same channel
-  //       modestbranding=1 reduces YouTube logo
-  //       playsinline=1 keeps video inline on iOS
-  const embedUrl = `https://www.youtube.com/embed/${youtubeId}?start=${seg.startSec}&end=${seg.endSec}&rel=0&modestbranding=1&playsinline=1`;
+  const embedUrl = videoId
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    : '';
   
   return `
     <div class="step-card">
@@ -8623,20 +8604,18 @@ function renderDemo(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        <iframe 
-          width="100%" 
-          height="100%" 
-          style="position: absolute; inset: 0; border: none;"
+        ${videoId ? `<iframe 
           src="${embedUrl}"
+          loading="lazy"
           title="Demo video — ${step.title}"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
+          style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"></iframe>` 
+        : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
       </div>
       
       <div class="video-meta">
-        <span class="video-meta-time">⏱ ${seg.start} → ${seg.end}</span>
-        <span class="video-meta-dot">·</span>
-        <span class="video-meta-tip">Watch then draw at your own pace</span>
+        <span class="video-meta-tip">Watch, then draw at your own pace</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
@@ -9397,12 +9376,11 @@ function goToOptionalFinish() {
 }
 
 function renderOptionalFinish(step) {
-  const subjectLabel = LESSON.badge ? LESSON.badge.name : 'your drawing';
   const refinements = [
-    ['🌑', 'Deepen the background tone', 'Add value behind the form so it reads against its environment.'],
-    ['⚡', 'Strengthen the light-dark boundary', 'Push the terminator one step darker to sharpen the 3D effect.'],
-    ['🌫️', 'Soften edge transitions', 'Let the outer edges dissolve gently into the background.'],
-    ['✋', 'Final blending pass', 'Use a tissue or blender to unify the surface and smooth transitions.']
+    ['🌌', 'Add background tone', 'Build value behind the cylinder so it reads against its environment.'],
+    ['🌫️', 'Deepen the atmosphere', 'Push the surrounding tones to create real space, not blank paper.'],
+    ['⚡', 'Strengthen contrast', 'Re-evaluate light-dark separation now that the background exists.'],
+    ['✋', 'Final blending pass', 'Use tissue or blender to unify the surface with the new background.']
   ];
   return `
     <div class="step-card">
@@ -9416,7 +9394,8 @@ function renderOptionalFinish(step) {
           Not required for completion
         </div>
       </div>
-      <div class="step-title" style="margin-bottom:8px;">Refine Your Drawing</div>
+      <div class="step-title" style="margin-bottom:8px;">Add background tones</div>
+      
       <div style="background:rgba(200,169,110,0.07); border-left:3px solid #c8a96e;
                   border-radius:0 10px 10px 0; padding:14px 16px; margin-bottom:20px;">
         <div style="font-family:'Montserrat',sans-serif; font-size:10px; font-weight:900;
@@ -9425,13 +9404,40 @@ function renderOptionalFinish(step) {
         </div>
         <p style="font-family:'Open Sans',sans-serif; font-size:13.5px; color:#4a4f5e;
                   line-height:1.65; margin:0 0 10px;">
-          Your core lesson is complete. This is for students who want to push further.
+          Your cylinder is complete. This optional step adds a background tone — to make the whole picture feel like a space, not just a floating object.
+        </p>
+        <p style="font-family:'Open Sans',sans-serif; font-size:13.5px; color:#4a4f5e;
+                  line-height:1.65; margin:0 0 10px;">
+          <strong>Honest warning:</strong> this step is repetitive. You'll be filling a lot of paper. But the final result feels noticeably more complete and atmospheric than a cylinder alone.
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:13.5px; color:#4a4f5e;
                   line-height:1.65; margin:0; font-style:italic;">
-          These steps won't change your completion status. They will change how the drawing feels.
+          For kids learners: feel free to skip this and finish the lesson. Your cylinder is already done.
         </p>
       </div>
+      
+      <!-- Real Optional video (Cloudflare Stream — Video 5 = background tones) -->
+      <div style="margin-bottom: 18px; border-radius: 14px; overflow: hidden;
+                  box-shadow: 0 6px 20px rgba(200,169,110,0.18);
+                  border: 1px solid rgba(200,169,110,0.3);">
+        <div style="background: linear-gradient(135deg, #c8a96e, #d4b884);
+                    padding: 10px 14px; color: #fff;
+                    font-family:'Montserrat',sans-serif; font-size:10px; font-weight:900;
+                    letter-spacing:1.5px; text-transform:uppercase;">
+          🎬 Optional demo — Background tones with Mrs. Dawn
+        </div>
+        <div style="position: relative; padding-top: 56.25%;">
+          <iframe
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F60af4a289c320b82ab88e3bbd830f644%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            loading="lazy"
+            title="Optional demo — Background tones"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+      
       <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:22px;">
         ${refinements.map(([icon, title, desc]) => `
           <div style="display:flex; gap:12px; align-items:flex-start; padding:12px 14px;
@@ -9446,20 +9452,9 @@ function renderOptionalFinish(step) {
           </div>
         `).join('')}
       </div>
-      <div style="background:linear-gradient(135deg, #1a1d2b, #2a2f42); border-radius:14px;
-                  padding:24px; text-align:center; margin-bottom:20px;
-                  border:1px solid rgba(200,169,110,0.2);">
-        <div style="font-size:32px; margin-bottom:10px;">🎬</div>
-        <div style="font-family:'Montserrat',sans-serif; font-size:12px; font-weight:800;
-                    color:#c8a96e; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;">
-          Refinement demo — coming soon
-        </div>
-        <div style="font-family:'Open Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.6);">
-          Mrs. Dawn will walk through each refinement step here.
-        </div>
-      </div>
+      
       <div class="btn-stack">
-        <button class="btn btn-gold" onclick="submitFinal()">📸 Upload my refined drawing</button>
+        <button class="btn btn-gold" onclick="submitFinal()">📸 Upload my drawing with background</button>
         <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> I'm done — finish lesson →</button>
         <button class="btn btn-ghost" onclick="nextStep()">Skip optional — mark complete</button>
       </div>
