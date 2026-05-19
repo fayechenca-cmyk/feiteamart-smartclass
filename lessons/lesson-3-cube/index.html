@@ -6122,32 +6122,26 @@ function renderOpeningLFC(step) {
         ${escapeHtml(data.title)}
       </h1>
       
-      <!-- Audio player placeholder — fill audioUrl in HONEST_WELCOME when ElevenLabs mp3 ready -->
-      <div style="margin-bottom: 24px;">
-        <div style="width: 80px; height: 80px; border-radius: 50%;
-                    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(103,232,249,0.2));
-                    border: 2px dashed rgba(167,139,250,0.4);
-                    display: flex; align-items: center; justify-content: center;
-                    margin: 0 auto 12px; font-size: 28px; opacity: 0.7;">
-          🎙️
-        </div>
-        <div style="font-family:'Montserrat',sans-serif; font-size:11px;
-                    font-weight:700; color:#a78bfa; letter-spacing:1.5px;
-                    text-transform:uppercase; margin-bottom: 4px;">
-          Voice welcome coming soon
-        </div>
-        <div style="font-size:11px; color:#94a3b8; font-style:italic;">
-          Mrs. Dawn will greet you here in her own voice
+      <!-- Opening welcome video (Cloudflare Stream — voice + music + visuals) -->
+      <div style="margin-bottom: 24px; border-radius: 16px; overflow: hidden;
+                  box-shadow: 0 12px 32px rgba(167,139,250,0.25);">
+        <div style="position: relative; padding-top: 56.25%;">
+          <iframe
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/7249fbce8b6a5b4e148512b802e200cb/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F7249fbce8b6a5b4e148512b802e200cb%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            loading="lazy"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true">
+          </iframe>
         </div>
       </div>
       
-      <!-- 3 essential sentences only (not the full text) -->
+      <!-- 2 essential sentences only -->
       <div style="background: rgba(167,139,250,0.06); border-radius: 12px;
                   padding: 16px 18px; margin-bottom: 20px; text-align: left;">
         <p style="font-family:'Open Sans',sans-serif; font-size:14px; 
                   color:#4a4f5e; line-height:1.7; margin:0 0 10px;">
-          You've drawn the sphere. You've drawn the cube. Today: the cylinder —
-          where curve and flat meet.
+          You've drawn the sphere. Today: the cube — three planes, one light.
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0;">
