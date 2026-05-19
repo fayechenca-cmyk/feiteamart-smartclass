@@ -3,618 +3,1106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Smart Class</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Smart Class · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
   /* ════════════════════════════════════════════════════════════════
-     FEI TeamArt · Smart Class · Directory Page
+     FEI TeamArt · Smart Class Home
+     Game-style learning map with Skills + Creation tracks.
      ════════════════════════════════════════════════════════════════
-     This is the entry point users see when they:
-     - Open feiteamart.com/100-classes-catalog (Webflow iframe target)
-     - Visit fayechenca-cmyk.github.io/feiteamart-smartclass/
      
-     v2.0 (May 2026): Updated for new "geometric + real-world pair" 
-     pedagogy. Lessons alternate between abstract forms (odd) and 
-     real-world objects (even).
+     ARCHITECTURE:
+     - Two parallel tracks: 🎓 Skills (structured) + 🎨 Creation (artistic)
+     - Skills contains: Drawing (active), Color Theory, Art Theory (coming)
+     - Drawing contains: Foundation A (currently 6 lessons, expandable)
+     - Course order is CONFIGURABLE (see FOUNDATION_A_PATH array)
      
-     Lesson status as of May 2026:
-       ✅ Lesson 1: Sphere (live)
-       ⏳ Lesson 2: Sphere Realworld (placeholder)
-       ✅ Lesson 3: Cube (live, renumbered from old Lesson 2)
-       ⏳ Lesson 4: Cube Realworld (coming)
-       ✅ Lesson 5: Cylinder (live, renumbered from old Lesson 3)
-       ⏳ Lesson 6: Cylinder Realworld (coming)
-       ⏳ Lessons 7-10: TBD
+     SCREENS (single-page-app style toggling):
+     1. signin-screen: when no profile
+     2. home-screen: dashboard with Skills + Creation overview
+     3. drawing-screen: Duolingo-style Foundation A unlock path
      ═══════════════════════════════════════════════════════════════ */
-  * { box-sizing: border-box; }
-  body { 
-    margin: 0; 
-    font-family: 'Open Sans', sans-serif; 
-    background: linear-gradient(135deg, #e9d8fd 0%, #d4e6ff 50%, #cffafe 100%);
-    background-attachment: fixed;
-    color: #1a1d2b; 
-    min-height: 100vh; 
+  
+  :root {
+    --ink: #1a1d2b;
+    --ink-soft: rgba(26, 29, 43, 0.65);
+    --ink-faint: rgba(26, 29, 43, 0.45);
+    --ink-veryfaint: rgba(26, 29, 43, 0.15);
+    --paper: #fafaf8;
+    --paper-soft: #f5f5f7;
+    --gold: #c8a96e;
+    --green: #1d9e75;
+    --purple: #a78bfa;
+    --cyan: #67e8f9;
+    --pink: #f9a8d4;
+    --bg-warm: #fff9f5;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
   }
   
-  .hero {
-    text-align: center;
-    padding: 70px 24px 30px;
-    max-width: 820px;
-    margin: 0 auto;
-  }
-  .hero-kicker {
-    display: inline-block;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2.2px;
-    color: #a78bfa;
-    background: rgba(167,139,250,0.12);
-    padding: 6px 14px;
-    border-radius: 16px;
-    margin-bottom: 18px;
-  }
-  h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -1.2px;
-    margin: 0 0 16px;
-    color: #1a1d2b;
-    line-height: 1.1;
-  }
-  .subtitle {
-    font-size: 16px;
-    line-height: 1.65;
-    color: #4a4f5e;
-    max-width: 540px;
-    margin: 0 auto 12px;
-  }
-  .subtitle b { color: #1a1d2b; font-weight: 700; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   
-  .cezanne-block {
-    margin: 28px auto 24px;
-    padding: 22px 28px 20px;
-    max-width: 540px;
-    background: rgba(255,255,255,0.7);
-    border-radius: 12px;
-    border-left: 3px solid #c8a96e;
-    text-align: left;
-  }
-  .cezanne-quote {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: #1a1d2b;
-    font-style: italic;
-    line-height: 1.5;
-    margin-bottom: 6px;
-    letter-spacing: -0.2px;
-  }
-  .cezanne-attribution {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #c8a96e;
-    margin-bottom: 12px;
-  }
-  .cezanne-gloss {
+  body {
     font-family: 'Open Sans', sans-serif;
-    font-size: 13px;
-    color: #4a4f5e;
-    line-height: 1.6;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
   
-  .tag-row {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 26px;
-  }
-  .tag {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 7px 13px;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 18px;
-    color: #4a4f5e;
-  }
-  
-  .lessons-section {
-    max-width: 1140px;
-    margin: 30px auto 70px;
-    padding: 0 24px;
-  }
-  .section-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2.5px;
-    color: #a78bfa;
-    margin-bottom: 18px;
-    text-align: center;
-    text-transform: uppercase;
-  }
-  
-  .lesson-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-    gap: 22px;
-  }
-  
-  .lesson-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 0;
-    text-decoration: none;
-    color: #1a1d2b;
-    position: relative;
-    transition: all 0.3s;
-    border: 1px solid rgba(0,0,0,0.05);
-    display: block;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-  }
-  .lesson-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(26,29,43,0.12);
-  }
-  
-  .lesson-card-visual {
-    position: relative;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    /* Default: warm amber → soft purple (Lesson 1 Sphere) */
-    background: linear-gradient(135deg, #fff4d4 0%, #e9d8fd 100%);
-  }
-  /* Lesson 2 (Sphere Realworld): soft pink → amber (real-world warmth) */
-  .lesson-card.lesson-2 .lesson-card-visual {
-    background: linear-gradient(135deg, #fce7f3 0%, #fff4d4 100%);
-  }
-  /* Lesson 3 (Cube): soft purple → cyan (cooler, architectural) */
-  .lesson-card.lesson-3 .lesson-card-visual {
-    background: linear-gradient(135deg, #e9d8fd 0%, #cffafe 100%);
-  }
-  /* Lesson 4 (Cube Realworld) */
-  .lesson-card.lesson-4 .lesson-card-visual {
-    background: linear-gradient(135deg, #d4e6ff 0%, #fce7f3 100%);
-  }
-  /* Lesson 5 (Cylinder) */
-  .lesson-card.lesson-5 .lesson-card-visual {
-    background: linear-gradient(135deg, #cffafe 0%, #d4e6ff 100%);
-  }
-  /* Lesson 6 (Cylinder Realworld) */
-  .lesson-card.lesson-6 .lesson-card-visual {
-    background: linear-gradient(135deg, #fce7f3 0%, #d4e6ff 100%);
-  }
-  
-  .lesson-icon {
-    font-size: 80px;
-    line-height: 1;
-    color: rgba(26,29,43,0.85);
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
-  }
-  
-  /* Real artwork image inside the lesson card visual */
-  .lesson-card-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-  .lesson-card:hover .lesson-card-image {
-    transform: scale(1.04);
-  }
-  
-  .lesson-status {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    padding: 6px 11px;
-    border-radius: 14px;
+  /* ═══ TOPBAR ═══ */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
     background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--ink-veryfaint);
+    position: sticky; top: 0; z-index: 100;
   }
-  .lesson-status.free { color: #1d9e75; }
-  .lesson-status.members { color: #c8a96e; }
-  .lesson-status.coming { color: #4a4f5e; opacity: 0.7; }
-  .lesson-status.preview { color: #a78bfa; }
-  
-  .lesson-card-body {
-    padding: 22px 22px 20px;
-  }
-  
-  .lesson-num {
+  .brand {
     font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 1.8px;
-    color: #a78bfa;
-    text-transform: uppercase;
-    margin-bottom: 6px;
+    font-weight: 800; font-size: 14px; color: var(--ink);
+    text-decoration: none; letter-spacing: 0.3px;
   }
-  
-  .lesson-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    color: #1a1d2b;
-    margin-bottom: 8px;
-    letter-spacing: -0.3px;
-    line-height: 1.2;
+  .brand-mark { color: var(--purple); margin-right: 4px; }
+  .topbar-right {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Montserrat', sans-serif; font-size: 12px;
   }
-  
-  .lesson-desc {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #4a4f5e;
-    margin-bottom: 16px;
+  .topbar-right a { color: var(--ink-soft); text-decoration: none; }
+  .sign-out-btn {
+    background: none; border: 1px solid var(--ink-veryfaint);
+    border-radius: 16px; padding: 6px 12px; font-size: 11px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
   }
+  .sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
   
-  .lesson-progress-pill {
-    background: rgba(167,139,250,0.10);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.4px;
-    color: #7c5fc7;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 14px;
-    border: 0.5px solid rgba(167,139,250,0.2);
+  /* ═══ SIGN-IN SCREEN ═══ */
+  .signin-screen {
+    min-height: calc(100vh - 60px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
   }
-  
-  .lesson-meta {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    color: #8a8f9c;
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
+  .signin-card {
+    background: #fff; border-radius: var(--radius-lg);
+    padding: 36px 28px; max-width: 380px; width: 100%;
+    box-shadow: var(--shadow-lg); text-align: center;
   }
-  
-  .lesson-cta {
-    display: block;
-    width: 100%;
-    padding: 14px 18px;
-    background: #1a1d2b;
-    color: #fff;
-    border-radius: 30px;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+  .signin-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 12px;
+  }
+  .signin-title {
+    font-family: 'Montserrat', sans-serif; font-size: 28px;
+    font-weight: 900; margin-bottom: 8px;
+  }
+  .signin-subtitle {
+    font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+  }
+  .signin-label {
+    display: block; text-align: left;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .signin-input {
+    width: 100%; padding: 12px 14px; font-size: 15px;
+    border: 1.5px solid var(--ink-veryfaint); border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    letter-spacing: 0.5px; outline: none;
+    transition: border 0.2s;
+  }
+  .signin-input:focus { border-color: var(--purple); }
+  .signin-input.error { border-color: #e74c3c; animation: shake 0.4s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  .signin-btn {
+    width: 100%; margin-top: 14px; padding: 14px;
+    background: var(--ink); color: #fff; border: none;
+    border-radius: var(--radius-sm); cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 13px; letter-spacing: 1px;
     transition: all 0.2s;
   }
-  .lesson-card:hover .lesson-cta {
-    background: #2a2f42;
-    transform: scale(1.02);
+  .signin-btn:hover:not(:disabled) { background: #2a2f42; }
+  .signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .signin-error {
+    display: none; margin-top: 12px; font-size: 12px;
+    color: #e74c3c;
+  }
+  .signin-error.visible { display: block; }
+  .signin-help {
+    margin-top: 22px; font-size: 12px; color: var(--ink-faint);
+    line-height: 1.7;
+  }
+  .signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
+  
+  /* ═══ MAIN CONTAINER ═══ */
+  .container {
+    max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
   }
   
-  /* Members-only CTA color (Cube) */
-  .lesson-card.lesson-3 .lesson-cta {
-    background: #67e8f9;
-    color: #1a1d2b;
+  /* ═══ HERO ═══ */
+  .hero {
+    text-align: center; margin-bottom: 28px;
   }
-  .lesson-card.lesson-3:hover .lesson-cta {
-    background: #4dd5e8;
+  .hero-greeting {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 6px;
   }
-  /* Members-only CTA color (Cylinder) */
-  .lesson-card.lesson-5 .lesson-cta {
-    background: #67e8f9;
-    color: #1a1d2b;
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-size: 26px;
+    font-weight: 900; margin-bottom: 4px;
   }
-  .lesson-card.lesson-5:hover .lesson-cta {
-    background: #4dd5e8;
-  }
-  
-  /* Preview lesson (Lesson 2 placeholder) styling */
-  .lesson-card.preview-soon .lesson-cta {
-    background: rgba(167,139,250,0.85);
-    color: #fff;
-  }
-  .lesson-card.preview-soon:hover .lesson-cta {
-    background: #a78bfa;
+  .hero-title .name { color: var(--purple); }
+  .hero-subtitle {
+    font-size: 13px; color: var(--ink-soft);
   }
   
-  .lesson-card.coming-soon {
-    opacity: 0.55;
-    cursor: default;
+  /* ═══ RESUME CARD ═══ */
+  .resume-card {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff; border-radius: var(--radius-md);
+    padding: 18px 20px; margin-bottom: 22px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(167,139,250,0.30);
   }
-  .lesson-card.coming-soon:hover {
-    transform: none;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  .resume-card.hidden { display: none; }
+  .resume-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    opacity: 0.85; margin-bottom: 4px;
   }
-  .lesson-card.coming-soon .lesson-card-visual {
-    background: linear-gradient(135deg, #f0f0f0 0%, #d8d8d8 100%);
+  .resume-title {
+    font-family: 'Montserrat', sans-serif; font-size: 16px;
+    font-weight: 800; margin-bottom: 2px;
   }
-  .lesson-card.coming-soon .lesson-cta {
-    background: #c0c0c0;
-    color: #fff;
-    cursor: default;
-  }
-  .lesson-card.coming-soon:hover .lesson-cta {
-    background: #c0c0c0;
-    transform: none;
-  }
-  
-  .pedagogy-note {
-    max-width: 720px;
-    margin: 40px auto 0;
-    padding: 18px 24px;
-    background: rgba(167,139,250,0.08);
-    border-left: 3px solid #a78bfa;
-    border-radius: 0 12px 12px 0;
-    text-align: left;
-  }
-  .pedagogy-note-label {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #a78bfa;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .pedagogy-note-text {
-    font-size: 13px;
-    color: #4a4f5e;
-    line-height: 1.65;
-  }
-  .pedagogy-note-text b { color: #1a1d2b; }
-  
-  .footer {
-    background: #fff;
-    text-align: center;
-    padding: 36px 24px;
-    border-top: 1px solid rgba(0,0,0,0.06);
-  }
-  .footer-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1.8px;
-    color: #8a8f9c;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .footer-links {
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .footer-links a {
-    color: #4a4f5e;
+  .resume-sub { font-size: 12px; opacity: 0.85; }
+  .resume-btn {
+    background: rgba(255,255,255,0.25); color: #fff;
+    padding: 10px 16px; border-radius: 22px;
     text-decoration: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 11px; letter-spacing: 0.5px;
+    transition: background 0.2s;
+    white-space: nowrap;
   }
-  .footer-links a:hover { color: #a78bfa; }
+  .resume-btn:hover { background: rgba(255,255,255,0.4); }
   
-  @media (max-width: 600px) {
-    h1 { font-size: 34px; }
-    .hero { padding: 50px 20px 24px; }
-    .lesson-icon { font-size: 60px; }
-    .lesson-card-visual { height: 160px; }
+  /* ═══ SECTION HEADING ═══ */
+  .section-heading {
+    margin: 32px 0 14px;
   }
+  .section-title {
+    font-family: 'Montserrat', sans-serif; font-size: 16px;
+    font-weight: 800; margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 12px; color: var(--ink-soft);
+  }
+  
+  /* ═══ TRACK CARDS (Skills / Creation) ═══ */
+  .tracks {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 480px) {
+    .tracks { grid-template-columns: 1fr; }
+  }
+  .track-card {
+    background: #fff; border-radius: var(--radius-md);
+    padding: 18px 16px;
+    border: 1.5px solid var(--ink-veryfaint);
+    cursor: pointer; text-decoration: none; color: inherit;
+    transition: all 0.2s;
+    display: flex; flex-direction: column;
+    min-height: 160px;
+  }
+  .track-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .track-card.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .track-card.locked:hover {
+    transform: none; border-color: var(--ink-veryfaint);
+    box-shadow: none;
+  }
+  .track-emoji { font-size: 32px; margin-bottom: 8px; }
+  .track-name {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 900; margin-bottom: 3px;
+  }
+  .track-tagline {
+    font-size: 11px; color: var(--ink-soft);
+    margin-bottom: 12px; line-height: 1.4;
+  }
+  .track-progress {
+    margin-top: auto;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 700; color: var(--ink-soft);
+    letter-spacing: 0.5px;
+  }
+  .track-bar {
+    margin-top: 6px;
+    height: 4px; background: var(--ink-veryfaint);
+    border-radius: 2px; overflow: hidden;
+  }
+  .track-fill {
+    height: 100%; background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+  .track-locked-tag {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    background: rgba(200,169,110,0.15); color: var(--gold);
+    padding: 3px 8px; border-radius: 10px;
+    margin-top: auto;
+  }
+  
+  /* ═══ SUB-TRACKS (inside Skills) ═══ */
+  .subtrack {
+    background: #fff; border-radius: var(--radius-md);
+    padding: 14px 16px; margin-bottom: 10px;
+    border: 1.5px solid var(--ink-veryfaint);
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none; color: inherit;
+    transition: all 0.2s;
+  }
+  .subtrack:hover {
+    border-color: var(--purple);
+    transform: translateX(2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .subtrack.locked {
+    opacity: 0.55; cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .subtrack.locked:hover {
+    transform: none; border-color: var(--ink-veryfaint); box-shadow: none;
+  }
+  .subtrack-emoji {
+    font-size: 28px; flex-shrink: 0;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper-soft); border-radius: 50%;
+  }
+  .subtrack-info { flex: 1; }
+  .subtrack-name {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 800; margin-bottom: 2px;
+  }
+  .subtrack-meta {
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .subtrack-arrow {
+    color: var(--purple); font-size: 18px; font-weight: 700;
+  }
+  
+  /* ═══ BACK BUTTON ═══ */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--ink-soft); padding: 6px 0;
+    margin-bottom: 16px;
+  }
+  .back-btn:hover { color: var(--purple); }
+  
+  /* ═══ PATH NODE (Foundation A — game-style) ═══ */
+  .path-header {
+    text-align: center; margin-bottom: 22px;
+  }
+  .path-header-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 6px;
+  }
+  .path-header-title {
+    font-family: 'Montserrat', sans-serif; font-size: 22px;
+    font-weight: 900; margin-bottom: 6px;
+  }
+  .path-header-sub {
+    font-size: 12px; color: var(--ink-soft); margin-bottom: 14px;
+  }
+  .path-header-bar {
+    height: 6px; background: var(--ink-veryfaint);
+    border-radius: 3px; overflow: hidden;
+    max-width: 240px; margin: 0 auto 6px;
+  }
+  .path-header-fill {
+    height: 100%; background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border-radius: 3px;
+    transition: width 0.5s;
+  }
+  .path-header-meta {
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 700; color: var(--ink-soft);
+    letter-spacing: 0.5px;
+  }
+  
+  /* Vertical path nodes */
+  .path-nodes {
+    position: relative;
+    padding: 6px 0;
+  }
+  .path-node {
+    position: relative;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 14px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--ink-veryfaint);
+    text-decoration: none; color: inherit;
+    transition: all 0.2s;
+  }
+  /* Connector line between nodes */
+  .path-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 38px;
+    bottom: -14px;
+    width: 2px; height: 14px;
+    background: var(--ink-veryfaint);
+    z-index: 0;
+  }
+  
+  /* DONE state */
+  .path-node.done {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
+    border-color: rgba(29,158,117,0.3);
+  }
+  .path-node.done:not(:last-child)::after { background: var(--green); }
+  .path-node.done:hover { transform: translateX(2px); border-color: var(--green); }
+  
+  /* CURRENT state — glowing */
+  .path-node.current {
+    background: #fff;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 20px rgba(200,169,110,0.35), 0 4px 12px rgba(0,0,0,0.06);
+    animation: currentPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes currentPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(200,169,110,0.35), 0 4px 12px rgba(0,0,0,0.06); }
+    50%      { box-shadow: 0 0 30px rgba(200,169,110,0.6), 0 6px 18px rgba(200,169,110,0.20); }
+  }
+  .path-node.current:hover { transform: translateX(2px); }
+  
+  /* LOCKED state */
+  .path-node.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .path-node.locked:hover { transform: none; }
+  
+  /* COMING SOON */
+  .path-node.coming {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+    border-style: dashed;
+  }
+  .path-node.coming:hover { transform: none; }
+  
+  /* Node icon (circle) */
+  .node-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    background: var(--paper-soft);
+    z-index: 1; position: relative;
+  }
+  .path-node.done .node-icon {
+    background: var(--green); color: #fff;
+    box-shadow: 0 4px 12px rgba(29,158,117,0.30);
+  }
+  .path-node.current .node-icon {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(167,139,250,0.40);
+  }
+  .path-node.locked .node-icon,
+  .path-node.coming .node-icon {
+    background: var(--ink-veryfaint);
+    color: var(--ink-faint);
+  }
+  
+  /* Node info */
+  .node-info { flex: 1; min-width: 0; }
+  .node-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 3px;
+  }
+  .path-node.done .node-kicker { color: var(--green); }
+  .path-node.current .node-kicker { color: var(--gold); }
+  .node-title {
+    font-family: 'Montserrat', sans-serif; font-size: 15px;
+    font-weight: 800; margin-bottom: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .node-tag {
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .node-arrow {
+    color: var(--ink-faint); font-size: 18px;
+    flex-shrink: 0;
+  }
+  .path-node.current .node-arrow { color: var(--gold); }
+  
+  /* ═══ BADGE FOOTER ═══ */
+  .badge-footer {
+    margin-top: 28px;
+    padding: 24px 18px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 100%);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .badge-footer-icon {
+    font-size: 42px; margin-bottom: 8px;
+    opacity: 0.5;
+  }
+  .badge-footer.unlocked .badge-footer-icon {
+    opacity: 1;
+    animation: badgeSpin 2s ease infinite alternate;
+  }
+  @keyframes badgeSpin {
+    from { transform: rotate(-5deg) scale(1); }
+    to   { transform: rotate(5deg) scale(1.08); }
+  }
+  .badge-footer-title {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 900; letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .badge-footer-sub {
+    font-size: 12px; color: var(--ink-soft);
+  }
+  
+  /* ═══ CREATION SCREEN (placeholder) ═══ */
+  .creation-placeholder {
+    background: linear-gradient(135deg, #fef3f7 0%, #f5f3ff 100%);
+    border-radius: var(--radius-lg);
+    padding: 40px 24px; text-align: center;
+    margin-bottom: 24px;
+  }
+  .creation-placeholder-icon { font-size: 56px; margin-bottom: 12px; }
+  .creation-placeholder-title {
+    font-family: 'Montserrat', sans-serif; font-size: 20px;
+    font-weight: 900; margin-bottom: 8px;
+  }
+  .creation-placeholder-text {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.7; max-width: 360px; margin: 0 auto 16px;
+  }
+  .creation-coming-pill {
+    display: inline-block;
+    background: rgba(200,169,110,0.15);
+    color: var(--gold);
+    padding: 6px 14px; border-radius: 18px;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-kicker">FEI TEAMART · SMART CLASS</div>
-  <h1>Foundation of Sketch A</h1>
-  <p class="subtitle">
-    An honest skill training in the academic tradition of drawing. <b>Ten lessons</b> — geometric forms alternating with their real-world echoes. The sphere, the apple. The cube, the box. The cylinder, the cup.
-  </p>
-  <p class="subtitle" style="font-size: 14px; opacity: 0.85; margin-top: 8px;">
-    No promises beyond what training can give. Taste, vision, voice — those are yours to find.
-  </p>
-  
-  <div class="cezanne-block">
-    <div class="cezanne-quote">"Treat nature by means of the cylinder, the sphere, the cone."</div>
-    <div class="cezanne-attribution">— Cézanne, 1904</div>
-    <div class="cezanne-gloss">This series follows that idea. Each abstract form is paired with its real-world appearance — because what you draw in the studio, you'll see again on your kitchen table.</div>
-  </div>
-  
-  <div class="tag-row">
-    <span class="tag">📐 Skill training</span>
-    <span class="tag">💭 Critical thinking</span>
-    <span class="tag">🎨 LFC moments</span>
-    <span class="tag">🏆 Earn badges</span>
-  </div>
+<!-- ═══════════════════════════════════════════════════════════
+     TOPBAR
+     ═══════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="./" class="brand"><span class="brand-mark">●</span> FEI · Smart Class</a>
+  <div class="topbar-right" id="topbar-right"></div>
 </div>
 
-<div class="lessons-section">
-  <div class="section-label">✨ Available now</div>
-  
-  <div class="lesson-grid">
+<!-- ═══════════════════════════════════════════════════════════
+     SIGN-IN SCREEN
+     ═══════════════════════════════════════════════════════════ -->
+<div class="signin-screen" id="signin-screen" style="display:none;">
+  <div class="signin-card">
+    <div class="signin-kicker">✨ Smart Class</div>
+    <h1 class="signin-title">Welcome.</h1>
+    <p class="signin-subtitle">Enter your student code to begin or continue.</p>
     
-    <!-- LESSON 1: SPHERE (live) -->
-    <a href="lessons/lesson-1-sphere/" class="lesson-card lesson-1">
-      <div class="lesson-card-visual">
-        <div class="lesson-status free">Free</div>
-        <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f2479cd7d51892a9fd9751_1be5b197-bd6a-41f9-8f16-2f2a6a949c29.png" 
-             alt="The Sphere" 
-             class="lesson-card-image">
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 1 · Geometric</div>
-        <div class="lesson-title">The Sphere</div>
-        <div class="lesson-desc">Building form with value. The first foundation — how light wraps a curved surface, and how to draw it.</div>
-        <div class="lesson-progress-pill">📐 1 of 10 · Foundation A</div>
-        <div class="lesson-meta">
-          <span>⏱ ~45 min</span>
-          <span>·</span>
-          <span>+100 XP</span>
-        </div>
-        <div class="lesson-cta">Start lesson →</div>
-      </div>
-    </a>
+    <label class="signin-label" for="signin-code">Student Code</label>
+    <input type="text" class="signin-input" id="signin-code" 
+           placeholder="e.g. LILY-01" autocomplete="off"
+           autocapitalize="characters" spellcheck="false" />
     
-    <!-- LESSON 2: SPHERE REALWORLD (placeholder, preview available) -->
-    <a href="lessons/lesson-2-sphere-realworld/" class="lesson-card lesson-2 preview-soon">
-      <div class="lesson-card-visual">
-        <div class="lesson-status preview">Preview</div>
-        <div class="lesson-icon">🍎</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 2 · Real-world</div>
-        <div class="lesson-title">Sphere in the Real World</div>
-        <div class="lesson-desc">You drew an abstract sphere. Now: pick a real spherical object — an apple, an orange — and apply what you've learned.</div>
-        <div class="lesson-progress-pill">📐 2 of 10 · Foundation A</div>
-        <div class="lesson-meta">
-          <span>⏱ Coming soon</span>
-          <span>·</span>
-          <span>Preview ready</span>
-        </div>
-        <div class="lesson-cta">View preview →</div>
-      </div>
-    </a>
+    <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
     
-    <!-- LESSON 3: CUBE (live, renumbered from old Lesson 2) -->
-    <a href="lessons/lesson-3-cube/" class="lesson-card lesson-3">
-      <div class="lesson-card-visual">
-        <div class="lesson-status members">Members</div>
-        <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f24799be993424f4fc6db5_2950e9f1-3183-484b-814e-61330bcb7846.png" 
-             alt="The Cube" 
-             class="lesson-card-image">
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 3 · Geometric</div>
-        <div class="lesson-title">The Cube</div>
-        <div class="lesson-desc">Constructing form with perspective. Edges, planes, and the architecture of seeing.</div>
-        <div class="lesson-progress-pill">📐 3 of 10 · Foundation A</div>
-        <div class="lesson-meta">
-          <span>⏱ ~60 min</span>
-          <span>·</span>
-          <span>+100 XP</span>
-        </div>
-        <div class="lesson-cta">Preview lesson →</div>
-      </div>
-    </a>
+    <p class="signin-error" id="signin-error">
+      That code doesn't match. Check your welcome email or contact Faye for help.
+    </p>
     
-    <!-- LESSON 5: CYLINDER (live, renumbered from old Lesson 3) -->
-    <a href="lessons/lesson-5-cylinder/" class="lesson-card lesson-5">
-      <div class="lesson-card-visual">
-        <div class="lesson-status members">Members</div>
-        <div class="lesson-icon">⬭</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 5 · Geometric</div>
-        <div class="lesson-title">The Cylinder</div>
-        <div class="lesson-desc">Where curved meets straight. Round AND edged at once — light behaves in two directions.</div>
-        <div class="lesson-progress-pill">📐 5 of 10 · Foundation A</div>
-        <div class="lesson-meta">
-          <span>⏱ ~60 min</span>
-          <span>·</span>
-          <span>+100 XP</span>
-        </div>
-        <div class="lesson-cta">Preview lesson →</div>
-      </div>
-    </a>
-    
-  </div>
-  
-  <div class="section-label" style="margin-top: 60px;">⏭ Coming next</div>
-  
-  <div class="lesson-grid">
-    
-    <!-- LESSON 4: CUBE REALWORLD (placeholder, no link) -->
-    <div class="lesson-card lesson-4 coming-soon">
-      <div class="lesson-card-visual">
-        <div class="lesson-status coming">Soon</div>
-        <div class="lesson-icon">📦</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 4 · Real-world</div>
-        <div class="lesson-title">Cube in the Real World</div>
-        <div class="lesson-desc">A gift box, a book, a phone — the cube in your hand. Apply edges + perspective to what you actually own.</div>
-        <div class="lesson-meta">
-          <span>In development</span>
-        </div>
-        <div class="lesson-cta">In development</div>
-      </div>
-    </div>
-    
-    <!-- LESSON 6: CYLINDER REALWORLD (placeholder) -->
-    <div class="lesson-card lesson-6 coming-soon">
-      <div class="lesson-card-visual">
-        <div class="lesson-status coming">Soon</div>
-        <div class="lesson-icon">☕</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lesson 6 · Real-world</div>
-        <div class="lesson-title">Cylinder in the Real World</div>
-        <div class="lesson-desc">A coffee cup, a vase, a candle. Where the cylinder lives — and what light tells you about it.</div>
-        <div class="lesson-meta">
-          <span>In development</span>
-        </div>
-        <div class="lesson-cta">In development</div>
-      </div>
-    </div>
-    
-    <!-- LESSONS 7-10 (one combined card) -->
-    <div class="lesson-card coming-soon" style="grid-column: 1 / -1; max-width: none;">
-      <div class="lesson-card-visual" style="height: 120px;">
-        <div class="lesson-status coming">Soon</div>
-        <div class="lesson-icon" style="font-size: 50px;">▲ ⬡ ◆ ◯</div>
-      </div>
-      <div class="lesson-card-body">
-        <div class="lesson-num">Lessons 7 — 10</div>
-        <div class="lesson-title">More forms + their real-world pairs</div>
-        <div class="lesson-desc">Pyramid, cone, ellipse, and the rest of Foundation A. Each geometric form paired with how it appears in everyday life.</div>
-        <div class="lesson-meta">
-          <span>4 more lessons coming through 2026</span>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-  
-  <!-- Pedagogy note -->
-  <div class="pedagogy-note">
-    <div class="pedagogy-note-label">Why pair geometric + real-world?</div>
-    <p class="pedagogy-note-text">
-      Learning shapes in isolation is useful. Seeing the same shape in everyday objects is transformation. <b>The sphere isn't just on the page — it's on your kitchen counter, in the garden, in the fruit bowl.</b> Once you see it, you can't un-see it. Foundation A teaches both: the form, and where it lives.
+    <p class="signin-help">
+      Don't have a code yet?<br>
+      <a href="https://www.feiteamart.com/contact" target="_blank">Contact Faye →</a>
+      &nbsp;·&nbsp;
+      <a href="#" id="try-code-link">Try with TRYNEW</a>
     </p>
   </div>
 </div>
 
-<div class="footer">
-  <div class="footer-text">FEI TeamArt · Burnaby BC · 2026</div>
-  <div class="footer-links">
-    <a href="https://www.feiteamart.com" target="_blank">Main site</a>
-    <a href="https://www.feiteamart.com/registration" target="_blank">LFC Registration</a>
-    <a href="https://www.feiteamart.com/about" target="_blank">About</a>
-    <a href="https://www.feiteamart.com/reports" target="_blank">Student Portal</a>
+<!-- ═══════════════════════════════════════════════════════════
+     HOME SCREEN — Skills + Creation tracks
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="home-screen" style="display:none;">
+  
+  <div class="hero">
+    <div class="hero-greeting" id="hero-greeting">Welcome back</div>
+    <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
+    <p class="hero-subtitle">What do you want to grow today?</p>
   </div>
+  
+  <!-- Resume card -->
+  <div class="resume-card hidden" id="resume-card">
+    <div>
+      <div class="resume-kicker">Continue learning</div>
+      <div class="resume-title" id="resume-title">Lesson 1: Sphere</div>
+      <div class="resume-sub" id="resume-sub">Pick up where you left off</div>
+    </div>
+    <a href="#" class="resume-btn" id="resume-btn">Continue →</a>
+  </div>
+  
+  <!-- Two tracks -->
+  <div class="section-heading">
+    <div class="section-title">Pick your direction</div>
+    <div class="section-sub">Two ways to grow — structured learning, or open creation.</div>
+  </div>
+  
+  <div class="tracks">
+    <a href="#" class="track-card" id="track-skills" onclick="event.preventDefault(); showSkills();">
+      <div class="track-emoji">🎓</div>
+      <div class="track-name">Skills</div>
+      <div class="track-tagline">Step-by-step training. Foundation through expertise.</div>
+      <div class="track-progress" id="skills-progress">0 of 6 lessons</div>
+      <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
+    </a>
+    
+    <a href="#" class="track-card locked" onclick="event.preventDefault();">
+      <div class="track-emoji">🎨</div>
+      <div class="track-name">Creation</div>
+      <div class="track-tagline">Illustration · stop motion · artistic painting.</div>
+      <div class="track-locked-tag">🎯 Coming soon</div>
+    </a>
+  </div>
+
 </div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SKILLS SCREEN — sub-tracks
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="skills-screen" style="display:none;">
+  
+  <button class="back-btn" onclick="showHome()">← Back to Smart Class</button>
+  
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">🎓 Skills</div>
+    <div class="section-sub">Structured training across the foundations of visual art.</div>
+  </div>
+  
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
+    <div class="subtrack-emoji">✏️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Drawing</div>
+      <div class="subtrack-meta" id="drawing-meta">Foundation A · in progress</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+  
+  <div class="subtrack locked">
+    <div class="subtrack-emoji">🎨</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Color Theory</div>
+      <div class="subtrack-meta">Coming soon</div>
+    </div>
+  </div>
+  
+  <div class="subtrack locked">
+    <div class="subtrack-emoji">📐</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Art Theory</div>
+      <div class="subtrack-meta">Coming soon</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DRAWING SCREEN — Foundation A unlock path (Duolingo style)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="drawing-screen" style="display:none;">
+  
+  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+  
+  <div class="path-header">
+    <div class="path-header-kicker">Drawing · Foundation A</div>
+    <div class="path-header-title">Form &amp; Structure</div>
+    <div class="path-header-sub">
+      Learn to see and construct objects through 6 foundational lessons.
+    </div>
+    <div class="path-header-bar">
+      <div class="path-header-fill" id="path-fill" style="width:0%"></div>
+    </div>
+    <div class="path-header-meta" id="path-meta">0 of 6 unlocked</div>
+  </div>
+  
+  <!-- Path nodes will be rendered here -->
+  <div class="path-nodes" id="path-nodes"></div>
+  
+  <!-- Foundation A badge footer -->
+  <div class="badge-footer" id="badge-footer">
+    <div class="badge-footer-icon">🏆</div>
+    <div class="badge-footer-title">Foundation A Badge</div>
+    <div class="badge-footer-sub" id="badge-footer-sub">
+      Complete all 6 lessons to earn this.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════════════════
+  // CONFIG
+  // ═══════════════════════════════════════════════════════════
+  
+  const ROSTER_PATH = 'core/student-access-codes.js';
+  const PROFILE_KEY = 'fei_user_profile';
+  
+  // ═══════════════════════════════════════════════════════════
+  // FOUNDATION A PATH — order is configurable!
+  // 改这个数组就能调换顺序 (per Faye's request: flexible reordering)
+  // ═══════════════════════════════════════════════════════════
+  const FOUNDATION_A_PATH = [
+    {
+      id: 'cube',
+      title: 'The Cube',
+      subtitle: 'Geometric form',
+      emoji: '◧',
+      href: 'lessons/lesson-3-cube/',
+      ready: true
+    },
+    {
+      id: 'sphere',
+      title: 'The Sphere',
+      subtitle: 'Geometric form',
+      emoji: '⬤',
+      href: 'lessons/lesson-1-sphere/',
+      ready: true
+    },
+    {
+      id: 'cylinder',
+      title: 'The Cylinder',
+      subtitle: 'Geometric form',
+      emoji: '◗',
+      href: 'lessons/lesson-5-cylinder/',
+      ready: true
+    },
+    {
+      id: 'cup',
+      title: 'The Cup',
+      subtitle: 'Cylinder · real world',
+      emoji: '☕',
+      href: 'lessons/lesson-6-cup/',
+      ready: true
+    },
+    {
+      id: 'box',
+      title: 'The Box',
+      subtitle: 'Cube · real world',
+      emoji: '📦',
+      href: 'lessons/lesson-4-cube-realworld/',
+      ready: false  // Coming soon
+    },
+    {
+      id: 'apple',
+      title: 'The Apple',
+      subtitle: 'Sphere · real world',
+      emoji: '🍎',
+      href: 'lessons/lesson-2-sphere-realworld/',
+      ready: false  // Coming soon
+    }
+  ];
+  
+  // ═══════════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════════
+  
+  let validStudents = new Map();
+  let userProfile = null;
+  
+  // ═══════════════════════════════════════════════════════════
+  // STUDENT ROSTER
+  // ═══════════════════════════════════════════════════════════
+  
+  async function loadRoster() {
+    try {
+      const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const text = await response.text();
+      
+      const blockRegex = /\{[^{}]*\}/g;
+      let block;
+      while ((block = blockRegex.exec(text)) !== null) {
+        const blockText = block[0];
+        const idMatch    = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+        const nameMatch  = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+        const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
+        
+        if (!idMatch || !nameMatch) continue;
+        
+        validStudents.set(
+          idMatch[1].toUpperCase(),
+          { displayName: nameMatch[1], isTrial: trialMatch ? trialMatch[1] === 'true' : false }
+        );
+      }
+      
+      console.log('[SmartClass Home] Loaded ' + validStudents.size + ' codes');
+    } catch (err) {
+      console.warn('[SmartClass Home] Failed to load roster:', err);
+    }
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // PROFILE
+  // ═══════════════════════════════════════════════════════════
+  
+  function loadProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      userProfile = raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      userProfile = null;
+    }
+  }
+  
+  function saveProfile(p) {
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+      userProfile = p;
+    } catch (e) {
+      console.warn('Save failed:', e);
+    }
+  }
+  
+  function clearProfile() {
+    try {
+      localStorage.removeItem(PROFILE_KEY);
+      userProfile = null;
+    } catch (e) {}
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SCREEN SWITCHING
+  // ═══════════════════════════════════════════════════════════
+  
+  function hideAllScreens() {
+    document.getElementById('signin-screen').style.display = 'none';
+    document.getElementById('home-screen').style.display = 'none';
+    document.getElementById('skills-screen').style.display = 'none';
+    document.getElementById('drawing-screen').style.display = 'none';
+  }
+  
+  function showSignIn() {
+    hideAllScreens();
+    document.getElementById('signin-screen').style.display = 'flex';
+    document.getElementById('topbar-right').innerHTML = `
+      <a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>
+    `;
+    
+    const urlCode = new URLSearchParams(window.location.search).get('code');
+    if (urlCode) {
+      document.getElementById('signin-code').value = urlCode.toUpperCase();
+      updateSignInBtn();
+    }
+  }
+  
+  function showHome() {
+    hideAllScreens();
+    document.getElementById('home-screen').style.display = 'block';
+    renderHome();
+    window.scrollTo(0, 0);
+  }
+  window.showHome = showHome;
+  
+  function showSkills() {
+    hideAllScreens();
+    document.getElementById('skills-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showSkills = showSkills;
+  
+  function showDrawing() {
+    hideAllScreens();
+    document.getElementById('drawing-screen').style.display = 'block';
+    renderDrawingPath();
+    window.scrollTo(0, 0);
+  }
+  window.showDrawing = showDrawing;
+  
+  // ═══════════════════════════════════════════════════════════
+  // RENDER HOME
+  // ═══════════════════════════════════════════════════════════
+  
+  function renderHome() {
+    // Topbar
+    const tier = userProfile.tier === 'trial' ? '· Trial' : '';
+    document.getElementById('topbar-right').innerHTML = `
+      <span style="font-size:12px; color:var(--ink-soft);">
+        ${userProfile.name} ${tier}
+      </span>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    `;
+    
+    // Hero
+    const completed = userProfile.completedLessons || [];
+    document.getElementById('hero-greeting').textContent = 
+      completed.length > 0 ? 'Welcome back' : 'Welcome to Smart Class';
+    document.getElementById('hero-name').textContent = userProfile.name;
+    
+    // Resume card
+    if (completed.length > 0) {
+      const next = pickNextLesson();
+      if (next) {
+        const card = document.getElementById('resume-card');
+        card.classList.remove('hidden');
+        document.getElementById('resume-title').textContent = next.title;
+        document.getElementById('resume-sub').textContent = next.subtitle;
+        document.getElementById('resume-btn').href = next.href;
+      }
+    } else {
+      document.getElementById('resume-card').classList.add('hidden');
+    }
+    
+    // Skills track progress
+    const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
+    const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
+    const totalCount = FOUNDATION_A_PATH.length;
+    const pct = Math.round((doneCount / totalCount) * 100);
+    document.getElementById('skills-progress').textContent = 
+      `${doneCount} of ${totalCount} lessons`;
+    document.getElementById('skills-bar').style.width = pct + '%';
+    
+    // Drawing sub-track meta
+    document.getElementById('drawing-meta').textContent = 
+      doneCount === 0
+        ? `Foundation A · ${totalCount} lessons`
+        : `Foundation A · ${doneCount}/${totalCount} done`;
+  }
+  
+  // Find the next lesson the student should do
+  function pickNextLesson() {
+    const completed = userProfile.completedLessons || [];
+    // Find the first lesson in order that they haven't completed and is ready
+    for (const lesson of FOUNDATION_A_PATH) {
+      if (!lesson.ready) continue;
+      if (!completed.includes(lesson.id)) {
+        return {
+          title: lesson.title,
+          subtitle: lesson.subtitle,
+          href: lesson.href
+        };
+      }
+    }
+    return null;  // All done
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // RENDER DRAWING PATH (Foundation A unlock map)
+  // ═══════════════════════════════════════════════════════════
+  
+  function renderDrawingPath() {
+    const completed = userProfile.completedLessons || [];
+    const container = document.getElementById('path-nodes');
+    
+    // Determine state for each node
+    let foundCurrent = false;
+    const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
+      let state = 'locked';
+      let icon = lesson.emoji;
+      let kicker = `Step ${idx + 1}`;
+      let arrow = '🔒';
+      let clickable = false;
+      
+      if (!lesson.ready) {
+        state = 'coming';
+        kicker = `Step ${idx + 1} · Coming soon`;
+        arrow = '⏳';
+      } else if (completed.includes(lesson.id)) {
+        state = 'done';
+        icon = '✓';
+        kicker = `Step ${idx + 1} · Complete`;
+        arrow = '↻';
+        clickable = true;
+      } else if (!foundCurrent) {
+        state = 'current';
+        kicker = `Step ${idx + 1} · Continue`;
+        arrow = '→';
+        clickable = true;
+        foundCurrent = true;
+      }
+      
+      const tag = state === 'done' ? '+50 XP earned'
+                : state === 'current' ? lesson.subtitle
+                : state === 'coming' ? 'Building this lesson'
+                : `Complete previous to unlock`;
+      
+      const tagEl = clickable ? 'a' : 'div';
+      const hrefAttr = clickable ? `href="${lesson.href}"` : '';
+      
+      return `
+        <${tagEl} class="path-node ${state}" ${hrefAttr}>
+          <div class="node-icon">${icon}</div>
+          <div class="node-info">
+            <div class="node-kicker">${kicker}</div>
+            <div class="node-title">${lesson.title}</div>
+            <div class="node-tag">${tag}</div>
+          </div>
+          <div class="node-arrow">${arrow}</div>
+        </${tagEl}>
+      `;
+    }).join('');
+    
+    container.innerHTML = nodesHTML;
+    
+    // Header progress
+    const doneCount = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
+    const totalCount = FOUNDATION_A_PATH.length;
+    const pct = Math.round((doneCount / totalCount) * 100);
+    document.getElementById('path-fill').style.width = pct + '%';
+    document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} unlocked`;
+    
+    // Badge state
+    const badgeFooter = document.getElementById('badge-footer');
+    const badgeSub = document.getElementById('badge-footer-sub');
+    if (doneCount === totalCount) {
+      badgeFooter.classList.add('unlocked');
+      badgeSub.textContent = '✨ Unlocked — you are a Foundation A graduate!';
+    } else {
+      badgeFooter.classList.remove('unlocked');
+      const remaining = totalCount - doneCount;
+      badgeSub.textContent = `${remaining} more ${remaining === 1 ? 'lesson' : 'lessons'} to unlock this badge.`;
+    }
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SIGN-IN FLOW
+  // ═══════════════════════════════════════════════════════════
+  
+  function updateSignInBtn() {
+    const input = document.getElementById('signin-code');
+    const btn = document.getElementById('signin-btn');
+    btn.disabled = input.value.trim().length < 3;
+  }
+  
+  function attemptSignIn() {
+    const input = document.getElementById('signin-code');
+    const error = document.getElementById('signin-error');
+    const code = input.value.trim().toUpperCase();
+    
+    if (!code) return;
+    
+    const match = validStudents.get(code);
+    if (!match) {
+      input.classList.add('error');
+      error.classList.add('visible');
+      setTimeout(() => input.classList.remove('error'), 400);
+      return;
+    }
+    
+    const profile = {
+      id: code,
+      studentCode: code,
+      name: match.displayName,
+      tier: match.isTrial ? 'trial' : 'member',
+      memberSince: Date.now(),
+      currentLesson: 'cube',
+      currentStepIdx: 0,
+      completedLessons: [],
+      totalXP: 0,
+      createdAt: Date.now(),
+      lastSeenAt: Date.now()
+    };
+    saveProfile(profile);
+    showHome();
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SIGN OUT
+  // ═══════════════════════════════════════════════════════════
+  
+  function signOut() {
+    if (confirm('Sign out of Smart Class? Your progress is saved on this device.')) {
+      clearProfile();
+      window.location.reload();
+    }
+  }
+  window.signOut = signOut;
+  
+  // ═══════════════════════════════════════════════════════════
+  // EVENT LISTENERS
+  // ═══════════════════════════════════════════════════════════
+  
+  document.getElementById('signin-code').addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();
+    updateSignInBtn();
+    document.getElementById('signin-error').classList.remove('visible');
+  });
+  
+  document.getElementById('signin-code').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptSignIn();
+  });
+  
+  document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
+  
+  document.getElementById('try-code-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('signin-code').value = 'TRYNEW';
+    updateSignInBtn();
+  });
+  
+  // ═══════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════
+  
+  (async function init() {
+    await loadRoster();
+    loadProfile();
+    
+    if (userProfile) {
+      showHome();
+    } else {
+      showSignIn();
+    }
+  })();
+</script>
 
 </body>
 </html>
