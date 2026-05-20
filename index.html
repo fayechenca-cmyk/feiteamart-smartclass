@@ -393,9 +393,15 @@
   .path-node.done {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
     border-color: rgba(29,158,117,0.3);
+    cursor: pointer;
+    text-decoration: none;
   }
   .path-node.done:not(:last-child)::after { background: var(--green); }
-  .path-node.done:hover { transform: translateX(2px); border-color: var(--green); }
+  .path-node.done:hover { 
+    transform: translateX(2px); 
+    border-color: var(--green); 
+    box-shadow: 0 4px 14px rgba(29,158,117,0.20);
+  }
   
   /* CURRENT state — glowing */
   .path-node.current {
@@ -558,12 +564,12 @@
     <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
     
     <p class="signin-error" id="signin-error">
-      That code doesn't match. Check your welcome email or contact Faye for help.
+      That code doesn't match. Check your welcome email or contact us for help.
     </p>
     
     <p class="signin-help">
       Don't have a code yet?<br>
-      <a href="https://www.feiteamart.com/contact" target="_blank">Contact Faye →</a>
+      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
       &nbsp;·&nbsp;
       <a href="#" id="try-code-link">Try with TRYNEW</a>
     </p>
