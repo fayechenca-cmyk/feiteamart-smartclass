@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch A · Lesson 3: The Cube</title>
+<title>FEI TeamArt · Foundation of Sketch A · Lesson 1: The Cube</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3019,7 +3019,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 2 <span class="sep">·</span> edges &amp; planes</div>
-  <div class="lesson-title">Lesson 3: The Cube</div>
+  <div class="lesson-title">Lesson 1: The Cube</div>
   <div class="lesson-sub">Constructing form with perspective — your second foundation</div>
 
   <div class="progress-rail">
@@ -3192,7 +3192,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     
     <div class="members-lock-icon-large">◼</div>
     
-    <div class="members-lock-title">Continue to Lesson 3: The Cube</div>
+    <div class="members-lock-title">Continue to Lesson 1: The Cube</div>
     <div class="members-lock-subtitle">Foundation A is $150 for the full 10-lesson series.<br/>Lessons 2 through 10 unlock with membership.</div>
     
     <!-- What's inside membership -->
@@ -3235,7 +3235,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
       <span class="members-lock-divider-text">OR</span>
     </div>
     
-    <!-- Secondary: Contact Faye for questions or custom arrangements -->
+    <!-- Secondary: Contact us for questions or custom arrangements -->
     <div class="members-lock-form">
       <div class="members-lock-form-label">Have questions, or prefer to talk first?</div>
       <a href="https://www.feiteamart.com/contact" 
@@ -3243,7 +3243,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
          rel="noopener"
          class="btn btn-secondary members-lock-submit"
          style="display: block; text-align: center; text-decoration: none;">
-        Contact Faye →
+        Contact us →
       </a>
     </div>
     
@@ -3282,7 +3282,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 3: The Cube</div>
+    <div class="welcome-lesson-label">Lesson 1: The Cube</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Smart Class is for FEI students only.</div>
     
@@ -3297,7 +3297,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
              maxlength="20"
              style="font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase;"
              oninput="onWelcomeInputChange()">
-      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask Faye ✨</div>
+      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask the team ✨</div>
     </div>
     
     <div class="welcome-field">
@@ -3795,7 +3795,7 @@ const LFC = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'Lesson 2 — the cube',
+  title: 'Lesson 1 — the cube',
   
   // ElevenLabs audio URL — fill in when mp3 is ready.
   // Script for Mrs. Dawn's cloned voice (30-40 sec):
@@ -5042,7 +5042,7 @@ const LFC_HOOKS = {
 
 const LESSON = {
   id: 'cube',
-  title: 'Lesson 3: The Cube',
+  title: 'Lesson 1: The Cube',
   totalXP: 100,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,        // Lesson 2 is members-only — paywall enforced via AccessControl
@@ -5193,73 +5193,11 @@ const LESSON = {
     //  LFC carry the meaning. Don't strain to insert master images.)
     
     // ===== PART C · DEMO & DRAW =====
-    // (Paywall modal triggers here automatically — Lesson 2 is members-only)
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'perspective',
-      title: 'Set up your perspective',
-      intro: 'Decide your viewpoint: one-point (calm, frontal) or two-point (active, dynamic). Lightly mark your horizon line and one or two vanishing points. This is the invisible scaffolding of every cube.',
-      quote: 'Perspective is not a rule — it\'s a decision. Choose it consciously.',
-      tip: 'Your horizon line tells the viewer where THEY are standing. High horizon = looking down. Low horizon = looking up.',
-      xp: 10
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'construction',
-      title: 'Construct the cube',
-      intro: 'Start with the front edge. Use light construction lines that converge to your vanishing points. Build the cube as a transparent wireframe first — yes, draw the back edges too, even though you\'ll erase them later.',
-      quote: 'Drawing the hidden edges keeps you honest. The cube has to make sense in 3D before it can look right in 2D.',
-      tip: 'Don\'t commit to dark lines yet. Construction lines should be ghosts. Confidence comes from understanding, not from pressing harder.',
-      xp: 10
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'planes',
-      title: 'Identify the three values',
-      intro: 'A cube has three visible planes: the top (lightest, catching most light), the front (middle value), and the side (darkest, in shadow). These three values must clearly differ — that\'s what makes a cube READ as a cube.',
-      quote: 'If your three planes blur into one value, you have a square. The cube lives in the contrast.',
-      tip: 'Squint at your reference. The three values should be distinguishable even when blurred. If they\'re not — push the contrast harder.',
-      xp: 10
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'shading',
-      title: 'Shade each plane evenly',
-      intro: 'Lay flat, even tone on each plane. Strokes should follow the direction of that plane — horizontal on horizontal surfaces, vertical on vertical ones. Don\'t cross-hatch yet; cleanliness matters.',
-      quote: 'Strokes that follow the plane reinforce its orientation. Strokes that fight the plane confuse the eye.',
-      tip: 'Lighter pressure than you think. You can always go darker. Going lighter requires erasing — and erasers crush paper fiber.',
-      xp: 15
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'cast_shadow',
-      title: 'Cast shadow + edge attack',
-      intro: 'A cube\'s cast shadow is sharp-edged at its source and softens as it stretches away. Now also reinforce the cube\'s outermost edges — these "attack lines" are what give the cube its presence.',
-      quote: 'Sharp edge near the form, soft edge as it travels — every cast shadow tells you about the light.',
-      tip: 'Don\'t outline the cube uniformly. Edges in shadow can be slightly softer; edges catching light should be cleaner. Variable line weight is sophistication.',
-      xp: 15
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · your turn to draw',
-      type: 'demo',
-      videoSeg: 'finishing',
-      title: 'Final adjustments',
-      intro: 'Step back. Squint. Are the three planes still clearly different? Are construction lines erased where they should be? Is the cube anchored to the ground? Make small final adjustments — restraint is everything now.',
-      quote: 'Knowing when to stop is the deepest skill in drawing.',
-      tip: 'Most beginners over-finish. The cube is done when adding more would only make it busier, not better.',
-      xp: 15
-    },
+    // (Paywall modal triggers here automatically — Lesson is members-only)
+    // The 5 videoSegment steps above ARE the demo content.
+    // (Previous text-based 'demo' steps removed in Round 28 —
+    //  they duplicated content already covered by Mrs. Dawn's video pause points.)
+    
     // ===== PART D · FINAL SUBMISSION =====
     {
       part: 'D',
@@ -6483,7 +6421,7 @@ function initPlayLight(shape) {
       </g>
     `;
   } else if (shape === 'cube') {
-    // For Lesson 2 — three visible cube faces, faceted shading
+    // For Lesson 1 — three visible cube faces, faceted shading
     svg.innerHTML = `
       <defs>
         <linearGradient id="pl-floor-grad" x1="0" y1="0" x2="0" y2="1">
@@ -8334,22 +8272,24 @@ function renderBadgeUnlocked(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Lesson 3 Teaser (changes per lesson) -->
+      <!-- Next lesson teaser (updates with FOUNDATION_A_PATH order) -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
-        <div class="lesson2-teaser-title">Lesson 3: The Cylinder</div>
+        <div class="lesson2-teaser-title">Lesson 2: The Sphere</div>
         <div class="lesson2-teaser-sub">
-          You\'ve drawn a curved form (sphere) and an edged form (cube). The cylinder is where they meet — round AND straight. Light will behave in both directions at once.
+          You\'ve drawn the cube — three planes, one light. Next: the sphere. Same light, but now wrapping a curved surface. Watch how shadows turn instead of breaking.
         </div>
-        <div class="lesson2-teaser-artists">
-          Featuring works by <b>Léger</b> · <b>Charles Sheeler</b> · <b>Tony Cragg</b>
-        </div>
-        <div class="lesson2-teaser-status">🔒 Members-only when it opens</div>
+        <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="openMyJourney()"><span class="glyph">◈</span> View my thinking journey</button>
-        <button class="btn btn-secondary" onclick="alert('In the real app: share to Community Showcase');">Share my badge</button>
+        <a href="../lesson-1-sphere/" class="btn btn-primary" style="text-decoration:none;">
+          <span class="glyph">◈</span> Continue to Lesson 2: Sphere →
+        </a>
+        <button class="btn btn-secondary" onclick="window.location.href='../../';">
+          ← Back to Smart Class home
+        </button>
+        <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
     </div>`;
@@ -10044,7 +9984,7 @@ function onWelcomeInputChange() {
   codeInput.style.borderColor = '';
   codeInput.style.background = '';
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
 }
@@ -10063,7 +10003,7 @@ function submitWelcome() {
     codeInput.style.borderColor = '#e57373';
     codeInput.style.background = '#fef2f2';
     if (hint) {
-      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message Faye for help.";
+      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message us for help.";
       hint.style.color = '#b91c1c';
     }
     Analytics.track('welcome_invalid_code', { code_length: code.length });
@@ -10185,7 +10125,7 @@ function switchProfile(event) {
   }
   const hint = document.getElementById('welcome-input-hint');
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
   document.querySelectorAll('.welcome-age-card').forEach(c => c.classList.remove('selected'));
