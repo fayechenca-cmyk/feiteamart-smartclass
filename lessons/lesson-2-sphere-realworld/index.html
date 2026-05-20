@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch A · Lesson 2: The Apple</title>
+<title>FEI TeamArt · Foundation of Sketch A · Lesson 6: The Apple</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3481,7 +3481,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 1 <span class="sep">·</span> form &amp; light</div>
-  <div class="lesson-title">Lesson 2: The Apple</div>
+  <div class="lesson-title">Lesson 6: The Apple</div>
   <div class="lesson-sub">Building form with value — our first foundation</div>
 
   <div class="progress-rail">
@@ -3648,7 +3648,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     
     <div class="members-lock-icon-large">◗</div>
     
-    <div class="members-lock-title">Continue to Lesson 2: The Apple</div>
+    <div class="members-lock-title">Continue to Lesson 6: The Apple</div>
     <div class="members-lock-subtitle">Foundation A is $150 for the full 10-lesson series.<br/>Lessons 2 through 10 unlock with membership.</div>
     
     <!-- What's inside membership -->
@@ -3659,7 +3659,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🎬</span>
-        <span><b>All demo videos</b> — step-by-step drawing with Faye</span>
+        <span><b>All demo videos</b> — step-by-step drawing with Mrs. Dawn</span>
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🌱</span>
@@ -3691,7 +3691,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
       <span class="members-lock-divider-text">OR</span>
     </div>
     
-    <!-- Secondary: Contact Faye for questions or custom arrangements -->
+    <!-- Secondary: Contact us for questions or custom arrangements -->
     <div class="members-lock-form">
       <div class="members-lock-form-label">Have questions, or prefer to talk first?</div>
       <a href="https://www.feiteamart.com/contact" 
@@ -3699,7 +3699,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
          rel="noopener"
          class="btn btn-secondary members-lock-submit"
          style="display: block; text-align: center; text-decoration: none;">
-        Contact Faye →
+        Contact us →
       </a>
     </div>
     
@@ -3748,7 +3748,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 2: The Apple</div>
+    <div class="welcome-lesson-label">Lesson 6: The Apple</div>
     
     <!-- Cylinder cover image -->
     <div style="margin: 12px 0 16px; border-radius: 14px; overflow: hidden; 
@@ -3775,7 +3775,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
              maxlength="20"
              style="font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase;"
              oninput="onWelcomeInputChange()">
-      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask Faye ✨</div>
+      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask the team ✨</div>
     </div>
     
     <div class="welcome-field">
@@ -5822,7 +5822,7 @@ const CLOSING_LFC = {
 
 const LESSON = {
   id: 'apple',
-  title: 'Lesson 2: The Apple',
+  title: 'Lesson 6: The Apple',
   totalXP: 120,
   membersOnly: true,
   ageGroups: ['kids', 'teen', 'adult'],
@@ -7415,7 +7415,7 @@ function initPlayLight(shape) {
       </g>
     `;
   } else if (shape === 'cube') {
-    // For Lesson 2 — three visible cube faces, faceted shading
+    // For Lesson 6 — three visible cube faces, faceted shading
     svg.innerHTML = `
       <defs>
         <!-- Cool floor: subtle purple-blue grading (matches sphere version) -->
@@ -8830,7 +8830,7 @@ function renderLessonComplete(profileOrLead) {
   return `
     <div class="step-card lesson-complete-celebration show">
       <div class="lesson-complete-emoji-big">🌱</div>
-      <div class="lesson-complete-title">Lesson 2 complete</div>
+      <div class="lesson-complete-title">Lesson 6 complete</div>
       <div class="lesson-complete-subtitle">You finished the cylinder.</div>
       
       <!-- Progress bar -->
@@ -8860,7 +8860,10 @@ function renderLessonComplete(profileOrLead) {
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-secondary" onclick="openMyJourney()">View my thinking journey</button>
+        <a href="../../" class="btn btn-primary" style="text-decoration:none;">
+          <span class="glyph">◈</span> ← Back to Smart Class home
+        </a>
+        <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
     </div>`;
@@ -10069,7 +10072,7 @@ function onWelcomeInputChange() {
   codeInput.style.borderColor = '';
   codeInput.style.background = '';
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
 }
@@ -10088,7 +10091,7 @@ function submitWelcome() {
     codeInput.style.borderColor = '#e57373';
     codeInput.style.background = '#fef2f2';
     if (hint) {
-      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message Faye for help.";
+      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message us for help.";
       hint.style.color = '#b91c1c';
     }
     Analytics.track('welcome_invalid_code', { code_length: code.length });
@@ -10210,7 +10213,7 @@ function switchProfile(event) {
   }
   const hint = document.getElementById('welcome-input-hint');
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
   document.querySelectorAll('.welcome-age-card').forEach(c => c.classList.remove('selected'));
