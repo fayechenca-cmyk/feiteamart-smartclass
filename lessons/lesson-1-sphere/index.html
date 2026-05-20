@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch A · Lesson 1: The Sphere</title>
+<title>FEI TeamArt · Foundation of Sketch A · Lesson 2: The Sphere</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3254,7 +3254,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 1 <span class="sep">·</span> form &amp; light</div>
-  <div class="lesson-title">Lesson 1: The Sphere</div>
+  <div class="lesson-title">Lesson 2: The Sphere</div>
   <div class="lesson-sub">Building form with value — our first foundation</div>
 
   <div class="progress-rail">
@@ -3439,7 +3439,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 1: The Sphere</div>
+    <div class="welcome-lesson-label">Lesson 2: The Sphere</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Smart Class is for FEI students only.</div>
     
@@ -3454,7 +3454,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
              maxlength="20"
              style="font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase;"
              oninput="onWelcomeInputChange()">
-      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask Faye ✨</div>
+      <div class="welcome-input-hint" id="welcome-input-hint">Find this in your welcome email — or ask the team ✨</div>
     </div>
     
     <div class="welcome-field">
@@ -5505,7 +5505,7 @@ const CLOSING_LFC = {
 
 const LESSON = {
   id: 'sphere',
-  title: 'Lesson 1: The Sphere',
+  title: 'Lesson 2: The Sphere',
   totalXP: 100,
   ageGroups: ['kids', 'teen', 'adult'],  // Which AGE_GROUPS keys this lesson uses (basic techniques → no 'pro')
   fullyFree: true,   // Lesson 1 is our free "flagship" — all parts open, no paywall. Badge still requires email.
@@ -9068,7 +9068,7 @@ function renderLessonComplete(profileOrLead) {
   return `
     <div class="step-card lesson-complete-celebration show">
       <div class="lesson-complete-emoji-big">🌱</div>
-      <div class="lesson-complete-title">Lesson 1 complete</div>
+      <div class="lesson-complete-title">Lesson 2 complete</div>
       <div class="lesson-complete-subtitle">You finished the sphere.</div>
       
       <!-- Progress bar -->
@@ -9098,8 +9098,11 @@ function renderLessonComplete(profileOrLead) {
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="goToLesson2()" disabled style="opacity: 0.5; cursor: not-allowed;"><span class="glyph">◯</span> Lesson 2 coming soon</button>
-        <button class="btn btn-secondary" onclick="openMyJourney()">View my thinking journey</button>
+        <a href="../lesson-5-cylinder/" class="btn btn-primary" style="text-decoration:none;">
+          <span class="glyph">◈</span> Continue to Lesson 3: Cylinder →
+        </a>
+        <button class="btn btn-secondary" onclick="window.location.href='../../';">← Back to Smart Class home</button>
+        <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
     </div>`;
@@ -10289,7 +10292,7 @@ function onWelcomeInputChange() {
   codeInput.style.borderColor = '';
   codeInput.style.background = '';
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
 }
@@ -10308,7 +10311,7 @@ function submitWelcome() {
     codeInput.style.borderColor = '#e57373';
     codeInput.style.background = '#fef2f2';
     if (hint) {
-      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message Faye for help.";
+      hint.textContent = "Hmm, that code doesn't match. Check your welcome email or message us for help.";
       hint.style.color = '#b91c1c';
     }
     Analytics.track('welcome_invalid_code', { code_length: code.length });
@@ -10430,7 +10433,7 @@ function switchProfile(event) {
   }
   const hint = document.getElementById('welcome-input-hint');
   if (hint) {
-    hint.textContent = 'Find this in your welcome email — or ask Faye ✨';
+    hint.textContent = 'Find this in your welcome email — or ask the team ✨';
     hint.style.color = '';
   }
   document.querySelectorAll('.welcome-age-card').forEach(c => c.classList.remove('selected'));
