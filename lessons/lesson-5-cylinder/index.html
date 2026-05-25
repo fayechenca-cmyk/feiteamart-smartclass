@@ -343,6 +343,9 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes vpImageFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vpPanelSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes videoCompleteHintFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 
 /* AI FEEDBACK CARD */
 .fb-card { position: relative; background: #fff; border-radius: var(--radius-lg); padding: 20px 18px; margin-bottom: 16px; box-shadow: 0 4px 28px rgba(0,0,0,0.08); border: 0.5px solid var(--border); }
@@ -6108,7 +6111,7 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); break;
+    case 'demo':       el.innerHTML = renderDemo(step); setTimeout(() => { initCylinderPauses(step); }, 100); break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -8589,10 +8592,284 @@ function selectPlan(tier) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// CYLINDER VIDEO PAUSE SYSTEM
+// Mirrors Sphere's pause system — single-image pauses only for now.
+// Each pause: {time, duration, title, shortPrompt, text, image}
+// ═══════════════════════════════════════════════════════════════
+const CYLINDER_VIDEO_PAUSES = {
+  // ═══ Cylinder Video 1 (Build the cylinder) — 8 pause points ═══
+  'ba31784be13c1abc6875e4ce3c576502': [
+    {
+      time: 37,
+      duration: 25,
+      title: 'Measure left & right with your pencil',
+      shortPrompt: 'Use your pencil as a tool to check symmetry.',
+      text: 'Just like we practiced before — use your pencil as a measuring tool. Compare left to right so the cylinder begins with a stable, balanced frame from the very first stroke.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba32520df7140a900627_cylinder-p1-1.PNG'
+    },
+    {
+      time: 62,
+      duration: 25,
+      title: 'Mark top, bottom, left, right',
+      shortPrompt: 'Frame the cylinder like building a house.',
+      text: 'The teacher places dots above, below, and on each side. These four points define how much of the page the cylinder will fill. Check the gap to the paper edge — too big or too small and the composition fails.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33abbf0829ce7122ed_cylinder-p1-2.PNG'
+    },
+    {
+      time: 108,
+      duration: 25,
+      title: 'Box the cylinder in a rectangle',
+      shortPrompt: 'Draw the outer rectangle that holds the entire form.',
+      text: 'The teacher draws a long rectangle around where the cylinder will sit. This rectangle gives the cylinder a clear, direct answer for its size — no guessing.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33d59268daae03a17d_cylinder-p1-3.PNG'
+    },
+    {
+      time: 116,
+      duration: 25,
+      title: 'Check that top & bottom match',
+      shortPrompt: 'Pencil-measure to verify equal areas above and below.',
+      text: 'The teacher finds a point and measures with the pencil — checking whether the top section matches the area of the bottom. Equal proportions = a believable cylinder.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba3310f4c6d18bd77a16_cylinder-p1-4.PNG'
+    },
+    {
+      time: 141,
+      duration: 25,
+      title: 'Frame where the front curve will sit',
+      shortPrompt: 'Build sub-frames above and below to locate the ellipses.',
+      text: 'The teacher draws specific guide frames at the top and bottom. These tell you exactly where the front curve should arc through. With this scaffolding, your pencil moves with confidence.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba337b14dc76774f73bb_cylinder-p1-5.PNG'
+    },
+    {
+      time: 196,
+      duration: 25,
+      title: 'Cut with straight tangents — not curves yet',
+      shortPrompt: 'Draw the upper edge as a series of short straight lines.',
+      text: 'Just like with the sphere — circles and ellipses are very hard for beginners. The teacher uses straight tangent cuts first to find the right angles, then softens them into a curve.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33decfe598f02c0825_cylinder-p1-6.PNG'
+    },
+    {
+      time: 206,
+      duration: 25,
+      title: 'Find the bottom curve points',
+      shortPrompt: 'Mark high and low points of the bottom arc, symmetrically.',
+      text: 'The teacher locates the starting points for the bottom ellipse. Find the highest and lowest points of the curve — and they must be perfectly left-right symmetric.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba330a22dc454686b1f7_cylinder-p1-7.PNG'
+    },
+    {
+      time: 230,
+      duration: 25,
+      title: 'Keep top & bottom curves parallel',
+      shortPrompt: 'Both arcs must curve downward at the same angle.',
+      text: 'The bottom curve is almost finished. Common mistake: students draw it too flat. The top and bottom curves must arc downward in parallel — if either becomes too flat, the perspective breaks.',
+      image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33c8f6338c6fec8373_cylinder-p1-8.PNG'
+    }
+  ]
+  // Future: pause points for Cylinder videos 2-4 (and Optional V5) when designed
+};
+
+// Cylinder pause-system state — keyed by videoSeg
+const cylState = {
+  player: null,
+  videoSeg: null,
+  videoId: null,
+  pauses: [],
+  triggered: new Set(),
+  watcher: null,
+  countdown: null,
+  countdownEnds: 0,
+  paused: false,
+  currentPauseIdx: -1,
+  currentTime: 0
+};
+
+// Cloudflare Stream SDK loader (shared with other Cloudflare features)
+let cylStreamSDKLoaded = false;
+function loadCylinderStreamSDK(cb) {
+  if (window.Stream) { cylStreamSDKLoaded = true; if (cb) cb(); return; }
+  if (cylStreamSDKLoaded) { if (cb) cb(); return; }
+  const script = document.createElement('script');
+  script.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  script.async = true;
+  script.onload = () => { cylStreamSDKLoaded = true; if (cb) cb(); };
+  document.head.appendChild(script);
+}
+
+function initCylinderPauses(step) {
+  if (!step || !step.videoId || !step.videoSeg) return;
+  const pauses = CYLINDER_VIDEO_PAUSES[step.videoId];
+  if (!pauses || pauses.length === 0) return;
+  
+  cylState.videoSeg = step.videoSeg;
+  cylState.videoId = step.videoId;
+  cylState.pauses = pauses;
+  cylState.triggered = new Set();
+  cylState.paused = false;
+  cylState.currentPauseIdx = -1;
+  cylState.currentTime = 0;
+  if (cylState.watcher) { clearInterval(cylState.watcher); cylState.watcher = null; }
+  if (cylState.countdown) { clearInterval(cylState.countdown); cylState.countdown = null; }
+  
+  loadCylinderStreamSDK(() => {
+    setTimeout(() => {
+      const iframe = document.getElementById(`demo-iframe-${step.videoSeg}`);
+      if (!iframe || !window.Stream) return;
+      try {
+        cylState.player = window.Stream(iframe);
+        cylState.player.addEventListener('timeupdate', () => {
+          try { cylState.currentTime = cylState.player.currentTime || 0; } catch (e) {}
+        });
+        cylState.player.addEventListener('play', () => {
+          if (cylState.paused) {
+            hideCylOverlay();
+            cylState.paused = false;
+          }
+        });
+        cylState.player.addEventListener('loadedmetadata', () => {
+          startCylWatcher();
+        });
+        setTimeout(() => { if (!cylState.watcher) startCylWatcher(); }, 1500);
+      } catch (err) {
+        console.warn('[Cylinder pauses] Stream attach failed:', err);
+      }
+    }, 350);
+  });
+}
+
+function startCylWatcher() {
+  if (cylState.watcher) clearInterval(cylState.watcher);
+  cylState.watcher = setInterval(() => {
+    if (!cylState.player || cylState.paused) return;
+    const t = cylState.currentTime;
+    if (typeof t !== 'number') return;
+    for (let i = 0; i < cylState.pauses.length; i++) {
+      const p = cylState.pauses[i];
+      if (cylState.triggered.has(i)) continue;
+      if (t < p.time) continue;
+      if (t > p.time + 2) { cylState.triggered.add(i); continue; }
+      triggerCylPause(i);
+      break;
+    }
+  }, 250);
+}
+
+function triggerCylPause(idx) {
+  const p = cylState.pauses[idx];
+  if (!p) return;
+  cylState.triggered.add(idx);
+  cylState.currentPauseIdx = idx;
+  cylState.paused = true;
+  
+  try { cylState.player.pause(); } catch (e) {}
+  
+  const seg = cylState.videoSeg;
+  const total = cylState.pauses.length;
+  const counterText = `⏸ Key moment ${idx + 1} of ${total}`;
+  
+  document.getElementById(`cyl-counter-${seg}`).textContent = counterText;
+  document.getElementById(`cyl-counter-badge-${seg}`).textContent = counterText;
+  document.getElementById(`cyl-title-${seg}`).textContent = p.title;
+  document.getElementById(`cyl-text-${seg}`).textContent = p.text;
+  
+  const shortPromptEl = document.getElementById(`cyl-shortprompt-${seg}`);
+  if (shortPromptEl) {
+    if (p.shortPrompt) {
+      shortPromptEl.textContent = p.shortPrompt;
+      shortPromptEl.style.display = 'block';
+    } else {
+      shortPromptEl.style.display = 'none';
+    }
+  }
+  
+  // Show the image overlay
+  const imageOverlay = document.getElementById(`cyl-image-overlay-${seg}`);
+  const imgEl = document.getElementById(`cyl-image-${seg}`);
+  if (imgEl) imgEl.src = p.image;
+  if (imageOverlay) imageOverlay.style.display = 'block';
+  
+  // Show panel
+  const panel = document.getElementById(`cyl-panel-${seg}`);
+  if (panel) panel.style.display = 'block';
+  
+  // Scroll into view
+  setTimeout(() => {
+    const frame = document.getElementById(`demo-video-frame-${seg}`);
+    if (frame) frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+  
+  // Start countdown
+  startCylCountdown(p.duration || 25);
+}
+
+function startCylCountdown(duration) {
+  if (cylState.countdown) clearInterval(cylState.countdown);
+  cylState.countdownEnds = Date.now() + duration * 1000;
+  const seg = cylState.videoSeg;
+  
+  cylState.countdown = setInterval(() => {
+    const remaining = Math.max(0, cylState.countdownEnds - Date.now());
+    const seconds = Math.ceil(remaining / 1000);
+    const pct = (remaining / (duration * 1000)) * 100;
+    const bar = document.getElementById(`cyl-bar-${seg}`);
+    const timer = document.getElementById(`cyl-timer-${seg}`);
+    if (bar) bar.style.width = pct + '%';
+    if (timer) timer.textContent = `${seconds}s`;
+    
+    if (remaining <= 0) {
+      clearInterval(cylState.countdown);
+      cylState.countdown = null;
+      cylResume(seg);
+    }
+  }, 200);
+}
+
+function cylResume(seg) {
+  if (cylState.countdown) { clearInterval(cylState.countdown); cylState.countdown = null; }
+  hideCylOverlay();
+  cylState.paused = false;
+  
+  try {
+    cylState.player.play();
+    setTimeout(() => { try { cylState.player.play(); } catch (e) {} }, 150);
+    setTimeout(() => { try { cylState.player.play(); } catch (e) {} }, 400);
+  } catch (e) {
+    console.warn('[Cylinder pauses] resume failed:', e);
+  }
+}
+
+function cylKeepPaused(seg) {
+  if (cylState.countdown) { clearInterval(cylState.countdown); cylState.countdown = null; }
+  const timer = document.getElementById(`cyl-timer-${seg}`);
+  if (timer) timer.textContent = '∞';
+  const bar = document.getElementById(`cyl-bar-${seg}`);
+  if (bar) bar.style.width = '100%';
+}
+
+function hideCylOverlay() {
+  const seg = cylState.videoSeg;
+  if (!seg) return;
+  const imageOverlay = document.getElementById(`cyl-image-overlay-${seg}`);
+  if (imageOverlay) imageOverlay.style.display = 'none';
+  const panel = document.getElementById(`cyl-panel-${seg}`);
+  if (panel) panel.style.display = 'none';
+}
+
+function openCylinderImageLightbox(seg) {
+  const imgEl = document.getElementById(`cyl-image-${seg}`);
+  if (!imgEl || !imgEl.src) return;
+  if (typeof openImageLightbox === 'function') {
+    try { openImageLightbox(seg); return; } catch (e) {}
+  }
+  window.open(imgEl.src, '_blank');
+}
+
 function renderDemo(step) {
   // Cloudflare Stream migration: each demo step now has its own videoId.
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
+  const safeSeg = step.videoSeg || 'demo';
+  const pauses = (typeof CYLINDER_VIDEO_PAUSES !== 'undefined' && CYLINDER_VIDEO_PAUSES[videoId]) || [];
+  const hasPauses = pauses.length > 0;
   
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
@@ -8603,8 +8880,15 @@ function renderDemo(step) {
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        ${videoId ? `<iframe 
+      ${hasPauses ? `
+        <div class="video-segment-meta" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
+          <span>📹 ${step.title}</span>
+          <span>${pauses.length} key moments</span>
+        </div>
+      ` : ''}
+      
+      <div class="video-frame demo-video-frame" id="demo-video-frame-${safeSeg}" style="background: #000; cursor: default; padding: 0; position: relative;">
+        ${videoId ? `<iframe id="demo-iframe-${safeSeg}"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
@@ -8612,10 +8896,110 @@ function renderDemo(step) {
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
           allowfullscreen="true"></iframe>` 
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
+        
+        ${hasPauses ? `
+          <!-- Image overlay for pause points -->
+          <div id="cyl-image-overlay-${safeSeg}"
+               style="display:none; position:absolute; inset:0; z-index:10;
+                      background:#fff; cursor:zoom-in;
+                      animation: vpImageFadeIn 0.3s ease-out;"
+               onclick="openCylinderImageLightbox('${safeSeg}')">
+            <img id="cyl-image-${safeSeg}" src="" alt="Reference"
+                 style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;">
+            <div style="position:absolute; bottom:12px; right:12px; 
+                        background:rgba(26,29,43,0.85); color:#fff; padding:6px 12px;
+                        border-radius:14px; font-family:'Montserrat',sans-serif;
+                        font-size:10px; font-weight:800; letter-spacing:1px;
+                        text-transform:uppercase; pointer-events:none;">
+              🔍 Tap to enlarge
+            </div>
+            <div style="position:absolute; top:12px; left:12px; 
+                        background:linear-gradient(135deg,#a78bfa,#67e8f9); color:#fff; 
+                        padding:6px 14px; border-radius:14px; 
+                        font-family:'Montserrat',sans-serif; font-size:10px; 
+                        font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                        pointer-events:none; box-shadow:0 3px 10px rgba(167,139,250,0.4);">
+              <span id="cyl-counter-badge-${safeSeg}">⏸ Key moment 1</span>
+            </div>
+          </div>
+        ` : ''}
       </div>
       
+      ${hasPauses ? `
+        <!-- Teaching panel BELOW video -->
+        <div id="cyl-panel-${safeSeg}" 
+             style="display:none; margin-top:14px; padding:18px 20px; 
+                    border-radius:14px; background:#fff;
+                    box-shadow:0 4px 18px rgba(167,139,250,0.16);
+                    border:1px solid rgba(167,139,250,0.2);
+                    animation: vpPanelSlideUp 0.35s ease-out;">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center;
+                      margin-bottom:12px; padding-bottom:10px;
+                      border-bottom:1px solid rgba(167,139,250,0.15);">
+            <span id="cyl-counter-${safeSeg}"
+                  style="font-family:'Montserrat',sans-serif; font-size:10px;
+                         font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                         color:#7c5fc7;">
+              ⏸ Key moment 1
+            </span>
+            <span id="cyl-timer-${safeSeg}" 
+                  style="font-family:'Montserrat',sans-serif; font-size:11px;
+                         font-weight:800; color:#1d9e75;">25s</span>
+          </div>
+          
+          <div style="height:3px; background:rgba(167,139,250,0.15); border-radius:2px;
+                      margin-bottom:14px; overflow:hidden;">
+            <div id="cyl-bar-${safeSeg}" 
+                 style="height:100%; width:100%; 
+                        background:linear-gradient(90deg,#a78bfa,#67e8f9);
+                        transition:width 0.3s linear;"></div>
+          </div>
+          
+          <div id="cyl-title-${safeSeg}" 
+               style="font-family:'Montserrat',sans-serif; font-size:15px;
+                      font-weight:800; color:#1a1d2b; margin-bottom:6px;
+                      line-height:1.4;"></div>
+          
+          <div id="cyl-shortprompt-${safeSeg}"
+               style="display:none; font-family:'Open Sans',sans-serif; font-size:13px;
+                      font-style:italic; color:#7c5fc7; margin-bottom:10px;
+                      line-height:1.5;"></div>
+          
+          <div id="cyl-text-${safeSeg}"
+               style="font-family:'Open Sans',sans-serif; font-size:13px;
+                      color:#4a4f5e; line-height:1.6; margin-bottom:14px;"></div>
+          
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="cylResume('${safeSeg}')" 
+                    style="flex:1; min-width:170px; padding:12px 16px; 
+                           background:#1a1d2b; color:#fff;
+                           border:none; border-radius:24px; 
+                           font-family:'Montserrat',sans-serif;
+                           font-weight:800; font-size:12px; letter-spacing:0.8px; 
+                           text-transform:uppercase; cursor:pointer;"
+                    onmouseover="this.style.background='#2a2f42'"
+                    onmouseout="this.style.background='#1a1d2b'">
+              ✨ Continue
+            </button>
+            <button onclick="cylKeepPaused('${safeSeg}')"
+                    style="flex:1; min-width:170px; padding:12px 16px; 
+                           background:#fff; color:#4a4f5e; 
+                           border:1px solid rgba(0,0,0,0.12); 
+                           border-radius:24px; 
+                           font-family:'Montserrat',sans-serif;
+                           font-weight:700; font-size:11.5px; letter-spacing:0.6px; 
+                           cursor:pointer;"
+                    onmouseover="this.style.background='#f5f5f7'"
+                    onmouseout="this.style.background='#fff'">
+              Need more time
+            </button>
+          </div>
+        </div>
+      ` : ''}
+      
       <div class="video-meta">
-        <span class="video-meta-tip">Watch, then draw at your own pace</span>
+        <span class="video-meta-tip">${hasPauses ? `Video has ${pauses.length} key moments — pauses with reference images` : 'Watch, then draw at your own pace'}</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
