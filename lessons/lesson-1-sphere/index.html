@@ -5604,14 +5604,7 @@ const LESSON = {
       xp: 10
     },
     // ===== PART B · WARM-UP (OPTIONAL) =====
-    {
-      part: 'B',
-      partLabel: 'Part b · warm-up · optional',
-      type: 'warmup',
-      title: 'Warm up your hand',
-      intro: 'A 5-minute warm-up drill helps your lines flow. Totally optional — skip if you\'re ready.',
-      xp: 5
-    },
+    // Warm-up step removed in Round 34: now lives in standalone Preparation lesson.
     // (LFC moment "beforeDemo" removed — Lesson 1 is foundational skill 
     //  training. Forcing a master-work comparison here would be 
     //  strained. The opening LFC and closing LFC carry the meaning.)
@@ -5666,30 +5659,7 @@ const LESSON = {
       tip: 'The halftone is where most beginners get stuck. Be patient — build value gradually in thin passes rather than pressing hard once.',
       xp: 15
     },
-    {
-      part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
-      type: 'demo',
-      videoSeg: 'reflected',
-      videoId: 'd5946a2e904d80e19874913b034ec5b9',  // Sphere 5 — Cloudflare Stream UID
-      title: 'Add reflected light (carefully!)',
-      intro: 'On the shadow side, allow a thin band of reflected light to show — but only a little. This is the most-broken rule in beginner drawings.',
-      quote: 'Reflected light must remain darker than your halftones to maintain a matte appearance.',
-      tip: 'If your reflected light is as bright as the halftones, the sphere will look metallic — like a chrome ball instead of a soft form.',
-      xp: 15
-    },
-    {
-      part: 'C',
-      partLabel: 'Part c · demo &amp; draw',
-      type: 'demo',
-      videoSeg: 'grounding',
-      videoId: '32345bcf74493208f3f83616f8af4d42',  // Sphere 6 — Cloudflare Stream UID
-      title: 'Ground your sphere',
-      intro: 'Reinforce the darkest point where the sphere touches the ground (ambient occlusion). Let the cast shadow fade as it moves away from the form.',
-      quote: 'This gradient suggests how light spills and spreads across the ground plane.',
-      tip: 'A grounded sphere feels heavy and real. A floating sphere looks like a flat circle.',
-      xp: 15
-    },
+    // Round 34: 'Add reflected light' + 'Ground your sphere' steps removed per Faye's request.
     // ===== PART E · FINAL SUBMISSION =====
     {
       part: 'E',
@@ -9089,12 +9059,12 @@ function renderLessonComplete(profileOrLead) {
       
       <!-- Lesson 2 invitation (now Sphere Realworld — placeholder) -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 2</div>
-        <div class="lesson2-teaser-title">Sphere in the Real World</div>
+        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 3</div>
+        <div class="lesson2-teaser-title">The Cylinder</div>
         <div class="lesson2-teaser-sub">
-          You drew an abstract sphere. Now: pick a real spherical object and apply what you've learned.
+          You\'ve drawn the sphere. Next: the cylinder — where curve and flat meet. Same light, but now wrapping both surfaces.
         </div>
-        <div class="lesson2-teaser-status">Coming soon · 9 lessons remaining</div>
+        <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
@@ -9270,7 +9240,7 @@ function skipBadgeGate(event) {
       <div class="badge-big" style="opacity: 0.4;">${LESSON.badge.emoji}</div>
       <div class="badge-title" style="opacity: 0.7;">No badge claimed yet</div>
       <div class="badge-desc">
-        Your thinking journey is still saved. You can come back anytime to claim your badge.
+        Your thinking journey is still saved. You can come back anytime to mark this lesson complete.
       </div>
       <div class="btn-stack" style="max-width: 280px; margin: 20px auto 0;">
         <!-- BUG FIX #3: go back to the real badge gate, not just re-render the step -->
@@ -9676,7 +9646,7 @@ function renderOptionalFinish(step) {
         <div style="font-size:32px; margin-bottom:10px;">🎬</div>
         <div style="font-family:'Montserrat',sans-serif; font-size:12px; font-weight:800;
                     color:#c8a96e; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;">
-          Refinement demo — coming soon
+          Optional finish step — coming soon
         </div>
         <div style="font-family:'Open Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.6);">
           Mrs. Dawn will walk through each refinement step here.
@@ -9731,18 +9701,18 @@ function openUploadModal() {
   
   // Build modal based on tier — single source of truth, no fallback overrides
   if (tier === 'explorer') {
-    // EXPLORER (Lesson 1, free): AI feedback only.
+    // EXPLORER (Lesson 1, free): Artchi feedback only.
     // Real teacher review is shown only in Lesson 2+ (paid tier feature).
     // Upload is OPTIONAL — student can skip if not ready.
     content.innerHTML = `
       <div class="modal-title">Show your work</div>
-      <div class="modal-sub">Optional — share your sphere if you'd like AI feedback.</div>
+      <div class="modal-sub">Optional — share your sphere if you'd like Artchi feedback.</div>
       
       <!-- Preview disclosure (transparent: this is a mock for now) -->
       <div class="upload-preview-banner">
         <div class="upload-preview-banner-icon">🚧</div>
         <div class="upload-preview-banner-text">
-          <b>Preview mode.</b> AI feedback is launching soon — for now, your upload is just for show.
+          <b>Preview mode.</b> Artchi feedback is launching soon — for now, your upload is just for show.
         </div>
       </div>
       
@@ -9769,7 +9739,7 @@ function openUploadModal() {
         <div class="choice selected" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>AI feedback <span class="choice-soft-badge" style="background: rgba(167,139,250,0.15); color: #7c5fc7;">Coming soon</span></h5>
+            <h5>Artchi feedback <span class="choice-soft-badge" style="background: rgba(167,139,250,0.15); color: #7c5fc7;">Coming soon</span></h5>
             <p>Once live, Artchi will review your shading, form, and value balance — ready in seconds</p>
           </div>
         </div>
@@ -9787,12 +9757,12 @@ function openUploadModal() {
     // MASTER: AI + async teacher feedback (within 48h)
     content.innerHTML = `
       <div class="modal-title">How would you like feedback?</div>
-      <div class="modal-sub">Your Master plan includes both AI feedback and a real teacher review within 48 hours.</div>
+      <div class="modal-sub">Your Master plan includes both Artchi feedback and a real teacher review within 48 hours.</div>
       <div class="choice-list">
         <div class="choice" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>Quick AI feedback</h5>
+            <h5>Quick Artchi feedback</h5>
             <p>Instant review from Artchi's AI teacher</p>
           </div>
         </div>
@@ -9827,7 +9797,7 @@ function openUploadModal() {
         <div class="choice" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>Quick AI feedback</h5>
+            <h5>Quick Artchi feedback</h5>
             <p>Instant review from Artchi's AI teacher</p>
           </div>
         </div>
@@ -9951,7 +9921,7 @@ function submitUpload() {
   // Customized confirmation based on what was chosen
   let msg = "✓ Sent! ";
   if (choice === 'ai') {
-    msg += "AI feedback ready in a moment 🤖";
+    msg += "Artchi feedback ready in a moment 🤖";
   } else if (choice === 'teacher_annotate' || choice === 'teacher_text') {
     msg += "Teacher will reply in ~48h 🎨";
   } else if (choice === 'live_session') {
@@ -9971,10 +9941,10 @@ function submitUpload() {
         interests: ['real_teacher_review']
       });
       sendLeadToFormspree(lead);  // ← real email send
-      msg = `👩‍🎨 Noted, ${profile.name}! We'll let you know when teacher reviews open. Your AI feedback is also being prepared.`;
+      msg = `👩‍🎨 Noted, ${profile.name}! We'll let you know when teacher reviews open. Your Artchi feedback is also being prepared.`;
     } else {
       // No email yet — record the intent locally; will be attached when they claim badge
-      msg = "👩‍🎨 Great — your interest is noted! We'll send AI feedback for now. When you claim your badge, we'll know to notify you about teacher reviews.";
+      msg = "👩‍🎨 Great — your interest is noted! We'll send Artchi feedback for now. When you mark this lesson complete, we'll know to notify you about teacher reviews.";
       Analytics.track('teacher_interest_expressed_pre_badge', { 
         age_group: AccessControl.ageGroup 
       });
