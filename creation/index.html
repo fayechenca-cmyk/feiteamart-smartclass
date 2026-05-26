@@ -188,6 +188,30 @@
     display: block;
   }
 
+  /* ============ FIT MODE (iPad / smaller screens) ============
+     Below 1280px wide, scale the whole 1800x1300 room down so all 
+     five stations are visible at once. Drag is disabled at this size
+     — there's nothing to drag to.
+     The scale is applied via a CSS variable set by JS in updateRoom().
+     The fallback default (1.0) handles laptops where no scaling is needed.
+     ===================================================== */
+  .room-wrap.fit-mode {
+    cursor: default;
+  }
+  .room-wrap.fit-mode .room {
+    transform: scale(var(--fit-scale, 1)) !important;
+    transform-origin: center center;
+  }
+  .room-wrap.fit-mode {
+    /* Disable touch drag entirely when in fit mode */
+    touch-action: auto;
+  }
+  /* Hide minimap and drag hint when the whole room fits — no use for them */
+  .fit-mode-hide-minimap .minimap,
+  .fit-mode-hide-minimap .drag-hint {
+    display: none;
+  }
+
   /* ============ HOTSPOTS ============ */
   /* These are invisible hit areas on top of the SVG room */
   .hotspot {
@@ -422,6 +446,14 @@
     transform: scale(0.92);
     opacity: 0;
     transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s, opacity 0.4s ease 0.2s;
+    /* Padding area is transparent to clicks so the overlay backdrop
+       receives them — that triggers click-outside-to-close. Inner 
+       .station-detail re-enables pointer events on the actual content. */
+    pointer-events: none;
+  }
+  .zoom-content > .station-detail,
+  .zoom-content .course-item {
+    pointer-events: auto;
   }
 
   .zoom-overlay.active .zoom-content {
@@ -1556,11 +1588,50 @@
 
   const ROOM_W = 1800;
   const ROOM_H = 1300;
+  
+  // Below this viewport width, we switch to fit-mode (scale the room
+  // to fit instead of allowing drag). 1280 covers iPads (most have 
+  // landscape ≤1180px) and small laptops in split-screen.
+  const FIT_BREAKPOINT = 1280;
+  let inFitMode = false;
+
+  function isFitMode() {
+    return window.innerWidth < FIT_BREAKPOINT || window.innerHeight < 900;
+  }
+
+  function applyFitMode() {
+    const shouldFit = isFitMode();
+    inFitMode = shouldFit;
+    if (shouldFit) {
+      // Scale so the whole 1800x1300 room fits within the viewport,
+      // with a small margin so nothing presses against the edge.
+      const scaleX = (window.innerWidth - 32) / ROOM_W;
+      const scaleY = (window.innerHeight - 80) / ROOM_H;
+      const scale = Math.min(scaleX, scaleY, 1);
+      document.documentElement.style.setProperty('--fit-scale', scale);
+      roomWrap.classList.add('fit-mode');
+      stage.classList.add('fit-mode-hide-minimap');
+      // Reset drag offset so the scaled room stays centered
+      offsetX = 0; offsetY = 0;
+      // Update subtitle for touch-only context (drag hint is hidden)
+      const subEl = document.querySelector('.title-block .subtitle');
+      if (subEl) subEl.textContent = 'tap what glows';
+    } else {
+      roomWrap.classList.remove('fit-mode');
+      stage.classList.remove('fit-mode-hide-minimap');
+      document.documentElement.style.removeProperty('--fit-scale');
+      const subEl = document.querySelector('.title-block .subtitle');
+      if (subEl) subEl.textContent = 'drag to look around · click what glows';
+    }
+  }
 
   function getMaxOffset() {
+    // No drag past room edges. No overscan. If room fits viewport
+    // (which is always true in fit-mode), no drag allowed at all.
+    if (inFitMode) return { x: 0, y: 0 };
     return {
-      x: Math.max(0, (ROOM_W - window.innerWidth) / 2 + 200),
-      y: Math.max(0, (ROOM_H - window.innerHeight) / 2 + 100)
+      x: Math.max(0, (ROOM_W - window.innerWidth) / 2),
+      y: Math.max(0, (ROOM_H - window.innerHeight) / 2)
     };
   }
 
@@ -1619,6 +1690,7 @@
   }
 
   roomWrap.addEventListener('mousedown', (e) => {
+    if (inFitMode) return;
     if (e.target.closest('.hotspot')) return;
     startDrag(e.clientX, e.clientY);
     e.preventDefault();
@@ -1627,6 +1699,7 @@
   window.addEventListener('mouseup', endDrag);
 
   roomWrap.addEventListener('touchstart', (e) => {
+    if (inFitMode) return;
     if (e.target.closest('.hotspot')) return;
     const t = e.touches[0];
     startDrag(t.clientX, t.clientY);
@@ -1789,6 +1862,39 @@
     hideCourseTooltip();
     closeGridView();
   }
+  
+  // ============================================================
+  // CLOSE STATION ON BACKGROUND CLICK
+  // Clicking the dark area around the content closes the station,
+  // same as the "← back to studio" button. Clicks on the courses
+  // themselves, on Artchi, or on the close button work normally
+  // because they're inside child elements.
+  // ============================================================
+  document.getElementById('zoomOverlay').addEventListener('click', (e) => {
+    // Only close if the click was directly on the overlay backdrop,
+    // not on a child (course-item, artchi, view-all button, etc.)
+    if (e.target.id === 'zoomOverlay') {
+      closeStation();
+    }
+  });
+  
+  // Grid view: same treatment — click outside cards to dismiss
+  document.getElementById('gridView').addEventListener('click', (e) => {
+    if (e.target.id === 'gridView') {
+      closeGridView();
+    }
+  });
+  
+  // Escape key also closes either overlay (laptop convenience)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (document.getElementById('gridView').classList.contains('active')) {
+        closeGridView();
+      } else if (document.getElementById('zoomOverlay').classList.contains('active')) {
+        closeStation();
+      }
+    }
+  });
 
   // ============================================================
   // ENTER COURSE
@@ -2180,10 +2286,20 @@
   moveArtchiTo(pickRandomWander(), 'wandering');
   scheduleArtchiNextMove();
 
+  applyFitMode();
   updateRoom();
   window.addEventListener('resize', () => {
+    applyFitMode();
     clampOffset();
     updateRoom();
+  });
+  // Also handle iPad orientation flips
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      applyFitMode();
+      clampOffset();
+      updateRoom();
+    }, 100);
   });
 </script>
 
