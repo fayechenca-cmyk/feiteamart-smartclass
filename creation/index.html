@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Creation · Art Creation Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Nunito:wght@300;400;500;600;700&family=Shadows+Into+Light&family=Caveat:wght@500;600&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Studio palette - warm, lived-in, sage greens with wood tones */
+    --bg: #e8dec8;
+    --bg-deep: #d8c8a8;
+    --wall: #e0d4ba;
+    --wall-shadow: #c8b898;
+    --floor: #b89878;
+    --floor-deep: #8a6e50;
+    --floor-line: #6a5238;
+    --wood: #a8825a;
+    --wood-dark: #6a4828;
+    --wood-light: #c8a878;
+    --sage: #8a9678;
+    --sage-deep: #6a7858;
+    --sage-light: #b8c4a8;
+    --ink: #2a2418;
+    --ink-soft: #5a4e3a;
+    --warm: #e8a850;
+    --glow: #f8c860;
+    --window-light: #f4ecc8;
+    --paint-red: #c44a32;
+    --paint-blue: #5a7a8a;
+    --paint-yellow: #d4a858;
+    --paint-purple: #8a7ab8;
+
+    /* Artchi colors */
+    --artchi: #b8a8e0;
+    --artchi-deep: #8a7ab8;
+    --artchi-wing: #f4c4d0;
+    --artchi-hat: #6a5a9a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* ============ STAGE ============ */
+  .stage {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* Soft paper texture */
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.1 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.45;
+    z-index: 1;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    position: absolute;
+    top: 22px;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+    pointer-events: none;
+  }
+
+  .breadcrumb {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: rgba(42, 36, 24, 0.55);
+    text-transform: uppercase;
+    font-weight: 600;
+    pointer-events: auto;
+  }
+  .breadcrumb strong { color: rgba(42, 36, 24, 0.95); }
+  .breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .breadcrumb a:hover {
+    color: rgba(42, 36, 24, 0.95);
+  }
+
+  .header-tools {
+    display: flex;
+    gap: 10px;
+    pointer-events: auto;
+  }
+
+  .tool-btn {
+    background: rgba(255, 248, 230, 0.7);
+    border: 1px solid rgba(42, 36, 24, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 7px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(42, 36, 24, 0.8);
+    cursor: pointer;
+    border-radius: 18px;
+    transition: all 0.2s ease;
+  }
+
+  .tool-btn:hover {
+    background: rgba(255, 248, 230, 0.95);
+    color: rgba(42, 36, 24, 1);
+  }
+
+  /* ============ TITLE (small, top-center) ============ */
+  .title-block {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 55;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+
+  .title-block.fade { opacity: 0.4; }
+
+  .title {
+    font-family: 'Caveat Brush', cursive;
+    font-size: 34px;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    opacity: 0.7;
+  }
+
+  /* ============ STUDIO ROOM ============ */
+  .room-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    cursor: grab;
+    touch-action: none;
+  }
+  .room-wrap.dragging { cursor: grabbing; }
+
+  .room {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1800px;
+    height: 1300px;
+    margin-left: -900px;
+    margin-top: -650px;
+    transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+    will-change: transform;
+  }
+
+  .room svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ============ HOTSPOTS ============ */
+  /* These are invisible hit areas on top of the SVG room */
+  .hotspot {
+    position: absolute;
+    cursor: pointer;
+    z-index: 20;
+  }
+
+  /* Specific positions in the 1800x1200 room coordinate */
+  /* Layout (5 stations + window + cat, well-separated) */
+  /* Left wall: Window (top), Bookshelf (bottom-left of left wall) */
+  /* Right wall: Cork board (top-right) */
+  /* Floor: Easel (front-left), Drafting desk (center), Workbench (front-right) */
+  .hotspot-color      { left: 90px;   top: 540px; width: 280px; height: 280px; }
+  .hotspot-shape      { left: 660px;  top: 600px; width: 320px; height: 240px; }
+  .hotspot-character  { left: 1150px; top: 230px; width: 320px; height: 290px; }
+  .hotspot-material   { left: 1230px; top: 660px; width: 320px; height: 260px; }
+  .hotspot-project    { left: 660px;  top: 240px; width: 220px; height: 260px; }
+
+  /* Hotspot label that floats above each station */
+  .hotspot-label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: rgba(42, 36, 24, 0.92);
+    color: #f0e6d0;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(42, 36, 24, 0.3);
+  }
+
+  .hotspot:hover .hotspot-label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  /* Glow ring around each hotspot - always visible */
+  .hotspot::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 28px;
+    background: radial-gradient(ellipse, var(--glow) 0%, transparent 70%);
+    opacity: 0.55;
+    pointer-events: none;
+    animation: glowPulse 4s ease-in-out infinite;
+  }
+
+  .hotspot:hover::before {
+    opacity: 0.95;
+    animation: glowPulseFast 1.2s ease-in-out infinite;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+    50% { opacity: 0.7; transform: translateX(-50%) scale(1.08); }
+  }
+
+  @keyframes glowPulseFast {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1.05); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+  }
+
+  /* The actual artwork inside the hotspot lifts on hover */
+  .station-art {
+    transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    transform-origin: center bottom;
+    transform-box: fill-box;
+    will-change: transform;
+  }
+
+  .hotspot:hover .station-art {
+    transform: translateY(-3px) scale(1.02);
+  }
+
+  /* ============ ARTCHI (now inside SVG, scales with room) ============ */
+  #room-artchi {
+    pointer-events: none;
+    transition: transform 1.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+    will-change: transform;
+  }
+
+  @keyframes wingFlap {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(0.65); }
+  }
+
+  @keyframes wingFlapSlow {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(0.82); }
+  }
+
+  #room-artchi .wing {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: wingFlap 0.4s ease-in-out infinite;
+  }
+
+  #room-artchi.resting .wing {
+    animation: wingFlapSlow 0.9s ease-in-out infinite;
+  }
+
+  /* Tiny hover float when resting */
+  @keyframes restBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+
+  #room-artchi.resting .artchi-body-group {
+    animation: restBob 2.2s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  /* When Artchi is resting, small attention indicator appears */
+  .artchi-attention {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  #room-artchi.resting .artchi-attention {
+    opacity: 1;
+  }
+
+  /* ============ DRAG HINT ============ */
+  .drag-hint {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 15px;
+    color: rgba(42, 36, 24, 0.55);
+    pointer-events: none;
+    text-align: center;
+    transition: opacity 0.8s ease;
+  }
+
+  .drag-hint.hidden { opacity: 0; }
+
+  /* ============ MINIMAP (room navigator) ============ */
+  .minimap {
+    position: absolute;
+    bottom: 22px;
+    right: 24px;
+    z-index: 45;
+    width: 140px;
+    height: 90px;
+    background: rgba(255, 248, 230, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(42, 36, 24, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .minimap-bg {
+    position: absolute;
+    inset: 6px;
+    background: var(--bg-deep);
+    border-radius: 3px;
+  }
+
+  .minimap-station {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--glow);
+    border-radius: 50%;
+    box-shadow: 0 0 4px var(--glow);
+  }
+
+  .minimap-viewport {
+    position: absolute;
+    border: 1.5px solid var(--paint-red);
+    background: rgba(196, 74, 50, 0.15);
+    transition: transform 0.1s ease, width 0.1s ease, height 0.1s ease;
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  .minimap-label {
+    position: absolute;
+    top: -16px;
+    left: 0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(42, 36, 24, 0.5);
+    font-weight: 600;
+  }
+
+  /* ============ ZOOM OVERLAY (when entering a station) ============ */
+  .zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(42, 36, 24, 1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .zoom-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .zoom-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    transform: scale(0.92);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s, opacity 0.4s ease 0.2s;
+  }
+
+  .zoom-overlay.active .zoom-content {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .zoom-close {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    background: transparent;
+    border: 1px solid rgba(240, 230, 208, 0.4);
+    color: rgba(240, 230, 208, 0.9);
+    padding: 8px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 18px;
+    z-index: 110;
+    transition: all 0.2s ease;
+  }
+
+  .zoom-close:hover {
+    background: rgba(240, 230, 208, 0.95);
+    color: var(--ink);
+  }
+
+  .zoom-title {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(240, 230, 208, 0.9);
+    font-family: 'Caveat Brush', cursive;
+    font-size: 26px;
+    pointer-events: none;
+    z-index: 110;
+  }
+
+  .zoom-subtitle {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(240, 230, 208, 0.6);
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 110;
+  }
+
+  /* ============ ZOOM ARTCHI (in detail view) ============ */
+  .zoom-artchi-wrap {
+    position: absolute;
+    bottom: 30px;
+    right: 60px;
+    z-index: 115;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease 0.7s, transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) 0.7s;
+    pointer-events: none;
+  }
+
+  .zoom-overlay.active .zoom-artchi-wrap {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .zoom-artchi {
+    display: block;
+    filter: drop-shadow(0 4px 10px rgba(248, 200, 96, 0.4));
+  }
+
+  @keyframes zoomArtchiBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .zoom-artchi {
+    animation: zoomArtchiBob 3s ease-in-out infinite;
+  }
+
+  .zoom-artchi .wing {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: wingFlap 0.5s ease-in-out infinite;
+  }
+
+  /* Speech bubble */
+  .zoom-artchi-bubble {
+    position: absolute;
+    bottom: 105px;
+    right: 0;
+    background: #fbf6e8;
+    border: 1.5px solid var(--ink);
+    border-radius: 18px;
+    padding: 14px 18px;
+    max-width: 280px;
+    min-width: 180px;
+    box-shadow: 3px 5px 0 var(--ink-soft), 4px 6px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: transform 0.5s cubic-bezier(0.34, 1.5, 0.64, 1);
+  }
+
+  .zoom-overlay.active .zoom-artchi-bubble {
+    transform: scale(1);
+    transition-delay: 1.2s;
+  }
+
+  .bubble-content {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+
+  .bubble-tail {
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    width: 20px;
+    height: 14px;
+    background: #fbf6e8;
+    clip-path: polygon(0 0, 100% 0, 60% 100%);
+    border-right: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .bubble-tail::after {
+    content: '';
+    position: absolute;
+    top: -1.5px;
+    left: -1.5px;
+    width: 20px;
+    height: 14px;
+    background: #fbf6e8;
+    clip-path: polygon(0 0, 100% 0, 60% 100%);
+  }
+
+  /* ============ VIEW ALL BUTTON ============ */
+  .view-all-btn {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 115;
+    background: transparent;
+    border: 1.5px solid rgba(240, 230, 208, 0.7);
+    color: rgba(240, 230, 208, 0.9);
+    padding: 10px 24px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 22px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transition-delay: 1.5s;
+  }
+
+  .zoom-overlay.active .view-all-btn {
+    opacity: 1;
+  }
+
+  .view-all-btn:hover {
+    background: rgba(240, 230, 208, 0.95);
+    color: var(--ink);
+    border-color: rgba(240, 230, 208, 0.95);
+  }
+
+  /* ============ GRID VIEW (for "View All") ============ */
+  .grid-view {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow-y: auto;
+  }
+
+  .grid-view.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .grid-view::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+  }
+
+  .grid-title {
+    text-align: center;
+    padding: 70px 20px 16px;
+    font-family: 'Caveat Brush', cursive;
+    font-size: 36px;
+    color: var(--ink);
+    position: relative;
+    z-index: 1;
+  }
+
+  .grid-title small {
+    display: block;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    font-weight: normal;
+  }
+
+  .grid-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px 80px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .grid-card {
+    background: #fbf6e8;
+    border: 1.5px solid var(--ink);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 3px 4px 0 var(--ink-soft);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .grid-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 6px 0 var(--ink-soft);
+  }
+
+  .grid-card.disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+
+  .grid-card.disabled:hover {
+    transform: none;
+    box-shadow: 3px 4px 0 var(--ink-soft);
+  }
+
+  .grid-card .card-color-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--paint-red);
+  }
+
+  .grid-card h3 {
+    font-family: 'Caveat Brush', cursive;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+
+  .grid-card p {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    font-style: italic;
+    flex: 1;
+  }
+
+  .grid-card .card-meta {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(122, 90, 50, 0.8);
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(42, 36, 24, 0.2);
+  }
+
+  .grid-card .enter-arrow {
+    color: var(--paint-red);
+    font-family: 'Caveat Brush', cursive;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+
+  .station-detail { display: none; }
+  .station-detail.active { display: block; }
+
+  /* Common course-item base */
+  .course-item {
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .course-item:hover {
+    transform: translateY(-4px) scale(1.04);
+    filter: brightness(1.1);
+  }
+
+  .course-item.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .course-item.disabled:hover {
+    transform: none;
+    filter: none;
+  }
+
+  .course-tooltip {
+    position: absolute;
+    background: rgba(255, 248, 230, 0.97);
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 14px 18px;
+    width: 280px;
+    border-radius: 4px;
+    box-shadow: 4px 6px 0 var(--ink-soft);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(8px);
+    z-index: 200;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .course-tooltip.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .course-tooltip h4 {
+    font-family: 'Caveat Brush', cursive;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+
+  .course-tooltip p {
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .course-tooltip .meta {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(122, 90, 50, 0.8);
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(42, 36, 24, 0.2);
+  }
+
+  .course-tooltip .enter-arrow {
+    color: var(--paint-red);
+    font-family: 'Caveat Brush', cursive;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14px;
+  }
+
+  /* ============ INTRO ============ */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 18px;
+    padding: 40px;
+    transition: opacity 1s ease;
+  }
+  .intro.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-title {
+    font-family: 'Caveat Brush', cursive;
+    font-size: 56px;
+    color: #f0e6d0;
+    text-align: center;
+    line-height: 1;
+  }
+  .intro-sub {
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 17px;
+    color: rgba(240, 230, 208, 0.7);
+    text-align: center;
+    max-width: 460px;
+    line-height: 1.5;
+  }
+  .intro-enter {
+    margin-top: 24px;
+    padding: 13px 32px;
+    background: transparent;
+    border: 1.5px solid #f0e6d0;
+    color: #f0e6d0;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+  }
+  .intro-enter:hover {
+    background: #f0e6d0;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO ============ -->
+<div class="intro" id="intro">
+  <div class="intro-title">Art Creation Studio</div>
+  <div class="intro-sub">step inside an artist's working room.<br>every corner is a different way of making.</div>
+  <button class="intro-enter" onclick="enterStudio()">push the door open</button>
+</div>
+
+<!-- ============ STAGE ============ -->
+<div class="stage" id="stage">
+
+  <div class="header">
+    <div class="breadcrumb"><a href="../">Smart Class</a> · Manual · <strong>Creation</strong></div>
+    <div class="header-tools">
+      <button class="tool-btn" onclick="recenterRoom()">Recenter</button>
+    </div>
+  </div>
+
+  <div class="title-block" id="title">
+    <div class="title">Art Creation Studio</div>
+    <div class="subtitle">drag to look around · click what glows</div>
+  </div>
+
+  <!-- ROOM (the isometric scene) -->
+  <div class="room-wrap" id="roomWrap">
+    <div class="room" id="room">
+
+      <!-- The studio scene - isometric perspective -->
+      <svg viewBox="0 0 1800 1300" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <!-- Drop shadow -->
+          <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+            <feOffset dx="3" dy="6"/>
+            <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+            <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Glow filter -->
+          <filter id="warmGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="14"/>
+          </filter>
+
+          <!-- Wood floor planks pattern (horizontal, no skew now) -->
+          <pattern id="woodFloor" x="0" y="0" width="160" height="40" patternUnits="userSpaceOnUse">
+            <rect width="160" height="40" fill="#b89878"/>
+            <line x1="0" y1="0" x2="160" y2="0" stroke="#6a5238" stroke-width="1.2" opacity="0.5"/>
+            <line x1="0" y1="20" x2="160" y2="20" stroke="#6a5238" stroke-width="0.8" opacity="0.4"/>
+            <line x1="80" y1="0" x2="80" y2="40" stroke="#6a5238" stroke-width="0.5" opacity="0.25"/>
+            <!-- Wood grain -->
+            <line x1="0" y1="7" x2="160" y2="8" stroke="#8a6e50" stroke-width="0.4" opacity="0.35"/>
+            <line x1="0" y1="15" x2="160" y2="14" stroke="#8a6e50" stroke-width="0.4" opacity="0.35"/>
+            <line x1="0" y1="26" x2="160" y2="27" stroke="#8a6e50" stroke-width="0.4" opacity="0.35"/>
+            <line x1="0" y1="34" x2="160" y2="33" stroke="#8a6e50" stroke-width="0.4" opacity="0.35"/>
+          </pattern>
+
+          <!-- Wall texture -->
+          <pattern id="wallTexture" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <rect width="20" height="20" fill="#e0d4ba"/>
+          </pattern>
+
+          <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2a1a08" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#2a1a08" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- ============ BACK WALL & FLOOR ============ -->
+        <polygon points="40,100 1760,100 1760,780 40,780" fill="#e0d4ba"/>
+        <polygon points="40,100 1760,100 1760,780 40,780" fill="url(#wallTexture)" opacity="0.5"/>
+        <polygon points="900,100 1760,100 1760,780 900,780" fill="#e8dcbe" opacity="0.6"/>
+        <line x1="900" y1="120" x2="900" y2="780" stroke="#a89878" stroke-width="0.8" opacity="0.4"/>
+        <line x1="40" y1="780" x2="1760" y2="780" stroke="#8a7858" stroke-width="2.5"/>
+        <line x1="40" y1="785" x2="1760" y2="785" stroke="#7a6848" stroke-width="0.8" opacity="0.5"/>
+
+        <polygon points="40,780 1760,780 1760,1280 40,1280" fill="url(#woodFloor)"/>
+        <polygon points="40,780 1760,780 1760,1280 40,1280" fill="url(#floorGrad)" opacity="0.2"/>
+
+        <!-- ============ WINDOW (back-left wall, upper area) ============ -->
+        <g transform="translate(120, 140)">
+          <polygon points="0,0 240,60 240,300 0,240" fill="#5a4a35"/>
+          <polygon points="10,12 230,67 230,288 10,234" fill="#f4ecc8"/>
+          <polygon points="10,12 230,67 230,288 10,234" fill="#fff8d0" opacity="0.5"/>
+          <line x1="0" y1="120" x2="240" y2="180" stroke="#5a4a35" stroke-width="5"/>
+          <line x1="120" y1="30" x2="120" y2="265" stroke="#5a4a35" stroke-width="5"/>
+          <polygon points="-10,240 250,300 250,310 -10,250" fill="#7a6244"/>
+          <g transform="translate(190, 232)">
+            <ellipse cx="0" cy="22" rx="16" ry="4" fill="#3a2a18" opacity="0.4"/>
+            <rect x="-11" y="8" width="22" height="16" fill="#a85838"/>
+            <rect x="-13" y="6" width="26" height="6" fill="#c46850"/>
+            <ellipse cx="-7" cy="0" rx="9" ry="15" fill="#6a8568" transform="rotate(-20 -7 0)"/>
+            <ellipse cx="7" cy="-2" rx="10" ry="17" fill="#7a9678" transform="rotate(15 7 -2)"/>
+            <ellipse cx="0" cy="-7" rx="8" ry="13" fill="#5a7458"/>
+          </g>
+        </g>
+
+        <!-- ============ STATION 5: PROJECT (Books & Stories) · Bookshelf ============ -->
+        <g class="station-art" id="art-project">
+          <g transform="translate(720, 270)">
+            <polygon points="0,0 220,25 220,190 0,165" fill="#7a5838"/>
+            <polygon points="0,0 220,25 220,30 0,5" fill="#5a4028"/>
+            <polygon points="0,160 220,185 220,190 0,165" fill="#5a4028"/>
+            <polygon points="0,80 220,105 220,110 0,85" fill="#5a4028"/>
+            <g transform="translate(18, 10)">
+              <polygon points="0,0 22,2.5 22,57 0,55" fill="#c44a32"/>
+              <line x1="2" y1="22" x2="24" y2="23" stroke="#fbf6e8" stroke-width="0.6"/>
+            </g>
+            <g transform="translate(43, 12)">
+              <polygon points="0,0 20,2.5 20,55 0,53" fill="#5a7a8a"/>
+              <line x1="2" y1="20" x2="22" y2="21" stroke="#fbf6e8" stroke-width="0.6"/>
+              <line x1="2" y1="25" x2="22" y2="26" stroke="#fbf6e8" stroke-width="0.6"/>
+            </g>
+            <g transform="translate(66, 14)">
+              <polygon points="0,0 24,2.5 24,52 0,50" fill="#d4a858"/>
+              <line x1="2" y1="16" x2="26" y2="17.5" stroke="#7a5838" stroke-width="0.5"/>
+            </g>
+            <g transform="translate(94, 16)">
+              <polygon points="0,0 18,2 18,50 0,48" fill="#7a8a5e"/>
+            </g>
+            <g transform="translate(118, 18) rotate(-6)">
+              <polygon points="0,0 26,2.5 26,50 0,48" fill="#8a7ab8"/>
+              <line x1="2" y1="18" x2="28" y2="19" stroke="#fbf6e8" stroke-width="0.5"/>
+            </g>
+            <g transform="translate(156, 16)">
+              <polygon points="0,0 13,1.5 13,58 0,56" fill="#a85838"/>
+              <line x1="0" y1="16" x2="13" y2="17" stroke="#3a1818" stroke-width="0.4"/>
+              <line x1="0" y1="44" x2="13" y2="45" stroke="#3a1818" stroke-width="0.4"/>
+            </g>
+            <g transform="translate(180, 18)">
+              <polygon points="0,0 28,3 28,54 0,51" fill="#6a4a8a"/>
+              <line x1="2" y1="20" x2="30" y2="21.5" stroke="#fbf6e8" stroke-width="0.5"/>
+            </g>
+            <g transform="translate(22, 96)">
+              <polygon points="0,0 26,2.5 26,52 0,50" fill="#5a4028"/>
+              <polygon points="2,2 24,4 24,11 2,9" fill="#d4a858"/>
+            </g>
+            <g transform="translate(54, 98)">
+              <polygon points="0,0 32,3.5 32,50 0,47" fill="#8a6e50"/>
+              <line x1="4" y1="18" x2="34" y2="20" stroke="#fbf6e8" stroke-width="0.5"/>
+              <line x1="4" y1="25" x2="34" y2="27" stroke="#fbf6e8" stroke-width="0.5"/>
+            </g>
+            <g transform="translate(96, 102)">
+              <ellipse cx="0" cy="0" rx="5" ry="7" fill="#fbf6e8"/>
+              <rect x="-5" y="0" width="10" height="40" fill="#fbf6e8"/>
+              <ellipse cx="0" cy="40" rx="5" ry="3.5" fill="#e8d8b8"/>
+              <line x1="-2.5" y1="5" x2="-2.5" y2="36" stroke="#c44a32" stroke-width="0.6"/>
+              <line x1="2.5" y1="5" x2="2.5" y2="36" stroke="#5a7a8a" stroke-width="0.6"/>
+            </g>
+            <g transform="translate(120, 104)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="38" height="46" fill="#5a4028"/>
+              <rect x="2" y="2" width="34" height="42" fill="#f4ecc8"/>
+              <circle cx="19" cy="22" r="9" fill="#c44a32" opacity="0.8"/>
+              <rect x="6" y="32" width="26" height="8" fill="#5a7a8a" opacity="0.7"/>
+            </g>
+            <g transform="translate(168, 110)">
+              <polygon points="0,0 36,4 36,11 0,7" fill="#7a8a5e"/>
+              <polygon points="0,7 36,11 36,18 0,14" fill="#a85838"/>
+              <polygon points="0,14 36,18 36,25 0,21" fill="#d4a858"/>
+              <polygon points="0,21 36,25 36,32 0,28" fill="#5a7a8a"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- ============ WALL DECOR ============ -->
+        <g transform="translate(1180, 220)">
+          <g filter="url(#dropShadow)">
+            <rect x="0" y="0" width="80" height="56" fill="#5a4a35" transform="skewY(-8)"/>
+            <rect x="3" y="3" width="74" height="50" fill="#f0e6d0" transform="skewY(-8)"/>
+            <g transform="skewY(-8)">
+              <rect x="3" y="3" width="74" height="30" fill="#a8c0c8"/>
+              <polygon points="10,33 40,18 70,33" fill="#7a8a5e"/>
+              <rect x="3" y="33" width="74" height="17" fill="#9aa884"/>
+              <circle cx="62" cy="12" r="4" fill="#f4d878"/>
+            </g>
+          </g>
+        </g>
+
+        <g transform="translate(1310, 270)">
+          <g filter="url(#dropShadow)">
+            <rect x="0" y="0" width="68" height="84" fill="#5a4a35" transform="skewY(-8)"/>
+            <rect x="3" y="3" width="62" height="78" fill="#e8d8b8" transform="skewY(-8)"/>
+            <g transform="skewY(-8)">
+              <path d="M 8 20 Q 25 8 45 22 Q 55 30 60 50" stroke="#c44a32" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <path d="M 12 50 Q 25 40 40 55 Q 50 62 56 70" stroke="#5a7a8a" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+              <circle cx="20" cy="68" r="5" fill="#d4a858"/>
+            </g>
+          </g>
+        </g>
+
+        <g transform="translate(1430, 240)">
+          <g filter="url(#dropShadow)">
+            <rect x="0" y="0" width="60" height="78" fill="#5a4a35" transform="skewY(-8)"/>
+            <rect x="3" y="3" width="54" height="72" fill="#fbf6e8" transform="skewY(-8)"/>
+            <g transform="skewY(-8)">
+              <circle cx="30" cy="28" r="12" fill="none" stroke="#3a2818" stroke-width="1.2"/>
+              <circle cx="26" cy="26" r="1.5" fill="#3a2818"/>
+              <circle cx="34" cy="26" r="1.5" fill="#3a2818"/>
+              <path d="M 27 33 Q 30 36 33 33" stroke="#3a2818" stroke-width="1" fill="none"/>
+              <path d="M 18 22 Q 22 14 30 14 Q 38 14 42 22" stroke="#3a2818" stroke-width="1.5" fill="none"/>
+              <line x1="30" y1="42" x2="30" y2="62" stroke="#3a2818" stroke-width="1.2"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- ============ STATION 3: CHARACTER · Cork board on right wall ============ -->
+        <g class="station-art" id="art-character">
+          <g transform="translate(1180, 360)">
+            <polygon points="0,0 270,-30 270,200 0,230" fill="#a87858" filter="url(#dropShadow)"/>
+            <polygon points="0,0 270,-30 270,200 0,230" fill="#c89878" opacity="0.4"/>
+            <circle cx="40" cy="40" r="1.2" fill="#8a5838" opacity="0.5"/>
+            <circle cx="90" cy="65" r="1" fill="#8a5838" opacity="0.5"/>
+            <circle cx="160" cy="45" r="1.3" fill="#8a5838" opacity="0.5"/>
+            <circle cx="220" cy="85" r="1" fill="#8a5838" opacity="0.5"/>
+            <circle cx="60" cy="135" r="1.2" fill="#8a5838" opacity="0.5"/>
+            <circle cx="200" cy="165" r="1" fill="#8a5838" opacity="0.5"/>
+            <circle cx="110" cy="185" r="1.3" fill="#8a5838" opacity="0.5"/>
+            <polygon points="0,0 270,-30 270,200 0,230" fill="none" stroke="#5a3818" stroke-width="3"/>
+
+            <g transform="translate(20, 30)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="65" height="75" fill="#fbf6e8" transform="rotate(-4)"/>
+              <g transform="rotate(-4)">
+                <ellipse cx="32" cy="38" rx="24" ry="27" fill="#8a7ab8"/>
+                <circle cx="24" cy="32" r="3" fill="#fbf6e8"/>
+                <circle cx="24" cy="32" r="1.5" fill="#3a2818"/>
+                <circle cx="40" cy="32" r="3" fill="#fbf6e8"/>
+                <circle cx="40" cy="32" r="1.5" fill="#3a2818"/>
+                <path d="M 25 48 Q 32 54 39 48" stroke="#3a2818" stroke-width="1.5" fill="none"/>
+                <polygon points="22,15 27,5 32,15" fill="#6a5a9a"/>
+              </g>
+              <circle cx="32" cy="5" r="3.5" fill="#c44a32"/>
+            </g>
+
+            <g transform="translate(105, 18)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="58" height="85" fill="#f4ecc8" transform="rotate(3)"/>
+              <g transform="rotate(3)">
+                <circle cx="29" cy="22" r="11" fill="#d4a878"/>
+                <circle cx="33" cy="20" r="1.5" fill="#3a2818"/>
+                <path d="M 29 25 Q 31 28 33 25" stroke="#3a2818" stroke-width="0.8" fill="none"/>
+                <rect x="20" y="31" width="18" height="32" fill="#5a7a8a"/>
+                <rect x="20" y="63" width="7" height="18" fill="#3a2818"/>
+                <rect x="31" y="63" width="7" height="18" fill="#3a2818"/>
+              </g>
+              <circle cx="29" cy="5" r="3.5" fill="#5a7a8a"/>
+            </g>
+
+            <g transform="translate(190, 45)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="70" height="65" fill="#fbf6e8" transform="rotate(-2)"/>
+              <g transform="rotate(-2)">
+                <ellipse cx="38" cy="33" rx="24" ry="15" fill="#c4956a"/>
+                <circle cx="54" cy="24" r="9" fill="#c4956a"/>
+                <polygon points="59,20 64,12 60,18" fill="#c4956a"/>
+                <polygon points="51,20 56,12 52,18" fill="#c4956a"/>
+                <circle cx="57" cy="24" r="1.5" fill="#3a2818"/>
+                <path d="M 14 33 L 9 31" stroke="#c4956a" stroke-width="3" stroke-linecap="round"/>
+              </g>
+              <circle cx="38" cy="5" r="3.5" fill="#d4a858"/>
+            </g>
+
+            <g transform="translate(45, 125)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="62" height="70" fill="#f4ecc8" transform="rotate(2)"/>
+              <g transform="rotate(2)">
+                <ellipse cx="30" cy="38" rx="19" ry="24" fill="#7a8a5e"/>
+                <circle cx="24" cy="30" r="3" fill="#fbf6e8"/>
+                <circle cx="36" cy="30" r="3" fill="#fbf6e8"/>
+                <circle cx="24" cy="31" r="1.5" fill="#3a2818"/>
+                <circle cx="36" cy="31" r="1.5" fill="#3a2818"/>
+                <path d="M 27 45 Q 30 48 33 45" stroke="#3a2818" stroke-width="1" fill="none"/>
+                <line x1="24" y1="15" x2="20" y2="8" stroke="#3a2818" stroke-width="1"/>
+                <line x1="36" y1="15" x2="40" y2="8" stroke="#3a2818" stroke-width="1"/>
+                <circle cx="20" cy="8" r="2" fill="#c44a32"/>
+                <circle cx="40" cy="8" r="2" fill="#c44a32"/>
+              </g>
+              <circle cx="30" cy="5" r="3.5" fill="#7a8a5e"/>
+            </g>
+
+            <g transform="translate(150, 130)" filter="url(#dropShadow)">
+              <rect x="0" y="0" width="60" height="62" fill="#fbf6e8" transform="rotate(-3)"/>
+              <g transform="rotate(-3)">
+                <circle cx="30" cy="30" r="21" fill="#d4a878"/>
+                <circle cx="23" cy="27" r="2.5" fill="#3a2818"/>
+                <circle cx="37" cy="27" r="2.5" fill="#3a2818"/>
+                <path d="M 24 37 Q 30 42 36 37" stroke="#3a2818" stroke-width="1.5" fill="none"/>
+                <path d="M 8 19 Q 22 5 30 8 Q 38 5 52 19" fill="#5a3818"/>
+              </g>
+              <circle cx="30" cy="5" r="3.5" fill="#8a7ab8"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- ============ STATION 1: COLOR · Easel (front-left) ============ -->
+        <g class="station-art" id="art-color">
+          <ellipse cx="220" cy="900" rx="90" ry="14" fill="#3a2a18" opacity="0.3"/>
+          <polygon points="148,640 156,640 212,900 200,900" fill="#7a5838"/>
+          <polygon points="286,660 294,660 244,900 232,900" fill="#7a5838"/>
+          <polygon points="210,650 218,650 218,900 210,900" fill="#8a6850"/>
+          <polygon points="165,740 286,760 286,765 165,745" fill="#5a4028"/>
+          <polygon points="140,600 304,632 304,786 140,762" fill="#3a2818"/>
+          <polygon points="148,608 296,637 296,780 148,758" fill="#f4ecc8"/>
+          <ellipse cx="202" cy="672" rx="38" ry="24" fill="#c44a32" opacity="0.85"/>
+          <ellipse cx="244" cy="704" rx="30" ry="34" fill="#d4a858" opacity="0.8"/>
+          <ellipse cx="192" cy="724" rx="24" ry="20" fill="#5a7a8a" opacity="0.85"/>
+          <path d="M 170 746 Q 222 728 274 750" stroke="#8a7ab8" stroke-width="6" fill="none" opacity="0.7"/>
+          <polygon points="60,760 160,782 160,824 60,802" fill="#a8825a"/>
+          <polygon points="60,760 65,758 165,780 160,782" fill="#c8a878"/>
+          <polygon points="160,782 165,780 165,822 160,824" fill="#7a5838"/>
+          <ellipse cx="102" cy="782" rx="36" ry="15" fill="#7a5838" transform="rotate(-5 102 782)"/>
+          <ellipse cx="102" cy="780" rx="34" ry="14" fill="#c8a878" transform="rotate(-5 102 780)"/>
+          <ellipse cx="84" cy="782" rx="4.5" ry="2.8" fill="#5a4028" transform="rotate(-5 84 782)"/>
+          <circle cx="90" cy="772" r="4" fill="#c44a32" transform="rotate(-5 90 772)"/>
+          <circle cx="102" cy="770" r="3.8" fill="#d4a858" transform="rotate(-5 102 770)"/>
+          <circle cx="114" cy="772" r="4" fill="#5a7a8a" transform="rotate(-5 114 772)"/>
+          <circle cx="116" cy="784" r="3.5" fill="#7a8a5e" transform="rotate(-5 116 784)"/>
+          <circle cx="100" cy="786" r="3" fill="#8a7ab8" transform="rotate(-5 100 786)"/>
+          <g transform="translate(82, 808)">
+            <ellipse cx="0" cy="0" rx="16" ry="4" fill="#c44a32" transform="rotate(-8)"/>
+            <rect x="-2" y="-2" width="4" height="3" fill="#5a4028" transform="rotate(-8)"/>
+          </g>
+          <g transform="translate(130, 816)">
+            <ellipse cx="0" cy="0" rx="14" ry="4" fill="#5a7a8a" transform="rotate(12)"/>
+            <rect x="-2" y="-2" width="4" height="3" fill="#5a4028" transform="rotate(12)"/>
+          </g>
+          <g transform="translate(138, 740)">
+            <ellipse cx="0" cy="22" rx="15" ry="4" fill="#5a4028"/>
+            <path d="M -13 -22 L -13 22 L 13 22 L 13 -22 Z" fill="#9ab8c8" opacity="0.7"/>
+            <ellipse cx="0" cy="-22" rx="13" ry="4" fill="#7a98a8"/>
+            <line x1="-5" y1="-32" x2="-5" y2="-10" stroke="#a85838" stroke-width="2.2"/>
+            <line x1="3" y1="-38" x2="3" y2="-10" stroke="#7a5838" stroke-width="2.2"/>
+            <line x1="9" y1="-28" x2="9" y2="-10" stroke="#5a4028" stroke-width="2.2"/>
+            <ellipse cx="-5" cy="-33" rx="2.2" ry="3.2" fill="#3a2818"/>
+            <ellipse cx="3" cy="-39" rx="2.2" ry="3.2" fill="#3a2818"/>
+            <ellipse cx="9" cy="-29" rx="2.2" ry="3.2" fill="#3a2818"/>
+          </g>
+        </g>
+
+        <!-- ============ STATION 2: SHAPE · Drafting desk (center) ============ -->
+        <g class="station-art" id="art-shape">
+          <ellipse cx="820" cy="870" rx="180" ry="22" fill="#3a2a18" opacity="0.3"/>
+          <polygon points="660,720 980,760 1000,810 680,770" fill="#8a6e50"/>
+          <polygon points="660,720 980,760 990,770 670,730" fill="#a88868"/>
+          <polygon points="675,700 970,738 985,808 690,770" fill="#f4ecc8"/>
+          <polygon points="675,700 970,738 985,808 690,770" fill="#e8dcc0" opacity="0.4"/>
+          <g transform="translate(700, 718) rotate(-3)">
+            <rect x="0" y="0" width="74" height="50" fill="#fbf6e8" stroke="#8a7858" stroke-width="0.5"/>
+            <rect x="10" y="10" width="22" height="22" fill="none" stroke="#3a2818" stroke-width="1.2"/>
+            <circle cx="52" cy="22" r="11" fill="none" stroke="#3a2818" stroke-width="1.2"/>
+            <polygon points="38,43 54,32 60,46" fill="none" stroke="#3a2818" stroke-width="1"/>
+          </g>
+          <g transform="translate(810, 736) rotate(4)">
+            <rect x="0" y="0" width="68" height="44" fill="#fbf6e8" stroke="#8a7858" stroke-width="0.5"/>
+            <path d="M 5 26 Q 16 11 26 23 Q 36 36 46 19 Q 56 6 62 30" stroke="#3a2818" stroke-width="1.3" fill="none"/>
+          </g>
+          <g transform="translate(900, 728) rotate(-2)">
+            <rect x="0" y="0" width="60" height="46" fill="#fbf6e8" stroke="#8a7858" stroke-width="0.5"/>
+            <rect x="5" y="5" width="24" height="16" fill="#c44a32"/>
+            <rect x="5" y="24" width="24" height="17" fill="#5a7a8a"/>
+            <rect x="32" y="5" width="22" height="36" fill="none" stroke="#3a2818" stroke-width="0.8"/>
+          </g>
+          <g transform="translate(720, 768) rotate(12)">
+            <rect x="0" y="0" width="85" height="6" fill="#d4a858"/>
+            <line x1="10" y1="0" x2="10" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="20" y1="0" x2="20" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="30" y1="0" x2="30" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="40" y1="0" x2="40" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="50" y1="0" x2="50" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="60" y1="0" x2="60" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+            <line x1="70" y1="0" x2="70" y2="3" stroke="#5a4028" stroke-width="0.6"/>
+          </g>
+          <g transform="translate(680, 800) rotate(20)">
+            <rect x="0" y="0" width="55" height="5" fill="#d4a858"/>
+            <polygon points="55,0 62,2.5 55,5" fill="#3a2818"/>
+            <rect x="-7" y="0" width="7" height="5" fill="#c44a32"/>
+          </g>
+          <g transform="translate(945, 770)">
+            <polygon points="0,-16 13,-9 13,9 0,16 -13,9 -13,-9" fill="#9ab8c8" stroke="#3a2818" stroke-width="0.8"/>
+            <line x1="0" y1="-16" x2="0" y2="16" stroke="#3a2818" stroke-width="0.5" opacity="0.5"/>
+          </g>
+          <polygon points="685,770 693,770 700,1000 690,1000" fill="#7a5838"/>
+          <polygon points="975,810 983,810 990,1000 980,1000" fill="#7a5838"/>
+        </g>
+
+        <!-- ============ STATION 4: MATERIAL · Workbench (front-right) ============ -->
+        <g class="station-art" id="art-material">
+          <ellipse cx="1390" cy="950" rx="200" ry="22" fill="#3a2a18" opacity="0.35"/>
+          <polygon points="1240,820 1248,820 1258,1000 1248,1000" fill="#5a4028"/>
+          <polygon points="1530,780 1538,780 1548,1000 1538,1000" fill="#5a4028"/>
+          <polygon points="1220,780 1550,738 1560,820 1230,860" fill="#7a5838"/>
+          <polygon points="1220,780 1550,738 1555,750 1225,790" fill="#9a7858"/>
+          <polygon points="1240,770 1540,730 1545,815 1245,855" fill="#a88868" opacity="0.35"/>
+          <g transform="translate(1265, 762) rotate(-8)">
+            <path d="M 0 0 L 42 -4 L 47 16 L 40 30 L 5 28 L -2 16 Z" fill="#c44a32" opacity="0.9"/>
+          </g>
+          <g transform="translate(1330, 760) rotate(5)">
+            <path d="M 0 0 L 37 -2 L 42 18 L 4 23 L -2 13 Z" fill="#5a7a8a" opacity="0.85"/>
+          </g>
+          <g transform="translate(1395, 748) rotate(-3)">
+            <path d="M 0 0 L 32 -4 L 38 22 L 4 26 Z" fill="#d4a858" opacity="0.9"/>
+          </g>
+          <g transform="translate(1450, 768) rotate(10)">
+            <path d="M 0 0 L 40 -2 L 44 17 L 6 24 L -3 11 Z" fill="#7a8a5e" opacity="0.85"/>
+          </g>
+          <g transform="translate(1310, 808) rotate(15)">
+            <path d="M 0 0 L 35 -2 L 41 16 L 4 20 Z" fill="#8a7ab8" opacity="0.85"/>
+          </g>
+          <g transform="translate(1470, 800) rotate(35)">
+            <polygon points="0,0 32,4 42,0 32,-2 0,-2" fill="#c8c8d0" stroke="#3a2818" stroke-width="1"/>
+            <polygon points="0,2 32,-2 42,2 32,4 0,4" fill="#c8c8d0" stroke="#3a2818" stroke-width="1"/>
+            <circle cx="-2" cy="-7" r="6.5" fill="none" stroke="#c44a32" stroke-width="3"/>
+            <circle cx="-2" cy="9" r="6.5" fill="none" stroke="#c44a32" stroke-width="3"/>
+            <circle cx="2" cy="1" r="2" fill="#3a2818"/>
+          </g>
+          <g transform="translate(1395, 830) rotate(-15)">
+            <rect x="0" y="0" width="13" height="42" fill="#d8a878" rx="2"/>
+            <rect x="0" y="0" width="13" height="9" fill="#3a2818" rx="2"/>
+            <rect x="3" y="-3" width="7" height="3" fill="#c44a32"/>
+          </g>
+          <g transform="translate(1230, 808)" filter="url(#dropShadow)">
+            <rect x="0" y="0" width="64" height="52" fill="#f4ecc8"/>
+            <path d="M 5 10 L 27 8 L 30 26 L 8 30 Z" fill="#c44a32" opacity="0.85"/>
+            <path d="M 32 15 L 54 12 L 56 38 L 34 40 Z" fill="#5a7a8a" opacity="0.85"/>
+            <circle cx="44" cy="32" r="7" fill="#d4a858"/>
+          </g>
+          <line x1="1325" y1="850" x2="1395" y2="855" stroke="#5a3818" stroke-width="2.2"/>
+          <g transform="translate(1430, 860)">
+            <ellipse cx="0" cy="0" rx="7" ry="3.5" fill="#7a8a5e" transform="rotate(20)"/>
+          </g>
+        </g>
+
+        <!-- Cat sleeping on floor -->
+        <g transform="translate(480, 990)">
+          <ellipse cx="0" cy="14" rx="40" ry="7" fill="#3a2a18" opacity="0.3"/>
+          <ellipse cx="0" cy="0" rx="36" ry="16" fill="#d4a878"/>
+          <ellipse cx="-26" cy="-2" rx="15" ry="14" fill="#d4a878"/>
+          <path d="M -8 -8 Q -5 -10 -2 -8" stroke="#a87858" stroke-width="2" fill="none"/>
+          <path d="M 5 -10 Q 8 -12 11 -10" stroke="#a87858" stroke-width="2" fill="none"/>
+          <path d="M 18 -6 Q 22 -8 25 -6" stroke="#a87858" stroke-width="2" fill="none"/>
+          <polygon points="-33,-12 -29,-23 -23,-14" fill="#d4a878"/>
+          <polygon points="-23,-15 -19,-24 -15,-13" fill="#d4a878"/>
+          <path d="M -31 -4 Q -29 -2 -27 -4" stroke="#3a2818" stroke-width="1" fill="none"/>
+          <path d="M -23 -4 Q -21 -2 -19 -4" stroke="#3a2818" stroke-width="1" fill="none"/>
+          <path d="M 33 4 Q 47 -2 52 9" stroke="#d4a878" stroke-width="11" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- ============ ARTCHI ============ -->
+        <g id="room-artchi" transform="translate(800, 500)">
+          <g class="artchi-attention">
+            <circle cx="-50" cy="-25" r="2" fill="#f8c860" opacity="0.9"/>
+            <circle cx="-58" cy="-15" r="1.4" fill="#fff8d0" opacity="0.8"/>
+            <circle cx="-44" cy="-35" r="1.6" fill="#f8c860" opacity="0.85"/>
+            <path d="M -54 -28 L -52 -30 L -50 -28 L -52 -26 Z" fill="#fff8d0" opacity="0.9"/>
+          </g>
+          <ellipse cx="0" cy="46" rx="14" ry="3" fill="rgba(0,0,0,0.2)"/>
+          <g class="wing">
+            <path d="M -12 4 Q -28 -2 -32 12 Q -28 22 -10 16 Z" fill="var(--artchi-wing)" opacity="0.92"/>
+            <path d="M 12 4 Q 28 -2 32 12 Q 28 22 10 16 Z" fill="var(--artchi-wing)" opacity="0.92"/>
+            <path d="M -10 6 Q -22 4 -22 14 Q -16 20 -8 14 Z" fill="#e8a8b8" opacity="0.5"/>
+            <path d="M 10 6 Q 22 4 22 14 Q 16 20 8 14 Z" fill="#e8a8b8" opacity="0.5"/>
+          </g>
+          <g class="artchi-body-group">
+            <ellipse cx="0" cy="14" rx="16" ry="20" fill="var(--artchi)" stroke="var(--artchi-deep)" stroke-width="1"/>
+            <ellipse cx="-5" cy="6" rx="5" ry="9" fill="#d4c8f0" opacity="0.6"/>
+            <path d="M -10 -10 Q 0 -22 10 -10 L 9 -8 Q 0 -14 -9 -8 Z" fill="var(--artchi-hat)" stroke="#4a3a7a" stroke-width="0.6"/>
+            <circle cx="0" cy="-19" r="3" fill="var(--artchi-hat)" stroke="#4a3a7a" stroke-width="0.5"/>
+            <circle cx="-1" cy="-20" r="1.2" fill="#a898d0" opacity="0.7"/>
+            <ellipse cx="0" cy="-9" rx="10" ry="1.8" fill="#4a3a7a"/>
+            <ellipse cx="-5" cy="6" rx="1.8" ry="2.4" fill="#2a1f4a"/>
+            <ellipse cx="5" cy="6" rx="1.8" ry="2.4" fill="#2a1f4a"/>
+            <circle cx="-4.3" cy="4.8" r="0.7" fill="#fff"/>
+            <circle cx="5.7" cy="4.8" r="0.7" fill="#fff"/>
+            <ellipse cx="-9" cy="12" rx="2" ry="1.3" fill="#f4a4b4" opacity="0.75"/>
+            <ellipse cx="9" cy="12" rx="2" ry="1.3" fill="#f4a4b4" opacity="0.75"/>
+            <path d="M -3 16 Q 0 18 3 16" stroke="#4a3a5a" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+            <circle cx="-11" cy="22" r="2.5" fill="var(--artchi)" stroke="#6a5a9a" stroke-width="0.5"/>
+            <circle cx="11" cy="22" r="2.5" fill="var(--artchi)" stroke="#6a5a9a" stroke-width="0.5"/>
+            <ellipse cx="0" cy="26" rx="9" ry="5.5" fill="#d4a878" stroke="#7a5838" stroke-width="0.6"/>
+            <ellipse cx="-5" cy="26" rx="1.2" ry="1" fill="#5a4028" opacity="0.6"/>
+            <circle cx="-2" cy="24" r="1" fill="#c44a32"/>
+            <circle cx="2" cy="24" r="1" fill="#5a7a8a"/>
+            <circle cx="0" cy="27" r="1" fill="#d4a858"/>
+            <circle cx="4" cy="27" r="1" fill="#7a8a5e"/>
+          </g>
+        </g>
+
+      </svg>
+
+      <!-- Hotspots (invisible click areas with labels) -->
+      <div class="hotspot hotspot-color" data-id="color">
+        <div class="hotspot-label">Color · The Easel</div>
+      </div>
+      <div class="hotspot hotspot-shape" data-id="shape">
+        <div class="hotspot-label">Shape · The Drafting Desk</div>
+      </div>
+      <div class="hotspot hotspot-character" data-id="character">
+        <div class="hotspot-label">Character · The Sketch Board</div>
+      </div>
+      <div class="hotspot hotspot-material" data-id="material">
+        <div class="hotspot-label">Material · The Workbench</div>
+      </div>
+      <div class="hotspot hotspot-project" data-id="project">
+        <div class="hotspot-label">Books &amp; Stories · The Bookshelf</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="drag-hint" id="dragHint">drag to look around the studio</div>
+
+  <div class="minimap">
+    <div class="minimap-label">Studio Map</div>
+    <div class="minimap-bg" id="minimapBg">
+      <div class="minimap-station" style="left: 12%; top: 52%;"></div>
+      <div class="minimap-station" style="left: 45%; top: 60%;"></div>
+      <div class="minimap-station" style="left: 75%; top: 32%;"></div>
+      <div class="minimap-station" style="left: 78%; top: 64%;"></div>
+      <div class="minimap-station" style="left: 42%; top: 26%;"></div>
+      <div class="minimap-viewport" id="minimapViewport"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ ZOOM OVERLAY (station detail) ============ -->
+<div class="zoom-overlay" id="zoomOverlay">
+  <button class="zoom-close" onclick="closeStation()">← back to studio</button>
+  <div class="zoom-title" id="zoomTitle"></div>
+  <div class="zoom-subtitle" id="zoomSubtitle"></div>
+  <div class="zoom-content" id="zoomContent"></div>
+
+  <div class="zoom-artchi-wrap" id="zoomArtchiWrap">
+    <div class="zoom-artchi-bubble" id="zoomArtchiBubble">
+      <div class="bubble-content" id="zoomArtchiBubbleText"></div>
+      <div class="bubble-tail"></div>
+    </div>
+    <svg class="zoom-artchi" viewBox="-30 -30 60 70" width="80" height="93">
+      <ellipse cx="0" cy="32" rx="14" ry="3" fill="rgba(0,0,0,0.25)"/>
+      <g class="wing">
+        <path d="M -12 4 Q -28 -2 -32 12 Q -28 22 -10 16 Z" fill="var(--artchi-wing)" opacity="0.92"/>
+        <path d="M 12 4 Q 28 -2 32 12 Q 28 22 10 16 Z" fill="var(--artchi-wing)" opacity="0.92"/>
+        <path d="M -10 6 Q -22 4 -22 14 Q -16 20 -8 14 Z" fill="#e8a8b8" opacity="0.5"/>
+        <path d="M 10 6 Q 22 4 22 14 Q 16 20 8 14 Z" fill="#e8a8b8" opacity="0.5"/>
+      </g>
+      <g class="artchi-body-group">
+        <ellipse cx="0" cy="14" rx="16" ry="20" fill="var(--artchi)" stroke="var(--artchi-deep)" stroke-width="1"/>
+        <ellipse cx="-5" cy="6" rx="5" ry="9" fill="#d4c8f0" opacity="0.6"/>
+        <path d="M -10 -10 Q 0 -22 10 -10 L 9 -8 Q 0 -14 -9 -8 Z" fill="var(--artchi-hat)" stroke="#4a3a7a" stroke-width="0.6"/>
+        <circle cx="0" cy="-19" r="3" fill="var(--artchi-hat)" stroke="#4a3a7a" stroke-width="0.5"/>
+        <ellipse cx="0" cy="-9" rx="10" ry="1.8" fill="#4a3a7a"/>
+        <ellipse cx="-5" cy="6" rx="1.8" ry="2.4" fill="#2a1f4a"/>
+        <ellipse cx="5" cy="6" rx="1.8" ry="2.4" fill="#2a1f4a"/>
+        <circle cx="-4.3" cy="4.8" r="0.7" fill="#fff"/>
+        <circle cx="5.7" cy="4.8" r="0.7" fill="#fff"/>
+        <ellipse cx="-9" cy="12" rx="2" ry="1.3" fill="#f4a4b4" opacity="0.75"/>
+        <ellipse cx="9" cy="12" rx="2" ry="1.3" fill="#f4a4b4" opacity="0.75"/>
+        <path d="M -3 16 Q 0 18 3 16" stroke="#4a3a5a" stroke-width="0.8" fill="none"/>
+        <circle cx="-11" cy="22" r="2.5" fill="var(--artchi)" stroke="#6a5a9a" stroke-width="0.5"/>
+        <circle cx="11" cy="22" r="2.5" fill="var(--artchi)" stroke="#6a5a9a" stroke-width="0.5"/>
+        <ellipse cx="0" cy="26" rx="9" ry="5.5" fill="#d4a878" stroke="#7a5838" stroke-width="0.6"/>
+        <circle cx="-2" cy="24" r="1" fill="#c44a32"/>
+        <circle cx="2" cy="24" r="1" fill="#5a7a8a"/>
+        <circle cx="0" cy="27" r="1" fill="#d4a858"/>
+      </g>
+    </svg>
+  </div>
+
+  <button class="view-all-btn" id="viewAllBtn" onclick="toggleGridView()">
+    <span id="viewAllText">view all 5 courses →</span>
+  </button>
+</div>
+
+<div class="grid-view" id="gridView">
+  <button class="zoom-close" onclick="closeGridView()">← back to featured</button>
+  <div class="grid-title" id="gridTitle"></div>
+  <div class="grid-content" id="gridContent"></div>
+</div>
+
+<script>
+  // ============================================================
+  // STATIONS & COURSES DATA
+  //
+  // CURRENT STATE (Phase 1 launch):
+  //   - Only "Surrealism Illustration" (lfc054) is available: true.
+  //     It routes to lessons/lfc054-illustration-surrealism/
+  //   - All other courses are placeholders: available: false.
+  //     They show as visible-but-disabled book/tube/etc., with
+  //     Artchi saying "still being painted" on hover.
+  //
+  // WHEN A NEW LESSON IS READY:
+  //   1. Flip its course's `available` to true here.
+  //   2. Add an entry in the COURSE_ROUTES map below (in enterCourse).
+  //   3. That's it.
+  // ============================================================
+  const stations = {
+    color: {
+      title: 'Color · The Easel',
+      subtitle: 'where color becomes feeling',
+      welcome: 'this is where color stops being just color and starts being a mood. pick a tube to see what you can make.',
+      featuredCount: 5,
+      mode: 'tubes',
+      courses: [
+        { title: 'The Color-Gatherer', desc: 'spend a week with your city. bring back what it taught you to see.', meta: 'COMING SOON', available: false, color: '#c44a32' },
+        { title: "Monet's Sunrise", desc: 'record time through color, hour by hour.', meta: 'COMING SOON', available: false, color: '#d4a858' },
+        { title: "Rothko's Color Blocks", desc: 'feel a color until it becomes a feeling.', meta: 'COMING SOON', available: false, color: '#5a7a8a' },
+        { title: 'Paint a Song', desc: 'listen first. paint what the song looked like.', meta: 'COMING SOON', available: false, color: '#7a8a5e' },
+        { title: 'Color Mixing Lab', desc: 'become a chemist of mood.', meta: 'COMING SOON', available: false, color: '#8a7ab8' },
+      ]
+    },
+    shape: {
+      title: 'Shape · The Drafting Desk',
+      subtitle: 'where lines decide everything',
+      welcome: 'here we play with how things are built — circles, lines, blocks, space. pick a paper.',
+      featuredCount: 5,
+      mode: 'papers',
+      courses: [
+        { title: "Hide an Animal in Rousseau's Jungle", desc: 'layer leaves, light, and silence — then let something live between them.', meta: 'COMING SOON', available: false },
+        { title: 'A Line Takes a Walk', desc: 'one line. no lifting. no crossing. see where it wants to go.', meta: 'COMING SOON', available: false },
+        { title: "Mondrian's Grid Maze", desc: 'lines, blocks, primary colors. make order out of nothing.', meta: 'COMING SOON', available: false },
+        { title: 'Geometry in Nature', desc: 'shells, honeycombs, leaves — the shapes the world already made.', meta: 'COMING SOON', available: false },
+      ]
+    },
+    character: {
+      title: 'Character · The Sketch Board',
+      subtitle: 'where personalities are pinned up',
+      welcome: 'every face on this board started as a feeling. which one do you want to invent today?',
+      featuredCount: 5,
+      mode: 'notes',
+      courses: [
+        { title: 'The Bureau of Feeling-Monsters', desc: 'bring three feelings, leave with a creature only you could have made.', meta: 'COMING SOON', available: false },
+        { title: "Hokusai's Book of Yōkai", desc: 'invent a spirit in ink lines.', meta: 'COMING SOON', available: false },
+        { title: 'Invent Like Miró', desc: 'tiny beings born from squiggles.', meta: 'COMING SOON', available: false },
+        { title: 'When Daily Things Become Heroes', desc: 'a teapot, a sock, a stapler — make them alive.', meta: 'COMING SOON', available: false },
+      ]
+    },
+    material: {
+      title: 'Material · The Workbench',
+      subtitle: 'where stuff becomes art',
+      welcome: 'no rules about what counts as art-supplies here. pick a scrap.',
+      featuredCount: 5,
+      mode: 'scraps',
+      courses: [
+        { title: 'The Kitchen Material Challenge', desc: 'coffee, soy sauce, flour, onion skin — make a painting from what is in the kitchen.', meta: 'COMING SOON', available: false, color: '#c44a32' },
+        { title: "Matisse's Scissors", desc: 'no brushes. only paper, color, and cuts.', meta: 'COMING SOON', available: false, color: '#5a7a8a' },
+        { title: 'Trash Reborn', desc: 'cardboard, wrappers, broken things — bring them back as art.', meta: 'COMING SOON', available: false, color: '#d4a858' },
+        { title: 'Touch Memory', desc: 'rebuild a childhood scene using only materials, no lines.', meta: 'COMING SOON', available: false, color: '#7a8a5e' },
+      ]
+    },
+    project: {
+      title: 'Books & Stories · The Bookshelf',
+      subtitle: 'where pictures and stories live together',
+      welcome: 'every book on this shelf started as a feeling someone wanted to share. pick one to start your own.',
+      featuredCount: 6,
+      mode: 'books',
+      courses: [
+        { title: 'Surrealism Illustration', desc: 'dreams, distortions, impossible objects — illustrate what cannot be photographed.', meta: 'LFC054 · ILLUSTRATION', available: true, color: '#8a7ab8' },
+        { title: 'Tell Your Dream', desc: 'a long climb. four chapters. pause anytime. the light stays on.', meta: 'COMING SOON · STORYBOARD', available: false, color: '#c44a32' },
+        { title: 'Illustrate a Poem', desc: 'pick a poem. make it visible.', meta: 'COMING SOON', available: false, color: '#d4a858' },
+        { title: 'Make a Zine', desc: 'design your own independent magazine cover.', meta: 'COMING SOON', available: false, color: '#5a7a8a' },
+        { title: 'A Tree Near Your Home', desc: 'a month with one tree. give it a picture book.', meta: 'COMING SOON · PICTURE BOOK', available: false, color: '#7a8a5e' },
+        { title: 'Four-Panel Comic', desc: 'four panels, one moment. start small, end somewhere.', meta: 'COMING SOON · COMIC', available: false, color: '#a85838' },
+      ]
+    },
+  };
+
+  // ============================================================
+  // COURSE ROUTING — where each available course takes the student.
+  // Add entries here when new lessons go live.
+  // ============================================================
+  const COURSE_ROUTES = {
+    'Surrealism Illustration': '../lessons/lfc054-illustration-surrealism/',
+  };
+
+  // ============ STATE ============
+  const stage = document.getElementById('stage');
+  const roomWrap = document.getElementById('roomWrap');
+  const room = document.getElementById('room');
+  const title = document.getElementById('title');
+  const dragHint = document.getElementById('dragHint');
+  const minimapViewport = document.getElementById('minimapViewport');
+
+  let offsetX = 0, offsetY = 0;
+  let isDragging = false;
+  let dragStartX = 0, dragStartY = 0;
+  let dragStartOffsetX = 0, dragStartOffsetY = 0;
+  let didDrag = false;
+  let hasInteracted = false;
+
+  const ROOM_W = 1800;
+  const ROOM_H = 1300;
+
+  function getMaxOffset() {
+    return {
+      x: Math.max(0, (ROOM_W - window.innerWidth) / 2 + 200),
+      y: Math.max(0, (ROOM_H - window.innerHeight) / 2 + 100)
+    };
+  }
+
+  function updateRoom() {
+    room.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    const vw = (window.innerWidth / ROOM_W) * 100;
+    const vh = (window.innerHeight / ROOM_H) * 100;
+    const px = 50 - (offsetX / ROOM_W) * 100 - vw / 2;
+    const py = 50 - (offsetY / ROOM_H) * 100 - vh / 2;
+    minimapViewport.style.width = vw + '%';
+    minimapViewport.style.height = vh + '%';
+    minimapViewport.style.left = px + '%';
+    minimapViewport.style.top = py + '%';
+  }
+
+  function clampOffset() {
+    const max = getMaxOffset();
+    offsetX = Math.max(-max.x, Math.min(max.x, offsetX));
+    offsetY = Math.max(-max.y, Math.min(max.y, offsetY));
+  }
+
+  // ============ DRAGGING ============
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    didDrag = false;
+    dragStartX = clientX;
+    dragStartY = clientY;
+    dragStartOffsetX = offsetX;
+    dragStartOffsetY = offsetY;
+    roomWrap.classList.add('dragging');
+    room.style.transition = 'none';
+  }
+
+  function moveDrag(clientX, clientY) {
+    if (!isDragging) return;
+    const dx = clientX - dragStartX;
+    const dy = clientY - dragStartY;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) didDrag = true;
+    offsetX = dragStartOffsetX + dx;
+    offsetY = dragStartOffsetY + dy;
+    clampOffset();
+    updateRoom();
+
+    if (!hasInteracted && didDrag) {
+      hasInteracted = true;
+      title.classList.add('fade');
+      dragHint.classList.add('hidden');
+    }
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    roomWrap.classList.remove('dragging');
+    room.style.transition = '';
+  }
+
+  roomWrap.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.hotspot')) return;
+    startDrag(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+  window.addEventListener('mouseup', endDrag);
+
+  roomWrap.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.hotspot')) return;
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, { passive: true });
+  roomWrap.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1 && isDragging) {
+      const t = e.touches[0];
+      moveDrag(t.clientX, t.clientY);
+      e.preventDefault();
+    }
+  }, { passive: false });
+  roomWrap.addEventListener('touchend', endDrag);
+  roomWrap.addEventListener('touchcancel', endDrag);
+
+  // ============ HOTSPOT CLICKS ============
+  document.querySelectorAll('.hotspot').forEach(h => {
+    h.addEventListener('click', (e) => {
+      if (didDrag) {
+        didDrag = false;
+        return;
+      }
+      const id = h.getAttribute('data-id');
+      openStation(id);
+      e.stopPropagation();
+    });
+
+    let touchStartTime = 0;
+    h.addEventListener('touchstart', (e) => {
+      touchStartTime = Date.now();
+    }, { passive: true });
+    h.addEventListener('touchend', (e) => {
+      const dur = Date.now() - touchStartTime;
+      if (dur < 300 && !didDrag) {
+        const id = h.getAttribute('data-id');
+        openStation(id);
+        e.preventDefault();
+      }
+      didDrag = false;
+    });
+  });
+
+  // ============ STATION DETAIL ============
+  let currentStationId = null;
+
+  function openStation(id) {
+    const s = stations[id];
+    if (!s) return;
+
+    currentStationId = id;
+
+    document.getElementById('zoomTitle').textContent = s.title;
+    document.getElementById('zoomSubtitle').textContent = s.subtitle;
+
+    const content = document.getElementById('zoomContent');
+    content.innerHTML = renderStation(s);
+
+    document.getElementById('zoomArtchiBubbleText').textContent = s.welcome;
+
+    const viewAllBtn = document.getElementById('viewAllBtn');
+    const viewAllText = document.getElementById('viewAllText');
+    if (s.courses.length > 0) {
+      viewAllText.textContent = `view all ${s.courses.length} courses →`;
+      viewAllBtn.style.display = 'block';
+    } else {
+      viewAllBtn.style.display = 'none';
+    }
+
+    document.getElementById('zoomOverlay').classList.add('active');
+
+    content.querySelectorAll('.course-item').forEach((el, i) => {
+      const course = s.courses[i];
+      el.addEventListener('mouseenter', () => {
+        showCourseTooltip(el, course);
+        speakArtchi(s, course);
+      });
+      el.addEventListener('mouseleave', () => {
+        hideCourseTooltip();
+        resetArtchiSpeech(s);
+      });
+      el.addEventListener('click', () => {
+        if (course.available) enterCourse(course.title);
+        else flashCourse(el);
+      });
+    });
+  }
+
+  function speakArtchi(station, course) {
+    const bubble = document.getElementById('zoomArtchiBubbleText');
+    let msg = '';
+    if (course.available) {
+      msg = generateArtchiLine(course);
+    } else {
+      msg = `still being painted. come back soon for "${course.title}".`;
+    }
+    bubble.textContent = msg;
+  }
+
+  function resetArtchiSpeech(station) {
+    clearTimeout(window._artchiResetTimer);
+    window._artchiResetTimer = setTimeout(() => {
+      document.getElementById('zoomArtchiBubbleText').textContent = station.welcome;
+    }, 500);
+  }
+
+  function generateArtchiLine(course) {
+    const lines = {
+      'The Color-Gatherer': 'a whole week of looking? a city as a paintbox? oh yes.',
+      "Monet's Sunrise": 'i love this one. light, but slow.',
+      "Rothko's Color Blocks": 'just two colors. but it has to feel like something.',
+      'Paint a Song': 'close your eyes first. then you can see the colors.',
+      "Hide an Animal in Rousseau's Jungle": 'my favorite kind of secret — a creature in plain sight.',
+      'A Line Takes a Walk': 'one line. it has to go everywhere. i\'ll watch.',
+      'The Bureau of Feeling-Monsters': 'three feelings, one creature. you bring the feelings.',
+      'The Kitchen Material Challenge': 'no rules. that is the whole rule.',
+      'Tell Your Dream': 'this one is a big one. take your time.',
+      'Surrealism Illustration': 'reality is just a starting point here. melt it, stretch it, dream it.',
+      'Illustrate a Poem': 'don\'t illustrate the words. illustrate what the words feel like.',
+      'Four-Panel Comic': 'four panels. less is harder than more.',
+      'A Tree Near Your Home': 'one tree. one month. you\'ll be surprised what you notice.',
+      'Make a Zine': 'a tiny magazine, all yours. fold it, share it.',
+    };
+    return lines[course.title] || 'pick this and i\'ll come along.';
+  }
+
+  function flashCourse(el) {
+    el.style.animation = 'none';
+    setTimeout(() => { el.style.animation = ''; }, 10);
+  }
+
+  function showCourseTooltip(el, course) {
+    let tip = document.getElementById('courseTooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = 'courseTooltip';
+      tip.className = 'course-tooltip';
+      document.body.appendChild(tip);
+    }
+    tip.innerHTML = `
+      <h4>${course.title}</h4>
+      <p>${course.desc}</p>
+      <div class="meta">
+        <span>${course.meta}</span>
+        <span class="enter-arrow">${course.available ? 'enter →' : 'soon'}</span>
+      </div>
+    `;
+    const r = el.getBoundingClientRect();
+    tip.style.left = Math.min(window.innerWidth - 300, Math.max(10, r.left + r.width / 2 - 140)) + 'px';
+    tip.style.top = (r.top - 130) + 'px';
+    if (r.top - 130 < 100) tip.style.top = (r.bottom + 12) + 'px';
+    requestAnimationFrame(() => tip.classList.add('show'));
+  }
+
+  function hideCourseTooltip() {
+    const tip = document.getElementById('courseTooltip');
+    if (tip) tip.classList.remove('show');
+  }
+
+  function closeStation() {
+    document.getElementById('zoomOverlay').classList.remove('active');
+    hideCourseTooltip();
+    closeGridView();
+  }
+
+  // ============================================================
+  // ENTER COURSE
+  // Looks up COURSE_ROUTES table and navigates to the lesson folder.
+  // If a course is marked available:true but has no route, falls 
+  // back to alert (which should never happen — keep them in sync).
+  // ============================================================
+  function enterCourse(title) {
+    const route = COURSE_ROUTES[title];
+    if (route) {
+      window.location.href = route;
+      return;
+    }
+    // Safety fallback — log so we notice in console
+    console.warn('[Studio] No route configured for course:', title);
+    alert('→ Entering: ' + title + '\n\n(Lesson route not configured yet.)');
+    closeStation();
+  }
+
+  // ============ GRID VIEW ============
+  function toggleGridView() {
+    if (!currentStationId) return;
+    const s = stations[currentStationId];
+    const gridView = document.getElementById('gridView');
+    const gridContent = document.getElementById('gridContent');
+
+    document.getElementById('gridTitle').innerHTML =
+      `${s.title} <small>· all ${s.courses.length} courses</small>`;
+
+    gridContent.innerHTML = s.courses.map((c, i) => {
+      const color = c.color || ['#c44a32', '#5a7a8a', '#d4a858', '#7a8a5e', '#8a7ab8'][i % 5];
+      return `
+        <div class="grid-card ${c.available ? '' : 'disabled'}" data-idx="${i}">
+          <div class="card-color-strip" style="background:${color}"></div>
+          <h3>${c.title}</h3>
+          <p>${c.desc}</p>
+          <div class="card-meta">
+            <span>${c.meta}</span>
+            <span class="enter-arrow">${c.available ? 'enter →' : 'soon'}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    gridContent.querySelectorAll('.grid-card').forEach((el, i) => {
+      const course = s.courses[i];
+      el.addEventListener('click', () => {
+        if (course.available) enterCourse(course.title);
+      });
+    });
+
+    gridView.classList.add('active');
+  }
+
+  function closeGridView() {
+    document.getElementById('gridView').classList.remove('active');
+  }
+
+  function recenterRoom() {
+    offsetX = 0; offsetY = 0;
+    updateRoom();
+  }
+
+  function enterStudio() {
+    document.getElementById('intro').classList.add('hidden');
+    setTimeout(() => document.getElementById('intro').remove(), 1000);
+  }
+
+  // ============ STATION DETAIL RENDERERS ============
+  function renderStation(s) {
+    if (s.mode === 'tubes') return renderPaintTubes(s);
+    if (s.mode === 'papers') return renderScatteredPapers(s);
+    if (s.mode === 'notes') return renderPinnedNotes(s);
+    if (s.mode === 'scraps') return renderTornScraps(s);
+    if (s.mode === 'books') return renderBookSpines(s);
+    return '';
+  }
+
+  function renderPaintTubes(s) {
+    return `
+      <div class="station-detail active" style="position:relative; width:1000px; height:600px;">
+        <svg width="1000" height="600" viewBox="0 0 1000 600" style="position:absolute; inset:0;">
+          <defs>
+            <radialGradient id="palette-grad" cx="40%" cy="40%">
+              <stop offset="0%" stop-color="#e8d0a0"/>
+              <stop offset="100%" stop-color="#8a6840"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="500" cy="300" rx="450" ry="240" fill="#c8a878" stroke="#7a5838" stroke-width="3"/>
+          <ellipse cx="500" cy="300" rx="450" ry="240" fill="url(#palette-grad)" opacity="0.4"/>
+          <ellipse cx="200" cy="280" rx="35" ry="22" fill="#3a2818"/>
+          <ellipse cx="600" cy="200" rx="35" ry="18" fill="#c44a32" opacity="0.4"/>
+          <ellipse cx="700" cy="380" rx="40" ry="22" fill="#5a7a8a" opacity="0.4"/>
+          <ellipse cx="400" cy="420" rx="30" ry="18" fill="#7a8a5e" opacity="0.4"/>
+        </svg>
+        ${s.courses.map((c, i) => {
+          const positions = [
+            { x: 380, y: 200, rot: -10 },
+            { x: 520, y: 180, rot: 8 },
+            { x: 660, y: 240, rot: -5 },
+            { x: 720, y: 380, rot: 15 },
+            { x: 440, y: 400, rot: -8 },
+          ];
+          const p = positions[i] || { x: 500, y: 300, rot: 0 };
+          return `
+            <div class="course-item ${c.available ? '' : 'disabled'}"
+                 style="position:absolute; left:${p.x}px; top:${p.y}px; transform: rotate(${p.rot}deg);">
+              <svg width="180" height="60" viewBox="0 0 180 60">
+                <path d="M 30 20 L 150 20 Q 165 20 165 30 Q 165 40 150 40 L 30 40 Z" fill="${c.color}" stroke="#3a2818" stroke-width="1.5"/>
+                <rect x="8" y="20" width="22" height="20" fill="#3a2818" rx="2"/>
+                <rect x="0" y="24" width="10" height="12" fill="#5a4028" rx="1"/>
+                <path d="M 150 20 L 165 25 L 165 35 L 150 40" fill="${c.color}" stroke="#3a2818" stroke-width="1"/>
+                <line x1="158" y1="22" x2="158" y2="38" stroke="#3a2818" stroke-width="0.6"/>
+                <line x1="163" y1="22" x2="163" y2="38" stroke="#3a2818" stroke-width="0.6"/>
+                <text x="90" y="34" text-anchor="middle" font-family="Caveat Brush" font-size="14" fill="#fbf6e8">${c.title.length > 18 ? c.title.slice(0, 16) + '...' : c.title}</text>
+                <circle cx="10" cy="50" r="4" fill="${c.color}" opacity="0.7"/>
+              </svg>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderScatteredPapers(s) {
+    return `
+      <div class="station-detail active" style="position:relative; width:1000px; height:600px;">
+        <svg width="1000" height="600" viewBox="0 0 1000 600" style="position:absolute; inset:0;">
+          <defs>
+            <pattern id="wood-detail" x="0" y="0" width="80" height="40" patternUnits="userSpaceOnUse">
+              <rect width="80" height="40" fill="#a8825a"/>
+              <line x1="0" y1="0" x2="80" y2="2" stroke="#6a4828" stroke-width="0.5"/>
+              <line x1="0" y1="20" x2="80" y2="22" stroke="#6a4828" stroke-width="0.5"/>
+              <line x1="0" y1="35" x2="80" y2="36" stroke="#6a4828" stroke-width="0.4"/>
+            </pattern>
+          </defs>
+          <rect width="1000" height="600" fill="#8a6850"/>
+          <rect width="1000" height="600" fill="url(#wood-detail)"/>
+        </svg>
+        ${s.courses.map((c, i) => {
+          const positions = [
+            { x: 30,  y: 60,  rot: -6 },
+            { x: 290, y: 30,  rot: 4 },
+            { x: 580, y: 70,  rot: -3 },
+            { x: 130, y: 360, rot: 8 },
+            { x: 470, y: 380, rot: -5 },
+          ];
+          const p = positions[i] || { x: 300, y: 200, rot: 0 };
+          const sketches = [
+            '<path d="M 20 80 Q 50 30 80 80 Q 110 130 140 80" stroke="#2a2418" stroke-width="2" fill="none"/>',
+            '<rect x="30" y="40" width="40" height="40" fill="none" stroke="#2a2418" stroke-width="2"/><circle cx="100" cy="60" r="20" fill="none" stroke="#2a2418" stroke-width="2"/>',
+            '<path d="M 20 100 L 50 30 L 80 100 Z" fill="none" stroke="#2a2418" stroke-width="2"/><polygon points="100,90 130,30 160,90 130,50" fill="none" stroke="#2a2418" stroke-width="2"/>',
+            '<path d="M 20 60 Q 40 40 60 60 Q 80 80 100 60 Q 120 40 140 60 Q 160 80 170 60" stroke="#2a2418" stroke-width="2" fill="none"/>',
+            '<rect x="20" y="20" width="50" height="20" fill="#c44a32"/><rect x="80" y="40" width="30" height="50" fill="#5a7a8a"/><rect x="120" y="20" width="40" height="30" fill="none" stroke="#2a2418" stroke-width="1.5"/>',
+          ];
+          return `
+            <div class="course-item ${c.available ? '' : 'disabled'}"
+                 style="position:absolute; left:${p.x}px; top:${p.y}px; transform: rotate(${p.rot}deg);">
+              <svg width="200" height="160" viewBox="0 0 200 160" filter="drop-shadow(4px 6px 8px rgba(0,0,0,0.3))">
+                <rect width="200" height="160" fill="#fbf6e8" stroke="#a89878" stroke-width="0.8"/>
+                ${sketches[i] || sketches[0]}
+                <text x="100" y="135" text-anchor="middle" font-family="Patrick Hand" font-size="14" fill="#3a2818">${c.title.length > 30 ? c.title.slice(0, 28) + '...' : c.title}</text>
+                <text x="100" y="150" text-anchor="middle" font-family="Nunito" font-size="8" fill="#7a5838" letter-spacing="1.5">${c.meta}</text>
+              </svg>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderPinnedNotes(s) {
+    return `
+      <div class="station-detail active" style="position:relative; width:1000px; height:600px;">
+        <svg width="1000" height="600" viewBox="0 0 1000 600" style="position:absolute; inset:0;">
+          <rect width="1000" height="600" fill="#a87858"/>
+          ${Array.from({length: 80}, () => {
+            const x = Math.random() * 1000;
+            const y = Math.random() * 600;
+            const r = 1 + Math.random() * 1.5;
+            return `<circle cx="${x}" cy="${y}" r="${r}" fill="#7a5838" opacity="0.5"/>`;
+          }).join('')}
+          <rect width="1000" height="600" fill="none" stroke="#5a3818" stroke-width="8"/>
+        </svg>
+        ${s.courses.map((c, i) => {
+          const positions = [
+            { x: 100, y: 100, rot: -5, color: '#fbf6e8' },
+            { x: 380, y: 80, rot: 4, color: '#f4e8b8' },
+            { x: 650, y: 120, rot: -2, color: '#e8d8a8' },
+            { x: 220, y: 360, rot: 6, color: '#fbf6e8' },
+            { x: 550, y: 380, rot: -4, color: '#f4e8b8' },
+          ];
+          const p = positions[i] || { x: 300, y: 200, rot: 0, color: '#fbf6e8' };
+          const pinColor = ['#c44a32', '#5a7a8a', '#d4a858', '#7a8a5e', '#8a7ab8'][i] || '#c44a32';
+          return `
+            <div class="course-item ${c.available ? '' : 'disabled'}"
+                 style="position:absolute; left:${p.x}px; top:${p.y}px; transform: rotate(${p.rot}deg);">
+              <svg width="200" height="180" viewBox="0 0 200 180" filter="drop-shadow(3px 5px 8px rgba(0,0,0,0.35))">
+                <rect width="200" height="180" fill="${p.color}"/>
+                <circle cx="100" cy="80" r="35" fill="${pinColor}" opacity="0.7"/>
+                <circle cx="92" cy="72" r="4" fill="#fbf6e8"/>
+                <circle cx="108" cy="72" r="4" fill="#fbf6e8"/>
+                <circle cx="92" cy="73" r="2" fill="#2a2418"/>
+                <circle cx="108" cy="73" r="2" fill="#2a2418"/>
+                <path d="M 90 92 Q 100 100 110 92" stroke="#2a2418" stroke-width="2" fill="none"/>
+                <text x="100" y="140" text-anchor="middle" font-family="Patrick Hand" font-size="15" fill="#2a2418">${c.title.length > 28 ? c.title.slice(0, 26) + '...' : c.title}</text>
+                <text x="100" y="160" text-anchor="middle" font-family="Nunito" font-size="8" fill="#5a4028" letter-spacing="1.5">${c.meta}</text>
+                <circle cx="100" cy="12" r="7" fill="${pinColor}"/>
+                <circle cx="100" cy="12" r="3" fill="#fff" opacity="0.5"/>
+              </svg>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderTornScraps(s) {
+    return `
+      <div class="station-detail active" style="position:relative; width:1000px; height:600px;">
+        <svg width="1000" height="600" viewBox="0 0 1000 600" style="position:absolute; inset:0;">
+          <defs>
+            <pattern id="wood-rough" x="0" y="0" width="60" height="30" patternUnits="userSpaceOnUse">
+              <rect width="60" height="30" fill="#8a6e50"/>
+              <line x1="0" y1="0" x2="60" y2="2" stroke="#5a4028" stroke-width="0.6"/>
+              <line x1="0" y1="15" x2="60" y2="17" stroke="#5a4028" stroke-width="0.5"/>
+              <line x1="0" y1="28" x2="60" y2="29" stroke="#5a4028" stroke-width="0.4"/>
+            </pattern>
+          </defs>
+          <rect width="1000" height="600" fill="#7a5838"/>
+          <rect width="1000" height="600" fill="url(#wood-rough)"/>
+          <ellipse cx="700" cy="450" rx="40" ry="20" fill="#fbf6e8" opacity="0.3"/>
+        </svg>
+        ${s.courses.map((c, i) => {
+          const positions = [
+            { x: 120, y: 100, rot: -8 },
+            { x: 420, y: 80, rot: 5 },
+            { x: 700, y: 120, rot: -3 },
+            { x: 200, y: 380, rot: 7 },
+            { x: 550, y: 380, rot: -6 },
+          ];
+          const p = positions[i] || { x: 300, y: 200, rot: 0 };
+          const tornPaths = [
+            'M 0 10 L 25 4 L 50 12 L 80 6 L 115 14 L 150 8 L 180 16 L 195 30 L 200 60 L 195 85 L 200 110 L 185 130 L 160 138 L 130 134 L 100 138 L 65 132 L 35 138 L 10 130 L 4 100 L 0 70 L 5 40 Z',
+          ];
+          return `
+            <div class="course-item ${c.available ? '' : 'disabled'}"
+                 style="position:absolute; left:${p.x}px; top:${p.y}px; transform: rotate(${p.rot}deg);">
+              <svg width="200" height="145" viewBox="0 0 200 145" filter="drop-shadow(3px 5px 8px rgba(0,0,0,0.35))">
+                <path d="${tornPaths[0]}" fill="${c.color}" opacity="0.95"/>
+                <text x="100" y="65" text-anchor="middle" font-family="Caveat Brush" font-size="20" fill="#fbf6e8">${c.title.length > 24 ? c.title.slice(0, 22) + '...' : c.title}</text>
+                <text x="100" y="110" text-anchor="middle" font-family="Nunito" font-size="9" fill="rgba(251, 246, 232, 0.8)" letter-spacing="2">${c.meta}</text>
+              </svg>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function renderBookSpines(s) {
+    return `
+      <div class="station-detail active" style="position:relative; width:1000px; height:600px;">
+        <svg width="1000" height="600" viewBox="0 0 1000 600" style="position:absolute; inset:0;">
+          <defs>
+            <pattern id="shelf-grain" x="0" y="0" width="100" height="50" patternUnits="userSpaceOnUse">
+              <rect width="100" height="50" fill="#7a5838"/>
+              <line x1="0" y1="0" x2="100" y2="0" stroke="#5a4028" stroke-width="1.5"/>
+              <line x1="0" y1="25" x2="100" y2="25" stroke="#5a4028" stroke-width="1"/>
+              <line x1="0" y1="48" x2="100" y2="48" stroke="#5a4028" stroke-width="1.5"/>
+            </pattern>
+          </defs>
+          <rect width="1000" height="600" fill="#5a4028"/>
+          <rect width="1000" height="600" fill="url(#shelf-grain)"/>
+          <rect x="0" y="540" width="1000" height="60" fill="#3a2818"/>
+          <rect x="0" y="538" width="1000" height="6" fill="#5a4028"/>
+        </svg>
+        ${s.courses.map((c, i) => {
+          const x = 100 + i * 140;
+          return `
+            <div class="course-item ${c.available ? '' : 'disabled'}"
+                 style="position:absolute; left:${x}px; top:160px;">
+              <svg width="140" height="400" viewBox="0 0 140 400" filter="drop-shadow(4px 4px 8px rgba(0,0,0,0.5))">
+                <rect x="20" y="0" width="100" height="380" fill="${c.color}" stroke="#3a2818" stroke-width="1.5"/>
+                <rect x="20" y="0" width="100" height="14" fill="${c.color}" stroke="#3a2818" stroke-width="1.5"/>
+                <rect x="20" y="30" width="100" height="8" fill="#fbf6e8" opacity="0.4"/>
+                <rect x="20" y="360" width="100" height="8" fill="#fbf6e8" opacity="0.4"/>
+                <g transform="translate(70, 200)">
+                  <text x="0" y="0" text-anchor="middle" font-family="Caveat Brush" font-size="22" fill="#fbf6e8" transform="rotate(-90)">${c.title.length > 20 ? c.title.slice(0, 18) + '...' : c.title}</text>
+                </g>
+                <text x="70" y="395" text-anchor="middle" font-family="Nunito" font-size="8" fill="#fbf6e8" letter-spacing="2" opacity="0.8">${c.meta}</text>
+              </svg>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  // ============ ARTCHI BEHAVIOR ============
+  const artchi = document.getElementById('room-artchi');
+
+  const stationRestPoints = {
+    color:     { x: 360, y: 580 },
+    shape:     { x: 1030, y: 700 },
+    character: { x: 1140, y: 340 },
+    material:  { x: 1200, y: 760 },
+    project:   { x: 970, y: 320 },
+  };
+
+  const wanderPoints = [
+    { x: 550, y: 480 },
+    { x: 850, y: 500 },
+    { x: 1080, y: 550 },
+    { x: 600, y: 620 },
+    { x: 920, y: 400 },
+    { x: 700, y: 380 },
+    { x: 1000, y: 620 },
+  ];
+
+  let artchiState = 'wandering';
+  let currentTarget = null;
+  let wanderTimeoutId = null;
+  let hoveredStation = null;
+
+  function moveArtchiTo(point, state) {
+    artchi.setAttribute('transform', `translate(${point.x}, ${point.y})`);
+    artchiState = state;
+    if (state === 'resting') {
+      artchi.classList.add('resting');
+    } else {
+      artchi.classList.remove('resting');
+    }
+  }
+
+  function pickRandomWander() {
+    return wanderPoints[Math.floor(Math.random() * wanderPoints.length)];
+  }
+
+  function pickRandomStation() {
+    const keys = Object.keys(stationRestPoints);
+    return keys[Math.floor(Math.random() * keys.length)];
+  }
+
+  function scheduleArtchiNextMove() {
+    clearTimeout(wanderTimeoutId);
+    if (hoveredStation) return;
+
+    const willRest = Math.random() < 0.3;
+    const dwellTime = artchiState === 'resting'
+      ? 2500 + Math.random() * 2000
+      : 3000 + Math.random() * 2500;
+
+    wanderTimeoutId = setTimeout(() => {
+      if (hoveredStation) return;
+      if (willRest) {
+        const stationId = pickRandomStation();
+        moveArtchiTo(stationRestPoints[stationId], 'resting');
+      } else {
+        moveArtchiTo(pickRandomWander(), 'wandering');
+      }
+      scheduleArtchiNextMove();
+    }, dwellTime);
+  }
+
+  function summonArtchiToStation(stationId) {
+    hoveredStation = stationId;
+    clearTimeout(wanderTimeoutId);
+    if (stationRestPoints[stationId]) {
+      moveArtchiTo(stationRestPoints[stationId], 'resting');
+    }
+  }
+
+  function releaseArtchi() {
+    hoveredStation = null;
+    setTimeout(() => {
+      if (!hoveredStation) {
+        scheduleArtchiNextMove();
+      }
+    }, 800);
+  }
+
+  document.querySelectorAll('.hotspot').forEach(h => {
+    const id = h.getAttribute('data-id');
+    h.addEventListener('mouseenter', () => summonArtchiToStation(id));
+    h.addEventListener('mouseleave', () => releaseArtchi());
+  });
+
+  moveArtchiTo(pickRandomWander(), 'wandering');
+  scheduleArtchiNextMove();
+
+  updateRoom();
+  window.addEventListener('resize', () => {
+    clampOffset();
+    updateRoom();
+  });
+</script>
+
+</body>
+</html>
