@@ -5699,9 +5699,9 @@ const HONEST_WELCOME = {
       // Opening - acknowledge what this is
       type: 'prose',
       paragraphs: [
-        "You've drawn a sphere. You've drawn a cube. Today: the cylinder.",
-        "This is the form where curve and flat meet. The side gradates like the sphere. The top stays one shade like the cube. One light, two surfaces, two different responses.",
-        "If you understand cylinders, you understand most of the everyday objects you see — bottles, cans, columns, candles, chair legs, fingers, tree trunks, tea cups."
+        "You've drawn the sphere. Today: the apple — your first real still-life from the sphere family.",
+        "The apple IS a sphere — but a sphere with personality. It has a dent at the top, a slight tilt, asymmetry from one side to the other, and the small stem that gives it character.",
+        "Everything you learned about the sphere — terminator, half-tones, cast shadow, light wrapping curve — applies here. The apple is your sphere knowledge meeting the real world."
       ]
     },
     {
@@ -5898,14 +5898,7 @@ const LESSON = {
       xp: 10
     },
     // ===== PART B · WARM-UP (OPTIONAL) =====
-    {
-      part: 'B',
-      partLabel: 'Part b · warm-up · optional',
-      type: 'warmup',
-      title: 'Warm up your hand',
-      intro: 'A 5-minute warm-up drill helps your lines flow. Totally optional — skip if you\'re ready.',
-      xp: 5
-    },
+    // Warm-up step removed in Round 34: now lives in standalone Preparation lesson.
     // (LFC moment "beforeDemo" removed — Lesson 1 is foundational skill 
     //  training. Forcing a master-work comparison here would be 
     //  strained. The opening LFC and closing LFC carry the meaning.)
@@ -5918,9 +5911,9 @@ const LESSON = {
       type: 'demo',
       videoSeg: 'apple_construction',
       videoId: '36a67d11fec318fed06ee4c6dea15b9f',  // Apple 1 — Cloudflare Stream
-      title: 'Build the apple',
-      intro: 'Begin with the apple as a sphere with personality — outer construction, top dip, bottom curve, and the stem indication. The apple is asymmetric, so look for its true silhouette, not a perfect circle.',
-      quote: 'An apple is a sphere that lives a life. Find its slight tilt, its dent at the top, its weight at the bottom — that\'s where character begins.',
+      title: 'Build the apple — as a sphere first',
+      intro: 'Start by drawing the apple as a sphere. Same construction you learned in Lesson 2 — light circle, find the form first. Then add the apple\'s personality: the dent at the top, the slight tilt, the bottom curve, and the stem position. Underneath every apple is a sphere — that\'s your structural foundation.',
+      quote: 'An apple is a sphere that lives a life. Build the sphere right first, then add what makes it an apple — the tilt, the dent, the personality.',
       tip: 'Keep all construction lines light. Look hard at your reference: where is the highest point? Where does it sit on the table?',
       xp: 10
     },
@@ -8860,8 +8853,8 @@ function renderLessonComplete(profileOrLead) {
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <a href="../../" class="btn btn-primary" style="text-decoration:none;">
-          <span class="glyph">◈</span> ← Back to Smart Class home
+        <a href="../lesson-7-cone/" class="btn btn-primary" style="text-decoration:none;">
+          <span class="glyph">→</span> Continue to Lesson 7: Cone →
         </a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
@@ -9028,7 +9021,7 @@ function skipBadgeGate(event) {
       <div class="badge-big" style="opacity: 0.4;">${LESSON.badge.emoji}</div>
       <div class="badge-title" style="opacity: 0.7;">No badge claimed yet</div>
       <div class="badge-desc">
-        Your thinking journey is still saved. You can come back anytime to claim your badge.
+        Your thinking journey is still saved. You can come back anytime to mark this lesson complete.
       </div>
       <div class="btn-stack" style="max-width: 280px; margin: 20px auto 0;">
         <!-- BUG FIX #3: go back to the real badge gate, not just re-render the step -->
@@ -9433,13 +9426,13 @@ function renderOptionalFinish(step) {
                     padding: 10px 14px; color: #fff;
                     font-family:'Montserrat',sans-serif; font-size:10px; font-weight:900;
                     letter-spacing:1.5px; text-transform:uppercase;">
-          🎬 Challenge demo — The full atmospheric apple
+          🎬 Challenge step — The full atmospheric apple
         </div>
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
             src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/0dcdad00872f8658282c521067f144eb/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F0dcdad00872f8658282c521067f144eb%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
-            title="Optional demo — Background tones"
+            title="Optional step — Background tones"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
             allowfullscreen="true">
@@ -9511,18 +9504,18 @@ function openUploadModal() {
   
   // Build modal based on tier — single source of truth, no fallback overrides
   if (tier === 'explorer') {
-    // EXPLORER (Lesson 1, free): AI feedback only.
+    // EXPLORER (Lesson 1, free): Artchi feedback only.
     // Real teacher review is shown only in Lesson 2+ (paid tier feature).
     // Upload is OPTIONAL — student can skip if not ready.
     content.innerHTML = `
       <div class="modal-title">Show your work</div>
-      <div class="modal-sub">Optional — share your sphere if you'd like AI feedback.</div>
+      <div class="modal-sub">Optional — share your sphere if you'd like Artchi feedback.</div>
       
       <!-- Preview disclosure (transparent: this is a mock for now) -->
       <div class="upload-preview-banner">
         <div class="upload-preview-banner-icon">🚧</div>
         <div class="upload-preview-banner-text">
-          <b>Preview mode.</b> AI feedback is launching soon — for now, your upload is just for show.
+          <b>Preview mode.</b> Artchi feedback is launching soon — for now, your upload is just for show.
         </div>
       </div>
       
@@ -9549,7 +9542,7 @@ function openUploadModal() {
         <div class="choice selected" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>AI feedback <span class="choice-soft-badge" style="background: rgba(167,139,250,0.15); color: #7c5fc7;">Coming soon</span></h5>
+            <h5>Artchi feedback <span class="choice-soft-badge" style="background: rgba(167,139,250,0.15); color: #7c5fc7;">Coming soon</span></h5>
             <p>Once live, Artchi will review your shading, form, and value balance — ready in seconds</p>
           </div>
         </div>
@@ -9567,12 +9560,12 @@ function openUploadModal() {
     // MASTER: AI + async teacher feedback (within 48h)
     content.innerHTML = `
       <div class="modal-title">How would you like feedback?</div>
-      <div class="modal-sub">Your Master plan includes both AI feedback and a real teacher review within 48 hours.</div>
+      <div class="modal-sub">Your Master plan includes both Artchi feedback and a real teacher review within 48 hours.</div>
       <div class="choice-list">
         <div class="choice" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>Quick AI feedback</h5>
+            <h5>Quick Artchi feedback</h5>
             <p>Instant review from Artchi's AI teacher</p>
           </div>
         </div>
@@ -9607,7 +9600,7 @@ function openUploadModal() {
         <div class="choice" onclick="selectChoice(this, 'ai')">
           <div class="choice-icon">🤖</div>
           <div class="choice-body">
-            <h5>Quick AI feedback</h5>
+            <h5>Quick Artchi feedback</h5>
             <p>Instant review from Artchi's AI teacher</p>
           </div>
         </div>
@@ -9731,7 +9724,7 @@ function submitUpload() {
   // Customized confirmation based on what was chosen
   let msg = "✓ Sent! ";
   if (choice === 'ai') {
-    msg += "AI feedback ready in a moment 🤖";
+    msg += "Artchi feedback ready in a moment 🤖";
   } else if (choice === 'teacher_annotate' || choice === 'teacher_text') {
     msg += "Teacher will reply in ~48h 🎨";
   } else if (choice === 'live_session') {
@@ -9751,10 +9744,10 @@ function submitUpload() {
         interests: ['real_teacher_review']
       });
       sendLeadToFormspree(lead);  // ← real email send
-      msg = `👩‍🎨 Noted, ${profile.name}! We'll let you know when teacher reviews open. Your AI feedback is also being prepared.`;
+      msg = `👩‍🎨 Noted, ${profile.name}! We'll let you know when teacher reviews open. Your Artchi feedback is also being prepared.`;
     } else {
       // No email yet — record the intent locally; will be attached when they claim badge
-      msg = "👩‍🎨 Great — your interest is noted! We'll send AI feedback for now. When you claim your badge, we'll know to notify you about teacher reviews.";
+      msg = "👩‍🎨 Great — your interest is noted! We'll send Artchi feedback for now. When you mark this lesson complete, we'll know to notify you about teacher reviews.";
       Analytics.track('teacher_interest_expressed_pre_badge', { 
         age_group: AccessControl.ageGroup 
       });
