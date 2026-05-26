@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illustration Through Surrealism · LFC054 · FEI Smart Class</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════════════════════
+   LFC054 · Illustration Through Surrealism
+   First Creation-track lesson on FEI Smart Class
+   
+   ARCHITECTURE NOTE:
+   - This file follows Foundation A's single-file architecture:
+     everything (CSS, HTML, JS, lesson data, renderers) lives here.
+   - Different pedagogy from Foundation A:
+     * artwork-driven, not step-by-step
+     * lessons compare and trigger, never deliver answers
+     * AI mode rotates by phase (look/think/make/reflect)
+     * Thinking Quest cards save cross-lesson to localStorage
+   - Shell pieces (sign-in, profile, journal, paywall-dormant)
+     IDENTICAL to Foundation A so the platform stays coherent.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Smart Class platform colors (same as Foundation A) */
+  --ink: #1a1d2b;
+  --ink-soft: rgba(26, 29, 43, 0.65);
+  --ink-faint: rgba(26, 29, 43, 0.45);
+  --ink-veryfaint: rgba(26, 29, 43, 0.15);
+  --paper: #fafaf8;
+  --paper-soft: #f5f5f7;
+  --gold: #c8a96e;
+  --green: #1d9e75;
+  --purple: #a78bfa;
+  --cyan: #67e8f9;
+  --pink: #f9a8d4;
+  --bg-warm: #fff9f5;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  
+  /* Creation-track accent colors */
+  --surreal-deep: #2d1b69;       /* deep dream purple */
+  --surreal-mid: #6b4ba6;        
+  --surreal-glow: #fef3c7;       /* moonlight cream */
+  --look: #67e8f9;               /* Artchi voice: look (cyan) */
+  --think: #a78bfa;              /* Artchi voice: think (purple) */
+  --make: #f9a8d4;               /* Artchi voice: make (pink) */
+  --reflect: #c8a96e;            /* Artchi voice: reflect (gold) */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ TOPBAR (identical to Foundation A) ═══ */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-veryfaint);
+  position: sticky; top: 0; z-index: 100;
+}
+.brand-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 14px; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.3px;
+}
+.brand-mark { color: var(--purple); margin-right: 4px; }
+.breadcrumb-trail {
+  font-size: 11px; color: var(--ink-faint);
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-left: 6px;
+}
+.topbar-right {
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+}
+.topbar-right a { color: var(--ink-soft); text-decoration: none; }
+.user-pill { font-size: 12px; color: var(--ink-soft); }
+.sign-out-btn {
+  background: none; border: 1px solid var(--ink-veryfaint);
+  border-radius: 16px; padding: 6px 12px; font-size: 11px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
+}
+.sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
+
+/* ═══ SIGN-IN SCREEN (identical to Foundation A) ═══ */
+.signin-screen {
+  min-height: calc(100vh - 60px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
+}
+.signin-card {
+  background: #fff; border-radius: var(--radius-lg);
+  padding: 36px 28px; max-width: 380px; width: 100%;
+  box-shadow: var(--shadow-lg); text-align: center;
+}
+.signin-kicker {
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 12px;
+}
+.signin-title {
+  font-family: 'Montserrat', sans-serif; font-size: 26px;
+  font-weight: 900; margin-bottom: 8px;
+}
+.signin-subtitle {
+  font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+}
+.signin-label {
+  display: block; text-align: left;
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 6px;
+}
+.signin-input {
+  width: 100%; padding: 12px 14px; font-size: 15px;
+  border: 1.5px solid var(--ink-veryfaint); border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  letter-spacing: 0.5px; outline: none;
+  transition: border 0.2s;
+}
+.signin-input:focus { border-color: var(--purple); }
+.signin-input.error { border-color: #e74c3c; animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.signin-btn {
+  width: 100%; margin-top: 14px; padding: 14px;
+  background: var(--ink); color: #fff; border: none;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 13px; letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.signin-btn:hover:not(:disabled) { background: #2a2f42; }
+.signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.signin-error {
+  display: none; margin-top: 12px; font-size: 12px; color: #e74c3c;
+}
+.signin-error.visible { display: block; }
+.signin-help {
+  margin-top: 22px; font-size: 12px; color: var(--ink-faint);
+  line-height: 1.7;
+}
+.signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
+
+/* ═══ LESSON CONTAINER ═══ */
+.lesson {
+  max-width: 720px; margin: 0 auto; padding: 24px 18px 80px;
+}
+
+/* ═══ LESSON HEADER ═══ */
+.lesson-header {
+  text-align: center; margin-bottom: 32px;
+}
+.lesson-kicker {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 8px;
+}
+.lesson-kicker.part-a { color: var(--look); }
+.lesson-kicker.part-b { color: var(--think); }
+.lesson-kicker.part-c { color: var(--make); }
+.lesson-kicker.part-d { color: var(--reflect); }
+.lesson-title {
+  font-family: 'Montserrat', sans-serif; font-size: 28px;
+  font-weight: 900; margin-bottom: 6px; line-height: 1.15;
+}
+.lesson-subtitle {
+  font-size: 14px; color: var(--ink-soft);
+  max-width: 460px; margin: 0 auto;
+}
+
+/* ═══ PROGRESS DOTS (15 screens, color-coded by part) ═══ */
+.progress-strip {
+  display: flex; justify-content: center; gap: 6px;
+  margin: 18px 0 26px;
+  flex-wrap: wrap; max-width: 480px;
+  margin-left: auto; margin-right: auto;
+}
+.progress-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink-veryfaint);
+  cursor: pointer; transition: all 0.2s;
+}
+.progress-dot.done { background: var(--green); }
+.progress-dot.current {
+  width: 24px; border-radius: 4px;
+  background: var(--purple);
+  box-shadow: 0 0 8px rgba(167,139,250,0.5);
+}
+.progress-dot:hover { transform: scale(1.3); }
+.progress-divider {
+  width: 1px; height: 12px; background: var(--ink-veryfaint);
+  margin: 0 4px; align-self: center;
+}
+
+/* ═══ ARTWORK CARDS ═══ */
+.artwork-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 18px;
+  border: 1px solid var(--ink-veryfaint);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.artwork-card.selectable {
+  cursor: pointer;
+}
+.artwork-card.selectable:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.artwork-card.selected {
+  border: 2px solid var(--purple);
+  box-shadow: 0 6px 24px rgba(167,139,250,0.25);
+}
+.artwork-image-wrap {
+  position: relative;
+  background: var(--ink);
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+.artwork-image {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.artwork-image-wrap.contain .artwork-image {
+  object-fit: contain;
+  background: #1a1a2a;
+}
+
+/* If image fails, show a labeled placeholder so the card still looks intentional */
+.artwork-image-wrap.img-failed,
+.move-image-wrap.img-failed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2d1b69, #6b4ba6);
+  color: rgba(255,255,255,0.55);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  text-align: center;
+  padding: 16px;
+}
+.artwork-image-wrap.img-failed::before,
+.move-image-wrap.img-failed::before {
+  content: '✧ artwork loading…';
+  font-style: italic;
+}
+.artwork-meta {
+  padding: 14px 16px;
+}
+.artwork-title {
+  font-family: 'Montserrat', sans-serif; font-size: 15px;
+  font-weight: 800; margin-bottom: 4px;
+}
+.artwork-artist {
+  font-size: 13px; color: var(--ink-soft);
+  font-style: italic;
+}
+.artwork-year {
+  font-size: 11px; color: var(--ink-faint);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+.artwork-source {
+  font-size: 10px; color: var(--ink-faint);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--ink-veryfaint);
+}
+
+/* Side-by-side comparison */
+.artworks-row {
+  display: grid; gap: 14px;
+  margin-bottom: 20px;
+}
+.artworks-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.artworks-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 600px) {
+  .artworks-row.cols-2, .artworks-row.cols-3 { grid-template-columns: 1fr; }
+}
+.artworks-row .artwork-card {
+  margin-bottom: 0;
+}
+.artworks-row .artwork-image-wrap { aspect-ratio: 1/1; }
+.artworks-row .artwork-meta { padding: 10px 12px; }
+.artworks-row .artwork-title { font-size: 13px; }
+.artworks-row .artwork-artist { font-size: 11px; }
+
+/* ═══ PROMPT BLOCK (artwork-driven question) ═══ */
+.prompt-block {
+  background: linear-gradient(135deg, #f5f3ff 0%, #fef3f7 100%);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  margin-bottom: 22px;
+  border-left: 4px solid var(--purple);
+}
+.prompt-kicker {
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 6px;
+}
+.prompt-text {
+  font-size: 16px; line-height: 1.5;
+  color: var(--ink); font-weight: 600;
+  margin-bottom: 12px;
+}
+.prompt-hint {
+  font-size: 13px; color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* ═══ SURREAL MOVE GRID (5 moves shown together) ═══ */
+.moves-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+@media (max-width: 480px) {
+  .moves-grid { grid-template-columns: 1fr; }
+}
+.move-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1.5px solid var(--ink-veryfaint);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.move-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.move-card.selected {
+  border-color: var(--purple);
+  border-width: 2px;
+  box-shadow: 0 6px 20px rgba(167,139,250,0.25);
+}
+.move-image-wrap {
+  aspect-ratio: 4/3;
+  background: #1a1a2a;
+  overflow: hidden;
+  position: relative;
+}
+.move-image {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.move-info {
+  padding: 12px 14px;
+}
+.move-label {
+  font-family: 'Montserrat', sans-serif; font-size: 13px;
+  font-weight: 900; margin-bottom: 3px;
+  color: var(--ink);
+}
+.move-prompt {
+  font-size: 12px; color: var(--ink-soft);
+  line-height: 1.4;
+}
+.move-master {
+  font-size: 10px; color: var(--ink-faint);
+  font-style: italic; margin-top: 6px;
+}
+
+/* ═══ UPLOAD AREA (for Part C draw segments) ═══ */
+.upload-area {
+  background: #fff;
+  border: 2px dashed var(--ink-veryfaint);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 18px;
+}
+.upload-area:hover {
+  border-color: var(--purple);
+  background: var(--paper-soft);
+}
+.upload-area.has-upload {
+  padding: 0;
+  border: 1.5px solid var(--green);
+  background: #fff;
+}
+.upload-icon {
+  font-size: 32px; margin-bottom: 8px;
+  opacity: 0.5;
+}
+.upload-prompt {
+  font-family: 'Montserrat', sans-serif; font-size: 13px;
+  font-weight: 700; color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+.upload-hint {
+  font-size: 12px; color: var(--ink-faint);
+}
+.upload-preview {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+  background: #f5f5f7;
+  border-radius: var(--radius-md);
+}
+.upload-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px;
+  background: #f5f5f7;
+  border-top: 1px solid var(--ink-veryfaint);
+  font-size: 12px;
+}
+.upload-bar-text { color: var(--green); font-weight: 700; }
+.upload-bar-replace {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; color: var(--purple); letter-spacing: 0.5px;
+}
+
+/* ═══ VIDEO PLACEHOLDER ═══ */
+.video-frame {
+  position: relative;
+  background: #1a1a2a;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  margin-bottom: 18px;
+}
+.video-frame iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+.video-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Montserrat', sans-serif;
+  text-align: center; padding: 20px;
+  background: linear-gradient(135deg, var(--surreal-deep), var(--surreal-mid));
+}
+.video-placeholder .icon { font-size: 42px; margin-bottom: 12px; opacity: 0.8; }
+.video-placeholder .title {
+  font-size: 14px; font-weight: 800;
+  letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.video-placeholder .sub {
+  font-size: 12px; opacity: 0.7;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* ═══ JUDGMENT CARD (Thinking Quest) ═══ */
+.judgment-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 100%);
+  border-radius: var(--radius-md);
+  padding: 22px 20px;
+  margin-bottom: 22px;
+  border: 1.5px solid rgba(200,169,110,0.4);
+  position: relative;
+}
+.judgment-kicker {
+  display: inline-block;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 12px;
+  margin-bottom: 10px;
+}
+.judgment-question {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 14px; line-height: 1.4;
+}
+.judgment-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  border: 1.5px solid var(--ink-veryfaint);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.7);
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border 0.2s;
+}
+.judgment-input:focus { border-color: var(--gold); }
+.judgment-actions {
+  margin-top: 12px; display: flex; gap: 8px; align-items: center;
+}
+.judgment-actions .meta {
+  font-size: 11px; color: var(--ink-faint);
+  margin-left: auto; font-style: italic;
+}
+.judgment-card.saved {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
+  border-color: var(--green);
+}
+.judgment-card.saved .judgment-kicker { background: var(--green); }
+
+/* ═══ REFLECTION BLOCK (Part D) ═══ */
+.reflection-block {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 24px 22px;
+  margin-bottom: 18px;
+  border: 1px solid var(--ink-veryfaint);
+}
+.reflection-block textarea {
+  width: 100%; min-height: 100px;
+  padding: 12px 14px; font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  border: 1.5px solid var(--ink-veryfaint);
+  border-radius: var(--radius-sm);
+  resize: vertical; outline: none;
+  transition: border 0.2s;
+}
+.reflection-block textarea:focus { border-color: var(--gold); }
+.reflection-label {
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+  font-weight: 800; letter-spacing: 0.5px;
+  color: var(--ink-soft); margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* ═══ ARTCHI (the AI companion) ═══ */
+.artchi-block {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%);
+  border-radius: var(--radius-md);
+  padding: 16px 16px 16px 64px;
+  margin-bottom: 22px;
+  position: relative;
+  min-height: 80px;
+  border-left: 4px solid var(--purple);
+}
+.artchi-block.voice-look { border-left-color: var(--look); }
+.artchi-block.voice-think { border-left-color: var(--think); }
+.artchi-block.voice-make { border-left-color: var(--make); }
+.artchi-block.voice-reflect { border-left-color: var(--reflect); }
+.artchi-avatar {
+  position: absolute;
+  left: 12px; top: 14px;
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(167,139,250,0.30);
+}
+.artchi-voice {
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 4px;
+}
+.artchi-block.voice-look .artchi-voice { color: #0891b2; }
+.artchi-block.voice-think .artchi-voice { color: var(--think); }
+.artchi-block.voice-make .artchi-voice { color: #db2777; }
+.artchi-block.voice-reflect .artchi-voice { color: #92400e; }
+.artchi-text {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* ═══ CHAT WITH ARTCHI (collapsed by default) ═══ */
+.chat-trigger {
+  background: rgba(167,139,250,0.1);
+  border: 1px solid var(--purple);
+  color: var(--purple);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+  font-weight: 700; cursor: pointer; letter-spacing: 0.3px;
+  margin-bottom: 22px;
+}
+.chat-trigger:hover { background: rgba(167,139,250,0.2); }
+.chat-modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; padding: 30px 16px;
+  align-items: center; justify-content: center;
+}
+.chat-modal.active { display: flex; }
+.chat-modal-panel {
+  background: #fff; border-radius: var(--radius-lg);
+  width: 100%; max-width: 480px;
+  max-height: 90vh; display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.chat-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ink-veryfaint);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.chat-modal-title {
+  font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
+}
+.chat-modal-close {
+  background: none; border: none; cursor: pointer; font-size: 20px;
+  color: var(--ink-soft);
+}
+.chat-mode-pill {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif; font-size: 9px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  background: var(--paper-soft); color: var(--purple);
+  padding: 3px 8px; border-radius: 10px; margin-left: 8px;
+}
+.chat-thread {
+  flex: 1; overflow-y: auto;
+  padding: 18px 20px;
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.chat-msg.artchi {
+  background: #fff;
+  border: 1px solid var(--ink-veryfaint);
+  align-self: flex-start;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+}
+.chat-msg.user {
+  background: var(--purple);
+  color: #fff;
+  align-self: flex-end;
+}
+.chat-starters {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 10px;
+}
+.chat-starter {
+  background: var(--paper-soft);
+  border: 1px solid var(--ink-veryfaint);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.chat-starter:hover { background: #fff; border-color: var(--purple); }
+.chat-input-bar {
+  padding: 12px 16px;
+  border-top: 1px solid var(--ink-veryfaint);
+  display: flex; gap: 8px;
+}
+.chat-input {
+  flex: 1; padding: 10px 14px;
+  border: 1.5px solid var(--ink-veryfaint);
+  border-radius: 18px;
+  font-family: 'Open Sans', sans-serif; font-size: 14px;
+  outline: none;
+}
+.chat-input:focus { border-color: var(--purple); }
+.chat-send {
+  background: var(--purple); color: #fff;
+  border: none; border-radius: 18px;
+  padding: 10px 16px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  font-size: 12px; cursor: pointer;
+}
+
+/* ═══ NAVIGATION ═══ */
+.lesson-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 20px;
+  border-top: 1px solid var(--ink-veryfaint);
+  gap: 10px;
+}
+.nav-btn {
+  background: #fff;
+  border: 1.5px solid var(--ink-veryfaint);
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+  font-weight: 800; letter-spacing: 0.5px;
+  cursor: pointer; color: var(--ink-soft);
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--purple); color: var(--purple); }
+.nav-btn.primary {
+  background: var(--ink); color: #fff; border-color: var(--ink);
+}
+.nav-btn.primary:hover { background: #2a2f42; color: #fff; }
+.nav-btn:disabled {
+  opacity: 0.3; cursor: not-allowed;
+}
+.nav-btn:disabled:hover { border-color: var(--ink-veryfaint); color: var(--ink-soft); }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-soft); padding: 6px 0; margin-bottom: 16px;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--purple); }
+
+/* ═══ BADGE CEREMONY (Storyteller) ═══ */
+.badge-ceremony {
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 100%);
+  border-radius: var(--radius-lg);
+  padding: 40px 30px; text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+.badge-icon-big {
+  font-size: 72px; margin-bottom: 16px;
+  animation: badgeSpin 2s ease infinite alternate;
+}
+@keyframes badgeSpin {
+  from { transform: rotate(-5deg) scale(1); }
+  to { transform: rotate(5deg) scale(1.08); }
+}
+.badge-title-big {
+  font-family: 'Montserrat', sans-serif; font-size: 28px;
+  font-weight: 900; margin-bottom: 8px;
+}
+.badge-sub-big {
+  font-size: 14px; color: var(--ink-soft);
+  margin-bottom: 24px;
+}
+.badge-actions {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+}
+
+/* ═══ MOVE SELECTOR (chips inside Part B) ═══ */
+.move-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 14px 0;
+}
+.move-chip {
+  background: #fff;
+  border: 1.5px solid var(--ink-veryfaint);
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; letter-spacing: 0.3px;
+  cursor: pointer;
+}
+.move-chip:hover { border-color: var(--purple); }
+.move-chip.active {
+  background: var(--purple); color: #fff;
+  border-color: var(--purple);
+}
+
+/* ═══ COMPLETE CHECKMARK FLOAT ═══ */
+.complete-toast {
+  position: fixed;
+  bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--green); color: #fff;
+  padding: 12px 20px; border-radius: 24px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 13px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 24px rgba(29,158,117,0.3);
+  z-index: 150;
+  opacity: 0; transition: all 0.3s;
+  pointer-events: none;
+}
+.complete-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TOPBAR (Smart Class shell)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <div>
+    <a href="../../" class="brand-link"><span class="brand-mark">●</span> FEI · Smart Class</a>
+    <span class="breadcrumb-trail">· Creation · Surrealism</span>
+  </div>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SIGN-IN SCREEN
+     ═══════════════════════════════════════════════════════════ -->
+<div class="signin-screen" id="signin-screen" style="display:none;">
+  <div class="signin-card">
+    <div class="signin-kicker">🌙 LFC054 · Illustration</div>
+    <h1 class="signin-title">Illustration Through Surrealism</h1>
+    <p class="signin-subtitle">Enter your student code to begin the lesson.</p>
+    
+    <label class="signin-label" for="signin-code">Student Code</label>
+    <input type="text" class="signin-input" id="signin-code" 
+           placeholder="e.g. LILY-01" autocomplete="off"
+           autocapitalize="characters" spellcheck="false" />
+    
+    <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
+    
+    <p class="signin-error" id="signin-error">
+      That code doesn't match. Check your welcome email or contact us.
+    </p>
+    
+    <p class="signin-help">
+      Don't have a code yet?<br>
+      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
+      &nbsp;·&nbsp;
+      <a href="#" id="try-code-link">Try with TRYNEW</a>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LESSON SCREEN (single container, content swaps in/out)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="lesson" id="lesson-screen" style="display:none;">
+  <a href="../../creation/" class="back-link">← Back to Studio</a>
+  <div id="lesson-content"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAT MODAL (Artchi conversation)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="chat-modal" id="chat-modal">
+  <div class="chat-modal-panel">
+    <div class="chat-modal-header">
+      <div class="chat-modal-title">
+        Artchi <span class="chat-mode-pill" id="chat-mode-pill">LFC Guide</span>
+      </div>
+      <button class="chat-modal-close" onclick="closeChatModal()">×</button>
+    </div>
+    <div class="chat-thread" id="chat-thread"></div>
+    <div class="chat-input-bar">
+      <input type="text" class="chat-input" id="chat-input" 
+             placeholder="ask Artchi about this artwork..."
+             onkeydown="if(event.key==='Enter') sendChat()" />
+      <button class="chat-send" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast for completion notifications -->
+<div class="complete-toast" id="complete-toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// LFC054 · Illustration Through Surrealism
+// SECTION 1 — CONFIG
+// ════════════════════════════════════════════════════════════════
+const ROSTER_PATH = '../../core/student-access-codes.js';
+const PROFILE_KEY = 'fei_user_profile';
+const LESSON_PROGRESS_KEY = 'fei_lfc054_progress';
+const JUDGMENT_CARDS_KEY = 'lfc_cards_v1';  // Cross-lesson card portfolio
+const LESSON_ID = 'lfc054';
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 2 — LESSON DATA
+//
+// 15 screens across 4 parts.
+// Each screen specifies type, content, AI mode, Artchi voice,
+// thinkingQuest (judgment card if any), and completion rule.
+// ════════════════════════════════════════════════════════════════
+
+// ─── Surreal moves with their pre-1945 PD master anchors ─────────
+const SURREAL_MOVES = {
+  scale_shift: {
+    label: 'Scale Shift',
+    prompt: 'Make something tiny huge — or something huge tiny.',
+    master: 'Giorgio de Chirico',
+    masterWork: 'The Song of Love (1914)',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Giorgio_de_Chirico%2C_1914%2C_The_Song_of_Love_%28Le_Chant_d%27amour%29.jpg/640px-Giorgio_de_Chirico%2C_1914%2C_The_Song_of_Love_%28Le_Chant_d%27amour%29.jpg',
+    sourceLine: 'Source: MoMA · Public Domain (pre-1925)'
+  },
+  bending: {
+    label: 'Bending',
+    prompt: 'Take something rigid and let it bend or melt like dream-stuff.',
+    master: 'Francisco Goya',
+    masterWork: 'The Sleep of Reason Produces Monsters (1799)',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Francisco_Jos%C3%A9_de_Goya_y_Lucientes_-_The_sleep_of_reason_produces_monsters_%28No._43%29%2C_from_Los_Caprichos_-_Google_Art_Project.jpg/640px-Francisco_Jos%C3%A9_de_Goya_y_Lucientes_-_The_sleep_of_reason_produces_monsters_%28No._43%29%2C_from_Los_Caprichos_-_Google_Art_Project.jpg',
+    sourceLine: 'Source: Wikimedia Commons · Public Domain'
+  },
+  floating: {
+    label: 'Floating',
+    prompt: 'Lift something that should be heavy. Let gravity stop working.',
+    master: 'Henry Fuseli',
+    masterWork: 'The Nightmare (1781)',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/John_Henry_Fuseli_-_The_Nightmare.JPG/640px-John_Henry_Fuseli_-_The_Nightmare.JPG',
+    sourceLine: 'Source: Detroit Institute of Arts · Public Domain'
+  },
+  wrong_place: {
+    label: 'Wrong Place',
+    prompt: 'Put an ordinary object somewhere it does not belong.',
+    master: 'Giorgio de Chirico',
+    masterWork: 'Mystery and Melancholy of a Street (1914)',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Giorgio_de_Chirico%2C_Mystery_and_Melancholy_of_a_Street%2C_1914.jpg/640px-Giorgio_de_Chirico%2C_Mystery_and_Melancholy_of_a_Street%2C_1914.jpg',
+    sourceLine: 'Source: Wikimedia Commons · Public Domain (pre-1925)'
+  },
+  dream_combination: {
+    label: 'Dream Combination',
+    prompt: 'Merge two things that never go together — a body, a fish, a clock.',
+    master: 'Hieronymus Bosch',
+    masterWork: 'Garden of Earthly Delights, center panel (c.1500)',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/The_Garden_of_earthly_delights.jpg/640px-The_Garden_of_earthly_delights.jpg',
+    sourceLine: 'Source: Museo del Prado · Public Domain'
+  }
+};
+
+// ─── Artwork pool (Part A) — your real CDN URLs ─────────────────
+const ARTWORKS = {
+  blake: {
+    id: 'master-blake-great-red-dragon',
+    title: 'The Great Red Dragon and the Woman Clothed with the Sun',
+    artist: 'William Blake',
+    year: 'c. 1805',
+    img: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f509e89736e8690ee1ec5b_privateimages9f72309f7230ef-aaf7-4cf9-8b4b-b5e7d914cdb0__0.jpeg',
+    sourceLine: 'Source: National Gallery of Art · Public Domain'
+  },
+  teacherBridgeA: {
+    id: 'teacher-bridge-work-a',
+    title: 'Teacher Bridge Work I',
+    artist: 'FEI TeamArt Teaching Studio',
+    year: '2026',
+    img: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e922ac42a1214b70380e93_Screenshot%202026-04-22%20at%2012.33.59%E2%80%AFPM.png',
+    sourceLine: 'Source: Teaching illustration · FEI TeamArt'
+  },
+  teacherBridgeB: {
+    id: 'teacher-bridge-work-b',
+    title: 'Teacher Bridge Work II',
+    artist: 'FEI TeamArt Teaching Studio',
+    year: '2026',
+    img: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f50b0249d03cfe4c5b269b_IMG_7128.jpg',
+    sourceLine: 'Source: Teaching illustration · FEI TeamArt'
+  },
+  jojoStudent: {
+    id: 'student-jojo-surreal-work',
+    title: 'Student Surreal Illustration',
+    artist: 'Jojo Sun',
+    year: '2026',
+    img: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69f50b59acb908a61c40ad4f_Screenshot%202026-05-01%20at%201.21.31%E2%80%AFPM.png',
+    sourceLine: 'Source: Student work · Used with permission'
+  }
+};
+
+// ─── AI modes (the chatbot persona rotates by phase) ─────────────
+const AI_MODES = {
+  lfc_guide: {
+    label: 'LFC Guide',
+    intent: 'Help understand surrealism through artwork-led guidance.',
+    starters: [
+      'Why does this image feel surreal?',
+      'What stayed normal here?',
+      'What changed the logic of reality?'
+    ]
+  },
+  surreal_logic_helper: {
+    label: 'Surreal Logic Helper',
+    intent: 'Identify the visual mechanism that creates the surreal effect.',
+    starters: [
+      'What kind of surreal move is this?',
+      'Is this scale, placement, or dream-combination?',
+      'Which change creates the strongest feeling?'
+    ]
+  },
+  idea_builder: {
+    label: 'Idea Builder',
+    intent: 'Move from a real scene into one clear surreal concept.',
+    starters: [
+      'Is this idea clear enough?',
+      'Which surreal move fits this scene?',
+      'How do I keep the real world believable?'
+    ]
+  },
+  making_companion: {
+    label: 'Making Companion',
+    intent: 'Support drawing without overriding the lesson direction.',
+    starters: [
+      'Does my sketch still feel clear?',
+      'Is the strange part strong enough?',
+      'Does this still belong to the same space?'
+    ]
+  },
+  final_reflection_helper: {
+    label: 'Final Reflection Helper',
+    intent: 'Summarize what changed and what effect it created.',
+    starters: [
+      'What did I change in the image?',
+      'What feeling did I aim for?',
+      'What got stronger from sketch to final?'
+    ]
+  }
+};
+
+// ─── ARTCHI's voices (one per part) ──────────────────────────────
+const ARTCHI_VOICES = {
+  look: { color: 'look', label: 'Artchi · looking with you' },
+  think: { color: 'think', label: 'Artchi · thinking with you' },
+  make: { color: 'make', label: 'Artchi · making with you' },
+  reflect: { color: 'reflect', label: 'Artchi · reflecting with you' }
+};
+
+// ─── The 15 screens, the actual lesson ───────────────────────────
+const SCREENS = [
+  // ═════════ PART A · LOOK ═════════
+  {
+    id: 'welcome',
+    part: 'A', partLabel: 'Begin',
+    type: 'welcome',
+    title: 'Illustration Through Surrealism',
+    subtitle: 'Use surrealism to change one rule inside a real scene.',
+    artchi: { voice: 'look', text: "before we make anything, we look. surrealism happens in real images — it just bends one rule. let's start by looking." },
+    nav: { showBack: false }
+  },
+  {
+    id: 'what-is-surrealism',
+    part: 'A', partLabel: 'Part A · Look',
+    type: 'artwork-look',
+    title: 'What Is Surrealism?',
+    subtitle: 'Look closely. One part of this image is impossible.',
+    artworks: ['blake', 'teacherBridgeA'],
+    aiMode: 'lfc_guide',
+    artchi: { voice: 'look', text: "look at these. one is a master from 1805, the other is from one of our teaching studios. what feels real? what feels impossible? both can be true at the same time." },
+    judgment: {
+      id: 'whats-strange-1',
+      level: 1,
+      question: 'In one of these two images, where do you see the strange?',
+      placeholder: 'point to it in your own words — the spot that breaks the rule of reality'
+    }
+  },
+  {
+    id: 'meet-the-artists',
+    part: 'A', partLabel: 'Part A · Look',
+    type: 'artwork-look',
+    title: 'Meet the Artists Behind Surrealism',
+    subtitle: 'These artists each found a different way to break reality.',
+    moves: ['scale_shift', 'bending', 'floating', 'wrong_place', 'dream_combination'],
+    aiMode: 'lfc_guide',
+    artchi: { voice: 'look', text: "five artists. five different ways to make the impossible visible. notice — none of them painted in 'surrealism style'. they each found their own door into it." }
+  },
+  {
+    id: 'how-surreal-enters',
+    part: 'A', partLabel: 'Part A · Look',
+    type: 'artwork-look',
+    title: 'How Surreal Enters an Image',
+    subtitle: 'Compare three approaches. Same idea, different doors.',
+    artworks: ['teacherBridgeA', 'teacherBridgeB', 'jojoStudent'],
+    cols: 3,
+    aiMode: 'lfc_guide',
+    artchi: { voice: 'look', text: "two teacher works and one student work. all three made surreal images using completely different moves. which door did each one choose?" },
+    judgment: {
+      id: 'three-doors-2',
+      level: 2,
+      question: 'Pick one of the three. What rule did it change?',
+      placeholder: 'be specific — scale? gravity? placement? combination?'
+    }
+  },
+  
+  // ═════════ PART B · PLAN ═════════
+  {
+    id: 'pick-your-move',
+    part: 'B', partLabel: 'Part B · Plan',
+    type: 'move-select',
+    title: 'Pick Your Surreal Move',
+    subtitle: 'Choose one move. You can change it later.',
+    moves: ['scale_shift', 'bending', 'floating', 'wrong_place', 'dream_combination'],
+    aiMode: 'surreal_logic_helper',
+    artchi: { voice: 'think', text: "five moves. five doors. don't pick the one that looks most surreal — pick the one that feels closest to how you already see strange things in the world." }
+  },
+  {
+    id: 'pick-your-scene',
+    part: 'B', partLabel: 'Part B · Plan',
+    type: 'scene-upload',
+    title: 'Pick Your Real Scene',
+    subtitle: 'Take a photo of an ordinary place. Or describe one in writing.',
+    aiMode: 'idea_builder',
+    artchi: { voice: 'think', text: "ordinary is the secret weapon. the more boring the starting scene, the stronger the surreal move will land. kitchen, sidewalk, classroom — those work best." },
+    uploadKey: 'real_scene_upload'
+  },
+  {
+    id: 'add-the-strange',
+    part: 'B', partLabel: 'Part B · Plan',
+    type: 'planning',
+    title: 'Add the Strange',
+    subtitle: 'Where will your surreal move enter this scene?',
+    aiMode: 'idea_builder',
+    artchi: { voice: 'think', text: "you have a scene and a move. now: where exactly does the change enter? one spot. one rule broken. the rest stays real. write it out before you draw." },
+    judgment: {
+      id: 'plan-the-shift-3',
+      level: 2,
+      question: 'Describe your plan in one sentence: [scene] + [the one change].',
+      placeholder: 'example: a kitchen counter — but the apple is the size of a chair'
+    }
+  },
+  
+  // ═════════ PART C · MAKE ═════════
+  {
+    id: 'prepare-materials',
+    part: 'C', partLabel: 'Part C · Make',
+    type: 'materials',
+    title: 'Prepare Materials',
+    subtitle: 'You will need: paper, a pencil, and colored pencils or markers.',
+    artchi: { voice: 'make', text: "before you start drawing, gather your materials. paper, pencil, colored pencils. take your time setting up — making space matters." },
+    materials: [
+      { icon: '📄', name: 'Drawing paper', detail: 'Letter size or larger works best' },
+      { icon: '✏️', name: 'A pencil', detail: 'For your light sketch' },
+      { icon: '🖍️', name: 'Colored pencils or markers', detail: 'Whatever you have' },
+      { icon: '🧽', name: 'An eraser', detail: 'You will use it' }
+    ]
+  },
+  {
+    id: 'draw-sketch-real',
+    part: 'C', partLabel: 'Part C · Make · Segment 1 / 6',
+    type: 'draw-segment',
+    segmentNumber: 1,
+    title: 'Sketch the Real Scene',
+    subtitle: 'Draw your real scene lightly. No surreal move yet.',
+    videoId: null,
+    videoTitle: 'Sketching the Real Scene',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "the real has to feel real first. don't rush. light pencil lines. keep it simple — the magic comes later." },
+    uploadKey: 'segment_1_sketch'
+  },
+  {
+    id: 'draw-place-the-change',
+    part: 'C', partLabel: 'Part C · Make · Segment 2 / 6',
+    type: 'draw-segment',
+    segmentNumber: 2,
+    title: 'Choose Where the Change Enters',
+    subtitle: 'Mark the exact spot on your sketch where the surreal move will land.',
+    videoId: null,
+    videoTitle: 'Placing the Change',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "small mark. circle. arrow. anything. you're telling your future self: here is where reality stops being normal." },
+    uploadKey: 'segment_2_marker'
+  },
+  {
+    id: 'draw-make-strange-visible',
+    part: 'C', partLabel: 'Part C · Make · Segment 3 / 6',
+    type: 'draw-segment',
+    segmentNumber: 3,
+    title: 'Make the Strange Visible',
+    subtitle: 'Draw the surreal change. Bigger, smaller, floating, bent — whatever your move asks for.',
+    videoId: null,
+    videoTitle: 'Drawing the Surreal Move',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "this is the moment. commit to the change. don't make it small or shy. let the strange be strange." },
+    uploadKey: 'segment_3_strange',
+    judgment: {
+      id: 'is-strange-strong-4',
+      level: 2,
+      question: 'Look at your drawing. Is the strange part strong enough to be noticed first?',
+      placeholder: 'tell yourself the truth — does it read, or is it too quiet?'
+    }
+  },
+  {
+    id: 'draw-connect-real-strange',
+    part: 'C', partLabel: 'Part C · Make · Segment 4 / 6',
+    type: 'draw-segment',
+    segmentNumber: 4,
+    title: 'Connect Real and Strange',
+    subtitle: 'Add the details that make both worlds belong to the same image.',
+    videoId: null,
+    videoTitle: 'Connecting Real and Strange',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "shadows. light. context. the surreal only feels powerful if the real around it still feels real. work on the edges — that's where they meet." },
+    uploadKey: 'segment_4_connection'
+  },
+  {
+    id: 'draw-color-the-mood',
+    part: 'C', partLabel: 'Part C · Make · Segment 5 / 6',
+    type: 'draw-segment',
+    segmentNumber: 5,
+    title: 'Color the Mood',
+    subtitle: 'Choose colors that match the feeling you want — calm, eerie, playful, heavy.',
+    videoId: null,
+    videoTitle: 'Coloring the Mood',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "color is mood. pick one feeling word first — eerie, calm, joyful, lonely — then choose colors that say that word without saying it." },
+    uploadKey: 'segment_5_color'
+  },
+  {
+    id: 'draw-final-push',
+    part: 'C', partLabel: 'Part C · Make · Segment 6 / 6',
+    type: 'draw-segment',
+    segmentNumber: 6,
+    title: 'Final Push',
+    subtitle: 'Add the last touches. Stop before you over-work it.',
+    videoId: null,
+    videoTitle: 'Knowing When to Stop',
+    aiMode: 'making_companion',
+    artchi: { voice: 'make', text: "the hardest part of any drawing is knowing when to stop. one or two more touches. then put the pencil down." },
+    uploadKey: 'segment_6_final'
+  },
+  
+  // ═════════ PART D · REFLECT ═════════
+  {
+    id: 'reflection',
+    part: 'D', partLabel: 'Part D · Reflect',
+    type: 'reflection',
+    title: 'Look Back at Your Drawing',
+    subtitle: 'What did you change? What effect did it create?',
+    aiMode: 'final_reflection_helper',
+    artchi: { voice: 'reflect', text: "you made something that didn't exist this morning. before you move on, name what you did — out loud, or in writing. the act of naming makes it yours." },
+    reflectionPrompts: [
+      { id: 'what-changed', label: 'What rule of reality did you change?' },
+      { id: 'what-stayed', label: 'What stayed real, to make the change feel strong?' },
+      { id: 'what-surprised', label: 'What surprised you while making it?' }
+    ]
+  },
+  {
+    id: 'continue-your-path',
+    part: 'D', partLabel: 'Complete',
+    type: 'badge-ceremony',
+    title: 'You Earned the Storyteller Badge',
+    subtitle: "You used surrealism to tell something that couldn't be photographed.",
+    artchi: { voice: 'reflect', text: "this lesson stays with you. every time you see a strange image now, you'll notice the move it used. the badge is just a marker — the seeing is the real prize." }
+  }
+];
+
+// Quick-find helpers
+function findScreen(id) { return SCREENS.find(s => s.id === id); }
+function screenIndex(id) { return SCREENS.findIndex(s => s.id === id); }
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 3 — STUDENT ROSTER + PROFILE
+// (identical to Foundation A)
+// ════════════════════════════════════════════════════════════════
+let validStudents = new Map();
+let userProfile = null;
+let lessonProgress = {
+  currentScreen: 'welcome',
+  completed: [],            // screen IDs
+  selectedMove: null,        // one of the 5 moves
+  uploads: {},               // { uploadKey: dataUrl }
+  reflections: {},           // { promptId: text }
+  judgmentAnswers: {}        // { judgmentId: text }
+};
+
+async function loadRoster() {
+  try {
+    const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    const blockRegex = /\{[^{}]*\}/g;
+    let block;
+    while ((block = blockRegex.exec(text)) !== null) {
+      const blockText = block[0];
+      const idMatch = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+      const nameMatch = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+      const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
+      if (!idMatch || !nameMatch) continue;
+      validStudents.set(idMatch[1].toUpperCase(), {
+        displayName: nameMatch[1],
+        isTrial: trialMatch ? trialMatch[1] === 'true' : false
+      });
+    }
+    console.log('[LFC054] Loaded ' + validStudents.size + ' codes');
+  } catch (err) {
+    console.warn('[LFC054] Roster load failed:', err);
+  }
+}
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    userProfile = raw ? JSON.parse(raw) : null;
+  } catch (e) { userProfile = null; }
+}
+
+function saveProfile(p) {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); userProfile = p; }
+  catch (e) { console.warn('Save failed:', e); }
+}
+
+function clearProfile() {
+  try { localStorage.removeItem(PROFILE_KEY); userProfile = null; }
+  catch (e) {}
+}
+
+function loadLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    const raw = localStorage.getItem(key);
+    if (raw) lessonProgress = { ...lessonProgress, ...JSON.parse(raw) };
+  } catch (e) {}
+}
+
+function saveLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    localStorage.setItem(key, JSON.stringify(lessonProgress));
+  } catch (e) {}
+}
+
+// Judgment cards — cross-lesson portfolio in lfc_cards_v1
+function loadJudgmentCards() {
+  try {
+    const raw = localStorage.getItem(JUDGMENT_CARDS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function saveJudgmentCard(card) {
+  try {
+    const cards = loadJudgmentCards();
+    // Update existing card by id+lesson, or push new
+    const existingIdx = cards.findIndex(c => 
+      c.lessonId === LESSON_ID && c.judgmentId === card.judgmentId
+    );
+    const record = {
+      lessonId: LESSON_ID,
+      judgmentId: card.judgmentId,
+      level: card.level,
+      question: card.question,
+      answer: card.answer,
+      studentCode: userProfile?.studentCode,
+      savedAt: Date.now()
+    };
+    if (existingIdx >= 0) {
+      cards[existingIdx] = record;
+    } else {
+      cards.push(record);
+    }
+    localStorage.setItem(JUDGMENT_CARDS_KEY, JSON.stringify(cards));
+  } catch (e) { console.warn('Card save failed:', e); }
+}
+
+function getJudgmentAnswer(judgmentId) {
+  return lessonProgress.judgmentAnswers[judgmentId] || '';
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 4 — SCREEN SWITCHING
+// ════════════════════════════════════════════════════════════════
+function showSignIn() {
+  document.getElementById('signin-screen').style.display = 'flex';
+  document.getElementById('lesson-screen').style.display = 'none';
+  document.getElementById('topbar-right').innerHTML =
+    '<a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>';
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) {
+    document.getElementById('signin-code').value = urlCode.toUpperCase();
+    updateSignInBtn();
+  }
+}
+
+function showLesson() {
+  document.getElementById('signin-screen').style.display = 'none';
+  document.getElementById('lesson-screen').style.display = 'block';
+  const tier = userProfile.tier === 'trial' ? '· Trial' : '';
+  document.getElementById('topbar-right').innerHTML =
+    '<span class="user-pill">' + userProfile.name + ' ' + tier + '</span>' +
+    '<button class="sign-out-btn" onclick="signOut()">Sign out</button>';
+  renderCurrentScreen();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 5 — RENDERERS (the meat of Creation pedagogy)
+//
+// Each renderer matches one screen type from SCREENS.
+// They all dump HTML into #lesson-content.
+// ════════════════════════════════════════════════════════════════
+
+function renderCurrentScreen() {
+  const screen = findScreen(lessonProgress.currentScreen);
+  if (!screen) return;
+  const container = document.getElementById('lesson-content');
+  container.innerHTML = renderHeader(screen) + renderProgressStrip(screen) + renderScreenBody(screen) + renderNav(screen);
+  attachScreenHandlers(screen);
+  window.scrollTo(0, 0);
+}
+
+function renderHeader(screen) {
+  const partClass = 'part-' + (screen.part ? screen.part.toLowerCase() : '');
+  return `
+    <div class="lesson-header">
+      <div class="lesson-kicker ${partClass}">${escapeHtml(screen.partLabel)}</div>
+      <h1 class="lesson-title">${escapeHtml(screen.title)}</h1>
+      ${screen.subtitle ? `<p class="lesson-subtitle">${escapeHtml(screen.subtitle)}</p>` : ''}
+    </div>
+  `;
+}
+
+function renderProgressStrip(screen) {
+  const currentIdx = screenIndex(screen.id);
+  let html = '<div class="progress-strip">';
+  let prevPart = null;
+  SCREENS.forEach((s, i) => {
+    if (prevPart !== null && s.part !== prevPart) {
+      html += '<div class="progress-divider"></div>';
+    }
+    let cls = 'progress-dot';
+    if (lessonProgress.completed.includes(s.id)) cls += ' done';
+    if (i === currentIdx) cls += ' current';
+    html += `<div class="${cls}" onclick="jumpToScreen('${s.id}')" title="${escapeHtml(s.title)}"></div>`;
+    prevPart = s.part;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderScreenBody(screen) {
+  switch (screen.type) {
+    case 'welcome': return renderWelcomeBody(screen);
+    case 'artwork-look': return renderArtworkLookBody(screen);
+    case 'move-select': return renderMoveSelectBody(screen);
+    case 'scene-upload': return renderSceneUploadBody(screen);
+    case 'planning': return renderPlanningBody(screen);
+    case 'materials': return renderMaterialsBody(screen);
+    case 'draw-segment': return renderDrawSegmentBody(screen);
+    case 'reflection': return renderReflectionBody(screen);
+    case 'badge-ceremony': return renderBadgeCeremonyBody(screen);
+    default:
+      return '<p>Unknown screen type: ' + escapeHtml(screen.type) + '</p>';
+  }
+}
+
+// ─── Welcome ─────────────────────────────────────────────────────
+function renderWelcomeBody(screen) {
+  return `
+    ${renderArtchi(screen)}
+    <div style="background:#fff;border-radius:var(--radius-md);padding:24px 22px;margin-bottom:22px;border:1px solid var(--ink-veryfaint);">
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:14px;">
+        This lesson takes about <strong>45–90 minutes</strong>, depending on how deep you go.
+        It begins with looking at master artworks, moves through planning your own surreal idea,
+        guides you through six drawing segments, and ends with reflection.
+      </p>
+      <p style="font-size:14px;color:var(--ink-soft);line-height:1.6;">
+        You can pause anywhere. Your progress is saved on this device. Take your time —
+        Creation lessons reward looking slowly more than rushing forward.
+      </p>
+    </div>
+  `;
+}
+
+// ─── Artwork Look (Part A) ───────────────────────────────────────
+function renderArtworkLookBody(screen) {
+  let body = renderArtchi(screen);
+  
+  // Meet-the-artists screen shows the 5 move masters as a special grid
+  if (screen.id === 'meet-the-artists' && screen.moves) {
+    body += '<div class="artworks-row cols-3">';
+    screen.moves.slice(0, 3).forEach(moveKey => {
+      const move = SURREAL_MOVES[moveKey];
+      body += renderMasterCard(move);
+    });
+    body += '</div><div class="artworks-row cols-2" style="margin-top:14px;">';
+    screen.moves.slice(3).forEach(moveKey => {
+      const move = SURREAL_MOVES[moveKey];
+      body += renderMasterCard(move);
+    });
+    body += '</div>';
+  } else if (screen.artworks) {
+    const cols = screen.cols || screen.artworks.length;
+    body += '<div class="artworks-row cols-' + cols + '">';
+    screen.artworks.forEach(key => {
+      const art = ARTWORKS[key];
+      body += renderArtworkCard(art);
+    });
+    body += '</div>';
+  }
+  
+  body += renderChatTrigger(screen);
+  
+  if (screen.judgment) {
+    body += renderJudgmentCard(screen.judgment);
+  }
+  
+  return body;
+}
+
+function renderArtworkCard(art) {
+  return `
+    <div class="artwork-card">
+      <div class="artwork-image-wrap contain">
+        <img class="artwork-image" src="${art.img}" alt="${escapeHtml(art.title)}" loading="lazy"
+          onerror="this.parentElement.classList.add('img-failed'); this.style.display='none';">
+      </div>
+      <div class="artwork-meta">
+        <div class="artwork-title">${escapeHtml(art.title)}</div>
+        <div class="artwork-artist">${escapeHtml(art.artist)}</div>
+        <div class="artwork-year">${escapeHtml(art.year)}</div>
+        <div class="artwork-source">${escapeHtml(art.sourceLine)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMasterCard(move) {
+  return `
+    <div class="artwork-card">
+      <div class="artwork-image-wrap contain">
+        <img class="artwork-image" src="${move.img}" alt="${escapeHtml(move.masterWork)}" loading="lazy"
+          onerror="this.parentElement.classList.add('img-failed'); this.style.display='none';">
+      </div>
+      <div class="artwork-meta">
+        <div class="artwork-title">${escapeHtml(move.label)}</div>
+        <div class="artwork-artist">${escapeHtml(move.master)}</div>
+        <div class="artwork-year">${escapeHtml(move.masterWork)}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── Move Select (Part B) ────────────────────────────────────────
+function renderMoveSelectBody(screen) {
+  let body = renderArtchi(screen);
+  body += '<div class="moves-grid">';
+  screen.moves.forEach(moveKey => {
+    const move = SURREAL_MOVES[moveKey];
+    const selected = lessonProgress.selectedMove === moveKey ? ' selected' : '';
+    body += `
+      <div class="move-card${selected}" data-move="${moveKey}" onclick="selectMove('${moveKey}')">
+        <div class="move-image-wrap">
+          <img class="move-image" src="${move.img}" alt="${escapeHtml(move.label)}" loading="lazy"
+            onerror="this.parentElement.classList.add('img-failed'); this.style.display='none';">
+        </div>
+        <div class="move-info">
+          <div class="move-label">${escapeHtml(move.label)}</div>
+          <div class="move-prompt">${escapeHtml(move.prompt)}</div>
+          <div class="move-master">via ${escapeHtml(move.master)}</div>
+        </div>
+      </div>
+    `;
+  });
+  body += '</div>';
+  body += renderChatTrigger(screen);
+  return body;
+}
+
+// ─── Scene Upload (Part B) ──────────────────────────────────────
+function renderSceneUploadBody(screen) {
+  let body = renderArtchi(screen);
+  const uploadKey = screen.uploadKey;
+  const existing = lessonProgress.uploads[uploadKey];
+  
+  body += `
+    <div style="margin-bottom:14px;">
+      <div class="prompt-block">
+        <div class="prompt-kicker">Two ways</div>
+        <p class="prompt-text">Take or upload a photo of an ordinary place near you — OR write a description of one.</p>
+        <p class="prompt-hint">Kitchen counter. Bus stop. Hallway. The more boring, the better.</p>
+      </div>
+    </div>
+  `;
+  
+  body += renderUploadArea(uploadKey, 'Tap to add a photo of your real scene', existing);
+  
+  body += `
+    <div class="reflection-block" style="margin-top:14px;">
+      <div class="reflection-label">Or describe in words</div>
+      <textarea id="scene-description" placeholder="describe an ordinary scene in 2-3 sentences — where, when, what's around"
+        onchange="saveSceneDescription(this.value)">${escapeHtml(lessonProgress.reflections.scene_description || '')}</textarea>
+    </div>
+  `;
+  
+  body += renderChatTrigger(screen);
+  return body;
+}
+
+// ─── Planning (Part B) ──────────────────────────────────────────
+function renderPlanningBody(screen) {
+  let body = renderArtchi(screen);
+  
+  // Show the selected move + scene as context
+  if (lessonProgress.selectedMove) {
+    const move = SURREAL_MOVES[lessonProgress.selectedMove];
+    body += `
+      <div class="prompt-block">
+        <div class="prompt-kicker">Your move</div>
+        <p class="prompt-text">${escapeHtml(move.label)} — ${escapeHtml(move.prompt)}</p>
+      </div>
+    `;
+  }
+  
+  body += renderChatTrigger(screen);
+  
+  if (screen.judgment) {
+    body += renderJudgmentCard(screen.judgment);
+  }
+  
+  return body;
+}
+
+// ─── Materials (Part C kick-off) ─────────────────────────────────
+function renderMaterialsBody(screen) {
+  let body = renderArtchi(screen);
+  body += '<div style="background:#fff;border-radius:var(--radius-md);padding:22px;margin-bottom:18px;border:1px solid var(--ink-veryfaint);">';
+  body += '<div style="display:grid;gap:14px;">';
+  screen.materials.forEach(m => {
+    body += `
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="font-size:28px;flex-shrink:0;width:48px;text-align:center;">${m.icon}</div>
+        <div>
+          <div style="font-family:'Montserrat';font-weight:800;font-size:14px;">${escapeHtml(m.name)}</div>
+          <div style="font-size:12px;color:var(--ink-soft);">${escapeHtml(m.detail)}</div>
+        </div>
+      </div>
+    `;
+  });
+  body += '</div></div>';
+  return body;
+}
+
+// ─── Draw Segment (Part C — 6 of these) ─────────────────────────
+function renderDrawSegmentBody(screen) {
+  let body = renderArtchi(screen);
+  
+  // Video frame
+  body += `<div class="video-frame">`;
+  if (screen.videoId) {
+    body += `<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${screen.videoId}/iframe" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>`;
+  } else {
+    body += `
+      <div class="video-placeholder">
+        <div class="icon">🎬</div>
+        <div class="title">${escapeHtml(screen.videoTitle || 'Video')}</div>
+        <div class="sub">video coming soon · Faye is recording these</div>
+      </div>
+    `;
+  }
+  body += `</div>`;
+  
+  // Show selected move reminder
+  if (lessonProgress.selectedMove) {
+    const move = SURREAL_MOVES[lessonProgress.selectedMove];
+    body += `
+      <div style="background:var(--paper-soft);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--ink-soft);">
+        Your move: <strong style="color:var(--ink);">${escapeHtml(move.label)}</strong> — ${escapeHtml(move.prompt)}
+      </div>
+    `;
+  }
+  
+  // Upload area
+  const uploadKey = screen.uploadKey;
+  const existing = lessonProgress.uploads[uploadKey];
+  body += renderUploadArea(uploadKey, 'Tap to upload your drawing for this step', existing);
+  
+  body += renderChatTrigger(screen);
+  
+  if (screen.judgment) {
+    body += renderJudgmentCard(screen.judgment);
+  }
+  
+  return body;
+}
+
+// ─── Reflection (Part D) ────────────────────────────────────────
+function renderReflectionBody(screen) {
+  let body = renderArtchi(screen);
+  
+  screen.reflectionPrompts.forEach(prompt => {
+    const existing = lessonProgress.reflections[prompt.id] || '';
+    body += `
+      <div class="reflection-block">
+        <div class="reflection-label">${escapeHtml(prompt.label)}</div>
+        <textarea data-prompt-id="${prompt.id}" 
+          onchange="saveReflection('${prompt.id}', this.value)"
+          placeholder="write whatever comes to mind">${escapeHtml(existing)}</textarea>
+      </div>
+    `;
+  });
+  
+  body += renderChatTrigger(screen);
+  return body;
+}
+
+// ─── Badge Ceremony (Part D end) ─────────────────────────────────
+function renderBadgeCeremonyBody(screen) {
+  let body = renderArtchi(screen);
+  body += `
+    <div class="badge-ceremony">
+      <div class="badge-icon-big">🌙</div>
+      <div class="badge-title-big">Storyteller</div>
+      <div class="badge-sub-big">You used surrealism to tell something that couldn't be photographed.</div>
+      <div class="badge-actions">
+        <button class="nav-btn primary" onclick="completeLessonAndReturnToStudio()">Return to Studio</button>
+        <button class="nav-btn" onclick="lessonProgress.currentScreen='welcome'; saveLessonProgress(); renderCurrentScreen();">Start over</button>
+      </div>
+    </div>
+  `;
+  
+  // Show summary of completed work
+  const cards = loadJudgmentCards().filter(c => c.lessonId === LESSON_ID);
+  if (cards.length > 0) {
+    body += '<div style="margin-top:30px;"><h3 style="font-family:Montserrat;font-size:14px;font-weight:800;margin-bottom:12px;letter-spacing:0.5px;text-transform:uppercase;color:var(--ink-soft);">Your Thinking This Lesson</h3>';
+    cards.forEach(c => {
+      body += `
+        <div class="judgment-card saved" style="margin-bottom:10px;">
+          <div class="judgment-kicker">Card · Level ${c.level}</div>
+          <div class="judgment-question">${escapeHtml(c.question)}</div>
+          <div style="font-style:italic;color:var(--ink-soft);font-size:14px;">"${escapeHtml(c.answer)}"</div>
+        </div>
+      `;
+    });
+    body += '</div>';
+  }
+  
+  return body;
+}
+
+// ─── Shared bits ─────────────────────────────────────────────────
+function renderArtchi(screen) {
+  if (!screen.artchi) return '';
+  const voice = screen.artchi.voice || 'look';
+  return `
+    <div class="artchi-block voice-${voice}">
+      <div class="artchi-avatar">🪄</div>
+      <div class="artchi-voice">${escapeHtml(ARTCHI_VOICES[voice].label)}</div>
+      <div class="artchi-text">${escapeHtml(screen.artchi.text)}</div>
+    </div>
+  `;
+}
+
+function renderChatTrigger(screen) {
+  if (!screen.aiMode) return '';
+  const mode = AI_MODES[screen.aiMode];
+  return `<button class="chat-trigger" onclick="openChatModal('${screen.aiMode}')">💬 Ask Artchi (${escapeHtml(mode.label)})</button>`;
+}
+
+function renderJudgmentCard(judgment) {
+  const existing = getJudgmentAnswer(judgment.id);
+  const savedCls = existing ? ' saved' : '';
+  return `
+    <div class="judgment-card${savedCls}" id="card-${judgment.id}">
+      <div class="judgment-kicker">${existing ? '✓ Saved · ' : ''}Thinking Quest · Level ${judgment.level}</div>
+      <div class="judgment-question">${escapeHtml(judgment.question)}</div>
+      <textarea class="judgment-input" id="judgment-${judgment.id}"
+        placeholder="${escapeHtml(judgment.placeholder)}">${escapeHtml(existing)}</textarea>
+      <div class="judgment-actions">
+        <button class="nav-btn primary" onclick="saveJudgment('${judgment.id}', ${judgment.level}, '${escapeHtml(judgment.question).replace(/'/g, "\\'")}')">${existing ? 'Update card' : 'Save card'}</button>
+        <span class="meta">${existing ? 'in your portfolio' : 'cards stay with you across lessons'}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderUploadArea(uploadKey, prompt, existingDataUrl) {
+  if (existingDataUrl) {
+    return `
+      <div class="upload-area has-upload" id="upload-${uploadKey}">
+        <img class="upload-preview" src="${existingDataUrl}" alt="Your upload">
+        <div class="upload-bar">
+          <span class="upload-bar-text">✓ Uploaded</span>
+          <button class="upload-bar-replace" onclick="replaceUpload('${uploadKey}')">Replace</button>
+        </div>
+      </div>
+    `;
+  }
+  return `
+    <div class="upload-area" id="upload-${uploadKey}" onclick="document.getElementById('upload-input-${uploadKey}').click()">
+      <input type="file" id="upload-input-${uploadKey}" accept="image/*" 
+        style="display:none;" onchange="handleUpload('${uploadKey}', this)">
+      <div class="upload-icon">📷</div>
+      <div class="upload-prompt">${escapeHtml(prompt)}</div>
+      <div class="upload-hint">JPG, PNG, or HEIC · stays on your device</div>
+    </div>
+  `;
+}
+
+function renderNav(screen) {
+  const idx = screenIndex(screen.id);
+  const isFirst = idx === 0;
+  const isLast = idx === SCREENS.length - 1;
+  const canProceed = canAdvance(screen);
+  
+  if (screen.type === 'badge-ceremony') return '';
+  
+  return `
+    <div class="lesson-nav">
+      <button class="nav-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Previous</button>
+      <button class="nav-btn primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>
+        ${isLast ? 'Finish lesson' : 'Continue →'}
+      </button>
+    </div>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 6 — HANDLERS / EVENT WIRING
+// ════════════════════════════════════════════════════════════════
+function attachScreenHandlers(screen) {
+  // Nothing here that isn't already wired by onclick attributes,
+  // but kept as a hook for future enhancements.
+}
+
+function canAdvance(screen) {
+  // Move-select requires a move chosen
+  if (screen.type === 'move-select') return !!lessonProgress.selectedMove;
+  // Scene-upload requires either an upload or a description
+  if (screen.type === 'scene-upload') {
+    return !!lessonProgress.uploads[screen.uploadKey] 
+      || !!(lessonProgress.reflections.scene_description && lessonProgress.reflections.scene_description.trim());
+  }
+  // Other screens are free to advance — Creation pedagogy doesn't gate aggressively
+  return true;
+}
+
+function goNext() {
+  const screen = findScreen(lessonProgress.currentScreen);
+  if (!canAdvance(screen)) {
+    toast('Pick a move first', 1500);
+    return;
+  }
+  if (!lessonProgress.completed.includes(screen.id)) {
+    lessonProgress.completed.push(screen.id);
+  }
+  const idx = screenIndex(screen.id);
+  if (idx < SCREENS.length - 1) {
+    lessonProgress.currentScreen = SCREENS[idx + 1].id;
+    saveLessonProgress();
+    renderCurrentScreen();
+  }
+}
+
+function goPrev() {
+  const idx = screenIndex(lessonProgress.currentScreen);
+  if (idx > 0) {
+    lessonProgress.currentScreen = SCREENS[idx - 1].id;
+    saveLessonProgress();
+    renderCurrentScreen();
+  }
+}
+
+function jumpToScreen(screenId) {
+  // Allow jumping forward only to already-completed screens, or one step ahead
+  const targetIdx = screenIndex(screenId);
+  const currentIdx = screenIndex(lessonProgress.currentScreen);
+  if (lessonProgress.completed.includes(screenId) || targetIdx <= currentIdx) {
+    lessonProgress.currentScreen = screenId;
+    saveLessonProgress();
+    renderCurrentScreen();
+  }
+}
+
+function selectMove(moveKey) {
+  lessonProgress.selectedMove = moveKey;
+  saveLessonProgress();
+  renderCurrentScreen();
+}
+
+function handleUpload(uploadKey, input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    toast('Image too large (10MB max)', 2000);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    lessonProgress.uploads[uploadKey] = e.target.result;
+    saveLessonProgress();
+    renderCurrentScreen();
+    toast('Uploaded ✓', 1500);
+  };
+  reader.readAsDataURL(file);
+}
+
+function replaceUpload(uploadKey) {
+  delete lessonProgress.uploads[uploadKey];
+  saveLessonProgress();
+  renderCurrentScreen();
+}
+
+function saveSceneDescription(text) {
+  lessonProgress.reflections.scene_description = text;
+  saveLessonProgress();
+}
+
+function saveReflection(promptId, text) {
+  lessonProgress.reflections[promptId] = text;
+  saveLessonProgress();
+}
+
+function saveJudgment(judgmentId, level, question) {
+  const textarea = document.getElementById('judgment-' + judgmentId);
+  const answer = textarea.value.trim();
+  if (!answer) {
+    toast('Write something first', 1500);
+    return;
+  }
+  lessonProgress.judgmentAnswers[judgmentId] = answer;
+  saveLessonProgress();
+  saveJudgmentCard({ judgmentId, level, question, answer });
+  toast('Card saved to your portfolio ✓', 2000);
+  renderCurrentScreen();
+}
+
+function completeLessonAndReturnToStudio() {
+  // Mark the master "lfc054" as completed in the user's main profile
+  if (userProfile) {
+    const completed = userProfile.completedLessons || [];
+    if (!completed.includes('lfc054')) {
+      completed.push('lfc054');
+      userProfile.completedLessons = completed;
+      saveProfile(userProfile);
+    }
+  }
+  window.location.href = '../../creation/';
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 7 — CHAT MODAL (Artchi conversation)
+//
+// Local chat scaffold. Without a backend, Artchi gives pre-written
+// responses keyed off the starter or pattern-matched keywords.
+// This is the same approach Foundation A uses (Echo Engine local).
+// When a backend is wired, replace fakeArtchiReply with a fetch.
+// ════════════════════════════════════════════════════════════════
+let currentChatMode = 'lfc_guide';
+
+function openChatModal(modeKey) {
+  currentChatMode = modeKey;
+  const mode = AI_MODES[modeKey];
+  document.getElementById('chat-mode-pill').textContent = mode.label;
+  const thread = document.getElementById('chat-thread');
+  thread.innerHTML = '';
+  // Greeting
+  appendChatMsg('artchi', greetingFor(modeKey));
+  // Starters
+  const starterBar = document.createElement('div');
+  starterBar.className = 'chat-starters';
+  mode.starters.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'chat-starter';
+    btn.textContent = s;
+    btn.onclick = () => { document.getElementById('chat-input').value = s; sendChat(); };
+    starterBar.appendChild(btn);
+  });
+  thread.appendChild(starterBar);
+  document.getElementById('chat-modal').classList.add('active');
+  setTimeout(() => document.getElementById('chat-input').focus(), 100);
+}
+
+function closeChatModal() {
+  document.getElementById('chat-modal').classList.remove('active');
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  appendChatMsg('user', text);
+  input.value = '';
+  // Pretend-delay then reply
+  setTimeout(() => {
+    const reply = fakeArtchiReply(currentChatMode, text);
+    appendChatMsg('artchi', reply);
+  }, 600);
+}
+
+function appendChatMsg(who, text) {
+  const thread = document.getElementById('chat-thread');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + who;
+  div.textContent = text;
+  thread.appendChild(div);
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function greetingFor(modeKey) {
+  const greetings = {
+    lfc_guide: "i'm in look mode. point me at the part of an image that confuses you. i'll help you name what changed.",
+    surreal_logic_helper: "tell me which of the five moves you see in an artwork. i'll help you check if you're right — or find a better word for it.",
+    idea_builder: "you have a scene and a feeling. let's build one clear surreal idea. small and strong beats big and messy.",
+    making_companion: "i'm here while you draw. ask me when you get stuck. i won't tell you what to draw — just what to check.",
+    final_reflection_helper: "looking back is part of making. tell me what you did. i'll help you name it."
+  };
+  return greetings[modeKey] || "i'm here. what do you want to ask?";
+}
+
+function fakeArtchiReply(modeKey, userText) {
+  // Simple pattern-match / fallback. Real LLM backend goes here later.
+  const t = userText.toLowerCase();
+  
+  // Generic surreal-move recognition
+  for (const moveKey in SURREAL_MOVES) {
+    const move = SURREAL_MOVES[moveKey];
+    if (t.includes(move.label.toLowerCase()) || t.includes(moveKey.replace('_', ' '))) {
+      return `yes — that's a ${move.label.toLowerCase()} move. ${move.master} used it in "${move.masterWork}". the move works because ${move.prompt.toLowerCase()}`;
+    }
+  }
+  
+  // Mode-specific fallback flavor
+  const modeReplies = {
+    lfc_guide: [
+      "look closer. what is the part that breaks the rule of reality? everything else can stay normal — find just the one thing.",
+      "describe what you see, not what you think it means yet. the meaning comes after the looking."
+    ],
+    surreal_logic_helper: [
+      "five moves. only one is usually doing the heaviest lifting in any image. which one is it here?",
+      "is the change about size, shape, place, or combination? pick one — that narrows everything."
+    ],
+    idea_builder: [
+      "good — but is it specific enough yet? what exactly is the everyday scene, and what exactly is the one change?",
+      "if you can say it in one sentence — [scene] + [the one change] — your idea is ready."
+    ],
+    making_companion: [
+      "step back from the page. look at it from across the room. does the strange part jump out? if not, it might need more contrast.",
+      "the real part needs to stay real. shadows, edges, scale of objects you didn't change — those carry it."
+    ],
+    final_reflection_helper: [
+      "name the rule you broke. just the rule, in one short phrase. then everything else gets clearer.",
+      "what was hardest? sometimes the hardest part of the lesson is the part that matters most for next time."
+    ]
+  };
+  const pool = modeReplies[modeKey] || ["tell me more."];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 8 — SIGN-IN FLOW
+// ════════════════════════════════════════════════════════════════
+function updateSignInBtn() {
+  const input = document.getElementById('signin-code');
+  document.getElementById('signin-btn').disabled = input.value.trim().length < 3;
+}
+
+function attemptSignIn() {
+  const input = document.getElementById('signin-code');
+  const error = document.getElementById('signin-error');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return;
+  const match = validStudents.get(code);
+  if (!match) {
+    input.classList.add('error');
+    error.classList.add('visible');
+    setTimeout(() => input.classList.remove('error'), 400);
+    return;
+  }
+  const profile = {
+    id: code,
+    studentCode: code,
+    name: match.displayName,
+    tier: match.isTrial ? 'trial' : 'member',
+    completedLessons: [],
+    createdAt: Date.now(),
+    lastSeenAt: Date.now()
+  };
+  // Don't blow away existing profile — merge
+  const existing = userProfile;
+  if (existing && existing.studentCode === code) {
+    profile.completedLessons = existing.completedLessons || [];
+    profile.createdAt = existing.createdAt;
+  }
+  saveProfile(profile);
+  loadLessonProgress();
+  showLesson();
+}
+
+function signOut() {
+  if (confirm('Sign out? Your progress is saved on this device.')) {
+    clearProfile();
+    window.location.reload();
+  }
+}
+window.signOut = signOut;
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 9 — UTILITIES
+// ════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+let _toastTimer = null;
+function toast(msg, durationMs) {
+  const el = document.getElementById('complete-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), durationMs || 2000);
+}
+
+// Expose handler functions to onclick attributes
+window.attemptSignIn = attemptSignIn;
+window.goNext = goNext;
+window.goPrev = goPrev;
+window.jumpToScreen = jumpToScreen;
+window.selectMove = selectMove;
+window.handleUpload = handleUpload;
+window.replaceUpload = replaceUpload;
+window.saveSceneDescription = saveSceneDescription;
+window.saveReflection = saveReflection;
+window.saveJudgment = saveJudgment;
+window.completeLessonAndReturnToStudio = completeLessonAndReturnToStudio;
+window.openChatModal = openChatModal;
+window.closeChatModal = closeChatModal;
+window.sendChat = sendChat;
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 10 — INIT
+// ════════════════════════════════════════════════════════════════
+document.getElementById('signin-code').addEventListener('input', (e) => {
+  e.target.value = e.target.value.toUpperCase();
+  updateSignInBtn();
+  document.getElementById('signin-error').classList.remove('visible');
+});
+document.getElementById('signin-code').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') attemptSignIn();
+});
+document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
+document.getElementById('try-code-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('signin-code').value = 'TRYNEW';
+  updateSignInBtn();
+});
+
+(async function init() {
+  await loadRoster();
+  loadProfile();
+  if (userProfile) {
+    loadLessonProgress();
+    showLesson();
+  } else {
+    showSignIn();
+  }
+})();
+</script>
+
+</body>
+</html>
