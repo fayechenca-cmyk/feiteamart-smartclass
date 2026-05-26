@@ -612,11 +612,12 @@
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
     
-    <a href="#" class="track-card locked" onclick="event.preventDefault();">
+    <a href="creation/" class="track-card" id="track-creation">
       <div class="track-emoji">🎨</div>
       <div class="track-name">Creation</div>
-      <div class="track-tagline">Illustration · stop motion · artistic painting.</div>
-      <div class="track-locked-tag">🎯 Coming soon</div>
+      <div class="track-tagline">Illustration · books · materials · stop motion. Open studio, your way.</div>
+      <div class="track-progress" id="creation-progress" style="color: var(--purple);">✨ Studio open</div>
+      <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
   </div>
 
@@ -929,6 +930,13 @@
       doneCount === 0
         ? `Foundation A · ${totalCount} lessons`
         : `Foundation A · ${doneCount}/${totalCount} done`;
+    
+    // Creation track: static "Studio open" message + 1 currently-available course (lfc054).
+    // Show subtle completion if student has finished lfc054.
+    if (completed.includes('lfc054')) {
+      const progressEl = document.getElementById('creation-progress');
+      if (progressEl) progressEl.textContent = '🌙 Surrealism complete';
+    }
   }
   
   // Find the next lesson the student should do
