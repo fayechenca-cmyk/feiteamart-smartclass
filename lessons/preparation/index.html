@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Foundation of Sketch A · Preparation</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ════════════════════════════════════════════════════════════════
+     FEI TeamArt · Preparation Lesson
+     Standalone, simplified pre-course foundation.
+     5 parts: Welcome / Basic Prep / Hand Warm Up / Simple Shapes / Perspective
+     No paywall, no badge, no chat — just a supportive pre-flight.
+     ═══════════════════════════════════════════════════════════════ */
+  
+  :root {
+    --ink: #1a1d2b;
+    --ink-soft: rgba(26, 29, 43, 0.65);
+    --ink-faint: rgba(26, 29, 43, 0.45);
+    --ink-veryfaint: rgba(26, 29, 43, 0.15);
+    --paper: #fafaf8;
+    --paper-soft: #f5f5f7;
+    --gold: #c8a96e;
+    --green: #1d9e75;
+    --purple: #a78bfa;
+    --cyan: #67e8f9;
+    --pink: #f9a8d4;
+    --bg-warm: #fff9f5;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* ═══ TOPBAR ═══ */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--ink-veryfaint);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 14px; color: var(--ink);
+    text-decoration: none; letter-spacing: 0.3px;
+  }
+  .brand-mark { color: var(--purple); margin-right: 4px; }
+  .back-home {
+    background: none; border: 1px solid var(--ink-veryfaint);
+    border-radius: 16px; padding: 6px 12px; font-size: 11px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
+    text-decoration: none;
+  }
+  .back-home:hover { background: var(--paper-soft); color: var(--ink); }
+  
+  /* ═══ MAIN CONTAINER ═══ */
+  .container {
+    max-width: 620px; margin: 0 auto; padding: 24px 18px 80px;
+  }
+  
+  /* ═══ HERO ═══ */
+  .hero {
+    text-align: center; margin: 16px 0 36px;
+  }
+  .hero-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 10px;
+  }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-size: 36px;
+    font-weight: 900; margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .hero-emoji { font-size: 48px; margin-bottom: 12px; display: block; }
+  .hero-subtitle {
+    font-size: 15px; color: var(--ink-soft); max-width: 480px;
+    margin: 0 auto;
+  }
+  
+  /* ═══ INTRO CARD ═══ */
+  .intro-card {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%);
+    border-radius: var(--radius-md);
+    padding: 24px 22px; margin-bottom: 36px;
+    border: 1px solid rgba(167,139,250,0.18);
+  }
+  .intro-card p {
+    font-size: 14.5px; color: var(--ink); line-height: 1.75;
+    margin-bottom: 12px;
+  }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .intro-card strong { color: var(--purple); }
+  
+  /* ═══ PART HEADERS ═══ */
+  .part-header {
+    margin: 48px 0 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink-veryfaint);
+  }
+  .part-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .part-title {
+    font-family: 'Montserrat', sans-serif; font-size: 22px;
+    font-weight: 900; margin-bottom: 4px;
+  }
+  .part-sub {
+    font-size: 13px; color: var(--ink-soft);
+  }
+  
+  /* ═══ SECTION CONTENT ═══ */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section-label {
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 12px;
+  }
+  .section p {
+    font-size: 14.5px; color: var(--ink); line-height: 1.75;
+    margin-bottom: 14px;
+  }
+  
+  /* ═══ MATERIALS LIST ═══ */
+  .materials-list {
+    background: #fff; border-radius: var(--radius-md);
+    padding: 18px 20px;
+    border: 1px solid var(--ink-veryfaint);
+    list-style: none;
+    margin-bottom: 18px;
+  }
+  .materials-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--ink-veryfaint);
+  }
+  .materials-list li:last-child { border-bottom: none; }
+  .materials-list .mat-emoji {
+    font-size: 22px; flex-shrink: 0;
+    width: 36px; text-align: center;
+  }
+  .materials-list .mat-info {
+    flex: 1;
+  }
+  .materials-list .mat-name {
+    font-family: 'Montserrat', sans-serif; font-size: 13.5px;
+    font-weight: 800; margin-bottom: 2px;
+  }
+  .materials-list .mat-desc {
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.55;
+  }
+  
+  /* ═══ PLACEHOLDER (image) ═══ */
+  .placeholder {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, var(--paper-soft), #f5f3ff);
+    border: 2px dashed rgba(167,139,250,0.4);
+    border-radius: var(--radius-md);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin-bottom: 14px; padding: 20px;
+    text-align: center;
+  }
+  .placeholder-icon { font-size: 30px; opacity: 0.6; margin-bottom: 8px; }
+  .placeholder-label {
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 800; color: var(--purple); letter-spacing: 1.2px;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .placeholder-note {
+    font-size: 11.5px; color: var(--ink-soft); font-style: italic;
+  }
+  
+  /* ═══ VIDEO ═══ */
+  .video-card {
+    margin-bottom: 16px; border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--ink-veryfaint);
+  }
+  .video-label {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    padding: 10px 16px;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .video-label.optional {
+    background: linear-gradient(135deg, var(--gold), #d4b884);
+  }
+  .video-embed {
+    position: relative; padding-top: 56.25%;
+    background: #000;
+  }
+  .video-embed iframe {
+    border: none; position: absolute; top: 0; left: 0;
+    height: 100%; width: 100%;
+  }
+  .video-caption {
+    padding: 14px 16px;
+    background: #fff;
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .video-caption strong { color: var(--ink); }
+  
+  /* ═══ HAND POSITION CARD ═══ */
+  .hand-card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--ink-veryfaint);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .hand-card-label {
+    background: linear-gradient(135deg, var(--green), #4cb892);
+    color: #fff;
+    padding: 8px 14px;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .hand-card-tag {
+    background: rgba(255,255,255,0.25);
+    padding: 3px 10px; border-radius: 10px;
+    font-size: 9px;
+  }
+  .hand-card-img {
+    width: 100%; height: auto; display: block;
+    background: var(--paper-soft);
+  }
+  .hand-card-caption {
+    padding: 12px 16px;
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.6;
+    border-top: 1px solid var(--ink-veryfaint);
+  }
+  .hand-card-caption strong { color: var(--ink); }
+  
+  /* ═══ TIP CALLOUT ═══ */
+  .tip-callout {
+    background: rgba(200,169,110,0.08);
+    border-left: 3px solid var(--gold);
+    padding: 14px 16px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-bottom: 16px;
+  }
+  .tip-callout-label {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .tip-callout-text {
+    font-size: 13px; color: var(--ink); line-height: 1.65;
+  }
+  
+  /* ═══ OPTIONAL TAG ═══ */
+  .optional-tag {
+    display: inline-block;
+    background: rgba(200,169,110,0.15);
+    color: var(--gold);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  
+  /* ═══ COMING SOON BLOCK ═══ */
+  .coming-soon {
+    background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 100%);
+    border-radius: var(--radius-md);
+    padding: 32px 22px; text-align: center;
+    margin-bottom: 18px;
+  }
+  .coming-soon-icon { font-size: 38px; margin-bottom: 10px; opacity: 0.7; }
+  .coming-soon-title {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 900; letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .coming-soon-text {
+    font-size: 12.5px; color: var(--ink-soft);
+    max-width: 380px; margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  /* ═══ CONTINUE BUTTON STACK ═══ */
+  .continue-stack {
+    margin-top: 56px; padding-top: 32px;
+    border-top: 2px solid var(--ink-veryfaint);
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 320px; margin-left: auto; margin-right: auto;
+  }
+  .btn {
+    padding: 14px 18px;
+    border-radius: 26px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:hover {
+    background: #2a2f42;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--ink-soft);
+    border: 1px solid var(--ink-veryfaint);
+  }
+  .btn-secondary:hover {
+    background: var(--paper-soft);
+    color: var(--ink);
+  }
+  
+  /* ═══ COMPLETION CALLOUT ═══ */
+  .complete-callout {
+    text-align: center;
+    padding: 24px 18px;
+    margin-top: 24px;
+    background: rgba(29,158,117,0.08);
+    border-radius: var(--radius-md);
+  }
+  .complete-callout-icon { font-size: 32px; margin-bottom: 8px; }
+  .complete-callout-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 800;
+    color: var(--green);
+    letter-spacing: 0.3px;
+  }
+  
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 480px) {
+    .hero-title { font-size: 28px; }
+    .part-title { font-size: 19px; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="../../" class="brand"><span class="brand-mark">●</span> FEI · Smart Class</a>
+  <a href="../../" class="back-home">← Back to map</a>
+</div>
+
+<div class="container">
+  
+  <!-- ════════════════════════════════════════════════════════════
+       PART 1: WELCOME & INTRO
+       ════════════════════════════════════════════════════════════ -->
+  <div class="hero">
+    <span class="hero-emoji">🎒</span>
+    <div class="hero-kicker">✨ Preparation</div>
+    <h1 class="hero-title">Before you draw</h1>
+    <p class="hero-subtitle">
+      A short, friendly walk-through to get you set up and ready — before your first real drawing lesson begins.
+    </p>
+  </div>
+  
+  <div class="intro-card">
+    <p>
+      <strong>Welcome!</strong> This is your preparation lesson — a calm, friendly walk-through that gets you fully ready before you begin <strong>Lesson 1: The Cube</strong>.
+    </p>
+    <p>
+      Here we focus on the small things that make a big difference: your materials, your workspace, your hand position, and your first warm-up shapes. You don't need experience — just curiosity.
+    </p>
+    <p>
+      <strong>Why this comes first:</strong> The Cube lesson moves quickly into real drawing. If your pencil, posture, and paper are already sorted out, you can focus on the art — not the setup.
+    </p>
+  </div>
+  
+  
+  <!-- ════════════════════════════════════════════════════════════
+       PART 2: BASIC PREPARATION
+       ════════════════════════════════════════════════════════════ -->
+  <div class="part-header">
+    <div class="part-kicker">Part 2 · Get ready</div>
+    <h2 class="part-title">Basic Preparation</h2>
+    <p class="part-sub">Your materials, workspace, and setup before the pencil hits paper.</p>
+  </div>
+  
+  <!-- Materials -->
+  <div class="section">
+    <div class="section-label">📦 What you'll need</div>
+    
+    <ul class="materials-list">
+      <li>
+        <span class="mat-emoji">✏️</span>
+        <div class="mat-info">
+          <div class="mat-name">Pencils — HB, 2B, 3B, 2H</div>
+          <div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div>
+        </div>
+      </li>
+      <li>
+        <span class="mat-emoji">📄</span>
+        <div class="mat-info">
+          <div class="mat-name">Drawing paper</div>
+          <div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div>
+        </div>
+      </li>
+      <li>
+        <span class="mat-emoji">🧽</span>
+        <div class="mat-info">
+          <div class="mat-name">Eraser (kneaded + regular)</div>
+          <div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div>
+        </div>
+      </li>
+      <li>
+        <span class="mat-emoji">🧻</span>
+        <div class="mat-info">
+          <div class="mat-name">Blending tool (tissue or paper stump)</div>
+          <div class="mat-desc">Used to soften and unify tones — you'll see this in every lesson.</div>
+        </div>
+      </li>
+      <li>
+        <span class="mat-emoji">🖼️</span>
+        <div class="mat-info">
+          <div class="mat-name">Easel or angled surface (optional)</div>
+          <div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div>
+        </div>
+      </li>
+      <li>
+        <span class="mat-emoji">🩹</span>
+        <div class="mat-info">
+          <div class="mat-name">Masking tape / artist tape (optional)</div>
+          <div class="mat-desc">For taping down your paper. See the optional video below.</div>
+        </div>
+      </li>
+    </ul>
+    
+    <!-- Placeholder for materials photo -->
+    <div class="placeholder">
+      <div class="placeholder-icon">📸</div>
+      <div class="placeholder-label">Materials photo coming soon</div>
+      <div class="placeholder-note">A photo of all materials laid out together will appear here</div>
+    </div>
+  </div>
+  
+  <!-- Workspace setup video -->
+  <div class="section">
+    <div class="section-label">🪑 Setting up your space</div>
+    <p>
+      Watch the teacher set up the drawing space: positioning the easel, arranging materials, and getting everything ready before drawing.
+    </p>
+    
+    <div class="video-card">
+      <div class="video-label">🎬 Workspace setup demo</div>
+      <div class="video-embed">
+        <iframe
+          src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F9b335ebd533cbfdab6a608255a1c202c%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+          loading="lazy"
+          title="Workspace setup demo"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true">
+        </iframe>
+      </div>
+      <div class="video-caption">
+        Watch the teacher position the easel on the desk and arrange materials — a practical setup before drawing begins.
+      </div>
+    </div>
+  </div>
+  
+  <!-- Optional taping video -->
+  <div class="section">
+    <div class="section-label">🩹 Taping down your paper</div>
+    
+    <div class="optional-tag">🎯 Optional · Not required</div>
+    
+    <p>
+      Some artists like to tape their paper down before drawing — it keeps the page steady and creates clean edges. The teacher shows a full taping technique in this video.
+    </p>
+    
+    <div class="video-card">
+      <div class="video-label optional">🎬 Optional · Taping demo</div>
+      <div class="video-embed">
+        <iframe
+          src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F5fee79867ca52d1ec9b26654bb3bc0e5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+          loading="lazy"
+          title="Optional taping demo"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true">
+        </iframe>
+      </div>
+      <div class="video-caption">
+        <strong>You don't have to copy this exactly.</strong> You can tape only the four edges, or tape more completely like the teacher does. A more complete taping is usually used when the full artwork includes the background — that's why the teacher tapes more fully in this demo.
+      </div>
+    </div>
+    
+    <div class="tip-callout">
+      <div class="tip-callout-label">💡 For first-time drawers</div>
+      <div class="tip-callout-text">
+        If you're just doing the cube exercise, taping the four edges is plenty. Save the full taping setup for when you're building a complete artwork with background.
+      </div>
+    </div>
+  </div>
+  
+  <!-- Posture & readiness -->
+  <div class="section">
+    <div class="section-label">🧘 Posture & readiness</div>
+    <p>
+      Before you start: sit comfortably, with your back relaxed and your drawing surface in front of you. Keep your arm free to move — drawing isn't just from the wrist, it's from the shoulder for big strokes and from the fingers for details.
+    </p>
+    <p>
+      Take a breath. The next 30 minutes are yours.
+    </p>
+    
+    <div class="placeholder">
+      <div class="placeholder-icon">📸</div>
+      <div class="placeholder-label">Posture reference photo coming soon</div>
+      <div class="placeholder-note">A photo showing good drawing posture will appear here</div>
+    </div>
+  </div>
+  
+  
+  <!-- ════════════════════════════════════════════════════════════
+       PART 3: HAND WARM UP
+       ════════════════════════════════════════════════════════════ -->
+  <div class="part-header">
+    <div class="part-kicker">Part 3 · Loosen up</div>
+    <h2 class="part-title">Hand Warm Up</h2>
+    <p class="part-sub">How to hold your pencil + how to wake up your drawing hand.</p>
+  </div>
+  
+  <!-- Finger stretches -->
+  <div class="section">
+    <div class="section-label">👋 Wake up your hand</div>
+    <p>
+      Before drawing, give your hand 30 seconds of attention:
+    </p>
+    <ul style="padding-left: 22px; margin-bottom: 14px; font-size: 14.5px; line-height: 1.85; color: var(--ink);">
+      <li>Open and close your fist 10 times.</li>
+      <li>Wiggle each finger separately.</li>
+      <li>Roll your wrist slowly in both directions.</li>
+      <li>Hold your pencil and make 10 free squiggles on scratch paper.</li>
+    </ul>
+    <p>
+      This isn't optional — a stiff hand makes for stiff lines.
+    </p>
+  </div>
+  
+  <!-- Hand position section -->
+  <div class="section">
+    <div class="section-label">✋ How to hold the pencil</div>
+    <p>
+      There isn't <em>one</em> correct grip — there are several that work well. Below are three hand positions we recommend. All of them are acceptable. Pick the one that feels natural and matches what you're drawing.
+    </p>
+    
+    <!-- Image 1: Large-scale recommended grip -->
+    <div class="hand-card">
+      <div class="hand-card-label">
+        <span>① Large-scale grip — recommended for big drawings</span>
+        <span class="hand-card-tag">⭐ Featured</span>
+      </div>
+      <img class="hand-card-img"
+           src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611d4701f5219d08ad295_righthand%20b%20.PNG"
+           alt="Large-scale recommended pencil grip"
+           loading="lazy">
+      <div class="hand-card-caption">
+        <strong>This grip is great for large-scale drawing.</strong> Hold the pencil farther from the tip — you'll have more arm freedom and lighter, sweeping strokes. Watch the distance between your hand and the pencil tip — that gap gives you control over your line weight.
+      </div>
+    </div>
+    
+    <!-- Image 2: Left-handed acceptable -->
+    <div class="hand-card">
+      <div class="hand-card-label">
+        <span>② Left-handed version — acceptable</span>
+        <span class="hand-card-tag">✅ OK</span>
+      </div>
+      <img class="hand-card-img"
+           src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611cc755582b77735ac6b_lefthanded%20canbe.png"
+           alt="Acceptable left-handed pencil grip"
+           loading="lazy">
+      <div class="hand-card-caption">
+        <strong>For left-handed students:</strong> this grip works well and feels natural. Same principles — keep enough distance between your hand and the pencil tip so you can see what you're drawing.
+      </div>
+    </div>
+    
+    <!-- Image 3: Right-handed acceptable -->
+    <div class="hand-card">
+      <div class="hand-card-label">
+        <span>③ Right-handed version — acceptable</span>
+        <span class="hand-card-tag">✅ OK</span>
+      </div>
+      <img class="hand-card-img"
+           src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611badca330c34ac8a5a2_right%20hand%20a.png"
+           alt="Acceptable right-handed pencil grip"
+           loading="lazy">
+      <div class="hand-card-caption">
+        <strong>For right-handed students:</strong> a comfortable, close-to-the-tip grip for more precise control. Good for detailed work and smaller drawings.
+      </div>
+    </div>
+    
+    <div class="tip-callout">
+      <div class="tip-callout-label">💡 The key thing to notice</div>
+      <div class="tip-callout-text">
+        Pay attention to the distance between your hand grip and the pencil tip. Closer = more precision but stiffer lines. Farther = more freedom but less detail control. Different drawings call for different distances.
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- ════════════════════════════════════════════════════════════
+       PART 4: SIMPLE SHAPES
+       ════════════════════════════════════════════════════════════ -->
+  <div class="part-header">
+    <div class="part-kicker">Part 4 · Practice</div>
+    <h2 class="part-title">Simple Shapes</h2>
+    <p class="part-sub">A few easy shape exercises to build line confidence.</p>
+  </div>
+  
+  <div class="section">
+    <p>
+      Before drawing a cube, it helps to practice drawing the lines that <em>make</em> a cube — straight lines, controlled lengths, parallel pairs. These exercises take 5–10 minutes and are worth doing before every drawing session.
+    </p>
+    
+    <div class="coming-soon">
+      <div class="coming-soon-icon">📐</div>
+      <div class="coming-soon-title">Simple shapes practice — coming soon</div>
+      <div class="coming-soon-text">
+        Straight-line exercises, circles, ellipses, and simple geometry drills will appear here. We'll add the full set as videos and step-by-step images soon.
+      </div>
+    </div>
+    
+    <div class="tip-callout">
+      <div class="tip-callout-label">💡 Until this section is ready</div>
+      <div class="tip-callout-text">
+        Try this: on scratch paper, draw 20 straight horizontal lines, then 20 vertical lines, then 20 diagonals. Don't worry about perfection — just consistency. This is what every illustrator does to warm up.
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- ════════════════════════════════════════════════════════════
+       PART 5: BASIC PERSPECTIVE AWARENESS
+       ════════════════════════════════════════════════════════════ -->
+  <div class="part-header">
+    <div class="part-kicker">Part 5 · Bridge to Cube</div>
+    <h2 class="part-title">Basic Perspective Awareness</h2>
+    <p class="part-sub">The smallest amount of perspective theory you need before Cube.</p>
+  </div>
+  
+  <div class="section">
+    <p>
+      You don't need to learn full perspective theory before the cube lesson. But here's the one idea worth knowing:
+    </p>
+    <p>
+      <strong>Things farther from your eye look smaller. Lines that go away from you appear to converge.</strong> That's it. The cube lesson will show you how to use this in practice — for now, just keep this idea in the back of your mind.
+    </p>
+    
+    <div class="coming-soon">
+      <div class="coming-soon-icon">🔭</div>
+      <div class="coming-soon-title">Perspective intro visual — coming soon</div>
+      <div class="coming-soon-text">
+        A simple diagram showing how parallel lines converge toward a vanishing point will appear here.
+      </div>
+    </div>
+    
+    <div class="tip-callout">
+      <div class="tip-callout-label">💡 Notice it everywhere</div>
+      <div class="tip-callout-text">
+        Look at a road, a hallway, or a row of books. Notice how parallel lines seem to lean toward a single point in the distance. You already know this — drawing just makes you put it on paper.
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- ════════════════════════════════════════════════════════════
+       CONTINUE TO CUBE
+       ════════════════════════════════════════════════════════════ -->
+  <div class="complete-callout">
+    <div class="complete-callout-icon">✅</div>
+    <div class="complete-callout-text">
+      You're ready to begin Lesson 1: The Cube
+    </div>
+  </div>
+  
+  <div class="continue-stack">
+    <a href="../lesson-3-cube/" class="btn btn-primary">
+      ◈ Continue to Lesson 1: The Cube →
+    </a>
+    <a href="../../" class="btn btn-secondary">
+      ← Back to Smart Class home
+    </a>
+  </div>
+
+</div>
+
+<script>
+  // Mark Preparation as visited when the page loads.
+  // Saved to localStorage so the home path map can show it as 'done'.
+  (function() {
+    try {
+      const PROFILE_KEY = 'fei_user_profile';
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (!raw) return;
+      
+      const profile = JSON.parse(raw);
+      if (!profile.completedLessons) profile.completedLessons = [];
+      
+      // Mark preparation as visited after the user has spent at least
+      // a brief moment on the page (showing they engaged with it).
+      setTimeout(() => {
+        if (!profile.completedLessons.includes('preparation')) {
+          profile.completedLessons.push('preparation');
+          profile.lastSeenAt = Date.now();
+          localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+          console.log('[Preparation] Marked as completed.');
+        }
+      }, 30000);  // 30 seconds — enough time to scan the page
+    } catch (e) {
+      console.warn('[Preparation] Could not update profile:', e);
+    }
+  })();
+</script>
+
+</body>
+</html>
