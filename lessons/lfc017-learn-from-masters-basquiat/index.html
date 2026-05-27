@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn From Masters: Basquiat · LFC017 · FEI Smart Class</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Patrick+Hand&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════════════════════
+   LFC017 · Learn From Masters: Basquiat
+   Creation track · Learn From Collection family
+   
+   PEDAGOGY:
+   6 steps. Image-led. Low-text. No right-answer framing.
+   Step 4 (Decode the Symbols) is the signature interactive moment —
+   a Basquiat-inspired hero image is itself the teaching interface.
+   
+   AESTHETIC:
+   Raw, urban, layered. Cream paper with paint blocks in
+   black / red / yellow / blue. Patrick Hand + Permanent Marker
+   typography. Visible texture and hand-pressure.
+   
+   COPYRIGHT NOTE:
+   The hero image is an original Basquiat-inspired classroom 
+   composition (inline SVG below). NOT a redraw of any known 
+   Basquiat painting. External MoMA link provided for students 
+   who want to see real Basquiat works.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Smart Class platform shell colors (kept for topbar consistency) */
+  --ink: #1a1d2b;
+  --ink-soft: rgba(26, 29, 43, 0.65);
+  --ink-faint: rgba(26, 29, 43, 0.45);
+  --ink-veryfaint: rgba(26, 29, 43, 0.15);
+  --paper: #fafaf8;
+  --paper-soft: #f5f5f7;
+  --purple: #a78bfa;
+  --cyan: #67e8f9;
+  --gold: #c8a96e;
+  --green: #1d9e75;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  
+  /* Basquiat-coded lesson palette */
+  --bsq-cream: #f5ecd2;       /* dirty off-white base */
+  --bsq-cream-soft: #faf3e3;
+  --bsq-paper: #f1e6c8;       /* rougher paper tone */
+  --bsq-black: #1a1a1a;
+  --bsq-charcoal: #2d2d2d;
+  --bsq-red: #d63838;
+  --bsq-red-deep: #a52828;
+  --bsq-yellow: #f4c430;
+  --bsq-yellow-warm: #e8a838;
+  --bsq-blue: #2a5a8a;
+  --bsq-blue-deep: #1a3d65;
+  --bsq-green: #5a8a4a;
+  --bsq-rust: #b8593a;
+  --bsq-pink: #d49a8a;
+  
+  /* Artchi voices (same 4 voices as the platform standard) */
+  --voice-look: #67e8f9;
+  --voice-think: #a78bfa;
+  --voice-make: #f9a8d4;
+  --voice-reflect: #c8a96e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ TOPBAR (Smart Class shell — identical to platform) ═══ */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-veryfaint);
+  position: sticky; top: 0; z-index: 100;
+}
+.brand-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 14px; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.3px;
+}
+.brand-mark { color: var(--purple); margin-right: 4px; }
+.breadcrumb-trail {
+  font-size: 11px; color: var(--ink-faint);
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-left: 6px;
+}
+.topbar-right {
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+}
+.topbar-right a { color: var(--ink-soft); text-decoration: none; }
+.user-pill { font-size: 12px; color: var(--ink-soft); }
+.sign-out-btn {
+  background: none; border: 1px solid var(--ink-veryfaint);
+  border-radius: 16px; padding: 6px 12px; font-size: 11px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
+}
+.sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
+
+/* ═══ SIGN-IN SCREEN (platform-standard) ═══ */
+.signin-screen {
+  min-height: calc(100vh - 60px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 50%, #f5ecd2 100%);
+}
+.signin-card {
+  background: #fff; border-radius: var(--radius-lg);
+  padding: 36px 28px; max-width: 380px; width: 100%;
+  box-shadow: var(--shadow-lg); text-align: center;
+}
+.signin-kicker {
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--bsq-red); margin-bottom: 12px;
+}
+.signin-title {
+  font-family: 'Montserrat', sans-serif; font-size: 26px;
+  font-weight: 900; margin-bottom: 8px;
+}
+.signin-subtitle {
+  font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+}
+.signin-label {
+  display: block; text-align: left;
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 6px;
+}
+.signin-input {
+  width: 100%; padding: 12px 14px; font-size: 15px;
+  border: 1.5px solid var(--ink-veryfaint); border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  letter-spacing: 0.5px; outline: none;
+  transition: border 0.2s;
+}
+.signin-input:focus { border-color: var(--bsq-red); }
+.signin-input.error { border-color: #e74c3c; animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.signin-btn {
+  width: 100%; margin-top: 14px; padding: 14px;
+  background: var(--bsq-black); color: #fff; border: none;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 13px; letter-spacing: 1px;
+}
+.signin-btn:hover:not(:disabled) { background: #2a2a2a; }
+.signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.signin-error {
+  display: none; margin-top: 12px; font-size: 12px; color: #e74c3c;
+}
+.signin-error.visible { display: block; }
+.signin-help {
+  margin-top: 22px; font-size: 12px; color: var(--ink-faint);
+  line-height: 1.7;
+}
+.signin-help a { color: var(--bsq-red); text-decoration: none; font-weight: 700; }
+
+/* ═══ LESSON CONTAINER ═══ */
+.lesson {
+  max-width: 780px; margin: 0 auto; padding: 24px 18px 80px;
+}
+
+/* ═══ BACK LINK ═══ */
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-soft); padding: 6px 0; margin-bottom: 16px;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--bsq-red); }
+
+/* ═══ STEP HEADER ═══ */
+.step-header {
+  margin-bottom: 24px;
+}
+.step-kicker {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 12px; letter-spacing: 1.5px;
+  color: var(--bsq-red); margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.step-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px; font-weight: 900;
+  line-height: 1.1; margin-bottom: 8px;
+  color: var(--bsq-black);
+}
+.step-prompt {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 19px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+/* ═══ PROGRESS DOTS (6 steps) ═══ */
+.progress-strip {
+  display: flex; justify-content: center; gap: 10px;
+  margin: 0 0 28px;
+}
+.progress-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink-veryfaint);
+  cursor: pointer; transition: all 0.2s;
+}
+.progress-dot.done { background: var(--bsq-green); }
+.progress-dot.current {
+  width: 32px; border-radius: 5px;
+  background: var(--bsq-red);
+}
+.progress-dot:hover { transform: scale(1.3); }
+
+/* ═══ HERO IMAGE FRAME ═══ */
+.hero-frame {
+  background: var(--bsq-cream);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: 4px 5px 0 var(--bsq-black);
+  position: relative;
+}
+.hero-frame svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero-caption {
+  background: var(--bsq-cream-soft);
+  padding: 10px 14px;
+  border-top: 2px solid var(--bsq-black);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  color: var(--bsq-charcoal);
+  font-style: italic;
+}
+.hero-link-bar {
+  display: flex; gap: 10px; align-items: center;
+  margin-bottom: 22px; flex-wrap: wrap;
+}
+.museum-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bsq-black); color: var(--bsq-cream);
+  padding: 8px 14px;
+  border-radius: 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.8px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.museum-link-btn:hover { background: var(--bsq-red); }
+.museum-link-note {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px; color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ═══ CHIP CHOICE GRID ═══ */
+.chips-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 22px;
+}
+.chip {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 10px 16px;
+  border-radius: 24px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--bsq-black);
+}
+.chip:hover {
+  background: var(--bsq-yellow);
+}
+.chip.selected {
+  background: var(--bsq-black);
+  color: var(--bsq-cream);
+}
+.chip.selected:hover {
+  background: var(--bsq-charcoal);
+}
+
+/* ═══ ATTRACTION CARDS (Step 2) ═══ */
+.attraction-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+@media (max-width: 480px) { .attraction-grid { grid-template-columns: 1fr; } }
+.attraction-card {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 14px 16px;
+  cursor: pointer;
+  position: relative;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  color: var(--bsq-black);
+  box-shadow: 2px 3px 0 var(--bsq-black);
+  transition: all 0.15s;
+}
+.attraction-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 4px 0 var(--bsq-black);
+  background: var(--bsq-yellow);
+}
+.attraction-card.selected {
+  background: var(--bsq-red);
+  color: var(--bsq-cream);
+  border-color: var(--bsq-red-deep);
+}
+
+/* ═══ FOLLOW-UP (Step 2 after choice) ═══ */
+.follow-up {
+  background: var(--bsq-cream);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  display: none;
+}
+.follow-up.visible { display: block; }
+.follow-up-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 11px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.follow-up-text {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px; color: var(--bsq-black);
+  line-height: 1.4;
+}
+
+/* ═══ MEET BASQUIAT (Step 3) ═══ */
+.portrait-block {
+  display: flex; gap: 18px; align-items: center;
+  margin-bottom: 28px;
+  background: var(--bsq-cream-soft);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: 4px 5px 0 var(--bsq-black);
+}
+@media (max-width: 540px) { 
+  .portrait-block { flex-direction: column; align-items: flex-start; }
+}
+.portrait-svg {
+  flex-shrink: 0;
+  width: 110px; height: 130px;
+  background: var(--bsq-cream);
+  border: 1.5px solid var(--bsq-black);
+  border-radius: 4px;
+}
+.portrait-text { flex: 1; }
+.portrait-name {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 22px; color: var(--bsq-black);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.portrait-body {
+  font-size: 14px; line-height: 1.55;
+  color: var(--bsq-charcoal);
+}
+.portrait-caveat {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 12px; color: var(--ink-faint);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.three-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 28px;
+}
+@media (max-width: 600px) { .three-cards { grid-template-columns: 1fr; } }
+.fact-card {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 14px;
+  position: relative;
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.fact-card-num {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 28px; color: var(--bsq-red);
+  line-height: 1; margin-bottom: 8px;
+}
+.fact-card-text {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px; line-height: 1.35;
+  color: var(--bsq-black);
+}
+
+.expandable-panel {
+  background: var(--bsq-cream-soft);
+  border: 1.5px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.expandable-trigger {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px; font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--bsq-black);
+  text-align: left;
+}
+.expandable-trigger:hover { background: var(--bsq-cream); }
+.expandable-arrow { transition: transform 0.2s; font-size: 16px; }
+.expandable-panel.open .expandable-arrow { transform: rotate(180deg); }
+.expandable-content {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 16px;
+}
+.expandable-panel.open .expandable-content {
+  max-height: 400px;
+  padding: 0 16px 16px;
+}
+.expandable-content p {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px; line-height: 1.5;
+  color: var(--bsq-charcoal);
+}
+
+/* ═══ STEP 4 — DECODE THE SYMBOLS ═══ */
+.decode-stage {
+  position: relative;
+  margin-bottom: 22px;
+}
+.decode-stage svg.decode-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+.decode-prompt {
+  position: absolute;
+  bottom: 14px; left: 50%; transform: translateX(-50%);
+  background: var(--bsq-black);
+  color: var(--bsq-cream);
+  font-family: 'Permanent Marker', cursive;
+  font-size: 14px; letter-spacing: 1.2px;
+  padding: 8px 18px; border-radius: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  text-transform: uppercase;
+}
+.decode-stage.show-prompt .decode-prompt { opacity: 1; }
+
+/* Hotspot region — invisible overlay on top of SVG */
+.hotspot-region {
+  fill: rgba(244, 196, 48, 0);
+  stroke: rgba(244, 196, 48, 0);
+  stroke-width: 3;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.hotspot-region.sweeping {
+  fill: rgba(244, 196, 48, 0.25);
+  stroke: rgba(244, 196, 48, 0.7);
+  filter: drop-shadow(0 0 8px rgba(244, 196, 48, 0.7));
+}
+.hotspot-region:hover {
+  fill: rgba(244, 196, 48, 0.18);
+  stroke: rgba(244, 196, 48, 0.6);
+  filter: drop-shadow(0 0 6px rgba(244, 196, 48, 0.5));
+}
+.hotspot-region.saved {
+  stroke: var(--bsq-green);
+  fill: rgba(90, 138, 74, 0.1);
+}
+
+/* Decode card (floating) */
+.decode-card-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20, 20, 20, 0.65);
+  z-index: 200;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.decode-card-overlay.active { display: flex; }
+.decode-card {
+  background: var(--bsq-cream);
+  border: 3px solid var(--bsq-black);
+  max-width: 420px; width: 100%;
+  padding: 24px;
+  box-shadow: 6px 7px 0 var(--bsq-black);
+  position: relative;
+  animation: cardPop 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@keyframes cardPop {
+  from { transform: scale(0.85) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.decode-card-kicker {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 11px; letter-spacing: 1.5px;
+  color: var(--bsq-red); margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.decode-card-title {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 26px; color: var(--bsq-black);
+  letter-spacing: 0.5px; margin-bottom: 12px;
+  line-height: 1;
+}
+.decode-card-body {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px; line-height: 1.5;
+  color: var(--bsq-charcoal);
+  margin-bottom: 18px;
+}
+.decode-card-saved-tag {
+  display: inline-block;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  background: var(--bsq-yellow);
+  border: 1.5px solid var(--bsq-black);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 14px;
+  color: var(--bsq-black);
+}
+.decode-card-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.decode-card-btn {
+  flex: 1; min-width: 130px;
+  padding: 10px 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.6px; text-transform: uppercase;
+  cursor: pointer;
+  border: 1.5px solid var(--bsq-black);
+}
+.decode-card-btn.save {
+  background: var(--bsq-red);
+  color: var(--bsq-cream);
+}
+.decode-card-btn.save:hover { background: var(--bsq-red-deep); }
+.decode-card-btn.save.already-saved {
+  background: var(--bsq-green);
+  border-color: var(--bsq-green);
+}
+.decode-card-btn.close {
+  background: #fff;
+  color: var(--bsq-black);
+}
+.decode-card-btn.close:hover { background: var(--bsq-yellow); }
+
+/* Saved tray (My visual language) */
+.visual-tray {
+  background: var(--bsq-cream-soft);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.visual-tray-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 12px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.visual-tray-items {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  min-height: 28px;
+}
+.visual-tray-item {
+  background: var(--bsq-yellow);
+  border: 1.5px solid var(--bsq-black);
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  color: var(--bsq-black);
+  animation: trayPop 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+@keyframes trayPop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+.visual-tray-empty {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px; color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ═══ STEP 5 — SYMBOL BUILDER (6 slots) ═══ */
+.symbol-builder {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 22px;
+}
+@media (max-width: 540px) { .symbol-builder { grid-template-columns: 1fr; } }
+.symbol-slot {
+  background: var(--bsq-cream);
+  border: 2px dashed var(--bsq-black);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  min-height: 130px;
+  display: flex; flex-direction: column;
+}
+.symbol-slot:hover {
+  background: var(--bsq-cream-soft);
+  border-style: solid;
+}
+.symbol-slot.filled {
+  background: #fff;
+  border: 2px solid var(--bsq-black);
+  border-style: solid;
+  box-shadow: 3px 4px 0 var(--bsq-black);
+}
+.symbol-slot-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 11px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.symbol-slot-prompt {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px; color: var(--ink-soft);
+  flex: 1;
+}
+.symbol-slot-value {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 18px; color: var(--bsq-black);
+  line-height: 1.3;
+  white-space: pre-wrap;
+}
+.symbol-slot-edit-hint {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.8px;
+  color: var(--ink-faint); margin-top: 6px;
+  text-transform: uppercase;
+}
+
+/* Symbol-input modal */
+.slot-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,20,20,0.65); z-index: 200;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.slot-modal-overlay.active { display: flex; }
+.slot-modal {
+  background: var(--bsq-cream);
+  border: 3px solid var(--bsq-black);
+  max-width: 440px; width: 100%;
+  padding: 24px;
+  box-shadow: 6px 7px 0 var(--bsq-black);
+}
+.slot-modal-title {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 22px; color: var(--bsq-black);
+  margin-bottom: 6px;
+}
+.slot-modal-prompt {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px; color: var(--bsq-charcoal);
+  margin-bottom: 14px;
+}
+.slot-modal-textarea {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  color: var(--bsq-black);
+}
+.slot-modal-textarea:focus { border-color: var(--bsq-red); }
+.slot-modal-suggestions {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 12px 0 0;
+}
+.slot-suggestion {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--bsq-black);
+}
+.slot-suggestion:hover { background: var(--bsq-yellow); }
+.slot-modal-actions {
+  display: flex; gap: 8px; margin-top: 18px;
+}
+
+/* ═══ STEP 6 — MAKE THE PIECE ═══ */
+.materials-strip {
+  background: var(--bsq-cream-soft);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.materials-strip-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 12px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.materials-list {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.material-pill {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 4px 11px;
+  border-radius: 14px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  color: var(--bsq-black);
+}
+
+.ingredients-list {
+  background: #fff;
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  box-shadow: 3px 4px 0 var(--bsq-black);
+}
+.ingredients-title {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 14px; letter-spacing: 1.2px;
+  color: var(--bsq-black); margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.ingredient-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 6px 0;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px;
+  color: var(--bsq-charcoal);
+}
+.ingredient-bullet {
+  width: 14px; height: 14px;
+  background: var(--bsq-red);
+  flex-shrink: 0;
+}
+.ingredient-row.ok .ingredient-bullet { background: var(--bsq-green); }
+
+.start-modes {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px; margin-bottom: 22px;
+}
+@media (max-width: 600px) { .start-modes { grid-template-columns: 1fr; } }
+.start-mode {
+  background: var(--bsq-cream-soft);
+  border: 1.5px solid var(--bsq-black);
+  padding: 14px;
+  cursor: pointer;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 16px;
+  color: var(--bsq-black);
+  text-align: center;
+  line-height: 1.3;
+  transition: all 0.15s;
+}
+.start-mode:hover { background: var(--bsq-yellow); }
+.start-mode.selected {
+  background: var(--bsq-red);
+  color: var(--bsq-cream);
+  border-color: var(--bsq-red-deep);
+}
+
+.completion-line {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 19px;
+  color: var(--bsq-charcoal);
+  text-align: center;
+  margin: 24px 0 20px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ═══ UPLOAD AREA (final piece) ═══ */
+.upload-area {
+  background: #fff;
+  border: 2px dashed var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+.upload-area:hover {
+  background: var(--bsq-cream-soft);
+  border-style: solid;
+}
+.upload-area.has-upload {
+  padding: 0; border-color: var(--bsq-green);
+  background: #fff;
+}
+.upload-icon { font-size: 36px; margin-bottom: 8px; }
+.upload-prompt {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 14px; color: var(--bsq-black);
+  letter-spacing: 0.8px; margin-bottom: 6px;
+}
+.upload-hint {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px; color: var(--ink-faint);
+}
+.upload-preview {
+  width: 100%; max-height: 380px;
+  object-fit: contain;
+  display: block;
+  background: var(--bsq-cream);
+}
+.upload-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bsq-cream-soft);
+  border-top: 1.5px solid var(--bsq-black);
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+}
+.upload-bar-text { color: var(--bsq-green); font-weight: 700; }
+.upload-bar-replace {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; color: var(--bsq-red); letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ═══ REFLECTION BLOCK ═══ */
+.reflection-block {
+  background: var(--bsq-cream-soft);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.reflection-block textarea {
+  width: 100%; min-height: 90px;
+  padding: 12px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  border-radius: 4px;
+  resize: vertical; outline: none;
+  color: var(--bsq-black);
+}
+.reflection-block textarea:focus { border-color: var(--bsq-red); }
+.reflection-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 12px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* ═══ ARTCHI ═══ */
+.artchi-block {
+  background: var(--bsq-cream-soft);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-sm);
+  padding: 14px 14px 14px 64px;
+  margin-bottom: 22px;
+  position: relative;
+  min-height: 72px;
+  border-left: 6px solid var(--voice-think);
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.artchi-block.voice-look { border-left-color: var(--voice-look); }
+.artchi-block.voice-think { border-left-color: var(--voice-think); }
+.artchi-block.voice-make { border-left-color: var(--voice-make); }
+.artchi-block.voice-reflect { border-left-color: var(--voice-reflect); }
+.artchi-avatar {
+  position: absolute;
+  left: 12px; top: 12px;
+  width: 38px; height: 38px;
+  background: var(--bsq-black);
+  border: 2px solid var(--bsq-cream);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  color: var(--bsq-yellow);
+}
+.artchi-voice {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 10px; letter-spacing: 1.2px;
+  color: var(--bsq-red); margin-bottom: 3px;
+  text-transform: uppercase;
+}
+.artchi-text {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px;
+  color: var(--bsq-black);
+  line-height: 1.4;
+}
+
+/* ═══ NAV ═══ */
+.lesson-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 20px;
+  border-top: 1.5px solid var(--bsq-black);
+  gap: 10px;
+}
+.nav-btn {
+  background: #fff;
+  border: 1.5px solid var(--bsq-black);
+  padding: 12px 22px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+  font-weight: 800; letter-spacing: 0.6px;
+  cursor: pointer; color: var(--bsq-black);
+  text-transform: uppercase;
+}
+.nav-btn:hover { background: var(--bsq-yellow); }
+.nav-btn.primary {
+  background: var(--bsq-red);
+  color: var(--bsq-cream);
+  border-color: var(--bsq-red-deep);
+  box-shadow: 2px 3px 0 var(--bsq-black);
+}
+.nav-btn.primary:hover { background: var(--bsq-red-deep); }
+.nav-btn:disabled {
+  opacity: 0.4; cursor: not-allowed;
+  background: var(--paper-soft);
+}
+.nav-btn:disabled:hover { background: var(--paper-soft); }
+
+/* ═══ BADGE CEREMONY ═══ */
+.badge-ceremony {
+  background: var(--bsq-cream);
+  border: 3px solid var(--bsq-black);
+  padding: 36px 28px; text-align: center;
+  box-shadow: 6px 7px 0 var(--bsq-black);
+}
+.badge-crown {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 48px;
+  color: var(--bsq-yellow);
+  -webkit-text-stroke: 2px var(--bsq-black);
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+}
+.badge-title-big {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 32px;
+  color: var(--bsq-black);
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+.badge-sub-big {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 17px; color: var(--bsq-charcoal);
+  margin-bottom: 22px;
+}
+.badge-actions {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+}
+
+/* ═══ COMPLETE TOAST ═══ */
+.complete-toast {
+  position: fixed;
+  bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bsq-black); color: var(--bsq-cream);
+  padding: 12px 22px;
+  border: 1.5px solid var(--bsq-cream);
+  font-family: 'Permanent Marker', cursive;
+  font-size: 13px; letter-spacing: 0.8px;
+  z-index: 250;
+  opacity: 0; transition: all 0.3s;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+.complete-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <a href="../../" class="brand-link"><span class="brand-mark">●</span> FEI · Smart Class</a>
+    <span class="breadcrumb-trail">· Creation · Learn From Masters</span>
+  </div>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<div class="signin-screen" id="signin-screen" style="display:none;">
+  <div class="signin-card">
+    <div class="signin-kicker">👑 LFC017 · Learn From Masters</div>
+    <h1 class="signin-title">Basquiat</h1>
+    <p class="signin-subtitle">Enter your student code to begin the lesson.</p>
+    <label class="signin-label" for="signin-code">Student Code</label>
+    <input type="text" class="signin-input" id="signin-code"
+           placeholder="e.g. LILY-01" autocomplete="off"
+           autocapitalize="characters" spellcheck="false" />
+    <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
+    <p class="signin-error" id="signin-error">That code doesn't match.</p>
+    <p class="signin-help">
+      Don't have a code yet?<br>
+      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
+      &nbsp;·&nbsp;
+      <a href="#" id="try-code-link">Try with TRYNEW</a>
+    </p>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-screen" style="display:none;">
+  <a href="../../creation/" class="back-link">← Back to Studio</a>
+  <div id="lesson-content"></div>
+</div>
+
+<!-- Decode card overlay (Step 4 hotspot reveal) -->
+<div class="decode-card-overlay" id="decode-card-overlay" onclick="if(event.target===this) closeDecodeCard()">
+  <div class="decode-card" id="decode-card-content"></div>
+</div>
+
+<!-- Slot input modal (Step 5) -->
+<div class="slot-modal-overlay" id="slot-modal-overlay" onclick="if(event.target===this) closeSlotModal()">
+  <div class="slot-modal" id="slot-modal-content"></div>
+</div>
+
+<div class="complete-toast" id="complete-toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// LFC017 · Learn From Masters: Basquiat
+// SECTION 1 — CONFIG
+// ════════════════════════════════════════════════════════════════
+const ROSTER_PATH = '../../core/student-access-codes.js';
+const PROFILE_KEY = 'fei_user_profile';
+const LESSON_PROGRESS_KEY = 'fei_lfc017_progress';
+const JUDGMENT_CARDS_KEY = 'lfc_cards_v1';  // Cross-lesson card portfolio
+const LESSON_ID = 'lfc017';
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 2 — THE HERO IMAGE (inline SVG)
+//
+// Basquiat-INSPIRED original composition for classroom use.
+// NOT a copy of any known Basquiat work.
+// Each of 7 hotspot regions has data-hotspot-id matching HOTSPOTS keys.
+// ════════════════════════════════════════════════════════════════
+function renderHeroSVG(opts) {
+  opts = opts || {};
+  const showHotspots = !!opts.interactive;
+  
+  return `
+<svg class="${opts.interactive ? 'decode-svg' : ''}" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cream paper background with subtle texture -->
+  <defs>
+    <pattern id="paperTexture" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <rect width="200" height="200" fill="#f5ecd2"/>
+      <circle cx="20" cy="30" r="0.5" fill="#a89060" opacity="0.4"/>
+      <circle cx="80" cy="60" r="0.4" fill="#a89060" opacity="0.4"/>
+      <circle cx="140" cy="20" r="0.5" fill="#a89060" opacity="0.4"/>
+      <circle cx="170" cy="100" r="0.4" fill="#a89060" opacity="0.4"/>
+      <circle cx="40" cy="150" r="0.5" fill="#a89060" opacity="0.4"/>
+      <circle cx="100" cy="180" r="0.4" fill="#a89060" opacity="0.4"/>
+      <circle cx="160" cy="170" r="0.5" fill="#a89060" opacity="0.4"/>
+      <line x1="0" y1="50" x2="200" y2="51" stroke="#c0a878" stroke-width="0.3" opacity="0.3"/>
+      <line x1="0" y1="130" x2="200" y2="128" stroke="#c0a878" stroke-width="0.3" opacity="0.3"/>
+    </pattern>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" />
+      <feDisplacementMap in="SourceGraphic" scale="2"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#paperTexture)"/>
+  
+  <!-- Layered paint blocks (the underlayer) -->
+  <rect x="40" y="80" width="220" height="180" fill="#f4c430" opacity="0.45" transform="rotate(-2 150 170)"/>
+  <rect x="510" y="30" width="240" height="140" fill="#2a5a8a" opacity="0.4" transform="rotate(3 630 100)"/>
+  <rect x="80" y="380" width="280" height="150" fill="#d63838" opacity="0.35" transform="rotate(-1 220 455)"/>
+  <rect x="450" y="380" width="220" height="170" fill="#5a8a4a" opacity="0.3" transform="rotate(2 560 465)"/>
+  
+  <!-- Scratchy diagonal layering marks -->
+  <g stroke="#1a1a1a" stroke-width="1.5" opacity="0.25" fill="none">
+    <line x1="40" y1="100" x2="240" y2="60"/>
+    <line x1="50" y1="120" x2="250" y2="80"/>
+    <line x1="510" y1="180" x2="730" y2="40"/>
+    <line x1="520" y1="200" x2="740" y2="60"/>
+  </g>
+
+  <!-- ═══════ HOTSPOT 7: Layered paint area (back layer) ═══════ -->
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="layers" x="430" y="370" width="260" height="200" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 1: HEAD / FIGURE (central) ═══════ -->
+  <!-- Crown above the head -->
+  <g transform="translate(310, 80)">
+    <path d="M 0 30 L 20 0 L 40 30 L 60 0 L 80 30 L 100 0 L 120 30 L 120 50 L 0 50 Z" 
+          fill="#f4c430" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="20" cy="2" r="4" fill="#d63838" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="60" cy="2" r="4" fill="#d63838" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="100" cy="2" r="4" fill="#d63838" stroke="#1a1a1a" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Mask-like face -->
+  <g transform="translate(280, 140)">
+    <!-- Face outline (rough hand-drawn ellipse) -->
+    <path d="M 90 0 
+             C 130 5, 180 30, 175 100
+             C 175 150, 160 200, 90 210
+             C 30 200, 0 150, 5 100
+             C 5 30, 50 5, 90 0 Z"
+          fill="#f5ecd2" stroke="#1a1a1a" stroke-width="4"/>
+    
+    <!-- Brain/scribbles inside the head top -->
+    <g stroke="#1a1a1a" stroke-width="1.5" fill="none" opacity="0.7">
+      <path d="M 40 30 Q 60 20, 80 32 Q 100 22, 120 32 Q 140 22, 150 35"/>
+      <path d="M 35 50 Q 60 40, 90 52 Q 120 42, 150 52"/>
+    </g>
+    
+    <!-- Left eye (target-style) -->
+    <circle cx="50" cy="90" r="14" fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
+    <circle cx="50" cy="90" r="8" fill="#d63838" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="50" cy="90" r="3" fill="#1a1a1a"/>
+    
+    <!-- Right eye -->
+    <circle cx="130" cy="90" r="14" fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
+    <circle cx="130" cy="90" r="8" fill="#2a5a8a" stroke="#1a1a1a" stroke-width="1.5"/>
+    <circle cx="130" cy="90" r="3" fill="#1a1a1a"/>
+    
+    <!-- Nose (slash) -->
+    <line x1="90" y1="105" x2="80" y2="135" stroke="#1a1a1a" stroke-width="3"/>
+    <line x1="80" y1="135" x2="95" y2="138" stroke="#1a1a1a" stroke-width="3"/>
+    
+    <!-- Teeth-bared mouth -->
+    <rect x="55" y="150" width="70" height="22" fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
+    <line x1="65" y1="150" x2="65" y2="172" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="78" y1="150" x2="78" y2="172" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="91" y1="150" x2="91" y2="172" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="103" y1="150" x2="103" y2="172" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="116" y1="150" x2="116" y2="172" stroke="#1a1a1a" stroke-width="2"/>
+    
+    <!-- Neck/body suggestion -->
+    <path d="M 60 210 L 50 250 L 130 250 L 120 210 Z" fill="#f5ecd2" stroke="#1a1a1a" stroke-width="3"/>
+    
+    <!-- Arrow/halo above head -->
+    <path d="M 75 -10 L 85 -20 L 105 -10" stroke="#d63838" stroke-width="3" fill="none"/>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="head" x="270" y="70" width="200" height="320" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 2: DOG / CREATURE (lower left) ═══════ -->
+  <g transform="translate(70, 430)">
+    <!-- Body -->
+    <path d="M 0 50 
+             L 15 35 L 30 30 L 60 25 L 90 28 L 110 38 L 125 50 L 130 65 L 125 75
+             L 115 80 L 95 80 L 85 95 L 75 95 L 75 80 L 50 80 L 40 95 L 30 95 L 30 80
+             L 5 75 Z"
+          fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2.5"/>
+    <!-- Head -->
+    <path d="M 110 38 L 135 28 L 155 30 L 155 50 L 145 55 L 130 52" 
+          fill="#1a1a1a" stroke="#1a1a1a" stroke-width="2"/>
+    <!-- Eye on creature -->
+    <circle cx="143" cy="40" r="2.5" fill="#f4c430"/>
+    <!-- Teeth -->
+    <line x1="145" y1="50" x2="147" y2="55" stroke="#fff" stroke-width="1.5"/>
+    <line x1="150" y1="50" x2="152" y2="55" stroke="#fff" stroke-width="1.5"/>
+    <!-- Tail -->
+    <path d="M 0 50 L -15 35 L -20 20" stroke="#1a1a1a" stroke-width="3" fill="none"/>
+    <!-- Rib lines (anatomical) -->
+    <line x1="35" y1="45" x2="45" y2="65" stroke="#d63838" stroke-width="1.5"/>
+    <line x1="55" y1="40" x2="65" y2="65" stroke="#d63838" stroke-width="1.5"/>
+    <line x1="75" y1="40" x2="85" y2="65" stroke="#d63838" stroke-width="1.5"/>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="creature" x="45" y="420" width="195" height="120" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 3: CITY CODE (upper right, word block) ═══════ -->
+  <g transform="translate(530, 90)" font-family="Permanent Marker, sans-serif" fill="#1a1a1a">
+    <rect x="-10" y="-30" width="200" height="100" fill="#f5ecd2" stroke="#1a1a1a" stroke-width="2.5"/>
+    <text x="0" y="0" font-size="32" font-weight="900">CITY</text>
+    <text x="0" y="35" font-size="32" font-weight="900">CODE</text>
+    <!-- Strikethrough on CITY (Basquiat-style) -->
+    <line x1="-5" y1="-10" x2="105" y2="-10" stroke="#d63838" stroke-width="3"/>
+    <!-- Small marks below -->
+    <text x="0" y="62" font-size="13" font-family="Patrick Hand, cursive">No. 47-3</text>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="words" x="510" y="50" width="220" height="120" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 4: OPEN EYE (symbol, mid-right) ═══════ -->
+  <g transform="translate(580, 250)">
+    <!-- Eye shape -->
+    <path d="M 0 25 Q 35 -5 70 25 Q 35 55 0 25 Z" 
+          fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- Iris -->
+    <circle cx="35" cy="25" r="14" fill="#2a5a8a" stroke="#1a1a1a" stroke-width="2"/>
+    <!-- Pupil -->
+    <circle cx="35" cy="25" r="5" fill="#1a1a1a"/>
+    <!-- Lashes -->
+    <line x1="5" y1="20" x2="0" y2="13" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="15" y1="13" x2="13" y2="5" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="35" y1="9" x2="35" y2="0" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="55" y1="13" x2="57" y2="5" stroke="#1a1a1a" stroke-width="2"/>
+    <line x1="65" y1="20" x2="70" y2="13" stroke="#1a1a1a" stroke-width="2"/>
+    <!-- "OPEN EYE" label -->
+    <text x="0" y="70" font-family="Permanent Marker, sans-serif" font-size="16" fill="#1a1a1a">OPEN EYE</text>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="symbol" x="570" y="220" width="165" height="120" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 5: BUILD / BREAK / REBUILD (phrase block) ═══════ -->
+  <g transform="translate(490, 430)" font-family="Permanent Marker, sans-serif" fill="#1a1a1a">
+    <rect x="-10" y="-25" width="230" height="120" fill="#f4c430" opacity="0.7" stroke="#1a1a1a" stroke-width="2"/>
+    <text x="0" y="0" font-size="20" font-weight="900">BUILD</text>
+    <text x="0" y="28" font-size="20" font-weight="900">BREAK</text>
+    <text x="0" y="56" font-size="20" font-weight="900">REBUILD</text>
+    <!-- crossed out / scribble correction -->
+    <line x1="-3" y1="20" x2="80" y2="20" stroke="#d63838" stroke-width="2.5"/>
+    <!-- Tally marks beside the phrase -->
+    <g stroke="#1a1a1a" stroke-width="2" fill="none">
+      <line x1="150" y1="0" x2="150" y2="20"/>
+      <line x1="158" y1="0" x2="158" y2="20"/>
+      <line x1="166" y1="0" x2="166" y2="20"/>
+      <line x1="174" y1="0" x2="174" y2="20"/>
+      <line x1="146" y1="14" x2="178" y2="6"/>
+    </g>
+    <text x="155" y="40" font-family="Patrick Hand, cursive" font-size="11">×3</text>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="phrase" x="475" y="395" width="245" height="155" />' : ''}
+  
+  <!-- ═══════ HOTSPOT 6: ECHO + grid (repetition pattern, upper-left) ═══════ -->
+  <g transform="translate(55, 110)" font-family="Permanent Marker, sans-serif" fill="#1a1a1a">
+    <text x="0" y="0" font-size="22" font-weight="900">ECHO</text>
+    <text x="0" y="22" font-size="22" font-weight="900" opacity="0.7">ECHO</text>
+    <text x="0" y="44" font-size="22" font-weight="900" opacity="0.45">ECHO</text>
+    <text x="0" y="66" font-size="22" font-weight="900" opacity="0.25">ECHO</text>
+    <!-- Grid pattern next to ECHOs -->
+    <g stroke="#1a1a1a" stroke-width="1.5" fill="none" transform="translate(105, -8)">
+      <rect x="0" y="0" width="20" height="20"/>
+      <rect x="22" y="0" width="20" height="20"/>
+      <rect x="44" y="0" width="20" height="20"/>
+      <rect x="0" y="22" width="20" height="20"/>
+      <rect x="22" y="22" width="20" height="20" fill="#d63838"/>
+      <rect x="44" y="22" width="20" height="20"/>
+      <rect x="0" y="44" width="20" height="20"/>
+      <rect x="22" y="44" width="20" height="20"/>
+      <rect x="44" y="44" width="20" height="20" fill="#2a5a8a"/>
+    </g>
+  </g>
+  ${showHotspots ? '<rect class="hotspot-region" data-hotspot-id="pattern" x="40" y="85" width="180" height="115" />' : ''}
+  
+  <!-- Scattered scratches/X marks across the surface -->
+  <g stroke="#1a1a1a" stroke-width="2" fill="none">
+    <path d="M 470 250 L 490 270"/>
+    <path d="M 490 250 L 470 270"/>
+    <path d="M 200 320 L 215 335"/>
+    <path d="M 215 320 L 200 335"/>
+    <path d="M 380 555 L 395 570"/>
+    <path d="M 395 555 L 380 570"/>
+  </g>
+  
+  <!-- Small "©" mark and numbers (Basquiat-like signature density) -->
+  <g font-family="Patrick Hand, cursive" fill="#1a1a1a" font-size="13">
+    <text x="380" y="565">© NYC</text>
+    <text x="200" y="365" font-size="11">17 / 47</text>
+    <text x="460" y="280" font-family="Permanent Marker, sans-serif" font-size="20" fill="#d63838">A</text>
+    <text x="320" y="395" font-family="Permanent Marker, sans-serif" font-size="20" fill="#d63838">B</text>
+  </g>
+</svg>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 3 — BASQUIAT PORTRAIT (stylized silhouette SVG)
+// Generic artist-portrait silhouette. NOT a likeness of any photo.
+// ════════════════════════════════════════════════════════════════
+function renderPortraitSVG() {
+  return `
+<svg class="portrait-svg" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background block -->
+  <rect width="110" height="130" fill="#f5ecd2"/>
+  <!-- Color paint block behind silhouette -->
+  <rect x="5" y="20" width="100" height="105" fill="#2a5a8a" opacity="0.55"/>
+  <rect x="50" y="55" width="55" height="70" fill="#d63838" opacity="0.4"/>
+  
+  <!-- Silhouette: shoulders -->
+  <path d="M 10 130 
+           Q 15 95, 35 92
+           L 45 88
+           Q 50 60, 55 55
+           Q 60 60, 65 88
+           L 75 92
+           Q 95 95, 100 130 Z"
+        fill="#1a1a1a"/>
+  
+  <!-- Head -->
+  <ellipse cx="55" cy="50" rx="20" ry="22" fill="#1a1a1a"/>
+  
+  <!-- Dreadlocks (textured strokes coming off head) -->
+  <g fill="#1a1a1a">
+    <path d="M 38 38 Q 30 28, 28 18 L 32 18 Q 34 26, 40 36 Z"/>
+    <path d="M 42 32 Q 38 22, 36 10 L 42 12 Q 44 22, 48 32 Z"/>
+    <path d="M 50 30 Q 50 16, 50 6 L 56 8 Q 56 18, 56 32 Z"/>
+    <path d="M 60 30 Q 62 18, 66 8 L 70 14 Q 70 22, 66 34 Z"/>
+    <path d="M 68 34 Q 74 22, 80 14 L 82 22 Q 78 30, 72 38 Z"/>
+    <path d="M 72 40 Q 80 32, 86 28 L 86 38 Q 82 42, 76 44 Z"/>
+  </g>
+  
+  <!-- Yellow crown above head -->
+  <g transform="translate(40, -2)">
+    <path d="M 0 12 L 6 4 L 14 12 L 22 4 L 30 12 L 30 18 L 0 18 Z" 
+          fill="#f4c430" stroke="#1a1a1a" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+</svg>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 4 — LESSON DATA
+// 6 steps. Each step has a renderer function name + content.
+// ════════════════════════════════════════════════════════════════
+
+// ─── Hotspot definitions (Step 4) ─────────────────────────────
+const HOTSPOTS = {
+  head: {
+    cardTitle: 'Figure',
+    cardBody: 'A figure does not need to look realistic to feel human. A face can become a mask, a signal, or an emotional center.',
+    savedMove: 'figure energy'
+  },
+  creature: {
+    cardTitle: 'Creature',
+    cardBody: 'An animal in a symbolic image does not have to behave like a real animal. It can stand for instinct, warning, memory, humor, or force.',
+    savedMove: 'animal silhouette'
+  },
+  words: {
+    cardTitle: 'Words',
+    cardBody: 'Words can label, interrupt, organize, or create rhythm. They do not always explain the image. Sometimes they complicate it.',
+    savedMove: 'text fragments'
+  },
+  symbol: {
+    cardTitle: 'Symbol',
+    cardBody: 'A symbol can work like a sign, a warning, a private code, or a repeated visual idea. It does not need one fixed meaning.',
+    savedMove: 'symbolic icon'
+  },
+  phrase: {
+    cardTitle: 'Text as Thought',
+    cardBody: 'Sometimes text feels less like a label and more like a pulse of thinking. It can sound like instruction, memory, argument, or emotion.',
+    savedMove: 'phrase energy'
+  },
+  pattern: {
+    cardTitle: 'Pattern',
+    cardBody: 'Repeated words, marks, and diagrams can create rhythm. They make the image feel coded, unstable, and alive.',
+    savedMove: 'repeated marks'
+  },
+  layers: {
+    cardTitle: 'Layers',
+    cardBody: 'Layering lets an image feel like it has memory. Something is shown, covered, rewritten, or pushed back. The surface becomes part of the meaning.',
+    savedMove: 'layered texture'
+  }
+};
+
+// The sweep order (Phase B auto-glow walks through the hotspots)
+const HOTSPOT_SWEEP_ORDER = ['head', 'creature', 'words', 'symbol', 'phrase', 'pattern', 'layers'];
+
+// ─── Step 1 chips ────────────────────────────────────────────
+const STEP1_CHIPS = [
+  'a face', 'an animal', 'words', 'numbers', 'symbols', 'scribbles',
+  'a crown-like shape', 'layers', 'chaos', 'humor', 'something uncomfortable'
+];
+
+// ─── Step 2 attraction cards + follow-ups ────────────────────
+const STEP2_CARDS = [
+  { id: 'energy', label: 'The raw energy', followUp: 'What makes it feel energetic to you?' },
+  { id: 'symbols', label: 'The strange symbols', followUp: 'Do the symbols feel meaningful, decorative, or both?' },
+  { id: 'figure', label: 'The face or figure', followUp: 'Does the figure feel like a person, a mask, or something else?' },
+  { id: 'freedom', label: 'The messy freedom', followUp: 'Does it feel free, wild, or carefully intentional?' },
+  { id: 'mix', label: 'The mix of words and images', followUp: 'Do the words explain the image, or interrupt it?' },
+  { id: 'street', label: 'The street feeling', followUp: 'Does the image feel like a wall, a page, or a window?' },
+  { id: 'colors', label: 'The colors and layers', followUp: 'Are the colors fighting or working together?' },
+  { id: 'bold', label: 'It feels bold and alive', followUp: 'What is making it feel alive — pace, marks, faces, or something else?' }
+];
+
+// ─── Step 3 — fact cards + expandable panels ─────────────────
+const STEP3_FACTS = [
+  { num: '1', text: 'He began in the language of the street.' },
+  { num: '2', text: 'Words mattered to him.' },
+  { num: '3', text: 'His life shaped the work.' }
+];
+const STEP3_PANELS = [
+  {
+    title: 'Basquiat and Warhol',
+    body: 'In the early 1980s, Basquiat and Andy Warhol made paintings together. Two artists, two generations, two languages — collaging into each other. It changed both of them.'
+  },
+  {
+    title: 'Why the symbols feel layered',
+    body: 'Basquiat read everything — anatomy textbooks, jazz history, comic strips, world religions, ancient Egyptian symbols. The marks on his canvases are not random. They are a private library, half-erased, half-visible.'
+  }
+];
+const STEP3_CHIPS = [
+  'his energy', 'his story', 'his use of words',
+  'his symbols', 'his freedom', 'his intensity'
+];
+
+// ─── Step 5 — 6 symbol slots ─────────────────────────────────
+const STEP5_SLOTS = [
+  { id: 'personal', label: 'A personal symbol', prompt: 'Something only you would understand', suggestions: ['a key', 'a number that matters', 'a shape from childhood', 'a color stain'] },
+  { id: 'animal', label: 'An animal or creature', prompt: 'Real, imagined, or both', suggestions: ['a dog', 'a bird', 'a beetle', 'a creature with too many legs'] },
+  { id: 'word', label: 'A word or phrase', prompt: 'One word. A name. A demand. A question.', suggestions: ['CITY', 'WAIT', 'EVERYDAY', 'TRY AGAIN', 'NO PERMISSION'] },
+  { id: 'figure', label: 'A human figure or face', prompt: 'A friend, a stranger, an invented person', suggestions: ['my face from the side', 'a stranger I saw today', 'a mask', 'someone with no eyes'] },
+  { id: 'graphic', label: 'A graphic sign', prompt: 'Arrow, X, circle, halo, crown, target', suggestions: ['three arrows', 'a target', 'a crown like Basquiat\'s but rough', 'a halo'] },
+  { id: 'hidden', label: 'A hidden meaning', prompt: 'A symbol with a meaning only you carry', suggestions: ['something I almost lost', 'a date in a code', 'a feeling I can\'t name yet'] }
+];
+
+// ─── Step 6 — materials + ingredients + starting modes ───────
+const STEP6_MATERIALS = [
+  'oil pastel / oil stick feeling',
+  'crayon',
+  'marker',
+  'brush',
+  'collage scraps',
+  'dry pencil',
+  'paint plus text',
+  'rough layering'
+];
+const STEP6_INGREDIENTS = [
+  'a figure or face',
+  'an animal or creature',
+  'at least one word or phrase',
+  'abstract shapes',
+  'graphic signs or repeated marks',
+  'one symbol with personal meaning'
+];
+const STEP6_MODES = [
+  'A symbolic self-portrait',
+  'A person and creature world',
+  'A visual map of your thoughts'
+];
+
+// ─── Artchi voices ───────────────────────────────────────────
+const ARTCHI_VOICES = {
+  look: { label: 'Artchi · looking with you' },
+  think: { label: 'Artchi · thinking with you' },
+  make: { label: 'Artchi · making with you' },
+  reflect: { label: 'Artchi · reflecting with you' }
+};
+
+// ─── 6 STEPS ─────────────────────────────────────────────────
+const STEPS = [
+  {
+    id: 'step-1-first-look',
+    step: 1,
+    title: 'First Look: What Do You See?',
+    prompt: 'Look slowly. What do you notice first?',
+    artchi: { voice: 'look', text: "don't read it yet. just look. let your eye go to the part it wants to go to. that part already matters." },
+    rule: 'Tap at least 3.',
+    minSelections: 3,
+    completionRule: 'chips'
+  },
+  {
+    id: 'step-2-pulls-you-in',
+    step: 2,
+    title: 'What Pulls You In?',
+    prompt: 'What is pulling you toward this image?',
+    artchi: { voice: 'look', text: "your attraction is information. what your eye wants tells you something about how the image is working." },
+    rule: 'Pick 1 or 2.',
+    minSelections: 1,
+    maxSelections: 2,
+    completionRule: 'attractions'
+  },
+  {
+    id: 'step-3-meet-basquiat',
+    step: 3,
+    title: 'Meet Basquiat',
+    prompt: 'Now the artist behind the marks.',
+    artchi: { voice: 'think', text: "knowing the artist's life is not the answer to the work. but it changes how you read what's already in front of you." },
+    completionRule: 'chips',
+    minSelections: 1
+  },
+  {
+    id: 'step-4-decode-symbols',
+    step: 4,
+    title: 'Decode the Symbols',
+    prompt: 'Tap a glowing region of the image to learn what it is.',
+    artchi: { voice: 'think', text: "the image is the lesson. tap it. listen to what each part is doing. save the moves that feel like yours." },
+    rule: 'Save at least 2 moves to continue.',
+    minSavedMoves: 2,
+    completionRule: 'hotspots'
+  },
+  {
+    id: 'step-5-symbol-language',
+    step: 5,
+    title: 'Build Your Own Symbol Language',
+    prompt: 'What symbols belong to your world?',
+    artchi: { voice: 'make', text: "you're not borrowing basquiat's symbols. you're using what he showed you to build your own." },
+    rule: 'Fill at least 4 slots.',
+    minSelections: 4,
+    completionRule: 'slots'
+  },
+  {
+    id: 'step-6-make-the-piece',
+    step: 6,
+    title: 'Make the Piece',
+    prompt: 'Create a symbolic composition using figure, animal, text, abstract shape, and graphic marks.',
+    artchi: { voice: 'make', text: "do not make it tidy. let some parts stay raw. your image does not need to be polished. it needs to carry a voice." },
+    completionRule: 'upload'
+  }
+];
+
+function findStep(id) { return STEPS.find(s => s.id === id); }
+function stepIndex(id) { return STEPS.findIndex(s => s.id === id); }
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 5 — ROSTER + PROFILE (same shell as platform)
+// ════════════════════════════════════════════════════════════════
+let validStudents = new Map();
+let userProfile = null;
+let lessonProgress = {
+  currentStep: 'step-1-first-look',
+  completed: [],
+  step1Chips: [],         // selected observations
+  step2Attractions: [],   // selected attraction card IDs
+  step3Chips: [],         // "what stays with you most"
+  step3OpenPanels: [],    // expanded panel titles
+  hotspotSweepDone: false,
+  hotspotsVisited: [],
+  savedMoves: [],         // strings from HOTSPOTS[].savedMove
+  symbolSlots: {},        // { slotId: text }
+  startMode: null,
+  finalUpload: null,
+  reflection: ''
+};
+
+async function loadRoster() {
+  try {
+    const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    const blockRegex = /\{[^{}]*\}/g;
+    let block;
+    while ((block = blockRegex.exec(text)) !== null) {
+      const blockText = block[0];
+      const idMatch = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+      const nameMatch = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+      const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
+      if (!idMatch || !nameMatch) continue;
+      validStudents.set(idMatch[1].toUpperCase(), {
+        displayName: nameMatch[1],
+        isTrial: trialMatch ? trialMatch[1] === 'true' : false
+      });
+    }
+    console.log('[LFC017] Loaded ' + validStudents.size + ' codes');
+  } catch (err) {
+    console.warn('[LFC017] Roster load failed:', err);
+  }
+}
+
+function loadProfile() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    userProfile = raw ? JSON.parse(raw) : null;
+  } catch (e) { userProfile = null; }
+}
+
+function saveProfile(p) {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); userProfile = p; }
+  catch (e) {}
+}
+
+function clearProfile() {
+  try { localStorage.removeItem(PROFILE_KEY); userProfile = null; }
+  catch (e) {}
+}
+
+function loadLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    const raw = localStorage.getItem(key);
+    if (raw) lessonProgress = { ...lessonProgress, ...JSON.parse(raw) };
+  } catch (e) {}
+}
+
+function saveLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    localStorage.setItem(key, JSON.stringify(lessonProgress));
+  } catch (e) {}
+}
+
+// Cross-lesson card portfolio (same key Basquiat shares with lfc054)
+function saveJudgmentCard(card) {
+  try {
+    const raw = localStorage.getItem(JUDGMENT_CARDS_KEY);
+    const cards = raw ? JSON.parse(raw) : [];
+    const existingIdx = cards.findIndex(c =>
+      c.lessonId === LESSON_ID && c.judgmentId === card.judgmentId
+    );
+    const record = {
+      lessonId: LESSON_ID,
+      judgmentId: card.judgmentId,
+      level: card.level || 1,
+      question: card.question,
+      answer: card.answer,
+      studentCode: userProfile?.studentCode,
+      savedAt: Date.now()
+    };
+    if (existingIdx >= 0) cards[existingIdx] = record;
+    else cards.push(record);
+    localStorage.setItem(JUDGMENT_CARDS_KEY, JSON.stringify(cards));
+  } catch (e) {}
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 6 — SCREEN SWITCHING
+// ════════════════════════════════════════════════════════════════
+function showSignIn() {
+  document.getElementById('signin-screen').style.display = 'flex';
+  document.getElementById('lesson-screen').style.display = 'none';
+  document.getElementById('topbar-right').innerHTML =
+    '<a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>';
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) {
+    document.getElementById('signin-code').value = urlCode.toUpperCase();
+    updateSignInBtn();
+  }
+}
+
+function showLesson() {
+  document.getElementById('signin-screen').style.display = 'none';
+  document.getElementById('lesson-screen').style.display = 'block';
+  const tier = userProfile.tier === 'trial' ? '· Trial' : '';
+  document.getElementById('topbar-right').innerHTML =
+    '<span class="user-pill">' + escapeHtml(userProfile.name) + ' ' + tier + '</span>' +
+    '<button class="sign-out-btn" onclick="signOut()">Sign out</button>';
+  renderCurrentStep();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 7 — RENDERERS
+// ════════════════════════════════════════════════════════════════
+function renderCurrentStep() {
+  const step = findStep(lessonProgress.currentStep);
+  if (!step) return;
+  const container = document.getElementById('lesson-content');
+  container.innerHTML = renderHeader(step) + renderProgressStrip(step) + renderStepBody(step) + renderNav(step);
+  window.scrollTo(0, 0);
+  
+  // Post-render hooks
+  if (step.id === 'step-4-decode-symbols') {
+    setupHotspotInteraction();
+  }
+}
+
+function renderHeader(step) {
+  return `
+    <div class="step-header">
+      <div class="step-kicker">Step ${step.step} of ${STEPS.length} · Learn From Masters · Basquiat</div>
+      <h1 class="step-title">${escapeHtml(step.title)}</h1>
+      <p class="step-prompt">${escapeHtml(step.prompt)}</p>
+    </div>
+  `;
+}
+
+function renderProgressStrip(step) {
+  const currentIdx = stepIndex(step.id);
+  let html = '<div class="progress-strip">';
+  STEPS.forEach((s, i) => {
+    let cls = 'progress-dot';
+    if (lessonProgress.completed.includes(s.id)) cls += ' done';
+    if (i === currentIdx) cls += ' current';
+    html += `<div class="${cls}" onclick="jumpToStep('${s.id}')" title="Step ${s.step}: ${escapeHtml(s.title)}"></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderStepBody(step) {
+  switch (step.id) {
+    case 'step-1-first-look': return renderStep1(step);
+    case 'step-2-pulls-you-in': return renderStep2(step);
+    case 'step-3-meet-basquiat': return renderStep3(step);
+    case 'step-4-decode-symbols': return renderStep4(step);
+    case 'step-5-symbol-language': return renderStep5(step);
+    case 'step-6-make-the-piece': return renderStep6(step);
+    case 'badge-ceremony': return renderBadgeCeremony(step);
+    default: return '<p>Unknown step</p>';
+  }
+}
+
+// ─── Step 1 ──────────────────────────────────────────────────
+function renderStep1(step) {
+  let html = renderArtchi(step);
+  html += `
+    <div class="hero-frame">
+      ${renderHeroSVG()}
+      <div class="hero-caption">An inspired study image, made for this classroom. Not a Basquiat painting.</div>
+    </div>
+    <div class="hero-link-bar">
+      <a href="https://www.moma.org/artists/370" target="_blank" rel="noopener" class="museum-link-btn">
+        🏛 See an original Basquiat on MoMA →
+      </a>
+      <span class="museum-link-note">opens in a new tab</span>
+    </div>
+  `;
+  
+  html += '<div class="chips-grid">';
+  STEP1_CHIPS.forEach(chip => {
+    const sel = lessonProgress.step1Chips.includes(chip) ? ' selected' : '';
+    html += `<button class="chip${sel}" onclick="toggleStep1Chip('${escapeAttr(chip)}')">${escapeHtml(chip)}</button>`;
+  });
+  html += '</div>';
+  
+  // Rule + feedback
+  const picked = lessonProgress.step1Chips.length;
+  if (picked >= step.minSelections) {
+    html += '<div class="follow-up visible"><div class="follow-up-label">Noticed</div><div class="follow-up-text">You are already reading the image like an artist.</div></div>';
+  } else {
+    html += `<p style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--ink-faint);margin-top:-10px;margin-bottom:18px;font-style:italic;">Choose at least ${step.minSelections}. You chose ${picked}.</p>`;
+  }
+  
+  return html;
+}
+
+// ─── Step 2 ──────────────────────────────────────────────────
+function renderStep2(step) {
+  let html = renderArtchi(step);
+  
+  html += `
+    <div class="hero-frame">
+      ${renderHeroSVG()}
+      <div class="hero-caption">Look again. This time notice what you are drawn to.</div>
+    </div>
+  `;
+  
+  html += '<div class="attraction-grid">';
+  STEP2_CARDS.forEach(card => {
+    const sel = lessonProgress.step2Attractions.includes(card.id) ? ' selected' : '';
+    html += `<div class="attraction-card${sel}" onclick="toggleStep2Card('${card.id}')">${escapeHtml(card.label)}</div>`;
+  });
+  html += '</div>';
+  
+  // Follow-up based on selections
+  if (lessonProgress.step2Attractions.length > 0) {
+    const firstId = lessonProgress.step2Attractions[0];
+    const card = STEP2_CARDS.find(c => c.id === firstId);
+    html += `
+      <div class="follow-up visible">
+        <div class="follow-up-label">A question, then</div>
+        <div class="follow-up-text">${escapeHtml(card.followUp)}</div>
+      </div>
+    `;
+    html += '<div class="follow-up visible" style="margin-top:-8px;"><div class="follow-up-text">That attraction matters. It tells you how the image is working on you.</div></div>';
+  } else {
+    html += '<p style="font-family:\'Patrick Hand\',cursive;font-size:15px;color:var(--ink-faint);font-style:italic;">Pick 1 or 2 cards to continue.</p>';
+  }
+  
+  return html;
+}
+
+// ─── Step 3 ──────────────────────────────────────────────────
+function renderStep3(step) {
+  let html = renderArtchi(step);
+  
+  // Section A: portrait + intro paragraph
+  html += `
+    <div class="portrait-block">
+      ${renderPortraitSVG()}
+      <div class="portrait-text">
+        <div class="portrait-name">Jean-Michel Basquiat</div>
+        <div class="portrait-body">
+          A New York artist whose work brought together graffiti, language, identity, history, music, and raw personal expression.
+        </div>
+        <div class="portrait-caveat">Illustrated likeness · not a photograph</div>
+      </div>
+    </div>
+  `;
+  
+  // Section B: three things to know
+  html += '<div class="three-cards">';
+  STEP3_FACTS.forEach(fact => {
+    html += `
+      <div class="fact-card">
+        <div class="fact-card-num">${escapeHtml(fact.num)}</div>
+        <div class="fact-card-text">${escapeHtml(fact.text)}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  // Section C: expandable panels
+  STEP3_PANELS.forEach((panel, i) => {
+    const open = lessonProgress.step3OpenPanels.includes(panel.title) ? ' open' : '';
+    html += `
+      <div class="expandable-panel${open}" id="panel-${i}">
+        <button class="expandable-trigger" onclick="togglePanel('${escapeAttr(panel.title)}', ${i})">
+          <span>${escapeHtml(panel.title)}</span>
+          <span class="expandable-arrow">▾</span>
+        </button>
+        <div class="expandable-content">
+          <p>${escapeHtml(panel.body)}</p>
+        </div>
+      </div>
+    `;
+  });
+  
+  // End prompt + chips
+  html += '<div style="margin-top:24px;">';
+  html += '<div class="reflection-label">What stays with you most?</div>';
+  html += '<div class="chips-grid" style="margin-top:6px;">';
+  STEP3_CHIPS.forEach(chip => {
+    const sel = lessonProgress.step3Chips.includes(chip) ? ' selected' : '';
+    html += `<button class="chip${sel}" onclick="toggleStep3Chip('${escapeAttr(chip)}')">${escapeHtml(chip)}</button>`;
+  });
+  html += '</div>';
+  
+  if (lessonProgress.step3Chips.length > 0) {
+    html += '<div class="follow-up visible"><div class="follow-up-text">Now the work may start to feel different.</div></div>';
+  }
+  html += '</div>';
+  
+  return html;
+}
+
+// ─── Step 4 — Decode the Symbols (signature interaction) ─────
+function renderStep4(step) {
+  let html = renderArtchi(step);
+  
+  // Stage: hero image as interactive interface
+  html += `
+    <div class="decode-stage ${lessonProgress.hotspotSweepDone ? '' : 'show-prompt'}" id="decode-stage">
+      ${renderHeroSVG({ interactive: true })}
+      <div class="decode-prompt">${lessonProgress.hotspotSweepDone ? 'Tap any glowing region' : 'Tap the image to begin decoding'}</div>
+    </div>
+  `;
+  
+  // Visual tray (My visual language)
+  html += `
+    <div class="visual-tray">
+      <div class="visual-tray-label">My visual language</div>
+      <div class="visual-tray-items" id="visual-tray-items">
+        ${renderTrayItems()}
+      </div>
+    </div>
+  `;
+  
+  // Progress line
+  const savedCount = lessonProgress.savedMoves.length;
+  const need = step.minSavedMoves;
+  if (savedCount < need) {
+    html += `<p style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--ink-faint);font-style:italic;text-align:center;margin-top:-8px;">Save ${need - savedCount} more move${need - savedCount === 1 ? '' : 's'} to continue.</p>`;
+  } else {
+    html += `<p style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--bsq-green);font-weight:700;text-align:center;margin-top:-8px;">✓ You have ${savedCount} moves saved.</p>`;
+  }
+  
+  return html;
+}
+
+function renderTrayItems() {
+  if (lessonProgress.savedMoves.length === 0) {
+    return '<div class="visual-tray-empty">Tap into the image. Save the moves that feel like yours.</div>';
+  }
+  return lessonProgress.savedMoves.map(m => `<div class="visual-tray-item">${escapeHtml(m)}</div>`).join('');
+}
+
+// ─── Step 5 — Symbol Builder ─────────────────────────────────
+function renderStep5(step) {
+  let html = renderArtchi(step);
+  
+  // Carry-over from Step 4
+  if (lessonProgress.savedMoves.length > 0) {
+    html += `
+      <div class="visual-tray" style="margin-bottom:18px;">
+        <div class="visual-tray-label">↘ Carried from Step 4 · your visual moves</div>
+        <div class="visual-tray-items">${renderTrayItems()}</div>
+      </div>
+    `;
+  }
+  
+  // 6 slots
+  html += '<div class="symbol-builder">';
+  STEP5_SLOTS.forEach(slot => {
+    const value = lessonProgress.symbolSlots[slot.id];
+    const filled = value ? ' filled' : '';
+    html += `
+      <div class="symbol-slot${filled}" onclick="openSlotModal('${slot.id}')">
+        <div class="symbol-slot-label">${escapeHtml(slot.label)}</div>
+        ${value
+          ? `<div class="symbol-slot-value">${escapeHtml(value)}</div>
+             <div class="symbol-slot-edit-hint">tap to edit</div>`
+          : `<div class="symbol-slot-prompt">${escapeHtml(slot.prompt)}</div>
+             <div class="symbol-slot-edit-hint">tap to fill</div>`
+        }
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  const filledCount = Object.values(lessonProgress.symbolSlots).filter(v => v && v.trim()).length;
+  const need = step.minSelections;
+  if (filledCount < need) {
+    html += `<p style="font-family:'Patrick Hand',cursive;font-size:15px;color:var(--ink-faint);font-style:italic;text-align:center;">Fill ${need - filledCount} more slot${need - filledCount === 1 ? '' : 's'} to continue. (${filledCount} / ${need})</p>`;
+  } else {
+    html += `<div class="follow-up visible"><div class="follow-up-text">Now you are not borrowing Basquiat's symbols. You are building your own language.</div></div>`;
+  }
+  
+  return html;
+}
+
+// ─── Step 6 — Make the Piece ─────────────────────────────────
+function renderStep6(step) {
+  let html = renderArtchi(step);
+  
+  // Materials strip
+  html += `
+    <div class="materials-strip">
+      <div class="materials-strip-label">Material prompt</div>
+      <div class="materials-list">
+        ${STEP6_MATERIALS.map(m => `<span class="material-pill">${escapeHtml(m)}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  
+  // Required ingredients
+  html += '<div class="ingredients-list">';
+  html += '<div class="ingredients-title">Required ingredients</div>';
+  STEP6_INGREDIENTS.forEach(ing => {
+    html += `<div class="ingredient-row"><span class="ingredient-bullet"></span><span>${escapeHtml(ing)}</span></div>`;
+  });
+  html += '</div>';
+  
+  // Carry-over symbols reminder
+  const symbolEntries = Object.entries(lessonProgress.symbolSlots).filter(([k, v]) => v && v.trim());
+  if (symbolEntries.length > 0) {
+    html += '<div class="visual-tray" style="margin-bottom:22px;"><div class="visual-tray-label">↘ Your symbol language (from Step 5)</div><div class="visual-tray-items">';
+    symbolEntries.forEach(([slotId, value]) => {
+      const slot = STEP5_SLOTS.find(s => s.id === slotId);
+      html += `<div class="visual-tray-item" title="${escapeAttr(slot.label)}">${escapeHtml(value)}</div>`;
+    });
+    html += '</div></div>';
+  }
+  
+  // Optional starting modes
+  html += '<div class="reflection-label" style="margin-top:18px;">Optional starting modes</div>';
+  html += '<div class="start-modes">';
+  STEP6_MODES.forEach(mode => {
+    const sel = lessonProgress.startMode === mode ? ' selected' : '';
+    html += `<div class="start-mode${sel}" onclick="selectStartMode('${escapeAttr(mode)}')">${escapeHtml(mode)}</div>`;
+  });
+  html += '</div>';
+  
+  html += '<p class="completion-line">When your image feels full, strange, personal, and alive — stop.</p>';
+  
+  // Upload area
+  if (lessonProgress.finalUpload) {
+    html += `
+      <div class="upload-area has-upload">
+        <img class="upload-preview" src="${escapeAttr(lessonProgress.finalUpload)}" alt="Your work">
+        <div class="upload-bar">
+          <span class="upload-bar-text">✓ Uploaded</span>
+          <button class="upload-bar-replace" onclick="replaceUpload()">Replace</button>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="upload-area" onclick="document.getElementById('final-upload-input').click()">
+        <input type="file" id="final-upload-input" accept="image/*" style="display:none;" onchange="handleFinalUpload(this)">
+        <div class="upload-icon">📸</div>
+        <div class="upload-prompt">Upload My Work</div>
+        <div class="upload-hint">photograph your piece — JPG/PNG/HEIC</div>
+      </div>
+    `;
+  }
+  
+  // Reflection before upload
+  html += `
+    <div class="reflection-block">
+      <div class="reflection-label">Reflect before upload (optional)</div>
+      <textarea id="step6-reflection" placeholder="what does your image carry? what does it not say?"
+        onchange="saveReflection(this.value)">${escapeHtml(lessonProgress.reflection || '')}</textarea>
+    </div>
+  `;
+  
+  // Final response if uploaded
+  if (lessonProgress.finalUpload) {
+    html += '<div class="follow-up visible" style="background:var(--bsq-yellow);border-color:var(--bsq-black);"><div class="follow-up-text" style="color:var(--bsq-black);">Your image does not need to be tidy. It needs to carry a voice.</div></div>';
+  }
+  
+  return html;
+}
+
+// ─── Badge Ceremony (after Step 6) ───────────────────────────
+function renderBadgeCeremony() {
+  let html = '';
+  html += `
+    <div class="badge-ceremony">
+      <div class="badge-crown">♛ ♛ ♛</div>
+      <div class="badge-title-big">Symbol-Maker</div>
+      <div class="badge-sub-big">You built your own visual language from a master's example.</div>
+      <div class="badge-actions">
+        <button class="nav-btn primary" onclick="completeLessonAndReturnToStudio()">Return to Studio</button>
+        <button class="nav-btn" onclick="lessonProgress.currentStep='step-1-first-look';saveLessonProgress();renderCurrentStep();">Start again</button>
+      </div>
+    </div>
+  `;
+  
+  // Summary
+  if (lessonProgress.savedMoves.length > 0 || Object.keys(lessonProgress.symbolSlots).length > 0) {
+    html += '<div style="margin-top:30px;">';
+    html += '<div class="reflection-label">What you carried out of this lesson</div>';
+    if (lessonProgress.savedMoves.length > 0) {
+      html += '<div class="visual-tray" style="margin-bottom:14px;"><div class="visual-tray-label">Visual moves</div><div class="visual-tray-items">';
+      lessonProgress.savedMoves.forEach(m => {
+        html += `<div class="visual-tray-item">${escapeHtml(m)}</div>`;
+      });
+      html += '</div></div>';
+    }
+    const symbolEntries = Object.entries(lessonProgress.symbolSlots).filter(([k, v]) => v && v.trim());
+    if (symbolEntries.length > 0) {
+      html += '<div class="visual-tray"><div class="visual-tray-label">Your symbol language</div><div class="visual-tray-items">';
+      symbolEntries.forEach(([slotId, value]) => {
+        html += `<div class="visual-tray-item">${escapeHtml(value)}</div>`;
+      });
+      html += '</div></div>';
+    }
+    html += '</div>';
+  }
+  
+  return html;
+}
+
+// ─── Shared bits ─────────────────────────────────────────────
+function renderArtchi(step) {
+  if (!step.artchi) return '';
+  const voice = step.artchi.voice;
+  return `
+    <div class="artchi-block voice-${voice}">
+      <div class="artchi-avatar">♛</div>
+      <div class="artchi-voice">${escapeHtml(ARTCHI_VOICES[voice].label)}</div>
+      <div class="artchi-text">${escapeHtml(step.artchi.text)}</div>
+    </div>
+  `;
+}
+
+function renderNav(step) {
+  if (step.id === 'badge-ceremony') return '';
+  const idx = stepIndex(step.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STEPS.length - 1;
+  const canProceed = canAdvance(step);
+  return `
+    <div class="lesson-nav">
+      <button class="nav-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Previous</button>
+      <button class="nav-btn primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>
+        ${isLast ? 'Finish lesson' : 'Continue →'}
+      </button>
+    </div>
+  `;
+}
+
+function canAdvance(step) {
+  switch (step.completionRule) {
+    case 'chips':
+      if (step.id === 'step-1-first-look') return lessonProgress.step1Chips.length >= step.minSelections;
+      if (step.id === 'step-3-meet-basquiat') return lessonProgress.step3Chips.length >= step.minSelections;
+      return true;
+    case 'attractions':
+      return lessonProgress.step2Attractions.length >= step.minSelections;
+    case 'hotspots':
+      return lessonProgress.savedMoves.length >= step.minSavedMoves;
+    case 'slots':
+      return Object.values(lessonProgress.symbolSlots).filter(v => v && v.trim()).length >= step.minSelections;
+    case 'upload':
+      return !!lessonProgress.finalUpload;
+    default: return true;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 8 — STEP HANDLERS / EVENT WIRING
+// ════════════════════════════════════════════════════════════════
+function goNext() {
+  const step = findStep(lessonProgress.currentStep);
+  if (!canAdvance(step)) {
+    let msg = 'Not yet';
+    if (step.completionRule === 'chips' || step.completionRule === 'attractions') msg = 'Make a selection first';
+    if (step.completionRule === 'hotspots') msg = `Save ${step.minSavedMoves} moves first`;
+    if (step.completionRule === 'slots') msg = `Fill ${step.minSelections} slots first`;
+    if (step.completionRule === 'upload') msg = 'Upload your piece to finish';
+    toast(msg, 1800);
+    return;
+  }
+  if (!lessonProgress.completed.includes(step.id)) {
+    lessonProgress.completed.push(step.id);
+  }
+  
+  // Save key answers as judgment cards (cross-lesson portfolio)
+  saveStepAsCard(step);
+  
+  const idx = stepIndex(step.id);
+  if (idx < STEPS.length - 1) {
+    lessonProgress.currentStep = STEPS[idx + 1].id;
+  } else {
+    // Last step done → badge ceremony
+    lessonProgress.currentStep = 'badge-ceremony';
+  }
+  saveLessonProgress();
+  
+  if (lessonProgress.currentStep === 'badge-ceremony') {
+    const container = document.getElementById('lesson-content');
+    container.innerHTML = renderBadgeCeremony();
+    window.scrollTo(0, 0);
+  } else {
+    renderCurrentStep();
+  }
+}
+
+function goPrev() {
+  const idx = stepIndex(lessonProgress.currentStep);
+  if (idx > 0) {
+    lessonProgress.currentStep = STEPS[idx - 1].id;
+    saveLessonProgress();
+    renderCurrentStep();
+  }
+}
+
+function jumpToStep(stepId) {
+  const targetIdx = stepIndex(stepId);
+  const currentIdx = stepIndex(lessonProgress.currentStep);
+  if (lessonProgress.completed.includes(stepId) || targetIdx <= currentIdx) {
+    lessonProgress.currentStep = stepId;
+    saveLessonProgress();
+    renderCurrentStep();
+  }
+}
+
+function saveStepAsCard(step) {
+  // For step 1, 2, 3 — save key answers to cross-lesson card portfolio
+  if (step.id === 'step-1-first-look' && lessonProgress.step1Chips.length) {
+    saveJudgmentCard({
+      judgmentId: 'lfc017-first-look',
+      level: 1,
+      question: 'Basquiat · First Look · What I noticed first',
+      answer: lessonProgress.step1Chips.join(', ')
+    });
+  }
+  if (step.id === 'step-2-pulls-you-in' && lessonProgress.step2Attractions.length) {
+    const labels = lessonProgress.step2Attractions
+      .map(id => STEP2_CARDS.find(c => c.id === id)?.label || id);
+    saveJudgmentCard({
+      judgmentId: 'lfc017-attraction',
+      level: 2,
+      question: 'Basquiat · What pulled me in',
+      answer: labels.join(' · ')
+    });
+  }
+  if (step.id === 'step-4-decode-symbols' && lessonProgress.savedMoves.length) {
+    saveJudgmentCard({
+      judgmentId: 'lfc017-visual-moves',
+      level: 2,
+      question: 'Basquiat · Visual moves I saved',
+      answer: lessonProgress.savedMoves.join(' · ')
+    });
+  }
+}
+
+// Step 1 — chip toggle
+function toggleStep1Chip(chip) {
+  const idx = lessonProgress.step1Chips.indexOf(chip);
+  if (idx >= 0) lessonProgress.step1Chips.splice(idx, 1);
+  else lessonProgress.step1Chips.push(chip);
+  saveLessonProgress();
+  renderCurrentStep();
+}
+
+// Step 2 — attraction toggle
+function toggleStep2Card(id) {
+  const idx = lessonProgress.step2Attractions.indexOf(id);
+  if (idx >= 0) {
+    lessonProgress.step2Attractions.splice(idx, 1);
+  } else {
+    if (lessonProgress.step2Attractions.length >= 2) {
+      // Cap at 2 — replace oldest
+      lessonProgress.step2Attractions.shift();
+    }
+    lessonProgress.step2Attractions.push(id);
+  }
+  saveLessonProgress();
+  renderCurrentStep();
+}
+
+// Step 3 — chip toggle + panel expand
+function toggleStep3Chip(chip) {
+  const idx = lessonProgress.step3Chips.indexOf(chip);
+  if (idx >= 0) lessonProgress.step3Chips.splice(idx, 1);
+  else lessonProgress.step3Chips.push(chip);
+  saveLessonProgress();
+  renderCurrentStep();
+}
+
+function togglePanel(title, idx) {
+  const pIdx = lessonProgress.step3OpenPanels.indexOf(title);
+  if (pIdx >= 0) lessonProgress.step3OpenPanels.splice(pIdx, 1);
+  else lessonProgress.step3OpenPanels.push(title);
+  saveLessonProgress();
+  // Just toggle the DOM class without full re-render so scroll position stays
+  const el = document.getElementById('panel-' + idx);
+  if (el) el.classList.toggle('open');
+}
+
+// ─── Step 4 — Hotspot interaction logic ──────────────────────
+function setupHotspotInteraction() {
+  // Attach click handlers to all hotspot regions
+  const regions = document.querySelectorAll('.hotspot-region');
+  regions.forEach(r => {
+    const id = r.getAttribute('data-hotspot-id');
+    r.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDecodeCard(id);
+    });
+    // Mark previously-saved hotspots
+    const hs = HOTSPOTS[id];
+    if (hs && lessonProgress.savedMoves.includes(hs.savedMove)) {
+      r.classList.add('saved');
+    }
+  });
+  
+  // Phase A → B → C transition
+  if (!lessonProgress.hotspotSweepDone) {
+    // On any click anywhere in the stage (or after first interaction), start sweep
+    const stage = document.getElementById('decode-stage');
+    if (stage) {
+      const startSweep = () => {
+        if (lessonProgress.hotspotSweepDone) return;
+        stage.classList.remove('show-prompt');
+        runSweep();
+        stage.removeEventListener('click', startSweep);
+      };
+      stage.addEventListener('click', startSweep);
+      // Auto-start sweep after 2 seconds if user hasn't clicked
+      setTimeout(() => {
+        if (!lessonProgress.hotspotSweepDone) startSweep();
+      }, 2000);
+    }
+  }
+}
+
+function runSweep() {
+  let i = 0;
+  const interval = 400;
+  function step() {
+    if (i >= HOTSPOT_SWEEP_ORDER.length) {
+      lessonProgress.hotspotSweepDone = true;
+      saveLessonProgress();
+      // Clear all sweep classes
+      document.querySelectorAll('.hotspot-region').forEach(r => r.classList.remove('sweeping'));
+      const prompt = document.querySelector('.decode-prompt');
+      if (prompt) {
+        prompt.textContent = 'Tap any glowing region';
+        document.getElementById('decode-stage').classList.add('show-prompt');
+        setTimeout(() => document.getElementById('decode-stage').classList.remove('show-prompt'), 2500);
+      }
+      return;
+    }
+    const id = HOTSPOT_SWEEP_ORDER[i];
+    document.querySelectorAll('.hotspot-region').forEach(r => r.classList.remove('sweeping'));
+    const region = document.querySelector(`[data-hotspot-id="${id}"]`);
+    if (region) region.classList.add('sweeping');
+    i++;
+    setTimeout(step, interval);
+  }
+  step();
+}
+
+function openDecodeCard(hotspotId) {
+  const hs = HOTSPOTS[hotspotId];
+  if (!hs) return;
+  if (!lessonProgress.hotspotsVisited.includes(hotspotId)) {
+    lessonProgress.hotspotsVisited.push(hotspotId);
+    saveLessonProgress();
+  }
+  
+  const alreadySaved = lessonProgress.savedMoves.includes(hs.savedMove);
+  const content = document.getElementById('decode-card-content');
+  content.innerHTML = `
+    <div class="decode-card-kicker">${alreadySaved ? '✓ Saved · Visual move' : 'Visual move'}</div>
+    <div class="decode-card-title">${escapeHtml(hs.cardTitle)}</div>
+    <div class="decode-card-body">${escapeHtml(hs.cardBody)}</div>
+    <div class="decode-card-saved-tag">saves as: <strong>${escapeHtml(hs.savedMove)}</strong></div>
+    <div class="decode-card-actions">
+      <button class="decode-card-btn save ${alreadySaved ? 'already-saved' : ''}"
+        onclick="${alreadySaved ? 'unsaveMove' : 'saveMove'}('${hotspotId}')">
+        ${alreadySaved ? 'Saved ✓ tap to remove' : 'Save this visual move'}
+      </button>
+      <button class="decode-card-btn close" onclick="closeDecodeCard()">Keep exploring</button>
+    </div>
+  `;
+  document.getElementById('decode-card-overlay').classList.add('active');
+}
+
+function closeDecodeCard() {
+  document.getElementById('decode-card-overlay').classList.remove('active');
+}
+
+function saveMove(hotspotId) {
+  const hs = HOTSPOTS[hotspotId];
+  if (!hs) return;
+  if (!lessonProgress.savedMoves.includes(hs.savedMove)) {
+    lessonProgress.savedMoves.push(hs.savedMove);
+    saveLessonProgress();
+    // Mark region as saved
+    const region = document.querySelector(`[data-hotspot-id="${hotspotId}"]`);
+    if (region) region.classList.add('saved');
+    // Update tray
+    const tray = document.getElementById('visual-tray-items');
+    if (tray) tray.innerHTML = renderTrayItems();
+    toast('Saved: ' + hs.savedMove, 1500);
+  }
+  closeDecodeCard();
+  // Re-render to update the count + nav state
+  renderCurrentStep();
+}
+
+function unsaveMove(hotspotId) {
+  const hs = HOTSPOTS[hotspotId];
+  if (!hs) return;
+  const idx = lessonProgress.savedMoves.indexOf(hs.savedMove);
+  if (idx >= 0) {
+    lessonProgress.savedMoves.splice(idx, 1);
+    saveLessonProgress();
+  }
+  closeDecodeCard();
+  renderCurrentStep();
+}
+
+// ─── Step 5 — Slot input modal ───────────────────────────────
+let currentSlotId = null;
+
+function openSlotModal(slotId) {
+  currentSlotId = slotId;
+  const slot = STEP5_SLOTS.find(s => s.id === slotId);
+  const existing = lessonProgress.symbolSlots[slotId] || '';
+  const content = document.getElementById('slot-modal-content');
+  content.innerHTML = `
+    <div class="slot-modal-title">${escapeHtml(slot.label)}</div>
+    <div class="slot-modal-prompt">${escapeHtml(slot.prompt)}</div>
+    <textarea class="slot-modal-textarea" id="slot-input" placeholder="write or describe your symbol here">${escapeHtml(existing)}</textarea>
+    <div class="slot-modal-suggestions">
+      ${slot.suggestions.map(s => `<button class="slot-suggestion" onclick="useSuggestion('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join('')}
+    </div>
+    <div class="slot-modal-actions">
+      <button class="nav-btn primary" onclick="saveSlot()">Save</button>
+      <button class="nav-btn" onclick="closeSlotModal()">Cancel</button>
+      ${existing ? '<button class="nav-btn" onclick="clearSlot()" style="margin-left:auto;color:var(--bsq-red);">Clear</button>' : ''}
+    </div>
+  `;
+  document.getElementById('slot-modal-overlay').classList.add('active');
+  setTimeout(() => document.getElementById('slot-input').focus(), 100);
+}
+
+function useSuggestion(text) {
+  document.getElementById('slot-input').value = text;
+}
+
+function saveSlot() {
+  if (!currentSlotId) return;
+  const text = document.getElementById('slot-input').value.trim();
+  if (text) {
+    lessonProgress.symbolSlots[currentSlotId] = text;
+  } else {
+    delete lessonProgress.symbolSlots[currentSlotId];
+  }
+  saveLessonProgress();
+  closeSlotModal();
+  renderCurrentStep();
+}
+
+function clearSlot() {
+  if (!currentSlotId) return;
+  delete lessonProgress.symbolSlots[currentSlotId];
+  saveLessonProgress();
+  closeSlotModal();
+  renderCurrentStep();
+}
+
+function closeSlotModal() {
+  document.getElementById('slot-modal-overlay').classList.remove('active');
+  currentSlotId = null;
+}
+
+// ─── Step 6 ──────────────────────────────────────────────────
+function selectStartMode(mode) {
+  lessonProgress.startMode = lessonProgress.startMode === mode ? null : mode;
+  saveLessonProgress();
+  renderCurrentStep();
+}
+
+function handleFinalUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) {
+    toast('Image too large (10MB max)', 2000);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    lessonProgress.finalUpload = e.target.result;
+    saveLessonProgress();
+    renderCurrentStep();
+    toast('Uploaded ✓', 1500);
+  };
+  reader.readAsDataURL(file);
+}
+
+function replaceUpload() {
+  lessonProgress.finalUpload = null;
+  saveLessonProgress();
+  renderCurrentStep();
+}
+
+function saveReflection(text) {
+  lessonProgress.reflection = text;
+  saveLessonProgress();
+}
+
+function completeLessonAndReturnToStudio() {
+  if (userProfile) {
+    const completed = userProfile.completedLessons || [];
+    if (!completed.includes('lfc017')) {
+      completed.push('lfc017');
+      userProfile.completedLessons = completed;
+      saveProfile(userProfile);
+    }
+  }
+  // Final card capture
+  if (lessonProgress.reflection && lessonProgress.reflection.trim()) {
+    saveJudgmentCard({
+      judgmentId: 'lfc017-final-reflection',
+      level: 3,
+      question: 'Basquiat · Final reflection',
+      answer: lessonProgress.reflection.trim()
+    });
+  }
+  window.location.href = '../../creation/';
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 9 — SIGN-IN
+// ════════════════════════════════════════════════════════════════
+function updateSignInBtn() {
+  const input = document.getElementById('signin-code');
+  document.getElementById('signin-btn').disabled = input.value.trim().length < 3;
+}
+
+function attemptSignIn() {
+  const input = document.getElementById('signin-code');
+  const error = document.getElementById('signin-error');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return;
+  const match = validStudents.get(code);
+  if (!match) {
+    input.classList.add('error');
+    error.classList.add('visible');
+    setTimeout(() => input.classList.remove('error'), 400);
+    return;
+  }
+  const profile = {
+    id: code,
+    studentCode: code,
+    name: match.displayName,
+    tier: match.isTrial ? 'trial' : 'member',
+    completedLessons: [],
+    createdAt: Date.now(),
+    lastSeenAt: Date.now()
+  };
+  const existing = userProfile;
+  if (existing && existing.studentCode === code) {
+    profile.completedLessons = existing.completedLessons || [];
+    profile.createdAt = existing.createdAt;
+  }
+  saveProfile(profile);
+  loadLessonProgress();
+  showLesson();
+}
+
+function signOut() {
+  if (confirm('Sign out? Progress saved on this device.')) {
+    clearProfile();
+    window.location.reload();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 10 — UTILITIES
+// ════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+function escapeAttr(s) {
+  if (s == null) return '';
+  return String(s).replace(/['"\\]/g, c => '\\' + c);
+}
+
+let _toastTimer = null;
+function toast(msg, durationMs) {
+  const el = document.getElementById('complete-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), durationMs || 2000);
+}
+
+// Window-level exposure (for inline onclick)
+window.goNext = goNext;
+window.goPrev = goPrev;
+window.jumpToStep = jumpToStep;
+window.toggleStep1Chip = toggleStep1Chip;
+window.toggleStep2Card = toggleStep2Card;
+window.toggleStep3Chip = toggleStep3Chip;
+window.togglePanel = togglePanel;
+window.openDecodeCard = openDecodeCard;
+window.closeDecodeCard = closeDecodeCard;
+window.saveMove = saveMove;
+window.unsaveMove = unsaveMove;
+window.openSlotModal = openSlotModal;
+window.closeSlotModal = closeSlotModal;
+window.useSuggestion = useSuggestion;
+window.saveSlot = saveSlot;
+window.clearSlot = clearSlot;
+window.selectStartMode = selectStartMode;
+window.handleFinalUpload = handleFinalUpload;
+window.replaceUpload = replaceUpload;
+window.saveReflection = saveReflection;
+window.completeLessonAndReturnToStudio = completeLessonAndReturnToStudio;
+window.signOut = signOut;
+window.attemptSignIn = attemptSignIn;
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 11 — INIT
+// ════════════════════════════════════════════════════════════════
+document.getElementById('signin-code').addEventListener('input', (e) => {
+  e.target.value = e.target.value.toUpperCase();
+  updateSignInBtn();
+  document.getElementById('signin-error').classList.remove('visible');
+});
+document.getElementById('signin-code').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') attemptSignIn();
+});
+document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
+document.getElementById('try-code-link').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('signin-code').value = 'TRYNEW';
+  updateSignInBtn();
+});
+
+(async function init() {
+  await loadRoster();
+  loadProfile();
+  if (userProfile) {
+    loadLessonProgress();
+    showLesson();
+  } else {
+    showSignIn();
+  }
+})();
+</script>
+
+</body>
+</html>
