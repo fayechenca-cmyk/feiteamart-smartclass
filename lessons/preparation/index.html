@@ -598,28 +598,46 @@
     },
 
     {
-      id: 'perspective',
-      render: function() {
-        return '<div class="step-card">' +
-          '<div class="step-emoji">🔭</div>' +
-          '<div class="step-kicker">Step 8 · Bridge to the cube</div>' +
-          '<h2 class="step-title">Basic Perspective</h2>' +
-          '<p class="step-subtitle">The smallest amount of perspective you need before the cube.</p>' +
-          '<div class="step-body">' +
-          '<p>You don\'t need to learn full perspective theory before the cube lesson. But here\'s the one idea worth knowing:</p>' +
-          '<p><strong>Things farther from your eye look smaller. Lines that go away from you appear to converge.</strong></p>' +
-          '<p>That\'s it. The cube lesson will show you how to use this in practice — for now, just keep this idea in the back of your mind.</p>' +
-          '<div class="placeholder" style="aspect-ratio: 16 / 8;">' +
-          '<div class="placeholder-icon">🔭</div>' +
-          '<div class="placeholder-label">Perspective diagram — coming soon</div>' +
-          '<div class="placeholder-note">A simple visual showing how parallel lines converge toward a vanishing point</div>' +
-          '</div>' +
-          '<div class="tip-callout">' +
-          '<div class="tip-callout-label">💡 Notice it everywhere</div>' +
-          '<div class="tip-callout-text">Look at a road, a hallway, or a row of books. Notice how parallel lines seem to lean toward a single point in the distance. You already know this — drawing just makes you put it on paper.</div>' +
-          '</div></div></div>';
-      }
-    },
+  id: 'perspective',
+  render: function() {
+    return '<div class="step-card">' +
+      '<div class="step-emoji">🔭</div>' +
+      '<div class="step-kicker">Step 8 · Bridge to the cube</div>' +
+      '<h2 class="step-title">Basic Perspective</h2>' +
+      '<p class="step-subtitle">The smallest amount of perspective you need before the cube.</p>' +
+      '<div class="step-body">' +
+      '<p>You don\'t need to learn full perspective theory before the cube lesson. But here\'s the one idea worth knowing:</p>' +
+      '<p><strong>Things farther from your eye look smaller. Lines that go away from you appear to converge.</strong></p>' +
+      '<p>That\'s it. The cube lesson will show you how to use this in practice — for now, just keep this idea in the back of your mind.</p>' +
+
+      '<div class="hand-card">' +
+        '<div class="hand-card-label">' +
+          '<span>Perspective reference 1</span>' +
+          '<span class="hand-card-tag">✅ Ready</span>' +
+        '</div>' +
+        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174ca901e24bf3475f7a56_61d1abd4-697a-46e7-b39b-b8357f3d686b.png" alt="Basic perspective reference image 1" loading="lazy">' +
+        '<div class="hand-card-caption">' +
+          '<strong>Perspective reference.</strong> This image introduces the basic idea of how forms begin to turn and move in space.' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="hand-card">' +
+        '<div class="hand-card-label">' +
+          '<span>Perspective reference 2</span>' +
+          '<span class="hand-card-tag">✅ Ready</span>' +
+        '</div>' +
+        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174e06c08d0acccb668f11_perspective%202.png" alt="Basic perspective reference image 2" loading="lazy">' +
+        '<div class="hand-card-caption">' +
+          '<strong>Perspective reference.</strong> This second image continues the idea and helps students connect the concept more clearly before moving into the cube lesson.' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="tip-callout">' +
+      '<div class="tip-callout-label">💡 Notice it everywhere</div>' +
+      '<div class="tip-callout-text">Look at a road, a hallway, or a row of books. Notice how parallel lines seem to lean toward a single point in the distance. You already know this — drawing just makes you put it on paper.</div>' +
+      '</div></div></div>';
+  }
+},
 
     {
       id: 'hand-warmup',
