@@ -514,28 +514,34 @@
     },
     
     {
-      id: 'posture',
-      render: function() {
-        return '<div class="step-card">' +
-          '<div class="step-emoji">🧘</div>' +
-          '<div class="step-kicker">Step 5 · Get comfortable</div>' +
-          '<h2 class="step-title">Posture & readiness</h2>' +
-          '<p class="step-subtitle">A relaxed body draws better lines.</p>' +
-          '<div class="step-body">' +
-          '<p>Before you start:</p>' +
-          '<ul>' +
-          '<li>Sit comfortably, with your back relaxed.</li>' +
-          '<li>Keep your drawing surface in front of you.</li>' +
-          '<li>Keep your arm free to move — drawing isn\'t just from the wrist. It\'s from the shoulder for big strokes and from the fingers for details.</li>' +
-          '<li>Take a breath. The next 30 minutes are yours.</li>' +
-          '</ul>' +
-          '<div class="placeholder">' +
-          '<div class="placeholder-icon">📸</div>' +
-          '<div class="placeholder-label">Posture reference photo coming soon</div>' +
-          '<div class="placeholder-note">A photo showing good drawing posture will appear here</div>' +
-          '</div></div></div>';
-      }
-    },
+  id: 'posture',
+  render: function() {
+    return '<div class="step-card">' +
+      '<div class="step-emoji">🧘</div>' +
+      '<div class="step-kicker">Step 5 · Get comfortable</div>' +
+      '<h2 class="step-title">Posture & readiness</h2>' +
+      '<p class="step-subtitle">A relaxed body draws better lines.</p>' +
+      '<div class="step-body">' +
+      '<p>Before you start:</p>' +
+      '<ul>' +
+      '<li>Sit comfortably, with your back relaxed.</li>' +
+      '<li>Keep your drawing surface in front of you.</li>' +
+      '<li>Keep your arm free to move — drawing isn\'t just from the wrist. It\'s from the shoulder for big strokes and from the fingers for details.</li>' +
+      '<li>Take a breath. The next 30 minutes are yours.</li>' +
+      '</ul>' +
+      '<div class="hand-card">' +
+        '<div class="hand-card-label">' +
+          '<span>Posture reference</span>' +
+          '<span class="hand-card-tag">✅ Ready</span>' +
+        '</div>' +
+        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1744e99dc910c955275058_7c903390-e353-4b11-a93f-7300224101e1.png" alt="Good drawing posture reference" loading="lazy">' +
+        '<div class="hand-card-caption">' +
+          '<strong>Posture reference.</strong> Sit in a relaxed, balanced way so your hand and arm can move freely while drawing.' +
+        '</div>' +
+      '</div>' +
+      '</div></div>';
+  }
+},
     
     {
       id: 'hand-warmup',
