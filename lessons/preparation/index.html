@@ -25,9 +25,9 @@
     --radius-md: 14px;
     --radius-lg: 20px;
   }
-  
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
+
   body {
     font-family: 'Open Sans', sans-serif;
     background: var(--paper);
@@ -36,7 +36,7 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
-  
+
   .topbar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 20px;
@@ -59,7 +59,7 @@
     text-decoration: none;
   }
   .back-home:hover { background: var(--paper-soft); color: var(--ink); }
-  
+
   .progress-bar {
     position: sticky; top: 56px; z-index: 90;
     background: rgba(255,255,255,0.95);
@@ -86,11 +86,11 @@
     border-radius: 3px;
     transition: width 0.4s ease-out;
   }
-  
+
   .container {
     max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
   }
-  
+
   .step-card {
     background: #fff;
     border-radius: var(--radius-lg);
@@ -104,7 +104,7 @@
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  
+
   .step-emoji {
     text-align: center;
     font-size: 48px;
@@ -134,7 +134,7 @@
     max-width: 440px;
     margin-left: auto; margin-right: auto;
   }
-  
+
   .step-body p {
     font-size: 14.5px; color: var(--ink);
     line-height: 1.75;
@@ -142,7 +142,7 @@
   }
   .step-body strong { color: var(--purple); }
   .step-body em { color: var(--ink-soft); }
-  
+
   .step-body ul {
     padding-left: 22px;
     margin-bottom: 14px;
@@ -151,7 +151,7 @@
     line-height: 1.85;
   }
   .step-body li { margin-bottom: 6px; }
-  
+
   .materials-list {
     list-style: none;
     padding: 0;
@@ -176,7 +176,7 @@
   .materials-list .mat-desc {
     font-size: 12.5px; color: var(--ink-soft); line-height: 1.5;
   }
-  
+
   .video-card {
     margin-bottom: 18px; border-radius: var(--radius-md);
     overflow: hidden;
@@ -206,7 +206,7 @@
     font-size: 13px; color: var(--ink-soft); line-height: 1.6;
   }
   .video-caption strong { color: var(--ink); }
-  
+
   .hand-card {
     background: #fff;
     border-radius: var(--radius-md);
@@ -240,7 +240,7 @@
     border-top: 1px solid var(--ink-veryfaint);
   }
   .hand-card-caption strong { color: var(--ink); }
-  
+
   .tip-callout {
     background: rgba(200,169,110,0.08);
     border-left: 3px solid var(--gold);
@@ -256,7 +256,7 @@
   .tip-callout-text {
     font-size: 13px; color: var(--ink); line-height: 1.65;
   }
-  
+
   .optional-tag {
     display: inline-block;
     background: rgba(200,169,110,0.15);
@@ -267,7 +267,7 @@
     font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
     margin-bottom: 12px;
   }
-  
+
   .placeholder {
     aspect-ratio: 16 / 10;
     background: linear-gradient(135deg, var(--paper-soft), #f5f3ff);
@@ -287,7 +287,7 @@
   .placeholder-note {
     font-size: 11.5px; color: var(--ink-soft); font-style: italic;
   }
-  
+
   .step-nav {
     display: flex;
     gap: 10px;
@@ -338,7 +338,7 @@
   }
   .btn-ghost:hover:not(:disabled) { color: var(--ink); }
   .btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }
-  
+
   .step-dots {
     display: flex;
     justify-content: center;
@@ -360,7 +360,7 @@
     border-radius: 4px;
   }
   .step-dot:hover { transform: scale(1.2); }
-  
+
   .complete-card {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
     border: 2px solid rgba(29,158,117,0.3);
@@ -376,7 +376,7 @@
     60% { transform: scale(1.15); }
     100% { transform: scale(1); opacity: 1; }
   }
-  
+
   @media (max-width: 480px) {
     .step-title { font-size: 21px; }
     .step-card { padding: 22px 18px; }
@@ -410,7 +410,7 @@
   const PROFILE_KEY = 'fei_user_profile';
   const PREP_STEP_KEY = 'fei_prep_current_step';
   const TOTAL_STEPS = 10;
-  
+
   let currentStep = 1;
   try {
     const saved = localStorage.getItem(PREP_STEP_KEY);
@@ -419,7 +419,7 @@
       if (n >= 1 && n <= TOTAL_STEPS) currentStep = n;
     }
   } catch (e) {}
-  
+
   const STEPS = [
     {
       id: 'welcome',
@@ -436,38 +436,38 @@
           '</div></div>';
       }
     },
-    
+
     {
-  id: 'materials',
-  render: function() {
-    return '<div class="step-card">' +
-      '<div class="step-emoji">📦</div>' +
-      '<div class="step-kicker">Step 2 · What you\'ll need</div>' +
-      '<h2 class="step-title">Materials</h2>' +
-      '<p class="step-subtitle">Gather these before you start the cube lesson.</p>' +
-      '<div class="step-body">' +
-      '<ul class="materials-list">' +
-      '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — HB, 2B, 3B, 2H</div><div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div></div></li>' +
-      '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Drawing paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div></div></li>' +
-      '<li><span class="mat-emoji">🧽</span><div class="mat-info"><div class="mat-name">Eraser (kneaded + regular)</div><div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div></div></li>' +
-      '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool (tissue or paper stump)</div><div class="mat-desc">Used to soften and unify tones — you\'ll see this in every lesson.</div></div></li>' +
-      '<li><span class="mat-emoji">🖼️</span><div class="mat-info"><div class="mat-name">Easel or angled surface <em>(optional)</em></div><div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div></div></li>' +
-      '<li><span class="mat-emoji">🩹</span><div class="mat-info"><div class="mat-name">Masking tape / artist tape <em>(optional)</em></div><div class="mat-desc">For taping down your paper — covered in a later step.</div></div></li>' +
-      '</ul>' +
-      '<div class="hand-card">' +
-        '<div class="hand-card-label">' +
-          '<span>Materials overview</span>' +
-          '<span class="hand-card-tag">✅ Ready</span>' +
-        '</div>' +
-        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png" alt="Materials laid out for the preparation lesson" loading="lazy">' +
-        '<div class="hand-card-caption">' +
-          '<strong>Materials overview.</strong> This is the set of tools prepared before starting the lesson.' +
-        '</div>' +
-      '</div>' +
-      '</div></div>';
-  }
-},
-    
+      id: 'materials',
+      render: function() {
+        return '<div class="step-card">' +
+          '<div class="step-emoji">📦</div>' +
+          '<div class="step-kicker">Step 2 · What you\'ll need</div>' +
+          '<h2 class="step-title">Materials</h2>' +
+          '<p class="step-subtitle">Gather these before you start the cube lesson.</p>' +
+          '<div class="step-body">' +
+          '<ul class="materials-list">' +
+          '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — HB, 2B, 3B, 2H</div><div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div></div></li>' +
+          '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Drawing paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div></div></li>' +
+          '<li><span class="mat-emoji">🧽</span><div class="mat-info"><div class="mat-name">Eraser (kneaded + regular)</div><div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div></div></li>' +
+          '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool (tissue or paper stump)</div><div class="mat-desc">Used to soften and unify tones — you\'ll see this in every lesson.</div></div></li>' +
+          '<li><span class="mat-emoji">🖼️</span><div class="mat-info"><div class="mat-name">Easel or angled surface <em>(optional)</em></div><div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div></div></li>' +
+          '<li><span class="mat-emoji">🩹</span><div class="mat-info"><div class="mat-name">Masking tape / artist tape <em>(optional)</em></div><div class="mat-desc">For taping down your paper — covered in a later step.</div></div></li>' +
+          '</ul>' +
+          '<div class="hand-card">' +
+            '<div class="hand-card-label">' +
+              '<span>Materials overview</span>' +
+              '<span class="hand-card-tag">✅ Ready</span>' +
+            '</div>' +
+            '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png" alt="Materials laid out for the preparation lesson" loading="lazy">' +
+            '<div class="hand-card-caption">' +
+              '<strong>Materials overview.</strong> This is the set of tools prepared before starting the lesson.' +
+            '</div>' +
+          '</div>' +
+          '</div></div>';
+      }
+    },
+
     {
       id: 'workspace',
       render: function() {
@@ -486,7 +486,7 @@
           '</div></div></div>';
       }
     },
-    
+
     {
       id: 'taping',
       canSkip: true,
@@ -512,102 +512,75 @@
           '</div></div></div>';
       }
     },
-    
+
     {
-  id: 'posture',
-  render: function() {
-    return '<div class="step-card">' +
-      '<div class="step-emoji">🧘</div>' +
-      '<div class="step-kicker">Step 5 · Get comfortable</div>' +
-      '<h2 class="step-title">Posture & readiness</h2>' +
-      '<p class="step-subtitle">A relaxed body draws better lines.</p>' +
-      '<div class="step-body">' +
-      '<p>Before you start:</p>' +
-      '<ul>' +
-      '<li>Sit comfortably, with your back relaxed.</li>' +
-      '<li>Keep your drawing surface in front of you.</li>' +
-      '<li>Keep your arm free to move — drawing isn\'t just from the wrist. It\'s from the shoulder for big strokes and from the fingers for details.</li>' +
-      '<li>Take a breath. The next 30 minutes are yours.</li>' +
-      '</ul>' +
-      '<div class="hand-card">' +
-        '<div class="hand-card-label">' +
-          '<span>Posture reference</span>' +
-          '<span class="hand-card-tag">✅ Ready</span>' +
-        '</div>' +
-        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1744e99dc910c955275058_7c903390-e353-4b11-a93f-7300224101e1.png" alt="Good drawing posture reference" loading="lazy">' +
-        '<div class="hand-card-caption">' +
-          '<strong>Posture reference.</strong> Sit in a relaxed, balanced way so your hand and arm can move freely while drawing.' +
-        '</div>' +
-      '</div>' +
-      '</div></div>';
-  }
-},
-    
-    {
-      id: 'hand-warmup',
+      id: 'posture',
       render: function() {
         return '<div class="step-card">' +
-          '<div class="step-emoji">👋</div>' +
-          '<div class="step-kicker">Step 6 · Wake up your hand</div>' +
-          '<h2 class="step-title">Hand warm-up</h2>' +
-          '<p class="step-subtitle">30 seconds of finger care before you draw.</p>' +
+          '<div class="step-emoji">🧘</div>' +
+          '<div class="step-kicker">Step 5 · Get comfortable</div>' +
+          '<h2 class="step-title">Posture & readiness</h2>' +
+          '<p class="step-subtitle">A relaxed body draws better lines.</p>' +
           '<div class="step-body">' +
-          '<p>Before drawing, give your hand 30 seconds of attention:</p>' +
+          '<p>Before you start:</p>' +
           '<ul>' +
-          '<li>Open and close your fist <strong>10 times</strong>.</li>' +
-          '<li>Wiggle each finger separately.</li>' +
-          '<li>Roll your wrist slowly in both directions.</li>' +
-          '<li>Hold your pencil and make <strong>10 free squiggles</strong> on scratch paper.</li>' +
+          '<li>Sit comfortably, with your back relaxed.</li>' +
+          '<li>Keep your drawing surface in front of you.</li>' +
+          '<li>Keep your arm free to move — drawing isn\'t just from the wrist. It\'s from the shoulder for big strokes and from the fingers for details.</li>' +
+          '<li>Take a breath. The next 30 minutes are yours.</li>' +
           '</ul>' +
-          '<div class="tip-callout">' +
-          '<div class="tip-callout-label">💡 Why this matters</div>' +
-          '<div class="tip-callout-text">A stiff hand makes for stiff lines. A relaxed hand makes for confident, flowing lines. This isn\'t optional — it\'s the foundation of every drawing session.</div>' +
-          '</div></div></div>';
+          '<div class="hand-card">' +
+            '<div class="hand-card-label">' +
+              '<span>Posture reference</span>' +
+              '<span class="hand-card-tag">✅ Ready</span>' +
+            '</div>' +
+            '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1744e99dc910c955275058_7c903390-e353-4b11-a93f-7300224101e1.png" alt="Good drawing posture reference" loading="lazy">' +
+            '<div class="hand-card-caption">' +
+              '<strong>Posture reference.</strong> Sit in a relaxed, balanced way so your hand and arm can move freely while drawing.' +
+            '</div>' +
+          '</div>' +
+          '</div></div>';
       }
     },
-    
+
     {
       id: 'pencil-grip',
       render: function() {
         return '<div class="step-card">' +
           '<div class="step-emoji">✋</div>' +
-          '<div class="step-kicker">Step 7 · How to hold the pencil</div>' +
+          '<div class="step-kicker">Step 6 · How to hold the pencil</div>' +
           '<h2 class="step-title">Pencil grip</h2>' +
           '<p class="step-subtitle">Three hand positions — all of them are acceptable.</p>' +
           '<div class="step-body">' +
           '<p>There isn\'t <em>one</em> correct grip — there are several that work well. Pick the one that feels natural and matches what you\'re drawing.</p>' +
-          
           '<div class="hand-card">' +
           '<div class="hand-card-label"><span>① Large-scale grip</span><span class="hand-card-tag">⭐ Featured</span></div>' +
           '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611d4701f5219d08ad295_righthand%20b%20.PNG" alt="Large-scale recommended pencil grip" loading="lazy">' +
           '<div class="hand-card-caption"><strong>Great for large-scale drawing.</strong> Hold the pencil farther from the tip — more arm freedom, lighter sweeping strokes.</div>' +
           '</div>' +
-          
           '<div class="hand-card">' +
           '<div class="hand-card-label"><span>② Left-handed version</span><span class="hand-card-tag">✅ OK</span></div>' +
           '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611cc755582b77735ac6b_lefthanded%20canbe.png" alt="Acceptable left-handed pencil grip" loading="lazy">' +
           '<div class="hand-card-caption"><strong>For left-handed students:</strong> this grip works well and feels natural.</div>' +
           '</div>' +
-          
           '<div class="hand-card">' +
           '<div class="hand-card-label"><span>③ Right-handed version</span><span class="hand-card-tag">✅ OK</span></div>' +
           '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1611badca330c34ac8a5a2_right%20hand%20a.png" alt="Acceptable right-handed pencil grip" loading="lazy">' +
           '<div class="hand-card-caption"><strong>For right-handed students:</strong> a comfortable, close-to-the-tip grip for more precise control.</div>' +
           '</div>' +
-          
           '<div class="tip-callout">' +
           '<div class="tip-callout-label">💡 The key thing to notice</div>' +
           '<div class="tip-callout-text">Pay attention to the distance between your hand grip and the pencil tip. Closer = more precision but stiffer lines. Farther = more freedom but less detail control.</div>' +
           '</div></div></div>';
       }
     },
-    
+
     {
       id: 'simple-shapes',
       render: function() {
         return '<div class="step-card">' +
           '<div class="step-emoji">📐</div>' +
-          '<div class="step-kicker">Step 8 · Build line confidence</div>' +
+          '<div class="step-kicker">Step 7 · Build line confidence</div>' +
           '<h2 class="step-title">Simple Shapes</h2>' +
           '<p class="step-subtitle">A few easy exercises to control your lines.</p>' +
           '<div class="step-body">' +
@@ -623,13 +596,13 @@
           '</div></div></div>';
       }
     },
-    
+
     {
       id: 'perspective',
       render: function() {
         return '<div class="step-card">' +
           '<div class="step-emoji">🔭</div>' +
-          '<div class="step-kicker">Step 9 · Bridge to the cube</div>' +
+          '<div class="step-kicker">Step 8 · Bridge to the cube</div>' +
           '<h2 class="step-title">Basic Perspective</h2>' +
           '<p class="step-subtitle">The smallest amount of perspective you need before the cube.</p>' +
           '<div class="step-body">' +
@@ -647,7 +620,37 @@
           '</div></div></div>';
       }
     },
-    
+
+    {
+      id: 'hand-warmup',
+      render: function() {
+        return '<div class="step-card">' +
+          '<div class="step-emoji">👋</div>' +
+          '<div class="step-kicker">Step 9 · Wake up your hand</div>' +
+          '<h2 class="step-title">Hand warm-up</h2>' +
+          '<p class="step-subtitle">A final warm-up before you begin the cube lesson.</p>' +
+          '<div class="step-body">' +
+          '<p>Before drawing, give your hand a short moment to loosen up:</p>' +
+          '<ul>' +
+          '<li>Open and close your fist <strong>10 times</strong>.</li>' +
+          '<li>Wiggle each finger separately.</li>' +
+          '<li>Roll your wrist slowly in both directions.</li>' +
+          '<li>Hold your pencil and make <strong>10 free squiggles</strong> on scratch paper.</li>' +
+          '</ul>' +
+          '<div class="video-card">' +
+            '<div class="video-label">🎬 Hand warm-up</div>' +
+            '<div class="video-embed">' +
+              '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Hand warm-up" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
+            '</div>' +
+            '<div class="video-caption"><strong>Hand warm-up demonstration.</strong> Follow along to loosen your fingers, wrist, and arm before starting the lesson.</div>' +
+          '</div>' +
+          '<div class="tip-callout">' +
+          '<div class="tip-callout-label">💡 Why this matters</div>' +
+          '<div class="tip-callout-text">A stiff hand makes stiff lines. A relaxed hand makes smoother, more confident marks. This is the last small reset before you begin drawing.</div>' +
+          '</div></div></div>';
+      }
+    },
+
     {
       id: 'ready',
       render: function() {
@@ -669,7 +672,7 @@
       }
     }
   ];
-  
+
   function renderStepDots() {
     const dotsEl = document.getElementById('step-dots');
     let html = '';
@@ -681,51 +684,51 @@
     }
     dotsEl.innerHTML = html;
   }
-  
+
   function renderCurrentStep() {
     const step = STEPS[currentStep - 1];
-    
+
     document.getElementById('step-counter').textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
     document.getElementById('progress-fill').style.width = ((currentStep / TOTAL_STEPS) * 100) + '%';
-    
+
     renderStepDots();
-    
+
     const contentEl = document.getElementById('step-content');
     const navHTML = renderNavButtons();
     contentEl.innerHTML = step.render() + navHTML;
-    
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
+
     try { localStorage.setItem(PREP_STEP_KEY, String(currentStep)); } catch (e) {}
-    
+
     if (currentStep === TOTAL_STEPS) {
       markPreparationComplete();
     }
   }
-  
+
   function renderNavButtons() {
     const step = STEPS[currentStep - 1];
     const isFirst = currentStep === 1;
     const isLast = currentStep === TOTAL_STEPS;
-    
+
     if (isLast) {
       return '<div class="step-nav">' +
         '<button class="btn btn-ghost" onclick="prevStep()"' + (isFirst ? ' disabled' : '') + '>← Previous</button>' +
         '<div style="flex:1"></div>' +
         '</div>';
     }
-    
-    const skipBtn = step.canSkip ? 
-      '<button class="btn btn-ghost" onclick="nextStep()" style="font-style:italic;">Skip</button>' : 
+
+    const skipBtn = step.canSkip ?
+      '<button class="btn btn-ghost" onclick="nextStep()" style="font-style:italic;">Skip</button>' :
       '<div style="width:60px"></div>';
-    
+
     return '<div class="step-nav">' +
       '<button class="btn btn-ghost" onclick="prevStep()"' + (isFirst ? ' disabled' : '') + '>← Previous</button>' +
       '<button class="btn btn-primary" onclick="nextStep()">Continue →</button>' +
       skipBtn +
       '</div>';
   }
-  
+
   function nextStep() {
     if (currentStep < TOTAL_STEPS) {
       currentStep++;
@@ -733,7 +736,7 @@
     }
   }
   window.nextStep = nextStep;
-  
+
   function prevStep() {
     if (currentStep > 1) {
       currentStep--;
@@ -741,7 +744,7 @@
     }
   }
   window.prevStep = prevStep;
-  
+
   function jumpToStep(n) {
     if (n >= 1 && n <= TOTAL_STEPS) {
       currentStep = n;
@@ -749,7 +752,7 @@
     }
   }
   window.jumpToStep = jumpToStep;
-  
+
   function markPreparationComplete() {
     try {
       const raw = localStorage.getItem(PROFILE_KEY);
@@ -766,7 +769,7 @@
       console.warn('[Preparation] Could not update profile:', e);
     }
   }
-  
+
   renderCurrentStep();
 </script>
 
