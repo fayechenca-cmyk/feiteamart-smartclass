@@ -438,29 +438,35 @@
     },
     
     {
-      id: 'materials',
-      render: function() {
-        return '<div class="step-card">' +
-          '<div class="step-emoji">📦</div>' +
-          '<div class="step-kicker">Step 2 · What you\'ll need</div>' +
-          '<h2 class="step-title">Materials</h2>' +
-          '<p class="step-subtitle">Gather these before you start the cube lesson.</p>' +
-          '<div class="step-body">' +
-          '<ul class="materials-list">' +
-          '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — HB, 2B, 3B, 2H</div><div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div></div></li>' +
-          '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Drawing paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div></div></li>' +
-          '<li><span class="mat-emoji">🧽</span><div class="mat-info"><div class="mat-name">Eraser (kneaded + regular)</div><div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div></div></li>' +
-          '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool (tissue or paper stump)</div><div class="mat-desc">Used to soften and unify tones — you\'ll see this in every lesson.</div></div></li>' +
-          '<li><span class="mat-emoji">🖼️</span><div class="mat-info"><div class="mat-name">Easel or angled surface <em>(optional)</em></div><div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div></div></li>' +
-          '<li><span class="mat-emoji">🩹</span><div class="mat-info"><div class="mat-name">Masking tape / artist tape <em>(optional)</em></div><div class="mat-desc">For taping down your paper — covered in a later step.</div></div></li>' +
-          '</ul>' +
-          '<div class="placeholder">' +
-          '<div class="placeholder-icon">📸</div>' +
-          '<div class="placeholder-label">Materials photo coming soon</div>' +
-          '<div class="placeholder-note">A photo of all materials laid out together will appear here</div>' +
-          '</div></div></div>';
-      }
-    },
+  id: 'materials',
+  render: function() {
+    return '<div class="step-card">' +
+      '<div class="step-emoji">📦</div>' +
+      '<div class="step-kicker">Step 2 · What you\'ll need</div>' +
+      '<h2 class="step-title">Materials</h2>' +
+      '<p class="step-subtitle">Gather these before you start the cube lesson.</p>' +
+      '<div class="step-body">' +
+      '<ul class="materials-list">' +
+      '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — HB, 2B, 3B, 2H</div><div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div></div></li>' +
+      '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Drawing paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div></div></li>' +
+      '<li><span class="mat-emoji">🧽</span><div class="mat-info"><div class="mat-name">Eraser (kneaded + regular)</div><div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div></div></li>' +
+      '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool (tissue or paper stump)</div><div class="mat-desc">Used to soften and unify tones — you\'ll see this in every lesson.</div></div></li>' +
+      '<li><span class="mat-emoji">🖼️</span><div class="mat-info"><div class="mat-name">Easel or angled surface <em>(optional)</em></div><div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div></div></li>' +
+      '<li><span class="mat-emoji">🩹</span><div class="mat-info"><div class="mat-name">Masking tape / artist tape <em>(optional)</em></div><div class="mat-desc">For taping down your paper — covered in a later step.</div></div></li>' +
+      '</ul>' +
+      '<div class="hand-card">' +
+        '<div class="hand-card-label">' +
+          '<span>Materials overview</span>' +
+          '<span class="hand-card-tag">✅ Ready</span>' +
+        '</div>' +
+        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png" alt="Materials laid out for the preparation lesson" loading="lazy">' +
+        '<div class="hand-card-caption">' +
+          '<strong>Materials overview.</strong> This is the set of tools prepared before starting the lesson.' +
+        '</div>' +
+      '</div>' +
+      '</div></div>';
+  }
+},
     
     {
       id: 'workspace',
