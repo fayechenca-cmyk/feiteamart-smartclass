@@ -433,6 +433,15 @@
   }
   .path-node.coming:hover { transform: none; }
   
+  /* PREP — slight visual differentiation from numbered lessons */
+  .path-node.prep .node-kicker {
+    color: var(--gold);
+  }
+  .path-node.prep.current {
+    border-color: var(--gold);
+    box-shadow: 0 0 18px rgba(200,169,110,0.30), 0 4px 12px rgba(0,0,0,0.06);
+  }
+  
   /* Node icon (circle) */
   .node-icon {
     width: 52px; height: 52px;
@@ -612,12 +621,11 @@
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
     
-    <a href="creation/" class="track-card" id="track-creation">
+    <a href="creation/" class="track-card">
       <div class="track-emoji">🎨</div>
       <div class="track-name">Creation</div>
-      <div class="track-tagline">Illustration · books · materials · stop motion. Open studio, your way.</div>
-      <div class="track-progress" id="creation-progress" style="color: var(--purple);">✨ Studio open</div>
-      <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
+      <div class="track-tagline">An isometric studio. Five stations. Explore where you make from.</div>
+      <div class="track-locked-tag" style="background: linear-gradient(135deg, #a78bfa, #67e8f9); color: #fff; font-weight: 800;">✨ Step into the studio →</div>
     </a>
   </div>
 
@@ -709,6 +717,16 @@
   // ═══════════════════════════════════════════════════════════
   const FOUNDATION_A_PATH = [
     {
+      id: 'preparation',
+      title: 'Preparation',
+      subtitle: 'Get ready before you draw',
+      emoji: '🎒',
+      href: 'lessons/preparation/',
+      ready: true,
+      isPrep: true
+    },
+    // ═══ Geometric forms (3) → real-world applications (3) ═══
+    {
       id: 'cube',
       title: 'The Cube',
       subtitle: 'Geometric form',
@@ -733,20 +751,20 @@
       ready: true
     },
     {
-      id: 'cup',
-      title: 'The Cup',
-      subtitle: 'Cylinder · real world',
-      emoji: '☕',
-      href: 'lessons/lesson-6-cup/',
-      ready: true
-    },
-    {
       id: 'box',
       title: 'The Box',
       subtitle: 'Cube · real world',
       emoji: '📦',
       href: 'lessons/lesson-4-cube-realworld/',
       ready: false  // Coming soon
+    },
+    {
+      id: 'cup',
+      title: 'The Cup',
+      subtitle: 'Cylinder · real world',
+      emoji: '☕',
+      href: 'lessons/lesson-6-cup/',
+      ready: true
     },
     {
       id: 'apple',
@@ -756,13 +774,38 @@
       href: 'lessons/lesson-2-sphere-realworld/',
       ready: true
     },
+    // ═══ Advanced forms (2) + advanced real-world (2) ═══
     {
       id: 'cone',
       title: 'The Cone',
-      subtitle: 'Geometric form · ice cream cousin',
+      subtitle: 'Geometric form',
       emoji: '🔺',
       href: 'lessons/lesson-7-cone/',
       ready: true
+    },
+    {
+      id: 'icecream',
+      title: 'Ice Cream',
+      subtitle: 'Cone · real world',
+      emoji: '🍦',
+      href: 'lessons/lesson-8-icecream/',
+      ready: false  // Coming soon
+    },
+    {
+      id: 'intersecting',
+      title: 'Intersecting Geometry',
+      subtitle: 'Advanced form',
+      emoji: '💎',
+      href: 'lessons/lesson-9-intersecting/',
+      ready: true
+    },
+    {
+      id: 'papercrane',
+      title: 'Paper Crane',
+      subtitle: 'Intersecting · real world',
+      emoji: '🕊️',
+      href: 'lessons/lesson-10-papercrane/',
+      ready: false  // Coming soon
     }
   ];
   
@@ -930,20 +973,6 @@
       doneCount === 0
         ? `Foundation A · ${totalCount} lessons`
         : `Foundation A · ${doneCount}/${totalCount} done`;
-    
-    // Creation track: static "Studio open" message + count of completed Creation lessons.
-    // Currently 2 available courses (lfc054 Surrealism + lfc017 Basquiat).
-    const creationLessons = ['lfc054', 'lfc017'];
-    const creationDone = creationLessons.filter(id => completed.includes(id)).length;
-    const progressEl = document.getElementById('creation-progress');
-    if (progressEl) {
-      if (creationDone === creationLessons.length) {
-        progressEl.textContent = '✨ All studio lessons complete';
-      } else if (creationDone > 0) {
-        progressEl.textContent = `🌙 ${creationDone} of ${creationLessons.length} complete`;
-      }
-      // else: keep the default "✨ Studio open" text
-    }
   }
   
   // Find the next lesson the student should do
@@ -972,33 +1001,40 @@
     const container = document.getElementById('path-nodes');
     
     // Determine state for each node
+    // Preparation is shown as "Prep" not numbered. Other lessons start at Step 1.
     let foundCurrent = false;
+    let lessonStepNum = 0;  // increments only for non-prep lessons
     const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
+      const isPrep = lesson.isPrep === true;
+      if (!isPrep) lessonStepNum++;
+      
+      const stepLabel = isPrep ? 'Prep' : `Step ${lessonStepNum}`;
+      
       let state = 'locked';
       let icon = lesson.emoji;
-      let kicker = `Step ${idx + 1}`;
+      let kicker = stepLabel;
       let arrow = '🔒';
       let clickable = false;
       
       if (!lesson.ready) {
         state = 'coming';
-        kicker = `Step ${idx + 1} · Coming soon`;
+        kicker = `${stepLabel} · Coming soon`;
         arrow = '⏳';
       } else if (completed.includes(lesson.id)) {
         state = 'done';
         icon = '✓';
-        kicker = `Step ${idx + 1} · Complete`;
+        kicker = `${stepLabel} · Complete`;
         arrow = '↻';
         clickable = true;
       } else if (!foundCurrent) {
         state = 'current';
-        kicker = `Step ${idx + 1} · Continue`;
+        kicker = `${stepLabel} · ${isPrep ? 'Start here' : 'Continue'}`;
         arrow = '→';
         clickable = true;
         foundCurrent = true;
       }
       
-      const tag = state === 'done' ? '+50 XP earned'
+      const tag = state === 'done' ? (isPrep ? 'Reviewed' : '+50 XP earned')
                 : state === 'current' ? lesson.subtitle
                 : state === 'coming' ? 'Building this lesson'
                 : `Complete previous to unlock`;
@@ -1007,7 +1043,7 @@
       const hrefAttr = clickable ? `href="${lesson.href}"` : '';
       
       return `
-        <${tagEl} class="path-node ${state}" ${hrefAttr}>
+        <${tagEl} class="path-node ${state}${isPrep ? ' prep' : ''}" ${hrefAttr}>
           <div class="node-icon">${icon}</div>
           <div class="node-info">
             <div class="node-kicker">${kicker}</div>
@@ -1021,22 +1057,25 @@
     
     container.innerHTML = nodesHTML;
     
-    // Header progress
+    // Header progress — count ALL nodes (including Preparation)
     const doneCount = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
     document.getElementById('path-fill').style.width = pct + '%';
     document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} unlocked`;
     
-    // Badge state
+    // Badge state — only counts NUMBERED lessons (not preparation)
+    const numberedLessons = FOUNDATION_A_PATH.filter(l => !l.isPrep);
+    const numberedDone = numberedLessons.filter(l => completed.includes(l.id)).length;
+    const numberedTotal = numberedLessons.length;
     const badgeFooter = document.getElementById('badge-footer');
     const badgeSub = document.getElementById('badge-footer-sub');
-    if (doneCount === totalCount) {
+    if (numberedDone === numberedTotal) {
       badgeFooter.classList.add('unlocked');
       badgeSub.textContent = '✨ Unlocked — you are a Foundation A graduate!';
     } else {
       badgeFooter.classList.remove('unlocked');
-      const remaining = totalCount - doneCount;
+      const remaining = numberedTotal - numberedDone;
       badgeSub.textContent = `${remaining} more ${remaining === 1 ? 'lesson' : 'lessons'} to unlock this badge.`;
     }
   }
