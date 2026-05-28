@@ -7,23 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* ════════════════════════════════════════════════════════════════
-     FEI TeamArt · Smart Class Home
-     Game-style learning map with Skills + Creation tracks.
-     ════════════════════════════════════════════════════════════════
-     
-     ARCHITECTURE:
-     - Two parallel tracks: 🎓 Skills (structured) + 🎨 Creation (artistic)
-     - Skills contains: Drawing (active), Color Theory, Art Theory (coming)
-     - Drawing contains: Foundation A (currently 6 lessons, expandable)
-     - Course order is CONFIGURABLE (see FOUNDATION_A_PATH array)
-     
-     SCREENS (single-page-app style toggling):
-     1. signin-screen: when no profile
-     2. home-screen: dashboard with Skills + Creation overview
-     3. drawing-screen: Duolingo-style Foundation A unlock path
-     ═══════════════════════════════════════════════════════════════ */
-  
   :root {
     --ink: #1a1d2b;
     --ink-soft: rgba(26, 29, 43, 0.65);
@@ -44,9 +27,9 @@
     --radius-md: 14px;
     --radius-lg: 20px;
   }
-  
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
+
   body {
     font-family: 'Open Sans', sans-serif;
     background: var(--paper);
@@ -55,8 +38,7 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-  
-  /* ═══ TOPBAR ═══ */
+
   .topbar {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 20px;
@@ -83,8 +65,7 @@
     color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
   }
   .sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
-  
-  /* ═══ SIGN-IN SCREEN ═══ */
+
   .signin-screen {
     min-height: calc(100vh - 60px);
     display: flex; align-items: center; justify-content: center;
@@ -148,13 +129,11 @@
     line-height: 1.7;
   }
   .signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
-  
-  /* ═══ MAIN CONTAINER ═══ */
+
   .container {
     max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
   }
-  
-  /* ═══ HERO ═══ */
+
   .hero {
     text-align: center; margin-bottom: 28px;
   }
@@ -171,8 +150,7 @@
   .hero-subtitle {
     font-size: 13px; color: var(--ink-soft);
   }
-  
-  /* ═══ RESUME CARD ═══ */
+
   .resume-card {
     background: linear-gradient(135deg, var(--purple), var(--cyan));
     color: #fff; border-radius: var(--radius-md);
@@ -202,8 +180,7 @@
     white-space: nowrap;
   }
   .resume-btn:hover { background: rgba(255,255,255,0.4); }
-  
-  /* ═══ SECTION HEADING ═══ */
+
   .section-heading {
     margin: 32px 0 14px;
   }
@@ -214,8 +191,7 @@
   .section-sub {
     font-size: 12px; color: var(--ink-soft);
   }
-  
-  /* ═══ TRACK CARDS (Skills / Creation) ═══ */
+
   .tracks {
     display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
     margin-bottom: 28px;
@@ -279,8 +255,7 @@
     padding: 3px 8px; border-radius: 10px;
     margin-top: auto;
   }
-  
-  /* ═══ SUB-TRACKS (inside Skills) ═══ */
+
   .subtrack {
     background: #fff; border-radius: var(--radius-md);
     padding: 14px 16px; margin-bottom: 10px;
@@ -318,8 +293,7 @@
   .subtrack-arrow {
     color: var(--purple); font-size: 18px; font-weight: 700;
   }
-  
-  /* ═══ BACK BUTTON ═══ */
+
   .back-btn {
     display: inline-flex; align-items: center; gap: 6px;
     background: none; border: none; cursor: pointer;
@@ -329,8 +303,7 @@
     margin-bottom: 16px;
   }
   .back-btn:hover { color: var(--purple); }
-  
-  /* ═══ PATH NODE (Foundation A — game-style) ═══ */
+
   .path-header {
     text-align: center; margin-bottom: 22px;
   }
@@ -361,8 +334,7 @@
     font-weight: 700; color: var(--ink-soft);
     letter-spacing: 0.5px;
   }
-  
-  /* Vertical path nodes */
+
   .path-nodes {
     position: relative;
     padding: 6px 0;
@@ -378,7 +350,6 @@
     text-decoration: none; color: inherit;
     transition: all 0.2s;
   }
-  /* Connector line between nodes */
   .path-node:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -388,8 +359,7 @@
     background: var(--ink-veryfaint);
     z-index: 0;
   }
-  
-  /* DONE state */
+
   .path-node.done {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
     border-color: rgba(29,158,117,0.3);
@@ -397,13 +367,12 @@
     text-decoration: none;
   }
   .path-node.done:not(:last-child)::after { background: var(--green); }
-  .path-node.done:hover { 
-    transform: translateX(2px); 
-    border-color: var(--green); 
+  .path-node.done:hover {
+    transform: translateX(2px);
+    border-color: var(--green);
     box-shadow: 0 4px 14px rgba(29,158,117,0.20);
   }
-  
-  /* CURRENT state — glowing */
+
   .path-node.current {
     background: #fff;
     border: 2px solid var(--gold);
@@ -412,19 +381,17 @@
   }
   @keyframes currentPulse {
     0%, 100% { box-shadow: 0 0 20px rgba(200,169,110,0.35), 0 4px 12px rgba(0,0,0,0.06); }
-    50%      { box-shadow: 0 0 30px rgba(200,169,110,0.6), 0 6px 18px rgba(200,169,110,0.20); }
+    50% { box-shadow: 0 0 30px rgba(200,169,110,0.6), 0 6px 18px rgba(200,169,110,0.20); }
   }
   .path-node.current:hover { transform: translateX(2px); }
-  
-  /* LOCKED state */
+
   .path-node.locked {
     opacity: 0.55;
     cursor: not-allowed;
     background: var(--paper-soft);
   }
   .path-node.locked:hover { transform: none; }
-  
-  /* COMING SOON */
+
   .path-node.coming {
     opacity: 0.45;
     cursor: not-allowed;
@@ -432,8 +399,7 @@
     border-style: dashed;
   }
   .path-node.coming:hover { transform: none; }
-  
-  /* PREP — slight visual differentiation from numbered lessons */
+
   .path-node.prep .node-kicker {
     color: var(--gold);
   }
@@ -441,8 +407,7 @@
     border-color: var(--gold);
     box-shadow: 0 0 18px rgba(200,169,110,0.30), 0 4px 12px rgba(0,0,0,0.06);
   }
-  
-  /* Node icon (circle) */
+
   .node-icon {
     width: 52px; height: 52px;
     border-radius: 50%;
@@ -466,8 +431,7 @@
     background: var(--ink-veryfaint);
     color: var(--ink-faint);
   }
-  
-  /* Node info */
+
   .node-info { flex: 1; min-width: 0; }
   .node-kicker {
     font-family: 'Montserrat', sans-serif; font-size: 9px;
@@ -489,8 +453,7 @@
     flex-shrink: 0;
   }
   .path-node.current .node-arrow { color: var(--gold); }
-  
-  /* ═══ BADGE FOOTER ═══ */
+
   .badge-footer {
     margin-top: 28px;
     padding: 24px 18px;
@@ -508,7 +471,7 @@
   }
   @keyframes badgeSpin {
     from { transform: rotate(-5deg) scale(1); }
-    to   { transform: rotate(5deg) scale(1.08); }
+    to { transform: rotate(5deg) scale(1.08); }
   }
   .badge-footer-title {
     font-family: 'Montserrat', sans-serif; font-size: 14px;
@@ -518,85 +481,48 @@
   .badge-footer-sub {
     font-size: 12px; color: var(--ink-soft);
   }
-  
-  /* ═══ CREATION SCREEN (placeholder) ═══ */
-  .creation-placeholder {
-    background: linear-gradient(135deg, #fef3f7 0%, #f5f3ff 100%);
-    border-radius: var(--radius-lg);
-    padding: 40px 24px; text-align: center;
-    margin-bottom: 24px;
-  }
-  .creation-placeholder-icon { font-size: 56px; margin-bottom: 12px; }
-  .creation-placeholder-title {
-    font-family: 'Montserrat', sans-serif; font-size: 20px;
-    font-weight: 900; margin-bottom: 8px;
-  }
-  .creation-placeholder-text {
-    font-size: 13px; color: var(--ink-soft);
-    line-height: 1.7; max-width: 360px; margin: 0 auto 16px;
-  }
-  .creation-coming-pill {
-    display: inline-block;
-    background: rgba(200,169,110,0.15);
-    color: var(--gold);
-    padding: 6px 14px; border-radius: 18px;
-    font-family: 'Montserrat', sans-serif; font-size: 10px;
-    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
-  }
-
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     TOPBAR
-     ═══════════════════════════════════════════════════════════ -->
 <div class="topbar">
   <a href="./" class="brand"><span class="brand-mark">●</span> FEI · Smart Class</a>
   <div class="topbar-right" id="topbar-right"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SIGN-IN SCREEN
-     ═══════════════════════════════════════════════════════════ -->
 <div class="signin-screen" id="signin-screen" style="display:none;">
   <div class="signin-card">
     <div class="signin-kicker">✨ Smart Class</div>
     <h1 class="signin-title">Welcome.</h1>
     <p class="signin-subtitle">Enter your student code to begin or continue.</p>
-    
+
     <label class="signin-label" for="signin-code">Student Code</label>
-    <input type="text" class="signin-input" id="signin-code" 
+    <input type="text" class="signin-input" id="signin-code"
            placeholder="e.g. LILY-01" autocomplete="off"
            autocapitalize="characters" spellcheck="false" />
-    
+
     <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
-    
+
     <p class="signin-error" id="signin-error">
       That code doesn't match. Check your welcome email or contact us for help.
     </p>
-    
+
     <p class="signin-help">
       Don't have a code yet?<br>
-      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
+      <a href="https://www.feiteamart.com/contact" target="_blank" rel="noopener noreferrer">Contact us →</a>
       &nbsp;·&nbsp;
       <a href="#" id="try-code-link">Try with TRYNEW</a>
     </p>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     HOME SCREEN — Skills + Creation tracks
-     ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="home-screen" style="display:none;">
-  
   <div class="hero">
     <div class="hero-greeting" id="hero-greeting">Welcome back</div>
     <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
     <p class="hero-subtitle">What do you want to grow today?</p>
   </div>
-  
-  <!-- Resume card -->
+
   <div class="resume-card hidden" id="resume-card">
     <div>
       <div class="resume-kicker">Continue learning</div>
@@ -605,13 +531,12 @@
     </div>
     <a href="#" class="resume-btn" id="resume-btn">Continue →</a>
   </div>
-  
-  <!-- Two tracks -->
+
   <div class="section-heading">
     <div class="section-title">Pick your direction</div>
     <div class="section-sub">Two ways to grow — structured learning, or open creation.</div>
   </div>
-  
+
   <div class="tracks">
     <a href="#" class="track-card" id="track-skills" onclick="event.preventDefault(); showSkills();">
       <div class="track-emoji">🎓</div>
@@ -620,29 +545,25 @@
       <div class="track-progress" id="skills-progress">0 of 6 lessons</div>
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
-    
-    <a href="creation/" class="track-card">
+
+    <a href="creation/" class="track-card" id="track-creation">
       <div class="track-emoji">🎨</div>
       <div class="track-name">Creation</div>
-      <div class="track-tagline">An isometric studio. Five stations. Explore where you make from.</div>
-      <div class="track-locked-tag" style="background: linear-gradient(135deg, #a78bfa, #67e8f9); color: #fff; font-weight: 800;">✨ Step into the studio →</div>
+      <div class="track-tagline">Illustration · books · materials · stop motion. Open studio, your way.</div>
+      <div class="track-progress" id="creation-progress" style="color: var(--purple);">✨ Studio open</div>
+      <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
   </div>
-
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SKILLS SCREEN — sub-tracks
-     ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="skills-screen" style="display:none;">
-  
   <button class="back-btn" onclick="showHome()">← Back to Smart Class</button>
-  
+
   <div class="section-heading" style="text-align:center; margin-top: 8px;">
     <div class="section-title" style="font-size:22px;">🎓 Skills</div>
     <div class="section-sub">Structured training across the foundations of visual art.</div>
   </div>
-  
+
   <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
     <div class="subtrack-emoji">✏️</div>
     <div class="subtrack-info">
@@ -651,7 +572,7 @@
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
-  
+
   <div class="subtrack locked">
     <div class="subtrack-emoji">🎨</div>
     <div class="subtrack-info">
@@ -659,7 +580,7 @@
       <div class="subtrack-meta">Coming soon</div>
     </div>
   </div>
-  
+
   <div class="subtrack locked">
     <div class="subtrack-emoji">📐</div>
     <div class="subtrack-info">
@@ -667,16 +588,11 @@
       <div class="subtrack-meta">Coming soon</div>
     </div>
   </div>
-
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     DRAWING SCREEN — Foundation A unlock path (Duolingo style)
-     ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="drawing-screen" style="display:none;">
-  
   <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
-  
+
   <div class="path-header">
     <div class="path-header-kicker">Drawing · Foundation A</div>
     <div class="path-header-title">Form &amp; Structure</div>
@@ -688,11 +604,9 @@
     </div>
     <div class="path-header-meta" id="path-meta">0 of 6 unlocked</div>
   </div>
-  
-  <!-- Path nodes will be rendered here -->
+
   <div class="path-nodes" id="path-nodes"></div>
-  
-  <!-- Foundation A badge footer -->
+
   <div class="badge-footer" id="badge-footer">
     <div class="badge-footer-icon">🏆</div>
     <div class="badge-footer-title">Foundation A Badge</div>
@@ -700,21 +614,12 @@
       Complete all 6 lessons to earn this.
     </div>
   </div>
-
 </div>
 
 <script>
-  // ═══════════════════════════════════════════════════════════
-  // CONFIG
-  // ═══════════════════════════════════════════════════════════
-  
   const ROSTER_PATH = 'core/student-access-codes.js';
   const PROFILE_KEY = 'fei_user_profile';
-  
-  // ═══════════════════════════════════════════════════════════
-  // FOUNDATION A PATH — order is configurable!
-  // 改这个数组就能调换顺序 (per Faye's request: flexible reordering)
-  // ═══════════════════════════════════════════════════════════
+
   const FOUNDATION_A_PATH = [
     {
       id: 'preparation',
@@ -725,7 +630,6 @@
       ready: true,
       isPrep: true
     },
-    // ═══ Geometric forms (3) → real-world applications (3) ═══
     {
       id: 'cube',
       title: 'The Cube',
@@ -756,7 +660,7 @@
       subtitle: 'Cube · real world',
       emoji: '📦',
       href: 'lessons/lesson-4-cube-realworld/',
-      ready: false  // Coming soon
+      ready: false
     },
     {
       id: 'cup',
@@ -774,7 +678,6 @@
       href: 'lessons/lesson-2-sphere-realworld/',
       ready: true
     },
-    // ═══ Advanced forms (2) + advanced real-world (2) ═══
     {
       id: 'cone',
       title: 'The Cone',
@@ -789,7 +692,7 @@
       subtitle: 'Cone · real world',
       emoji: '🍦',
       href: 'lessons/lesson-8-icecream/',
-      ready: false  // Coming soon
+      ready: false
     },
     {
       id: 'intersecting',
@@ -805,53 +708,41 @@
       subtitle: 'Intersecting · real world',
       emoji: '🕊️',
       href: 'lessons/lesson-10-papercrane/',
-      ready: false  // Coming soon
+      ready: false
     }
   ];
-  
-  // ═══════════════════════════════════════════════════════════
-  // STATE
-  // ═══════════════════════════════════════════════════════════
-  
+
   let validStudents = new Map();
   let userProfile = null;
-  
-  // ═══════════════════════════════════════════════════════════
-  // STUDENT ROSTER
-  // ═══════════════════════════════════════════════════════════
-  
+
   async function loadRoster() {
     try {
       const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const text = await response.text();
-      
+
       const blockRegex = /\{[^{}]*\}/g;
       let block;
       while ((block = blockRegex.exec(text)) !== null) {
         const blockText = block[0];
-        const idMatch    = blockText.match(/id\s*:\s*["']([^"']+)["']/);
-        const nameMatch  = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+        const idMatch = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+        const nameMatch = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
         const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
-        
+
         if (!idMatch || !nameMatch) continue;
-        
+
         validStudents.set(
           idMatch[1].toUpperCase(),
           { displayName: nameMatch[1], isTrial: trialMatch ? trialMatch[1] === 'true' : false }
         );
       }
-      
+
       console.log('[SmartClass Home] Loaded ' + validStudents.size + ' codes');
     } catch (err) {
       console.warn('[SmartClass Home] Failed to load roster:', err);
     }
   }
-  
-  // ═══════════════════════════════════════════════════════════
-  // PROFILE
-  // ═══════════════════════════════════════════════════════════
-  
+
   function loadProfile() {
     try {
       const raw = localStorage.getItem(PROFILE_KEY);
@@ -860,7 +751,7 @@
       userProfile = null;
     }
   }
-  
+
   function saveProfile(p) {
     try {
       localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
@@ -869,39 +760,35 @@
       console.warn('Save failed:', e);
     }
   }
-  
+
   function clearProfile() {
     try {
       localStorage.removeItem(PROFILE_KEY);
       userProfile = null;
     } catch (e) {}
   }
-  
-  // ═══════════════════════════════════════════════════════════
-  // SCREEN SWITCHING
-  // ═══════════════════════════════════════════════════════════
-  
+
   function hideAllScreens() {
     document.getElementById('signin-screen').style.display = 'none';
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('skills-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
   }
-  
+
   function showSignIn() {
     hideAllScreens();
     document.getElementById('signin-screen').style.display = 'flex';
     document.getElementById('topbar-right').innerHTML = `
-      <a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>
+      <a href="https://www.feiteamart.com" target="_blank" rel="noopener noreferrer">feiteamart.com</a>
     `;
-    
+
     const urlCode = new URLSearchParams(window.location.search).get('code');
     if (urlCode) {
       document.getElementById('signin-code').value = urlCode.toUpperCase();
       updateSignInBtn();
     }
   }
-  
+
   function showHome() {
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
@@ -909,14 +796,14 @@
     window.scrollTo(0, 0);
   }
   window.showHome = showHome;
-  
+
   function showSkills() {
     hideAllScreens();
     document.getElementById('skills-screen').style.display = 'block';
     window.scrollTo(0, 0);
   }
   window.showSkills = showSkills;
-  
+
   function showDrawing() {
     hideAllScreens();
     document.getElementById('drawing-screen').style.display = 'block';
@@ -924,13 +811,8 @@
     window.scrollTo(0, 0);
   }
   window.showDrawing = showDrawing;
-  
-  // ═══════════════════════════════════════════════════════════
-  // RENDER HOME
-  // ═══════════════════════════════════════════════════════════
-  
+
   function renderHome() {
-    // Topbar
     const tier = userProfile.tier === 'trial' ? '· Trial' : '';
     document.getElementById('topbar-right').innerHTML = `
       <span style="font-size:12px; color:var(--ink-soft);">
@@ -938,14 +820,12 @@
       </span>
       <button class="sign-out-btn" onclick="signOut()">Sign out</button>
     `;
-    
-    // Hero
+
     const completed = userProfile.completedLessons || [];
-    document.getElementById('hero-greeting').textContent = 
+    document.getElementById('hero-greeting').textContent =
       completed.length > 0 ? 'Welcome back' : 'Welcome to Smart Class';
     document.getElementById('hero-name').textContent = userProfile.name;
-    
-    // Resume card
+
     if (completed.length > 0) {
       const next = pickNextLesson();
       if (next) {
@@ -958,27 +838,43 @@
     } else {
       document.getElementById('resume-card').classList.add('hidden');
     }
-    
-    // Skills track progress
+
     const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
     const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
-    document.getElementById('skills-progress').textContent = 
-      `${doneCount} of ${totalCount} lessons`;
+    document.getElementById('skills-progress').textContent = `${doneCount} of ${totalCount} lessons`;
     document.getElementById('skills-bar').style.width = pct + '%';
-    
-    // Drawing sub-track meta
-    document.getElementById('drawing-meta').textContent = 
+
+    document.getElementById('drawing-meta').textContent =
       doneCount === 0
         ? `Foundation A · ${totalCount} lessons`
         : `Foundation A · ${doneCount}/${totalCount} done`;
+
+    const creationLessons = ['lfc054', 'lfc017'];
+    const creationDone = creationLessons.filter(id => completed.includes(id)).length;
+    const creationProgressEl = document.getElementById('creation-progress');
+    const creationBarEl = document.getElementById('creation-bar');
+
+    if (creationProgressEl) {
+      if (creationDone === creationLessons.length) {
+        creationProgressEl.textContent = '✨ All studio lessons complete';
+      } else if (creationDone > 0) {
+        creationProgressEl.textContent = `🌙 ${creationDone} of ${creationLessons.length} complete`;
+      } else {
+        creationProgressEl.textContent = '✨ Studio open';
+      }
+    }
+
+    if (creationBarEl) {
+      const creationPct = creationLessons.length ? Math.round((creationDone / creationLessons.length) * 100) : 0;
+      creationBarEl.style.width = creationDone > 0 ? creationPct + '%' : '100%';
+      creationBarEl.style.opacity = creationDone > 0 ? '1' : '0.4';
+    }
   }
-  
-  // Find the next lesson the student should do
+
   function pickNextLesson() {
     const completed = userProfile.completedLessons || [];
-    // Find the first lesson in order that they haven't completed and is ready
     for (const lesson of FOUNDATION_A_PATH) {
       if (!lesson.ready) continue;
       if (!completed.includes(lesson.id)) {
@@ -989,33 +885,27 @@
         };
       }
     }
-    return null;  // All done
+    return null;
   }
-  
-  // ═══════════════════════════════════════════════════════════
-  // RENDER DRAWING PATH (Foundation A unlock map)
-  // ═══════════════════════════════════════════════════════════
-  
+
   function renderDrawingPath() {
     const completed = userProfile.completedLessons || [];
     const container = document.getElementById('path-nodes');
-    
-    // Determine state for each node
-    // Preparation is shown as "Prep" not numbered. Other lessons start at Step 1.
+
     let foundCurrent = false;
-    let lessonStepNum = 0;  // increments only for non-prep lessons
-    const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
+    let lessonStepNum = 0;
+    const nodesHTML = FOUNDATION_A_PATH.map((lesson) => {
       const isPrep = lesson.isPrep === true;
       if (!isPrep) lessonStepNum++;
-      
+
       const stepLabel = isPrep ? 'Prep' : `Step ${lessonStepNum}`;
-      
+
       let state = 'locked';
       let icon = lesson.emoji;
       let kicker = stepLabel;
       let arrow = '🔒';
       let clickable = false;
-      
+
       if (!lesson.ready) {
         state = 'coming';
         kicker = `${stepLabel} · Coming soon`;
@@ -1033,15 +923,15 @@
         clickable = true;
         foundCurrent = true;
       }
-      
+
       const tag = state === 'done' ? (isPrep ? 'Reviewed' : '+50 XP earned')
-                : state === 'current' ? lesson.subtitle
-                : state === 'coming' ? 'Building this lesson'
-                : `Complete previous to unlock`;
-      
+        : state === 'current' ? lesson.subtitle
+        : state === 'coming' ? 'Building this lesson'
+        : 'Complete previous to unlock';
+
       const tagEl = clickable ? 'a' : 'div';
       const hrefAttr = clickable ? `href="${lesson.href}"` : '';
-      
+
       return `
         <${tagEl} class="path-node ${state}${isPrep ? ' prep' : ''}" ${hrefAttr}>
           <div class="node-icon">${icon}</div>
@@ -1054,22 +944,21 @@
         </${tagEl}>
       `;
     }).join('');
-    
+
     container.innerHTML = nodesHTML;
-    
-    // Header progress — count ALL nodes (including Preparation)
+
     const doneCount = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
     document.getElementById('path-fill').style.width = pct + '%';
     document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} unlocked`;
-    
-    // Badge state — only counts NUMBERED lessons (not preparation)
+
     const numberedLessons = FOUNDATION_A_PATH.filter(l => !l.isPrep);
     const numberedDone = numberedLessons.filter(l => completed.includes(l.id)).length;
     const numberedTotal = numberedLessons.length;
     const badgeFooter = document.getElementById('badge-footer');
     const badgeSub = document.getElementById('badge-footer-sub');
+
     if (numberedDone === numberedTotal) {
       badgeFooter.classList.add('unlocked');
       badgeSub.textContent = '✨ Unlocked — you are a Foundation A graduate!';
@@ -1079,24 +968,20 @@
       badgeSub.textContent = `${remaining} more ${remaining === 1 ? 'lesson' : 'lessons'} to unlock this badge.`;
     }
   }
-  
-  // ═══════════════════════════════════════════════════════════
-  // SIGN-IN FLOW
-  // ═══════════════════════════════════════════════════════════
-  
+
   function updateSignInBtn() {
     const input = document.getElementById('signin-code');
     const btn = document.getElementById('signin-btn');
     btn.disabled = input.value.trim().length < 3;
   }
-  
+
   function attemptSignIn() {
     const input = document.getElementById('signin-code');
     const error = document.getElementById('signin-error');
     const code = input.value.trim().toUpperCase();
-    
+
     if (!code) return;
-    
+
     const match = validStudents.get(code);
     if (!match) {
       input.classList.add('error');
@@ -1104,7 +989,7 @@
       setTimeout(() => input.classList.remove('error'), 400);
       return;
     }
-    
+
     const profile = {
       id: code,
       studentCode: code,
@@ -1121,11 +1006,7 @@
     saveProfile(profile);
     showHome();
   }
-  
-  // ═══════════════════════════════════════════════════════════
-  // SIGN OUT
-  // ═══════════════════════════════════════════════════════════
-  
+
   function signOut() {
     if (confirm('Sign out of Smart Class? Your progress is saved on this device.')) {
       clearProfile();
@@ -1133,37 +1014,29 @@
     }
   }
   window.signOut = signOut;
-  
-  // ═══════════════════════════════════════════════════════════
-  // EVENT LISTENERS
-  // ═══════════════════════════════════════════════════════════
-  
+
   document.getElementById('signin-code').addEventListener('input', (e) => {
     e.target.value = e.target.value.toUpperCase();
     updateSignInBtn();
     document.getElementById('signin-error').classList.remove('visible');
   });
-  
+
   document.getElementById('signin-code').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') attemptSignIn();
   });
-  
+
   document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
-  
+
   document.getElementById('try-code-link').addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('signin-code').value = 'TRYNEW';
     updateSignInBtn();
   });
-  
-  // ═══════════════════════════════════════════════════════════
-  // INIT
-  // ═══════════════════════════════════════════════════════════
-  
+
   (async function init() {
     await loadRoster();
     loadProfile();
-    
+
     if (userProfile) {
       showHome();
     } else {
