@@ -186,7 +186,18 @@ body {
 .signin-help a { color: var(--pop-pink); text-decoration: none; font-weight: 700; }
 
 /* ═══ LESSON CONTAINER ═══ */
+/* Content width adapts to viewport so iPad landscape doesn't have huge dead margins.
+   Right-padding includes Artchi clearance (~140px) on tablet+ so the mascot never overlaps content. */
 .lesson { max-width: 820px; margin: 0 auto; padding: 24px 18px 80px; }
+@media (min-width: 768px) {
+  .lesson { max-width: 960px; padding: 28px 32px 100px; padding-right: 170px; }
+}
+@media (min-width: 1100px) {
+  .lesson { max-width: 1080px; padding: 32px 40px 120px; padding-right: 180px; }
+}
+@media (min-width: 1400px) {
+  .lesson { max-width: 1180px; }
+}
 
 .back-link {
   display: inline-flex; align-items: center; gap: 6px;
@@ -740,34 +751,51 @@ body {
 
 /* ═══════════════════════════════════════════════════════════════
    ARTCHI · platform-wide companion (identical across all lessons)
-   See SECTION 8 in JS for behavior. CSS below should match Foundation.
+   
+   IMPORTANT: We use `.artchi-mascot` (not `.artchi`) to avoid CSS
+   collision with `.chat-msg.artchi` (chat reply bubbles).
    ═══════════════════════════════════════════════════════════════ */
-.artchi {
-  position: fixed; right: 18px; bottom: 18px;
-  width: 80px; height: 80px;
+.artchi-mascot {
+  position: fixed; right: 22px; bottom: 22px;
+  width: 110px; height: 110px;
   cursor: grab; z-index: 60; user-select: none;
   transition: transform .3s;
+  filter: drop-shadow(0 6px 20px rgba(167,139,250,0.45));
 }
-.artchi:active { cursor: grabbing; }
-.artchi.awake { animation: artchi-breathe 3s ease-in-out infinite; }
-.artchi.excited { animation: artchi-bounce .6s ease-in-out 3; }
-.artchi.sleep .artchi-eye { transform: scaleY(0.1); transform-origin: center; }
-.artchi.sleep::after {
+.artchi-mascot:active { cursor: grabbing; }
+.artchi-mascot.awake { animation: artchi-breathe 3s ease-in-out infinite; }
+.artchi-mascot.excited { animation: artchi-bounce .6s ease-in-out 3; }
+.artchi-mascot.sleep .artchi-eye { transform: scaleY(0.1); transform-origin: center; }
+.artchi-mascot.sleep::after {
   content: 'z'; position: absolute; top: -4px; right: -6px;
-  font-size: 18px; color: var(--ink-faint); font-weight: 900;
+  font-size: 22px; color: var(--ink-faint); font-weight: 900;
   animation: artchi-zzz 2s ease-in-out infinite;
   font-style: italic; font-family: 'Montserrat', sans-serif;
 }
-.artchi.hidden { display: none; }
+.artchi-mascot.hidden { display: none; }
+
+/* Subtle pulsing halo to draw eye to Artchi (only when awake & idle) */
+.artchi-mascot.awake::before {
+  content: ''; position: absolute; inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.18) 0%, transparent 70%);
+  z-index: -1;
+  animation: artchi-halo 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes artchi-halo {
+  0%,100% { opacity: 0.5; transform: scale(1); }
+  50%     { opacity: 0.85; transform: scale(1.1); }
+}
 @keyframes artchi-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes artchi-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px) rotate(-5deg); } }
 @keyframes artchi-zzz { 0%,100% { opacity: 0; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-8px); } }
 
 .artchi-bubble {
-  position: fixed; right: 18px; bottom: 100px;
-  max-width: 220px; background: #fff;
+  position: fixed; right: 22px; bottom: 142px;
+  max-width: 240px; background: #fff;
   padding: 12px 14px; border-radius: var(--radius-md);
-  font-size: 12px; color: var(--ink); line-height: 1.5;
+  font-size: 13px; color: var(--ink); line-height: 1.5;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   border: 1.5px solid var(--pop-black);
   z-index: 59; font-weight: 600;
@@ -791,32 +819,29 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-.artchi-hint {
-  position: fixed; right: 36px; bottom: 0px;
-  background: var(--pop-yellow); color: var(--pop-black);
-  padding: 4px 10px; border-radius: 10px;
-  font-family: 'Montserrat', sans-serif; font-size: 9px;
+/* Persistent "Ask Artchi" label — always visible, anchored to the mascot */
+.artchi-label {
+  position: fixed; right: 22px; bottom: 0px;
+  background: var(--pop-pink); color: #fff;
+  padding: 6px 14px; border-radius: 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
   font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
   z-index: 61; pointer-events: none;
-  box-shadow: 0 3px 10px rgba(255,210,0,0.5);
-  animation: artchi-hintPulse 3s ease-in-out infinite;
-  opacity: 0.9; transition: all .5s ease;
+  box-shadow: 0 4px 14px rgba(255,45,142,0.4);
+  white-space: nowrap;
+  transition: opacity .3s ease, transform .3s ease;
 }
-.artchi-hint.gone { opacity: 0; transform: translateY(8px); pointer-events: none; visibility: hidden; }
-.artchi-hint.muted { opacity: 0; visibility: hidden; }
-@keyframes artchi-hintPulse {
-  0%,100% { transform: translateY(0); opacity: 0.85; }
-  50%    { transform: translateY(-2px); opacity: 1; }
-}
+.artchi-label.hidden { display: none; }
+.artchi-label.muted { opacity: 0; visibility: hidden; }
 
 .artchi-info {
-  position: fixed; right: 4px; bottom: 66px;
-  width: 20px; height: 20px; border-radius: 50%;
+  position: fixed; right: 6px; bottom: 90px;
+  width: 22px; height: 22px; border-radius: 50%;
   background: rgba(255,255,255,0.95);
   border: 1.5px solid var(--pop-black);
   color: var(--pop-black);
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 900;
+  font-size: 11px; font-weight: 900;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer; z-index: 63;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
@@ -952,8 +977,8 @@ body {
      ════════════════════════════════════════════════════════════════ -->
 
 <!-- Floating mascot (draggable, sleeps after idle) -->
-<div class="artchi awake hidden" id="artchi-character">
-  <svg width="80" height="80" viewBox="0 0 100 100">
+<div class="artchi-mascot awake hidden" id="artchi-character">
+  <svg width="110" height="110" viewBox="0 0 100 100">
     <defs>
       <linearGradient id="artchiBody" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#e9d5ff"/>
@@ -998,8 +1023,8 @@ body {
   <span id="artchi-bubble-text">Hi! I'm Artchi ✨</span>
 </div>
 
-<!-- Hint label (hangs near Artchi, fades after first interaction) -->
-<div class="artchi-hint hidden" id="artchi-hint">Tap me!</div>
+<!-- Persistent "Ask Artchi" label (always visible — discoverable) -->
+<div class="artchi-label hidden" id="artchi-label">💬 Ask Artchi</div>
 
 <!-- Small info button (opens About modal) -->
 <div class="artchi-info hidden" id="artchi-info-btn" onclick="openArtchiAbout()" title="About Artchi">i</div>
@@ -2487,9 +2512,9 @@ const ARTCHI_GLOBAL_FLAG = 'fei_artchi_introduced';
 let artchiSleepTimer = null;
 
 function showArtchi() {
-  // Reveal the floating mascot + hint + info button after sign-in
+  // Reveal the floating mascot + persistent label + info button after sign-in
   document.getElementById('artchi-character').classList.remove('hidden');
-  document.getElementById('artchi-hint').classList.remove('hidden');
+  document.getElementById('artchi-label').classList.remove('hidden');
   document.getElementById('artchi-info-btn').classList.remove('hidden');
   resetArtchiSleep();
   // First visit anywhere on the platform → show onboarding once
@@ -2522,22 +2547,19 @@ function showArtchiBubble(text, duration) {
   if (!b || !t) return;
   t.textContent = text;
   b.classList.add('show');
-  // Mute hint while bubble is showing
-  const hint = document.getElementById('artchi-hint');
-  if (hint && !hint.classList.contains('gone')) hint.classList.add('muted');
+  // Mute label while bubble is showing (avoid visual stack)
+  const label = document.getElementById('artchi-label');
+  if (label) label.classList.add('muted');
   if (duration) setTimeout(() => closeArtchiBubble(), duration);
 }
 
 function closeArtchiBubble() {
   document.getElementById('artchi-bubble').classList.remove('show');
-  const hint = document.getElementById('artchi-hint');
-  if (hint && !hint.classList.contains('gone')) hint.classList.remove('muted');
+  const label = document.getElementById('artchi-label');
+  if (label) label.classList.remove('muted');
 }
 
 function onArtchiClick() {
-  // Hide hint forever after first interaction
-  const hint = document.getElementById('artchi-hint');
-  if (hint) hint.classList.add('gone');
   // Brief excitement
   const a = document.getElementById('artchi-character');
   if (a) {
