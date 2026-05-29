@@ -392,6 +392,18 @@ body {
   overflow: hidden;
 }
 .transform-canvas-wrap svg { display: block; width: 100%; height: 100%; }
+/* The inner holder div + any canvas appended into it must fill the wrap.
+   Without this, canvases get a 0-height inline-block parent and render tiny. */
+.transform-canvas-wrap > div:not(.transform-stage-label) {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.transform-canvas-wrap canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
 .transform-stage-label {
   position: absolute; top: 8px; left: 8px;
   background: var(--pop-black); color: #fff;
@@ -2146,10 +2158,9 @@ function playWarholDemo() {
   const stages = ['original','isolate','flatten','recolor','repeat'];
   let i = 0;
   let holder = document.getElementById('demo-warhol-svg');
-  const size = wrap.clientWidth;
+  const size = Math.max(240, Math.min(640, wrap.clientWidth));
   const canvas = document.createElement('canvas');
   canvas.width = size; canvas.height = size;
-  canvas.style.width = '100%'; canvas.style.height = '100%';
   holder.innerHTML = ''; holder.appendChild(canvas);
   const ctx = canvas.getContext('2d');
   svgToImage(svgSampleFace(), (img) => {
@@ -2195,10 +2206,11 @@ function playLichtDemo() {
   const stages = ['original','crop','flatten','outline','dots'];
   let i = 0;
   let holder = document.getElementById('demo-licht-svg');
-  const size = wrap.clientWidth;
+  // Measure the outer wrap (has aspect-ratio:1/1, sized by parent pane) — NOT the inner holder
+  const size = Math.max(240, Math.min(640, wrap.clientWidth));
   const canvas = document.createElement('canvas');
   canvas.width = size; canvas.height = size;
-  canvas.style.width = '100%'; canvas.style.height = '100%';
+  // CSS rule .transform-canvas-wrap canvas now handles display sizing (100%)
   holder.innerHTML = ''; holder.appendChild(canvas);
   const ctx = canvas.getContext('2d');
   svgToImage(svgSampleFace(), (img) => {
