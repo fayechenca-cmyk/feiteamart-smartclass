@@ -737,6 +737,160 @@ body {
 }
 .compare-chip:hover { background: var(--pop-yellow); }
 .compare-chip.selected { background: var(--pop-pink); color: #fff; border-color: var(--pop-yellow); }
+
+/* ═══════════════════════════════════════════════════════════════
+   ARTCHI · platform-wide companion (identical across all lessons)
+   See SECTION 8 in JS for behavior. CSS below should match Foundation.
+   ═══════════════════════════════════════════════════════════════ */
+.artchi {
+  position: fixed; right: 18px; bottom: 18px;
+  width: 80px; height: 80px;
+  cursor: grab; z-index: 60; user-select: none;
+  transition: transform .3s;
+}
+.artchi:active { cursor: grabbing; }
+.artchi.awake { animation: artchi-breathe 3s ease-in-out infinite; }
+.artchi.excited { animation: artchi-bounce .6s ease-in-out 3; }
+.artchi.sleep .artchi-eye { transform: scaleY(0.1); transform-origin: center; }
+.artchi.sleep::after {
+  content: 'z'; position: absolute; top: -4px; right: -6px;
+  font-size: 18px; color: var(--ink-faint); font-weight: 900;
+  animation: artchi-zzz 2s ease-in-out infinite;
+  font-style: italic; font-family: 'Montserrat', sans-serif;
+}
+.artchi.hidden { display: none; }
+@keyframes artchi-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes artchi-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px) rotate(-5deg); } }
+@keyframes artchi-zzz { 0%,100% { opacity: 0; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-8px); } }
+
+.artchi-bubble {
+  position: fixed; right: 18px; bottom: 100px;
+  max-width: 220px; background: #fff;
+  padding: 12px 14px; border-radius: var(--radius-md);
+  font-size: 12px; color: var(--ink); line-height: 1.5;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border: 1.5px solid var(--pop-black);
+  z-index: 59; font-weight: 600;
+  display: none;
+}
+.artchi-bubble::after {
+  content: ''; position: absolute; bottom: -8px; right: 30px;
+  width: 14px; height: 14px; background: #fff;
+  transform: rotate(45deg);
+  border-right: 1.5px solid var(--pop-black);
+  border-bottom: 1.5px solid var(--pop-black);
+}
+.artchi-bubble.show { display: block; animation: artchi-bubblePop .3s ease; }
+.artchi-bubble-close {
+  position: absolute; top: 4px; right: 8px;
+  color: var(--ink-faint); font-size: 14px;
+  cursor: pointer; font-weight: 800;
+}
+@keyframes artchi-bubblePop {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.artchi-hint {
+  position: fixed; right: 36px; bottom: 0px;
+  background: var(--pop-yellow); color: var(--pop-black);
+  padding: 4px 10px; border-radius: 10px;
+  font-family: 'Montserrat', sans-serif; font-size: 9px;
+  font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+  z-index: 61; pointer-events: none;
+  box-shadow: 0 3px 10px rgba(255,210,0,0.5);
+  animation: artchi-hintPulse 3s ease-in-out infinite;
+  opacity: 0.9; transition: all .5s ease;
+}
+.artchi-hint.gone { opacity: 0; transform: translateY(8px); pointer-events: none; visibility: hidden; }
+.artchi-hint.muted { opacity: 0; visibility: hidden; }
+@keyframes artchi-hintPulse {
+  0%,100% { transform: translateY(0); opacity: 0.85; }
+  50%    { transform: translateY(-2px); opacity: 1; }
+}
+
+.artchi-info {
+  position: fixed; right: 4px; bottom: 66px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  border: 1.5px solid var(--pop-black);
+  color: var(--pop-black);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer; z-index: 63;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: all .25s; font-style: italic; opacity: 0.6;
+}
+.artchi-info:hover {
+  transform: scale(1.15);
+  background: var(--pop-pink); color: #fff;
+  border-color: var(--pop-black); opacity: 1;
+}
+.artchi-info.hidden { opacity: 0; pointer-events: none; }
+
+/* Onboarding modal */
+.artchi-onboard-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,0.6);
+  backdrop-filter: blur(8px);
+  z-index: 500; display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.artchi-onboard-backdrop.show { display: flex; animation: artchi-fadeIn .35s ease; }
+.artchi-onboard-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 2.5px solid var(--pop-black);
+  padding: 28px 24px;
+  max-width: 360px; width: 100%;
+  text-align: center;
+  box-shadow: 8px 9px 0 var(--pop-black);
+  animation: artchi-slideUp .45s ease;
+}
+.artchi-onboard-svg-wrap { margin: 0 auto 14px; }
+.artchi-onboard-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; color: var(--pop-black);
+  letter-spacing: 1px; margin-bottom: 6px;
+  line-height: 0.95;
+}
+.artchi-onboard-sub {
+  font-size: 13px; color: var(--ink-soft);
+  line-height: 1.55; margin-bottom: 20px;
+  font-style: italic;
+}
+.artchi-onboard-features {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 22px; text-align: left;
+}
+.artchi-onboard-feat {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--pop-cream);
+  border: 1.5px solid var(--pop-black);
+  border-radius: 8px;
+}
+.artchi-onboard-feat-ico {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--pop-pink);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.artchi-onboard-feat-text h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 800;
+  color: var(--pop-black); letter-spacing: 0.5px;
+  margin-bottom: 2px; text-transform: uppercase;
+}
+.artchi-onboard-feat-text p {
+  font-size: 11px; color: var(--ink-soft); line-height: 1.45;
+}
+@keyframes artchi-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes artchi-slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* "About Artchi" info modal — reuses .artchi-onboard-backdrop styles for consistency */
 </style>
 </head>
 <body>
@@ -791,6 +945,158 @@ body {
 </div>
 
 <div class="complete-toast" id="complete-toast"></div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     ARTCHI · platform-wide companion
+     Same character across all FEI Smart Class lessons. Future: AI-backed.
+     ════════════════════════════════════════════════════════════════ -->
+
+<!-- Floating mascot (draggable, sleeps after idle) -->
+<div class="artchi awake hidden" id="artchi-character">
+  <svg width="80" height="80" viewBox="0 0 100 100">
+    <defs>
+      <linearGradient id="artchiBody" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e9d5ff"/>
+        <stop offset="50%" stop-color="#c4b5fd"/>
+        <stop offset="100%" stop-color="#a78bfa"/>
+      </linearGradient>
+      <linearGradient id="artchiWing" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#fda4af" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0.85"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="50" cy="92" rx="22" ry="4" fill="rgba(0,0,0,0.08)"/>
+    <path d="M 22 50 Q 5 32 12 55 Q 18 70 32 62 Z" fill="url(#artchiWing)" opacity="0.9"/>
+    <path d="M 78 50 Q 95 32 88 55 Q 82 70 68 62 Z" fill="url(#artchiWing)" opacity="0.9"/>
+    <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#artchiBody)"/>
+    <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#artchiBody)"/>
+    <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+    <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+    <path d="M 34 26 Q 38 20 42 26 Q 40 30 34 28 Z" fill="#c4b5fd"/>
+    <path d="M 66 26 Q 62 20 58 26 Q 60 30 66 28 Z" fill="#c4b5fd"/>
+    <g class="artchi-eye">
+      <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+      <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+      <circle cx="43" cy="42" r="1" fill="#fff"/>
+      <circle cx="59" cy="42" r="1" fill="#fff"/>
+    </g>
+    <circle cx="36" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+    <circle cx="64" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+    <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="35" cy="72" rx="9" ry="6" fill="#fff"/>
+    <circle cx="31" cy="70" r="2" fill="#ef4444"/>
+    <circle cx="36" cy="70" r="2" fill="#f59e0b"/>
+    <circle cx="34" cy="75" r="2" fill="#1d9e75"/>
+    <circle cx="39" cy="74" r="2" fill="#3b82f6"/>
+  </svg>
+</div>
+
+<!-- Speech bubble (shows encouragement messages) -->
+<div class="artchi-bubble" id="artchi-bubble">
+  <span class="artchi-bubble-close" onclick="closeArtchiBubble()">×</span>
+  <span id="artchi-bubble-text">Hi! I'm Artchi ✨</span>
+</div>
+
+<!-- Hint label (hangs near Artchi, fades after first interaction) -->
+<div class="artchi-hint hidden" id="artchi-hint">Tap me!</div>
+
+<!-- Small info button (opens About modal) -->
+<div class="artchi-info hidden" id="artchi-info-btn" onclick="openArtchiAbout()" title="About Artchi">i</div>
+
+<!-- Onboarding modal (first visit, then never again — global flag) -->
+<div class="artchi-onboard-backdrop" id="artchi-onboard">
+  <div class="artchi-onboard-card">
+    <div class="artchi-onboard-svg-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="onboardBody" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e9d5ff"/>
+            <stop offset="50%" stop-color="#c4b5fd"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <linearGradient id="onboardWing" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.85"/>
+            <stop offset="50%" stop-color="#fda4af" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0.85"/>
+          </linearGradient>
+        </defs>
+        <path d="M 22 50 Q 5 32 12 55 Q 18 70 32 62 Z" fill="url(#onboardWing)" opacity="0.9"/>
+        <path d="M 78 50 Q 95 32 88 55 Q 82 70 68 62 Z" fill="url(#onboardWing)" opacity="0.9"/>
+        <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#onboardBody)"/>
+        <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#onboardBody)"/>
+        <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+        <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+        <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="43" cy="42" r="1" fill="#fff"/>
+        <circle cx="59" cy="42" r="1" fill="#fff"/>
+        <circle cx="36" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+        <circle cx="64" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+        <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="artchi-onboard-title">Hi, I'm Artchi!</div>
+    <div class="artchi-onboard-sub">Your art companion across every FEI lesson ✨</div>
+    <div class="artchi-onboard-features">
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">💬</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>Tap me anytime</h5>
+          <p>Ask anything about the lesson — I'm tuned to wherever you are.</p>
+        </div>
+      </div>
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">✋</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>Drag me anywhere</h5>
+          <p>Move me wherever feels comfortable — or ignore me if you want quiet focus.</p>
+        </div>
+      </div>
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">💤</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>I rest when you're focused</h5>
+          <p>After a minute of quiet I doze off. Tap me to wake me up.</p>
+        </div>
+      </div>
+    </div>
+    <button class="nav-btn primary" style="width:100%;" onclick="closeArtchiOnboard()">Got it — let's start! ✨</button>
+  </div>
+</div>
+
+<!-- About Artchi modal -->
+<div class="artchi-onboard-backdrop" id="artchi-about">
+  <div class="artchi-onboard-card" style="max-width:340px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--pop-pink);margin-bottom:8px;">About Artchi</div>
+    <div class="artchi-onboard-title" style="font-size:30px;">Your companion</div>
+    <div class="artchi-onboard-sub">Same Artchi in every lesson — Foundation or Creation.</div>
+    <div class="artchi-onboard-features">
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">💬</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>Tap me to chat</h5>
+          <p>Opens chat about the current step.</p>
+        </div>
+      </div>
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">💤</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>I rest if quiet</h5>
+          <p>After 1 minute of no action I sleep. Tap me to wake me up.</p>
+        </div>
+      </div>
+      <div class="artchi-onboard-feat">
+        <div class="artchi-onboard-feat-ico">✋</div>
+        <div class="artchi-onboard-feat-text">
+          <h5>Drag me anywhere</h5>
+          <p>Move me around the screen freely.</p>
+        </div>
+      </div>
+    </div>
+    <button class="nav-btn primary" style="width:100%;" onclick="closeArtchiAbout()">Got it</button>
+  </div>
+</div>
 
 <script>
 // ════════════════════════════════════════════════════════════════
@@ -1318,6 +1624,7 @@ function showLesson() {
     '<span class="user-pill">' + escapeHtml(userProfile.name) + ' ' + tier + '</span>' +
     '<button class="sign-out-btn" onclick="signOut()">Sign out</button>';
   renderCurrentStep();
+  showArtchi();
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1719,6 +2026,11 @@ function goNext() {
   if (idx < STEPS.length - 1) lessonProgress.currentStep = STEPS[idx+1].id;
   else lessonProgress.currentStep = 'badge-ceremony';
   saveLessonProgress();
+  // Artchi celebrates step completion
+  if (typeof showArtchiBubble === 'function') {
+    const cheers = ['nice — keep going ✨', 'good work 🎨', 'love it 💛', 'onward!'];
+    showArtchiBubble(cheers[Math.floor(Math.random()*cheers.length)], 2500);
+  }
   if (lessonProgress.currentStep === 'badge-ceremony') {
     document.getElementById('lesson-content').innerHTML = renderBadge();
     window.scrollTo(0, 0);
@@ -2162,6 +2474,139 @@ function fakeArtchiReply(modeKey, userText) {
 }
 
 // ════════════════════════════════════════════════════════════════
+// SECTION 11b — ARTCHI MASCOT (platform-wide, identical across lessons)
+// 
+// The "shell" layer of Artchi: SVG character, drag, sleep/wake,
+// bubble, hint label, info button, onboarding modal.
+// 
+// The "brain" layer (what Artchi says when you chat with her) lives
+// in SECTION 11 (AI_MODES + openChatModal + fakeArtchiReply).
+// Future: replace fakeArtchiReply with a real AI backend; shell unchanged.
+// ════════════════════════════════════════════════════════════════
+const ARTCHI_GLOBAL_FLAG = 'fei_artchi_introduced';
+let artchiSleepTimer = null;
+
+function showArtchi() {
+  // Reveal the floating mascot + hint + info button after sign-in
+  document.getElementById('artchi-character').classList.remove('hidden');
+  document.getElementById('artchi-hint').classList.remove('hidden');
+  document.getElementById('artchi-info-btn').classList.remove('hidden');
+  resetArtchiSleep();
+  // First visit anywhere on the platform → show onboarding once
+  if (!localStorage.getItem(ARTCHI_GLOBAL_FLAG)) {
+    setTimeout(() => openArtchiOnboard(), 600);
+  } else {
+    // Returning user — Artchi just greets briefly via bubble
+    setTimeout(() => {
+      const greeting = userProfile ? `welcome back, ${userProfile.name}! ✨` : `back again ✨`;
+      showArtchiBubble(greeting, 3500);
+    }, 800);
+  }
+}
+
+function resetArtchiSleep() {
+  clearTimeout(artchiSleepTimer);
+  const a = document.getElementById('artchi-character');
+  if (!a) return;
+  a.classList.remove('sleep');
+  a.classList.add('awake');
+  artchiSleepTimer = setTimeout(() => {
+    a.classList.remove('awake');
+    a.classList.add('sleep');
+  }, 60000); // 60s idle → sleep
+}
+
+function showArtchiBubble(text, duration) {
+  const b = document.getElementById('artchi-bubble');
+  const t = document.getElementById('artchi-bubble-text');
+  if (!b || !t) return;
+  t.textContent = text;
+  b.classList.add('show');
+  // Mute hint while bubble is showing
+  const hint = document.getElementById('artchi-hint');
+  if (hint && !hint.classList.contains('gone')) hint.classList.add('muted');
+  if (duration) setTimeout(() => closeArtchiBubble(), duration);
+}
+
+function closeArtchiBubble() {
+  document.getElementById('artchi-bubble').classList.remove('show');
+  const hint = document.getElementById('artchi-hint');
+  if (hint && !hint.classList.contains('gone')) hint.classList.remove('muted');
+}
+
+function onArtchiClick() {
+  // Hide hint forever after first interaction
+  const hint = document.getElementById('artchi-hint');
+  if (hint) hint.classList.add('gone');
+  // Brief excitement
+  const a = document.getElementById('artchi-character');
+  if (a) {
+    a.classList.add('excited');
+    setTimeout(() => a.classList.remove('excited'), 1800);
+  }
+  // Open chat with the CURRENT STEP's AI mode
+  const step = findStep(lessonProgress.currentStep);
+  const modeKey = (step && step.aiMode) || 'pop_culture_guide';
+  openChatModal(modeKey);
+}
+
+function openArtchiOnboard() {
+  document.getElementById('artchi-onboard').classList.add('show');
+}
+
+function closeArtchiOnboard() {
+  document.getElementById('artchi-onboard').classList.remove('show');
+  localStorage.setItem(ARTCHI_GLOBAL_FLAG, 'true');
+  resetArtchiSleep();
+  setTimeout(() => showArtchiBubble("i'm here whenever you need me ✨", 3000), 400);
+}
+
+function openArtchiAbout() { document.getElementById('artchi-about').classList.add('show'); }
+function closeArtchiAbout() { document.getElementById('artchi-about').classList.remove('show'); }
+
+// ─── DRAG + CLICK on the floating Artchi ──────────────────────
+(function initArtchiDrag() {
+  const a = document.getElementById('artchi-character');
+  if (!a) return;
+  let dragging = false, offX = 0, offY = 0, moved = false;
+
+  function onDown(e) {
+    dragging = true; moved = false;
+    const rect = a.getBoundingClientRect();
+    const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+    const cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+    offX = cx - rect.left; offY = cy - rect.top;
+    a.style.right = 'auto'; a.style.bottom = 'auto';
+    if (e.preventDefault) e.preventDefault();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    moved = true;
+    const cx = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
+    const cy = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
+    const rect = a.getBoundingClientRect();
+    let x = cx - offX, y = cy - offY;
+    x = Math.max(0, Math.min(window.innerWidth - rect.width, x));
+    y = Math.max(0, Math.min(window.innerHeight - rect.height, y));
+    a.style.left = x + 'px'; a.style.top = y + 'px';
+  }
+  function onUp() {
+    if (dragging && !moved) onArtchiClick();
+    dragging = false;
+  }
+  a.addEventListener('mousedown', onDown);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  a.addEventListener('touchstart', onDown, { passive: false });
+  document.addEventListener('touchmove', onMove, { passive: false });
+  document.addEventListener('touchend', onUp);
+})();
+
+// Any user activity resets Artchi's sleep timer
+document.addEventListener('click', () => { if (!document.getElementById('artchi-character').classList.contains('hidden')) resetArtchiSleep(); });
+document.addEventListener('touchstart', () => { if (!document.getElementById('artchi-character').classList.contains('hidden')) resetArtchiSleep(); }, { passive: true });
+
+// ════════════════════════════════════════════════════════════════
 // SECTION 12 — SIGN-IN
 // ════════════════════════════════════════════════════════════════
 function updateSignInBtn() {
@@ -2223,6 +2668,8 @@ window.downloadOutput=downloadOutput; window.saveReflection=saveReflection;
 window.completeLessonAndReturnToStudio=completeLessonAndReturnToStudio;
 window.openChatModal=openChatModal; window.closeChatModal=closeChatModal; window.sendChat=sendChat;
 window.signOut=signOut; window.attemptSignIn=attemptSignIn;
+window.closeArtchiBubble=closeArtchiBubble; window.closeArtchiOnboard=closeArtchiOnboard;
+window.openArtchiAbout=openArtchiAbout; window.closeArtchiAbout=closeArtchiAbout;
 
 // ════════════════════════════════════════════════════════════════
 // SECTION 14 — INIT
