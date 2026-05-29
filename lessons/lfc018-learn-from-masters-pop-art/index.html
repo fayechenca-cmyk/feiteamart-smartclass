@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn From Masters: Pop Art · LFC018 · FEI Smart Class</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════════════════════
+   LFC018 · Learn From Masters: Pop Art (Warhol & Lichtenstein)
+   Creation track · Learn From Collection family
+
+   PEDAGOGY:
+   6 steps. Image-led, transformation-driven.
+   Step 3 (See the Pop Shift) — auto before/after transform demo.
+   Step 5 (Transform It) — the SIGNATURE interaction: a real
+   in-browser Canvas image transformer. Student uploads an ordinary
+   image and turns it into Warhol-style or Lichtenstein-style pop art.
+
+   AESTHETIC (opposite of Basquiat's raw cream):
+   Bright white, crisp pop colors, clean geometric layout,
+   Ben-Day dots as decoration. Bebas Neue + Permanent Marker.
+
+   COPYRIGHT:
+   All sample images are original inline SVG. Artist portraits are
+   stylized silhouettes, not photographs. MoMA links provided for
+   real works.
+
+   ARTCHI:
+   Full online chat (like lfc054) — mode rotates per phase.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Platform shell */
+  --ink: #1a1d2b;
+  --ink-soft: rgba(26,29,43,0.65);
+  --ink-faint: rgba(26,29,43,0.45);
+  --ink-veryfaint: rgba(26,29,43,0.13);
+  --paper: #ffffff;
+  --paper-soft: #f7f7fa;
+  --purple: #a78bfa;
+  --cyan: #67e8f9;
+  --gold: #c8a96e;
+  --green: #1d9e75;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 18px rgba(0,0,0,0.09);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* Pop palette */
+  --pop-pink: #ff2d8e;
+  --pop-pink-soft: #ffd6e8;
+  --pop-yellow: #ffd200;
+  --pop-blue: #0099fe;
+  --pop-blue2: #0077dd;
+  --pop-red: #e8112d;
+  --pop-cyan: #00d4e8;
+  --pop-green: #2ecc71;
+  --pop-orange: #ff7a00;
+  --pop-black: #111111;
+  --pop-cream: #fff8e8;
+  --warhol-accent: #ff2d8e;   /* Warhol = hot pink */
+  --licht-accent: #009afe;    /* Lichtenstein = comic blue */
+
+  /* Artchi voices */
+  --voice-look: #00d4e8;
+  --voice-think: #a78bfa;
+  --voice-make: #ff2d8e;
+  --voice-reflect: #ffd200;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ TOPBAR ═══ */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--pop-black);
+  position: sticky; top: 0; z-index: 100;
+}
+.brand-link {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800; font-size: 14px; color: var(--ink);
+  text-decoration: none; letter-spacing: 0.3px;
+}
+.brand-mark { color: var(--pop-pink); margin-right: 4px; }
+.breadcrumb-trail {
+  font-size: 11px; color: var(--ink-faint);
+  font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-left: 6px;
+}
+.topbar-right {
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px;
+}
+.topbar-right a { color: var(--ink-soft); text-decoration: none; }
+.user-pill { font-size: 12px; color: var(--ink-soft); }
+.sign-out-btn {
+  background: none; border: 1px solid var(--ink-veryfaint);
+  border-radius: 16px; padding: 6px 12px; font-size: 11px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
+}
+.sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
+
+/* ═══ SIGN-IN ═══ */
+.signin-screen {
+  min-height: calc(100vh - 60px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px 20px;
+  background:
+    radial-gradient(circle at 20% 30%, var(--pop-yellow) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, var(--pop-pink) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, var(--pop-cyan) 0%, transparent 50%),
+    #fff;
+}
+.signin-card {
+  background: #fff; border-radius: var(--radius-lg);
+  padding: 36px 28px; max-width: 380px; width: 100%;
+  box-shadow: 6px 7px 0 var(--pop-black);
+  border: 2.5px solid var(--pop-black);
+  text-align: center;
+}
+.signin-kicker {
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--pop-pink); margin-bottom: 12px;
+}
+.signin-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 44px;
+  font-weight: 400; margin-bottom: 4px; letter-spacing: 1px;
+  line-height: 0.95;
+}
+.signin-subtitle {
+  font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+}
+.signin-label {
+  display: block; text-align: left;
+  font-family: 'Montserrat', sans-serif; font-size: 10px;
+  font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 6px;
+}
+.signin-input {
+  width: 100%; padding: 12px 14px; font-size: 15px;
+  border: 2px solid var(--pop-black); border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  letter-spacing: 0.5px; outline: none;
+}
+.signin-input:focus { border-color: var(--pop-pink); }
+.signin-input.error { border-color: var(--pop-red); animation: shake 0.4s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.signin-btn {
+  width: 100%; margin-top: 14px; padding: 14px;
+  background: var(--pop-black); color: #fff; border: none;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 13px; letter-spacing: 1px;
+}
+.signin-btn:hover:not(:disabled) { background: var(--pop-pink); }
+.signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.signin-error {
+  display: none; margin-top: 12px; font-size: 12px; color: var(--pop-red);
+}
+.signin-error.visible { display: block; }
+.signin-help {
+  margin-top: 22px; font-size: 12px; color: var(--ink-faint); line-height: 1.7;
+}
+.signin-help a { color: var(--pop-pink); text-decoration: none; font-weight: 700; }
+
+/* ═══ LESSON CONTAINER ═══ */
+.lesson { max-width: 820px; margin: 0 auto; padding: 24px 18px 80px; }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px;
+  font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-soft); padding: 6px 0; margin-bottom: 16px;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--pop-pink); }
+
+/* ═══ STEP HEADER ═══ */
+.step-header { margin-bottom: 24px; }
+.step-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; letter-spacing: 1.5px;
+  color: var(--pop-pink); margin-bottom: 6px;
+  text-transform: uppercase; font-weight: 800;
+}
+.step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px; font-weight: 400;
+  line-height: 0.92; margin-bottom: 10px;
+  color: var(--pop-black); letter-spacing: 1px;
+}
+.step-prompt {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px; color: var(--ink-soft); line-height: 1.4;
+  font-weight: 500;
+}
+
+/* ═══ PROGRESS ═══ */
+.progress-strip {
+  display: flex; justify-content: center; gap: 10px; margin: 0 0 28px;
+}
+.progress-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--ink-veryfaint); cursor: pointer; transition: all 0.2s;
+}
+.progress-dot.done { background: var(--pop-pink); }
+.progress-dot.current { width: 32px; border-radius: 5px; background: var(--pop-black); }
+.progress-dot:hover { transform: scale(1.3); }
+
+/* ═══ CHIPS ═══ */
+.chips-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.chip {
+  background: #fff;
+  border: 2px solid var(--pop-black);
+  padding: 10px 18px;
+  border-radius: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.12s;
+  color: var(--pop-black);
+}
+.chip:hover { background: var(--pop-yellow); transform: translateY(-2px); }
+.chip.selected { background: var(--pop-pink); color: #fff; border-color: var(--pop-black); }
+
+/* ═══ RESPONSE / FOLLOW-UP ═══ */
+.pop-response {
+  background: var(--pop-yellow);
+  border: 2px solid var(--pop-black);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px; margin-bottom: 22px;
+  box-shadow: 3px 4px 0 var(--pop-black);
+  display: none;
+}
+.pop-response.visible { display: block; }
+.pop-response-main {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 18px; color: var(--pop-black); line-height: 1.3;
+}
+.pop-response-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; color: var(--ink-soft); margin-top: 8px; font-weight: 500;
+}
+.hint-line {
+  font-family: 'Open Sans', sans-serif; font-size: 14px;
+  color: var(--ink-faint); font-style: italic; margin: -8px 0 18px;
+}
+
+/* ═══ STEP 1 — pop culture field (SVG collage) ═══ */
+.pop-field {
+  border: 2px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 4px 5px 0 var(--pop-black);
+}
+.pop-field svg { display: block; width: 100%; height: auto; }
+
+/* ═══ STEP 2 — artist cards ═══ */
+.artist-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+}
+@media (max-width: 600px) { .artist-cards { grid-template-columns: 1fr; } }
+.artist-card {
+  background: #fff;
+  border: 2.5px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 4px 5px 0 var(--pop-black);
+}
+.artist-card.warhol { border-top: 8px solid var(--warhol-accent); }
+.artist-card.licht { border-top: 8px solid var(--licht-accent); }
+.artist-portrait-wrap {
+  background: var(--pop-cream);
+  border-bottom: 2px solid var(--pop-black);
+  padding: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.artist-portrait-wrap svg { width: 120px; height: 140px; }
+.artist-body { padding: 16px; }
+.artist-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px; letter-spacing: 1px; line-height: 0.95;
+  margin-bottom: 6px; color: var(--pop-black);
+}
+.artist-identity {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; color: var(--ink-soft); line-height: 1.4; margin-bottom: 12px;
+}
+.artist-expand-btn {
+  width: 100%;
+  background: var(--pop-black); color: #fff;
+  border: none; padding: 10px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+  letter-spacing: 0.6px; text-transform: uppercase; cursor: pointer;
+  border-radius: 6px;
+}
+.artist-card.warhol .artist-expand-btn:hover { background: var(--warhol-accent); }
+.artist-card.licht .artist-expand-btn:hover { background: var(--licht-accent); }
+.artist-expanded {
+  max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+}
+.artist-card.open .artist-expanded { max-height: 600px; }
+.artist-expanded-inner { padding: 14px 0 0; }
+.artist-expanded-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px; color: var(--ink); line-height: 1.5; margin-bottom: 12px;
+}
+.inspired-sample {
+  border: 1.5px solid var(--pop-black);
+  border-radius: 6px; overflow: hidden; margin-bottom: 10px;
+}
+.inspired-sample svg { display: block; width: 100%; height: auto; }
+.inspired-label {
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--ink-faint);
+  padding: 6px 0; text-align: center;
+}
+.museum-link-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff; color: var(--pop-black);
+  border: 1.5px solid var(--pop-black);
+  padding: 7px 12px; border-radius: 18px;
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.6px; text-decoration: none; text-transform: uppercase;
+}
+.museum-link-btn:hover { background: var(--pop-yellow); }
+
+/* ═══ STEP 3 — Pop Transformer demo (before/after) ═══ */
+.transform-demo {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px;
+}
+@media (max-width: 640px) { .transform-demo { grid-template-columns: 1fr; } }
+.transform-pane {
+  background: #fff;
+  border: 2.5px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 4px 5px 0 var(--pop-black);
+}
+.transform-pane.warhol-pane { border-top: 8px solid var(--warhol-accent); }
+.transform-pane.licht-pane { border-top: 8px solid var(--licht-accent); }
+.transform-pane-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; letter-spacing: 0.5px;
+  padding: 12px 16px 4px; color: var(--pop-black);
+}
+.transform-pane-copy {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px; color: var(--ink-soft); line-height: 1.45;
+  padding: 0 16px 12px;
+}
+.transform-canvas-wrap {
+  position: relative;
+  background: var(--pop-cream);
+  border-top: 2px solid var(--pop-black);
+  border-bottom: 2px solid var(--pop-black);
+  aspect-ratio: 1/1;
+  overflow: hidden;
+}
+.transform-canvas-wrap svg { display: block; width: 100%; height: 100%; }
+.transform-stage-label {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--pop-black); color: #fff;
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.8px; padding: 4px 10px; border-radius: 12px;
+  text-transform: uppercase;
+}
+.transform-controls {
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.transform-play-btn {
+  background: var(--pop-black); color: #fff; border: none;
+  padding: 9px 16px; border-radius: 18px;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.6px; cursor: pointer; text-transform: uppercase;
+}
+.transform-pane.warhol-pane .transform-play-btn:hover { background: var(--warhol-accent); }
+.transform-pane.licht-pane .transform-play-btn:hover { background: var(--licht-accent); }
+.transform-prompt-line {
+  font-family: 'Open Sans', sans-serif; font-size: 12px;
+  color: var(--ink-faint); font-style: italic; flex: 1;
+}
+
+/* ═══ STEP 4 — Source capture ═══ */
+.source-options {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 22px;
+}
+@media (max-width: 600px) { .source-options { grid-template-columns: 1fr; } }
+.source-option {
+  background: #fff; border: 2px solid var(--pop-black);
+  border-radius: var(--radius-md); padding: 20px 16px; text-align: center;
+  cursor: pointer; transition: all 0.15s;
+  box-shadow: 3px 4px 0 var(--pop-black);
+}
+.source-option:hover { background: var(--pop-yellow); transform: translateY(-2px); }
+.source-option-icon { font-size: 32px; margin-bottom: 8px; }
+.source-option-label {
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800;
+  letter-spacing: 0.4px;
+}
+.sample-sources {
+  margin-bottom: 22px;
+}
+.sample-sources-label {
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+.sample-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 600px) { .sample-grid { grid-template-columns: repeat(2, 1fr); } }
+.sample-item {
+  border: 2px solid var(--pop-black); border-radius: var(--radius-sm);
+  overflow: hidden; cursor: pointer; transition: all 0.15s;
+  background: #fff;
+}
+.sample-item:hover { transform: translateY(-2px); box-shadow: 3px 4px 0 var(--pop-black); }
+.sample-item.selected { border-width: 3px; box-shadow: 0 0 0 3px var(--pop-pink); }
+.sample-item svg { display: block; width: 100%; height: auto; }
+.sample-item-name {
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+  text-align: center; padding: 6px 4px; border-top: 1.5px solid var(--pop-black);
+  color: var(--ink-soft);
+}
+.source-preview {
+  border: 2.5px solid var(--pop-black); border-radius: var(--radius-md);
+  overflow: hidden; margin-bottom: 22px; box-shadow: 4px 5px 0 var(--pop-black);
+  background: var(--pop-cream);
+}
+.source-preview img { display: block; width: 100%; max-height: 360px; object-fit: contain; }
+.source-preview svg { display: block; width: 100%; height: auto; max-height: 360px; }
+.source-preview-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-top: 2px solid var(--pop-black);
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+}
+.source-preview-replace {
+  background: none; border: none; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+  color: var(--pop-pink); letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+/* ═══ STEP 5 — THE TRANSFORMER (signature interaction) ═══ */
+.mode-switch {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+}
+.mode-btn {
+  border: 2.5px solid var(--pop-black); border-radius: var(--radius-md);
+  padding: 16px; cursor: pointer; text-align: center; background: #fff;
+  transition: all 0.15s; box-shadow: 3px 4px 0 var(--pop-black);
+}
+.mode-btn:hover { transform: translateY(-2px); }
+.mode-btn.warhol-mode.active { background: var(--warhol-accent); color: #fff; }
+.mode-btn.licht-mode.active { background: var(--licht-accent); color: #fff; }
+.mode-btn-name {
+  font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; line-height: 1;
+}
+.mode-btn-sub {
+  font-family: 'Open Sans', sans-serif; font-size: 12px; margin-top: 4px; opacity: 0.85;
+}
+
+.transformer {
+  display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 22px;
+}
+.transformer-canvas-wrap {
+  position: relative;
+  border: 2.5px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background:
+    repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 24px 24px;
+  box-shadow: 4px 5px 0 var(--pop-black);
+  min-height: 280px;
+  display: flex; align-items: center; justify-content: center;
+}
+.transformer-canvas-wrap canvas { display: block; max-width: 100%; height: auto; }
+.transformer-empty {
+  font-family: 'Open Sans', sans-serif; font-size: 14px; color: var(--ink-faint);
+  text-align: center; padding: 40px 20px; font-style: italic;
+}
+.transformer-controls {
+  background: #fff;
+  border: 2px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.transformer-prompt {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 16px; color: var(--pop-black); margin-bottom: 14px; line-height: 1.3;
+}
+.control-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px;
+}
+@media (max-width: 540px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+.control-btn {
+  border: 2px solid var(--pop-black); background: #fff;
+  padding: 12px 8px; border-radius: 8px; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.3px; text-align: center; transition: all 0.12s;
+  text-transform: uppercase; color: var(--pop-black);
+}
+.control-btn:hover { background: var(--pop-yellow); }
+.control-btn.active { background: var(--pop-black); color: #fff; }
+.control-btn.warhol-on.active { background: var(--warhol-accent); }
+.control-btn.licht-on.active { background: var(--licht-accent); }
+.control-slider-row {
+  display: flex; align-items: center; gap: 12px; margin-top: 12px;
+  padding-top: 12px; border-top: 1.5px dashed var(--ink-veryfaint);
+}
+.control-slider-row label {
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.4px; text-transform: uppercase; color: var(--ink-soft);
+  min-width: 70px;
+}
+.control-slider-row input[type=range] { flex: 1; accent-color: var(--pop-pink); }
+.transformer-actions {
+  display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
+}
+.recolor-swatches { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.recolor-swatch {
+  width: 40px; height: 40px; border-radius: 8px;
+  border: 2px solid var(--pop-black); cursor: pointer; overflow: hidden;
+  display: flex; transition: transform 0.12s;
+}
+.recolor-swatch:hover { transform: scale(1.1); }
+.recolor-swatch.active { box-shadow: 0 0 0 3px var(--pop-pink); }
+.recolor-swatch .half { flex: 1; height: 100%; }
+
+/* ═══ UPLOAD ═══ */
+.upload-area {
+  background: #fff; border: 2.5px dashed var(--pop-black);
+  border-radius: var(--radius-md); padding: 32px 20px; text-align: center;
+  cursor: pointer; margin-bottom: 18px;
+}
+.upload-area:hover { background: var(--pop-cream); border-style: solid; }
+.upload-icon { font-size: 36px; margin-bottom: 8px; }
+.upload-prompt {
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 800;
+  letter-spacing: 0.4px; margin-bottom: 6px;
+}
+.upload-hint { font-family: 'Open Sans', sans-serif; font-size: 13px; color: var(--ink-faint); }
+
+/* ═══ REFLECTION ═══ */
+.reflection-block {
+  background: #fff; border: 2px solid var(--pop-black);
+  border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 18px;
+  box-shadow: 3px 4px 0 var(--pop-black);
+}
+.reflection-block textarea {
+  width: 100%; min-height: 80px; padding: 12px;
+  font-family: 'Open Sans', sans-serif; font-size: 15px;
+  border: 1.5px solid var(--pop-black); border-radius: 6px; resize: vertical;
+  outline: none;
+}
+.reflection-block textarea:focus { border-color: var(--pop-pink); }
+.reflection-label {
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+  letter-spacing: 0.8px; text-transform: uppercase; color: var(--pop-pink);
+  margin-bottom: 10px;
+}
+.reflection-prompt-item {
+  font-family: 'Open Sans', sans-serif; font-size: 14px; color: var(--ink-soft);
+  padding: 6px 0; display: flex; gap: 10px; align-items: flex-start;
+}
+.reflection-prompt-item::before { content: '◆'; color: var(--pop-pink); }
+
+/* ═══ ARTCHI ═══ */
+.artchi-block {
+  background: var(--pop-cream);
+  border: 2px solid var(--pop-black);
+  border-radius: var(--radius-md);
+  padding: 14px 14px 14px 64px;
+  margin-bottom: 22px; position: relative; min-height: 72px;
+  border-left: 6px solid var(--voice-think);
+  box-shadow: 3px 4px 0 var(--pop-black);
+}
+.artchi-block.voice-look { border-left-color: var(--voice-look); }
+.artchi-block.voice-think { border-left-color: var(--voice-think); }
+.artchi-block.voice-make { border-left-color: var(--voice-make); }
+.artchi-block.voice-reflect { border-left-color: var(--voice-reflect); }
+.artchi-avatar {
+  position: absolute; left: 12px; top: 12px;
+  width: 38px; height: 38px;
+  background: var(--pop-black); border: 2px solid var(--pop-yellow);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.artchi-voice {
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: 1.2px; color: var(--pop-pink); margin-bottom: 3px; text-transform: uppercase;
+}
+.artchi-text {
+  font-family: 'Open Sans', sans-serif; font-size: 16px; color: var(--pop-black);
+  line-height: 1.45; font-weight: 500;
+}
+
+/* Chat trigger + modal */
+.chat-trigger {
+  background: #fff; border: 2px solid var(--pop-pink); color: var(--pop-pink);
+  border-radius: 22px; padding: 9px 18px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.4px; margin-bottom: 22px; text-transform: uppercase;
+}
+.chat-trigger:hover { background: var(--pop-pink); color: #fff; }
+.chat-modal {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  z-index: 300; padding: 30px 16px; align-items: center; justify-content: center;
+}
+.chat-modal.active { display: flex; }
+.chat-modal-panel {
+  background: #fff; border-radius: var(--radius-lg); border: 2.5px solid var(--pop-black);
+  width: 100%; max-width: 480px; max-height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 8px 9px 0 var(--pop-black);
+}
+.chat-modal-header {
+  padding: 16px 20px; border-bottom: 2px solid var(--pop-black);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.chat-modal-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; }
+.chat-mode-pill {
+  display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px;
+  font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase;
+  background: var(--pop-yellow); color: var(--pop-black); padding: 3px 8px;
+  border-radius: 10px; margin-left: 8px;
+}
+.chat-modal-close { background: none; border: none; cursor: pointer; font-size: 22px; color: var(--ink-soft); }
+.chat-thread {
+  flex: 1; overflow-y: auto; padding: 18px 20px; background: var(--paper-soft);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.45; }
+.chat-msg.artchi { background: #fff; border: 1.5px solid var(--pop-black); align-self: flex-start; }
+.chat-msg.user { background: var(--pop-pink); color: #fff; align-self: flex-end; }
+.chat-starters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chat-starter {
+  background: #fff; border: 1.5px solid var(--pop-black); border-radius: 16px;
+  padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: 'Open Sans', sans-serif;
+}
+.chat-starter:hover { background: var(--pop-yellow); }
+.chat-input-bar { padding: 12px 16px; border-top: 2px solid var(--pop-black); display: flex; gap: 8px; }
+.chat-input {
+  flex: 1; padding: 10px 14px; border: 1.5px solid var(--pop-black); border-radius: 18px;
+  font-family: 'Open Sans', sans-serif; font-size: 14px; outline: none;
+}
+.chat-input:focus { border-color: var(--pop-pink); }
+.chat-send {
+  background: var(--pop-pink); color: #fff; border: none; border-radius: 18px;
+  padding: 10px 16px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px; cursor: pointer;
+}
+
+/* ═══ NAV ═══ */
+.lesson-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--pop-black); gap: 10px;
+}
+.nav-btn {
+  background: #fff; border: 2px solid var(--pop-black); padding: 12px 22px;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+  letter-spacing: 0.6px; cursor: pointer; color: var(--pop-black); text-transform: uppercase;
+  border-radius: 8px;
+}
+.nav-btn:hover { background: var(--pop-yellow); }
+.nav-btn.primary {
+  background: var(--pop-pink); color: #fff; border-color: var(--pop-black);
+  box-shadow: 3px 4px 0 var(--pop-black);
+}
+.nav-btn.primary:hover { background: var(--pop-black); }
+.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; background: var(--paper-soft); }
+.nav-btn:disabled:hover { background: var(--paper-soft); }
+
+/* ═══ BADGE ═══ */
+.badge-ceremony {
+  background:
+    radial-gradient(circle at 30% 30%, var(--pop-yellow) 0%, transparent 35%),
+    radial-gradient(circle at 70% 70%, var(--pop-pink) 0%, transparent 35%),
+    #fff;
+  border: 3px solid var(--pop-black); padding: 40px 30px; text-align: center;
+  box-shadow: 8px 9px 0 var(--pop-black); border-radius: var(--radius-lg);
+}
+.badge-icon-big { font-size: 64px; margin-bottom: 12px; }
+.badge-title-big {
+  font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--pop-black);
+  letter-spacing: 1px; margin-bottom: 8px; line-height: 0.95;
+}
+.badge-sub-big {
+  font-family: 'Open Sans', sans-serif; font-size: 16px; color: var(--ink-soft);
+  margin-bottom: 22px; font-weight: 500;
+}
+.badge-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* ═══ TOAST ═══ */
+.complete-toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--pop-black); color: #fff; padding: 12px 22px; border-radius: 24px;
+  font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: 0.4px;
+  z-index: 350; opacity: 0; transition: all 0.3s; pointer-events: none; text-transform: uppercase;
+}
+.complete-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ═══ COMPARE PROMPT (Step 3) ═══ */
+.compare-prompt {
+  background: var(--pop-black); color: #fff;
+  border-radius: var(--radius-md); padding: 20px; margin-bottom: 22px; text-align: center;
+}
+.compare-prompt-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.5px; margin-bottom: 14px;
+}
+.compare-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.compare-chip {
+  background: #fff; color: var(--pop-black); border: 2px solid #fff;
+  padding: 10px 16px; border-radius: 22px; cursor: pointer;
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; transition: all 0.12s;
+}
+.compare-chip:hover { background: var(--pop-yellow); }
+.compare-chip.selected { background: var(--pop-pink); color: #fff; border-color: var(--pop-yellow); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <a href="../../" class="brand-link"><span class="brand-mark">●</span> FEI · Smart Class</a>
+    <span class="breadcrumb-trail">· Creation · Learn From Masters</span>
+  </div>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<div class="signin-screen" id="signin-screen" style="display:none;">
+  <div class="signin-card">
+    <div class="signin-kicker">★ LFC018 · Learn From Masters</div>
+    <h1 class="signin-title">POP ART</h1>
+    <p class="signin-subtitle">Warhol &amp; Lichtenstein · Enter your student code to begin.</p>
+    <label class="signin-label" for="signin-code">Student Code</label>
+    <input type="text" class="signin-input" id="signin-code"
+           placeholder="e.g. LILY-01" autocomplete="off"
+           autocapitalize="characters" spellcheck="false" />
+    <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
+    <p class="signin-error" id="signin-error">That code doesn't match.</p>
+    <p class="signin-help">
+      Don't have a code yet?<br>
+      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
+      &nbsp;·&nbsp;
+      <a href="#" id="try-code-link">Try with TRYNEW</a>
+    </p>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-screen" style="display:none;">
+  <a href="../../creation/" class="back-link">← Back to Studio</a>
+  <div id="lesson-content"></div>
+</div>
+
+<div class="chat-modal" id="chat-modal">
+  <div class="chat-modal-panel">
+    <div class="chat-modal-header">
+      <div class="chat-modal-title">Artchi <span class="chat-mode-pill" id="chat-mode-pill">Pop Guide</span></div>
+      <button class="chat-modal-close" onclick="closeChatModal()">×</button>
+    </div>
+    <div class="chat-thread" id="chat-thread"></div>
+    <div class="chat-input-bar">
+      <input type="text" class="chat-input" id="chat-input"
+             placeholder="ask Artchi about pop art..."
+             onkeydown="if(event.key==='Enter') sendChat()" />
+      <button class="chat-send" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="complete-toast" id="complete-toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// LFC018 · Learn From Masters: Pop Art
+// SECTION 1 — CONFIG
+// ════════════════════════════════════════════════════════════════
+const ROSTER_PATH = '../../core/student-access-codes.js';
+const PROFILE_KEY = 'fei_user_profile';
+const LESSON_PROGRESS_KEY = 'fei_lfc018_progress';
+const JUDGMENT_CARDS_KEY = 'lfc_cards_v1';
+const LESSON_ID = 'lfc018';
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 2 — INLINE SVG ART (all original, copyright-safe)
+// ════════════════════════════════════════════════════════════════
+function svgPopField() {
+  return `
+<svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="360" fill="#fff8e8"/>
+  <g transform="translate(60,70)">
+    <path d="M0,-40 L10,-15 L36,-22 L20,0 L40,18 L12,16 L4,42 L-8,16 L-34,22 L-18,0 L-36,-20 L-10,-14 Z" fill="#e8112d"/>
+    <text x="0" y="6" font-family="Bebas Neue, sans-serif" font-size="22" fill="#fff" text-anchor="middle">SALE</text>
+  </g>
+  <g transform="translate(150,40)">
+    <rect x="0" y="0" width="70" height="100" rx="6" fill="#e8112d" stroke="#111" stroke-width="2.5"/>
+    <rect x="0" y="34" width="70" height="34" fill="#fff"/>
+    <text x="35" y="30" font-family="Bebas Neue, sans-serif" font-size="13" fill="#fff" text-anchor="middle">SOUP</text>
+    <text x="35" y="56" font-family="Montserrat, sans-serif" font-size="9" font-weight="800" fill="#e8112d" text-anchor="middle">TOMATO</text>
+    <circle cx="35" cy="82" r="8" fill="none" stroke="#ffd200" stroke-width="2"/>
+  </g>
+  <g transform="translate(260,30)">
+    <rect x="0" y="0" width="150" height="110" fill="#0099fe" stroke="#111" stroke-width="3"/>
+    <circle cx="75" cy="55" r="34" fill="#ffd200" stroke="#111" stroke-width="2.5"/>
+    <circle cx="63" cy="48" r="4" fill="#111"/><circle cx="87" cy="48" r="4" fill="#111"/>
+    <path d="M58,68 Q75,80 92,68" fill="none" stroke="#111" stroke-width="3"/>
+    <g transform="translate(95,10)">
+      <ellipse cx="28" cy="18" rx="30" ry="18" fill="#fff" stroke="#111" stroke-width="2.5"/>
+      <path d="M10,30 L2,44 L20,32 Z" fill="#fff" stroke="#111" stroke-width="2.5"/>
+      <text x="28" y="23" font-family="Permanent Marker, cursive" font-size="14" fill="#111" text-anchor="middle">POW!</text>
+    </g>
+  </g>
+  <g transform="translate(440,40)">
+    <rect x="0" y="0" width="90" height="120" fill="#fff" stroke="#111" stroke-width="2.5"/>
+    <rect x="0" y="0" width="90" height="34" fill="#ff2d8e"/>
+    <text x="45" y="23" font-family="Bebas Neue, sans-serif" font-size="18" fill="#fff" text-anchor="middle">STYLE</text>
+    <circle cx="45" cy="68" r="22" fill="#ffd200" stroke="#111" stroke-width="1.5"/>
+    <rect x="12" y="98" width="66" height="4" fill="#111"/>
+    <rect x="12" y="107" width="50" height="4" fill="#aaa"/>
+  </g>
+  <g transform="translate(560,30)">
+    <rect x="0" y="0" width="100" height="130" fill="#ff2d8e" stroke="#111" stroke-width="2.5"/>
+    <ellipse cx="50" cy="50" rx="28" ry="32" fill="#111"/>
+    <path d="M18,130 Q20,90 50,86 Q80,90 82,130 Z" fill="#111"/>
+    <path d="M24,34 Q50,10 76,34 Q70,20 50,18 Q30,20 24,34 Z" fill="#111"/>
+  </g>
+  <g transform="translate(60,200)">
+    ${[0,1,2,3,4,5].map(i => `
+      <g transform="translate(${i*115},0)">
+        <rect x="0" y="0" width="100" height="120" fill="${['#ffd200','#ff2d8e','#00d4e8','#2ecc71','#ff7a00','#a78bfa'][i]}" stroke="#111" stroke-width="2"/>
+        <ellipse cx="50" cy="45" rx="24" ry="28" fill="#111" opacity="0.85"/>
+        <path d="M22,120 Q24,82 50,80 Q76,82 78,120 Z" fill="#111" opacity="0.85"/>
+      </g>
+    `).join('')}
+  </g>
+  <g fill="#111" opacity="0.15">
+    ${Array.from({length: 40}, (_, i) => {
+      const x = 20 + (i % 20) * 38;
+      const y = 340 + Math.floor(i / 20) * 14;
+      return `<circle cx="${x}" cy="${y}" r="3"/>`;
+    }).join('')}
+  </g>
+</svg>`;
+}
+
+function svgWarholPortrait() {
+  return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="140" fill="#fff8e8"/>
+  <rect x="8" y="16" width="104" height="118" fill="#ff2d8e" opacity="0.5"/>
+  <path d="M16,140 Q18,104 44,100 L48,96 Q52,80 60,78 Q68,80 72,96 L76,100 Q102,104 104,140 Z" fill="#111"/>
+  <g fill="#e8e8e8" stroke="#111" stroke-width="1.5">
+    <path d="M34,44 Q30,20 36,12 L40,28 Q42,18 46,10 L48,26 Q52,14 56,8 L58,24 Q60,12 60,6 L64,22 Q68,12 72,8 L72,26 Q78,16 82,12 L80,30 Q88,22 90,18 L84,40 Z"/>
+  </g>
+  <ellipse cx="60" cy="54" rx="22" ry="24" fill="#f0e0d8" stroke="#111" stroke-width="1.5"/>
+  <g stroke="#111" stroke-width="2.5" fill="rgba(20,20,20,0.18)">
+    <rect x="42" y="48" width="16" height="12" rx="3"/>
+    <rect x="62" y="48" width="16" height="12" rx="3"/>
+    <line x1="58" y1="52" x2="62" y2="52"/>
+  </g>
+  <line x1="52" y1="70" x2="68" y2="70" stroke="#111" stroke-width="1.5"/>
+</svg>`;
+}
+
+function svgLichtensteinPortrait() {
+  return `
+<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="140" fill="#fff8e8"/>
+  <rect x="8" y="16" width="104" height="118" fill="#0099fe" opacity="0.5"/>
+  <g fill="#111" opacity="0.18">
+    ${Array.from({length: 30}, (_, i) => {
+      const x = 14 + (i % 6) * 16;
+      const y = 22 + Math.floor(i / 6) * 16;
+      return `<circle cx="${x}" cy="${y}" r="2.2"/>`;
+    }).join('')}
+  </g>
+  <path d="M16,140 Q18,104 44,100 L48,96 Q52,82 60,80 Q68,82 72,96 L76,100 Q102,104 104,140 Z" fill="#111"/>
+  <path d="M38,46 Q36,28 60,26 Q84,28 82,46 Q76,36 60,35 Q44,36 38,46 Z" fill="#111"/>
+  <ellipse cx="60" cy="56" rx="22" ry="24" fill="#f0e0d8" stroke="#111" stroke-width="1.5"/>
+  <g stroke="#111" stroke-width="2.5" fill="none">
+    <circle cx="50" cy="54" r="8"/>
+    <circle cx="70" cy="54" r="8"/>
+    <line x1="58" y1="54" x2="62" y2="54"/>
+  </g>
+  <line x1="52" y1="72" x2="68" y2="72" stroke="#111" stroke-width="1.5"/>
+</svg>`;
+}
+
+function svgWarholInspired() {
+  const cells = [
+    { bg: '#ffd200', face: '#ff2d8e', hair: '#0099fe' },
+    { bg: '#00d4e8', face: '#ffd200', hair: '#e8112d' },
+    { bg: '#ff2d8e', face: '#00d4e8', hair: '#ffd200' },
+    { bg: '#2ecc71', face: '#ff2d8e', hair: '#111' }
+  ];
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  ${cells.map((c, i) => {
+    const x = (i % 2) * 100, y = Math.floor(i / 2) * 100;
+    return `
+    <g transform="translate(${x},${y})">
+      <rect width="100" height="100" fill="${c.bg}"/>
+      <path d="M30,42 Q28,22 50,20 Q72,22 70,42 Q64,30 50,29 Q36,30 30,42 Z" fill="${c.hair}"/>
+      <ellipse cx="50" cy="52" rx="20" ry="23" fill="${c.face}"/>
+      <circle cx="42" cy="48" r="3" fill="#111"/><circle cx="58" cy="48" r="3" fill="#111"/>
+      <path d="M42,64 Q50,70 58,64" fill="none" stroke="#111" stroke-width="2"/>
+    </g>`;
+  }).join('')}
+  <line x1="100" y1="0" x2="100" y2="200" stroke="#fff" stroke-width="3"/>
+  <line x1="0" y1="100" x2="200" y2="100" stroke="#fff" stroke-width="3"/>
+</svg>`;
+}
+
+function svgLichtensteinInspired() {
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#ffd200"/>
+  <g fill="#e8112d">
+    ${Array.from({length: 100}, (_, i) => {
+      const x = 8 + (i % 10) * 20;
+      const y = 8 + Math.floor(i / 10) * 20;
+      return `<circle cx="${x}" cy="${y}" r="3.5"/>`;
+    }).join('')}
+  </g>
+  <path d="M40,200 L40,90 Q40,50 90,48 Q150,50 150,110 L150,200 Z" fill="#fff" stroke="#111" stroke-width="4"/>
+  <path d="M40,90 Q45,45 95,46 Q140,48 150,90 Q140,60 95,60 Q55,62 40,90 Z" fill="#ffd200" stroke="#111" stroke-width="4"/>
+  <ellipse cx="80" cy="95" rx="14" ry="9" fill="#fff" stroke="#111" stroke-width="3"/>
+  <circle cx="82" cy="95" r="5" fill="#0099fe" stroke="#111" stroke-width="2"/>
+  <path d="M70,108 Q66,120 72,124 Q78,120 74,108 Z" fill="#0099fe" stroke="#111" stroke-width="1.5"/>
+  <path d="M70,150 Q95,140 120,150 Q95,166 70,150 Z" fill="#e8112d" stroke="#111" stroke-width="2.5"/>
+  <g transform="translate(110,20)">
+    <ellipse cx="40" cy="28" rx="42" ry="24" fill="#fff" stroke="#111" stroke-width="3"/>
+    <path d="M18,46 L8,64 L32,48 Z" fill="#fff" stroke="#111" stroke-width="3"/>
+    <text x="40" y="34" font-family="Permanent Marker, cursive" font-size="18" fill="#111" text-anchor="middle">OH!</text>
+  </g>
+</svg>`;
+}
+
+function svgSampleCan() {
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#e8e8e8"/>
+  <rect x="62" y="30" width="76" height="140" rx="6" fill="#c0392b" stroke="#555" stroke-width="1.5"/>
+  <rect x="62" y="74" width="76" height="48" fill="#f5f5f5"/>
+  <text x="100" y="64" font-family="Montserrat, sans-serif" font-size="14" font-weight="800" fill="#f5f5f5" text-anchor="middle">SOUP</text>
+  <text x="100" y="102" font-family="Montserrat, sans-serif" font-size="11" font-weight="700" fill="#c0392b" text-anchor="middle">TOMATO</text>
+  <ellipse cx="100" cy="30" rx="38" ry="8" fill="#999"/>
+  <ellipse cx="100" cy="146" rx="38" ry="7" fill="#a83224"/>
+</svg>`;
+}
+function svgSampleFace() {
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#d8d8d8"/>
+  <ellipse cx="100" cy="95" rx="52" ry="62" fill="#e8c8b0"/>
+  <path d="M48,80 Q50,36 100,34 Q150,36 152,80 Q140,52 100,50 Q60,52 48,80 Z" fill="#6b4a32"/>
+  <ellipse cx="78" cy="92" rx="10" ry="7" fill="#fff" stroke="#333" stroke-width="1.5"/>
+  <ellipse cx="122" cy="92" rx="10" ry="7" fill="#fff" stroke="#333" stroke-width="1.5"/>
+  <circle cx="79" cy="92" r="4" fill="#333"/><circle cx="123" cy="92" r="4" fill="#333"/>
+  <path d="M84,128 Q100,138 116,128" fill="none" stroke="#a85040" stroke-width="3"/>
+  <path d="M70,72 Q78,68 86,72" fill="none" stroke="#6b4a32" stroke-width="2"/>
+  <path d="M114,72 Q122,68 130,72" fill="none" stroke="#6b4a32" stroke-width="2"/>
+</svg>`;
+}
+function svgSampleProduct() {
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#f0f0f0"/>
+  <rect x="55" y="50" width="90" height="110" rx="10" fill="#fff" stroke="#888" stroke-width="2"/>
+  <circle cx="100" cy="92" r="30" fill="#333"/>
+  <circle cx="100" cy="92" r="20" fill="#f0f0f0"/>
+  <circle cx="100" cy="92" r="6" fill="#333"/>
+  <rect x="72" y="135" width="56" height="6" rx="3" fill="#333"/>
+  <rect x="80" y="146" width="40" height="4" rx="2" fill="#aaa"/>
+</svg>`;
+}
+function svgSamplePet() {
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#cfe0d0"/>
+  <ellipse cx="100" cy="130" rx="55" ry="42" fill="#b08850"/>
+  <ellipse cx="100" cy="78" rx="40" ry="36" fill="#c89860"/>
+  <ellipse cx="68" cy="54" rx="14" ry="24" fill="#9a7038" transform="rotate(-20 68 54)"/>
+  <ellipse cx="132" cy="54" rx="14" ry="24" fill="#9a7038" transform="rotate(20 132 54)"/>
+  <circle cx="84" cy="74" r="6" fill="#222"/><circle cx="116" cy="74" r="6" fill="#222"/>
+  <ellipse cx="100" cy="92" rx="9" ry="6" fill="#222"/>
+  <path d="M100,98 Q100,108 90,110 M100,98 Q100,108 110,110" fill="none" stroke="#222" stroke-width="2"/>
+</svg>`;
+}
+
+const SAMPLE_SOURCES = {
+  can: { name: 'Soup Can', svg: svgSampleCan() },
+  face: { name: 'Dramatic Face', svg: svgSampleFace() },
+  product: { name: 'Product Ad', svg: svgSampleProduct() },
+  pet: { name: 'A Dog Photo', svg: svgSamplePet() }
+};
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 3 — CANVAS TRANSFORMER ENGINE
+// ════════════════════════════════════════════════════════════════
+function lum(r, g, b) { return 0.299*r + 0.587*g + 0.114*b; }
+
+function fx_posterize(imgData, levels) {
+  const d = imgData.data;
+  const step = 255 / (levels - 1);
+  for (let i = 0; i < d.length; i += 4) {
+    d[i]   = Math.round(Math.round(d[i]/step)*step);
+    d[i+1] = Math.round(Math.round(d[i+1]/step)*step);
+    d[i+2] = Math.round(Math.round(d[i+2]/step)*step);
+  }
+  return imgData;
+}
+
+const RECOLOR_PALETTES = {
+  pinkGreen: { name: 'Pink / Green', colors: [[20,20,40],[255,45,142],[57,255,150]] },
+  yellowPurple: { name: 'Yellow / Purple', colors: [[40,10,60],[167,139,250],[255,210,0]] },
+  blueOrange: { name: 'Blue / Orange', colors: [[10,30,70],[0,153,254],[255,122,0]] },
+  redBlack: { name: 'Red / Black', colors: [[17,17,17],[232,17,45],[255,210,0]] }
+};
+
+function fx_recolor(imgData, paletteColors) {
+  const d = imgData.data;
+  const p = paletteColors;
+  for (let i = 0; i < d.length; i += 4) {
+    const L = lum(d[i], d[i+1], d[i+2]);
+    let c;
+    if (L < 85) c = p[0];
+    else if (L < 170) c = p[1];
+    else c = p[2];
+    d[i] = c[0]; d[i+1] = c[1]; d[i+2] = c[2];
+  }
+  return imgData;
+}
+
+function fx_edgeOutline(imgData, w, h, threshold) {
+  const d = imgData.data;
+  const gray = new Float32Array(w*h);
+  for (let i = 0; i < w*h; i++) gray[i] = lum(d[i*4], d[i*4+1], d[i*4+2]);
+  const out = new Uint8ClampedArray(d);
+  const gx = [-1,0,1,-2,0,2,-1,0,1], gy = [-1,-2,-1,0,0,0,1,2,1];
+  for (let y = 1; y < h-1; y++) for (let x = 1; x < w-1; x++) {
+    let sx=0, sy=0, k=0;
+    for (let dy=-1; dy<=1; dy++) for (let dx=-1; dx<=1; dx++) {
+      const v = gray[(y+dy)*w + (x+dx)];
+      sx += v*gx[k]; sy += v*gy[k]; k++;
+    }
+    const mag = Math.sqrt(sx*sx + sy*sy);
+    if (mag > threshold) {
+      const oi = (y*w+x)*4;
+      out[oi]=0; out[oi+1]=0; out[oi+2]=0; out[oi+3]=255;
+    }
+  }
+  return new ImageData(out, w, h);
+}
+
+function fx_drawBenDay(ctx, w, h, srcImgData, spacing, dotColor) {
+  const d = srcImgData.data;
+  ctx.save();
+  ctx.fillStyle = dotColor;
+  for (let y = 0; y < h; y += spacing) {
+    for (let x = 0; x < w; x += spacing) {
+      const idx = (Math.min(h-1, Math.floor(y))*w + Math.min(w-1, Math.floor(x)))*4;
+      const L = lum(d[idx], d[idx+1], d[idx+2]);
+      const maxR = spacing/2;
+      const r = maxR * (1 - L/255);
+      if (r > 0.5) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill(); }
+    }
+  }
+  ctx.restore();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 4 — LESSON DATA
+// ════════════════════════════════════════════════════════════════
+const STEP1_CHIPS = ['advertising','celebrities','comics','products','magazines','bright color','repetition','mass media'];
+
+const STEP2_PANELS = {
+  warhol: {
+    name: 'Andy Warhol',
+    identity: 'He transformed celebrity, packaging, repetition, and mass media into art.',
+    expanded: 'Warhol saw popular images differently. A face, a label, or a printed picture could become powerful when repeated, enlarged, recolored, or isolated.',
+    inspiredLabel: 'Inspired by Warhol',
+    museum: 'https://www.moma.org/artists/6246'
+  },
+  licht: {
+    name: 'Roy Lichtenstein',
+    identity: 'He transformed comic-book language into bold visual drama.',
+    expanded: 'Lichtenstein took the language of comics — outlines, speech, drama, dots, and cropped action — and turned it into a new kind of painting.',
+    inspiredLabel: 'Inspired by Lichtenstein',
+    museum: 'https://www.moma.org/artists/3542'
+  }
+};
+
+const STEP4_SOURCE_IDEAS = {
+  warhol: ['a magazine image','a product label','a food package','a fashion image','a household object','a celebrity-inspired image'],
+  licht: ['a comic panel','a cartoon image','a dramatic face','a gesture','a speech-bubble moment','an illustrated scene']
+};
+
+const WARHOL_CONTROLS = [
+  { id: 'crop', label: 'Crop it' },
+  { id: 'isolate', label: 'Isolate it' },
+  { id: 'enlarge', label: 'Enlarge it' },
+  { id: 'repeat', label: 'Repeat it' },
+  { id: 'recolor', label: 'Recolor it' },
+  { id: 'flatten', label: 'Flatten it' }
+];
+const LICHT_CONTROLS = [
+  { id: 'crop', label: 'Crop the moment' },
+  { id: 'outline', label: 'Bold the outline' },
+  { id: 'flatten', label: 'Flatten the color' },
+  { id: 'dots', label: 'Add dot texture' },
+  { id: 'speech', label: 'Add speech bubble' },
+  { id: 'drama', label: 'Push the drama' }
+];
+
+const SPEECH_PRESETS = ['POW!','WHAM!','OH!','WHY?','BOOM!','!!!'];
+
+const STEP6_REFLECTION_PROMPTS = [
+  'What changed most: color, scale, repetition, or context?',
+  'Did your image feel more like Warhol or Lichtenstein in the end?',
+  'When did it stop feeling ordinary?'
+];
+
+const AI_MODES = {
+  pop_culture_guide: {
+    label: 'Pop Guide',
+    starters: ['What makes something "pop"?','Is pop culture the same as pop art?','Why use ordinary images?']
+  },
+  artist_compare: {
+    label: 'Warhol vs Lichtenstein',
+    starters: ['How are they different?','Which one repeated images?','Who used comic dots?']
+  },
+  transformation_helper: {
+    label: 'Transformation Helper',
+    starters: ['When does an image become art?','What does repetition do?','Why flatten the color?']
+  },
+  making_companion: {
+    label: 'Making Companion',
+    starters: ['Which mode fits my image?','Is my crop strong enough?','Too much or too little?']
+  },
+  final_reflection_helper: {
+    label: 'Reflection Helper',
+    starters: ['What did I change?','Did meaning change too?','Warhol or Lichtenstein?']
+  }
+};
+
+const ARTCHI_VOICES = {
+  look: { label: 'Artchi · looking with you' },
+  think: { label: 'Artchi · thinking with you' },
+  make: { label: 'Artchi · making with you' },
+  reflect: { label: 'Artchi · reflecting with you' }
+};
+
+const STEPS = [
+  {
+    id: 'step-1-what-is-pop', step: 1, title: 'What Is Pop Art?',
+    prompt: 'What kinds of images feel "pop" to you?',
+    artchi: { voice: 'look', text: "pop art doesn't start in a museum. it starts with the images you already see every day — ads, labels, comics, famous faces." },
+    aiMode: 'pop_culture_guide', completionRule: 'step1chips', minSelections: 3
+  },
+  {
+    id: 'step-2-meet-artists', step: 2, title: 'Meet the Artists',
+    prompt: 'Two artists. Two different ways to transform the ordinary.',
+    artchi: { voice: 'look', text: "warhol and lichtenstein both started with everyday images — but they pushed them in completely different directions. meet them first." },
+    aiMode: 'artist_compare', completionRule: 'step2choice', minSelections: 1
+  },
+  {
+    id: 'step-3-pop-shift', step: 3, title: 'See the Pop Shift',
+    prompt: 'When does an ordinary image start to feel like art?',
+    artchi: { voice: 'think', text: "watch what happens. an ordinary image doesn't become art by accident — the artist changes how it behaves. press play on each side." },
+    aiMode: 'transformation_helper', completionRule: 'step3choice', minSelections: 1
+  },
+  {
+    id: 'step-4-capture-source', step: 4, title: 'Capture Your Source',
+    prompt: 'Choose an ordinary image to transform.',
+    artchi: { voice: 'think', text: "pick something ordinary. the more everyday it is, the more surprising the transformation. no photo handy? use a sample." },
+    aiMode: 'transformation_helper', completionRule: 'source'
+  },
+  {
+    id: 'step-5-transform', step: 5, title: 'Transform It',
+    prompt: 'Turn your ordinary image into pop art.',
+    artchi: { voice: 'make', text: "this is the moment. pick warhol or lichtenstein logic, then change how the image works. you're not applying a filter — you're making a decision." },
+    aiMode: 'making_companion', completionRule: 'transformed'
+  },
+  {
+    id: 'step-6-finish', step: 6, title: 'Finish and Show It',
+    prompt: 'Does your image feel more iconic, more dramatic, or more surprising than before?',
+    artchi: { voice: 'reflect', text: "pop art asks us to look again at what we thought was ordinary. look at what you made. did the meaning change, not just the look?" },
+    aiMode: 'final_reflection_helper', completionRule: 'finish'
+  }
+];
+
+function findStep(id) { return STEPS.find(s => s.id === id); }
+function stepIndex(id) { return STEPS.findIndex(s => s.id === id); }
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 5 — ROSTER + PROFILE + PROGRESS
+// ════════════════════════════════════════════════════════════════
+let validStudents = new Map();
+let userProfile = null;
+let lessonProgress = {
+  currentStep: 'step-1-what-is-pop',
+  completed: [],
+  step1Chips: [],
+  step2Choice: null,
+  step2Opened: [],
+  step3Choice: null,
+  sourceImage: null,
+  mode: null,
+  appliedControls: [],
+  recolorPalette: 'pinkGreen',
+  enlargeZoom: 1,
+  transformedOutput: null,
+  speechText: '',
+  reflection: ''
+};
+
+async function loadRoster() {
+  try {
+    const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    const blockRegex = /\{[^{}]*\}/g;
+    let block;
+    while ((block = blockRegex.exec(text)) !== null) {
+      const bt = block[0];
+      const idMatch = bt.match(/id\s*:\s*["']([^"']+)["']/);
+      const nameMatch = bt.match(/displayName\s*:\s*["']([^"']+)["']/);
+      const trialMatch = bt.match(/isTrial\s*:\s*(true|false)/);
+      if (!idMatch || !nameMatch) continue;
+      validStudents.set(idMatch[1].toUpperCase(), {
+        displayName: nameMatch[1],
+        isTrial: trialMatch ? trialMatch[1] === 'true' : false
+      });
+    }
+    console.log('[LFC018] Loaded ' + validStudents.size + ' codes');
+  } catch (err) { console.warn('[LFC018] Roster load failed:', err); }
+}
+
+function loadProfile() {
+  try { const raw = localStorage.getItem(PROFILE_KEY); userProfile = raw ? JSON.parse(raw) : null; }
+  catch (e) { userProfile = null; }
+}
+function saveProfile(p) {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); userProfile = p; } catch (e) {}
+}
+function clearProfile() {
+  try { localStorage.removeItem(PROFILE_KEY); userProfile = null; } catch (e) {}
+}
+function loadLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    const raw = localStorage.getItem(key);
+    if (raw) lessonProgress = { ...lessonProgress, ...JSON.parse(raw) };
+  } catch (e) {}
+}
+function saveLessonProgress() {
+  if (!userProfile) return;
+  try {
+    const key = LESSON_PROGRESS_KEY + '_' + userProfile.studentCode;
+    localStorage.setItem(key, JSON.stringify(lessonProgress));
+  } catch (e) { console.warn('Progress save failed (likely quota):', e); }
+}
+function saveJudgmentCard(card) {
+  try {
+    const raw = localStorage.getItem(JUDGMENT_CARDS_KEY);
+    const cards = raw ? JSON.parse(raw) : [];
+    const existingIdx = cards.findIndex(c => c.lessonId === LESSON_ID && c.judgmentId === card.judgmentId);
+    const record = {
+      lessonId: LESSON_ID, judgmentId: card.judgmentId, level: card.level || 1,
+      question: card.question, answer: card.answer,
+      studentCode: userProfile ? userProfile.studentCode : null, savedAt: Date.now()
+    };
+    if (existingIdx >= 0) cards[existingIdx] = record; else cards.push(record);
+    localStorage.setItem(JUDGMENT_CARDS_KEY, JSON.stringify(cards));
+  } catch (e) {}
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 6 — SCREEN SWITCHING
+// ════════════════════════════════════════════════════════════════
+function showSignIn() {
+  document.getElementById('signin-screen').style.display = 'flex';
+  document.getElementById('lesson-screen').style.display = 'none';
+  document.getElementById('topbar-right').innerHTML =
+    '<a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>';
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) { document.getElementById('signin-code').value = urlCode.toUpperCase(); updateSignInBtn(); }
+}
+function showLesson() {
+  document.getElementById('signin-screen').style.display = 'none';
+  document.getElementById('lesson-screen').style.display = 'block';
+  const tier = userProfile.tier === 'trial' ? '· Trial' : '';
+  document.getElementById('topbar-right').innerHTML =
+    '<span class="user-pill">' + escapeHtml(userProfile.name) + ' ' + tier + '</span>' +
+    '<button class="sign-out-btn" onclick="signOut()">Sign out</button>';
+  renderCurrentStep();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 7 — RENDERERS
+// ════════════════════════════════════════════════════════════════
+function renderCurrentStep() {
+  const step = findStep(lessonProgress.currentStep);
+  if (!step) return;
+  const c = document.getElementById('lesson-content');
+  c.innerHTML = renderHeader(step) + renderProgress(step) + renderStepBody(step) + renderNav(step);
+  window.scrollTo(0, 0);
+  if (step.id === 'step-3-pop-shift') setupStep3Demos();
+  if (step.id === 'step-5-transform') setupTransformer();
+}
+
+function renderHeader(step) {
+  return `
+    <div class="step-header">
+      <div class="step-kicker">Step ${step.step} of ${STEPS.length} · Pop Art</div>
+      <h1 class="step-title">${escapeHtml(step.title)}</h1>
+      <p class="step-prompt">${escapeHtml(step.prompt)}</p>
+    </div>`;
+}
+
+function renderProgress(step) {
+  const cur = stepIndex(step.id);
+  let html = '<div class="progress-strip">';
+  STEPS.forEach((s, i) => {
+    let cls = 'progress-dot';
+    if (lessonProgress.completed.includes(s.id)) cls += ' done';
+    if (i === cur) cls += ' current';
+    html += `<div class="${cls}" onclick="jumpToStep('${s.id}')" title="Step ${s.step}"></div>`;
+  });
+  return html + '</div>';
+}
+
+function renderStepBody(step) {
+  switch (step.id) {
+    case 'step-1-what-is-pop': return renderStep1(step);
+    case 'step-2-meet-artists': return renderStep2(step);
+    case 'step-3-pop-shift': return renderStep3(step);
+    case 'step-4-capture-source': return renderStep4(step);
+    case 'step-5-transform': return renderStep5(step);
+    case 'step-6-finish': return renderStep6(step);
+    case 'badge-ceremony': return renderBadge();
+    default: return '<p>?</p>';
+  }
+}
+
+function renderStep1(step) {
+  let h = renderArtchi(step);
+  h += `<div class="pop-field">${svgPopField()}</div>`;
+  h += '<div class="chips-grid">';
+  STEP1_CHIPS.forEach(chip => {
+    const sel = lessonProgress.step1Chips.includes(chip) ? ' selected' : '';
+    h += `<button class="chip${sel}" onclick="toggleStep1('${escapeAttr(chip)}')">${escapeHtml(chip)}</button>`;
+  });
+  h += '</div>';
+  if (lessonProgress.step1Chips.length >= step.minSelections) {
+    h += `<div class="pop-response visible">
+      <div class="pop-response-main">Pop Art often starts with what feels familiar, ordinary, or everywhere.</div>
+      <div class="pop-response-sub">The question is not only what we see. It is how artists choose to look at it.</div>
+    </div>`;
+  } else {
+    h += `<p class="hint-line">Choose at least ${step.minSelections}. You chose ${lessonProgress.step1Chips.length}.</p>`;
+  }
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderStep2(step) {
+  let h = renderArtchi(step);
+  h += '<div class="artist-cards">';
+  ['warhol','licht'].forEach(key => {
+    const a = STEP2_PANELS[key];
+    const open = lessonProgress.step2Opened.includes(key) ? ' open' : '';
+    const portrait = key === 'warhol' ? svgWarholPortrait() : svgLichtensteinPortrait();
+    const inspired = key === 'warhol' ? svgWarholInspired() : svgLichtensteinInspired();
+    h += `
+      <div class="artist-card ${key}${open}" id="artist-${key}">
+        <div class="artist-portrait-wrap">${portrait}</div>
+        <div class="artist-body">
+          <div class="artist-name">${escapeHtml(a.name)}</div>
+          <div class="artist-identity">${escapeHtml(a.identity)}</div>
+          <button class="artist-expand-btn" onclick="toggleArtist('${key}')">${open ? 'Close' : 'Open ' + (key==='warhol'?'Warhol':'Lichtenstein')}</button>
+          <div class="artist-expanded">
+            <div class="artist-expanded-inner">
+              <div class="artist-expanded-text">${escapeHtml(a.expanded)}</div>
+              <div class="inspired-sample">${inspired}</div>
+              <div class="inspired-label">${escapeHtml(a.inspiredLabel)} · original study image</div>
+              <a href="${a.museum}" target="_blank" rel="noopener" class="museum-link-btn">🏛 See ${key==='warhol'?'Warhol':'Lichtenstein'} at MoMA →</a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+  h += '</div>';
+  h += `<div class="compare-prompt">
+    <div class="compare-prompt-title">Which artist are you more curious about right now?</div>
+    <div class="compare-chips">
+      ${['Warhol','Lichtenstein','Both'].map(opt => {
+        const val = opt.toLowerCase();
+        const sel = lessonProgress.step2Choice === val ? ' selected' : '';
+        return `<button class="compare-chip${sel}" onclick="setStep2Choice('${val}')">${opt}</button>`;
+      }).join('')}
+    </div>
+  </div>`;
+  if (lessonProgress.step2Choice) {
+    h += `<div class="pop-response visible"><div class="pop-response-main">Both artists began with familiar images, but each one pushed them in a different direction.</div></div>`;
+  }
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderStep3(step) {
+  let h = renderArtchi(step);
+  h += '<div class="transform-demo">';
+  h += `
+    <div class="transform-pane warhol-pane">
+      <div class="transform-pane-title">From printed image to icon</div>
+      <div class="transform-pane-copy">A magazine image, a product, or a familiar face can feel ordinary in daily life. But when it is repeated, enlarged, flattened, or recolored, it begins to work differently.</div>
+      <div class="transform-canvas-wrap" id="demo-warhol-wrap">
+        <div class="transform-stage-label" id="demo-warhol-label">original</div>
+        <div id="demo-warhol-svg">${svgSampleFace()}</div>
+      </div>
+      <div class="transform-controls">
+        <button class="transform-play-btn" onclick="playWarholDemo()">▶ Transform</button>
+        <span class="transform-prompt-line">When does a familiar image stop feeling ordinary?</span>
+      </div>
+    </div>`;
+  h += `
+    <div class="transform-pane licht-pane">
+      <div class="transform-pane-title">From comic panel to art</div>
+      <div class="transform-pane-copy">A comic image can feel disposable when we read it quickly. But when one moment is enlarged, cropped, outlined, and intensified, it becomes dramatic in a new way.</div>
+      <div class="transform-canvas-wrap" id="demo-licht-wrap">
+        <div class="transform-stage-label" id="demo-licht-label">original</div>
+        <div id="demo-licht-svg">${svgSampleFace()}</div>
+      </div>
+      <div class="transform-controls">
+        <button class="transform-play-btn" onclick="playLichtDemo()">▶ Transform</button>
+        <span class="transform-prompt-line">What happens when a comic moment is taken seriously?</span>
+      </div>
+    </div>`;
+  h += '</div>';
+  h += `<div class="compare-prompt">
+    <div class="compare-prompt-title">Which transformation feels more surprising to you?</div>
+    <div class="compare-chips">
+      ${[['warhol','Warhol feels more surprising'],['licht','Lichtenstein feels more surprising'],['both','Both change the image in powerful ways']].map(pair => {
+        const val = pair[0], label = pair[1];
+        const sel = lessonProgress.step3Choice === val ? ' selected' : '';
+        return `<button class="compare-chip${sel}" onclick="setStep3Choice('${val}')">${escapeHtml(label)}</button>`;
+      }).join('')}
+    </div>
+  </div>`;
+  if (lessonProgress.step3Choice) {
+    h += `<div class="pop-response visible"><div class="pop-response-main">Pop Art changes not only the image, but the way we value it.</div></div>`;
+  }
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderStep4(step) {
+  let h = renderArtchi(step);
+  if (lessonProgress.sourceImage) {
+    let previewHtml;
+    if (typeof lessonProgress.sourceImage === 'object' && lessonProgress.sourceImage.sample) {
+      previewHtml = SAMPLE_SOURCES[lessonProgress.sourceImage.sample].svg;
+    } else {
+      previewHtml = `<img src="${escapeAttr(lessonProgress.sourceImage)}" alt="Your source">`;
+    }
+    h += `<div class="source-preview">${previewHtml}
+      <div class="source-preview-bar"><span>✓ Source ready to transform</span>
+      <button class="source-preview-replace" onclick="clearSource()">Choose different →</button></div></div>`;
+    h += `<div class="pop-response visible"><div class="pop-response-main">Everyday images are the starting point. Transformation comes next.</div></div>`;
+    h += renderChatTrigger(step);
+    return h;
+  }
+  h += `<div class="source-options">
+    <div class="source-option" onclick="document.getElementById('source-upload-input').click()">
+      <div class="source-option-icon">📸</div>
+      <div class="source-option-label">Take a Photo</div>
+    </div>
+    <div class="source-option" onclick="document.getElementById('source-upload-input').click()">
+      <div class="source-option-icon">⬆️</div>
+      <div class="source-option-label">Upload an Image</div>
+    </div>
+    <div class="source-option" onclick="document.getElementById('sample-anchor').scrollIntoView({behavior:'smooth'})">
+      <div class="source-option-icon">🎨</div>
+      <div class="source-option-label">Use a Sample</div>
+    </div>
+  </div>
+  <input type="file" id="source-upload-input" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="handleSourceUpload(this)">`;
+  h += `<div class="sample-sources" id="sample-anchor">
+    <div class="sample-sources-label">Or start with a sample source:</div>
+    <div class="sample-grid">`;
+  Object.keys(SAMPLE_SOURCES).forEach(key => {
+    const s = SAMPLE_SOURCES[key];
+    h += `<div class="sample-item" onclick="selectSample('${key}')">${s.svg}<div class="sample-item-name">${escapeHtml(s.name)}</div></div>`;
+  });
+  h += `</div></div>`;
+  h += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;">
+    <div style="background:var(--pop-cream);border:2px solid var(--pop-black);border-radius:10px;padding:14px;">
+      <div style="font-family:'Montserrat';font-weight:800;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:var(--warhol-accent);margin-bottom:8px;">Warhol-ready sources</div>
+      <div style="font-family:'Open Sans';font-size:13px;color:var(--ink-soft);line-height:1.6;">${STEP4_SOURCE_IDEAS.warhol.join(' · ')}</div>
+    </div>
+    <div style="background:var(--pop-cream);border:2px solid var(--pop-black);border-radius:10px;padding:14px;">
+      <div style="font-family:'Montserrat';font-weight:800;font-size:11px;letter-spacing:0.5px;text-transform:uppercase;color:var(--licht-accent);margin-bottom:8px;">Lichtenstein-ready sources</div>
+      <div style="font-family:'Open Sans';font-size:13px;color:var(--ink-soft);line-height:1.6;">${STEP4_SOURCE_IDEAS.licht.join(' · ')}</div>
+    </div>
+  </div>`;
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderStep5(step) {
+  let h = renderArtchi(step);
+  if (!lessonProgress.sourceImage) {
+    h += `<div class="pop-response visible"><div class="pop-response-main">You need a source image first.</div>
+      <div class="pop-response-sub">Go back to Step 4 to pick or upload one.</div></div>`;
+    h += `<button class="nav-btn" onclick="goToStep('step-4-capture-source')">← Back to Capture Source</button>`;
+    return h;
+  }
+  h += `<div class="mode-switch">
+    <div class="mode-btn warhol-mode ${lessonProgress.mode==='warhol'?'active':''}" onclick="setMode('warhol')">
+      <div class="mode-btn-name">Warhol Mode</div>
+      <div class="mode-btn-sub">repeat · recolor · flatten · isolate</div>
+    </div>
+    <div class="mode-btn licht-mode ${lessonProgress.mode==='licht'?'active':''}" onclick="setMode('licht')">
+      <div class="mode-btn-name">Lichtenstein Mode</div>
+      <div class="mode-btn-sub">outline · dots · speech · drama</div>
+    </div>
+  </div>`;
+  if (!lessonProgress.mode) {
+    h += `<p class="hint-line">Pick a mode to start transforming.</p>`;
+    h += renderChatTrigger(step);
+    return h;
+  }
+  h += `<div class="transformer">
+    <div class="transformer-canvas-wrap" id="transformer-canvas-wrap">
+      <canvas id="transformer-canvas"></canvas>
+    </div>
+    <div class="transformer-controls">
+      <div class="transformer-prompt">${lessonProgress.mode==='warhol'
+        ? 'How can you turn this familiar image into something iconic?'
+        : 'How can you turn this ordinary image into graphic drama?'}</div>
+      <div class="control-grid">`;
+  const controls = lessonProgress.mode === 'warhol' ? WARHOL_CONTROLS : LICHT_CONTROLS;
+  const onCls = lessonProgress.mode === 'warhol' ? 'warhol-on' : 'licht-on';
+  controls.forEach(ctrl => {
+    const active = lessonProgress.appliedControls.includes(ctrl.id) ? ' active' : '';
+    h += `<button class="control-btn ${onCls}${active}" onclick="toggleControl('${ctrl.id}')">${escapeHtml(ctrl.label)}</button>`;
+  });
+  h += `</div>`;
+  if (lessonProgress.mode === 'warhol' && lessonProgress.appliedControls.includes('recolor')) {
+    h += `<div class="recolor-swatches">`;
+    Object.keys(RECOLOR_PALETTES).forEach(key => {
+      const pal = RECOLOR_PALETTES[key];
+      const active = lessonProgress.recolorPalette === key ? ' active' : '';
+      const c1 = `rgb(${pal.colors[1].join(',')})`;
+      const c2 = `rgb(${pal.colors[2].join(',')})`;
+      h += `<div class="recolor-swatch${active}" onclick="setRecolorPalette('${key}')" title="${escapeAttr(pal.name)}">
+        <div class="half" style="background:${c1}"></div><div class="half" style="background:${c2}"></div></div>`;
+    });
+    h += `</div>`;
+  }
+  if (lessonProgress.mode === 'warhol' && lessonProgress.appliedControls.includes('enlarge')) {
+    h += `<div class="control-slider-row"><label>Zoom</label>
+      <input type="range" min="1" max="3" step="0.1" value="${lessonProgress.enlargeZoom}" 
+        oninput="setEnlargeZoom(this.value)"></div>`;
+  }
+  if (lessonProgress.mode === 'licht' && lessonProgress.appliedControls.includes('speech')) {
+    h += `<div class="control-slider-row" style="flex-wrap:wrap;gap:8px;">
+      <label style="min-width:100%;">Speech bubble text</label>`;
+    SPEECH_PRESETS.forEach(p => {
+      h += `<button class="chip" style="padding:5px 12px;font-size:12px;" onclick="setSpeechText('${escapeAttr(p)}')">${escapeHtml(p)}</button>`;
+    });
+    h += `<input type="text" class="chat-input" style="flex:1;min-width:140px;" placeholder="or type your own" 
+      value="${escapeAttr(lessonProgress.speechText)}" oninput="setSpeechTextRaw(this.value)"></div>`;
+  }
+  h += `<div class="transformer-actions">
+    <button class="nav-btn primary" onclick="applyTransform()">Apply changes</button>
+    <button class="nav-btn" onclick="resetTransform()">Reset</button>
+    <button class="nav-btn" onclick="lockInTransform()" id="lockin-btn">✓ Use this as my piece</button>
+  </div>`;
+  h += `</div></div>`;
+  if (lessonProgress.transformedOutput) {
+    h += `<div class="pop-response visible"><div class="pop-response-main">You are not just changing the look of the image. You are changing how it works.</div></div>`;
+  }
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderStep6(step) {
+  let h = renderArtchi(step);
+  if (lessonProgress.transformedOutput) {
+    h += `<div class="source-preview"><img src="${escapeAttr(lessonProgress.transformedOutput)}" alt="Your pop art">
+      <div class="source-preview-bar"><span>✓ Your transformed piece</span>
+      <button class="source-preview-replace" onclick="downloadOutput()">⬇ Download</button></div></div>`;
+  } else if (lessonProgress.sourceImage) {
+    h += `<div class="pop-response visible"><div class="pop-response-main">You haven't locked in a transformed version yet.</div>
+      <div class="pop-response-sub">Go back to Step 5, transform your image, and press "Use this as my piece".</div></div>
+      <button class="nav-btn" onclick="goToStep('step-5-transform')" style="margin-bottom:18px;">← Back to Transform</button>`;
+  }
+  h += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;">
+    <button class="nav-btn" onclick="goToStep('step-5-transform')">↻ Make Another Version</button>`;
+  if (lessonProgress.transformedOutput) {
+    h += `<button class="nav-btn" onclick="downloadOutput()">⬇ Download My Work</button>`;
+  }
+  h += `</div>`;
+  h += `<div class="reflection-block">
+    <div class="reflection-label">Reflect before you finish</div>
+    <div style="margin-bottom:12px;">`;
+  STEP6_REFLECTION_PROMPTS.forEach(p => {
+    h += `<div class="reflection-prompt-item">${escapeHtml(p)}</div>`;
+  });
+  h += `</div>
+    <textarea id="step6-reflection" placeholder="write your reflection here..." 
+      onchange="saveReflection(this.value)">${escapeHtml(lessonProgress.reflection || '')}</textarea>
+  </div>`;
+  h += `<div class="pop-response visible"><div class="pop-response-main">Pop Art asks us to look again at what we thought was ordinary.</div></div>`;
+  h += renderChatTrigger(step);
+  return h;
+}
+
+function renderBadge() {
+  let h = `<div class="badge-ceremony">
+    <div class="badge-icon-big">★</div>
+    <div class="badge-title-big">Pop Transformer</div>
+    <div class="badge-sub-big">You took something ordinary and changed how it works.</div>
+    <div class="badge-actions">
+      <button class="nav-btn primary" onclick="completeLessonAndReturnToStudio()">Return to Studio</button>
+      <button class="nav-btn" onclick="lessonProgress.currentStep='step-1-what-is-pop';saveLessonProgress();renderCurrentStep();">Start again</button>
+    </div>
+  </div>`;
+  if (lessonProgress.transformedOutput) {
+    h += `<div style="margin-top:30px;"><div class="reflection-label">Your transformed piece</div>
+      <div class="source-preview"><img src="${escapeAttr(lessonProgress.transformedOutput)}" alt="Your pop art">
+      <div class="source-preview-bar"><span>${lessonProgress.mode === 'warhol' ? 'Warhol logic' : 'Lichtenstein logic'}</span>
+      <button class="source-preview-replace" onclick="downloadOutput()">⬇ Download</button></div></div></div>`;
+  }
+  return h;
+}
+
+function renderArtchi(step) {
+  if (!step.artchi) return '';
+  const v = step.artchi.voice;
+  return `<div class="artchi-block voice-${v}">
+    <div class="artchi-avatar">★</div>
+    <div class="artchi-voice">${escapeHtml(ARTCHI_VOICES[v].label)}</div>
+    <div class="artchi-text">${escapeHtml(step.artchi.text)}</div>
+  </div>`;
+}
+function renderChatTrigger(step) {
+  if (!step.aiMode) return '';
+  const m = AI_MODES[step.aiMode];
+  return `<button class="chat-trigger" onclick="openChatModal('${step.aiMode}')">💬 Ask Artchi (${escapeHtml(m.label)})</button>`;
+}
+function renderNav(step) {
+  if (step.id === 'badge-ceremony') return '';
+  const idx = stepIndex(step.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STEPS.length - 1;
+  const can = canAdvance(step);
+  return `<div class="lesson-nav">
+    <button class="nav-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Previous</button>
+    <button class="nav-btn primary" onclick="goNext()" ${!can ? 'disabled' : ''}>${isLast ? 'Finish lesson' : 'Continue →'}</button>
+  </div>`;
+}
+
+function canAdvance(step) {
+  switch (step.completionRule) {
+    case 'step1chips': return lessonProgress.step1Chips.length >= step.minSelections;
+    case 'step2choice': return !!lessonProgress.step2Choice;
+    case 'step3choice': return !!lessonProgress.step3Choice;
+    case 'source': return !!lessonProgress.sourceImage;
+    case 'transformed': return !!lessonProgress.transformedOutput;
+    case 'finish': return !!lessonProgress.transformedOutput;
+    default: return true;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 8 — NAV + HANDLERS
+// ════════════════════════════════════════════════════════════════
+function goNext() {
+  const step = findStep(lessonProgress.currentStep);
+  if (!canAdvance(step)) {
+    const msgs = {
+      step1chips: 'Choose at least 3', step2choice: 'Pick an artist',
+      step3choice: 'Make a choice', source: 'Choose a source image',
+      transformed: 'Transform & lock in your piece', finish: 'Lock in a transformed piece first'
+    };
+    toast(msgs[step.completionRule] || 'Not yet', 1800);
+    return;
+  }
+  if (!lessonProgress.completed.includes(step.id)) lessonProgress.completed.push(step.id);
+  saveStepAsCard(step);
+  const idx = stepIndex(step.id);
+  if (idx < STEPS.length - 1) lessonProgress.currentStep = STEPS[idx+1].id;
+  else lessonProgress.currentStep = 'badge-ceremony';
+  saveLessonProgress();
+  if (lessonProgress.currentStep === 'badge-ceremony') {
+    document.getElementById('lesson-content').innerHTML = renderBadge();
+    window.scrollTo(0, 0);
+  } else renderCurrentStep();
+}
+function goPrev() {
+  const idx = stepIndex(lessonProgress.currentStep);
+  if (idx > 0) { lessonProgress.currentStep = STEPS[idx-1].id; saveLessonProgress(); renderCurrentStep(); }
+}
+function goToStep(id) { lessonProgress.currentStep = id; saveLessonProgress(); renderCurrentStep(); }
+function jumpToStep(id) {
+  const t = stepIndex(id), c = stepIndex(lessonProgress.currentStep);
+  if (lessonProgress.completed.includes(id) || t <= c) { lessonProgress.currentStep = id; saveLessonProgress(); renderCurrentStep(); }
+}
+
+function saveStepAsCard(step) {
+  if (step.id === 'step-1-what-is-pop' && lessonProgress.step1Chips.length) {
+    saveJudgmentCard({ judgmentId: 'lfc018-pop-culture', level: 1,
+      question: 'Pop Art · Images that feel "pop" to me', answer: lessonProgress.step1Chips.join(', ') });
+  }
+  if (step.id === 'step-3-pop-shift' && lessonProgress.step3Choice) {
+    const labels = { warhol: 'Warhol more surprising', licht: 'Lichtenstein more surprising', both: 'Both powerful' };
+    saveJudgmentCard({ judgmentId: 'lfc018-pop-shift', level: 2,
+      question: 'Pop Art · Which transformation surprised me', answer: labels[lessonProgress.step3Choice] });
+  }
+  if (step.id === 'step-5-transform' && lessonProgress.mode) {
+    saveJudgmentCard({ judgmentId: 'lfc018-transform-choice', level: 2,
+      question: 'Pop Art · My transformation logic',
+      answer: (lessonProgress.mode === 'warhol' ? 'Warhol' : 'Lichtenstein') + ': ' + lessonProgress.appliedControls.join(', ') });
+  }
+}
+
+function toggleStep1(chip) {
+  const i = lessonProgress.step1Chips.indexOf(chip);
+  if (i >= 0) lessonProgress.step1Chips.splice(i, 1); else lessonProgress.step1Chips.push(chip);
+  saveLessonProgress(); renderCurrentStep();
+}
+function toggleArtist(key) {
+  const i = lessonProgress.step2Opened.indexOf(key);
+  if (i >= 0) lessonProgress.step2Opened.splice(i, 1); else lessonProgress.step2Opened.push(key);
+  saveLessonProgress(); renderCurrentStep();
+}
+function setStep2Choice(val) { lessonProgress.step2Choice = val; saveLessonProgress(); renderCurrentStep(); }
+function setStep3Choice(val) { lessonProgress.step3Choice = val; saveLessonProgress(); renderCurrentStep(); }
+
+function handleSourceUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10*1024*1024) { toast('Image too large (10MB max)', 2000); return; }
+  if (/heic|heif/i.test(file.type) || /\.heic$/i.test(file.name)) {
+    toast('HEIC not supported — use JPG or PNG', 2500); return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    lessonProgress.sourceImage = e.target.result;
+    saveLessonProgress(); renderCurrentStep(); toast('Source ready ✓', 1500);
+  };
+  reader.readAsDataURL(file);
+}
+function selectSample(key) {
+  lessonProgress.sourceImage = { sample: key };
+  saveLessonProgress(); renderCurrentStep(); toast('Sample selected ✓', 1500);
+}
+function clearSource() {
+  lessonProgress.sourceImage = null;
+  lessonProgress.transformedOutput = null;
+  lessonProgress.appliedControls = [];
+  saveLessonProgress(); renderCurrentStep();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 9 — STEP 3 DEMOS
+// ════════════════════════════════════════════════════════════════
+function setupStep3Demos() { /* canvases drawn on play */ }
+
+function svgToImage(svgString, cb) {
+  const blob = new Blob([svgString], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = () => { cb(img); URL.revokeObjectURL(url); };
+  img.onerror = () => { URL.revokeObjectURL(url); cb(null); };
+  img.src = url;
+}
+
+function playWarholDemo() {
+  const wrap = document.getElementById('demo-warhol-wrap');
+  const label = document.getElementById('demo-warhol-label');
+  const stages = ['original','isolate','flatten','recolor','repeat'];
+  let i = 0;
+  let holder = document.getElementById('demo-warhol-svg');
+  const size = wrap.clientWidth;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  canvas.style.width = '100%'; canvas.style.height = '100%';
+  holder.innerHTML = ''; holder.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  svgToImage(svgSampleFace(), (img) => {
+    if (!img) return;
+    function drawStage(stage) {
+      ctx.clearRect(0, 0, size, size);
+      if (stage === 'original') { ctx.drawImage(img, 0, 0, size, size); return; }
+      ctx.drawImage(img, 0, 0, size, size);
+      let data = ctx.getImageData(0, 0, size, size);
+      if (stage === 'isolate') { data = fx_posterize(data, 4); ctx.putImageData(data, 0, 0); }
+      if (stage === 'flatten') { data = fx_posterize(data, 3); ctx.putImageData(data, 0, 0); }
+      if (stage === 'recolor') { data = fx_recolor(data, RECOLOR_PALETTES.pinkGreen.colors); ctx.putImageData(data, 0, 0); }
+      if (stage === 'repeat') {
+        const palettes = [RECOLOR_PALETTES.pinkGreen, RECOLOR_PALETTES.yellowPurple, RECOLOR_PALETTES.blueOrange, RECOLOR_PALETTES.redBlack];
+        const tmp = document.createElement('canvas'); tmp.width = size; tmp.height = size;
+        const tctx = tmp.getContext('2d');
+        ctx.clearRect(0, 0, size, size);
+        palettes.forEach((pal, k) => {
+          tctx.clearRect(0, 0, size, size);
+          tctx.drawImage(img, 0, 0, size, size);
+          let dd = tctx.getImageData(0, 0, size, size);
+          dd = fx_recolor(dd, pal.colors);
+          tctx.putImageData(dd, 0, 0);
+          const x = (k % 2) * (size/2), y = Math.floor(k/2) * (size/2);
+          ctx.drawImage(tmp, x, y, size/2, size/2);
+        });
+      }
+    }
+    function next() {
+      if (i >= stages.length) return;
+      label.textContent = stages[i];
+      drawStage(stages[i]);
+      i++;
+      if (i < stages.length) setTimeout(next, 900);
+    }
+    next();
+  });
+}
+
+function playLichtDemo() {
+  const wrap = document.getElementById('demo-licht-wrap');
+  const label = document.getElementById('demo-licht-label');
+  const stages = ['original','crop','flatten','outline','dots'];
+  let i = 0;
+  let holder = document.getElementById('demo-licht-svg');
+  const size = wrap.clientWidth;
+  const canvas = document.createElement('canvas');
+  canvas.width = size; canvas.height = size;
+  canvas.style.width = '100%'; canvas.style.height = '100%';
+  holder.innerHTML = ''; holder.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  svgToImage(svgSampleFace(), (img) => {
+    if (!img) return;
+    function drawStage(stage) {
+      ctx.clearRect(0, 0, size, size);
+      if (stage === 'original') { ctx.drawImage(img, 0, 0, size, size); return; }
+      if (stage === 'crop') { ctx.drawImage(img, size*0.2, size*0.15, size*0.6, size*0.6, 0, 0, size, size); return; }
+      ctx.drawImage(img, size*0.2, size*0.15, size*0.6, size*0.6, 0, 0, size, size);
+      let data = ctx.getImageData(0, 0, size, size);
+      if (stage === 'flatten') { data = fx_posterize(data, 4); ctx.putImageData(data, 0, 0); }
+      if (stage === 'outline') {
+        data = fx_posterize(data, 4);
+        const edged = fx_edgeOutline(data, size, size, 50);
+        ctx.putImageData(edged, 0, 0);
+      }
+      if (stage === 'dots') {
+        data = fx_posterize(data, 4);
+        const edged = fx_edgeOutline(data, size, size, 50);
+        ctx.putImageData(edged, 0, 0);
+        const srcData = ctx.getImageData(0, 0, size, size);
+        fx_drawBenDay(ctx, size, size, srcData, 7, 'rgba(232,17,45,0.55)');
+      }
+    }
+    function next() {
+      if (i >= stages.length) return;
+      label.textContent = stages[i];
+      drawStage(stages[i]);
+      i++;
+      if (i < stages.length) setTimeout(next, 900);
+    }
+    next();
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 10 — STEP 5 TRANSFORMER
+// ════════════════════════════════════════════════════════════════
+let transformerImg = null;
+let transformerSize = 360;
+
+function setupTransformer() {
+  if (!lessonProgress.sourceImage || !lessonProgress.mode) return;
+  const canvas = document.getElementById('transformer-canvas');
+  if (!canvas) return;
+  const wrap = document.getElementById('transformer-canvas-wrap');
+  transformerSize = Math.min(360, wrap.clientWidth - 4);
+  canvas.width = transformerSize;
+  canvas.height = transformerSize;
+  const onLoad = (img) => {
+    if (!img) { toast('Could not load that image — try another source', 2500); return; }
+    transformerImg = img;
+    applyTransform();
+  };
+  if (typeof lessonProgress.sourceImage === 'object' && lessonProgress.sourceImage.sample) {
+    svgToImage(SAMPLE_SOURCES[lessonProgress.sourceImage.sample].svg, onLoad);
+  } else {
+    const img = new Image();
+    img.onload = () => onLoad(img);
+    img.onerror = () => toast('Could not load image — try a different file or a sample', 2500);
+    img.src = lessonProgress.sourceImage;
+  }
+}
+
+function setMode(mode) {
+  lessonProgress.mode = mode;
+  lessonProgress.appliedControls = [];
+  lessonProgress.transformedOutput = null;
+  saveLessonProgress();
+  renderCurrentStep();
+}
+function toggleControl(id) {
+  const i = lessonProgress.appliedControls.indexOf(id);
+  if (i >= 0) lessonProgress.appliedControls.splice(i, 1);
+  else lessonProgress.appliedControls.push(id);
+  saveLessonProgress();
+  renderCurrentStep();
+  setTimeout(() => { if (transformerImg) applyTransform(); }, 50);
+}
+function setRecolorPalette(key) { lessonProgress.recolorPalette = key; saveLessonProgress(); renderCurrentStep(); setTimeout(function(){applyTransform();},50); }
+function setEnlargeZoom(v) { lessonProgress.enlargeZoom = parseFloat(v); saveLessonProgress(); applyTransform(); }
+function setSpeechText(t) { lessonProgress.speechText = t; saveLessonProgress(); renderCurrentStep(); setTimeout(function(){applyTransform();},50); }
+function setSpeechTextRaw(t) { lessonProgress.speechText = t; applyTransform(); }
+
+function applyTransform() {
+  const canvas = document.getElementById('transformer-canvas');
+  if (!canvas || !transformerImg) return;
+  const ctx = canvas.getContext('2d');
+  const S = transformerSize;
+  const ctrls = lessonProgress.appliedControls;
+  const mode = lessonProgress.mode;
+  ctx.clearRect(0, 0, S, S);
+  let sx=0, sy=0, sw=transformerImg.width, sh=transformerImg.height;
+  if (ctrls.includes('crop')) {
+    sx = transformerImg.width*0.2; sy = transformerImg.height*0.15;
+    sw = transformerImg.width*0.6; sh = transformerImg.height*0.6;
+  }
+  if (mode === 'warhol' && ctrls.includes('enlarge')) {
+    const z = lessonProgress.enlargeZoom;
+    const cx = sx + sw/2, cy = sy + sh/2;
+    sw = sw / z; sh = sh / z;
+    sx = cx - sw/2; sy = cy - sh/2;
+  }
+  const doRepeat = mode === 'warhol' && ctrls.includes('repeat');
+  function renderSingle(targetCtx, tx, ty, tw, th) {
+    targetCtx.drawImage(transformerImg, sx, sy, sw, sh, tx, ty, tw, th);
+    let data = targetCtx.getImageData(tx, ty, tw, th);
+    if (mode === 'warhol') {
+      if (ctrls.includes('isolate')) data = fx_posterize(data, 4);
+      if (ctrls.includes('flatten')) data = fx_posterize(data, 3);
+      if (ctrls.includes('recolor')) {
+        const pal = RECOLOR_PALETTES[lessonProgress.recolorPalette].colors;
+        data = fx_recolor(data, pal);
+      }
+      targetCtx.putImageData(data, tx, ty);
+    }
+    if (mode === 'licht') {
+      if (ctrls.includes('flatten') || ctrls.includes('outline') || ctrls.includes('dots')) {
+        data = fx_posterize(data, 4);
+        targetCtx.putImageData(data, tx, ty);
+      }
+      if (ctrls.includes('outline')) {
+        const edged = fx_edgeOutline(targetCtx.getImageData(tx, ty, tw, th), tw, th, 45);
+        targetCtx.putImageData(edged, tx, ty);
+      }
+      if (ctrls.includes('dots')) {
+        const srcData = targetCtx.getImageData(tx, ty, tw, th);
+        fx_drawBenDay(targetCtx, tw, th, srcData, 6, 'rgba(232,17,45,0.5)');
+      }
+    }
+  }
+  if (doRepeat) {
+    const palettes = [RECOLOR_PALETTES.pinkGreen, RECOLOR_PALETTES.yellowPurple, RECOLOR_PALETTES.blueOrange, RECOLOR_PALETTES.redBlack];
+    const half = S/2;
+    const tmp = document.createElement('canvas'); tmp.width = S; tmp.height = S;
+    const tctx = tmp.getContext('2d');
+    for (let k = 0; k < 4; k++) {
+      tctx.clearRect(0, 0, S, S);
+      tctx.drawImage(transformerImg, sx, sy, sw, sh, 0, 0, S, S);
+      let data = tctx.getImageData(0, 0, S, S);
+      if (ctrls.includes('isolate')) data = fx_posterize(data, 4);
+      if (ctrls.includes('flatten')) data = fx_posterize(data, 3);
+      const pal = ctrls.includes('recolor') ? palettes[k].colors : RECOLOR_PALETTES[lessonProgress.recolorPalette].colors;
+      data = fx_recolor(data, pal);
+      tctx.putImageData(data, 0, 0);
+      const x = (k % 2) * half, y = Math.floor(k/2) * half;
+      ctx.drawImage(tmp, 0, 0, S, S, x, y, half, half);
+    }
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(half, 0); ctx.lineTo(half, S); ctx.moveTo(0, half); ctx.lineTo(S, half); ctx.stroke();
+  } else {
+    renderSingle(ctx, 0, 0, S, S);
+  }
+  if (mode === 'licht' && ctrls.includes('speech')) {
+    const text = lessonProgress.speechText || 'POW!';
+    ctx.save();
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#111'; ctx.lineWidth = 3;
+    const bx = S*0.58, by = S*0.12, bw = S*0.36, bh = S*0.2;
+    ctx.beginPath();
+    ctx.ellipse(bx + bw/2, by + bh/2, bw/2, bh/2, 0, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bx + bw*0.2, by + bh*0.85);
+    ctx.lineTo(bx + bw*0.05, by + bh*1.4);
+    ctx.lineTo(bx + bw*0.4, by + bh*0.9);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#111';
+    ctx.font = 'bold ' + Math.floor(S*0.06) + 'px "Permanent Marker", cursive';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(text, bx + bw/2, by + bh/2);
+    ctx.restore();
+  }
+  if (mode === 'licht' && ctrls.includes('drama')) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,210,0,0.9)'; ctx.strokeStyle = '#111'; ctx.lineWidth = 2;
+    const cx = S*0.2, cy = S*0.8, spikes = 12, outer = S*0.16, inner = S*0.08;
+    ctx.beginPath();
+    for (let p = 0; p < spikes*2; p++) {
+      const r = p % 2 === 0 ? outer : inner;
+      const a = (p / (spikes*2)) * Math.PI*2;
+      const px = cx + Math.cos(a)*r, py = cy + Math.sin(a)*r;
+      if (p === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e8112d';
+    ctx.font = 'bold ' + Math.floor(S*0.045) + 'px "Permanent Marker", cursive';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('!', cx, cy);
+    ctx.restore();
+  }
+}
+
+function resetTransform() {
+  lessonProgress.appliedControls = [];
+  lessonProgress.transformedOutput = null;
+  saveLessonProgress(); renderCurrentStep();
+  setTimeout(() => applyTransform(), 50);
+}
+function lockInTransform() {
+  const canvas = document.getElementById('transformer-canvas');
+  if (!canvas || !transformerImg) { toast('Transform something first', 1800); return; }
+  if (lessonProgress.appliedControls.length === 0) { toast('Apply at least one change', 1800); return; }
+  try {
+    lessonProgress.transformedOutput = canvas.toDataURL('image/png');
+    saveLessonProgress();
+    toast('Locked in ✓ — go to Step 6', 2000);
+    renderCurrentStep();
+  } catch (e) { toast('Could not save image', 2000); }
+}
+
+function downloadOutput() {
+  if (!lessonProgress.transformedOutput) return;
+  const a = document.createElement('a');
+  a.href = lessonProgress.transformedOutput;
+  a.download = 'my-pop-art.png';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function saveReflection(text) { lessonProgress.reflection = text; saveLessonProgress(); }
+
+function completeLessonAndReturnToStudio() {
+  if (userProfile) {
+    const completed = userProfile.completedLessons || [];
+    if (!completed.includes('lfc018')) { completed.push('lfc018'); userProfile.completedLessons = completed; saveProfile(userProfile); }
+  }
+  if (lessonProgress.reflection && lessonProgress.reflection.trim()) {
+    saveJudgmentCard({ judgmentId: 'lfc018-final-reflection', level: 3,
+      question: 'Pop Art · Final reflection', answer: lessonProgress.reflection.trim() });
+  }
+  window.location.href = '../../creation/';
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 11 — ARTCHI CHAT
+// ════════════════════════════════════════════════════════════════
+let currentChatMode = 'pop_culture_guide';
+function openChatModal(modeKey) {
+  currentChatMode = modeKey;
+  const mode = AI_MODES[modeKey];
+  document.getElementById('chat-mode-pill').textContent = mode.label;
+  const thread = document.getElementById('chat-thread');
+  thread.innerHTML = '';
+  appendChatMsg('artchi', greetingFor(modeKey));
+  const bar = document.createElement('div');
+  bar.className = 'chat-starters';
+  mode.starters.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'chat-starter'; b.textContent = s;
+    b.onclick = () => { document.getElementById('chat-input').value = s; sendChat(); };
+    bar.appendChild(b);
+  });
+  thread.appendChild(bar);
+  document.getElementById('chat-modal').classList.add('active');
+  setTimeout(() => document.getElementById('chat-input').focus(), 100);
+}
+function closeChatModal() { document.getElementById('chat-modal').classList.remove('active'); }
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  appendChatMsg('user', text);
+  input.value = '';
+  setTimeout(() => appendChatMsg('artchi', fakeArtchiReply(currentChatMode, text)), 600);
+}
+function appendChatMsg(who, text) {
+  const thread = document.getElementById('chat-thread');
+  const d = document.createElement('div');
+  d.className = 'chat-msg ' + who; d.textContent = text;
+  thread.appendChild(d); thread.scrollTop = thread.scrollHeight;
+}
+function greetingFor(modeKey) {
+  const g = {
+    pop_culture_guide: "pop art starts with what's around you — ads, labels, comics, famous faces. what feels 'pop' to you?",
+    artist_compare: "warhol repeated and recolored. lichtenstein cropped comics and added dots. ask me how they differ.",
+    transformation_helper: "transformation is the whole game here. ask me what each move does to an image.",
+    making_companion: "i'm here while you transform. ask me which move fits, or whether you've done enough.",
+    final_reflection_helper: "look at what you made. did the meaning change, not just the look? tell me what shifted."
+  };
+  return g[modeKey] || "i'm here. ask away.";
+}
+function fakeArtchiReply(modeKey, userText) {
+  const t = userText.toLowerCase();
+  if (t.includes('warhol')) return "warhol took ONE familiar image and repeated it, recolored it, flattened it. repetition made the ordinary feel iconic — even strange.";
+  if (t.includes('lichtenstein') || t.includes('comic')) return "lichtenstein blew up a single comic panel. bold black outlines, flat color, and ben-day dots — the cheap printing dots — became the whole painting.";
+  if (t.includes('dot')) return "those are ben-day dots — the little dots cheap comics used to make color. lichtenstein made them huge and deliberate. cheap printing became fine art.";
+  if (t.includes('repeat') || t.includes('repetition')) return "repetition changes meaning. see something once, it's an object. see it 32 times, it becomes a pattern, a product, a comment. that's the trick.";
+  if (t.includes('flatten') || t.includes('color')) return "flattening removes the soft shadows that make an image feel 'real' and replaces them with bold flat zones — it makes the image feel printed, mass-produced, graphic.";
+  if (t.includes('pop culture') || (t.includes('same') && t.includes('pop'))) return "pop culture is the raw material — the ads and comics everyone sees. pop ART happens when an artist changes how we look at that material.";
+  if (t.includes('ordinary') || t.includes('become art') || t.includes('when')) return "an image becomes art when the artist makes a decision about it — crop, scale, repeat, recolor. the decision is the art, not the original picture.";
+  const pools = {
+    pop_culture_guide: ["look at what's around you — packaging, screens, logos. pop art says those deserve a second look.","the everyday is the raw material. nothing is too ordinary to transform."],
+    artist_compare: ["both started with mass images. warhol leaned into repetition and celebrity; lichtenstein into comic drama.","different doors, same building: ordinary image to art object."],
+    transformation_helper: ["pick one change and really commit to it. half-transformations feel like filters; full ones feel like decisions.","ask yourself: after this change, does the image behave differently?"],
+    making_companion: ["step back. does it still read? pop art is bold — don't be shy with the change.","if it looks too much like the original, push one more control."],
+    final_reflection_helper: ["name the single biggest change you made. that's usually where the meaning shifted.","did it get more iconic, more dramatic, or more strange? any of those is a win."]
+  };
+  const pool = pools[modeKey] || ["tell me more."];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 12 — SIGN-IN
+// ════════════════════════════════════════════════════════════════
+function updateSignInBtn() {
+  document.getElementById('signin-btn').disabled = document.getElementById('signin-code').value.trim().length < 3;
+}
+function attemptSignIn() {
+  const input = document.getElementById('signin-code');
+  const error = document.getElementById('signin-error');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return;
+  const match = validStudents.get(code);
+  if (!match) {
+    input.classList.add('error'); error.classList.add('visible');
+    setTimeout(() => input.classList.remove('error'), 400); return;
+  }
+  const profile = {
+    id: code, studentCode: code, name: match.displayName,
+    tier: match.isTrial ? 'trial' : 'member',
+    completedLessons: [], createdAt: Date.now(), lastSeenAt: Date.now()
+  };
+  const existing = userProfile;
+  if (existing && existing.studentCode === code) {
+    profile.completedLessons = existing.completedLessons || [];
+    profile.createdAt = existing.createdAt;
+  }
+  saveProfile(profile); loadLessonProgress(); showLesson();
+}
+function signOut() {
+  if (confirm('Sign out? Progress saved on this device.')) { clearProfile(); window.location.reload(); }
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 13 — UTILITIES
+// ════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) {
+  if (s == null) return '';
+  return String(s).replace(/['"\\]/g, c => '\\' + c);
+}
+let _toastTimer = null;
+function toast(msg, ms) {
+  const el = document.getElementById('complete-toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), ms || 2000);
+}
+
+window.goNext=goNext; window.goPrev=goPrev; window.goToStep=goToStep; window.jumpToStep=jumpToStep;
+window.toggleStep1=toggleStep1; window.toggleArtist=toggleArtist; window.setStep2Choice=setStep2Choice;
+window.setStep3Choice=setStep3Choice; window.playWarholDemo=playWarholDemo; window.playLichtDemo=playLichtDemo;
+window.handleSourceUpload=handleSourceUpload; window.selectSample=selectSample; window.clearSource=clearSource;
+window.setMode=setMode; window.toggleControl=toggleControl; window.setRecolorPalette=setRecolorPalette;
+window.setEnlargeZoom=setEnlargeZoom; window.setSpeechText=setSpeechText; window.setSpeechTextRaw=setSpeechTextRaw;
+window.applyTransform=applyTransform; window.resetTransform=resetTransform; window.lockInTransform=lockInTransform;
+window.downloadOutput=downloadOutput; window.saveReflection=saveReflection;
+window.completeLessonAndReturnToStudio=completeLessonAndReturnToStudio;
+window.openChatModal=openChatModal; window.closeChatModal=closeChatModal; window.sendChat=sendChat;
+window.signOut=signOut; window.attemptSignIn=attemptSignIn;
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 14 — INIT
+// ════════════════════════════════════════════════════════════════
+document.getElementById('signin-code').addEventListener('input', (e) => {
+  e.target.value = e.target.value.toUpperCase();
+  updateSignInBtn();
+  document.getElementById('signin-error').classList.remove('visible');
+});
+document.getElementById('signin-code').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptSignIn(); });
+document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
+document.getElementById('try-code-link').addEventListener('click', (e) => {
+  e.preventDefault(); document.getElementById('signin-code').value = 'TRYNEW'; updateSignInBtn();
+});
+
+(async function init() {
+  await loadRoster();
+  loadProfile();
+  if (userProfile) { loadLessonProgress(); showLesson(); }
+  else { showSignIn(); }
+})();
+
+</script>
+
+</body>
+</html>
