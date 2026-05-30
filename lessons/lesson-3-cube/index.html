@@ -5075,7 +5075,7 @@ const LESSON = {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'An honest welcome',
+      title: 'Meet the cube',
       intro: '',
       xp: 5
     },
@@ -5108,7 +5108,7 @@ const LESSON = {
       partLabel: 'Part a · preparation',
       type: 'tools',
       title: 'Your pencil toolkit',
-      intro: 'Cubes need confident, straight lines and clean tonal blocks. We\'ll lean harder on harder pencils (2H, HB) for construction, and softer (2B, 4B) for shadow planes.',
+      intro: 'Cubes need confident, straight lines and clean tonal blocks. You\'ll use the full pencil range — 2H for lightest construction, HB for sketching, 2B–6B for shading from medium to deepest darks. A blending tool is required for unifying tones.',
       xp: 0
     },
     {
@@ -5138,7 +5138,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 5',
+      partLabel: 'Part b · core lesson · video 2 of 5',
       type: 'videoSegment',
       videoId: '1f907944da6d234ac8da34fcd5e2a98d',  // cube 02 (3:29) — Cloudflare Stream UID
       videoNumber: 2,
@@ -5146,7 +5146,8 @@ const LESSON = {
       stepName: 'Establishing Light & Shadow Planes',
       teacher: 'Mrs. Dawn',
       title: 'Establishing Light & Shadow Planes',
-      intro: 'Now Mrs. Dawn separates the cube into its light side and shadow side. You\'ll start with 4B for the darkest plane, then 2B for the light plane, and finally HB to unify the surface.',
+      intro: 'Now Mrs. Dawn separates the cube into its light side and shadow side. You\'ll start with 4B for the darkest plane, then 2B for the light plane, and finally HB to unify the surface. ✨ This completes the core cube lesson — the next steps are optional finishing touches.',
+      isCoreEnd: true,
       xp: 5
     },
     {
@@ -5159,12 +5160,13 @@ const LESSON = {
       stepName: 'Refining & Strengthening Contrast',
       teacher: 'Mrs. Dawn',
       title: 'Refining & Strengthening Contrast',
-      intro: 'Mrs. Dawn refines the tones and pushes the contrast between light and shadow. Subtle adjustments at this stage make a big difference — watch how she strengthens the form without overworking it.',
+      intro: '🎯 OPTIONAL. Your cube is technically complete — you can stop here if you wish. This step refines the tones and pushes contrast further. Subtle adjustments that make a big difference, but not required.',
+      isOptional: true,
       xp: 5
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 4 of 5',
+      partLabel: 'Part b · optional finish · 4 of 5',
       type: 'videoSegment',
       videoId: '6d946c502719811ef5235137cbbb6bdb',  // cube 4 (4:20) — Cloudflare Stream UID
       videoNumber: 4,
@@ -5172,12 +5174,13 @@ const LESSON = {
       stepName: 'Background Tone',
       teacher: 'Mrs. Dawn',
       title: 'Background Tone',
-      intro: 'Now Mrs. Dawn adds background tone to ground the cube in its space. This is where a drawing transforms from "shape on paper" to "object in light".',
+      intro: '🎯 OPTIONAL. Adds background tone to ground the cube in its space. This is where a drawing transforms from "shape on paper" to "object in light" — but only do this if you want the full finish.',
+      isOptional: true,
       xp: 5
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 5 of 5',
+      partLabel: 'Part b · optional finish · 5 of 5',
       type: 'videoSegment',
       videoId: 'af20cfc9c1313d4313b332e50be4a17b',  // cube 5 (3:17) — Cloudflare Stream UID
       videoNumber: 5,
@@ -5185,7 +5188,8 @@ const LESSON = {
       stepName: 'Finishing Tone',
       teacher: 'Mrs. Dawn',
       title: 'Finishing Tone',
-      intro: 'The final tonal adjustments. Watch how Mrs. Dawn polishes the drawing — small refinements that take the cube from "drawn" to "alive". This is the difference between an exercise and a finished piece.',
+      intro: '🎯 OPTIONAL. The final tonal adjustments — polishing the cube from "drawn" to "alive". Skip if you\'re done after step 2.',
+      isOptional: true,
       xp: 5
     },
     // (LFC moment "beforeDemo" removed — Lesson 2 follows the same 
@@ -6065,7 +6069,7 @@ function renderOpeningLFC(step) {
                   box-shadow: 0 12px 32px rgba(167,139,250,0.25);">
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/7249fbce8b6a5b4e148512b802e200cb/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F7249fbce8b6a5b4e148512b802e200cb%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/7249fbce8b6a5b4e148512b802e200cb/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F7249fbce8b6a5b4e148512b802e200cb%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
@@ -6439,21 +6443,22 @@ function initPlayLight(shape) {
       
       <!-- Cast shadow polygon — recomputed by updatePlayLight -->
       <polygon class="pl-cast-shadow" id="pl-cast-shadow"
-               points="160,225 240,225 260,235 140,235"
+               points="160,210 240,210 260,220 140,220"
                fill="rgba(40,30,60,0.32)"
                style="filter: blur(2px);"/>
       
       <!-- Cube faces: top, left, right (drawn separately so they can shade independently) -->
+      <!-- Round 38 fix: re-proportioned so the cube reads as a true cube (equal edge lengths), not a rectangular box -->
       <polygon class="pl-cube-face pl-cube-top" id="pl-cube-top"
-               points="135,90 200,60 265,90 200,120"
+               points="135,100 200,70 265,100 200,130"
                fill="#aaa" 
                stroke="#1a1d2b" stroke-width="1.5"/>
       <polygon class="pl-cube-face pl-cube-left" id="pl-cube-left"
-               points="135,90 135,200 200,230 200,120"
+               points="135,100 135,180 200,210 200,130"
                fill="#777" 
                stroke="#1a1d2b" stroke-width="1.5"/>
       <polygon class="pl-cube-face pl-cube-right" id="pl-cube-right"
-               points="265,90 265,200 200,230 200,120"
+               points="265,100 265,180 200,210 200,130"
                fill="#888" 
                stroke="#1a1d2b" stroke-width="1.5"/>
       
@@ -6954,54 +6959,12 @@ function renderReference(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="ref-grid">
-        <div class="ref-card wide" style="background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 50%, #fef3f7 100%);">
-          <svg width="100%" height="100%" viewBox="0 0 400 240" style="max-width: 340px;">
-            <defs>
-              <linearGradient id="cubeRefTop" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#f8fafc"/>
-                <stop offset="100%" stop-color="#cbd5e1"/>
-              </linearGradient>
-              <linearGradient id="cubeRefFront" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#94a3b8"/>
-                <stop offset="100%" stop-color="#64748b"/>
-              </linearGradient>
-              <linearGradient id="cubeRefSide" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#475569"/>
-                <stop offset="100%" stop-color="#1e293b"/>
-              </linearGradient>
-            </defs>
-            
-            <!-- Cast shadow under cube -->
-            <polygon points="60,200 220,200 310,170 150,170" fill="#1e293b" opacity="0.25"/>
-            
-            <!-- Cube body: 3 visible planes in standard 3/4 view -->
-            <!-- Top plane (lightest) -->
-            <polygon points="100,90 200,60 280,90 180,120" fill="url(#cubeRefTop)" stroke="#1a1d2b" stroke-width="1.2"/>
-            <!-- Front plane (mid value) -->
-            <polygon points="100,90 180,120 180,200 100,170" fill="url(#cubeRefFront)" stroke="#1a1d2b" stroke-width="1.2"/>
-            <!-- Side plane (darkest) -->
-            <polygon points="180,120 280,90 280,170 180,200" fill="url(#cubeRefSide)" stroke="#1a1d2b" stroke-width="1.2"/>
-            
-            <!-- Label callouts -->
-            <line x1="190" y1="80" x2="320" y2="40" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="322" y="42" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">1 TOP PLANE</text>
-            
-            <line x1="140" y1="155" x2="60" y2="120" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="118" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">2 FRONT PLANE</text>
-            
-            <line x1="240" y1="155" x2="350" y2="135" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="352" y="137" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">3 SIDE PLANE</text>
-            
-            <line x1="180" y1="120" x2="60" y2="80" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="78" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">4 EDGE</text>
-            
-            <line x1="180" y1="200" x2="60" y2="220" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="222" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">5 CORNER</text>
-            
-            <line x1="220" y1="200" x2="340" y2="225" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="342" y="227" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">6 CAST SHADOW</text>
-          </svg>
-          <div class="ref-label">The cube · labeled anatomy</div>
+        <div class="ref-card wide" style="background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 50%, #fef3f7 100%); padding: 16px;">
+          <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0401675829c7a24d3fe72f_9b875766-32b6-40ae-ac3a-4c33196f0e49.png"
+               alt="Cube anatomy reference — labeled planes, edges, corners, and cast shadow"
+               style="display: block; width: 100%; max-width: 400px; height: auto; margin: 0 auto; border-radius: 8px;"
+               loading="lazy">
+          <div class="ref-label" style="margin-top: 10px;">The cube · labeled anatomy</div>
         </div>
       </div>
       
@@ -7029,36 +6992,84 @@ function renderTools(step) {
       <div class="pencil-grid">
         <div class="pencil-item">
           <svg width="48" height="48" viewBox="0 0 60 60">
-            <rect x="10" y="20" width="40" height="8" fill="#f59e0b" rx="1"/>
+            <rect x="10" y="20" width="40" height="8" fill="#e0e7ff" rx="1"/>
             <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
-            <polygon points="10,20 10,28 4,24" fill="#1a1d2b"/>
-            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#1a1d2b">HB</text>
+            <polygon points="10,20 10,28 4,24" fill="#94a3b8"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#1a1d2b">2H</text>
           </svg>
           <div class="pencil-text">
-            <h4>HB pencil</h4>
-            <p>Your workhorse. Use for construction lines, terminator, core shadow, halftones.</p>
+            <h4>2H pencil</h4>
+            <p>Hardest — for lightest construction lines and the final light-side veil.</p>
           </div>
         </div>
         <div class="pencil-item">
           <svg width="48" height="48" viewBox="0 0 60 60">
             <rect x="10" y="20" width="40" height="8" fill="#fbbf24" rx="1"/>
             <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
-            <polygon points="10,20 10,28 4,24" fill="#6b7280"/>
-            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#1a1d2b">2H</text>
+            <polygon points="10,20 10,28 4,24" fill="#475569"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#1a1d2b">HB</text>
           </svg>
           <div class="pencil-text">
-            <h4>2H pencil</h4>
-            <p>Lighter and harder. Only for the light-side "thin veil" over halftones at the end.</p>
+            <h4>HB pencil</h4>
+            <p>Your workhorse. Use for sketching, terminator, halftones.</p>
           </div>
         </div>
         <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#f59e0b" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#374151"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#1a1d2b">2B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>2B pencil</h4>
+            <p>Medium-soft. For the lighter plane and halftone development.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#ea580c" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#1f2937"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">3B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>3B pencil</h4>
+            <p>Softer. For deepening shadows and pushing contrast.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#c2410c" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#111827"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">4B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>4B pencil</h4>
+            <p>Dark. For the darkest plane on the cube.</p>
+          </div>
+        </div>
+        <div class="pencil-item">
+          <svg width="48" height="48" viewBox="0 0 60 60">
+            <rect x="10" y="20" width="40" height="8" fill="#7c2d12" rx="1"/>
+            <rect x="46" y="18" width="8" height="12" fill="#fde68a" stroke="#1a1d2b" stroke-width="0.5"/>
+            <polygon points="10,20 10,28 4,24" fill="#000"/>
+            <text x="30" y="27" text-anchor="middle" font-family="Montserrat" font-size="7" font-weight="900" fill="#fff">6B</text>
+          </svg>
+          <div class="pencil-text">
+            <h4>6B pencil</h4>
+            <p>Deepest darks. For the strongest shadow accents and cast shadow.</p>
+          </div>
+        </div>
+        <div class="pencil-item" style="border: 2px solid #a78bfa; background: rgba(167,139,250,0.05);">
           <svg width="48" height="48" viewBox="0 0 60 60">
             <ellipse cx="30" cy="30" rx="18" ry="11" fill="#94a3b8"/>
             <ellipse cx="30" cy="30" rx="16" ry="9" fill="#cbd5e1"/>
           </svg>
           <div class="pencil-text">
-            <h4>Blending stump · optional</h4>
-            <p>Only inside shadow zones. Never drag across the terminator into the light.</p>
+            <h4>Blending tool · <span style="color: #a78bfa; font-weight: 900;">REQUIRED</span></h4>
+            <p>Blending stump or tissue. Used in every shading lesson — this is not optional.</p>
           </div>
         </div>
       </div>
@@ -7081,7 +7092,7 @@ function renderReady(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="check-list" id="ready-checks">
-        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I have an HB pencil and blank paper</div></div>
+        <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I have my 2H, HB, 2B, 3B, 4B, 6B pencils, a blending tool, and sketch paper</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I understand the six zones of light</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I'm in a comfortable seat with good lighting</div></div>
         <div class="check-row" onclick="toggleCheck(this)"><div class="check-box">✓</div><div class="check-text">I'm ready to practice patiently — no rush</div></div>
@@ -7194,7 +7205,7 @@ function renderVideoSegment(step) {
       <!-- Video frame with image overlay capability -->
       <div class="video-frame" id="video-frame-${step.videoNumber}" style="background:#000; cursor:default; padding:0; position:relative;">
         <iframe id="yt-player-${step.videoNumber}" 
-          src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${step.videoId}/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F${step.videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+          src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${step.videoId}/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F${step.videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
           loading="lazy"
           style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
@@ -8741,35 +8752,35 @@ const VIDEO_PAUSES = {
   '9da68fb322c273cf67a707be97c9d7f7': [
     {
       time: 22,           // 0:22
-      duration: 60,
+      duration: 25,
       title: 'Position your drawing on the page',
       text: 'Notice how Mrs. Dawn places small marks for the cube\'s four outer edges before she draws anything else. The distance from these marks to the edge of the paper matters — too close to the edge feels cramped, too centered feels stiff. Take a moment: do you have your paper ready, with room around where the cube will sit?',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342a12023d9ed451645_1.png'
     },
     {
       time: 97,           // 1:37
-      duration: 60,
+      duration: 25,
       title: 'Use your pencil as a measuring tool',
       text: 'Mrs. Dawn holds her pencil at arm\'s length to measure the cube\'s height. This is one of the most important habits in observational drawing — your pencil becomes a ruler. Try holding your pencil this way now: arm fully extended, one eye closed. Mark the height before you commit to any lines.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b343fa449b3052f53feb_2.png'
     },
     {
       time: 198,          // 3:18  ⭐ most important
-      duration: 60,
+      duration: 25,
       title: 'The top plane — parallel FIRST, then perspective',
       text: 'This is where most students go wrong. The top of the cube tilts away from us — but you need to draw it parallel first, then gently apply perspective. Don\'t try to "see the angle" right away. Draw the top edges horizontal, then carefully tilt them inward. Look at Mrs. Dawn\'s example: notice how subtle the perspective actually is.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342b6d054fab010d11a_3.png'
     },
     {
       time: 291,          // 4:51
-      duration: 60,
+      duration: 25,
       title: 'See through the cube — internal framework',
       text: 'Mrs. Dawn draws the cube as if it were transparent — showing the edges you can\'t actually see. This isn\'t for show. Understanding the internal framework helps you feel the cube\'s 3D space. The back corners must align with the front corners. If your hidden edges look wrong, the visible ones will too.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b342a1dbf80f2ea9154a_4.png'
     },
     {
       time: 319,          // 5:19
-      duration: 60,
+      duration: 25,
       title: 'Perspective lines: parallel before they converge',
       text: 'Same rule as the top plane — keep your perspective lines (and any diagonal/background lines) parallel first. THEN gently bring them inward toward the vanishing point. Going straight to "angled" without "parallel" first makes the cube look wonky. Slow it down. Parallel first. Tilt second.',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04b343a8167f148de17720_5.png'
@@ -8783,7 +8794,7 @@ const VIDEO_PAUSES = {
   '1f907944da6d234ac8da34fcd5e2a98d': [
     {
       time: 4,
-      duration: 60,
+      duration: 25,
       title: '4B: Start from the darkest plane',
       shortPrompt: 'Use 4B and begin from the darkest side.',
       text: 'Lay in the darkest plane first. Keep the strokes moving in one direction so the tone stays clean and controlled.',
@@ -8794,7 +8805,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 23,
-      duration: 60,
+      duration: 25,
       title: 'Change direction',
       shortPrompt: 'Overlay a second layer to build gradation.',
       text: 'Change the stroke direction and overlay the first layer. This creates a smoother gradation and a stronger sense of 3D depth.',
@@ -8805,7 +8816,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 60,
-      duration: 60,
+      duration: 25,
       title: 'Fully apply the dark plane',
       shortPrompt: 'Cover the whole dark side evenly.',
       text: 'Fully apply the dark tone across the entire plane. Keep the surface clean so the dark side feels solid and unified.',
@@ -8816,7 +8827,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 64,
-      duration: 60,
+      duration: 25,
       title: 'Strengthen the light-dark edge',
       shortPrompt: 'Emphasize the boundary for stronger depth.',
       text: 'Darken the boundary between the light and dark planes. This edge makes the cube feel more solid and spatial.',
@@ -8827,7 +8838,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 87,
-      duration: 60,
+      duration: 25,
       title: 'Add the cast shadow',
       shortPrompt: 'Draw the shadow with clean, controlled strokes.',
       text: 'Add the cast shadow beside the cube and keep the shading direction consistent so the shadow feels tidy and believable.',
@@ -8838,7 +8849,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 125,
-      duration: 60,
+      duration: 25,
       title: '2B: Add the light-gray plane',
       shortPrompt: 'Use a lighter touch on the light-gray side.',
       text: 'Switch to a 2B pencil and lightly shade the lighter plane. Build contrast with the dark plane while keeping the transition smooth.',
@@ -8849,7 +8860,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 182,
-      duration: 60,
+      duration: 25,
       title: 'HB: Unify the surface',
       shortPrompt: 'Sweep lightly to harmonize the tone.',
       text: 'Use HB to lightly sweep over the surface and unify the texture. This helps clean up rough marks and harmonize the plane.',
@@ -8860,7 +8871,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 198,
-      duration: 60,
+      duration: 25,
       title: 'Blend lightly',
       shortPrompt: 'Use a tissue or blender to soften the tone.',
       text: 'Use a tissue or blender to soften the graphite and create a smoother transition, while still keeping the form clear.',
@@ -8876,7 +8887,7 @@ const VIDEO_PAUSES = {
   'c4de5ce55e5109dc622cd010300d2b16': [
     {
       time: 82,           // 1:22
-      duration: 60,
+      duration: 25,
       title: 'Edge dissolves — top plane emerges',
       shortPrompt: 'Watch the edge disappear into the background.',
       text: 'Notice how Mrs. Dawn\'s outer edge line gradually dissolves into the background — it no longer reads as a separate line. And look at the top plane: by strengthening the background, the top face suddenly appears much brighter. She didn\'t touch the top plane — she changed what surrounds it.',
@@ -8887,7 +8898,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 99,           // 1:39
-      duration: 60,
+      duration: 25,
       title: 'Strengthen the shadow',
       shortPrompt: 'Push the shadow darker for stronger contrast.',
       text: 'Mrs. Dawn goes back into the shadow area and pushes it darker. This is deliberate — stronger shadow means stronger contrast, which means more convincing light. The light side doesn\'t change, but the shadow getting darker makes the light side look even brighter.',
@@ -8898,7 +8909,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 159,          // 2:39
-      duration: 60,
+      duration: 25,
       title: 'Return to the terminator line',
       shortPrompt: 'Reinforce the terminator for stronger 3D.',
       text: 'Mrs. Dawn returns to the terminator — the boundary between light and shadow — and darkens it further. This is the key move: the terminator is the darkest area on the form itself (not the cast shadow). Strengthening it pushes the 3D effect dramatically. A soft terminator makes a sphere look flat; a firm one makes it pop.',
@@ -8909,7 +8920,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 202,          // 3:22
-      duration: 60,
+      duration: 25,
       title: 'Natural tonal transition',
       shortPrompt: 'Tone flows left to right, top to bottom — dark to light.',
       text: 'Notice the overall tonal map now: from left to right, from top to bottom, values transition naturally from dark to light. This isn\'t accidental — it\'s planned. Each area of the sphere flows smoothly into the next. There are no sudden jumps in value, no hard edges where there shouldn\'t be any.',
@@ -8920,7 +8931,7 @@ const VIDEO_PAUSES = {
     },
     {
       time: 219,          // 3:39
-      duration: 60,
+      duration: 25,
       title: 'Blend to unify',
       shortPrompt: 'Use a blender or tissue — gently sweep along the strokes.',
       text: 'Now Mrs. Dawn uses a blender to soften and unify the surface. If you don\'t have a blending stump, a tissue or cotton bud (maccan) works just as well. The key: follow the direction of your pencil strokes, sweep very lightly. This is not about erasing tone — it\'s about making the transitions smoother and the surface feel more continuous.',
@@ -9893,7 +9904,17 @@ function showWelcomePage() {
   const returningState = document.getElementById('welcome-returning');
   
   if (profile) {
-    // RETURNING VISITOR
+    // Round 38 #7.1 — Identity persistence: auto-skip the gate for established users.
+    const completedAny = (profile.completedLessons && profile.completedLessons.length > 0);
+    const visitedOften = (profile.visitCount && profile.visitCount >= 2);
+    if (completedAny || visitedOften) {
+      try { UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 }); } catch (e) {}
+      Analytics.track('welcome_auto_continued', { name: profile.name, completed_lessons: profile.completedLessons?.length || 0 });
+      if (backdrop) backdrop.classList.remove('show');
+      setTimeout(() => continueJourney(), 50);
+      return;
+    }
+    // FIRST RETURNING VISIT — show "Welcome back" gate
     renderReturningWelcome(profile);
     newState.style.display = 'none';
     returningState.style.display = 'block';
