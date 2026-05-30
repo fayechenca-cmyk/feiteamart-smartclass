@@ -5693,16 +5693,31 @@ const LFC_HOOKS = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'An honest welcome',
+  title: 'Meet the cylinder',
   
   sections: [
+    {
+      // Hero visual - cylinder reference image
+      type: 'image',
+      src: '',  // Reserved — add cylinder hero image URL when ready
+      placeholderEmoji: '◗',
+      placeholderLabel: 'Cylinder image — coming soon',
+      placeholderNote: 'A hero photo or illustration of the cylinder will appear here'
+    },
+    {
+      // Intro video placeholder
+      type: 'videoPlaceholder',
+      label: 'Intro video — coming soon',
+      note: 'A short introduction video to the cylinder will appear here'
+    },
     {
       // Opening - acknowledge what this is
       type: 'prose',
       paragraphs: [
         "You've drawn a sphere. You've drawn a cube. Today: the cylinder.",
         "This is the form where curve and flat meet. The side gradates like the sphere. The top stays one shade like the cube. One light, two surfaces, two different responses.",
-        "If you understand cylinders, you understand most of the everyday objects you see — bottles, cans, columns, candles, chair legs, fingers, tree trunks, tea cups."
+        "<strong>Why we draw cylinders:</strong> they're everywhere in real life. Bottles, cans, columns, candles, chair legs, fingers, tree trunks, tea cups — once you understand the cylinder, you can construct most everyday objects with confidence.",
+        "<strong>Why this lesson matters:</strong> the cylinder is the bridge between everything you've learned. The Cup lesson will build on cylinders. Apples will use what you learned about curves. The cylinder is foundational."
       ]
     },
     {
@@ -5873,7 +5888,7 @@ const LESSON = {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'An honest welcome',
+      title: 'Meet the cylinder',
       intro: '',
       xp: 5
     },
@@ -6791,8 +6806,9 @@ function renderOpeningLFC(step) {
   const data = HONEST_WELCOME;
   const sectionsHtml = data.sections.map(section => {
     if (section.type === 'prose') {
+      // Allow safe HTML (<strong>, <em>) for emphasis in intro prose
       return section.paragraphs.map(p => 
-        `<p class="opening-lfc-prose">${escapeHtml(p)}</p>`
+        `<p class="opening-lfc-prose">${p}</p>`
       ).join('');
     }
     if (section.type === 'heading') {
@@ -6802,6 +6818,44 @@ function renderOpeningLFC(step) {
       return `<ul class="opening-lfc-list">${
         section.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')
       }</ul>`;
+    }
+    if (section.type === 'image') {
+      // Hero image or placeholder if src is empty
+      if (section.src && section.src.length > 0) {
+        return `
+          <div class="opening-lfc-image" style="margin: 20px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08);">
+            <img src="${section.src}" alt="${escapeHtml(section.placeholderLabel || 'Lesson hero image')}"
+                 style="display: block; width: 100%; height: auto;" loading="lazy">
+          </div>
+        `;
+      } else {
+        return `
+          <div class="opening-lfc-image-placeholder" 
+               style="margin: 20px 0; padding: 36px 20px; text-align: center;
+                      background: linear-gradient(135deg, #faf8ff, #ecfeff);
+                      border: 2px dashed rgba(167,139,250,0.4);
+                      border-radius: 14px;">
+            <div style="font-size: 48px; opacity: 0.5; margin-bottom: 10px;">${section.placeholderEmoji || '🖼️'}</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+                        color: #7c5fc7; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">${escapeHtml(section.placeholderLabel || 'Image coming soon')}</div>
+            <div style="font-size: 12px; color: rgba(26,29,43,0.6); font-style: italic;">${escapeHtml(section.placeholderNote || '')}</div>
+          </div>
+        `;
+      }
+    }
+    if (section.type === 'videoPlaceholder') {
+      return `
+        <div class="opening-lfc-video-placeholder"
+             style="margin: 20px 0; padding: 32px 20px; text-align: center;
+                    background: linear-gradient(135deg, #1a1d2b, #2a2f42);
+                    color: #fff; border-radius: 14px;">
+          <div style="font-size: 42px; opacity: 0.7; margin-bottom: 10px;">🎬</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+                      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;
+                      color: #c8a96e;">${escapeHtml(section.label || 'Intro video — coming soon')}</div>
+          <div style="font-size: 12px; opacity: 0.75; font-style: italic;">${escapeHtml(section.note || '')}</div>
+        </div>
+      `;
     }
     if (section.type === 'cezanne') {
       // The micro-LFC — Cézanne's single sentence
@@ -9033,7 +9087,7 @@ function renderDemo(step) {
   const hasPauses = pauses.length > 0;
   
   const embedUrl = videoId
-    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
   
   return `
@@ -9286,9 +9340,22 @@ function renderBadgeUnlock() {
     age_group: AccessControl.ageGroup
   });
   
-  // For Foundation A (10 lessons total), show progress: this is lesson 3 of 10.
-  const TOTAL_LESSONS = 10;
-  const COMPLETED_LESSONS = 5;  // This is lesson 3, just completed.
+  // Read actual completed lessons from profile (Round 38 fix #5.1)
+  // Counts Preparation + all numbered Foundation A lessons the learner has finished.
+  const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
+  const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  let _completedFromProfile = [];
+  try {
+    const _raw = localStorage.getItem('fei_user_profile');
+    if (_raw) {
+      const _prof = JSON.parse(_raw);
+      _completedFromProfile = (_prof.completedLessons || []).filter(id => FOUNDATION_IDS.includes(id));
+    }
+  } catch (e) {}
+  // Make sure CURRENT lesson is counted as just-finished:
+  if (!_completedFromProfile.includes(LESSON.id)) _completedFromProfile.push(LESSON.id);
+  const COMPLETED_LESSONS = _completedFromProfile.length;
   const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
   
   return `
@@ -9403,21 +9470,21 @@ function renderLessonComplete(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Lesson 4 invitation (placeholder until Lesson 4 exists) -->
+      <!-- Next lesson: Box is locked, so we point to Cup which is next available -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 6</div>
-        <div class="lesson2-teaser-title">Cylinder in the Real World</div>
+        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 5</div>
+        <div class="lesson2-teaser-title">The Cup</div>
         <div class="lesson2-teaser-sub">
-          You've now drawn the three core forms — sphere, cube, cylinder. Lesson 4 will combine them.
+          You've drawn the cylinder. Next: the cup — the same form, but now observed as a real object with handle, rim, and material.
         </div>
-        <div class="lesson2-teaser-status">Members area · 5 lessons remaining</div>
+        <div class="lesson2-teaser-status">→ Cylinder applied to the real world</div>
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <a href="../../" class="btn btn-primary" style="text-decoration:none;">
-          <span class="glyph">◈</span> ← Back to Smart Class home
+        <a href="../lesson-6-cup/" class="btn btn-primary" style="text-decoration:none;">
+          <span class="glyph">→</span> Continue to Lesson 5: The Cup
         </a>
-        <button class="btn btn-secondary" onclick="window.location.href='../../';">← Back to Smart Class home</button>
+        <a href="../../" class="btn btn-secondary" style="text-decoration:none; text-align:center;">← Back to Smart Class home</a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
@@ -9977,7 +10044,7 @@ function renderOptionalFinish(step) {
         </div>
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F60af4a289c320b82ab88e3bbd830f644%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F60af4a289c320b82ab88e3bbd830f644%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             title="Optional step — Background tones"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
@@ -10522,7 +10589,17 @@ function showWelcomePage() {
   const returningState = document.getElementById('welcome-returning');
   
   if (profile) {
-    // RETURNING VISITOR
+    // Round 38 #7.1 — Identity persistence: auto-skip the gate for established users.
+    const completedAny = (profile.completedLessons && profile.completedLessons.length > 0);
+    const visitedOften = (profile.visitCount && profile.visitCount >= 2);
+    if (completedAny || visitedOften) {
+      try { UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 }); } catch (e) {}
+      Analytics.track('welcome_auto_continued', { name: profile.name, completed_lessons: profile.completedLessons?.length || 0 });
+      if (backdrop) backdrop.classList.remove('show');
+      setTimeout(() => continueJourney(), 50);
+      return;
+    }
+    // FIRST RETURNING VISIT — show "Welcome back" gate
     renderReturningWelcome(profile);
     newState.style.display = 'none';
     returningState.style.display = 'block';
