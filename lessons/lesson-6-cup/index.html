@@ -5692,63 +5692,60 @@ const LFC_HOOKS = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'An honest welcome',
+  title: 'Meet the cup',
   
   sections: [
     {
-      // Opening - acknowledge what this is
+      // Hero visual - cup reference image (placeholder until uploaded)
+      type: 'image',
+      src: '',
+      placeholderEmoji: '☕',
+      placeholderLabel: 'Cup image — coming soon',
+      placeholderNote: 'A hero photo of the cup will appear here'
+    },
+    {
+      // Intro video placeholder
+      type: 'videoPlaceholder',
+      label: 'Intro video — coming soon',
+      note: 'A short introduction video to the cup will appear here'
+    },
+    {
+      // Opening - build on Cylinder
       type: 'prose',
       paragraphs: [
-        "You've drawn a sphere. You've drawn a cube. Today: the cylinder.",
-        "This is the form where curve and flat meet. The side gradates like the sphere. The top stays one shade like the cube. One light, two surfaces, two different responses.",
-        "If you understand cylinders, you understand most of the everyday objects you see — bottles, cans, columns, candles, chair legs, fingers, tree trunks, tea cups."
+        "Today: the cup. Your first real-world object built on cylinder knowledge.",
+        "<strong>The cup is a cylinder with personality.</strong> Same core form — circular top, curved side, flat (or near-flat) bottom — but now with real-world details: a handle, rim thickness, surface material, slight proportion changes that make it a cup and not just a tube.",
+        "<strong>Before you start:</strong> if you haven't completed the Cylinder lesson yet, please go back and finish it first. The cup builds directly on what you learned there."
       ]
     },
     {
       type: 'heading',
-      label: 'WHAT THIS IS'
+      label: 'WHAT MAKES A CUP DIFFERENT FROM A CYLINDER'
     },
     {
       type: 'prose',
       paragraphs: [
-        "Foundation drawing trains three things:"
+        "The cylinder was abstract — a pure geometric form. The cup is observed. Four things change when you draw a real object:"
       ]
     },
     {
       type: 'list',
       items: [
-        "Understanding structure",
-        "Understanding perspective",
-        "Understanding light and shadow"
-      ]
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Today's lesson is the bridge between two ideas you already know. Drawing a cylinder asks you to switch between two kinds of seeing — for one part you think like you did with the sphere, for another you think like you did with the cube. The hardest part is the edge where they meet."
+        "<strong>Handle</strong> — a separate form that attaches to and visually balances the cup",
+        "<strong>Rim thickness</strong> — the lip has measurable depth, not just a line",
+        "<strong>Material / surface</strong> — ceramic, glass, metal each catches light differently",
+        "<strong>Proportion subtleties</strong> — narrower waist, flared rim, tapered base — every cup has its own shape"
       ]
     },
     {
       type: 'heading',
-      label: 'WHAT THIS ISN\'T'
+      label: 'WHAT THIS LESSON FOCUSES ON'
     },
     {
       type: 'prose',
       paragraphs: [
-        "This won't make you an artist.",
-        "Drawing a thousand cylinders won't either. But understanding how light behaves on different surfaces — that becomes a kind of vocabulary you carry into everything else.",
-        "We're teaching grammar. What you say with it is up to you."
-      ]
-    },
-    {
-      type: 'heading',
-      label: 'WHAT WE WANT YOU TO KNOW'
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Cylinders are everywhere. Once you can see them clearly, you'll start noticing how a coffee mug catches light differently from a bowl, or how a candle softens at the rim differently from a column.",
-        "This isn't a trick to memorize — it's a way of looking. The drawing is just the place where the looking shows."
+        "We're not re-teaching the cylinder. We're teaching the <strong>transition from basic form to observed object through detail</strong>.",
+        "If the cylinder taught you to construct, the cup teaches you to <em>observe</em> — to look at a real thing in front of you and notice what makes it specifically itself."
       ]
     },
     {
@@ -5758,16 +5755,16 @@ const HONEST_WELCOME = {
     {
       type: 'prose',
       paragraphs: [
-        "Take your time with this one. The cylinder is harder than the sphere or the cube — not because the geometry is more complex, but because your hand has to do two different things at once.",
-        "If you struggle today, that's fine. Many great artists found cylinders harder than spheres for years."
+        "Take this slowly. The cup is where geometry meets the real world. Every cup you draw will be different — and that's the point.",
+        "After this, every cylindrical object you see (mug, vase, can, candle, lamp) becomes something you can draw."
       ]
     },
     {
-      // Cézanne micro-LFC — same quote, but new gloss for cylinder context
+      // Cézanne micro-LFC — about observation
       type: 'cezanne',
       quote: "Treat nature by means of the cylinder, the sphere, the cone.",
       attribution: "Cézanne, 1904",
-      gloss: "Cézanne put the cylinder first in his list. He saw it as the form most things in the world reduce to — bottles, vases, tree trunks, human limbs."
+      gloss: "Cézanne reduced everything to simple forms — but he also painted real objects. The cup is where his idea becomes practice: a cylinder, observed."
     }
   ],
   
@@ -5790,30 +5787,29 @@ const CLOSING_LFC = {
   kicker: '✨ TAKE THIS WITH YOU',
   
   paragraphs: [
-    "You've watched one light behave two different ways on one form.",
-    "From now on, you'll see this everywhere."
+    "You've drawn your first real-world object on cylinder foundations.",
+    "From now on, every cup, mug, vase, can you look at is something you can see — not just look at."
   ],
   
   invitations: {
     label: 'When you go home, look at:',
     items: [
-      "the can of soup on your counter — where the side gradates and the top stays flat",
-      "a candle on a table — same logic, softer light",
-      "the trunk of a tree — same cylinder, just rougher"
+      "your morning coffee mug — its handle, rim thickness, and material",
+      "a glass jar in the kitchen — same cylinder logic, different material",
+      "a flower vase or candle holder — observe what makes each one specifically itself"
     ]
   },
   
   reflection: [
-    "Cylinders are the most useful form to train on, because everyday life is full of them.",
-    "Now you see how light treats curved and flat as two separate problems — even when they're glued together on the same object.",
-    "That's a small thing. But it changes how you draw bottles, mugs, columns, fingers, tree trunks, candles. Almost everything."
+    "Cups are the bridge from geometry to observation. The cylinder taught you to construct; the cup taught you to look.",
+    "Every cup is different. The handle curves slightly differently. The rim has its own thickness. The material catches light its own way. You now have eyes for these details.",
+    "That's not a small thing. It changes how you draw any object — vase, lamp, bottle, kettle, glass. The world of cylindrical things is now visible to you."
   ],
   
-  // The open question — the heart of this closing LFC
   openQuestion: {
     intro: 'But before you go — one open question to keep:',
-    question: 'If a sphere has no edges and a cube is all edges — what is a cylinder?',
-    afterthought: "Don't try to answer with words. Try to answer with your eyes, the next time you see one."
+    question: 'A cup is a cylinder with personality. What gives an object personality?',
+    afterthought: "Don't try to answer with words. Watch how each cup you see from now on tells its own story."
   },
   
   cta: 'See my progress →'
@@ -5849,7 +5845,7 @@ const LESSON = {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'An honest welcome',
+      title: 'Meet the cup',
       intro: '',
       xp: 5
     },
@@ -5875,10 +5871,10 @@ const LESSON = {
     // ═══════════════════════════════════════════════════════════════
     {
       part: 'A',
-      partLabel: '✨ Play with the light',
-      type: 'playLight',
-      title: 'Now feel it — drag the sun',
-      intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
+      partLabel: '✨ Observe the cup',
+      type: 'cupObservation',
+      title: 'Observe today\'s cup',
+      intro: 'Take a moment to look at the cup you\'ll be drawing today. Notice its handle, rim thickness, surface material, and proportions. Real-world details are what separate a cup from a basic cylinder.',
       xp: 5
     },
     {
@@ -6076,6 +6072,7 @@ function renderStep() {
                         // Defer interactive setup until DOM is in place
                         setTimeout(() => initPlayLight('cylinder'), 50);
                         break;
+    case 'cupObservation': el.innerHTML = renderCupObservation(step); break;
     case 'tools':      el.innerHTML = renderTools(step); break;
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
@@ -6767,8 +6764,9 @@ function renderOpeningLFC(step) {
   const data = HONEST_WELCOME;
   const sectionsHtml = data.sections.map(section => {
     if (section.type === 'prose') {
+      // Allow safe HTML (<strong>, <em>, <li>) for emphasis in intro prose
       return section.paragraphs.map(p => 
-        `<p class="opening-lfc-prose">${escapeHtml(p)}</p>`
+        `<p class="opening-lfc-prose">${p}</p>`
       ).join('');
     }
     if (section.type === 'heading') {
@@ -6776,8 +6774,45 @@ function renderOpeningLFC(step) {
     }
     if (section.type === 'list') {
       return `<ul class="opening-lfc-list">${
-        section.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')
+        section.items.map(item => `<li>${item}</li>`).join('')
       }</ul>`;
+    }
+    if (section.type === 'image') {
+      if (section.src && section.src.length > 0) {
+        return `
+          <div class="opening-lfc-image" style="margin: 20px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08);">
+            <img src="${section.src}" alt="${escapeHtml(section.placeholderLabel || 'Lesson hero image')}"
+                 style="display: block; width: 100%; height: auto;" loading="lazy">
+          </div>
+        `;
+      } else {
+        return `
+          <div class="opening-lfc-image-placeholder" 
+               style="margin: 20px 0; padding: 36px 20px; text-align: center;
+                      background: linear-gradient(135deg, #faf8ff, #ecfeff);
+                      border: 2px dashed rgba(167,139,250,0.4);
+                      border-radius: 14px;">
+            <div style="font-size: 48px; opacity: 0.5; margin-bottom: 10px;">${section.placeholderEmoji || '🖼️'}</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+                        color: #7c5fc7; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">${escapeHtml(section.placeholderLabel || 'Image coming soon')}</div>
+            <div style="font-size: 12px; color: rgba(26,29,43,0.6); font-style: italic;">${escapeHtml(section.placeholderNote || '')}</div>
+          </div>
+        `;
+      }
+    }
+    if (section.type === 'videoPlaceholder') {
+      return `
+        <div class="opening-lfc-video-placeholder"
+             style="margin: 20px 0; padding: 32px 20px; text-align: center;
+                    background: linear-gradient(135deg, #1a1d2b, #2a2f42);
+                    color: #fff; border-radius: 14px;">
+          <div style="font-size: 42px; opacity: 0.7; margin-bottom: 10px;">🎬</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+                      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;
+                      color: #c8a96e;">${escapeHtml(section.label || 'Intro video — coming soon')}</div>
+          <div style="font-size: 12px; opacity: 0.75; font-style: italic;">${escapeHtml(section.note || '')}</div>
+        </div>
+      `;
     }
     if (section.type === 'cezanne') {
       // The micro-LFC — Cézanne's single sentence
@@ -8267,6 +8302,56 @@ function renderReference(step) {
     </div>`;
 }
 
+function renderCupObservation(step) {
+  // Round 38 #8.3 — replaces the cylinder playLight in Cup with a 
+  // cup-specific observation step (handle, rim, material, proportion).
+  return `
+    <div class="step-card">
+      <div class="step-title">${step.title}</div>
+      <div class="step-intro">${step.intro}</div>
+      
+      <!-- Main cup image / video area -->
+      <div class="cup-main-visual"
+           style="margin: 18px 0; padding: 36px 20px; text-align: center;
+                  background: linear-gradient(135deg, #faf8ff, #ecfeff);
+                  border: 2px dashed rgba(167,139,250,0.4);
+                  border-radius: 14px;">
+        <div style="font-size: 64px; opacity: 0.55; margin-bottom: 10px;">☕</div>
+        <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+                    color: #7c5fc7; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">Today's cup — image / observation video coming soon</div>
+        <div style="font-size: 12px; color: rgba(26,29,43,0.6); font-style: italic;">A photo or short observation video of the cup you'll draw today will appear here</div>
+      </div>
+      
+      <!-- 3 detail cards -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px;">
+        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
+          <div style="font-size: 28px; margin-bottom: 6px;">🤝</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">HANDLE</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">A separate form that attaches and visually balances the cup.</div>
+        </div>
+        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
+          <div style="font-size: 28px; margin-bottom: 6px;">⭕</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">RIM THICKNESS</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">The lip has measurable depth — not just a line.</div>
+        </div>
+        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
+          <div style="font-size: 28px; margin-bottom: 6px;">✨</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">SURFACE</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">Ceramic, glass, metal — each catches light differently.</div>
+        </div>
+      </div>
+      
+      <div class="pro-tip">
+        <div class="pro-tip-label">💡 Why observation matters</div>
+        <div class="pro-tip-text">The cylinder was abstract — pure geometry. The cup is observed — a real object with handle, rim, material, and proportions you have to look at carefully. This step is where geometry meets the real world.</div>
+      </div>
+      
+      <div class="btn-stack">
+        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> I've observed — continue</button>
+      </div>
+    </div>`;
+}
+
 function renderTools(step) {
   return `
     <div class="step-card">
@@ -8567,7 +8652,7 @@ function renderDemo(step) {
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   
   const embedUrl = videoId
-    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
   
   return `
@@ -8713,9 +8798,22 @@ function renderBadgeUnlock() {
     age_group: AccessControl.ageGroup
   });
   
-  // For Foundation A (10 lessons total), show progress: this is lesson 3 of 10.
-  const TOTAL_LESSONS = 10;
-  const COMPLETED_LESSONS = 5;  // This is lesson 3, just completed.
+  // Read actual completed lessons from profile (Round 38 fix #5.1)
+  // Counts Preparation + all numbered Foundation A lessons the learner has finished.
+  const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
+  const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  let _completedFromProfile = [];
+  try {
+    const _raw = localStorage.getItem('fei_user_profile');
+    if (_raw) {
+      const _prof = JSON.parse(_raw);
+      _completedFromProfile = (_prof.completedLessons || []).filter(id => FOUNDATION_IDS.includes(id));
+    }
+  } catch (e) {}
+  // Make sure CURRENT lesson is counted as just-finished:
+  if (!_completedFromProfile.includes(LESSON.id)) _completedFromProfile.push(LESSON.id);
+  const COMPLETED_LESSONS = _completedFromProfile.length;
   const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
   
   return `
@@ -9403,7 +9501,7 @@ function renderOptionalFinish(step) {
         </div>
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/37f49448574a734ba1f6b5ff58e0f401/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F37f49448574a734ba1f6b5ff58e0f401%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/37f49448574a734ba1f6b5ff58e0f401/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F37f49448574a734ba1f6b5ff58e0f401%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             title="Optional step — Background tones"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
@@ -9948,7 +10046,17 @@ function showWelcomePage() {
   const returningState = document.getElementById('welcome-returning');
   
   if (profile) {
-    // RETURNING VISITOR
+    // Round 38 #7.1 — Identity persistence: auto-skip the gate for established users.
+    const completedAny = (profile.completedLessons && profile.completedLessons.length > 0);
+    const visitedOften = (profile.visitCount && profile.visitCount >= 2);
+    if (completedAny || visitedOften) {
+      try { UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 }); } catch (e) {}
+      Analytics.track('welcome_auto_continued', { name: profile.name, completed_lessons: profile.completedLessons?.length || 0 });
+      if (backdrop) backdrop.classList.remove('show');
+      setTimeout(() => continueJourney(), 50);
+      return;
+    }
+    // FIRST RETURNING VISIT — show "Welcome back" gate
     renderReturningWelcome(profile);
     newState.style.display = 'none';
     returningState.style.display = 'block';
