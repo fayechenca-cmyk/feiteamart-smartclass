@@ -5372,7 +5372,7 @@ const LFC_HOOKS = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'An honest welcome',
+  title: 'Meet the sphere',
   
   sections: [
     {
@@ -5555,7 +5555,7 @@ const LESSON = {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'An honest welcome',
+      title: 'Meet the sphere',
       intro: '',
       xp: 5
     },
@@ -6490,7 +6490,7 @@ function renderOpeningLFC(step) {
                   box-shadow: 0 12px 32px rgba(167,139,250,0.25);">
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/d866fd9e2d2daec8e5dd52b2512d5f06/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fd866fd9e2d2daec8e5dd52b2512d5f06%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/d866fd9e2d2daec8e5dd52b2512d5f06/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fd866fd9e2d2daec8e5dd52b2512d5f06%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
@@ -7918,7 +7918,7 @@ function renderWarmup(step) {
       <div id="warmup-video-wrap" style="display: none;">
         <div class="video-frame" id="warmup-video-frame" style="background: #000; cursor: default; padding: 0; position: relative;">
           <iframe id="warmup-stream-iframe"
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
             allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
@@ -8072,7 +8072,7 @@ function renderDemo(step) {
   const hasPauses = pauses.length > 0;
   
   const embedUrl = videoId
-    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
   
   return `
@@ -8241,7 +8241,7 @@ const SPHERE_VIDEO_PAUSES = {
   'cddd24e7b238689489c4506b2f6c682e': [
     {
       time: 27,
-      duration: 60,
+      duration: 25,
       title: 'Define the sphere placement',
       shortPrompt: 'Mark top, bottom, left, right — plus paper margin.',
       text: 'Start by ghosting four light marks where the sphere will sit. These four marks define the size and position. Leave breathing room around the edges of your paper.',
@@ -8250,7 +8250,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 49,
-      duration: 60,
+      duration: 25,
       title: 'Measure left and right',
       shortPrompt: 'Use your pencil to compare distances from the center.',
       text: 'Hold your pencil horizontally. Measure from the center to the left mark, then to the right mark. They should be equal — if not, adjust.',
@@ -8258,7 +8258,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 82,
-      duration: 60,
+      duration: 25,
       title: 'Measure top and bottom',
       shortPrompt: 'Now check vertically — same pencil method.',
       text: 'Rotate your pencil vertically. Compare distance from center to top, then to bottom. Equal distances = a true sphere, not an oval.',
@@ -8266,7 +8266,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 124,
-      duration: 60,
+      duration: 25,
       title: 'Find the diagonal points',
       shortPrompt: 'Same radius — now on the diagonals.',
       text: 'Use the same pencil-radius to locate four diagonal guide points (NE, NW, SE, SW). These eight points together define the circle.',
@@ -8274,7 +8274,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 158,
-      duration: 60,
+      duration: 25,
       title: 'See the full framework',
       shortPrompt: 'Center cross + diameter + radius + 8 guide points.',
       text: 'This is the scaffolding underneath every well-drawn sphere. The cross gives you center. The eight points give you the curve. Trust the structure.',
@@ -8282,7 +8282,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 169,
-      duration: 60,
+      duration: 25,
       title: 'Cut with straight tangents first',
       shortPrompt: 'Connect points with short straight lines — not curves yet.',
       text: 'Beginner mistake: drawing a curve straight away. Instead, connect your eight points with short straight lines first. A circle is just many small straight cuts.',
@@ -8290,7 +8290,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 254,
-      duration: 60,
+      duration: 25,
       title: 'Refine into a clean curve',
       shortPrompt: 'Now soften the straight cuts into a smooth circle.',
       text: 'Once your tangent cuts are right, gently round the corners. Don\'t force perfection — let the curve emerge from the geometry you built.',
@@ -8303,7 +8303,7 @@ const SPHERE_VIDEO_PAUSES = {
   'b05a527d319caec065da12e98a48a5e7': [
     {
       time: 38,           // 0:38
-      duration: 60,
+      duration: 25,
       title: 'Erase the cutting lines',
       shortPrompt: 'Clean up the outer edge — make the circle round and natural.',
       text: 'After cutting the sphere with straight tangents, use your eraser to clean away the leftover construction lines. This refinement makes the outer edge feel round, smooth, and natural — not geometric.',
@@ -8311,7 +8311,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 66,           // 1:06
-      duration: 60,
+      duration: 25,
       title: 'Cast shadow + sphere together',
       shortPrompt: 'The shadow is part of the same system as the sphere.',
       text: 'Draw the cast shadow at the same time as you finish the sphere. They\'re not two separate elements — they\'re one connected structure. The shadow grounds the sphere; the sphere casts the shadow.',
@@ -8319,7 +8319,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 106,          // 1:46
-      duration: 60,
+      duration: 25,
       title: 'Mark the terminator line',
       shortPrompt: 'Divide the sphere — light side vs shadow side.',
       text: 'As soon as the form is drawn, use the terminator line to clearly separate the light side from the shadow side. This single line is what makes a sphere read as three-dimensional.',
@@ -8327,7 +8327,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 158,          // 2:38
-      duration: 60,
+      duration: 25,
       title: 'Strengthen the terminator',
       shortPrompt: 'Go back to the terminator and darken it more.',
       text: 'Return to the terminator line and reinforce it. Strengthening this boundary is what creates strong contrast between the light side and the shadow side — and that contrast is what gives the sphere its volume.',
@@ -8335,7 +8335,7 @@ const SPHERE_VIDEO_PAUSES = {
     },
     {
       time: 178,          // 2:58
-      duration: 60,
+      duration: 25,
       title: 'Sharpen the shadow contrast',
       shortPrompt: 'Push the cast shadow darker — make the contrast clear.',
       text: 'Now move to the cast shadow below the sphere and strengthen its main contrast line. Making the shadow side firmly darker than the light side is what completes the illusion of form sitting in space.',
@@ -8940,9 +8940,22 @@ function renderBadgeUnlock() {
     age_group: AccessControl.ageGroup
   });
   
-  // For Foundation A (10 lessons total), show progress: this is lesson 1 of 10.
-  const TOTAL_LESSONS = 10;
-  const COMPLETED_LESSONS = 1;  // This is lesson 1, just completed.
+  // Read actual completed lessons from profile (Round 38 fix #5.1)
+  // Counts Preparation + all numbered Foundation A lessons the learner has finished.
+  const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
+  const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  let _completedFromProfile = [];
+  try {
+    const _raw = localStorage.getItem('fei_user_profile');
+    if (_raw) {
+      const _prof = JSON.parse(_raw);
+      _completedFromProfile = (_prof.completedLessons || []).filter(id => FOUNDATION_IDS.includes(id));
+    }
+  } catch (e) {}
+  // Make sure CURRENT lesson is counted as just-finished:
+  if (!_completedFromProfile.includes(LESSON.id)) _completedFromProfile.push(LESSON.id);
+  const COMPLETED_LESSONS = _completedFromProfile.length;
   const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
   
   return `
@@ -9641,15 +9654,26 @@ function renderOptionalFinish(step) {
         `).join('')}
       </div>
       <div style="background:linear-gradient(135deg, #1a1d2b, #2a2f42); border-radius:14px;
-                  padding:24px; text-align:center; margin-bottom:20px;
+                  padding:8px; margin-bottom:20px; overflow: hidden;
                   border:1px solid rgba(200,169,110,0.2);">
-        <div style="font-size:32px; margin-bottom:10px;">🎬</div>
-        <div style="font-family:'Montserrat',sans-serif; font-size:12px; font-weight:800;
-                    color:#c8a96e; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px;">
-          Optional finish step — coming soon
+        <div style="position: relative; padding-top: 56.25%; background:#000; border-radius: 10px; overflow:hidden;">
+          <iframe
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/32345bcf74493208f3f83616f8af4d42/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F32345bcf74493208f3f83616f8af4d42%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            loading="lazy"
+            title="Optional finish — refine your sphere"
+            style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true">
+          </iframe>
         </div>
-        <div style="font-family:'Open Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.6);">
-          Mrs. Dawn will walk through each refinement step here.
+        <div style="padding: 12px 14px 6px;">
+          <div style="font-family:'Montserrat',sans-serif; font-size:11px; font-weight:800;
+                      color:#c8a96e; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:4px;">
+            🎬 Optional finishing demonstration
+          </div>
+          <div style="font-family:'Open Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.7); line-height: 1.5;">
+            Watch Mrs. Dawn walk through refining and grounding the sphere with background tone.
+          </div>
         </div>
       </div>
       <div class="btn-stack">
@@ -10172,7 +10196,30 @@ function showWelcomePage() {
   const returningState = document.getElementById('welcome-returning');
   
   if (profile) {
-    // RETURNING VISITOR
+    // Round 38 #7.1 — Identity persistence: 
+    // If the user has already completed at least one lesson OR has visited 
+    // 2+ times before, skip the "Welcome back" gate and auto-continue.
+    // This avoids forcing students to click "Continue" every time they 
+    // open a new lesson in the same session/device.
+    const completedAny = (profile.completedLessons && profile.completedLessons.length > 0);
+    const visitedOften = (profile.visitCount && profile.visitCount >= 2);
+    if (completedAny || visitedOften) {
+      // Auto-continue silently — but bump visit count and update profile
+      try {
+        UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 });
+      } catch (e) {}
+      Analytics.track('welcome_auto_continued', { 
+        name: profile.name,
+        completed_lessons: profile.completedLessons?.length || 0
+      });
+      // Hide backdrop, then continue to current step
+      if (backdrop) backdrop.classList.remove('show');
+      // Defer slightly so the rest of init can finish
+      setTimeout(() => continueJourney(), 50);
+      return;
+    }
+    
+    // FIRST RETURNING VISIT — show "Welcome back" gate as before
     renderReturningWelcome(profile);
     newState.style.display = 'none';
     returningState.style.display = 'block';
