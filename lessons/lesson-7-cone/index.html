@@ -5692,7 +5692,7 @@ const LFC_HOOKS = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'An honest welcome',
+  title: 'Meet the cone',
   
   sections: [
     {
@@ -5849,7 +5849,7 @@ const LESSON = {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'An honest welcome',
+      title: 'Meet the cone',
       intro: '',
       xp: 5
     },
@@ -8591,7 +8591,7 @@ function renderDemo(step) {
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   
   const embedUrl = videoId
-    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
   
   return `
@@ -8737,9 +8737,22 @@ function renderBadgeUnlock() {
     age_group: AccessControl.ageGroup
   });
   
-  // For Foundation A (10 lessons total), show progress: this is lesson 3 of 10.
-  const TOTAL_LESSONS = 10;
-  const COMPLETED_LESSONS = 5;  // This is lesson 3, just completed.
+  // Read actual completed lessons from profile (Round 38 fix #5.1)
+  // Counts Preparation + all numbered Foundation A lessons the learner has finished.
+  const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
+  const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  let _completedFromProfile = [];
+  try {
+    const _raw = localStorage.getItem('fei_user_profile');
+    if (_raw) {
+      const _prof = JSON.parse(_raw);
+      _completedFromProfile = (_prof.completedLessons || []).filter(id => FOUNDATION_IDS.includes(id));
+    }
+  } catch (e) {}
+  // Make sure CURRENT lesson is counted as just-finished:
+  if (!_completedFromProfile.includes(LESSON.id)) _completedFromProfile.push(LESSON.id);
+  const COMPLETED_LESSONS = _completedFromProfile.length;
   const progressPct = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100);
   
   return `
@@ -9427,7 +9440,7 @@ function renderOptionalFinish(step) {
         </div>
         <div style="position: relative; padding-top: 56.25%;">
           <iframe
-            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/2b6c036ba9eb147dc8353cbeecb9b205/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F2b6c036ba9eb147dc8353cbeecb9b205%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+            src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/2b6c036ba9eb147dc8353cbeecb9b205/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F2b6c036ba9eb147dc8353cbeecb9b205%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
             loading="lazy"
             title="Optional step — Background tones"
             style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
@@ -9972,7 +9985,17 @@ function showWelcomePage() {
   const returningState = document.getElementById('welcome-returning');
   
   if (profile) {
-    // RETURNING VISITOR
+    // Round 38 #7.1 — Identity persistence: auto-skip the gate for established users.
+    const completedAny = (profile.completedLessons && profile.completedLessons.length > 0);
+    const visitedOften = (profile.visitCount && profile.visitCount >= 2);
+    if (completedAny || visitedOften) {
+      try { UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 }); } catch (e) {}
+      Analytics.track('welcome_auto_continued', { name: profile.name, completed_lessons: profile.completedLessons?.length || 0 });
+      if (backdrop) backdrop.classList.remove('show');
+      setTimeout(() => continueJourney(), 50);
+      return;
+    }
+    // FIRST RETURNING VISIT — show "Welcome back" gate
     renderReturningWelcome(profile);
     newState.style.display = 'none';
     returningState.style.display = 'block';
