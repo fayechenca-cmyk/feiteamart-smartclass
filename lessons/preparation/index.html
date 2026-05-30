@@ -421,6 +421,9 @@
   } catch (e) {}
 
   const STEPS = [
+    // ────────────────────────────────────────────────────────────
+    // STEP 1: Welcome & Intro
+    // ────────────────────────────────────────────────────────────
     {
       id: 'welcome',
       render: function() {
@@ -437,6 +440,10 @@
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 2: Materials list — Round 38 #1.2 full pencil range + REQUIRED blender
+    //        + Faye's uploaded materials photo
+    // ────────────────────────────────────────────────────────────
     {
       id: 'materials',
       render: function() {
@@ -447,13 +454,14 @@
           '<p class="step-subtitle">Gather these before you start the cube lesson.</p>' +
           '<div class="step-body">' +
           '<ul class="materials-list">' +
-          '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — HB, 2B, 3B, 2H</div><div class="mat-desc">A range of softness lets you go light (2H) for sketching to dark (3B) for shadow work.</div></div></li>' +
-          '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Drawing paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start.</div></div></li>' +
+          '<li><span class="mat-emoji">✏️</span><div class="mat-info"><div class="mat-name">Pencils — 2H, HB, 2B, 3B, 4B, 6B</div><div class="mat-desc">Six grades cover everything: 2H for lightest construction, HB for sketching, 2B–6B for shading from medium to deepest darks.</div></div></li>' +
+          '<li><span class="mat-emoji">📄</span><div class="mat-info"><div class="mat-name">Sketch paper</div><div class="mat-desc">Smooth or lightly textured sketch paper. A4 or letter size works well to start. Not just printer paper — sketch paper holds graphite better.</div></div></li>' +
+          '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool <strong>(required)</strong></div><div class="mat-desc">A blending stump or blending tissue. Used to soften and unify tones in every shading lesson — this is not optional.</div></div></li>' +
           '<li><span class="mat-emoji">🧽</span><div class="mat-info"><div class="mat-name">Eraser (kneaded + regular)</div><div class="mat-desc">Kneaded eraser for lifting, regular eraser for sharper corrections.</div></div></li>' +
-          '<li><span class="mat-emoji">🧻</span><div class="mat-info"><div class="mat-name">Blending tool (tissue or paper stump)</div><div class="mat-desc">Used to soften and unify tones — you\'ll see this in every lesson.</div></div></li>' +
           '<li><span class="mat-emoji">🖼️</span><div class="mat-info"><div class="mat-name">Easel or angled surface <em>(optional)</em></div><div class="mat-desc">Helps reduce perspective distortion. A simple desk works too.</div></div></li>' +
           '<li><span class="mat-emoji">🩹</span><div class="mat-info"><div class="mat-name">Masking tape / artist tape <em>(optional)</em></div><div class="mat-desc">For taping down your paper — covered in a later step.</div></div></li>' +
           '</ul>' +
+
           '<div class="hand-card">' +
             '<div class="hand-card-label">' +
               '<span>Materials overview</span>' +
@@ -464,10 +472,14 @@
               '<strong>Materials overview.</strong> This is the set of tools prepared before starting the lesson.' +
             '</div>' +
           '</div>' +
+
           '</div></div>';
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 3: Workspace setup video (with Round 38 muted=true)
+    // ────────────────────────────────────────────────────────────
     {
       id: 'workspace',
       render: function() {
@@ -480,13 +492,16 @@
           '<div class="video-card">' +
           '<div class="video-label">🎬 Workspace setup</div>' +
           '<div class="video-embed">' +
-          '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F9b335ebd533cbfdab6a608255a1c202c%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Workspace setup" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
+          '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F9b335ebd533cbfdab6a608255a1c202c%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Workspace setup" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
           '</div>' +
           '<div class="video-caption">A practical setup demonstration: positioning the easel on the desk, arranging materials, and getting everything ready before drawing.</div>' +
           '</div></div></div>';
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 4: Optional paper taping (with Round 38 muted=true)
+    // ────────────────────────────────────────────────────────────
     {
       id: 'taping',
       canSkip: true,
@@ -502,7 +517,7 @@
           '<div class="video-card">' +
           '<div class="video-label optional">🎬 Optional · Taping technique</div>' +
           '<div class="video-embed">' +
-          '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F5fee79867ca52d1ec9b26654bb3bc0e5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Optional taping technique" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
+          '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F5fee79867ca52d1ec9b26654bb3bc0e5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Optional taping technique" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
           '</div>' +
           '<div class="video-caption"><strong>You don\'t have to copy this exactly.</strong> You can tape only the four edges, or tape more completely like the teacher does. A more complete taping is usually used when the full artwork includes the background.</div>' +
           '</div>' +
@@ -513,6 +528,9 @@
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 5: Posture & readiness — Faye's uploaded posture photo
+    // ────────────────────────────────────────────────────────────
     {
       id: 'posture',
       render: function() {
@@ -529,6 +547,7 @@
           '<li>Keep your arm free to move — drawing isn\'t just from the wrist. It\'s from the shoulder for big strokes and from the fingers for details.</li>' +
           '<li>Take a breath. The next 30 minutes are yours.</li>' +
           '</ul>' +
+
           '<div class="hand-card">' +
             '<div class="hand-card-label">' +
               '<span>Posture reference</span>' +
@@ -539,10 +558,14 @@
               '<strong>Posture reference.</strong> Sit in a relaxed, balanced way so your hand and arm can move freely while drawing.' +
             '</div>' +
           '</div>' +
+
           '</div></div>';
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 6: Pencil grip (3 hand images)
+    // ────────────────────────────────────────────────────────────
     {
       id: 'pencil-grip',
       render: function() {
@@ -575,87 +598,96 @@
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 7: Hatching Practice — Faye's uploaded hatching image + 5 ideas
+    // ────────────────────────────────────────────────────────────
     {
-  id: 'simple-shapes',
-  render: function() {
-    return '<div class="step-card">' +
-      '<div class="step-emoji">✏️</div>' +
-      '<div class="step-kicker">Step 7 · Warm up your shading</div>' +
-      '<h2 class="step-title">Hatching Practice</h2>' +
-      '<p class="step-subtitle">A few simple shading movements to practice before drawing real objects.</p>' +
-      '<div class="step-body">' +
-      '<p><strong>Before drawing objects, it always helps to practice hatching.</strong> These are basic shading movements that will appear again and again in later drawing lessons.</p>' +
-      '<p>Take a sheet of paper and warm up your hand for a few minutes. Focus on keeping your pencil relaxed and your marks controlled.</p>' +
+      id: 'simple-shapes',
+      render: function() {
+        return '<div class="step-card">' +
+          '<div class="step-emoji">✏️</div>' +
+          '<div class="step-kicker">Step 7 · Warm up your shading</div>' +
+          '<h2 class="step-title">Hatching Practice</h2>' +
+          '<p class="step-subtitle">A few simple shading movements to practice before drawing real objects.</p>' +
+          '<div class="step-body">' +
+          '<p><strong>Before drawing objects, it always helps to practice hatching.</strong> These are basic shading movements that will appear again and again in later drawing lessons.</p>' +
+          '<p>Take a sheet of paper and warm up your hand for a few minutes. Focus on keeping your pencil relaxed and your marks controlled.</p>' +
 
-      '<div class="hand-card">' +
-        '<div class="hand-card-label">' +
-          '<span>Hatching practice</span>' +
-          '<span class="hand-card-tag">✅ Warm-up</span>' +
-        '</div>' +
-        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1880406bc19dd503f1455b_hatching.png" alt="Hatching practice reference" loading="lazy">' +
-        '<div class="hand-card-caption">' +
-          '<strong>Hatching practice.</strong> Use this page to warm up your shading control before starting the lesson.' +
-        '</div>' +
-      '</div>' +
+          '<div class="hand-card">' +
+            '<div class="hand-card-label">' +
+              '<span>Hatching practice</span>' +
+              '<span class="hand-card-tag">✅ Warm-up</span>' +
+            '</div>' +
+            '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a1880406bc19dd503f1455b_hatching.png" alt="Hatching practice reference" loading="lazy">' +
+            '<div class="hand-card-caption">' +
+              '<strong>Hatching practice.</strong> Use this page to warm up your shading control before starting the lesson.' +
+            '</div>' +
+          '</div>' +
 
-      '<p>As you practice, pay attention to these five ideas:</p>' +
-      '<ul>' +
-      '<li><strong>Coverage</strong> — how much of the area your pencil marks fill.</li>' +
-      '<li><strong>Direction</strong> — keeping your lines flowing in a clear and consistent way.</li>' +
-      '<li><strong>Gradation</strong> — moving gradually from light to dark.</li>' +
-      '<li><strong>Layering</strong> — building tone step by step instead of pressing too hard at once.</li>' +
-      '<li><strong>Control</strong> — making repeated marks with steadiness and patience.</li>' +
-      '</ul>' +
+          '<p>As you practice, pay attention to these five ideas:</p>' +
+          '<ul>' +
+          '<li><strong>Coverage</strong> — how much of the area your pencil marks fill.</li>' +
+          '<li><strong>Direction</strong> — keeping your lines flowing in a clear and consistent way.</li>' +
+          '<li><strong>Gradation</strong> — moving gradually from light to dark.</li>' +
+          '<li><strong>Layering</strong> — building tone step by step instead of pressing too hard at once.</li>' +
+          '<li><strong>Control</strong> — making repeated marks with steadiness and patience.</li>' +
+          '</ul>' +
 
-      '<div class="tip-callout">' +
-      '<div class="tip-callout-label">💡 Daily warm-up</div>' +
-      '<div class="tip-callout-text">Spend a few minutes each day making hatching rows, light-to-dark transitions, and layered pencil strokes on scrap paper. This small habit builds smoother shading and stronger control over time.</div>' +
-      '</div></div></div>';
-  }
-},
+          '<div class="tip-callout">' +
+          '<div class="tip-callout-label">💡 Daily warm-up</div>' +
+          '<div class="tip-callout-text">Spend a few minutes each day making hatching rows, light-to-dark transitions, and layered pencil strokes on scrap paper. This small habit builds smoother shading and stronger control over time.</div>' +
+          '</div></div></div>';
+      }
+    },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 8: Basic Perspective — Faye's uploaded 2 perspective images
+    // ────────────────────────────────────────────────────────────
     {
-  id: 'perspective',
-  render: function() {
-    return '<div class="step-card">' +
-      '<div class="step-emoji">🔭</div>' +
-      '<div class="step-kicker">Step 8 · Bridge to the cube</div>' +
-      '<h2 class="step-title">Basic Perspective</h2>' +
-      '<p class="step-subtitle">The smallest amount of perspective you need before the cube.</p>' +
-      '<div class="step-body">' +
-      '<p>You don\'t need to learn full perspective theory before the cube lesson. But here\'s the one idea worth knowing:</p>' +
-      '<p><strong>Things farther from your eye look smaller. Lines that go away from you appear to converge.</strong></p>' +
-      '<p>That\'s it. The cube lesson will show you how to use this in practice — for now, just keep this idea in the back of your mind.</p>' +
+      id: 'perspective',
+      render: function() {
+        return '<div class="step-card">' +
+          '<div class="step-emoji">🔭</div>' +
+          '<div class="step-kicker">Step 8 · Bridge to the cube</div>' +
+          '<h2 class="step-title">Basic Perspective</h2>' +
+          '<p class="step-subtitle">The smallest amount of perspective you need before the cube.</p>' +
+          '<div class="step-body">' +
+          '<p>You don\'t need to learn full perspective theory before the cube lesson. But here\'s the one idea worth knowing:</p>' +
+          '<p><strong>Things farther from your eye look smaller. Lines that go away from you appear to converge.</strong></p>' +
+          '<p>That\'s it. The cube lesson will show you how to use this in practice — for now, just keep this idea in the back of your mind.</p>' +
 
-      '<div class="hand-card">' +
-        '<div class="hand-card-label">' +
-          '<span>Perspective reference 1</span>' +
-          '<span class="hand-card-tag">✅ Ready</span>' +
-        '</div>' +
-        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174ca901e24bf3475f7a56_61d1abd4-697a-46e7-b39b-b8357f3d686b.png" alt="Basic perspective reference image 1" loading="lazy">' +
-        '<div class="hand-card-caption">' +
-          '<strong>Perspective reference.</strong> This image introduces the basic idea of how forms begin to turn and move in space.' +
-        '</div>' +
-      '</div>' +
+          '<div class="hand-card">' +
+            '<div class="hand-card-label">' +
+              '<span>Perspective reference 1</span>' +
+              '<span class="hand-card-tag">✅ Ready</span>' +
+            '</div>' +
+            '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174ca901e24bf3475f7a56_61d1abd4-697a-46e7-b39b-b8357f3d686b.png" alt="Basic perspective reference image 1" loading="lazy">' +
+            '<div class="hand-card-caption">' +
+              '<strong>Perspective reference.</strong> This image introduces the basic idea of how forms begin to turn and move in space.' +
+            '</div>' +
+          '</div>' +
 
-      '<div class="hand-card">' +
-        '<div class="hand-card-label">' +
-          '<span>Perspective reference 2</span>' +
-          '<span class="hand-card-tag">✅ Ready</span>' +
-        '</div>' +
-        '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174e06c08d0acccb668f11_perspective%202.png" alt="Basic perspective reference image 2" loading="lazy">' +
-        '<div class="hand-card-caption">' +
-          '<strong>Perspective reference.</strong> This second image continues the idea and helps students connect the concept more clearly before moving into the cube lesson.' +
-        '</div>' +
-      '</div>' +
+          '<div class="hand-card">' +
+            '<div class="hand-card-label">' +
+              '<span>Perspective reference 2</span>' +
+              '<span class="hand-card-tag">✅ Ready</span>' +
+            '</div>' +
+            '<img class="hand-card-img" src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a174e06c08d0acccb668f11_perspective%202.png" alt="Basic perspective reference image 2" loading="lazy">' +
+            '<div class="hand-card-caption">' +
+              '<strong>Perspective reference.</strong> This second image continues the idea and helps students connect the concept more clearly before moving into the cube lesson.' +
+            '</div>' +
+          '</div>' +
 
-      '<div class="tip-callout">' +
-      '<div class="tip-callout-label">💡 Notice it everywhere</div>' +
-      '<div class="tip-callout-text">Look at a road, a hallway, or a row of books. Notice how parallel lines seem to lean toward a single point in the distance. You already know this — drawing just makes you put it on paper.</div>' +
-      '</div></div></div>';
-  }
-},
+          '<div class="tip-callout">' +
+          '<div class="tip-callout-label">💡 Notice it everywhere</div>' +
+          '<div class="tip-callout-text">Look at a road, a hallway, or a row of books. Notice how parallel lines seem to lean toward a single point in the distance. You already know this — drawing just makes you put it on paper.</div>' +
+          '</div></div></div>';
+      }
+    },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 9: Hand warm-up — Faye's uploaded video (with Round 38 muted=true)
+    // ────────────────────────────────────────────────────────────
     {
       id: 'hand-warmup',
       render: function() {
@@ -675,7 +707,7 @@
           '<div class="video-card">' +
             '<div class="video-label">🎬 Hand warm-up</div>' +
             '<div class="video-embed">' +
-              '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Hand warm-up" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
+              '<iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/iframe?muted=true&poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fcf7834125b757d86d0965702c6550202%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600" loading="lazy" title="Hand warm-up" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>' +
             '</div>' +
             '<div class="video-caption"><strong>Hand warm-up demonstration.</strong> Follow along to loosen your fingers, wrist, and arm before starting the lesson.</div>' +
           '</div>' +
@@ -686,6 +718,9 @@
       }
     },
 
+    // ────────────────────────────────────────────────────────────
+    // STEP 10: Ready → Continue to Cube
+    // ────────────────────────────────────────────────────────────
     {
       id: 'ready',
       render: function() {
@@ -764,8 +799,26 @@
       '</div>';
   }
 
+  // Round 38 #1.1 — button sound feedback (consistent with later lessons)
+  let _soundOn = true;
+  function playTone(freq, dur) {
+    if (!_soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+      osc.start(); osc.stop(ctx.currentTime + dur);
+    } catch(e) {}
+  }
+
   function nextStep() {
     if (currentStep < TOTAL_STEPS) {
+      playTone(660, 0.08);  // gentle "forward" click
       currentStep++;
       renderCurrentStep();
     }
@@ -774,6 +827,7 @@
 
   function prevStep() {
     if (currentStep > 1) {
+      playTone(440, 0.08);  // gentle "back" tone (lower frequency)
       currentStep--;
       renderCurrentStep();
     }
@@ -782,6 +836,7 @@
 
   function jumpToStep(n) {
     if (n >= 1 && n <= TOTAL_STEPS) {
+      playTone(550, 0.06);  // step-dot click — middle tone
       currentStep = n;
       renderCurrentStep();
     }
