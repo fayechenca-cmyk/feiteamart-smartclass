@@ -1602,6 +1602,20 @@
     await loadRoster();
     loadProfile();
 
+    // 0. Detect Stripe success return — mark this user as paid
+    //    Stripe redirects come in as ?paid=success (set in Stripe Dashboard)
+    const urlParams = new URLSearchParams(window.location.search);
+    const paidParam = urlParams.get('paid');
+    let justPaid = false;
+    if (paidParam === 'success') {
+      justPaid = true;
+      // Clean the URL so refreshing doesn't re-trigger
+      try {
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+      } catch (e) {}
+    }
+
     // 1. If Supabase is configured, check for an existing session FIRST
     let supabaseUser = null;
     if (window.FEIAuth && window.FEIAuth._isConfigured()) {
@@ -1611,6 +1625,13 @@
         if (supabaseUser) {
           // Returning Supabase user — sync local profile
           await onAuthSuccess(supabaseUser);
+          // Stripe just paid — mark them and show confetti
+          if (justPaid && window.FEIAccess) {
+            try {
+              await window.FEIAccess.markPaid();
+              showPaidWelcome();
+            } catch (e) { console.warn('[init] markPaid failed', e); }
+          }
           // Listen for sign-out from another tab
           window.FEIAuth.onAuthChange((event) => {
             if (event === 'SIGNED_OUT') {
@@ -1625,11 +1646,53 @@
 
     // 2. Fall back to legacy access-code profile
     if (userProfile) {
+      if (justPaid) showPaidWelcome();  // legacy paid path
       showHome();
     } else {
-      showSignIn();
+      // No profile at all — but they just paid. Ask them to sign in / sign up
+      // with the email they used at Stripe so we can link the payment.
+      if (justPaid) {
+        showSignIn();
+        setTimeout(() => {
+          showAuthInfo('✓ Payment received! Sign in or create your account with the same email you used at checkout — your access will unlock automatically.');
+        }, 100);
+      } else {
+        showSignIn();
+      }
     }
   })();
+
+  // Show a brief paid-welcome toast (no obstruction; just gentle confirmation)
+  function showPaidWelcome() {
+    // Build a soft top-banner that fades out
+    let banner = document.getElementById('paid-welcome-banner');
+    if (banner) return;
+    banner = document.createElement('div');
+    banner.id = 'paid-welcome-banner';
+    banner.style.cssText = `
+      position: fixed; top: 60px; left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #6841d4; color: #fff;
+      padding: 14px 28px; border-radius: 999px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 700;
+      box-shadow: 0 8px 28px rgba(104,65,212,0.32);
+      z-index: 9999; opacity: 0;
+      transition: opacity 0.4s, transform 0.4s;
+    `;
+    banner.textContent = '✨ Welcome to the full Smart Class — your access is unlocked.';
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => {
+      banner.style.opacity = '1';
+      banner.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(() => {
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateX(-50%) translateY(-20px)';
+      setTimeout(() => banner.remove(), 500);
+    }, 6000);
+  }
+  window.showPaidWelcome = showPaidWelcome;
 </script>
 
 </body>
