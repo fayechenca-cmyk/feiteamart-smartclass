@@ -84,11 +84,14 @@
   }
   .sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
   
-  /* ═══ SIGN-IN SCREEN ═══ */
+  /* ═══ SIGN-IN SCREEN ═══
+     Top-anchored with viewport-aware padding instead of forced 100vh
+     flex-center, so the card sits proudly at ~22vh on tall screens
+     (iPad/desktop) rather than floating in the middle of a sea of empty. */
   .signin-screen {
     min-height: calc(100vh - 60px);
-    display: flex; align-items: center; justify-content: center;
-    padding: 30px 20px;
+    padding: clamp(48px, 14vh, 160px) 20px 60px;
+    display: flex; flex-direction: column; align-items: center;
     background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
   }
   .signin-card {
@@ -106,7 +109,9 @@
     font-weight: 900; margin-bottom: 8px;
   }
   .signin-subtitle {
+    font-family: 'Open Sans', sans-serif;
     font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+    font-weight: 400; line-height: 1.55;
   }
   .signin-label {
     display: block; text-align: left;
@@ -146,12 +151,176 @@
   .signin-help {
     margin-top: 22px; font-size: 12px; color: var(--ink-faint);
     line-height: 1.7;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
   }
   .signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
+
+  /* ═══ New auth UI ═══ */
+  .auth-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--ink-veryfaint);
+    margin-bottom: 18px;
+  }
+  .auth-tab {
+    flex: 1;
+    background: none; border: none; cursor: pointer;
+    padding: 12px 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 0.6px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.18s;
+  }
+  .auth-tab:hover { color: var(--ink); }
+  .auth-tab.active {
+    color: var(--purple);
+    border-bottom-color: var(--purple);
+  }
+  .google-btn {
+    width: 100%;
+    background: #fff;
+    color: var(--ink);
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.18s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .google-btn:hover {
+    border-color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .google-btn:disabled { opacity: 0.5; cursor: wait; }
+  .auth-divider {
+    text-align: center;
+    margin: 16px 0;
+    position: relative;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 24px);
+    height: 1px;
+    background: var(--ink-veryfaint);
+  }
+  .auth-divider::before { left: 0; }
+  .auth-divider::after { right: 0; }
+  .auth-divider span { background: #fff; padding: 0 8px; position: relative; }
+  .auth-form { text-align: left; }
+  .signin-info {
+    display: none; margin-top: 12px; font-size: 12px;
+    color: var(--purple); padding: 10px 12px;
+    background: #f5f3ff; border-radius: 8px;
+  }
+  .signin-info.visible { display: block; }
+  .access-code-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink-veryfaint);
+    text-align: left;
+  }
+  .access-code-section summary {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 4px 0;
+    user-select: none;
+  }
+  .access-code-section summary:hover { color: var(--ink); }
+  .access-code-section summary span { font-size: 10px; margin-left: 4px; }
+  .access-code-section[open] summary span { display: inline-block; transform: rotate(180deg); }
+  .signin-btn.secondary {
+    background: var(--ink-soft);
+    margin-top: 8px;
+  }
+  .signin-btn.secondary:hover:not(:disabled) { background: var(--ink); }
+
+  /* Paywall modal */
+  .paywall-modal {
+    position: fixed; inset: 0;
+    background: rgba(42, 47, 66, 0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .paywall-modal.visible { display: flex; }
+  .paywall-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+  .paywall-icon { font-size: 44px; margin-bottom: 12px; }
+  .paywall-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .paywall-body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .paywall-cta {
+    display: block;
+    width: 100%;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: background 0.18s;
+  }
+  .paywall-cta:hover { background: #4a26b8; }
+  .paywall-dismiss {
+    background: none; border: none;
+    color: var(--ink-faint);
+    font-size: 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .paywall-dismiss:hover { color: var(--ink); }
   
   /* ═══ MAIN CONTAINER ═══ */
   .container {
     max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
+  }
+  /* iPad+ : let content breathe horizontally so vertical run is shorter
+     and the page no longer looks like a narrow column on a giant canvas. */
+  @media (min-width: 768px) {
+    .container { max-width: 760px; padding: 36px 28px 80px; }
+  }
+  @media (min-width: 1100px) {
+    .container { max-width: 880px; padding: 44px 32px 100px; }
   }
   
   /* ═══ HERO ═══ */
@@ -223,6 +392,9 @@
   @media (max-width: 480px) {
     .tracks { grid-template-columns: 1fr; }
   }
+  @media (min-width: 768px) {
+    .tracks { gap: 18px; margin-bottom: 36px; }
+  }
   .track-card {
     background: #fff; border-radius: var(--radius-md);
     padding: 18px 16px;
@@ -231,6 +403,12 @@
     transition: all 0.2s;
     display: flex; flex-direction: column;
     min-height: 160px;
+  }
+  @media (min-width: 768px) {
+    .track-card { padding: 24px 22px; min-height: 200px; }
+    .track-emoji { font-size: 40px !important; margin-bottom: 12px !important; }
+    .track-name { font-size: 17px !important; }
+    .track-tagline { font-size: 12px !important; }
   }
   .track-card:hover {
     border-color: var(--purple);
@@ -433,15 +611,6 @@
   }
   .path-node.coming:hover { transform: none; }
   
-  /* PREP — slight visual differentiation from numbered lessons */
-  .path-node.prep .node-kicker {
-    color: var(--gold);
-  }
-  .path-node.prep.current {
-    border-color: var(--gold);
-    box-shadow: 0 0 18px rgba(200,169,110,0.30), 0 4px 12px rgba(0,0,0,0.06);
-  }
-  
   /* Node icon (circle) */
   .node-icon {
     width: 52px; height: 52px;
@@ -563,24 +732,75 @@
   <div class="signin-card">
     <div class="signin-kicker">✨ Smart Class</div>
     <h1 class="signin-title">Welcome.</h1>
-    <p class="signin-subtitle">Enter your student code to begin or continue.</p>
-    
-    <label class="signin-label" for="signin-code">Student Code</label>
-    <input type="text" class="signin-input" id="signin-code" 
-           placeholder="e.g. LILY-01" autocomplete="off"
-           autocapitalize="characters" spellcheck="false" />
-    
-    <button class="signin-btn" id="signin-btn" disabled>Continue →</button>
-    
-    <p class="signin-error" id="signin-error">
-      That code doesn't match. Check your welcome email or contact us for help.
-    </p>
-    
+    <p class="signin-subtitle" id="signin-subtitle">Create your free account or sign in to continue.</p>
+
+    <!-- Tabs: Sign Up / Log In -->
+    <div class="auth-tabs" id="auth-tabs">
+      <button class="auth-tab active" data-tab="signup" onclick="switchAuthTab('signup')">Sign up</button>
+      <button class="auth-tab" data-tab="login" onclick="switchAuthTab('login')">Log in</button>
+    </div>
+
+    <!-- Google login -->
+    <button class="google-btn" id="google-btn" onclick="handleGoogleSignIn()">
+      <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right:8px; vertical-align:-3px;">
+        <path fill="#4285F4" d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider"><span>or</span></div>
+
+    <!-- Sign Up form -->
+    <form class="auth-form" id="auth-signup-form" onsubmit="handleSignUp(event)">
+      <label class="signin-label" for="signup-name">Your name</label>
+      <input type="text" class="signin-input" id="signup-name"
+             placeholder="What should we call you?" autocomplete="name" required />
+
+      <label class="signin-label" for="signup-email" style="margin-top:12px;">Email</label>
+      <input type="email" class="signin-input" id="signup-email"
+             placeholder="you@example.com" autocomplete="email" required />
+
+      <label class="signin-label" for="signup-password" style="margin-top:12px;">Password</label>
+      <input type="password" class="signin-input" id="signup-password"
+             placeholder="Minimum 6 characters" autocomplete="new-password" minlength="6" required />
+
+      <button type="submit" class="signin-btn" id="signup-submit">Create account →</button>
+    </form>
+
+    <!-- Log In form -->
+    <form class="auth-form" id="auth-login-form" onsubmit="handleLogIn(event)" style="display:none;">
+      <label class="signin-label" for="login-email">Email</label>
+      <input type="email" class="signin-input" id="login-email"
+             placeholder="you@example.com" autocomplete="email" required />
+
+      <label class="signin-label" for="login-password" style="margin-top:12px;">Password</label>
+      <input type="password" class="signin-input" id="login-password"
+             placeholder="Your password" autocomplete="current-password" required />
+
+      <button type="submit" class="signin-btn" id="login-submit">Log in →</button>
+    </form>
+
+    <p class="signin-error" id="signin-error">Something went wrong. Please try again.</p>
+    <p class="signin-info" id="signin-info"></p>
+
+    <!-- Access code (legacy) collapsed section -->
+    <details class="access-code-section">
+      <summary>Have a student access code? <span>↓</span></summary>
+      <label class="signin-label" for="signin-code" style="margin-top:10px;">Student Code</label>
+      <input type="text" class="signin-input" id="signin-code"
+             placeholder="e.g. LILY-01" autocomplete="off"
+             autocapitalize="characters" spellcheck="false" />
+      <button class="signin-btn secondary" id="signin-btn" disabled>Continue with code →</button>
+      <p class="signin-help" style="margin-top:10px;">
+        <a href="#" id="try-code-link">Try the demo (TRYNEW)</a>
+      </p>
+    </details>
+
     <p class="signin-help">
-      Don't have a code yet?<br>
-      <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
-      &nbsp;·&nbsp;
-      <a href="#" id="try-code-link">Try with TRYNEW</a>
+      Need help? <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
     </p>
   </div>
 </div>
@@ -621,11 +841,12 @@
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
     
-    <a href="creation/" class="track-card">
+    <a href="creation/" class="track-card" id="track-creation">
       <div class="track-emoji">🎨</div>
       <div class="track-name">Creation</div>
-      <div class="track-tagline">An isometric studio. Five stations. Explore where you make from.</div>
-      <div class="track-locked-tag" style="background: linear-gradient(135deg, #a78bfa, #67e8f9); color: #fff; font-weight: 800;">✨ Step into the studio →</div>
+      <div class="track-tagline">Illustration · books · materials · stop motion. Open studio, your way.</div>
+      <div class="track-progress" id="creation-progress" style="color: var(--purple);">✨ Studio open</div>
+      <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
   </div>
 
@@ -681,7 +902,7 @@
     <div class="path-header-kicker">Drawing · Foundation A</div>
     <div class="path-header-title">Form &amp; Structure</div>
     <div class="path-header-sub">
-      Learn to see and construct objects — a guided path of preparation + foundational lessons.
+      Learn to see and construct objects through 6 foundational lessons.
     </div>
     <div class="path-header-bar">
       <div class="path-header-fill" id="path-fill" style="width:0%"></div>
@@ -697,12 +918,29 @@
     <div class="badge-footer-icon">🏆</div>
     <div class="badge-footer-title">Foundation A Badge</div>
     <div class="badge-footer-sub" id="badge-footer-sub">
-      Complete all lessons to earn this.
+      Complete all 6 lessons to earn this.
     </div>
   </div>
 
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════
+     PAYWALL MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="paywall-modal" id="paywall-modal" onclick="if(event.target===this) closePaywall()">
+  <div class="paywall-card">
+    <div class="paywall-icon" id="paywall-icon">✨</div>
+    <div class="paywall-title" id="paywall-title">Unlock the full Smart Class</div>
+    <div class="paywall-body" id="paywall-body">
+      You've explored your free starter lessons. Unlock everything in Skills and Creation with one upgrade.
+    </div>
+    <a class="paywall-cta" id="paywall-cta-link" href="upgrade/">See unlock options →</a>
+    <button class="paywall-dismiss" onclick="closePaywall()">Maybe later</button>
+  </div>
+</div>
+
+<script src="core/auth.js"></script>
+<script src="core/access.js"></script>
 <script>
   // ═══════════════════════════════════════════════════════════
   // CONFIG
@@ -716,16 +954,6 @@
   // 改这个数组就能调换顺序 (per Faye's request: flexible reordering)
   // ═══════════════════════════════════════════════════════════
   const FOUNDATION_A_PATH = [
-    {
-      id: 'preparation',
-      title: 'Preparation',
-      subtitle: 'Get ready before you draw',
-      emoji: '🎒',
-      href: 'lessons/preparation/',
-      ready: true,
-      isPrep: true
-    },
-    // ═══ Geometric forms (3) → real-world applications (3) ═══
     {
       id: 'cube',
       title: 'The Cube',
@@ -751,20 +979,20 @@
       ready: true
     },
     {
-      id: 'box',
-      title: 'The Box',
-      subtitle: 'Cube · real world',
-      emoji: '📦',
-      href: 'lessons/lesson-4-cube-realworld/',
-      ready: false  // Coming soon
-    },
-    {
       id: 'cup',
       title: 'The Cup',
       subtitle: 'Cylinder · real world',
       emoji: '☕',
       href: 'lessons/lesson-6-cup/',
       ready: true
+    },
+    {
+      id: 'box',
+      title: 'The Box',
+      subtitle: 'Cube · real world',
+      emoji: '📦',
+      href: 'lessons/lesson-4-cube-realworld/',
+      ready: false  // Coming soon
     },
     {
       id: 'apple',
@@ -774,38 +1002,13 @@
       href: 'lessons/lesson-2-sphere-realworld/',
       ready: true
     },
-    // ═══ Advanced forms (2) + advanced real-world (2) ═══
     {
       id: 'cone',
       title: 'The Cone',
-      subtitle: 'Geometric form',
+      subtitle: 'Geometric form · ice cream cousin',
       emoji: '🔺',
       href: 'lessons/lesson-7-cone/',
       ready: true
-    },
-    {
-      id: 'icecream',
-      title: 'Ice Cream',
-      subtitle: 'Cone · real world',
-      emoji: '🍦',
-      href: 'lessons/lesson-8-icecream/',
-      ready: false  // Coming soon
-    },
-    {
-      id: 'intersecting',
-      title: 'Intersecting Geometry',
-      subtitle: 'Advanced form',
-      emoji: '💎',
-      href: 'lessons/lesson-9-intersecting/',
-      ready: true
-    },
-    {
-      id: 'papercrane',
-      title: 'Paper Crane',
-      subtitle: 'Intersecting · real world',
-      emoji: '🕊️',
-      href: 'lessons/lesson-10-papercrane/',
-      ready: false  // Coming soon
     }
   ];
   
@@ -973,6 +1176,20 @@
       doneCount === 0
         ? `Foundation A · ${totalCount} lessons`
         : `Foundation A · ${doneCount}/${totalCount} done`;
+    
+    // Creation track: static "Studio open" message + count of completed Creation lessons.
+    // Currently 3 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art).
+    const creationLessons = ['lfc054', 'lfc017', 'lfc018'];
+    const creationDone = creationLessons.filter(id => completed.includes(id)).length;
+    const progressEl = document.getElementById('creation-progress');
+    if (progressEl) {
+      if (creationDone === creationLessons.length) {
+        progressEl.textContent = '✨ All studio lessons complete';
+      } else if (creationDone > 0) {
+        progressEl.textContent = `🌙 ${creationDone} of ${creationLessons.length} complete`;
+      }
+      // else: keep the default "✨ Studio open" text
+    }
   }
   
   // Find the next lesson the student should do
@@ -1001,40 +1218,33 @@
     const container = document.getElementById('path-nodes');
     
     // Determine state for each node
-    // Preparation is shown as "Prep" not numbered. Other lessons start at Step 1.
     let foundCurrent = false;
-    let lessonStepNum = 0;  // increments only for non-prep lessons
     const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
-      const isPrep = lesson.isPrep === true;
-      if (!isPrep) lessonStepNum++;
-      
-      const stepLabel = isPrep ? 'Prep' : `Step ${lessonStepNum}`;
-      
       let state = 'locked';
       let icon = lesson.emoji;
-      let kicker = stepLabel;
+      let kicker = `Step ${idx + 1}`;
       let arrow = '🔒';
       let clickable = false;
       
       if (!lesson.ready) {
         state = 'coming';
-        kicker = `${stepLabel} · Coming soon`;
+        kicker = `Step ${idx + 1} · Coming soon`;
         arrow = '⏳';
       } else if (completed.includes(lesson.id)) {
         state = 'done';
         icon = '✓';
-        kicker = `${stepLabel} · Complete`;
+        kicker = `Step ${idx + 1} · Complete`;
         arrow = '↻';
         clickable = true;
       } else if (!foundCurrent) {
         state = 'current';
-        kicker = `${stepLabel} · ${isPrep ? 'Start here' : 'Continue'}`;
+        kicker = `Step ${idx + 1} · Continue`;
         arrow = '→';
         clickable = true;
         foundCurrent = true;
       }
       
-      const tag = state === 'done' ? (isPrep ? 'Reviewed' : '+50 XP earned')
+      const tag = state === 'done' ? '+50 XP earned'
                 : state === 'current' ? lesson.subtitle
                 : state === 'coming' ? 'Building this lesson'
                 : `Complete previous to unlock`;
@@ -1043,7 +1253,7 @@
       const hrefAttr = clickable ? `href="${lesson.href}"` : '';
       
       return `
-        <${tagEl} class="path-node ${state}${isPrep ? ' prep' : ''}" ${hrefAttr}>
+        <${tagEl} class="path-node ${state}" ${hrefAttr}>
           <div class="node-icon">${icon}</div>
           <div class="node-info">
             <div class="node-kicker">${kicker}</div>
@@ -1057,25 +1267,22 @@
     
     container.innerHTML = nodesHTML;
     
-    // Header progress — count ALL nodes (including Preparation)
+    // Header progress
     const doneCount = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
     document.getElementById('path-fill').style.width = pct + '%';
     document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} unlocked`;
     
-    // Badge state — only counts NUMBERED lessons (not preparation)
-    const numberedLessons = FOUNDATION_A_PATH.filter(l => !l.isPrep);
-    const numberedDone = numberedLessons.filter(l => completed.includes(l.id)).length;
-    const numberedTotal = numberedLessons.length;
+    // Badge state
     const badgeFooter = document.getElementById('badge-footer');
     const badgeSub = document.getElementById('badge-footer-sub');
-    if (numberedDone === numberedTotal) {
+    if (doneCount === totalCount) {
       badgeFooter.classList.add('unlocked');
       badgeSub.textContent = '✨ Unlocked — you are a Foundation A graduate!';
     } else {
       badgeFooter.classList.remove('unlocked');
-      const remaining = numberedTotal - numberedDone;
+      const remaining = totalCount - doneCount;
       badgeSub.textContent = `${remaining} more ${remaining === 1 ? 'lesson' : 'lessons'} to unlock this badge.`;
     }
   }
@@ -1127,43 +1334,296 @@
   // ═══════════════════════════════════════════════════════════
   
   function signOut() {
-    if (confirm('Sign out of Smart Class? Your progress is saved on this device.')) {
+    if (!confirm('Sign out of Smart Class? Your progress is saved on this device.')) return;
+    (async () => {
+      try {
+        if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+          await window.FEIAuth.signOut();
+        }
+      } catch (e) { console.warn('[signOut] supabase signOut failed', e); }
       clearProfile();
+      try { localStorage.removeItem('fei_supabase_auth'); } catch (e) {}
+      window.FEIAccess && window.FEIAccess.clearCache();
       window.location.reload();
-    }
+    })();
   }
   window.signOut = signOut;
-  
+
   // ═══════════════════════════════════════════════════════════
-  // EVENT LISTENERS
+  // NEW AUTH FLOW (Supabase: email + Google)
   // ═══════════════════════════════════════════════════════════
-  
+
+  let currentAuthTab = 'signup';
+
+  function switchAuthTab(tab) {
+    currentAuthTab = tab;
+    document.querySelectorAll('.auth-tab').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    });
+    document.getElementById('auth-signup-form').style.display = (tab === 'signup') ? 'block' : 'none';
+    document.getElementById('auth-login-form').style.display  = (tab === 'login')  ? 'block' : 'none';
+    document.getElementById('signin-error').classList.remove('visible');
+    document.getElementById('signin-info').classList.remove('visible');
+  }
+  window.switchAuthTab = switchAuthTab;
+
+  function showAuthError(msg) {
+    const el = document.getElementById('signin-error');
+    el.textContent = msg;
+    el.classList.add('visible');
+    document.getElementById('signin-info').classList.remove('visible');
+  }
+
+  function showAuthInfo(msg) {
+    const el = document.getElementById('signin-info');
+    el.textContent = msg;
+    el.classList.add('visible');
+    document.getElementById('signin-error').classList.remove('visible');
+  }
+
+  function setSubmitBusy(formId, busy) {
+    const btn = document.querySelector('#' + formId + ' .signin-btn');
+    if (!btn) return;
+    btn.disabled = !!busy;
+    if (busy) {
+      btn.dataset.origText = btn.textContent;
+      btn.textContent = 'Working…';
+    } else if (btn.dataset.origText) {
+      btn.textContent = btn.dataset.origText;
+    }
+  }
+
+  async function handleSignUp(event) {
+    event.preventDefault();
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Sign-up is not configured yet. Please use a student access code below.');
+      return;
+    }
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
+    setSubmitBusy('auth-signup-form', true);
+    try {
+      const { user, session, error } = await window.FEIAuth.signUpWithEmail(email, password, name);
+      if (error) { showAuthError(error.message || 'Could not create account. Please try again.'); return; }
+      if (session && user) {
+        // Email confirmation disabled — straight to home
+        await onAuthSuccess(user);
+      } else {
+        // Email confirmation required — Supabase sent the email
+        showAuthInfo('✓ Check your email for a confirmation link, then log in.');
+        switchAuthTab('login');
+        document.getElementById('login-email').value = email;
+      }
+    } catch (e) {
+      console.error(e);
+      showAuthError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitBusy('auth-signup-form', false);
+    }
+  }
+  window.handleSignUp = handleSignUp;
+
+  async function handleLogIn(event) {
+    event.preventDefault();
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Log-in is not configured yet. Please use a student access code below.');
+      return;
+    }
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    setSubmitBusy('auth-login-form', true);
+    try {
+      const { user, error } = await window.FEIAuth.signInWithEmail(email, password);
+      if (error) { showAuthError(error.message || 'Wrong email or password.'); return; }
+      if (user) await onAuthSuccess(user);
+    } catch (e) {
+      console.error(e);
+      showAuthError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitBusy('auth-login-form', false);
+    }
+  }
+  window.handleLogIn = handleLogIn;
+
+  async function handleGoogleSignIn() {
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Google sign-in is not configured yet.');
+      return;
+    }
+    const btn = document.getElementById('google-btn');
+    btn.disabled = true;
+    try {
+      await window.FEIAuth.signInWithGoogle(window.location.origin + window.location.pathname);
+      // Redirect happens; nothing to do here
+    } catch (e) {
+      console.error(e);
+      showAuthError('Could not start Google sign-in. Please try again.');
+      btn.disabled = false;
+    }
+  }
+  window.handleGoogleSignIn = handleGoogleSignIn;
+
+  async function onAuthSuccess(user) {
+    // Sync to legacy profile shape so the rest of the UI works
+    const name = window.FEIAuth.displayName(user);
+    const existing = (function () {
+      try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); }
+      catch (e) { return null; }
+    })();
+    const profile = {
+      id: user.id,
+      studentCode: null,                  // null → Supabase user (not legacy code)
+      supabaseUserId: user.id,
+      email: user.email || null,
+      name: name,
+      ageGroup: existing ? existing.ageGroup : 'youth',
+      tier: 'member',                     // tier here = "is signed in"; paywall uses FEIAccess.membership
+      memberSince: existing ? existing.memberSince : Date.now(),
+      currentLesson: existing ? existing.currentLesson : 'cube',
+      currentStepIdx: existing ? existing.currentStepIdx : 0,
+      completedLessons: existing ? (existing.completedLessons || []) : [],
+      totalXP: existing ? (existing.totalXP || 0) : 0,
+      visitCount: ((existing && existing.visitCount) || 0) + 1,
+      createdAt: existing ? existing.createdAt : Date.now(),
+      lastSeenAt: Date.now()
+    };
+    saveProfile(profile);
+
+    // Pre-load access status (creates row if needed)
+    try {
+      if (window.FEIAccess) {
+        await window.FEIAccess.init();
+        await window.FEIAccess.getStatus();
+      }
+    } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
+
+    showHome();
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAYWALL
+  // ═══════════════════════════════════════════════════════════
+  function openPaywall(opts) {
+    opts = opts || {};
+    const branch = opts.branch || 'creation';
+    const icon = document.getElementById('paywall-icon');
+    const title = document.getElementById('paywall-title');
+    const body = document.getElementById('paywall-body');
+    const cta = document.getElementById('paywall-cta-link');
+    if (branch === 'skills') {
+      icon.textContent = '📐';
+      title.textContent = "You've completed your free Skills starter.";
+      body.textContent = "Preparation and Cube were on the house. Unlock the full Foundation A class — every Skills lesson plus the Creation studio.";
+    } else {
+      icon.textContent = '🎨';
+      title.textContent = "Two Creation lessons explored.";
+      body.textContent = "You've used your free Creation explorations. Unlock the full Foundation A class — every Creation lesson plus the Skills path — and choose the support level that fits.";
+    }
+    cta.href = 'upgrade/?reason=paywall_' + branch + '&branch=' + branch;
+    document.getElementById('paywall-modal').classList.add('visible');
+  }
+  function closePaywall() {
+    document.getElementById('paywall-modal').classList.remove('visible');
+  }
+  window.openPaywall = openPaywall;
+  window.closePaywall = closePaywall;
+
+  // ═══════════════════════════════════════════════════════════
+  // INTERCEPT SKILLS LESSON CLICKS for paywall
+  // ═══════════════════════════════════════════════════════════
+  function attachSkillsLessonGuard() {
+    const container = document.getElementById('path-nodes');
+    if (!container) return;
+    if (container.dataset.guardAttached === '1') return;
+    container.dataset.guardAttached = '1';
+    container.addEventListener('click', async function (e) {
+      const a = e.target.closest('a.path-node');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      // Find which lesson this is by matching href against FOUNDATION_A_PATH
+      const match = (typeof FOUNDATION_A_PATH !== 'undefined' ? FOUNDATION_A_PATH : []).find(L => L.href === href);
+      if (!match) return;
+      // Only enforce for Supabase users — legacy access code = full access
+      const profile = userProfile;
+      if (!profile || profile.studentCode) return;  // legacy
+      // Check access
+      if (!window.FEIAccess) return;
+      e.preventDefault();
+      try {
+        const check = await window.FEIAccess.canOpenLesson('skills', match.id);
+        if (check.allowed) {
+          await window.FEIAccess.recordLessonOpened('skills', match.id);
+          window.location.href = href;
+        } else {
+          openPaywall({ branch: 'skills' });
+        }
+      } catch (err) {
+        console.warn('[skills click] access check failed, allowing through', err);
+        window.location.href = href;
+      }
+    });
+  }
+  // Wrap showDrawing to also attach guard
+  const _origShowDrawing = window.showDrawing;
+  window.showDrawing = function () {
+    _origShowDrawing.apply(this, arguments);
+    setTimeout(attachSkillsLessonGuard, 50);
+  };
+
+  // ═══════════════════════════════════════════════════════════
+  // EVENT LISTENERS (legacy access-code path still wired)
+  // ═══════════════════════════════════════════════════════════
+
   document.getElementById('signin-code').addEventListener('input', (e) => {
     e.target.value = e.target.value.toUpperCase();
     updateSignInBtn();
     document.getElementById('signin-error').classList.remove('visible');
   });
-  
+
   document.getElementById('signin-code').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') attemptSignIn();
   });
-  
+
   document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
-  
+
   document.getElementById('try-code-link').addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('signin-code').value = 'TRYNEW';
     updateSignInBtn();
   });
-  
+
   // ═══════════════════════════════════════════════════════════
   // INIT
   // ═══════════════════════════════════════════════════════════
-  
+
   (async function init() {
     await loadRoster();
     loadProfile();
-    
+
+    // 1. If Supabase is configured, check for an existing session FIRST
+    let supabaseUser = null;
+    if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+      try {
+        await window.FEIAuth.init();
+        supabaseUser = await window.FEIAuth.getUser();
+        if (supabaseUser) {
+          // Returning Supabase user — sync local profile
+          await onAuthSuccess(supabaseUser);
+          // Listen for sign-out from another tab
+          window.FEIAuth.onAuthChange((event) => {
+            if (event === 'SIGNED_OUT') {
+              clearProfile();
+              window.location.reload();
+            }
+          });
+          return;
+        }
+      } catch (e) { console.warn('[init] FEIAuth check failed', e); }
+    }
+
+    // 2. Fall back to legacy access-code profile
     if (userProfile) {
       showHome();
     } else {
