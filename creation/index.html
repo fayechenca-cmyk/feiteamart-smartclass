@@ -1478,6 +1478,15 @@
   <div class="grid-content" id="gridContent"></div>
 </div>
 
+<script src="../core/auth.js"></script>
+<script src="../core/access.js"></script>
+<script>
+  // Ensure auth/access modules initialize early (non-blocking)
+  if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+    window.FEIAuth.init().catch(e => console.warn('[creation] auth init failed', e));
+  }
+</script>
+
 <script>
   // ============================================================
   // STATIONS & COURSES DATA
@@ -1908,21 +1917,69 @@
   });
 
   // ============================================================
+  // CREATION LESSON IDs (semantic, stable — used by FEIAccess gate)
+  // ============================================================
+  const COURSE_LESSON_IDS = {
+    'Surrealism Illustration': 'lfc054',
+    'Learn From Masters: Basquiat': 'lfc017',
+    'Learn From Masters: Pop Art': 'lfc018',
+    'Learn From Masters: Henri Rousseau': 'rousseau-jungle'
+  };
+
+  // ============================================================
   // ENTER COURSE
   // Looks up COURSE_ROUTES table and navigates to the lesson folder.
-  // If a course is marked available:true but has no route, falls 
-  // back to alert (which should never happen — keep them in sync).
+  // BEFORE navigating: check FEIAccess. Supabase users get the free
+  // Creation rule (any 2). Legacy access-code users bypass.
   // ============================================================
-  function enterCourse(title) {
+  async function enterCourse(title) {
     const route = COURSE_ROUTES[title];
-    if (route) {
+    if (!route) {
+      console.warn('[Studio] No route configured for course:', title);
+      alert('→ Entering: ' + title + '\n\n(Lesson route not configured yet.)');
+      closeStation();
+      return;
+    }
+
+    // Identify legacy code user (bypass paywall)
+    let legacy = false;
+    try {
+      const raw = localStorage.getItem('fei_user_profile');
+      if (raw) {
+        const p = JSON.parse(raw);
+        legacy = !!(p && p.studentCode && !p.supabaseUserId);
+      }
+    } catch (e) {}
+
+    if (legacy || !window.FEIAccess) {
       window.location.href = route;
       return;
     }
-    // Safety fallback — log so we notice in console
-    console.warn('[Studio] No route configured for course:', title);
-    alert('→ Entering: ' + title + '\n\n(Lesson route not configured yet.)');
-    closeStation();
+
+    const lessonId = COURSE_LESSON_IDS[title];
+    if (!lessonId) {
+      // No mapping yet → allow through (safe default for new courses)
+      window.location.href = route;
+      return;
+    }
+
+    try {
+      await window.FEIAccess.init();
+      const check = await window.FEIAccess.canOpenLesson('creation', lessonId);
+      if (check.allowed) {
+        await window.FEIAccess.recordLessonOpened('creation', lessonId);
+        window.location.href = route;
+      } else if (check.reason === 'not_signed_in') {
+        // Redirect to home so they can sign in
+        window.location.href = '../?next=' + encodeURIComponent(route);
+      } else {
+        // Paywall — central upgrade page
+        window.location.href = '../upgrade/?reason=paywall_creation&branch=creation';
+      }
+    } catch (e) {
+      console.warn('[Studio] access check failed, allowing through', e);
+      window.location.href = route;
+    }
   }
 
   // ============ GRID VIEW ============
