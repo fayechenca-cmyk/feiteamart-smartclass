@@ -1455,7 +1455,8 @@
     const btn = document.getElementById('google-btn');
     btn.disabled = true;
     try {
-      await window.FEIAuth.signInWithGoogle(window.location.origin + window.location.pathname);
+      await window.FEIAuth.signInWithGoogle();
+      // auth.js computes the correct app-base URL automatically
       // Redirect happens; nothing to do here
     } catch (e) {
       console.error(e);
