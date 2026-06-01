@@ -1,0 +1,3595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Henri Rousseau · Jungle Layers — FEI TeamArt Smart Class</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Montserrat:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet" />
+<style>
+/* ════════════════════════════════════════════════════════════════
+   LFC019 · Learn From Masters: Henri Rousseau · Jungle Layers
+   Contract-compliant from day 1:
+     - fei_user_profile (shared with Skills branch)
+     - fei_thinking_journal (shared with Skills branch)
+     - LESSON_ID 'rousseau-jungle' (semantic, not numbered)
+     - courseId 'creation' (single Creation bucket for journal)
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  /* Rousseau jungle palette */
+  --jungle-deep:  #0d2818;
+  --jungle-mid:   #2d5a3d;
+  --jungle-light: #7ba668;
+  --jungle-leaf:  #4a7a3a;
+  --jungle-warm:  #d4a548;
+  --jungle-flame: #c9522a;
+  --jungle-red:   #8b1e1e;
+  --moon:         #f4e9c1;
+  --night-sky:    #1a2840;
+  --paper:        #f5efe0;
+  --paper-warm:   #ede2c8;
+  --ink:          #1d2818;
+  --muted:        #6b7558;
+  --rule:         #d9d0b8;
+
+  --shadow-soft: 0 4px 20px rgba(13, 40, 24, 0.12);
+  --shadow-card: 0 6px 28px rgba(13, 40, 24, 0.18);
+  --shadow-deep: 0 12px 44px rgba(13, 40, 24, 0.28);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ───── Topbar ───── */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(180deg, rgba(245,239,224,0.96), rgba(245,239,224,0.86));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-left {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 700; font-size: 18px;
+  color: var(--jungle-deep);
+}
+.topbar-left .leaf-mark {
+  width: 24px; height: 24px;
+  background: var(--jungle-mid);
+  clip-path: path('M 12 0 Q 22 6 22 14 Q 22 22 12 24 Q 2 22 2 14 Q 2 6 12 0 Z');
+}
+.topbar-right { display: flex; align-items: center; gap: 14px; font-size: 14px; }
+.topbar-right a { color: var(--muted); text-decoration: none; }
+.topbar-right a:hover { color: var(--jungle-mid); }
+.user-pill {
+  background: var(--jungle-deep); color: var(--moon);
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+}
+.sign-out-btn {
+  background: transparent; border: 1px solid var(--rule);
+  color: var(--muted); cursor: pointer;
+  padding: 6px 12px; border-radius: 999px;
+  font-size: 12px; font-family: inherit;
+}
+.sign-out-btn:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ───── Sign-in screen ───── */
+.signin-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: calc(100vh - 60px);
+  padding: 40px 24px;
+  background:
+    radial-gradient(ellipse at top, rgba(45, 90, 61, 0.10), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(212, 165, 72, 0.12), transparent 50%),
+    var(--paper);
+  position: relative; overflow: hidden;
+}
+.signin-screen::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5 Q70 25 70 45 Q70 75 50 95 Q30 75 30 45 Q30 25 50 5 Z' fill='%232d5a3d' opacity='0.04'/></svg>");
+  background-size: 200px 200px; pointer-events: none;
+}
+.signin-card {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 44px 36px;
+  max-width: 460px; width: 100%;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+.signin-eyebrow {
+  font-family: 'Caveat', cursive;
+  font-size: 20px; color: var(--jungle-flame);
+  margin-bottom: 4px;
+}
+.signin-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 700;
+  font-size: 32px; line-height: 1.15;
+  color: var(--jungle-deep);
+  margin-bottom: 8px;
+}
+.signin-sub {
+  font-size: 14px; color: var(--muted); margin-bottom: 24px;
+}
+.signin-input-wrap { margin-bottom: 16px; text-align: left; }
+.signin-input-wrap label {
+  display: block; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.signin-input {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--rule); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 16px;
+  background: #fff; color: var(--ink);
+  transition: border-color 0.18s;
+}
+.signin-input:focus { outline: none; border-color: var(--jungle-mid); }
+.signin-input.error { border-color: var(--jungle-red); animation: shake 0.36s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.signin-error {
+  font-size: 12px; color: var(--jungle-red);
+  margin-top: 6px; height: 16px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.signin-error.visible { opacity: 1; }
+.signin-btn {
+  width: 100%; padding: 14px;
+  background: var(--jungle-deep); color: var(--moon);
+  border: none; border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  letter-spacing: 0.02em; cursor: pointer;
+  transition: transform 0.12s, background 0.2s;
+  margin-top: 8px;
+}
+.signin-btn:hover:not(:disabled) { background: var(--jungle-mid); transform: translateY(-1px); }
+.signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.signin-foot {
+  margin-top: 20px; font-size: 12px; color: var(--muted);
+}
+.signin-foot a { color: var(--jungle-flame); text-decoration: none; }
+
+/* ───── Lesson screen ───── */
+.lesson-screen { display: none; }
+.lesson {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 24px 120px;
+  padding-right: 24px;
+}
+@media (min-width: 768px) {
+  .lesson { max-width: 960px; padding: 40px 32px 140px; padding-right: 170px; }
+}
+@media (min-width: 1100px) {
+  .lesson { max-width: 1080px; padding: 48px 40px 160px; padding-right: 180px; }
+}
+@media (min-width: 1400px) {
+  .lesson { max-width: 1180px; }
+}
+
+.step-header { margin-bottom: 28px; }
+.step-eyebrow {
+  display: inline-block;
+  font-family: 'Caveat', cursive;
+  font-size: 22px; color: var(--jungle-flame);
+  margin-bottom: 2px;
+}
+.step-num {
+  display: inline-block; margin-left: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 800;
+  color: var(--muted); letter-spacing: 0.1em;
+  background: var(--paper-warm);
+  padding: 3px 10px; border-radius: 999px;
+  vertical-align: middle;
+}
+.step-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 700;
+  font-size: 34px; line-height: 1.1;
+  color: var(--jungle-deep);
+  margin-bottom: 10px;
+}
+@media (min-width: 768px) {
+  .step-title { font-size: 42px; }
+}
+.step-lede {
+  font-size: 16px; color: var(--muted);
+  max-width: 640px; margin-bottom: 24px;
+}
+.step-lede em {
+  font-family: 'Caveat', cursive; font-size: 20px;
+  font-style: normal; color: var(--jungle-flame);
+}
+
+/* ───── Step nav (footer) ───── */
+.step-nav {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(245,239,224,0.6), rgba(245,239,224,0.96) 30%);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--rule);
+  padding: 14px 20px 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  z-index: 30;
+}
+@media (min-width: 768px) {
+  .step-nav { padding-right: 170px; }
+}
+@media (min-width: 1100px) {
+  .step-nav { padding-right: 180px; }
+}
+.step-nav .nav-spacer { flex: 1; }
+.nav-btn {
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  border: none;
+}
+.nav-btn.secondary {
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--rule);
+}
+.nav-btn.secondary:hover { color: var(--ink); border-color: var(--ink); }
+.nav-btn.primary {
+  background: var(--jungle-deep); color: var(--moon);
+  box-shadow: var(--shadow-soft);
+}
+.nav-btn.primary:hover { background: var(--jungle-mid); transform: translateY(-1px); }
+.nav-btn.primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.nav-progress {
+  display: flex; gap: 5px; align-items: center;
+}
+.nav-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--rule); transition: all 0.2s;
+}
+.nav-dot.done { background: var(--jungle-mid); }
+.nav-dot.current { background: var(--jungle-flame); width: 26px; border-radius: 6px; }
+
+/* ───── Card / panel patterns ───── */
+.card {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.panel-dark {
+  background: var(--jungle-deep);
+  color: var(--moon);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+/* ───── Step 1: Layer Sweep ───── */
+.jungle-stage {
+  position: relative;
+  width: 100%;
+  background: var(--jungle-deep);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  aspect-ratio: 16 / 10;
+}
+.jungle-stage svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+.jungle-layer-group {
+  cursor: pointer;
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+.jungle-stage.has-active .jungle-layer-group {
+  opacity: 0.32;
+  filter: saturate(0.5) brightness(0.8);
+}
+.jungle-stage.has-active .jungle-layer-group.active {
+  opacity: 1;
+  filter: drop-shadow(0 0 14px rgba(244, 233, 193, 0.5)) drop-shadow(0 0 28px rgba(212, 165, 72, 0.3));
+}
+.layer-label {
+  position: absolute;
+  background: rgba(13, 40, 24, 0.92);
+  color: var(--moon);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 5;
+  white-space: nowrap;
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+}
+.layer-label.visible { opacity: 1; }
+.layer-meter {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-top: 14px;
+}
+.layer-pip {
+  flex: 1; min-width: 110px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1.5px solid var(--rule);
+  border-radius: 10px;
+  font-size: 12px; font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.3s ease;
+}
+.layer-pip.discovered {
+  background: var(--jungle-mid);
+  color: var(--moon);
+  border-color: var(--jungle-mid);
+}
+.step1-prompt {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: var(--jungle-flame);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* ───── Step 2: Hidden Symbols ───── */
+.symbol-scene-wrap { position: relative; }
+.symbol-hotspot {
+  position: absolute;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(244, 233, 193, 0.18);
+  border: 2px solid rgba(244, 233, 193, 0.45);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  transition: all 0.3s ease;
+  animation: pulse-glow 2.4s ease-in-out infinite;
+  z-index: 4;
+}
+.symbol-hotspot:hover, .symbol-hotspot.active {
+  background: rgba(244, 233, 193, 0.7);
+  border-color: var(--moon);
+  transform: scale(1.18);
+  box-shadow: 0 0 24px rgba(244, 233, 193, 0.7);
+}
+.symbol-hotspot.discovered {
+  background: var(--jungle-warm);
+  border-color: var(--jungle-warm);
+  animation: none;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 233, 193, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(244, 233, 193, 0); }
+}
+.symbol-card-popup {
+  position: absolute;
+  background: var(--paper);
+  border: 1.5px solid var(--jungle-mid);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  width: 260px;
+  box-shadow: var(--shadow-deep);
+  z-index: 20;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.symbol-card-popup.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.symbol-card-popup h4 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--jungle-deep);
+  margin-bottom: 6px;
+}
+.symbol-card-popup .save-symbol-btn {
+  margin-top: 12px;
+  background: var(--jungle-flame);
+  color: var(--moon);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+.symbol-card-popup .save-symbol-btn.saved {
+  background: var(--jungle-mid);
+}
+.symbol-tray {
+  background: var(--paper-warm);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-top: 18px;
+  min-height: 80px;
+}
+.symbol-tray-title {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: var(--jungle-deep);
+  margin-bottom: 10px;
+}
+.symbol-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.symbol-chip {
+  background: #fff;
+  border: 1px solid var(--jungle-mid);
+  color: var(--jungle-deep);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.symbol-chip .remove-chip {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 14px; line-height: 1;
+  padding: 0; margin-left: 4px;
+}
+.symbol-tray-empty {
+  color: var(--muted); font-style: italic; font-size: 13px;
+}
+
+/* ───── Step 3: Choose Your World ───── */
+.choose-section {
+  margin-bottom: 26px;
+}
+.choose-section-title {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: var(--jungle-flame);
+  margin-bottom: 4px;
+}
+.choose-section-sub {
+  font-size: 13px; color: var(--muted);
+  margin-bottom: 14px;
+}
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .option-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 900px) {
+  .option-grid { grid-template-columns: repeat(4, 1fr); }
+}
+.option-tile {
+  background: #fff;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 14px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.option-tile:hover {
+  border-color: var(--jungle-mid);
+  transform: translateY(-2px);
+}
+.option-tile.selected {
+  background: var(--jungle-mid);
+  border-color: var(--jungle-mid);
+  color: var(--moon);
+}
+.option-tile .tile-emoji { font-size: 22px; }
+.option-tile .tile-meaning {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--jungle-flame);
+}
+.option-tile.selected .tile-meaning { color: var(--moon); opacity: 0.95; }
+.elements-counter {
+  font-size: 12px; color: var(--muted); margin-bottom: 10px;
+  font-family: 'Caveat', cursive; font-size: 18px;
+}
+.elements-counter.good { color: var(--jungle-mid); }
+
+/* ───── Step 4: Layer Builder ───── */
+.builder-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 900px) {
+  .builder-wrap { grid-template-columns: 1.4fr 1fr; }
+}
+.builder-canvas {
+  position: relative;
+  background: var(--jungle-deep);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: var(--shadow-card);
+}
+.builder-canvas svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.builder-slot {
+  position: absolute;
+  left: 0; right: 0;
+  border-top: 1px dashed rgba(244, 233, 193, 0.15);
+  border-bottom: 1px dashed rgba(244, 233, 193, 0.15);
+  transition: background 0.2s;
+}
+.builder-slot.target-active {
+  background: rgba(212, 165, 72, 0.12);
+  border-color: var(--jungle-warm);
+}
+.builder-slot-label {
+  position: absolute;
+  top: 6px; right: 8px;
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: rgba(244, 233, 193, 0.4);
+  pointer-events: none;
+}
+.builder-slot.target-active .builder-slot-label { color: var(--jungle-warm); }
+
+.builder-tray {
+  background: var(--paper-warm);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-height: 200px;
+}
+.builder-tray-title {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--jungle-deep);
+  margin-bottom: 4px;
+}
+.builder-tray-sub {
+  font-size: 12px; color: var(--muted);
+  margin-bottom: 12px;
+}
+.builder-tray-pills {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.builder-tray-pill {
+  background: #fff;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.builder-tray-pill.active {
+  background: var(--jungle-deep);
+  color: var(--moon);
+  border-color: var(--jungle-deep);
+}
+.builder-pieces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.builder-piece {
+  position: relative;
+  aspect-ratio: 1;
+  background: #fff;
+  border: 1.5px solid var(--rule);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  user-select: none;
+  -webkit-user-drag: element;
+}
+.builder-piece:hover { border-color: var(--jungle-mid); transform: translateY(-2px); }
+.builder-piece.selected {
+  border-color: var(--jungle-flame);
+  background: rgba(212, 165, 72, 0.12);
+  box-shadow: 0 0 0 3px rgba(201, 82, 42, 0.18);
+}
+.builder-piece svg {
+  width: 80%; height: 80%;
+  pointer-events: none;
+}
+.builder-slot-instructions {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: rgba(244, 233, 193, 0.6);
+  pointer-events: none;
+  z-index: 2;
+  width: 80%;
+}
+.builder-instructions-fade {
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.builder-instructions-fade.show { opacity: 1; }
+.placed-piece {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: filter 0.3s;
+}
+.placed-piece svg { width: 100%; height: 100%; pointer-events: none; }
+.placed-piece:hover { filter: drop-shadow(0 0 8px var(--jungle-warm)); }
+.builder-status {
+  margin-top: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+.builder-status .layer-progress {
+  display: flex; gap: 4px;
+}
+.builder-status .layer-pip-mini {
+  width: 22px; height: 6px;
+  border-radius: 3px;
+  background: var(--rule);
+}
+.builder-status .layer-pip-mini.has-content {
+  background: var(--jungle-mid);
+}
+.builder-reset-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.builder-reset-btn:hover { color: var(--jungle-red); border-color: var(--jungle-red); }
+
+/* ───── Step 5: Paper Jungle (video) ───── */
+.video-wrap {
+  position: relative;
+  background: var(--jungle-deep);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  box-shadow: var(--shadow-card);
+}
+.video-wrap iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+.video-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--moon);
+  text-align: center;
+  padding: 24px;
+}
+.video-placeholder .play-icon {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  background: rgba(244, 233, 193, 0.12);
+  border: 2px solid var(--moon);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+.video-placeholder .play-label {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: var(--jungle-warm);
+}
+.video-placeholder .play-sub {
+  font-size: 13px; color: rgba(244, 233, 193, 0.7);
+  margin-top: 6px;
+}
+.materials-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 18px;
+}
+@media (min-width: 600px) {
+  .materials-list { grid-template-columns: repeat(3, 1fr); }
+}
+.material-tile {
+  background: var(--paper-warm);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--jungle-deep);
+  display: flex; align-items: center; gap: 8px;
+}
+.material-tile .mat-emoji { font-size: 18px; }
+.pause-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+@media (min-width: 700px) {
+  .pause-cards { grid-template-columns: repeat(2, 1fr); }
+}
+.pause-card {
+  background: #fff;
+  border-left: 4px solid var(--jungle-flame);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px;
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  color: var(--jungle-deep);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ───── Step 6: Reflect & Share ───── */
+.reflection-prompt {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--jungle-deep);
+  margin-bottom: 14px;
+}
+.reflection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+@media (min-width: 700px) {
+  .reflection-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.reflection-tile {
+  background: #fff;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 18px 14px;
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  color: var(--jungle-deep);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.reflection-tile:hover {
+  border-color: var(--jungle-flame);
+  transform: translateY(-2px);
+}
+.reflection-tile.selected {
+  background: var(--jungle-flame);
+  border-color: var(--jungle-flame);
+  color: var(--moon);
+}
+.reflection-textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 14px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  background: #fff;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.reflection-textarea:focus { outline: none; border-color: var(--jungle-mid); }
+.upload-area {
+  background: var(--paper-warm);
+  border: 2px dashed var(--jungle-mid);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.upload-area:hover { background: #f0e5cc; border-color: var(--jungle-flame); }
+.upload-area.has-image { padding: 12px; }
+.upload-area .up-icon { font-size: 30px; margin-bottom: 8px; }
+.upload-area .up-text {
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  color: var(--jungle-deep);
+}
+.upload-area .up-sub {
+  font-size: 12px; color: var(--muted); margin-top: 4px;
+}
+.upload-preview {
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: block;
+}
+.lesson-complete-card {
+  background: var(--jungle-deep);
+  color: var(--moon);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  text-align: center;
+  margin-top: 28px;
+}
+.lesson-complete-card .lc-eyebrow {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: var(--jungle-warm);
+  margin-bottom: 4px;
+}
+.lesson-complete-card .lc-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.lesson-complete-card .lc-line {
+  font-size: 14px;
+  color: rgba(244, 233, 193, 0.85);
+  max-width: 480px;
+  margin: 0 auto 18px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+.lesson-complete-card .lc-stats {
+  display: flex; gap: 18px; justify-content: center;
+  margin-bottom: 22px; flex-wrap: wrap;
+}
+.lesson-complete-card .lc-stat {
+  background: rgba(244, 233, 193, 0.08);
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+.lesson-complete-card .lc-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--jungle-warm);
+}
+.lesson-complete-card .lc-stat-lbl {
+  font-size: 11px;
+  color: rgba(244, 233, 193, 0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ───── Artchi mascot ───── */
+.artchi-mascot {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  width: 88px; height: 88px;
+  cursor: pointer;
+  z-index: 40;
+  transition: transform 0.3s ease;
+}
+.artchi-mascot:hover { transform: translateY(-4px); }
+.artchi-mascot svg { width: 100%; height: 100%; }
+.artchi-halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 165, 72, 0.5), transparent 70%);
+  z-index: -1;
+  animation: artchi-halo-pulse 3s ease-in-out infinite;
+}
+@keyframes artchi-halo-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.artchi-label {
+  position: absolute;
+  top: -22px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--jungle-flame);
+  color: var(--moon);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+}
+.artchi-bubble {
+  position: fixed;
+  right: 130px;
+  bottom: 110px;
+  background: #fff;
+  border: 1.5px solid var(--jungle-mid);
+  border-radius: 16px 16px 4px 16px;
+  padding: 14px 18px 14px 16px;
+  max-width: 260px;
+  font-size: 13px;
+  color: var(--ink);
+  box-shadow: var(--shadow-deep);
+  z-index: 39;
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  line-height: 1.35;
+  display: none;
+}
+.artchi-bubble.visible { display: block; animation: bubble-pop 0.35s ease-out; }
+@keyframes bubble-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.artchi-bubble .bubble-close {
+  position: absolute;
+  top: 6px; right: 8px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 18px; line-height: 1;
+}
+
+/* ───── Artchi onboarding & about ───── */
+.artchi-onboard, .artchi-about {
+  position: fixed; inset: 0;
+  background: rgba(13, 40, 24, 0.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.artchi-onboard.visible, .artchi-about.visible { display: flex; }
+.artchi-onboard-card, .artchi-about-card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: var(--shadow-deep);
+}
+.artchi-onboard-card h2, .artchi-about-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--jungle-deep);
+  margin: 14px 0 10px;
+}
+.artchi-onboard-card p, .artchi-about-card p {
+  color: var(--muted); font-size: 14px; margin-bottom: 14px;
+}
+.artchi-onboard-svg, .artchi-about-svg {
+  width: 100px; height: 100px;
+  margin: 0 auto;
+}
+.artchi-onboard-btn, .artchi-about-btn {
+  background: var(--jungle-deep);
+  color: var(--moon);
+  border: none; padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-weight: 700;
+  cursor: pointer; margin-top: 8px;
+  font-size: 14px;
+}
+
+/* ───── Chat modal ───── */
+.chat-modal {
+  position: fixed; inset: 0;
+  background: rgba(13, 40, 24, 0.55);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: flex-end; justify-content: center;
+  z-index: 90;
+}
+.chat-modal.visible { display: flex; }
+.chat-card {
+  background: var(--paper);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-deep);
+  animation: chat-slide-up 0.3s ease-out;
+}
+@media (min-width: 768px) {
+  .chat-modal { align-items: center; }
+  .chat-card { border-radius: var(--radius-lg); max-height: 70vh; }
+}
+@keyframes chat-slide-up {
+  0% { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.chat-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chat-mode-pill {
+  background: var(--jungle-mid);
+  color: var(--moon);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.chat-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: 22px; line-height: 1;
+}
+.chat-thread {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.chat-msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.chat-msg.artchi {
+  background: var(--jungle-mid);
+  color: var(--moon);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.user {
+  background: var(--paper-warm);
+  color: var(--ink);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-starters {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 0 20px 12px;
+}
+.chat-starter {
+  background: #fff;
+  border: 1px solid var(--jungle-mid);
+  color: var(--jungle-deep);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chat-starter:hover { background: var(--jungle-mid); color: var(--moon); }
+.chat-input-row {
+  padding: 12px 16px 16px;
+  display: flex; gap: 8px;
+  border-top: 1px solid var(--rule);
+}
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--rule);
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+.chat-input:focus { outline: none; border-color: var(--jungle-mid); }
+.chat-send {
+  background: var(--jungle-deep);
+  color: var(--moon);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.chat-mode-switcher {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 8px 16px 0;
+}
+.chat-mode-btn {
+  background: var(--paper-warm);
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+.chat-mode-btn.active {
+  background: var(--jungle-deep);
+  color: var(--moon);
+}
+
+/* ───── My Journey modal (contract: Section 4.4) ───── */
+.journey-modal {
+  position: fixed; inset: 0;
+  background: rgba(13, 40, 24, 0.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 95;
+  padding: 20px;
+}
+.journey-modal.visible { display: flex; }
+.journey-card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-deep);
+  overflow: hidden;
+}
+.journey-header {
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--jungle-deep);
+  color: var(--moon);
+}
+.journey-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.journey-header .journey-sub {
+  font-size: 12px;
+  color: rgba(244, 233, 193, 0.75);
+  letter-spacing: 0.04em;
+}
+.journey-close {
+  position: absolute; top: 16px; right: 20px;
+  background: none; border: none; cursor: pointer;
+  color: var(--moon); font-size: 22px;
+}
+.journey-stats {
+  display: flex; gap: 12px;
+  padding: 16px 24px;
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--rule);
+}
+.journey-stat {
+  flex: 1;
+  text-align: center;
+}
+.journey-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--jungle-flame);
+  line-height: 1;
+}
+.journey-stat-lbl {
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-top: 4px;
+}
+.journey-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+.journey-empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+}
+.journey-empty .empty-emoji { font-size: 38px; margin-bottom: 10px; }
+.journey-empty .empty-line {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--jungle-deep);
+}
+.journey-entry {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.journey-entry:last-child { border-bottom: none; }
+.journey-entry-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.journey-lesson-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jungle-mid);
+}
+.journey-time {
+  font-size: 11px;
+  color: var(--muted);
+}
+.journey-prompt {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  color: var(--jungle-flame);
+  margin-bottom: 4px;
+}
+.journey-text {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.journey-input-mode {
+  display: inline-block;
+  font-size: 10px;
+  background: var(--paper-warm);
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* ───── Toast ───── */
+#complete-toast {
+  position: fixed;
+  bottom: 100px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--jungle-deep);
+  color: var(--moon);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 80;
+  box-shadow: var(--shadow-card);
+}
+#complete-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ───── Accessibility focus ───── */
+button:focus-visible, input:focus-visible, textarea:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--jungle-flame);
+  outline-offset: 2px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════
+     TOPBAR
+     ════════════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="leaf-mark"></div>
+    <span>FEI TeamArt &middot; <em>Jungle Layers</em></span>
+  </div>
+  <div class="topbar-right" id="topbar-right">
+    <a href="https://www.feiteamart.com" target="_blank" rel="noopener">feiteamart.com</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SIGN-IN SCREEN
+     ════════════════════════════════════════════════════════════════ -->
+<div class="signin-screen" id="signin-screen">
+  <div class="signin-card">
+    <div class="signin-eyebrow">Learn From Masters &middot; Henri Rousseau</div>
+    <div class="signin-title">Jungle Layers <br/>&amp; Hidden Symbols</div>
+    <div class="signin-sub">A layered painting can feel like a world.</div>
+
+    <div class="signin-input-wrap">
+      <label for="signin-code">Your access code</label>
+      <input type="text" class="signin-input" id="signin-code"
+             placeholder="e.g. LILY-01"
+             autocomplete="off" spellcheck="false"
+             oninput="updateSignInBtn()" onkeydown="if(event.key==='Enter') attemptSignIn()" />
+      <div class="signin-error" id="signin-error">Hmm, that code isn't in our list. Double-check?</div>
+    </div>
+
+    <button class="signin-btn" id="signin-btn" onclick="attemptSignIn()" disabled>
+      Enter the jungle &rarr;
+    </button>
+
+    <div class="signin-foot">
+      Don't have a code? <a href="https://www.feiteamart.com" target="_blank" rel="noopener">Find yours at feiteamart.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     LESSON SCREEN
+     ════════════════════════════════════════════════════════════════ -->
+<div class="lesson-screen" id="lesson-screen">
+  <div class="lesson" id="lesson-content"></div>
+
+  <div class="step-nav" id="step-nav">
+    <button class="nav-btn secondary" id="prev-btn" onclick="goPrev()">&larr; Back</button>
+    <div class="nav-progress" id="nav-progress"></div>
+    <div class="nav-spacer"></div>
+    <button class="nav-btn primary" id="next-btn" onclick="goNext()">Continue &rarr;</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     ARTCHI MASCOT
+     ════════════════════════════════════════════════════════════════ -->
+<div class="artchi-mascot" id="artchi-mascot" onclick="openChatModal(currentChatMode)" style="display:none;">
+  <div class="artchi-halo"></div>
+  <div class="artchi-label">Ask Artchi</div>
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Wings -->
+    <ellipse cx="22" cy="58" rx="10" ry="14" fill="#a78bfa" opacity="0.7"/>
+    <ellipse cx="78" cy="58" rx="10" ry="14" fill="#a78bfa" opacity="0.7"/>
+    <!-- Body (purple egg) -->
+    <ellipse cx="50" cy="55" rx="28" ry="34" fill="#7c4dff"/>
+    <ellipse cx="50" cy="55" rx="28" ry="34" fill="url(#bodyGrad)"/>
+    <defs>
+      <radialGradient id="bodyGrad" cx="0.4" cy="0.4">
+        <stop offset="0%" stop-color="#a78bfa"/>
+        <stop offset="100%" stop-color="#5b32d6"/>
+      </radialGradient>
+    </defs>
+    <!-- Hat -->
+    <path d="M 28,30 Q 50,8 72,30 L 68,34 Q 50,18 32,34 Z" fill="#d4a548"/>
+    <circle cx="50" cy="14" r="3" fill="#c9522a"/>
+    <!-- Eyes -->
+    <circle cx="40" cy="52" r="4.5" fill="#fff"/>
+    <circle cx="60" cy="52" r="4.5" fill="#fff"/>
+    <circle cx="41" cy="53" r="2.4" fill="#1a2840"/>
+    <circle cx="61" cy="53" r="2.4" fill="#1a2840"/>
+    <circle cx="42" cy="52" r="0.9" fill="#fff"/>
+    <circle cx="62" cy="52" r="0.9" fill="#fff"/>
+    <!-- Smile -->
+    <path d="M 42,66 Q 50,72 58,66" stroke="#1a2840" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- Palette -->
+    <ellipse cx="32" cy="78" rx="8" ry="6" fill="#f4e9c1" stroke="#1a2840" stroke-width="1"/>
+    <circle cx="29" cy="76" r="1.5" fill="#c9522a"/>
+    <circle cx="33" cy="74" r="1.5" fill="#7ba668"/>
+    <circle cx="36" cy="78" r="1.5" fill="#d4a548"/>
+  </svg>
+</div>
+
+<!-- Artchi onboarding -->
+<div class="artchi-onboard" id="artchi-onboard">
+  <div class="artchi-onboard-card">
+    <div class="artchi-onboard-svg">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="22" cy="58" rx="10" ry="14" fill="#a78bfa" opacity="0.7"/>
+        <ellipse cx="78" cy="58" rx="10" ry="14" fill="#a78bfa" opacity="0.7"/>
+        <ellipse cx="50" cy="55" rx="28" ry="34" fill="#7c4dff"/>
+        <path d="M 28,30 Q 50,8 72,30 L 68,34 Q 50,18 32,34 Z" fill="#d4a548"/>
+        <circle cx="50" cy="14" r="3" fill="#c9522a"/>
+        <circle cx="40" cy="52" r="4.5" fill="#fff"/>
+        <circle cx="60" cy="52" r="4.5" fill="#fff"/>
+        <circle cx="41" cy="53" r="2.4" fill="#1a2840"/>
+        <circle cx="61" cy="53" r="2.4" fill="#1a2840"/>
+        <path d="M 42,66 Q 50,72 58,66" stroke="#1a2840" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2>Hi! I'm Artchi.</h2>
+    <p>I'll be wandering through the jungle with you. Tap me anytime — I'll help you notice hidden things, suggest layer ideas, or just be quiet company while you make.</p>
+    <button class="artchi-onboard-btn" onclick="closeArtchiOnboard()">Let's explore</button>
+  </div>
+</div>
+
+<!-- Artchi about -->
+<div class="artchi-about" id="artchi-about">
+  <div class="artchi-about-card">
+    <div class="artchi-about-svg">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="55" rx="28" ry="34" fill="#7c4dff"/>
+        <path d="M 28,30 Q 50,8 72,30 L 68,34 Q 50,18 32,34 Z" fill="#d4a548"/>
+        <circle cx="40" cy="52" r="4.5" fill="#fff"/>
+        <circle cx="60" cy="52" r="4.5" fill="#fff"/>
+        <circle cx="41" cy="53" r="2.4" fill="#1a2840"/>
+        <circle cx="61" cy="53" r="2.4" fill="#1a2840"/>
+        <path d="M 42,66 Q 50,72 58,66" stroke="#1a2840" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h2>About Artchi</h2>
+    <p>I'm your art companion — a soft guide through whatever you're making. In this lesson I'll be especially curious about hidden symbols and layered space.</p>
+    <p style="font-size: 12px;">I can chat in different modes (tap the mode pill in chat to switch). And if you want me out of the way, you can hide me — I'll come back when you call.</p>
+    <button class="artchi-about-btn" onclick="closeArtchiAbout()">Got it</button>
+  </div>
+</div>
+
+<!-- Artchi bubble -->
+<div class="artchi-bubble" id="artchi-bubble">
+  <button class="bubble-close" onclick="closeArtchiBubble()">&times;</button>
+  <span id="artchi-bubble-text"></span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAT MODAL
+     ════════════════════════════════════════════════════════════════ -->
+<div class="chat-modal" id="chat-modal" onclick="if(event.target===this) closeChatModal()">
+  <div class="chat-card">
+    <div class="chat-header">
+      <span class="chat-mode-pill" id="chat-mode-pill">Jungle Guide</span>
+      <button class="chat-close" onclick="closeChatModal()">&times;</button>
+    </div>
+    <div class="chat-mode-switcher" id="chat-mode-switcher"></div>
+    <div class="chat-thread" id="chat-thread"></div>
+    <div class="chat-starters" id="chat-starters"></div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chat-input" placeholder="Type a message..."
+             onkeydown="if(event.key==='Enter') sendChat()" />
+      <button class="chat-send" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     MY JOURNEY MODAL (contract: Section 4.4)
+     ════════════════════════════════════════════════════════════════ -->
+<div class="journey-modal" id="journey-modal" onclick="if(event.target===this) closeMyJourney()">
+  <div class="journey-card">
+    <div class="journey-header">
+      <button class="journey-close" onclick="closeMyJourney()">&times;</button>
+      <h2>My Journey</h2>
+      <div class="journey-sub">Your thinking trail across every lesson</div>
+    </div>
+    <div class="journey-stats" id="journey-stats"></div>
+    <div class="journey-list" id="journey-list"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="complete-toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// LFC019 · Henri Rousseau · Jungle Layers
+// SECTION 1 — CONFIG
+// ════════════════════════════════════════════════════════════════
+const ROSTER_PATH = '../../core/student-access-codes.js';
+const LESSON_ID = 'rousseau-jungle';
+const LESSON_TITLE = 'Jungle Layers';
+const LESSON_ARTIST = 'Henri Rousseau';
+const COURSE_ID = 'creation';
+const LESSON_XP_TOTAL = 80;
+// Per-step XP (sums to LESSON_XP_TOTAL)
+const STEP_XP = [10, 14, 12, 18, 12, 14];
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 2 — UserProfile (contract-compliant, shared with Skills)
+// Section 2.3 of Badge & My Journey contract
+// ════════════════════════════════════════════════════════════════
+const UserProfile = {
+  config: {
+    storageKey: 'fei_user_profile',
+    supabase: { enabled: false, url: '', anonKey: '', tableName: 'user_profiles' }
+  },
+  _cache: null,
+
+  current() {
+    if (this._cache) return this._cache;
+    try {
+      const raw = localStorage.getItem(this.config.storageKey);
+      this._cache = raw ? JSON.parse(raw) : null;
+    } catch (e) { this._cache = null; }
+    return this._cache;
+  },
+
+  clearCache() { this._cache = null; },
+
+  _save(profile) {
+    try {
+      localStorage.setItem(this.config.storageKey, JSON.stringify(profile));
+      this._cache = profile;
+    } catch (e) { console.warn('[UserProfile] save failed:', e); }
+    return profile;
+  },
+
+  createGuest(name, ageGroup) {
+    const p = {
+      id: 'user_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now(),
+      studentCode: null, name: name || 'Friend', ageGroup: ageGroup || 'youth',
+      email: null, tier: 'guest',
+      currentLesson: LESSON_ID, currentStepIdx: 0,
+      completedLessons: [], totalXP: 0, visitCount: 1,
+      memberSince: null, createdAt: Date.now(), lastSeenAt: Date.now()
+    };
+    return this._save(p);
+  },
+
+  createMember(code, name, ageGroup, isTrial) {
+    const existing = this.current();
+    const p = {
+      id: code, studentCode: code, name: name || code,
+      ageGroup: ageGroup || (existing && existing.ageGroup) || 'youth',
+      email: existing ? existing.email : null,
+      tier: isTrial ? 'trial' : 'member',
+      currentLesson: LESSON_ID,
+      currentStepIdx: 0,
+      completedLessons: existing ? (existing.completedLessons || []) : [],
+      totalXP: existing ? (existing.totalXP || 0) : 0,
+      visitCount: existing ? (existing.visitCount || 1) : 1,
+      memberSince: isTrial ? null : Date.now(),
+      createdAt: existing ? existing.createdAt : Date.now(),
+      lastSeenAt: Date.now()
+    };
+    return this._save(p);
+  },
+
+  update(partial) {
+    const cur = this.current();
+    if (!cur) return null;
+    const merged = { ...cur, ...partial, lastSeenAt: Date.now() };
+    return this._save(merged);
+  },
+
+  completeLesson(lessonId) {
+    const cur = this.current();
+    if (!cur) return null;
+    const completed = cur.completedLessons || [];
+    if (!completed.includes(lessonId)) completed.push(lessonId);
+    return this._save({ ...cur, completedLessons: completed, lastSeenAt: Date.now() });
+  },
+
+  addXP(amount) {
+    const cur = this.current();
+    if (!cur) return null;
+    return this._save({ ...cur, totalXP: (cur.totalXP || 0) + (amount || 0), lastSeenAt: Date.now() });
+  },
+
+  upgradeToFreeIntro(email) {
+    const cur = this.current();
+    if (!cur) return null;
+    return this._save({ ...cur, email: email, tier: 'free_intro', upgradedAt: Date.now() });
+  },
+
+  clear() {
+    try { localStorage.removeItem(this.config.storageKey); } catch (e) {}
+    this._cache = null;
+  },
+
+  exists() { return !!this.current(); },
+  isGuest() { const p = this.current(); return p && p.tier === 'guest'; },
+  isFreeIntro() { const p = this.current(); return p && p.tier === 'free_intro'; },
+  isMember() { const p = this.current(); return p && p.tier === 'member'; }
+};
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 3 — JournalStorage (contract Section 4.3)
+// ════════════════════════════════════════════════════════════════
+const JournalStorage = {
+  config: {
+    storageKey: 'fei_thinking_journal',
+    supabase: { enabled: false, url: '', anonKey: '', tableName: 'thinking_journal' }
+  },
+
+  _readAll() {
+    try {
+      const raw = localStorage.getItem(this.config.storageKey);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  },
+
+  _writeAll(entries) {
+    try { localStorage.setItem(this.config.storageKey, JSON.stringify(entries)); }
+    catch (e) { console.warn('[JournalStorage] write failed:', e); }
+  },
+
+  save(entry) {
+    const full = {
+      id: 'entry_' + Math.random().toString(36).slice(2, 8) + '_' + Date.now(),
+      createdAt: Date.now(),
+      courseId: entry.courseId || COURSE_ID,
+      lessonId: entry.lessonId || LESSON_ID,
+      momentKey: entry.momentKey || 'general',
+      ageGroup: entry.ageGroup || null,
+      promptText: entry.promptText || '',
+      studentText: entry.studentText || '',
+      inputType: entry.inputType || 'written'
+    };
+    const all = this._readAll();
+    all.push(full);
+    this._writeAll(all);
+    return full;
+  },
+
+  getForMoment(courseId, lessonId, momentKey) {
+    return this._readAll()
+      .filter(e => e.courseId === courseId && e.lessonId === lessonId && e.momentKey === momentKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  },
+
+  getAllForCourse(courseId) {
+    return this._readAll()
+      .filter(e => e.courseId === courseId)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  },
+
+  getAll() {
+    return this._readAll().sort((a, b) => b.createdAt - a.createdAt);
+  },
+
+  remove(entryId) {
+    const all = this._readAll().filter(e => e.id !== entryId);
+    this._writeAll(all);
+  },
+
+  count(courseId) {
+    if (courseId) return this._readAll().filter(e => e.courseId === courseId).length;
+    return this._readAll().length;
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 4 — LESSON DATA
+// ════════════════════════════════════════════════════════════════
+const LESSON = {
+  id: LESSON_ID,
+  title: LESSON_TITLE,
+  artist: LESSON_ARTIST,
+  badge: {
+    name: 'Jungle Builder',
+    emoji: '🌿',
+    desc: 'You can see layered space and choose your own symbols.'
+  },
+  steps: [
+    {
+      idx: 0,
+      key: 'see-layers',
+      title: 'See the Jungle in Layers',
+      lede: 'Move across the jungle. <em>Which layer are you looking at?</em>',
+      cta: 'Look Deeper',
+      xp: STEP_XP[0]
+    },
+    {
+      idx: 1,
+      key: 'hidden-symbols',
+      title: 'Find the Hidden Symbols',
+      lede: 'Some things in a painting carry meaning. <em>What do you notice?</em>',
+      cta: 'Build My Jungle',
+      xp: STEP_XP[1]
+    },
+    {
+      idx: 2,
+      key: 'choose-world',
+      title: 'Choose Your Jungle World',
+      lede: 'What kind of jungle do <em>you</em> want to make?',
+      cta: 'Arrange My Layers',
+      xp: STEP_XP[2]
+    },
+    {
+      idx: 3,
+      key: 'build-digital',
+      title: 'Build the Jungle Digitally',
+      lede: 'Build back to front. <em>I am constructing space, not decorating a page.</em>',
+      cta: 'Make It by Hand',
+      xp: STEP_XP[3]
+    },
+    {
+      idx: 4,
+      key: 'paper-jungle',
+      title: 'Make the Paper Jungle',
+      lede: 'Now bring your layered world into your hands.',
+      cta: 'Reflect on My Jungle',
+      xp: STEP_XP[4]
+    },
+    {
+      idx: 5,
+      key: 'share-world',
+      title: 'Share the World You Built',
+      lede: '<em>What kind of world did you build?</em>',
+      cta: 'Finish Lesson',
+      xp: STEP_XP[5]
+    }
+  ]
+};
+
+// Step 2: Symbol hotspots (positioned over the scene)
+const SYMBOLS = [
+  { id: 'animal',   x: 65, y: 58, emoji: '🐅', name: 'Watchful animal',
+    decode: 'An animal can stand for instinct, protection, mystery, memory, or power.' },
+  { id: 'figure',   x: 38, y: 65, emoji: '👤', name: 'Secret figure',
+    decode: 'A hidden person can make the jungle feel like a dream, a story, or a private world.' },
+  { id: 'fruit',    x: 22, y: 38, emoji: '🍑', name: 'Glowing fruit',
+    decode: 'A fruit can bring beauty, temptation, energy, danger, or surprise.' },
+  { id: 'flower',   x: 78, y: 40, emoji: '🌺', name: 'Protective flower',
+    decode: 'A flower can offer comfort, beauty, or a quiet kind of strength.' },
+  { id: 'moon',     x: 52, y: 12, emoji: '🌙', name: 'Moon opening',
+    decode: 'An opening inside a crowded painting can feel like a secret, a destination, or a breath.' },
+  { id: 'path',     x: 50, y: 82, emoji: '✨', name: 'Hidden pathway',
+    decode: 'A path can suggest where the eye should travel, or a way out of the dense scene.' }
+];
+
+// Step 3 choices
+const CHOICES = {
+  atmosphere: [
+    { id: 'day',      label: 'Day',        emoji: '☀️' },
+    { id: 'sunset',   label: 'Sunset',     emoji: '🌅' },
+    { id: 'night',    label: 'Night',      emoji: '🌙' },
+    { id: 'misty',    label: 'Misty',      emoji: '🌫️' },
+    { id: 'dream',    label: 'Dream-like', emoji: '💭' },
+    { id: 'stormy',   label: 'Stormy',     emoji: '⛈️' }
+  ],
+  landscape: [
+    { id: 'mountains',  label: 'Mountains behind',    emoji: '⛰️' },
+    { id: 'thickleaves',label: 'Thick leaves',        emoji: '🌿' },
+    { id: 'skywindow',  label: 'Open sky window',     emoji: '☁️' },
+    { id: 'water',      label: 'Deep water feeling',  emoji: '💧' },
+    { id: 'flowers',    label: 'Wild flower zone',    emoji: '🌸' },
+    { id: 'fruit',      label: 'Glowing fruit area',  emoji: '🍑' }
+  ],
+  elements: [
+    { id: 'leaves',   label: 'Large leaves',  emoji: '🌿' },
+    { id: 'vines',    label: 'Vines',         emoji: '🌱' },
+    { id: 'flowers',  label: 'Flowers',       emoji: '🌺' },
+    { id: 'fruits',   label: 'Fruits',        emoji: '🍑' },
+    { id: 'trunks',   label: 'Tree trunks',   emoji: '🪵' },
+    { id: 'hills',    label: 'Distant hills', emoji: '⛰️' },
+    { id: 'moon',     label: 'Moon',          emoji: '🌙' },
+    { id: 'animal',   label: 'Animal',        emoji: '🐅' },
+    { id: 'figure',   label: 'Figure',        emoji: '👤' },
+    { id: 'grass',    label: 'Patterned grass', emoji: '🌾' }
+  ],
+  symbols: [
+    { id: 'animal-protection', label: 'My animal',    meaning: 'means protection', emoji: '🐅' },
+    { id: 'figure-memory',     label: 'My hidden figure', meaning: 'means memory', emoji: '👤' },
+    { id: 'fruit-hope',        label: 'My bright fruit',  meaning: 'means hope',   emoji: '🍑' },
+    { id: 'moon-quiet',        label: 'My moon',     meaning: 'means quiet',       emoji: '🌙' },
+    { id: 'flower-strength',   label: 'My flower',   meaning: 'means strength',    emoji: '🌺' },
+    { id: 'path-discovery',    label: 'My pathway',  meaning: 'means discovery',   emoji: '✨' }
+  ]
+};
+
+// Step 4 builder pieces by layer category
+const BUILDER_PIECES = {
+  'far-bg': [
+    { id: 'sky-day',    name: 'Sky', svg: 'sky' },
+    { id: 'hills',      name: 'Hills', svg: 'hills' },
+    { id: 'moon',       name: 'Moon', svg: 'moon' },
+    { id: 'sky-night',  name: 'Night sky', svg: 'nightsky' }
+  ],
+  'deep': [
+    { id: 'deep-trees', name: 'Far trees', svg: 'deeptrees' },
+    { id: 'deep-leaves',name: 'Far leaves', svg: 'deepleaves' },
+    { id: 'mist',       name: 'Mist', svg: 'mist' },
+    { id: 'distant-tiger', name: 'Far animal', svg: 'fartiger' }
+  ],
+  'middle': [
+    { id: 'mid-trunk',  name: 'Tree trunk', svg: 'trunk' },
+    { id: 'figure',     name: 'Figure', svg: 'figure' },
+    { id: 'tiger',      name: 'Tiger', svg: 'tiger' },
+    { id: 'mid-leaves', name: 'Mid leaves', svg: 'midleaves' }
+  ],
+  'front': [
+    { id: 'flower-red', name: 'Red flower', svg: 'flowerred' },
+    { id: 'flower-pink',name: 'Pink flower', svg: 'flowerpink' },
+    { id: 'fruit',      name: 'Fruit', svg: 'fruit' },
+    { id: 'vine',       name: 'Vine', svg: 'vine' }
+  ],
+  'foreground': [
+    { id: 'big-leaf-l', name: 'Big leaf L', svg: 'bigleafleft' },
+    { id: 'big-leaf-r', name: 'Big leaf R', svg: 'bigleafright' },
+    { id: 'grass',      name: 'Grass', svg: 'grass' },
+    { id: 'pattern',    name: 'Pattern leaf', svg: 'patternleaf' }
+  ]
+};
+
+const BUILDER_LAYERS = [
+  { id: 'far-bg',     label: 'Far background', top: 0,   height: 22 },
+  { id: 'deep',       label: 'Deep layer',     top: 22,  height: 20 },
+  { id: 'middle',     label: 'Middle layer',   top: 42,  height: 22 },
+  { id: 'front',      label: 'Front layer',    top: 64,  height: 18 },
+  { id: 'foreground', label: 'Foreground',     top: 82,  height: 18 }
+];
+
+// Pause cards (Step 5)
+const PAUSE_CARDS = [
+  'Pause and look at your layers from the side.',
+  'Leave breathing room between some shapes.',
+  'Add one surprise in a deeper layer.',
+  'Do not cover everything. Let some secrets stay hidden.'
+];
+
+const MATERIALS = [
+  { name: 'Paper',          emoji: '📄' },
+  { name: 'Colored paper',  emoji: '🎨' },
+  { name: 'Scissors',       emoji: '✂️' },
+  { name: 'Glue',           emoji: '🧴' },
+  { name: 'Markers',        emoji: '🖍️' },
+  { name: 'Colored pencil', emoji: '✏️' }
+];
+
+// Step 6 reflection world choices
+const WORLD_REFLECTIONS = [
+  { id: 'quiet',       label: 'a quiet hidden world' },
+  { id: 'protective',  label: 'a protective jungle' },
+  { id: 'mysterious',  label: 'a mysterious dream' },
+  { id: 'bright',      label: 'a bright and living place' },
+  { id: 'memory',      label: 'a symbolic memory' },
+  { id: 'story',       label: 'a layered story' }
+];
+
+const SYMBOL_REFLECTIONS = [
+  { id: 'my-animal', label: 'my animal', emoji: '🐅' },
+  { id: 'my-figure', label: 'my figure', emoji: '👤' },
+  { id: 'my-fruit',  label: 'my fruit',  emoji: '🍑' },
+  { id: 'my-flower', label: 'my flower', emoji: '🌺' },
+  { id: 'my-sky',    label: 'my sky opening', emoji: '🌙' },
+  { id: 'my-path',   label: 'my hidden path', emoji: '✨' }
+];
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 5 — AI CHAT MODES (Artchi)
+// ════════════════════════════════════════════════════════════════
+const AI_MODES = {
+  jungle_guide: {
+    label: 'Jungle Guide',
+    greeting: "Welcome to the jungle. Try moving across the scene — each layer has its own life. Notice anything that feels far away or close to you?",
+    starters: [
+      "What is foreground exactly?",
+      "Why does this feel layered?",
+      "How did Rousseau make it feel real?"
+    ]
+  },
+  symbol_decoder: {
+    label: 'Symbol Decoder',
+    greeting: "Some things in this jungle want to be noticed. A flower, an animal, a hidden figure. They can mean different things to different people — what's catching your eye?",
+    starters: [
+      "What does an animal usually mean?",
+      "Why hide a figure?",
+      "Can a symbol be personal?"
+    ]
+  },
+  world_builder: {
+    label: 'World Builder',
+    greeting: "You're building a world, not just a picture. Mood, weather, light, what's behind and what's in front. What feeling do you want to start with?",
+    starters: [
+      "Day or night?",
+      "What if I pick everything?",
+      "How do I make it feel mine?"
+    ]
+  },
+  making_companion: {
+    label: 'Making Companion',
+    greeting: "Now we make it real. Layers of paper, scissors, glue. Start with the back — the part farthest from you — and work toward the front. Want a tip?",
+    starters: [
+      "Where do I start?",
+      "Help me pick colors",
+      "What if it gets messy?"
+    ]
+  },
+  final_reflection_helper: {
+    label: 'Reflection',
+    greeting: "You built a world twice. Once on screen, once in your hands. What does it mean to you?",
+    starters: [
+      "Help me name my jungle",
+      "Why did I pick these symbols?",
+      "What did I learn?"
+    ]
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 6 — STATE
+// ════════════════════════════════════════════════════════════════
+let validStudents = new Map();
+let lessonState = {
+  currentStep: 0,
+  layersDiscovered: new Set(),
+  symbolsSaved: [],         // array of {id, name, emoji}
+  worldChoices: {
+    atmosphere: null,
+    landscape: null,
+    elements: new Set(),
+    symbols: new Set()
+  },
+  builderPlacements: [],    // array of {pieceId, layerId, x, y, name}
+  builderActiveLayer: 'far-bg',
+  builderActiveCategory: 'far-bg',
+  builderSelectedPiece: null,
+  worldReflection: null,
+  symbolReflection: null,
+  reflectionText: '',
+  uploadedImage: null,      // dataURL
+  xpAwardedThisSession: new Set() // step keys we've awarded XP for in this session
+};
+
+// In-memory snapshot of last completed step (to award XP idempotently across reloads, also persist in localStorage briefly)
+const SESSION_STATE_KEY = 'fei_lfc019_session_v1';
+
+function persistLessonState() {
+  try {
+    const profile = UserProfile.current();
+    if (!profile) return;
+    const key = SESSION_STATE_KEY + '_' + (profile.studentCode || profile.id);
+    const snap = {
+      currentStep: lessonState.currentStep,
+      layersDiscovered: Array.from(lessonState.layersDiscovered),
+      symbolsSaved: lessonState.symbolsSaved,
+      worldChoices: {
+        atmosphere: lessonState.worldChoices.atmosphere,
+        landscape: lessonState.worldChoices.landscape,
+        elements: Array.from(lessonState.worldChoices.elements),
+        symbols: Array.from(lessonState.worldChoices.symbols)
+      },
+      builderPlacements: lessonState.builderPlacements,
+      worldReflection: lessonState.worldReflection,
+      symbolReflection: lessonState.symbolReflection,
+      reflectionText: lessonState.reflectionText,
+      uploadedImage: lessonState.uploadedImage,
+      xpAwardedThisSession: Array.from(lessonState.xpAwardedThisSession)
+    };
+    localStorage.setItem(key, JSON.stringify(snap));
+  } catch (e) {}
+}
+
+function restoreLessonState() {
+  try {
+    const profile = UserProfile.current();
+    if (!profile) return;
+    const key = SESSION_STATE_KEY + '_' + (profile.studentCode || profile.id);
+    const raw = localStorage.getItem(key);
+    if (!raw) return;
+    const snap = JSON.parse(raw);
+    if (typeof snap.currentStep === 'number') lessonState.currentStep = snap.currentStep;
+    if (Array.isArray(snap.layersDiscovered)) lessonState.layersDiscovered = new Set(snap.layersDiscovered);
+    if (Array.isArray(snap.symbolsSaved)) lessonState.symbolsSaved = snap.symbolsSaved;
+    if (snap.worldChoices) {
+      lessonState.worldChoices.atmosphere = snap.worldChoices.atmosphere;
+      lessonState.worldChoices.landscape = snap.worldChoices.landscape;
+      lessonState.worldChoices.elements = new Set(snap.worldChoices.elements || []);
+      lessonState.worldChoices.symbols = new Set(snap.worldChoices.symbols || []);
+    }
+    if (Array.isArray(snap.builderPlacements)) lessonState.builderPlacements = snap.builderPlacements;
+    if (typeof snap.worldReflection === 'string') lessonState.worldReflection = snap.worldReflection;
+    if (typeof snap.symbolReflection === 'string') lessonState.symbolReflection = snap.symbolReflection;
+    if (typeof snap.reflectionText === 'string') lessonState.reflectionText = snap.reflectionText;
+    if (typeof snap.uploadedImage === 'string') lessonState.uploadedImage = snap.uploadedImage;
+    if (Array.isArray(snap.xpAwardedThisSession)) lessonState.xpAwardedThisSession = new Set(snap.xpAwardedThisSession);
+  } catch (e) {}
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 7 — ROSTER + SIGN-IN
+// ════════════════════════════════════════════════════════════════
+async function loadRoster() {
+  try {
+    const res = await fetch(ROSTER_PATH, { cache: 'no-store' });
+    if (!res.ok) throw new Error('roster fetch failed: ' + res.status);
+    const txt = await res.text();
+    // Roster format: window.FEI_STUDENT_ROSTER = [ { code, displayName, isTrial }, ... ]
+    // Or older format: window.STUDENT_ACCESS = { 'CODE': { name, trial }, ... }
+    const blocks = [...txt.matchAll(/code\s*:\s*['"]([A-Z0-9-]+)['"][\s\S]*?displayName\s*:\s*['"]([^'"]+)['"][\s\S]*?(?:isTrial\s*:\s*(true|false))?/g)];
+    blocks.forEach(m => {
+      validStudents.set(m[1], { displayName: m[2], isTrial: m[3] === 'true' });
+    });
+    // Always allow trial code
+    if (!validStudents.has('TRYNEW')) {
+      validStudents.set('TRYNEW', { displayName: 'Trial', isTrial: true });
+    }
+    console.log('[LFC019] Loaded ' + validStudents.size + ' codes');
+  } catch (err) {
+    console.warn('[LFC019] Roster load failed, falling back to trial only:', err);
+    validStudents.set('TRYNEW', { displayName: 'Trial', isTrial: true });
+  }
+}
+
+function updateSignInBtn() {
+  const btn = document.getElementById('signin-btn');
+  const code = document.getElementById('signin-code').value.trim().toUpperCase();
+  btn.disabled = code.length < 3;
+}
+
+function attemptSignIn() {
+  const input = document.getElementById('signin-code');
+  const error = document.getElementById('signin-error');
+  const code = input.value.trim().toUpperCase();
+  if (!code) return;
+  const match = validStudents.get(code);
+  if (!match) {
+    input.classList.add('error');
+    error.classList.add('visible');
+    setTimeout(() => input.classList.remove('error'), 400);
+    return;
+  }
+  // Contract-compliant: createMember uses fei_user_profile
+  UserProfile.createMember(code, match.displayName, 'youth', match.isTrial);
+  restoreLessonState();
+  // Bump visit count for returning users
+  const cur = UserProfile.current();
+  UserProfile.update({ visitCount: (cur.visitCount || 1) + 1 });
+  showLesson();
+}
+
+function signOut() {
+  if (!confirm('Sign out? Your progress is saved on this device.')) return;
+  UserProfile.clear();
+  window.location.reload();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 8 — SCREEN SWITCHING + AUTO-SKIP WELCOME GATE
+// (contract Section 2.5: Round 38 #7.1)
+// ════════════════════════════════════════════════════════════════
+function showSignIn() {
+  document.getElementById('signin-screen').style.display = 'flex';
+  document.getElementById('lesson-screen').style.display = 'none';
+  document.getElementById('topbar-right').innerHTML =
+    '<a href="https://www.feiteamart.com" target="_blank" rel="noopener">feiteamart.com</a>';
+  const urlCode = new URLSearchParams(window.location.search).get('code');
+  if (urlCode) {
+    document.getElementById('signin-code').value = urlCode.toUpperCase();
+    updateSignInBtn();
+  }
+}
+
+function showLesson() {
+  const profile = UserProfile.current();
+  if (!profile) { showSignIn(); return; }
+  document.getElementById('signin-screen').style.display = 'none';
+  document.getElementById('lesson-screen').style.display = 'block';
+  const tier = profile.tier === 'trial' ? '· Trial' : '';
+  document.getElementById('topbar-right').innerHTML =
+    '<span class="user-pill">' + escapeHtml(profile.name) + ' ' + tier + '</span>' +
+    '<button class="sign-out-btn" onclick="openMyJourney()">📖 My Journey</button>' +
+    '<button class="sign-out-btn" onclick="signOut()">Sign out</button>';
+  renderCurrentStep();
+  showArtchi();
+}
+
+// Bootstrap on load
+async function init() {
+  await loadRoster();
+  const profile = UserProfile.current();
+  if (profile && profile.studentCode) {
+    // Round 38 #7.1: auto-skip the welcome gate for returning users
+    const completedAny = (profile.completedLessons || []).length > 0;
+    const visitedOften = (profile.visitCount || 0) >= 2;
+    if (completedAny || visitedOften) {
+      UserProfile.update({ visitCount: (profile.visitCount || 1) + 1 });
+      restoreLessonState();
+      showLesson();
+      return;
+    }
+    // First-visit gate is integrated into sign-in (no separate "Hi Regina" screen needed here)
+    restoreLessonState();
+    showLesson();
+  } else {
+    showSignIn();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+// (Continued in next script block — Section 9+ for renderers, interactions, Artchi, My Journey modal)
+</script>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SECTION 9 — SVG ART ASSETS (Rousseau jungle scene + builder pieces)
+// ════════════════════════════════════════════════════════════════
+
+// The main scene used in Step 1 (Layer Sweep) and Step 2 (Hidden Symbols)
+function svgJungleScene() {
+  return `
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2840"/>
+      <stop offset="55%" stop-color="#2d5a3d"/>
+      <stop offset="100%" stop-color="#0d2818"/>
+    </linearGradient>
+    <radialGradient id="moon-grad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#f4e9c1"/>
+      <stop offset="60%" stop-color="#d4a548" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#d4a548" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Layer 5: Distance / sky / moon (deepest, painted first) -->
+  <g class="jungle-layer-group" data-layer="distance" data-label="distance">
+    <rect width="1000" height="600" fill="url(#sky-grad)"/>
+    <!-- Moon -->
+    <circle cx="520" cy="100" r="42" fill="url(#moon-grad)"/>
+    <circle cx="520" cy="100" r="26" fill="#f4e9c1"/>
+    <!-- Distant mountains -->
+    <path d="M 0,250 Q 120,210 220,235 Q 320,255 420,220 Q 540,200 660,230 Q 780,255 900,225 Q 980,210 1000,235 L 1000,300 L 0,300 Z" fill="#1a2840" opacity="0.85"/>
+    <path d="M 0,280 Q 150,250 280,275 Q 420,295 560,265 Q 700,245 840,275 Q 940,290 1000,278 L 1000,310 L 0,310 Z" fill="#2d5a3d" opacity="0.55"/>
+    <!-- Distant stars -->
+    <circle cx="140" cy="60" r="1.5" fill="#f4e9c1" opacity="0.7"/>
+    <circle cx="320" cy="80" r="1" fill="#f4e9c1" opacity="0.6"/>
+    <circle cx="780" cy="50" r="1.5" fill="#f4e9c1" opacity="0.7"/>
+    <circle cx="880" cy="130" r="1" fill="#f4e9c1" opacity="0.5"/>
+  </g>
+
+  <!-- Layer 4: Deep layer (far trees, distant foliage) -->
+  <g class="jungle-layer-group" data-layer="deep" data-label="deep layer">
+    <!-- Deep dense foliage band -->
+    <path d="M 0,320 Q 100,290 200,315 Q 300,335 400,310 Q 500,290 600,320 Q 700,340 800,310 Q 900,290 1000,315 L 1000,400 L 0,400 Z" fill="#0d2818"/>
+    <!-- Deep tree trunks (silhouettes) -->
+    <g fill="#0d2818">
+      <rect x="60"  y="280" width="14" height="120"/>
+      <rect x="170" y="270" width="12" height="130"/>
+      <rect x="280" y="285" width="16" height="115"/>
+      <rect x="420" y="275" width="14" height="125"/>
+      <rect x="560" y="285" width="13" height="115"/>
+      <rect x="710" y="270" width="15" height="130"/>
+      <rect x="830" y="280" width="14" height="120"/>
+      <rect x="930" y="285" width="12" height="115"/>
+    </g>
+    <!-- Deep leaf masses (clusters of dark green ovals) -->
+    <g fill="#1d3a25">
+      <ellipse cx="80"  cy="280" rx="40" ry="22"/>
+      <ellipse cx="190" cy="270" rx="44" ry="24"/>
+      <ellipse cx="290" cy="285" rx="38" ry="20"/>
+      <ellipse cx="430" cy="275" rx="42" ry="22"/>
+      <ellipse cx="570" cy="285" rx="40" ry="22"/>
+      <ellipse cx="720" cy="270" rx="44" ry="24"/>
+      <ellipse cx="840" cy="280" rx="40" ry="22"/>
+      <ellipse cx="940" cy="285" rx="38" ry="20"/>
+    </g>
+    <!-- A far animal (eyes glowing) -->
+    <g transform="translate(640,348)">
+      <ellipse cx="0" cy="0" rx="22" ry="9" fill="#1a2840"/>
+      <circle cx="-6" cy="-1" r="1.4" fill="#d4a548"/>
+      <circle cx="6"  cy="-1" r="1.4" fill="#d4a548"/>
+    </g>
+  </g>
+
+  <!-- Layer 3: Middle layer (hidden figure + mid foliage) -->
+  <g class="jungle-layer-group" data-layer="middle" data-label="middle layer">
+    <!-- Mid leaves -->
+    <g fill="#2d5a3d">
+      <path d="M 30,370 Q 80,330 150,360 Q 220,380 280,355 Q 340,335 410,365 L 410,420 L 30,420 Z"/>
+      <path d="M 500,365 Q 580,340 660,365 Q 740,385 820,360 Q 900,340 1000,365 L 1000,420 L 500,420 Z"/>
+    </g>
+    <!-- Hidden figure (in the middle, half-obscured) -->
+    <g transform="translate(380,360)">
+      <!-- body -->
+      <ellipse cx="0" cy="50" rx="22" ry="38" fill="#8b1e1e" opacity="0.85"/>
+      <!-- head -->
+      <circle cx="0" cy="0" r="14" fill="#d4a548" opacity="0.95"/>
+      <!-- hair / hat -->
+      <path d="M -14,-4 Q 0,-22 14,-4 Z" fill="#0d2818"/>
+      <!-- eyes -->
+      <circle cx="-4" cy="0" r="1.3" fill="#0d2818"/>
+      <circle cx="4"  cy="0" r="1.3" fill="#0d2818"/>
+    </g>
+    <!-- Mid leaf cluster patterns -->
+    <g fill="#3d6c4a">
+      <ellipse cx="140" cy="380" rx="50" ry="22"/>
+      <ellipse cx="260" cy="385" rx="44" ry="20"/>
+      <ellipse cx="560" cy="380" rx="48" ry="22"/>
+      <ellipse cx="720" cy="385" rx="44" ry="20"/>
+      <ellipse cx="900" cy="380" rx="46" ry="22"/>
+    </g>
+    <!-- Vines hanging -->
+    <g stroke="#3d6c4a" stroke-width="2" fill="none" stroke-linecap="round">
+      <path d="M 200,300 Q 205,360 210,420"/>
+      <path d="M 480,310 Q 475,370 480,430"/>
+      <path d="M 770,300 Q 775,360 770,420"/>
+    </g>
+  </g>
+
+  <!-- Layer 2: Front layer (flowers, tiger, fruit) -->
+  <g class="jungle-layer-group" data-layer="front" data-label="front layer">
+    <!-- Tiger (Rousseau-inspired) -->
+    <g transform="translate(620,400)">
+      <!-- body -->
+      <ellipse cx="0" cy="20" rx="58" ry="28" fill="#d4a548"/>
+      <!-- head -->
+      <circle cx="-48" cy="0" r="22" fill="#d4a548"/>
+      <!-- stripes -->
+      <g fill="#0d2818" opacity="0.85">
+        <path d="M -42,-12 L -38,8 L -42,8 Z"/>
+        <path d="M -54,-8 L -50,10 L -54,10 Z"/>
+        <path d="M -30,-4 L -26,12 L -30,12 Z"/>
+        <path d="M -15,8 L -10,28 L -15,28 Z"/>
+        <path d="M 5,12 L 10,32 L 5,32 Z"/>
+        <path d="M 25,14 L 30,34 L 25,34 Z"/>
+        <path d="M 45,12 L 50,32 L 45,32 Z"/>
+      </g>
+      <!-- eyes -->
+      <circle cx="-54" cy="-4" r="2.5" fill="#0d2818"/>
+      <circle cx="-42" cy="-4" r="2.5" fill="#0d2818"/>
+      <circle cx="-54" cy="-4" r="0.9" fill="#f4e9c1"/>
+      <circle cx="-42" cy="-4" r="0.9" fill="#f4e9c1"/>
+      <!-- nose -->
+      <ellipse cx="-48" cy="6" rx="2.5" ry="1.5" fill="#0d2818"/>
+      <!-- ears -->
+      <path d="M -60,-18 L -54,-22 L -52,-14 Z" fill="#d4a548"/>
+      <path d="M -42,-18 L -36,-22 L -38,-14 Z" fill="#d4a548"/>
+      <!-- tail -->
+      <path d="M 56,18 Q 80,8 95,30" stroke="#d4a548" stroke-width="10" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Red flowers (front) -->
+    <g transform="translate(770,400)">
+      <circle cx="0" cy="0" r="14" fill="#8b1e1e"/>
+      <circle cx="-8" cy="-8" r="10" fill="#c9522a"/>
+      <circle cx="8" cy="-8" r="10" fill="#c9522a"/>
+      <circle cx="-10" cy="6" r="10" fill="#c9522a"/>
+      <circle cx="10" cy="6" r="10" fill="#c9522a"/>
+      <circle cx="0" cy="0" r="6" fill="#d4a548"/>
+    </g>
+    <!-- Pink flowers cluster -->
+    <g transform="translate(160,420)">
+      <circle cx="0" cy="0" r="11" fill="#e89b7a"/>
+      <circle cx="-7" cy="-7" r="8" fill="#f4b89a"/>
+      <circle cx="7" cy="-7" r="8" fill="#f4b89a"/>
+      <circle cx="0" cy="0" r="4" fill="#d4a548"/>
+    </g>
+    <!-- Fruit (orange/peach) -->
+    <g transform="translate(230,360)">
+      <circle cx="0" cy="0" r="13" fill="#c9522a"/>
+      <ellipse cx="-3" cy="-3" rx="4" ry="3" fill="#e88a52" opacity="0.6"/>
+      <path d="M -3,-12 L 0,-16 L 3,-12" stroke="#2d5a3d" stroke-width="2" fill="none"/>
+    </g>
+  </g>
+
+  <!-- Layer 1: Foreground (big leaves cutting in) -->
+  <g class="jungle-layer-group" data-layer="foreground" data-label="foreground">
+    <!-- Big foreground leaf, left, cutting in -->
+    <g transform="translate(-30,440)">
+      <path d="M 0,0 Q 60,-80 180,-30 Q 220,30 180,100 Q 60,150 -30,80 Q -50,40 0,0 Z" fill="#4a7a3a"/>
+      <!-- midrib -->
+      <path d="M 30,30 Q 90,20 170,50" stroke="#2d5a3d" stroke-width="2" fill="none"/>
+      <!-- vein lines -->
+      <g stroke="#2d5a3d" stroke-width="1" fill="none" opacity="0.6">
+        <path d="M 50,40 Q 70,20 80,5"/>
+        <path d="M 80,45 Q 100,25 110,10"/>
+        <path d="M 110,50 Q 130,30 140,15"/>
+        <path d="M 50,40 Q 30,55 10,70"/>
+        <path d="M 80,45 Q 60,60 35,75"/>
+        <path d="M 110,50 Q 90,65 60,82"/>
+      </g>
+    </g>
+
+    <!-- Big foreground leaf, right -->
+    <g transform="translate(900,440)">
+      <path d="M 0,0 Q -60,-80 -180,-30 Q -220,30 -180,100 Q -60,150 30,80 Q 50,40 0,0 Z" fill="#4a7a3a"/>
+      <path d="M -30,30 Q -90,20 -170,50" stroke="#2d5a3d" stroke-width="2" fill="none"/>
+      <g stroke="#2d5a3d" stroke-width="1" fill="none" opacity="0.6">
+        <path d="M -50,40 Q -70,20 -80,5"/>
+        <path d="M -80,45 Q -100,25 -110,10"/>
+        <path d="M -110,50 Q -130,30 -140,15"/>
+      </g>
+    </g>
+
+    <!-- Patterned grass blades (foreground) -->
+    <g stroke="#3d6c4a" stroke-width="3" fill="none" stroke-linecap="round">
+      <path d="M 300,600 Q 305,560 312,520"/>
+      <path d="M 330,600 Q 335,560 338,520"/>
+      <path d="M 360,600 Q 365,560 372,525"/>
+      <path d="M 400,600 Q 405,560 408,520"/>
+      <path d="M 440,600 Q 445,560 452,525"/>
+      <path d="M 500,600 Q 505,560 508,520"/>
+      <path d="M 540,600 Q 545,560 552,525"/>
+    </g>
+
+    <!-- Foreground vine -->
+    <g>
+      <path d="M 480,460 Q 500,520 470,570 Q 440,600 450,580"
+            stroke="#3d6c4a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="475" cy="500" rx="18" ry="8" fill="#4a7a3a" transform="rotate(30 475 500)"/>
+      <ellipse cx="465" cy="540" rx="18" ry="8" fill="#4a7a3a" transform="rotate(-20 465 540)"/>
+    </g>
+  </g>
+</svg>
+`;
+}
+
+// Builder piece SVGs (compact symbols used in Step 4)
+function svgBuilderPiece(svgId) {
+  const lib = {
+    sky: `<svg viewBox="0 0 60 60"><defs><linearGradient id="bp-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7eb8d4"/><stop offset="100%" stop-color="#d4a548"/></linearGradient></defs><rect width="60" height="60" rx="6" fill="url(#bp-sky)"/></svg>`,
+    nightsky: `<svg viewBox="0 0 60 60"><rect width="60" height="60" rx="6" fill="#1a2840"/><circle cx="20" cy="20" r="1.5" fill="#f4e9c1"/><circle cx="40" cy="14" r="1" fill="#f4e9c1"/><circle cx="48" cy="32" r="1.2" fill="#f4e9c1"/><circle cx="14" cy="40" r="1" fill="#f4e9c1"/></svg>`,
+    moon: `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="22" fill="#f4e9c1"/><circle cx="25" cy="27" r="3" fill="#d4a548" opacity="0.4"/><circle cx="35" cy="35" r="2" fill="#d4a548" opacity="0.4"/></svg>`,
+    hills: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#2d5a3d" opacity="0.2"/><path d="M 0,40 Q 15,28 30,38 Q 45,30 60,40 L 60,60 L 0,60 Z" fill="#1a2840"/></svg>`,
+    deeptrees: `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#0d2818" opacity="0.1"/><ellipse cx="15" cy="35" rx="10" ry="20" fill="#0d2818"/><ellipse cx="32" cy="32" rx="11" ry="22" fill="#0d2818"/><ellipse cx="48" cy="35" rx="10" ry="20" fill="#0d2818"/></svg>`,
+    deepleaves: `<svg viewBox="0 0 60 60"><ellipse cx="20" cy="30" rx="14" ry="8" fill="#1d3a25"/><ellipse cx="40" cy="32" rx="14" ry="8" fill="#1d3a25"/><ellipse cx="30" cy="44" rx="14" ry="7" fill="#1d3a25"/></svg>`,
+    mist: `<svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="26" ry="14" fill="#f4e9c1" opacity="0.5"/><ellipse cx="20" cy="38" rx="18" ry="8" fill="#f4e9c1" opacity="0.35"/></svg>`,
+    fartiger: `<svg viewBox="0 0 60 60"><ellipse cx="30" cy="34" rx="20" ry="8" fill="#d4a548"/><circle cx="14" cy="30" r="6" fill="#d4a548"/><path d="M 10,28 L 12,32 L 10,32 Z M 16,28 L 18,32 L 16,32 Z" fill="#0d2818"/><circle cx="11" cy="29" r="1" fill="#0d2818"/><circle cx="16" cy="29" r="1" fill="#0d2818"/></svg>`,
+    trunk: `<svg viewBox="0 0 60 60"><rect x="24" y="8" width="12" height="48" rx="2" fill="#5a3e1d"/><path d="M 24,20 L 36,20" stroke="#3a2810" stroke-width="1"/><path d="M 24,35 L 36,35" stroke="#3a2810" stroke-width="1"/></svg>`,
+    figure: `<svg viewBox="0 0 60 60"><ellipse cx="30" cy="38" rx="10" ry="18" fill="#8b1e1e"/><circle cx="30" cy="18" r="9" fill="#d4a548"/><path d="M 22,16 Q 30,5 38,16 Z" fill="#0d2818"/><circle cx="27" cy="18" r="0.8" fill="#0d2818"/><circle cx="33" cy="18" r="0.8" fill="#0d2818"/></svg>`,
+    tiger: `<svg viewBox="0 0 60 60"><ellipse cx="38" cy="34" rx="18" ry="9" fill="#d4a548"/><circle cx="18" cy="28" r="11" fill="#d4a548"/><g fill="#0d2818"><path d="M 24,22 L 26,32 L 24,32 Z"/><path d="M 32,32 L 34,40 L 32,40 Z"/><path d="M 44,34 L 46,42 L 44,42 Z"/></g><circle cx="14" cy="26" r="1.4" fill="#0d2818"/><circle cx="20" cy="26" r="1.4" fill="#0d2818"/><ellipse cx="17" cy="32" rx="1.5" ry="1" fill="#0d2818"/></svg>`,
+    midleaves: `<svg viewBox="0 0 60 60"><ellipse cx="20" cy="28" rx="14" ry="8" fill="#2d5a3d"/><ellipse cx="40" cy="32" rx="14" ry="8" fill="#3d6c4a"/><ellipse cx="30" cy="44" rx="14" ry="7" fill="#2d5a3d"/></svg>`,
+    flowerred: `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="8" fill="#8b1e1e"/><circle cx="22" cy="22" r="7" fill="#c9522a"/><circle cx="38" cy="22" r="7" fill="#c9522a"/><circle cx="22" cy="38" r="7" fill="#c9522a"/><circle cx="38" cy="38" r="7" fill="#c9522a"/><circle cx="30" cy="30" r="4" fill="#d4a548"/></svg>`,
+    flowerpink: `<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="7" fill="#e89b7a"/><circle cx="23" cy="23" r="6" fill="#f4b89a"/><circle cx="37" cy="23" r="6" fill="#f4b89a"/><circle cx="23" cy="37" r="6" fill="#f4b89a"/><circle cx="37" cy="37" r="6" fill="#f4b89a"/><circle cx="30" cy="30" r="3" fill="#d4a548"/></svg>`,
+    fruit: `<svg viewBox="0 0 60 60"><circle cx="30" cy="32" r="14" fill="#c9522a"/><ellipse cx="26" cy="28" rx="4" ry="3" fill="#e88a52" opacity="0.7"/><path d="M 26,18 L 30,12 L 34,18" stroke="#2d5a3d" stroke-width="2" fill="none"/></svg>`,
+    vine: `<svg viewBox="0 0 60 60"><path d="M 12,8 Q 18,28 12,40 Q 8,52 14,56" stroke="#3d6c4a" stroke-width="3" fill="none"/><ellipse cx="14" cy="24" rx="8" ry="4" fill="#4a7a3a" transform="rotate(30 14 24)"/><ellipse cx="10" cy="40" rx="8" ry="4" fill="#4a7a3a" transform="rotate(-20 10 40)"/></svg>`,
+    bigleafleft: `<svg viewBox="0 0 60 60"><path d="M 4,30 Q 20,8 50,18 Q 56,30 50,42 Q 20,52 4,30 Z" fill="#4a7a3a"/><path d="M 10,30 Q 30,28 48,32" stroke="#2d5a3d" stroke-width="1" fill="none"/></svg>`,
+    bigleafright: `<svg viewBox="0 0 60 60"><path d="M 56,30 Q 40,8 10,18 Q 4,30 10,42 Q 40,52 56,30 Z" fill="#4a7a3a"/><path d="M 50,30 Q 30,28 12,32" stroke="#2d5a3d" stroke-width="1" fill="none"/></svg>`,
+    grass: `<svg viewBox="0 0 60 60"><g stroke="#3d6c4a" stroke-width="2" fill="none" stroke-linecap="round"><path d="M 12,55 Q 14,40 16,28"/><path d="M 22,55 Q 24,40 26,30"/><path d="M 32,55 Q 34,40 35,28"/><path d="M 42,55 Q 44,40 46,30"/><path d="M 50,55 Q 52,40 54,32"/></g></svg>`,
+    patternleaf: `<svg viewBox="0 0 60 60"><path d="M 8,30 Q 20,12 52,18 Q 56,30 52,42 Q 20,48 8,30 Z" fill="#7ba668"/><g stroke="#2d5a3d" stroke-width="1" fill="none"><path d="M 14,30 L 50,30"/><path d="M 18,22 L 18,38"/><path d="M 28,20 L 28,40"/><path d="M 38,20 L 38,40"/><path d="M 46,22 L 46,38"/></g></svg>`
+  };
+  return lib[svgId] || `<svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#7ba668" rx="6"/></svg>`;
+}
+
+// (Continued in next script block — Section 10+ for renderers and interactions)
+</script>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SECTION 10 — RENDERERS (Steps 1 through 6) + NAV
+// ════════════════════════════════════════════════════════════════
+
+function findStep(idx) {
+  return LESSON.steps.find(s => s.idx === idx);
+}
+
+function renderCurrentStep() {
+  const step = findStep(lessonState.currentStep);
+  if (!step) return;
+  const c = document.getElementById('lesson-content');
+  c.innerHTML = `
+    <div class="step-header">
+      <div>
+        <span class="step-eyebrow">Henri Rousseau · Learn From Masters</span>
+        <span class="step-num">Step ${step.idx + 1} of 6</span>
+      </div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-lede">${step.lede}</div>
+    </div>
+    <div id="step-body"></div>
+  `;
+
+  // Render the appropriate body
+  const body = document.getElementById('step-body');
+  switch (step.idx) {
+    case 0: renderStep1(body); break;
+    case 1: renderStep2(body); break;
+    case 2: renderStep3(body); break;
+    case 3: renderStep4(body); break;
+    case 4: renderStep5(body); break;
+    case 5: renderStep6(body); break;
+  }
+
+  renderNavProgress();
+  updateNavButtons();
+  // Update profile current step
+  UserProfile.update({ currentLesson: LESSON_ID, currentStepIdx: step.idx });
+  persistLessonState();
+  // Suggest a chat mode appropriate to this step
+  updateSuggestedChatMode(step.idx);
+}
+
+function renderNavProgress() {
+  const dots = document.getElementById('nav-progress');
+  dots.innerHTML = LESSON.steps.map(s => {
+    let cls = 'nav-dot';
+    if (s.idx < lessonState.currentStep) cls += ' done';
+    else if (s.idx === lessonState.currentStep) cls += ' current';
+    return `<div class="${cls}" title="Step ${s.idx + 1}: ${s.title}"></div>`;
+  }).join('');
+}
+
+function updateNavButtons() {
+  const prev = document.getElementById('prev-btn');
+  const next = document.getElementById('next-btn');
+  const step = findStep(lessonState.currentStep);
+  prev.style.visibility = lessonState.currentStep === 0 ? 'hidden' : 'visible';
+  next.textContent = step.cta + ' →';
+  next.disabled = !canAdvance(step.idx);
+}
+
+function canAdvance(idx) {
+  switch (idx) {
+    case 0: return lessonState.layersDiscovered.size >= 3;
+    case 1: return lessonState.symbolsSaved.length >= 1;
+    case 2: return lessonState.worldChoices.atmosphere && lessonState.worldChoices.landscape
+                  && lessonState.worldChoices.elements.size >= 3;
+    case 3: {
+      // need at least 1 piece per major layer (3 of the 5 layers populated is enough)
+      const layersWithContent = new Set(lessonState.builderPlacements.map(p => p.layerId));
+      return layersWithContent.size >= 3;
+    }
+    case 4: return true; // making is offline; let students proceed after watching
+    case 5: return lessonState.worldReflection && lessonState.symbolReflection;
+    default: return true;
+  }
+}
+
+function goNext() {
+  const idx = lessonState.currentStep;
+  const step = findStep(idx);
+  if (!canAdvance(idx)) return;
+  // Award XP for the step we are leaving (idempotent)
+  awardStepXP(step.key, step.xp);
+  if (idx < LESSON.steps.length - 1) {
+    lessonState.currentStep = idx + 1;
+    renderCurrentStep();
+    scrollToTop();
+  } else {
+    finalizeLesson();
+  }
+}
+
+function goPrev() {
+  if (lessonState.currentStep === 0) return;
+  lessonState.currentStep -= 1;
+  renderCurrentStep();
+  scrollToTop();
+}
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+function awardStepXP(stepKey, xp) {
+  if (lessonState.xpAwardedThisSession.has(stepKey)) return;
+  UserProfile.addXP(xp);
+  lessonState.xpAwardedThisSession.add(stepKey);
+  persistLessonState();
+  toast('+' + xp + ' XP', 1400);
+}
+
+// ──── Step 1: Layer Sweep ──────────────────────────────────────
+function renderStep1(body) {
+  body.innerHTML = `
+    <div class="step1-prompt">Move across the jungle to see the layers.</div>
+    <div class="jungle-stage" id="jungle-stage">
+      ${svgJungleScene()}
+      <div class="layer-label" id="layer-label"></div>
+    </div>
+    <div class="layer-meter" id="layer-meter">
+      ${['foreground','front','middle','deep','distance'].map(l => `
+        <div class="layer-pip" data-layer="${l}">${l}</div>
+      `).join('')}
+    </div>
+    <p style="margin-top:18px; color: var(--muted); font-size: 13px; max-width:640px;">
+      Hover or tap across each part of the jungle. Watch how a layer comes forward and the rest steps back. <strong>Discover at least 3 of the 5 layers</strong> to continue.
+    </p>
+  `;
+
+  const stage = document.getElementById('jungle-stage');
+  const groups = stage.querySelectorAll('.jungle-layer-group');
+  const label = document.getElementById('layer-label');
+
+  function activateLayer(layerName, evt) {
+    groups.forEach(g => {
+      if (g.getAttribute('data-layer') === layerName) g.classList.add('active');
+      else g.classList.remove('active');
+    });
+    stage.classList.add('has-active');
+    label.textContent = layerName;
+    label.classList.add('visible');
+    // position label near pointer
+    if (evt) {
+      const rect = stage.getBoundingClientRect();
+      const px = evt.clientX - rect.left;
+      const py = evt.clientY - rect.top - 30;
+      label.style.left = Math.max(10, Math.min(rect.width - 120, px - 50)) + 'px';
+      label.style.top = Math.max(10, py) + 'px';
+    }
+    // mark discovered
+    if (!lessonState.layersDiscovered.has(layerName)) {
+      lessonState.layersDiscovered.add(layerName);
+      const pip = document.querySelector(`.layer-pip[data-layer="${layerName}"]`);
+      if (pip) pip.classList.add('discovered');
+      persistLessonState();
+      updateNavButtons();
+    }
+  }
+
+  function clearLayer() {
+    groups.forEach(g => g.classList.remove('active'));
+    stage.classList.remove('has-active');
+    label.classList.remove('visible');
+  }
+
+  groups.forEach(g => {
+    g.addEventListener('mouseenter', (e) => activateLayer(g.getAttribute('data-layer'), e));
+    g.addEventListener('mousemove',  (e) => {
+      const layer = g.getAttribute('data-layer');
+      const rect = stage.getBoundingClientRect();
+      label.style.left = Math.max(10, Math.min(rect.width - 120, e.clientX - rect.left - 50)) + 'px';
+      label.style.top  = Math.max(10, e.clientY - rect.top - 30) + 'px';
+      // ensure correct layer is active during move (in case mouseenter missed)
+      if (!g.classList.contains('active')) activateLayer(layer, e);
+    });
+    // touch
+    g.addEventListener('touchstart', (e) => {
+      if (e.touches.length) {
+        const t = e.touches[0];
+        activateLayer(g.getAttribute('data-layer'), { clientX: t.clientX, clientY: t.clientY });
+      }
+    }, { passive: true });
+  });
+  stage.addEventListener('mouseleave', clearLayer);
+
+  // restore discovered
+  lessonState.layersDiscovered.forEach(name => {
+    const pip = document.querySelector(`.layer-pip[data-layer="${name}"]`);
+    if (pip) pip.classList.add('discovered');
+  });
+}
+
+// ──── Step 2: Hidden Symbols ───────────────────────────────────
+function renderStep2(body) {
+  body.innerHTML = `
+    <div class="step1-prompt">Hover or tap the glowing dots. Each one is a small story.</div>
+    <div class="jungle-stage symbol-scene-wrap" id="symbol-stage">
+      ${svgJungleScene()}
+      ${SYMBOLS.map(s => `
+        <div class="symbol-hotspot" data-symbol="${s.id}"
+             style="left: calc(${s.x}% - 28px); top: calc(${s.y}% - 28px);"
+             onclick="openSymbolCard('${s.id}', event)">
+          ${s.emoji}
+        </div>
+      `).join('')}
+      <div class="symbol-card-popup" id="symbol-popup"></div>
+    </div>
+    <div class="symbol-tray">
+      <div class="symbol-tray-title">My jungle symbols</div>
+      <div class="symbol-chips" id="symbol-chips"></div>
+    </div>
+    <p style="margin-top:16px; color: var(--muted); font-size: 13px; max-width:640px;">
+      Tap each glowing spot to read what it could mean. Save <strong>at least 1</strong> symbol you'd like to keep with you.
+    </p>
+  `;
+  renderSymbolChips();
+  // Mark discovered symbols
+  lessonState.symbolsSaved.forEach(s => {
+    const dot = document.querySelector(`.symbol-hotspot[data-symbol="${s.id}"]`);
+    if (dot) dot.classList.add('discovered');
+  });
+}
+
+function openSymbolCard(symbolId, evt) {
+  const sym = SYMBOLS.find(s => s.id === symbolId);
+  if (!sym) return;
+  const popup = document.getElementById('symbol-popup');
+  const stage = document.getElementById('symbol-stage');
+  const saved = lessonState.symbolsSaved.some(s => s.id === symbolId);
+  popup.innerHTML = `
+    <h4>${sym.emoji} ${sym.name}</h4>
+    <div>${sym.decode}</div>
+    <button class="save-symbol-btn ${saved ? 'saved' : ''}" id="save-symbol-btn">
+      ${saved ? '✓ Saved to my tray' : '+ Save to my tray'}
+    </button>
+  `;
+  // Position popup near hotspot but inside stage
+  const dot = document.querySelector(`.symbol-hotspot[data-symbol="${symbolId}"]`);
+  const dRect = dot.getBoundingClientRect();
+  const sRect = stage.getBoundingClientRect();
+  const popupW = 280;
+  let left = dot.offsetLeft + 60;
+  let top  = dot.offsetTop;
+  if (left + popupW > stage.clientWidth) left = dot.offsetLeft - popupW - 8;
+  if (left < 8) left = 8;
+  if (top + 200 > stage.clientHeight) top = stage.clientHeight - 210;
+  if (top < 8) top = 8;
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+  popup.classList.add('visible');
+
+  document.getElementById('save-symbol-btn').addEventListener('click', () => {
+    if (saved) {
+      lessonState.symbolsSaved = lessonState.symbolsSaved.filter(s => s.id !== symbolId);
+      dot.classList.remove('discovered');
+    } else {
+      lessonState.symbolsSaved.push({ id: sym.id, name: sym.name, emoji: sym.emoji });
+      dot.classList.add('discovered');
+      // Save to journal — STRUCTURED data so future recommendation engine can query
+      const profile = UserProfile.current();
+      JournalStorage.save({
+        courseId: COURSE_ID,
+        lessonId: LESSON_ID,
+        momentKey: 'symbol-noticed',
+        ageGroup: profile ? profile.ageGroup : null,
+        promptText: 'Which symbol did you choose to keep?',
+        studentText: 'Saved symbol: ' + sym.name + ' (' + sym.id + ')',
+        inputType: 'selection'
+      });
+    }
+    renderSymbolChips();
+    persistLessonState();
+    updateNavButtons();
+    popup.classList.remove('visible');
+  });
+
+  // Close on outside click
+  setTimeout(() => {
+    const onAway = (e) => {
+      if (!popup.contains(e.target) && e.target !== dot) {
+        popup.classList.remove('visible');
+        document.removeEventListener('click', onAway);
+      }
+    };
+    document.addEventListener('click', onAway);
+  }, 50);
+  if (evt) evt.stopPropagation();
+}
+
+function renderSymbolChips() {
+  const wrap = document.getElementById('symbol-chips');
+  if (!wrap) return;
+  if (lessonState.symbolsSaved.length === 0) {
+    wrap.innerHTML = '<div class="symbol-tray-empty">Tap a glowing dot above — save one or two that speak to you.</div>';
+  } else {
+    wrap.innerHTML = lessonState.symbolsSaved.map(s => `
+      <div class="symbol-chip">
+        <span>${s.emoji}</span>
+        <span>${s.name}</span>
+        <button class="remove-chip" onclick="removeSymbol('${s.id}')" title="Remove">×</button>
+      </div>
+    `).join('');
+  }
+}
+
+function removeSymbol(id) {
+  lessonState.symbolsSaved = lessonState.symbolsSaved.filter(s => s.id !== id);
+  const dot = document.querySelector(`.symbol-hotspot[data-symbol="${id}"]`);
+  if (dot) dot.classList.remove('discovered');
+  renderSymbolChips();
+  persistLessonState();
+  updateNavButtons();
+}
+
+// ──── Step 3: Choose Your World ────────────────────────────────
+function renderStep3(body) {
+  body.innerHTML = `
+    <div class="card">
+      <div class="choose-section">
+        <div class="choose-section-title">A. Time / atmosphere</div>
+        <div class="choose-section-sub">Pick one.</div>
+        <div class="option-grid" id="atmos-grid">
+          ${CHOICES.atmosphere.map(o => `
+            <button class="option-tile ${lessonState.worldChoices.atmosphere === o.id ? 'selected' : ''}"
+                    onclick="pickAtmos('${o.id}')">
+              <span class="tile-emoji">${o.emoji}</span>
+              <span>${o.label}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="choose-section">
+        <div class="choose-section-title">B. Landscape feeling</div>
+        <div class="choose-section-sub">Pick one.</div>
+        <div class="option-grid" id="land-grid">
+          ${CHOICES.landscape.map(o => `
+            <button class="option-tile ${lessonState.worldChoices.landscape === o.id ? 'selected' : ''}"
+                    onclick="pickLandscape('${o.id}')">
+              <span class="tile-emoji">${o.emoji}</span>
+              <span>${o.label}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="choose-section">
+        <div class="choose-section-title">C. Main elements</div>
+        <div class="choose-section-sub">Pick <strong>3 to 6</strong>.</div>
+        <div class="elements-counter ${lessonState.worldChoices.elements.size >= 3 && lessonState.worldChoices.elements.size <= 6 ? 'good' : ''}" id="el-count">
+          ${lessonState.worldChoices.elements.size} chosen
+        </div>
+        <div class="option-grid" id="el-grid">
+          ${CHOICES.elements.map(o => `
+            <button class="option-tile ${lessonState.worldChoices.elements.has(o.id) ? 'selected' : ''}"
+                    onclick="toggleElement('${o.id}')">
+              <span class="tile-emoji">${o.emoji}</span>
+              <span>${o.label}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="choose-section">
+        <div class="choose-section-title">D. Personal symbols</div>
+        <div class="choose-section-sub">Pick <strong>1 to 2</strong> that feel personal.</div>
+        <div class="option-grid" id="sym-grid">
+          ${CHOICES.symbols.map(o => `
+            <button class="option-tile ${lessonState.worldChoices.symbols.has(o.id) ? 'selected' : ''}"
+                    onclick="toggleWorldSymbol('${o.id}')">
+              <span class="tile-emoji">${o.emoji}</span>
+              <span>${o.label}</span>
+              <span class="tile-meaning">${o.meaning}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function pickAtmos(id) {
+  lessonState.worldChoices.atmosphere = id;
+  renderCurrentStep();
+}
+
+function pickLandscape(id) {
+  lessonState.worldChoices.landscape = id;
+  renderCurrentStep();
+}
+
+function toggleElement(id) {
+  const set = lessonState.worldChoices.elements;
+  if (set.has(id)) set.delete(id);
+  else if (set.size < 6) set.add(id);
+  renderCurrentStep();
+}
+
+function toggleWorldSymbol(id) {
+  const set = lessonState.worldChoices.symbols;
+  if (set.has(id)) set.delete(id);
+  else if (set.size < 2) set.add(id);
+  renderCurrentStep();
+}
+
+// (Continued in next script block — Step 4 Layer Builder, Step 5, Step 6, Artchi, Journey)
+</script>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SECTION 11 — Step 4: Layer Builder (drag + tap dual interaction)
+// ════════════════════════════════════════════════════════════════
+
+function renderStep4(body) {
+  body.innerHTML = `
+    <div class="builder-wrap">
+      <!-- Canvas -->
+      <div class="builder-canvas" id="builder-canvas">
+        ${BUILDER_LAYERS.map(L => `
+          <div class="builder-slot" data-layer="${L.id}"
+               style="top:${L.top}%; height:${L.height}%;"
+               ondragover="builderDragOver(event, '${L.id}')"
+               ondragleave="builderDragLeave(event, '${L.id}')"
+               ondrop="builderDrop(event, '${L.id}')"
+               onclick="builderSlotClick('${L.id}')">
+            <span class="builder-slot-label">${L.label}</span>
+          </div>
+        `).join('')}
+        <div class="builder-slot-instructions builder-instructions-fade" id="builder-hint">Tap a piece → tap a layer<br/><span style="font-size:14px; opacity:0.7;">or drag</span></div>
+      </div>
+
+      <!-- Tray -->
+      <div class="builder-tray">
+        <div class="builder-tray-title">Pick & place</div>
+        <div class="builder-tray-sub">Build from back to front. Far background first.</div>
+        <div class="builder-tray-pills" id="builder-categories">
+          ${BUILDER_LAYERS.map(L => `
+            <button class="builder-tray-pill ${L.id === lessonState.builderActiveCategory ? 'active' : ''}"
+                    data-cat="${L.id}" onclick="setBuilderCategory('${L.id}')">
+              ${L.label}
+            </button>
+          `).join('')}
+        </div>
+        <div class="builder-pieces" id="builder-pieces"></div>
+        <div class="builder-status">
+          <div class="layer-progress" id="layer-progress">
+            ${BUILDER_LAYERS.map(L => {
+              const has = lessonState.builderPlacements.some(p => p.layerId === L.id);
+              return `<div class="layer-pip-mini ${has ? 'has-content' : ''}" title="${L.label}"></div>`;
+            }).join('')}
+          </div>
+          <button class="builder-reset-btn" onclick="resetBuilder()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:16px; color: var(--muted); font-size: 13px; max-width:640px;">
+      Place <strong>at least one piece in 3 different layers</strong>. Tap a piece, then tap a slot.
+      You can also drag on desktop. Layers can stay quiet — spacing is allowed.
+    </p>
+  `;
+  renderBuilderPieces();
+  renderPlacedPieces();
+  // Show hint briefly if canvas is empty
+  if (lessonState.builderPlacements.length === 0) {
+    setTimeout(() => {
+      const hint = document.getElementById('builder-hint');
+      if (hint) hint.classList.add('show');
+    }, 300);
+  }
+}
+
+function setBuilderCategory(catId) {
+  lessonState.builderActiveCategory = catId;
+  // Update pill
+  document.querySelectorAll('.builder-tray-pill').forEach(p => {
+    p.classList.toggle('active', p.getAttribute('data-cat') === catId);
+  });
+  renderBuilderPieces();
+}
+
+function renderBuilderPieces() {
+  const wrap = document.getElementById('builder-pieces');
+  if (!wrap) return;
+  const cat = lessonState.builderActiveCategory;
+  const pieces = BUILDER_PIECES[cat] || [];
+  wrap.innerHTML = pieces.map(p => `
+    <div class="builder-piece ${lessonState.builderSelectedPiece === p.id ? 'selected' : ''}"
+         data-piece="${p.id}" data-cat="${cat}"
+         draggable="true"
+         ondragstart="builderDragStart(event, '${p.id}', '${cat}')"
+         onclick="selectBuilderPiece('${p.id}', '${cat}')"
+         title="${p.name}">
+      ${svgBuilderPiece(p.svg)}
+    </div>
+  `).join('');
+}
+
+function selectBuilderPiece(pieceId, catId) {
+  if (lessonState.builderSelectedPiece === pieceId) {
+    lessonState.builderSelectedPiece = null;
+  } else {
+    lessonState.builderSelectedPiece = pieceId;
+    // Suggest matching layer
+    lessonState.builderActiveLayer = catId;
+    // Highlight the matching slot
+    document.querySelectorAll('.builder-slot').forEach(s => {
+      s.classList.toggle('target-active', s.getAttribute('data-layer') === catId);
+    });
+  }
+  renderBuilderPieces();
+}
+
+function builderDragStart(evt, pieceId, catId) {
+  evt.dataTransfer.setData('text/plain', JSON.stringify({ pieceId, catId }));
+  evt.dataTransfer.effectAllowed = 'copy';
+  lessonState.builderSelectedPiece = pieceId;
+  lessonState.builderActiveLayer = catId;
+}
+
+function builderDragOver(evt, layerId) {
+  evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'copy';
+  const slot = evt.currentTarget;
+  slot.classList.add('target-active');
+}
+
+function builderDragLeave(evt, layerId) {
+  const slot = evt.currentTarget;
+  slot.classList.remove('target-active');
+}
+
+function builderDrop(evt, layerId) {
+  evt.preventDefault();
+  const slot = evt.currentTarget;
+  slot.classList.remove('target-active');
+  let data;
+  try { data = JSON.parse(evt.dataTransfer.getData('text/plain')); }
+  catch (e) { data = null; }
+  if (!data || !data.pieceId) return;
+  const rect = slot.getBoundingClientRect();
+  const x = ((evt.clientX - rect.left) / rect.width) * 100;
+  const y = ((evt.clientY - rect.top) / rect.height) * 100;
+  placePiece(data.pieceId, data.catId, layerId, x, y);
+}
+
+function builderSlotClick(layerId) {
+  if (!lessonState.builderSelectedPiece) return;
+  // Find which category the selected piece belongs to
+  let pieceCat = null;
+  for (const [cat, list] of Object.entries(BUILDER_PIECES)) {
+    if (list.some(p => p.id === lessonState.builderSelectedPiece)) { pieceCat = cat; break; }
+  }
+  if (!pieceCat) return;
+  // Tap placement: center of slot (with small random offset)
+  const x = 50 + (Math.random() * 30 - 15);
+  const y = 50;
+  placePiece(lessonState.builderSelectedPiece, pieceCat, layerId, x, y);
+}
+
+function placePiece(pieceId, pieceCat, layerId, xPct, yPct) {
+  const pieceDef = (BUILDER_PIECES[pieceCat] || []).find(p => p.id === pieceId);
+  if (!pieceDef) return;
+  lessonState.builderPlacements.push({
+    pieceId,
+    layerId,
+    pieceCat,
+    name: pieceDef.name,
+    svg: pieceDef.svg,
+    x: xPct, y: yPct,
+    placedAt: Date.now()
+  });
+  lessonState.builderSelectedPiece = null;
+  renderPlacedPieces();
+  renderBuilderPieces();
+  // Hide hint
+  const hint = document.getElementById('builder-hint');
+  if (hint) hint.classList.remove('show');
+  // Clear all slot highlights
+  document.querySelectorAll('.builder-slot').forEach(s => s.classList.remove('target-active'));
+  // Update progress meter
+  const pips = document.querySelectorAll('.layer-pip-mini');
+  pips.forEach((pip, i) => {
+    const layer = BUILDER_LAYERS[i];
+    pip.classList.toggle('has-content', lessonState.builderPlacements.some(p => p.layerId === layer.id));
+  });
+  persistLessonState();
+  updateNavButtons();
+}
+
+function renderPlacedPieces() {
+  const canvas = document.getElementById('builder-canvas');
+  if (!canvas) return;
+  // Remove existing placed pieces
+  canvas.querySelectorAll('.placed-piece').forEach(el => el.remove());
+  // Re-render
+  lessonState.builderPlacements.forEach((p, i) => {
+    const layerDef = BUILDER_LAYERS.find(L => L.id === p.layerId);
+    if (!layerDef) return;
+    const el = document.createElement('div');
+    el.className = 'placed-piece';
+    el.style.left = (p.x - 6) + '%';
+    // Compute absolute top within canvas given slot top + offset within slot
+    const layerTopPct = layerDef.top;
+    const layerHeightPct = layerDef.height;
+    const absoluteTop = layerTopPct + (layerHeightPct * (p.y / 100)) - 6;
+    el.style.top = absoluteTop + '%';
+    el.style.width = '14%';
+    el.style.height = '18%';
+    el.title = p.name + ' — tap to remove';
+    el.innerHTML = svgBuilderPiece(p.svg);
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm('Remove ' + p.name + '?')) {
+        lessonState.builderPlacements.splice(i, 1);
+        renderPlacedPieces();
+        // Update progress
+        const pips = document.querySelectorAll('.layer-pip-mini');
+        pips.forEach((pip, j) => {
+          const layer = BUILDER_LAYERS[j];
+          pip.classList.toggle('has-content', lessonState.builderPlacements.some(pp => pp.layerId === layer.id));
+        });
+        persistLessonState();
+        updateNavButtons();
+      }
+    });
+    canvas.appendChild(el);
+  });
+}
+
+function resetBuilder() {
+  if (lessonState.builderPlacements.length === 0) return;
+  if (!confirm('Clear all placed pieces?')) return;
+  lessonState.builderPlacements = [];
+  renderPlacedPieces();
+  document.querySelectorAll('.layer-pip-mini').forEach(p => p.classList.remove('has-content'));
+  persistLessonState();
+  updateNavButtons();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 12 — Step 5: Make the Paper Jungle (video + materials + pause)
+// ════════════════════════════════════════════════════════════════
+function renderStep5(body) {
+  body.innerHTML = `
+    <div class="video-wrap" id="video-wrap">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="play-label">Teacher making video</div>
+        <div class="play-sub">Faye walks you through building the paper jungle, back layer first.</div>
+        <div class="play-sub" style="margin-top:14px; font-size:11px; opacity:0.5;">video coming soon · placeholder</div>
+      </div>
+      <!-- When video is ready, replace placeholder with:
+      <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/PLACEHOLDER/iframe" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+      -->
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="choose-section-title">What you'll need</div>
+      <div class="materials-list">
+        ${MATERIALS.map(m => `
+          <div class="material-tile"><span class="mat-emoji">${m.emoji}</span> ${m.name}</div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="choose-section-title" style="margin-top:24px;">Pause cards</div>
+    <div class="choose-section-sub">If you get stuck, glance at one of these.</div>
+    <div class="pause-cards">
+      ${PAUSE_CARDS.map(c => `<div class="pause-card">"${c}"</div>`).join('')}
+    </div>
+
+    <div class="panel-dark" style="margin-top:24px;">
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: var(--jungle-warm); margin-bottom: 6px;">A note from your teacher</div>
+      <div style="font-size:14px; line-height: 1.65; color: rgba(244,233,193,0.92);">
+        Your jungle can be different from mine. You do not need the same exact leaves or colors. <strong>Keep your symbols personal.</strong> The video is a guide, not a copy.
+      </div>
+    </div>
+  `;
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 13 — Step 6: Share + Reflect + Complete
+// ════════════════════════════════════════════════════════════════
+function renderStep6(body) {
+  // Pull forward the symbol they saved in Step 2 (used in the reflection prompt)
+  const savedSymbol = lessonState.symbolsSaved[0];
+  const symbolPrompt = savedSymbol
+    ? `You noticed a <em>${savedSymbol.name.toLowerCase()}</em>. Did it find its way into your jungle?`
+    : `Which symbol matters most in your jungle?`;
+
+  body.innerHTML = `
+    <div class="card">
+      <div class="reflection-prompt">What kind of world did you build?</div>
+      <div class="reflection-grid">
+        ${WORLD_REFLECTIONS.map(r => `
+          <button class="reflection-tile ${lessonState.worldReflection === r.id ? 'selected' : ''}"
+                  onclick="pickWorldReflection('${r.id}')">${r.label}</button>
+        `).join('')}
+      </div>
+
+      <div class="reflection-prompt" style="margin-top:8px;">${symbolPrompt}</div>
+      <div class="reflection-grid">
+        ${SYMBOL_REFLECTIONS.map(r => `
+          <button class="reflection-tile ${lessonState.symbolReflection === r.id ? 'selected' : ''}"
+                  onclick="pickSymbolReflection('${r.id}')">${r.emoji} ${r.label}</button>
+        `).join('')}
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label style="font-family:'Caveat',cursive; font-size:19px; color:var(--jungle-flame); display:block; margin-bottom:8px;">
+          One more thing you want to remember? <span style="font-size:13px; color:var(--muted); font-family:inherit;">(optional)</span>
+        </label>
+        <textarea class="reflection-textarea" id="reflection-text"
+                  placeholder="Maybe the moment when your jungle felt right…"
+                  oninput="onReflectionTextChange()">${escapeHtml(lessonState.reflectionText || '')}</textarea>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label style="font-family:'Caveat',cursive; font-size:19px; color:var(--jungle-flame); display:block; margin-bottom:8px;">
+          Show your paper jungle <span style="font-size:13px; color:var(--muted); font-family:inherit;">(optional photo)</span>
+        </label>
+        <div class="upload-area ${lessonState.uploadedImage ? 'has-image' : ''}" id="upload-area"
+             onclick="document.getElementById('upload-input').click()">
+          ${lessonState.uploadedImage
+            ? `<img class="upload-preview" src="${lessonState.uploadedImage}" alt="My paper jungle">`
+            : `<div><div class="up-icon">📷</div><div class="up-text">Tap to add a photo</div><div class="up-sub">Saved on your device only.</div></div>`}
+        </div>
+        <input type="file" id="upload-input" accept="image/*" style="display:none;" onchange="handleUpload(event)">
+      </div>
+    </div>
+
+    <div id="completion-card-slot"></div>
+  `;
+
+  if (canAdvance(5)) renderCompletionCard();
+}
+
+function pickWorldReflection(id) {
+  lessonState.worldReflection = id;
+  // Save journal entry — STRUCTURED so future recommendation system can query
+  const profile = UserProfile.current();
+  const ref = WORLD_REFLECTIONS.find(r => r.id === id);
+  JournalStorage.save({
+    courseId: COURSE_ID,
+    lessonId: LESSON_ID,
+    momentKey: 'world-named',
+    ageGroup: profile ? profile.ageGroup : null,
+    promptText: 'What kind of world did you build?',
+    studentText: 'I built ' + (ref ? ref.label : id),
+    inputType: 'selection'
+  });
+  renderCurrentStep();
+}
+
+function pickSymbolReflection(id) {
+  lessonState.symbolReflection = id;
+  const profile = UserProfile.current();
+  const ref = SYMBOL_REFLECTIONS.find(r => r.id === id);
+  JournalStorage.save({
+    courseId: COURSE_ID,
+    lessonId: LESSON_ID,
+    momentKey: 'symbol-chosen',
+    ageGroup: profile ? profile.ageGroup : null,
+    promptText: 'Which symbol matters most in your jungle?',
+    studentText: 'Most important: ' + (ref ? ref.label : id),
+    inputType: 'selection'
+  });
+  renderCurrentStep();
+}
+
+let _reflectionDebounce = null;
+function onReflectionTextChange() {
+  const ta = document.getElementById('reflection-text');
+  if (!ta) return;
+  lessonState.reflectionText = ta.value;
+  clearTimeout(_reflectionDebounce);
+  _reflectionDebounce = setTimeout(() => persistLessonState(), 400);
+}
+
+function handleUpload(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Photo is too large (max 5MB). Try a smaller image?');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    // Downscale to keep storage small
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxSize = 1200;
+      let { width, height } = img;
+      if (width > maxSize || height > maxSize) {
+        const scale = maxSize / Math.max(width, height);
+        width *= scale; height *= scale;
+      }
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      lessonState.uploadedImage = canvas.toDataURL('image/jpeg', 0.85);
+      persistLessonState();
+      renderCurrentStep();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderCompletionCard() {
+  const slot = document.getElementById('completion-card-slot');
+  if (!slot) return;
+  const profile = UserProfile.current();
+  const totalXP = (profile.totalXP || 0) + (lessonState.xpAwardedThisSession.has('share-world') ? 0 : LESSON.steps[5].xp);
+  const creationCount = (profile.completedLessons || []).filter(id =>
+    id === 'rousseau-jungle' || id.startsWith('lfc')
+  ).length + (profile.completedLessons.includes(LESSON_ID) ? 0 : 1);
+  slot.innerHTML = `
+    <div class="lesson-complete-card">
+      <div class="lc-eyebrow">Lesson complete</div>
+      <div class="lc-title">A layered painting can feel like a world.</div>
+      <div class="lc-line">A symbol inside it can make that world belong to you.</div>
+      <div class="lc-stats">
+        <div class="lc-stat">
+          <div class="lc-stat-num">${LESSON_XP_TOTAL}</div>
+          <div class="lc-stat-lbl">XP earned</div>
+        </div>
+        <div class="lc-stat">
+          <div class="lc-stat-num">${lessonState.symbolsSaved.length}</div>
+          <div class="lc-stat-lbl">Symbols saved</div>
+        </div>
+        <div class="lc-stat">
+          <div class="lc-stat-num">${lessonState.builderPlacements.length}</div>
+          <div class="lc-stat-lbl">Layer pieces</div>
+        </div>
+      </div>
+      <button class="nav-btn primary" style="background: var(--jungle-warm); color: var(--jungle-deep);"
+              onclick="finalizeLesson()">
+        Finish & return to Studio →
+      </button>
+    </div>
+  `;
+}
+
+function finalizeLesson() {
+  // Award the final step XP idempotently
+  const finalStep = LESSON.steps[5];
+  awardStepXP(finalStep.key, finalStep.xp);
+
+  // Mark lesson complete (contract: idempotent)
+  UserProfile.completeLesson(LESSON_ID);
+
+  // Save the final reflection journal entry
+  const profile = UserProfile.current();
+  const worldRef = WORLD_REFLECTIONS.find(r => r.id === lessonState.worldReflection);
+  const symRef = SYMBOL_REFLECTIONS.find(r => r.id === lessonState.symbolReflection);
+  let studentText = '';
+  if (worldRef) studentText += 'World: ' + worldRef.label + '. ';
+  if (symRef) studentText += 'Most important: ' + symRef.label + '. ';
+  if (lessonState.reflectionText && lessonState.reflectionText.trim()) {
+    studentText += 'Note: ' + lessonState.reflectionText.trim();
+  }
+  if (studentText) {
+    JournalStorage.save({
+      courseId: COURSE_ID,
+      lessonId: LESSON_ID,
+      momentKey: 'final-reflection',
+      ageGroup: profile ? profile.ageGroup : null,
+      promptText: 'Share the world you built.',
+      studentText: studentText,
+      inputType: lessonState.reflectionText.trim() ? 'mixed' : 'selection'
+    });
+  }
+
+  // Return to studio
+  toast('Saved · returning to Studio…', 1600);
+  setTimeout(() => {
+    window.location.href = '../../creation/';
+  }, 1700);
+}
+
+// (Continued in next script block — Artchi, Chat, My Journey, utilities)
+</script>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SECTION 14 — ARTCHI MASCOT + CHAT
+// ════════════════════════════════════════════════════════════════
+const ARTCHI_GLOBAL_FLAG = 'fei_artchi_introduced';
+let currentChatMode = 'jungle_guide';
+
+function showArtchi() {
+  const m = document.getElementById('artchi-mascot');
+  m.style.display = 'block';
+  // First-time intro
+  if (!localStorage.getItem(ARTCHI_GLOBAL_FLAG)) {
+    setTimeout(() => {
+      document.getElementById('artchi-onboard').classList.add('visible');
+    }, 800);
+  } else {
+    // Welcome-back bubble
+    const profile = UserProfile.current();
+    const text = (profile && profile.completedLessons.length > 0)
+      ? 'Welcome back! Ready for the jungle?'
+      : "Tap me when you'd like a nudge — I'll be quiet 'til then.";
+    showArtchiBubble(text, 5000);
+  }
+}
+
+function closeArtchiOnboard() {
+  document.getElementById('artchi-onboard').classList.remove('visible');
+  localStorage.setItem(ARTCHI_GLOBAL_FLAG, 'true');
+  showArtchiBubble('Tap me anytime!', 3500);
+}
+
+function openArtchiAbout() {
+  document.getElementById('artchi-about').classList.add('visible');
+}
+
+function closeArtchiAbout() {
+  document.getElementById('artchi-about').classList.remove('visible');
+}
+
+function showArtchiBubble(text, ms) {
+  const bubble = document.getElementById('artchi-bubble');
+  document.getElementById('artchi-bubble-text').textContent = text;
+  bubble.classList.add('visible');
+  if (ms) setTimeout(() => bubble.classList.remove('visible'), ms);
+}
+
+function closeArtchiBubble() {
+  document.getElementById('artchi-bubble').classList.remove('visible');
+}
+
+function updateSuggestedChatMode(stepIdx) {
+  const map = ['jungle_guide','symbol_decoder','world_builder','world_builder','making_companion','final_reflection_helper'];
+  currentChatMode = map[stepIdx] || 'jungle_guide';
+}
+
+// ──── Chat modal ──────────────────────────────────────────────
+function openChatModal(modeKey) {
+  currentChatMode = modeKey || currentChatMode;
+  const mode = AI_MODES[currentChatMode];
+  document.getElementById('chat-mode-pill').textContent = mode.label;
+  // Mode switcher
+  const switcher = document.getElementById('chat-mode-switcher');
+  switcher.innerHTML = Object.keys(AI_MODES).map(k => `
+    <button class="chat-mode-btn ${k === currentChatMode ? 'active' : ''}"
+            onclick="switchChatMode('${k}')">${AI_MODES[k].label}</button>
+  `).join('');
+  // Thread
+  const thread = document.getElementById('chat-thread');
+  thread.innerHTML = '';
+  appendChatMsg('artchi', mode.greeting);
+  // Starters
+  const starters = document.getElementById('chat-starters');
+  starters.innerHTML = mode.starters.map(s => `
+    <button class="chat-starter" onclick="sendStarter('${escapeAttr(s)}')">${escapeHtml(s)}</button>
+  `).join('');
+  document.getElementById('chat-modal').classList.add('visible');
+  setTimeout(() => document.getElementById('chat-input').focus(), 100);
+}
+
+function switchChatMode(k) {
+  if (!AI_MODES[k]) return;
+  openChatModal(k);
+}
+
+function closeChatModal() {
+  document.getElementById('chat-modal').classList.remove('visible');
+}
+
+function appendChatMsg(who, text) {
+  const thread = document.getElementById('chat-thread');
+  const el = document.createElement('div');
+  el.className = 'chat-msg ' + who;
+  el.textContent = text;
+  thread.appendChild(el);
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  appendChatMsg('user', text);
+  input.value = '';
+  // Hide starters after first message
+  document.getElementById('chat-starters').innerHTML = '';
+  // Fake reply (placeholder — to be replaced with real LLM backend later)
+  setTimeout(() => {
+    appendChatMsg('artchi', fakeArtchiReply(text, currentChatMode));
+  }, 700);
+}
+
+function sendStarter(text) {
+  document.getElementById('chat-input').value = text;
+  sendChat();
+}
+
+function fakeArtchiReply(userText, mode) {
+  const lower = userText.toLowerCase();
+  // Mode-specific keyword heuristic responses
+  if (mode === 'jungle_guide') {
+    if (lower.includes('foreground') || lower.includes('front')) {
+      return "Foreground is what feels closest to you — the leaves that almost touch your face. They're usually biggest and darkest, and they cut into the frame.";
+    }
+    if (lower.includes('background') || lower.includes('far')) {
+      return "Background is the farthest layer — sky, mountains, soft mist. Often paler, often quieter. It tells you where you are.";
+    }
+    if (lower.includes('layer')) {
+      return "Try this: pretend you're walking through it. What would touch you first? What would you only see if you squinted?";
+    }
+    return "Move slowly across the jungle. Each layer wants a moment of your attention.";
+  }
+  if (mode === 'symbol_decoder') {
+    if (lower.includes('animal')) {
+      return "An animal can be a guardian or a memory — sometimes both. What does yours feel like?";
+    }
+    if (lower.includes('figure') || lower.includes('person')) {
+      return "A hidden figure makes the jungle a story. Someone is there, but quietly. Maybe it's you?";
+    }
+    if (lower.includes('fruit') || lower.includes('flower')) {
+      return "Fruit and flowers can mean hope, warning, beauty, or surprise — depending on where you put them.";
+    }
+    return "Symbols don't have one fixed meaning. The meaning starts with you.";
+  }
+  if (mode === 'world_builder') {
+    if (lower.includes('day') || lower.includes('night')) {
+      return "Day jungles feel alive and exposed. Night jungles feel private and a little magical. Both work — pick the one that matches your mood.";
+    }
+    if (lower.includes('pick') || lower.includes('choose')) {
+      return "Three or four elements are usually enough. Crowded isn't always richer.";
+    }
+    if (lower.includes('mine') || lower.includes('personal')) {
+      return "Add something nobody else would think of. That's where your jungle starts to feel like yours.";
+    }
+    return "Start with the mood. Everything else follows from that.";
+  }
+  if (mode === 'making_companion') {
+    if (lower.includes('color')) {
+      return "Look at your digital version. Pick 4 main colors and one accent. Less is usually richer.";
+    }
+    if (lower.includes('start')) {
+      return "Start at the back — sky and far mountains. Build forward, layer by layer. Don't glue the foreground until everything behind it is done.";
+    }
+    if (lower.includes('messy') || lower.includes('mistake')) {
+      return "Layered paper is forgiving — you can hide a mistake with the next layer. That's part of why the technique feels good.";
+    }
+    return "Take it slow. The jungle gets richer with each layer.";
+  }
+  if (mode === 'final_reflection_helper') {
+    if (lower.includes('name')) {
+      return "What does your jungle protect? Or remember? Or wait for? A two-word name often lands the strongest.";
+    }
+    if (lower.includes('symbol')) {
+      return "Your symbols are your fingerprint in this scene. Naming why you chose them is the whole point of this step.";
+    }
+    if (lower.includes('learn')) {
+      return "Maybe: that a jungle is built, not painted all at once. That space has layers. That meaning hides in details.";
+    }
+    return "Take a breath. Look at what you built. Trust that it says something.";
+  }
+  // Generic fallback
+  return "Tell me more — what part of the jungle are you in right now?";
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 15 — MY JOURNEY MODAL (contract Section 4.4)
+// ════════════════════════════════════════════════════════════════
+function openMyJourney() {
+  renderJourneyContent();
+  document.getElementById('journey-modal').classList.add('visible');
+}
+
+function closeMyJourney() {
+  document.getElementById('journey-modal').classList.remove('visible');
+}
+
+function renderJourneyContent() {
+  const entries = JournalStorage.getAll();
+  const profile = UserProfile.current();
+  const totalThoughts = entries.length;
+  const creationThoughts = entries.filter(e => e.courseId === COURSE_ID).length;
+  const oldest = entries.length ? entries[entries.length - 1].createdAt : Date.now();
+  const daysGrowing = Math.max(1, Math.round((Date.now() - oldest) / (1000 * 60 * 60 * 24)));
+
+  document.getElementById('journey-stats').innerHTML = `
+    <div class="journey-stat">
+      <div class="journey-stat-num">${totalThoughts}</div>
+      <div class="journey-stat-lbl">Total thoughts</div>
+    </div>
+    <div class="journey-stat">
+      <div class="journey-stat-num">${creationThoughts}</div>
+      <div class="journey-stat-lbl">In Creation</div>
+    </div>
+    <div class="journey-stat">
+      <div class="journey-stat-num">${daysGrowing}</div>
+      <div class="journey-stat-lbl">Days growing</div>
+    </div>
+  `;
+
+  const list = document.getElementById('journey-list');
+  if (entries.length === 0) {
+    list.innerHTML = `
+      <div class="journey-empty">
+        <div class="empty-emoji">💭</div>
+        <div class="empty-line">No thoughts yet — your trail starts here.</div>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = entries.map(e => `
+    <div class="journey-entry">
+      <div class="journey-entry-head">
+        <span class="journey-lesson-tag">${lessonLabel(e.lessonId)}</span>
+        <span class="journey-time">${relativeTime(e.createdAt)}</span>
+      </div>
+      <div class="journey-prompt">${escapeHtml(e.promptText || '')}</div>
+      <div class="journey-text">${escapeHtml(e.studentText || '')}</div>
+      <span class="journey-input-mode">${e.inputType}</span>
+    </div>
+  `).join('');
+}
+
+function lessonLabel(lessonId) {
+  // Foundation Skills
+  if (lessonId === 'preparation') return 'Skills · Preparation';
+  if (lessonId === 'cube')         return 'Skills · Cube';
+  if (lessonId === 'sphere')       return 'Skills · Sphere';
+  if (lessonId === 'cylinder')     return 'Skills · Cylinder';
+  if (lessonId === 'box')          return 'Skills · Box';
+  if (lessonId === 'cup')          return 'Skills · Cup';
+  if (lessonId === 'apple')        return 'Skills · Apple';
+  if (lessonId === 'cone')         return 'Skills · Cone';
+  if (lessonId === 'icecream')     return 'Skills · Ice Cream';
+  if (lessonId === 'intersecting') return 'Skills · Intersecting';
+  if (lessonId === 'papercrane')   return 'Skills · Paper Crane';
+  // Creation
+  if (lessonId === LESSON_ID)      return 'Creation · Jungle Layers';
+  if (lessonId === 'lfc017')       return 'Creation · Basquiat';
+  if (lessonId === 'lfc018')       return 'Creation · Pop Art';
+  if (lessonId === 'lfc054')       return 'Creation · Illustration';
+  return lessonId;
+}
+
+function relativeTime(ts) {
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + 'm ago';
+  if (h < 24) return h + 'h ago';
+  if (d < 7) return d + 'd ago';
+  const date = new Date(ts);
+  return (date.getMonth() + 1) + '/' + date.getDate();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SECTION 16 — UTILITIES
+// ════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function escapeAttr(s) {
+  if (s == null) return '';
+  return String(s).replace(/['"\\]/g, c => '\\' + c);
+}
+
+let _toastTimer = null;
+function toast(msg, ms) {
+  const el = document.getElementById('complete-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), ms || 2000);
+}
+
+// Window exposure (for inline onclick handlers)
+window.attemptSignIn = attemptSignIn;
+window.updateSignInBtn = updateSignInBtn;
+window.signOut = signOut;
+window.goNext = goNext;
+window.goPrev = goPrev;
+window.openSymbolCard = openSymbolCard;
+window.removeSymbol = removeSymbol;
+window.pickAtmos = pickAtmos;
+window.pickLandscape = pickLandscape;
+window.toggleElement = toggleElement;
+window.toggleWorldSymbol = toggleWorldSymbol;
+window.setBuilderCategory = setBuilderCategory;
+window.selectBuilderPiece = selectBuilderPiece;
+window.builderDragStart = builderDragStart;
+window.builderDragOver = builderDragOver;
+window.builderDragLeave = builderDragLeave;
+window.builderDrop = builderDrop;
+window.builderSlotClick = builderSlotClick;
+window.resetBuilder = resetBuilder;
+window.pickWorldReflection = pickWorldReflection;
+window.pickSymbolReflection = pickSymbolReflection;
+window.onReflectionTextChange = onReflectionTextChange;
+window.handleUpload = handleUpload;
+window.finalizeLesson = finalizeLesson;
+window.openChatModal = openChatModal;
+window.switchChatMode = switchChatMode;
+window.closeChatModal = closeChatModal;
+window.sendChat = sendChat;
+window.sendStarter = sendStarter;
+window.closeArtchiOnboard = closeArtchiOnboard;
+window.openArtchiAbout = openArtchiAbout;
+window.closeArtchiAbout = closeArtchiAbout;
+window.closeArtchiBubble = closeArtchiBubble;
+window.openMyJourney = openMyJourney;
+window.closeMyJourney = closeMyJourney;
+// Expose modules and state for cross-script + testing access
+window.UserProfile = UserProfile;
+window.JournalStorage = JournalStorage;
+window.lessonState = lessonState;
+window.updateNavButtons = updateNavButtons;
+window.placePiece = placePiece;
+</script>
+
+</body>
+</html>
