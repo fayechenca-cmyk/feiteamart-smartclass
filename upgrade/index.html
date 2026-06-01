@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Unlock Smart Class — FEI TeamArt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* FEI TeamArt unified palette */
+  --bg: #f9f7f1;
+  --paper: #ffffff;
+  --ink: #1d2230;
+  --ink-soft: #5a6172;
+  --ink-faint: #8b91a3;
+  --rule: #e5e0d2;
+  --rule-soft: #f0ebde;
+  --accent: #6841d4;          /* primary purple — matches Smart Class home */
+  --accent-deep: #4a26b8;
+  --accent-soft: #f1ecff;
+  --teacher: #2d5a3d;
+  --teacher-deep: #234a30;
+  --teacher-soft: #e8f0ea;
+  --warm: #d4a548;
+  --premium: #8b6914;
+  --premium-soft: #fdf5e0;
+  --shadow-soft: 0 4px 16px rgba(29, 34, 48, 0.06);
+  --shadow-card: 0 8px 32px rgba(29, 34, 48, 0.10);
+  --shadow-hover: 0 14px 40px rgba(29, 34, 48, 0.14);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings always Montserrat */
+h1, h2, h3, h4, .h-display, .h-section {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(249, 247, 241, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  padding: 14px 22px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  display: flex; align-items: center; gap: 10px;
+}
+.brand-mark {
+  display: inline-block;
+  width: 22px; height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.back-link {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link:hover { color: var(--ink); }
+
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* Intro */
+.intro {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.headline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 34px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+@media (min-width: 768px) { .headline { font-size: 44px; } }
+.sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  color: var(--ink-soft);
+  max-width: 620px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* Context card */
+.context-card {
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin: 0 auto 36px;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.context-card .ctx-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.context-card .ctx-text strong {
+  color: var(--accent-deep);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+/* Plans grid — 3 columns */
+.plans {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-bottom: 36px;
+}
+@media (min-width: 720px) {
+  .plans { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1000px) {
+  .plans { grid-template-columns: repeat(3, 1fr); }
+}
+
+.plan {
+  background: var(--paper);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  position: relative;
+}
+.plan:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+.plan.standard:hover { border-color: var(--accent); }
+.plan.recommended { border-color: var(--accent); border-width: 2px; background: linear-gradient(180deg, #fff, #faf7ff); }
+.plan.recommended:hover { box-shadow: 0 14px 40px rgba(104, 65, 212, 0.18); }
+.plan.premium { border-color: var(--rule); background: linear-gradient(180deg, #fff, #fefaef); }
+.plan.premium:hover { border-color: var(--warm); box-shadow: 0 14px 40px rgba(212, 165, 72, 0.18); }
+
+.plan .badge {
+  position: absolute;
+  top: -11px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.plan.premium .badge { background: var(--warm); color: var(--premium); }
+
+.plan-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink-faint);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.plan-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.plan-tagline {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+.plan-divider {
+  height: 1px;
+  background: var(--rule-soft);
+  margin: 0 0 18px;
+}
+.plan-features {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+}
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.plan-features li::before {
+  content: '';
+  width: 16px; height: 16px;
+  background: var(--accent-soft);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  position: relative;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.5l3 3 5-6' stroke='%236841d4' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.plan.premium .plan-features li::before {
+  background-color: var(--premium-soft);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.5l3 3 5-6' stroke='%238b6914' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+.plan-features li.highlight {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.plan-cta {
+  display: block;
+  width: 100%;
+  background: var(--ink);
+  color: #fff;
+  text-align: center;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+}
+.plan-cta:hover { transform: translateY(-1px); }
+.plan.standard .plan-cta { background: var(--ink); }
+.plan.standard .plan-cta:hover { background: #000; }
+.plan.recommended .plan-cta { background: var(--accent); }
+.plan.recommended .plan-cta:hover { background: var(--accent-deep); }
+.plan.premium .plan-cta { background: var(--premium); }
+.plan.premium .plan-cta:hover { background: #6b510f; }
+
+/* Branch reminder banner */
+.branches-banner {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 720px) {
+  .branches-banner { grid-template-columns: 1fr 1fr; }
+}
+.branch-block {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.branch-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.branch-icon.skills { background: var(--accent-soft); }
+.branch-icon.creation { background: var(--teacher-soft); }
+.branch-block h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.branch-block p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Footnote + FAQ */
+.footnote {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-align: center;
+  line-height: 1.6;
+  font-weight: 400;
+  margin-bottom: 36px;
+}
+.footnote strong {
+  color: var(--ink);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+.footnote a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.footnote a:hover { text-decoration: underline; }
+
+.faq-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: var(--ink);
+}
+.faq-item {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  padding: 16px 22px;
+  margin-bottom: 10px;
+}
+.faq-q {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.faq-a {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Confirmation */
+#confirm-section { display: none; text-align: center; padding: 60px 20px; }
+#confirm-section.visible { display: block; }
+#confirm-section .checkmark {
+  font-size: 64px; margin-bottom: 16px;
+}
+#confirm-section h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+#confirm-section .confirm-sub {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin: 0 auto 28px;
+  font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="brand-mark"></span>FEI TeamArt</div>
+  <a class="back-link" href="../" id="back-link">← Back to Smart Class</a>
+</div>
+
+<div class="wrap">
+
+  <!-- Confirmation view (Stripe success) -->
+  <div id="confirm-section">
+    <div class="checkmark">✨</div>
+    <h2>Welcome to the full Foundation A experience.</h2>
+    <p class="confirm-sub">Your account is unlocked. Skills, Creation, and your saved work are now fully open to you.</p>
+    <a href="../" class="plan-cta" style="display:inline-block; max-width:280px; background: var(--accent);">Enter Smart Class →</a>
+  </div>
+
+  <!-- Default upgrade view -->
+  <div id="upgrade-section">
+
+    <div class="intro">
+      <div class="eyebrow">Unlock Foundation A</div>
+      <h1 class="headline">Choose how you'd like to learn.</h1>
+      <p class="sub">All three options open the full <strong>current Foundation A class experience</strong> — both Skills and Creation. Pick the level of support that fits you.</p>
+    </div>
+
+    <div class="context-card" id="ctx-card">
+      <div class="ctx-icon">🌱</div>
+      <div class="ctx-text">
+        <strong>You've used your free starter</strong> · Continue where you left off — your work and progress will carry over once you unlock.
+      </div>
+    </div>
+
+    <!-- What you're unlocking — both branches -->
+    <div class="branches-banner">
+      <div class="branch-block">
+        <div class="branch-icon skills">📐</div>
+        <div>
+          <h4>Skills · Foundation A</h4>
+          <p>The full structured drawing path — Cube, Sphere, Cylinder, Box, Cup, Apple, Cone, Ice Cream, Intersecting Forms, Paper Crane.</p>
+        </div>
+      </div>
+      <div class="branch-block">
+        <div class="branch-icon creation">🎨</div>
+        <div>
+          <h4>Creation · Studio</h4>
+          <p>Every current Creation lesson — Surrealism Illustration, Learn From Masters series, and the studio lessons available now.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="plans">
+
+      <!-- OPTION A — Smart Feedback -->
+      <div class="plan standard">
+        <div class="plan-eyebrow">Option A · Self-paced</div>
+        <div class="plan-name">Smart Feedback</div>
+        <p class="plan-tagline">Learn at your own rhythm with built-in guidance, hints, and reflection prompts inside every lesson.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="highlight">Full Foundation A access</li>
+          <li>Every Skills &amp; Creation lesson</li>
+          <li>In-lesson smart guidance &amp; reflection helpers</li>
+          <li>Saved cards, journal, badges across devices</li>
+          <li>Self-paced — no schedule, no pressure</li>
+        </ul>
+        <button class="plan-cta" onclick="goToStripe('smart_feedback')">Choose Smart Feedback →</button>
+      </div>
+
+      <!-- OPTION B — Smart Feedback + Real Teacher Support -->
+      <div class="plan recommended">
+        <div class="badge">Most chosen</div>
+        <div class="plan-eyebrow">Option B · Self-paced + teacher</div>
+        <div class="plan-name">Smart Feedback<br>+ Real Teacher Support</div>
+        <p class="plan-tagline">Everything in Option A, plus personal written feedback from Faye on the work you submit.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="highlight">Everything in Smart Feedback</li>
+          <li>Personal teacher feedback on submitted work</li>
+          <li>Written notes that help you grow faster</li>
+          <li>Direct support when you're stuck</li>
+          <li>Still self-paced — feedback on your timeline</li>
+        </ul>
+        <button class="plan-cta" onclick="goToStripe('smart_plus_teacher')">Choose Smart + Teacher →</button>
+      </div>
+
+      <!-- OPTION C — Online Teacher Small Group Class -->
+      <div class="plan premium">
+        <div class="badge">Most complete</div>
+        <div class="plan-eyebrow">Option C · Live group class</div>
+        <div class="plan-name">Online Teacher<br>Small Group Class</div>
+        <p class="plan-tagline">The full current Foundation A class taught live online by Ms. Dawn in a small group — the most complete pathway we currently offer.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="highlight">Full current Foundation A access</li>
+          <li>Live online small-group teaching by Ms. Dawn</li>
+          <li>Maximum 4 students per group</li>
+          <li>Teacher-led course structure &amp; in-class feedback</li>
+          <li>Includes Smart Class content &amp; tools</li>
+        </ul>
+        <button class="plan-cta" onclick="goToStripe('online_teacher_group')">Enroll in the group class →</button>
+      </div>
+
+    </div>
+
+    <div class="footnote">
+      <strong>Already paid?</strong> Sign in with the same email and your account will unlock automatically once payment is confirmed. <br/>
+      Questions about which option fits you? <a href="mailto:hello@feiteamart.com">hello@feiteamart.com</a> &middot; <a href="https://www.feiteamart.com/contact" target="_blank" rel="noopener">contact us →</a>
+    </div>
+
+    <div class="faq-title">A few quick answers</div>
+    <div class="faq-item">
+      <div class="faq-q">What does "current Foundation A class" mean?</div>
+      <div class="faq-a">Foundation A is the first Foundation stage we currently offer through Smart Class — the full Skills path (Cube through Paper Crane) and all of the Creation studio lessons available right now. Later Foundation stages (B, C, D) will be added as separate purchasable scopes when they open.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Will my saved work and progress carry over?</div>
+      <div class="faq-a">Yes. Journal entries, badges, and saved cards stay with your account. The free lessons you've already opened remain accessible too.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I switch options later?</div>
+      <div class="faq-a">Yes. Send us a note at hello@feiteamart.com and we'll help adjust your access.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How does the online small group class work?</div>
+      <div class="faq-a">Groups meet live online with Ms. Dawn on a scheduled cadence, with a maximum of 4 students per group. After you enroll, we'll be in touch about the next group's schedule.</div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../core/auth.js"></script>
+<script src="../core/access.js"></script>
+<script>
+const STRIPE_LINKS = {
+  smart_feedback:        'https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e',
+  smart_plus_teacher:    'https://buy.stripe.com/00w6oI5KZc0O72i2dMd7q0f',
+  online_teacher_group:  'https://buy.stripe.com/7sYcN67T70i65YecSqd7q0g'
+  // Foundation B / C / D group-class links may be added later as those scopes open.
+};
+
+function applyContextFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const reason = params.get('reason');
+  const ctx = document.getElementById('ctx-card');
+  if (reason === 'paywall_creation') {
+    ctx.querySelector('.ctx-text').innerHTML =
+      "<strong>Two Creation lessons explored</strong> · You've used your free Creation explorations. Unlock the rest, plus the full Skills path.";
+    ctx.querySelector('.ctx-icon').textContent = '🎨';
+  } else if (reason === 'paywall_skills') {
+    ctx.querySelector('.ctx-text').innerHTML =
+      "<strong>Cube finished — well done</strong> · You've completed your free Skills starter (Preparation + Cube). Unlock the rest of Skills, plus all of Creation.";
+    ctx.querySelector('.ctx-icon').textContent = '📐';
+  } else if (reason === 'not_signed_in') {
+    ctx.querySelector('.ctx-text').innerHTML =
+      "<strong>Sign in first</strong> · Create a free account from Smart Class home, then come back when you're ready to unlock.";
+    ctx.querySelector('.ctx-icon').textContent = '🔑';
+  }
+  if (params.get('status') === 'success') {
+    handleSuccessReturn();
+  }
+}
+
+async function handleSuccessReturn() {
+  document.getElementById('upgrade-section').style.display = 'none';
+  document.getElementById('confirm-section').classList.add('visible');
+  try {
+    if (window.FEIAccess) {
+      await window.FEIAccess.init();
+      await window.FEIAccess.markPaid();
+    }
+  } catch (e) { console.warn('[upgrade] markPaid failed', e); }
+}
+
+function goToStripe(planId) {
+  const url = STRIPE_LINKS[planId];
+  if (!url) return;
+  window.location.href = url;
+}
+
+document.addEventListener('DOMContentLoaded', applyContextFromUrl);
+</script>
+
+</body>
+</html>
