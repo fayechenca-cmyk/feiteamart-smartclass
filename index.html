@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Class · FEI TeamArt</title>
+<title>Art GPS · FEI TeamArt</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   /* ════════════════════════════════════════════════════════════════
-     FEI TeamArt · Smart Class Home
+     FEI TeamArt · Art GPS Home
      Game-style learning map with Skills + Creation tracks.
      ════════════════════════════════════════════════════════════════
      
      ARCHITECTURE:
-     - Two parallel tracks: 🎓 Skills (structured) + 🎨 Creation (artistic)
+     - Two parallel tracks: Skills (structured practice) + Creation · Learn from Collections
      - Skills contains: Drawing (active), Color Theory, Art Theory (coming)
-     - Drawing contains: Foundation A (currently 6 lessons, expandable)
+     - Drawing contains: Foundation A (11 practice sessions: 8 ready + 3 in development)
      - Course order is CONFIGURABLE (see FOUNDATION_A_PATH array)
      
      SCREENS (single-page-app style toggling):
@@ -37,6 +37,11 @@
     --cyan: #67e8f9;
     --pink: #f9a8d4;
     --bg-warm: #fff9f5;
+    /* Art GPS track accent colors (per spec 1.5) */
+    --skills-accent: #5e7a5e;          /* sage — clean, focused, daylight */
+    --creation-accent: #c8a96e;        /* warm gold — heritage, gallery */
+    --creation-bg: #2a2530;            /* deep plum — museum at 6pm */
+    --creation-bg-soft: #3a3340;
     --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
     --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
@@ -433,6 +438,66 @@
     font-size: 11px; color: var(--ink-soft);
     margin-bottom: 12px; line-height: 1.4;
   }
+  /* NEW (Art GPS): student-voice quote — italic, accent-colored, slightly larger than body */
+  .track-quote {
+    font-family: 'Open Sans', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 4px 0 10px;
+  }
+  @media (min-width: 768px) {
+    .track-quote { font-size: 14px; }
+  }
+  /* NEW (Art GPS): descriptive paragraph beneath the quote */
+  .track-description {
+    font-size: 11.5px; color: var(--ink-soft);
+    line-height: 1.55; margin-bottom: 14px;
+  }
+  @media (min-width: 768px) {
+    .track-description { font-size: 12.5px; }
+  }
+  /* Track-themed variants — Skills feels like daylight; Creation like gallery at 6pm. */
+  .track-card.track-skills {
+    background: #ffffff;
+    border-color: rgba(94,122,94,0.18);
+  }
+  .track-card.track-skills:hover {
+    border-color: var(--skills-accent);
+  }
+  .track-card.track-skills .track-quote {
+    color: var(--skills-accent);
+  }
+  .track-card.track-skills .track-fill {
+    background: linear-gradient(90deg, var(--skills-accent), #8fb18f);
+  }
+  .track-card.track-creation {
+    background: linear-gradient(135deg, var(--creation-bg) 0%, var(--creation-bg-soft) 100%);
+    border-color: rgba(200,169,110,0.25);
+    color: #f5f1e8;
+  }
+  .track-card.track-creation:hover {
+    border-color: var(--creation-accent);
+    box-shadow: 0 8px 28px rgba(42,37,48,0.32);
+  }
+  .track-card.track-creation .track-name {
+    color: #f5f1e8;
+  }
+  .track-card.track-creation .track-quote {
+    color: var(--creation-accent);
+  }
+  .track-card.track-creation .track-description {
+    color: rgba(245,241,232,0.72);
+  }
+  .track-card.track-creation .track-progress {
+    color: var(--creation-accent);
+  }
+  .track-card.track-creation .track-bar {
+    background: rgba(245,241,232,0.15);
+  }
+  .track-card.track-creation .track-fill {
+    background: linear-gradient(90deg, var(--creation-accent), #d4b884);
+  }
   .track-progress {
     margin-top: auto;
     font-family: 'Montserrat', sans-serif; font-size: 10px;
@@ -721,7 +786,7 @@
      TOPBAR
      ═══════════════════════════════════════════════════════════ -->
 <div class="topbar">
-  <a href="./" class="brand"><span class="brand-mark">●</span> FEI · Smart Class</a>
+  <a href="./" class="brand" title="Guided Practice Studio"><span class="brand-mark">●</span> FEI · Art GPS</a>
   <div class="topbar-right" id="topbar-right"></div>
 </div>
 
@@ -730,9 +795,9 @@
      ═══════════════════════════════════════════════════════════ -->
 <div class="signin-screen" id="signin-screen" style="display:none;">
   <div class="signin-card">
-    <div class="signin-kicker">✨ Smart Class</div>
-    <h1 class="signin-title">Welcome.</h1>
-    <p class="signin-subtitle" id="signin-subtitle">Create your free account or sign in to continue.</p>
+    <div class="signin-kicker">Art GPS</div>
+    <h1 class="signin-title">Welcome to your studio.</h1>
+    <p class="signin-subtitle" id="signin-subtitle">A guided practice studio for art students, families, and teachers. Sign in or create a free account to begin.</p>
 
     <!-- Tabs: Sign Up / Log In -->
     <div class="auth-tabs" id="auth-tabs">
@@ -767,7 +832,7 @@
       <input type="password" class="signin-input" id="signup-password"
              placeholder="Minimum 6 characters" autocomplete="new-password" minlength="6" required />
 
-      <button type="submit" class="signin-btn" id="signup-submit">Create account →</button>
+      <button type="submit" class="signin-btn" id="signup-submit">Start practicing →</button>
     </form>
 
     <!-- Log In form -->
@@ -780,7 +845,7 @@
       <input type="password" class="signin-input" id="login-password"
              placeholder="Your password" autocomplete="current-password" required />
 
-      <button type="submit" class="signin-btn" id="login-submit">Log in →</button>
+      <button type="submit" class="signin-btn" id="login-submit">Continue practicing →</button>
     </form>
 
     <p class="signin-error" id="signin-error">Something went wrong. Please try again.</p>
@@ -800,7 +865,7 @@
     </details>
 
     <p class="signin-help">
-      Need help? <a href="https://www.feiteamart.com/contact" target="_blank">Contact us →</a>
+      Questions? <a href="https://www.feiteamart.com/contact" target="_blank">Contact your teacher or write us →</a>
     </p>
   </div>
 </div>
@@ -811,41 +876,45 @@
 <div class="container" id="home-screen" style="display:none;">
   
   <div class="hero">
-    <div class="hero-greeting" id="hero-greeting">Welcome back</div>
+    <div class="hero-greeting" id="hero-greeting">Welcome back to the studio</div>
     <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
-    <p class="hero-subtitle">What do you want to grow today?</p>
+    <p class="hero-subtitle">What kind of practice today?</p>
   </div>
   
   <!-- Resume card -->
   <div class="resume-card hidden" id="resume-card">
     <div>
-      <div class="resume-kicker">Continue learning</div>
+      <div class="resume-kicker">Pick up where you left off</div>
       <div class="resume-title" id="resume-title">Lesson 1: Sphere</div>
-      <div class="resume-sub" id="resume-sub">Pick up where you left off</div>
+      <div class="resume-sub" id="resume-sub">Your last practice session</div>
     </div>
-    <a href="#" class="resume-btn" id="resume-btn">Continue →</a>
+    <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
   </div>
   
   <!-- Two tracks -->
   <div class="section-heading">
-    <div class="section-title">Pick your direction</div>
-    <div class="section-sub">Two ways to grow — structured learning, or open creation.</div>
+    <div class="section-title">Two ways to practice</div>
+    <div class="section-sub">Choose what matches where you are right now. You can move between them anytime.</div>
   </div>
   
   <div class="tracks">
-    <a href="#" class="track-card" id="track-skills" onclick="event.preventDefault(); showSkills();">
-      <div class="track-emoji">🎓</div>
+    <a href="#" class="track-card track-skills" id="track-skills" onclick="event.preventDefault(); showSkills();">
+      <!-- DESIGNER: replace emoji with custom SVG per Section 4.4 (geometric primitives / pencil + line / steps / grid). Color: var(--skills-accent). -->
+      <div class="track-emoji" aria-hidden="true">✏️</div>
       <div class="track-name">Skills</div>
-      <div class="track-tagline">Step-by-step training. Foundation through expertise.</div>
-      <div class="track-progress" id="skills-progress">0 of 6 lessons</div>
+      <div class="track-quote">&ldquo;I have no idea what to do. Guide me step by step.&rdquo;</div>
+      <div class="track-description">A teacher walks you through every step. You finish something real — a shape, a character, a small drawing — and build confidence one practice at a time.</div>
+      <div class="track-progress" id="skills-progress">0 of 11 practice sessions</div>
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
     
-    <a href="creation/" class="track-card" id="track-creation">
-      <div class="track-emoji">🎨</div>
-      <div class="track-name">Creation</div>
-      <div class="track-tagline">Illustration · books · materials · stop motion. Open studio, your way.</div>
-      <div class="track-progress" id="creation-progress" style="color: var(--purple);">✨ Studio open</div>
+    <a href="creation/" class="track-card track-creation" id="track-creation">
+      <!-- DESIGNER: replace emoji with custom SVG per Section 4.5 (framed artwork / archway / magnifier / open book). Color: var(--creation-accent). -->
+      <div class="track-emoji" aria-hidden="true">🖼</div>
+      <div class="track-name">Creation &middot; Learn from Collections</div>
+      <div class="track-quote">&ldquo;I want to learn from artists and create my own work.&rdquo;</div>
+      <div class="track-description">Step into a curated collection of artists, artworks, and movements. Look closely. Take inspiration. Then create your own response in our open studio.</div>
+      <div class="track-progress" id="creation-progress">Collections open</div>
       <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
   </div>
@@ -857,11 +926,11 @@
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="skills-screen" style="display:none;">
   
-  <button class="back-btn" onclick="showHome()">← Back to Smart Class</button>
+  <button class="back-btn" onclick="showHome()">← Back to Art GPS</button>
   
   <div class="section-heading" style="text-align:center; margin-top: 8px;">
-    <div class="section-title" style="font-size:22px;">🎓 Skills</div>
-    <div class="section-sub">Structured training across the foundations of visual art.</div>
+    <div class="section-title" style="font-size:22px;">Skills &middot; Step-by-Step Practice</div>
+    <div class="section-sub">Follow clear, guided lessons. Build real skills, one practice at a time.</div>
   </div>
   
   <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
@@ -902,23 +971,23 @@
     <div class="path-header-kicker">Drawing · Foundation A</div>
     <div class="path-header-title">Form &amp; Structure</div>
     <div class="path-header-sub">
-      Learn to see and construct objects through 6 foundational lessons.
+      Learn to see and construct objects through guided practice sessions. Each one builds on the last.
     </div>
     <div class="path-header-bar">
       <div class="path-header-fill" id="path-fill" style="width:0%"></div>
     </div>
-    <div class="path-header-meta" id="path-meta">0 of 6 unlocked</div>
+    <div class="path-header-meta" id="path-meta">0 of 11 practice sessions unlocked</div>
   </div>
   
   <!-- Path nodes will be rendered here -->
   <div class="path-nodes" id="path-nodes"></div>
   
-  <!-- Foundation A badge footer -->
+  <!-- Foundation A certificate footer -->
   <div class="badge-footer" id="badge-footer">
     <div class="badge-footer-icon">🏆</div>
-    <div class="badge-footer-title">Foundation A Badge</div>
+    <div class="badge-footer-title">Foundation A Certificate</div>
     <div class="badge-footer-sub" id="badge-footer-sub">
-      Complete all 6 lessons to earn this.
+      Complete all 11 practice sessions to earn your certificate.
     </div>
   </div>
 
@@ -929,13 +998,13 @@
      ═══════════════════════════════════════════════════════════ -->
 <div class="paywall-modal" id="paywall-modal" onclick="if(event.target===this) closePaywall()">
   <div class="paywall-card">
-    <div class="paywall-icon" id="paywall-icon">✨</div>
-    <div class="paywall-title" id="paywall-title">Unlock the full Smart Class</div>
+    <div class="paywall-icon" id="paywall-icon">🖼</div>
+    <div class="paywall-title" id="paywall-title">Unlock your full Art GPS studio</div>
     <div class="paywall-body" id="paywall-body">
-      You've explored your free starter lessons. Unlock everything in Skills and Creation with one upgrade.
+      You've finished your free practice sessions and Collections previews. Unlock everything in Skills and Creation with one upgrade.
     </div>
-    <a class="paywall-cta" id="paywall-cta-link" href="upgrade/">See unlock options →</a>
-    <button class="paywall-dismiss" onclick="closePaywall()">Maybe later</button>
+    <a class="paywall-cta" id="paywall-cta-link" href="upgrade/">See teacher-supported plans →</a>
+    <button class="paywall-dismiss" onclick="closePaywall()">Not yet</button>
   </div>
 </div>
 
@@ -1077,9 +1146,9 @@
         );
       }
       
-      console.log('[SmartClass Home] Loaded ' + validStudents.size + ' codes');
+      console.log('[ArtGPS Home] Loaded ' + validStudents.size + ' codes');
     } catch (err) {
-      console.warn('[SmartClass Home] Failed to load roster:', err);
+      console.warn('[ArtGPS Home] Failed to load roster:', err);
     }
   }
   
@@ -1177,7 +1246,7 @@
     // Hero
     const completed = userProfile.completedLessons || [];
     document.getElementById('hero-greeting').textContent = 
-      completed.length > 0 ? 'Welcome back' : 'Welcome to Smart Class';
+      completed.length > 0 ? 'Welcome back to the studio' : 'Welcome to the studio';
     document.getElementById('hero-name').textContent = userProfile.name;
     
     // Resume card
@@ -1200,27 +1269,27 @@
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
     document.getElementById('skills-progress').textContent = 
-      `${doneCount} of ${totalCount} lessons`;
+      `${doneCount} of ${totalCount} practice sessions`;
     document.getElementById('skills-bar').style.width = pct + '%';
     
     // Drawing sub-track meta
     document.getElementById('drawing-meta').textContent = 
       doneCount === 0
-        ? `Foundation A · ${totalCount} lessons`
+        ? `Foundation A · practice path`
         : `Foundation A · ${doneCount}/${totalCount} done`;
     
-    // Creation track: static "Studio open" message + count of completed Creation lessons.
+    // Creation track: static "Collections open" message + count of completed Creation lessons.
     // Currently 3 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art).
     const creationLessons = ['lfc054', 'lfc017', 'lfc018'];
     const creationDone = creationLessons.filter(id => completed.includes(id)).length;
     const progressEl = document.getElementById('creation-progress');
     if (progressEl) {
       if (creationDone === creationLessons.length) {
-        progressEl.textContent = '✨ All studio lessons complete';
+        progressEl.textContent = 'All Collections explored';
       } else if (creationDone > 0) {
-        progressEl.textContent = `🌙 ${creationDone} of ${creationLessons.length} complete`;
+        progressEl.textContent = `${creationDone} of ${creationLessons.length} Collections explored`;
       }
-      // else: keep the default "✨ Studio open" text
+      // else: keep the default "Collections open" text
     }
   }
   
@@ -1254,31 +1323,31 @@
     const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
       let state = 'locked';
       let icon = lesson.emoji;
-      let kicker = `Step ${idx + 1}`;
+      let kicker = `Practice ${idx + 1} · Locked`;
       let arrow = '🔒';
       let clickable = false;
       
       if (!lesson.ready) {
         state = 'coming';
-        kicker = `Step ${idx + 1} · Coming soon`;
+        kicker = `Practice ${idx + 1} · In development`;
         arrow = '⏳';
       } else if (completed.includes(lesson.id)) {
         state = 'done';
         icon = '✓';
-        kicker = `Step ${idx + 1} · Complete`;
+        kicker = `Practice ${idx + 1} · Complete ✓`;
         arrow = '↻';
         clickable = true;
       } else if (!foundCurrent) {
         state = 'current';
-        kicker = `Step ${idx + 1} · Continue`;
+        kicker = `Practice ${idx + 1} · Start now`;
         arrow = '→';
         clickable = true;
         foundCurrent = true;
       }
       
-      const tag = state === 'done' ? '+50 XP earned'
+      const tag = state === 'done' ? 'Practice complete · +1 Practice Point'
                 : state === 'current' ? lesson.subtitle
-                : state === 'coming' ? 'Building this lesson'
+                : state === 'coming' ? 'In development with our teaching team'
                 : `Complete previous to unlock`;
       
       const tagEl = clickable ? 'a' : 'div';
@@ -1304,18 +1373,18 @@
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
     document.getElementById('path-fill').style.width = pct + '%';
-    document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} unlocked`;
+    document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} practice sessions unlocked`;
     
-    // Badge state
+    // Certificate state
     const badgeFooter = document.getElementById('badge-footer');
     const badgeSub = document.getElementById('badge-footer-sub');
     if (doneCount === totalCount) {
       badgeFooter.classList.add('unlocked');
-      badgeSub.textContent = '✨ Unlocked — you are a Foundation A graduate!';
+      badgeSub.textContent = "Earned. You've completed Foundation A.";
     } else {
       badgeFooter.classList.remove('unlocked');
       const remaining = totalCount - doneCount;
-      badgeSub.textContent = `${remaining} more ${remaining === 1 ? 'lesson' : 'lessons'} to unlock this badge.`;
+      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? 'session' : 'sessions'} to earn your certificate.`;
     }
   }
   
@@ -1366,7 +1435,7 @@
   // ═══════════════════════════════════════════════════════════
   
   function signOut() {
-    if (!confirm('Sign out of Smart Class? Your progress is saved on this device.')) return;
+    if (!confirm('Sign out of Art GPS? Your practice progress is saved on this device.')) return;
     (async () => {
       try {
         if (window.FEIAuth && window.FEIAuth._isConfigured()) {
@@ -1547,12 +1616,12 @@
     const cta = document.getElementById('paywall-cta-link');
     if (branch === 'skills') {
       icon.textContent = '📐';
-      title.textContent = "You've completed your free Skills starter.";
-      body.textContent = "Preparation and Cube were on the house. Unlock the full Foundation A class — every Skills lesson plus the Creation studio.";
+      title.textContent = "You've finished your free practice sessions.";
+      body.textContent = "The first two practice sessions are on the house. Unlock the full Foundation A practice path — plus access to our Collections studio.";
     } else {
-      icon.textContent = '🎨';
-      title.textContent = "Two Creation lessons explored.";
-      body.textContent = "You've used your free Creation explorations. Unlock the full Foundation A class — every Creation lesson plus the Skills path — and choose the support level that fits.";
+      icon.textContent = '🖼';
+      title.textContent = "You've explored two Collections.";
+      body.textContent = "You've used your free Collections previews. Unlock everything — the full Skills practice path, every artist Collection, and your choice of teacher support.";
     }
     cta.href = 'upgrade/?reason=paywall_' + branch + '&branch=' + branch;
     document.getElementById('paywall-modal').classList.add('visible');
@@ -1713,7 +1782,7 @@
       z-index: 9999; opacity: 0;
       transition: opacity 0.4s, transform 0.4s;
     `;
-    banner.textContent = '✨ Welcome to the full Smart Class — your access is unlocked.';
+    banner.textContent = 'Welcome to your full Art GPS studio — your practice and collections are now open.';
     document.body.appendChild(banner);
     requestAnimationFrame(() => {
       banner.style.opacity = '1';
