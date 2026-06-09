@@ -1492,6 +1492,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, [role="button
 <!-- Toast -->
 <div id="complete-toast"></div>
 
+<!-- Art GPS access control (loaded before lesson script so FEIAccess is available) -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
 <script>
 // ════════════════════════════════════════════════════════════════
 // LFC019 · Henri Rousseau · Jungle Layers
@@ -2090,9 +2094,27 @@ function showLesson() {
 
 // Bootstrap on load
 async function init() {
+  // ─── PAYWALL GATE (Art GPS access control) ────────────────
+  // For free Supabase users, only the first 2 Creation lessons are free.
+  // If this is their 3rd+ Creation lesson, bounce them to home + paywall.
+  // Paid users and legacy access-code students pass through.
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'rousseau-jungle');
+      if (!ok) return;   // gateLessonPage already redirected to home
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  // ──────────────────────────────────────────────────────────
+
   await loadRoster();
   const profile = UserProfile.current();
-  if (profile && profile.studentCode) {
+  // Accept both legacy access-code users AND Supabase-authenticated users.
+  // (Supabase users have profile.email or profile.supabaseUserId, but studentCode=null.)
+  const hasIdentity = profile && (profile.studentCode || profile.supabaseUserId || profile.email);
+  if (hasIdentity) {
     // Round 38 #7.1: auto-skip the welcome gate for returning users
     const completedAny = (profile.completedLessons || []).length > 0;
     const visitedOften = (profile.visitCount || 0) >= 2;
