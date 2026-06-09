@@ -218,6 +218,60 @@
 
   function clearCache() { _cache = null; _cacheUserId = null; }
 
+  // ─────────────────────────────────────────────────────────────────
+  // gateLessonPage(branch, lessonId)
+  //
+  // Called by individual lesson pages at startup to enforce the paywall
+  // BEFORE rendering anything. If the user is allowed, returns true (the
+  // lesson proceeds normally). If not allowed, redirects to home with a
+  // paywall query param and returns false (lesson should abort init).
+  //
+  // Also records the lesson as "opened" for Creation lessons (counts
+  // toward the 2-free limit).
+  //
+  // Use at the very top of each lesson file's init() / DOMContentLoaded:
+  //
+  //   const ok = await window.FEIAccess.gateLessonPage('skills', 'sphere');
+  //   if (!ok) return;   // we're redirecting — stop rendering
+  //
+  // ─────────────────────────────────────────────────────────────────
+  async function gateLessonPage(branch, lessonId) {
+    try {
+      const check = await canOpenLesson(branch, lessonId);
+      if (check.allowed) {
+        // Record opening (no-op for legacy / non-Creation)
+        if (branch === 'creation') {
+          recordLessonOpened(branch, lessonId).catch(() => {});
+        }
+        return true;
+      }
+      if (check.reason === 'not_signed_in') {
+        // Send to home for sign-in
+        global.location.href = _homeUrl() + '?signin=required&from=' + encodeURIComponent(branch + ':' + lessonId);
+        return false;
+      }
+      // Blocked by paywall — send to home with paywall flag
+      global.location.href = _homeUrl() + '?paywall=' + branch + '&lesson=' + encodeURIComponent(lessonId);
+      return false;
+    } catch (err) {
+      // If access check fails (network, etc.), fail OPEN — don't lock students
+      // out due to a bug. Better to let one extra lesson through than to break
+      // a paid student's flow.
+      console.warn('[FEIAccess.gateLessonPage] check failed, allowing through', err);
+      return true;
+    }
+  }
+
+  // Compute the path to the home page from a lesson page.
+  // Lesson pages live at: /feiteamart-smartclass/lessons/<lesson-id>/index.html
+  // Home lives at:       /feiteamart-smartclass/index.html
+  // So from any lesson, '../../' gets us to home.
+  function _homeUrl() {
+    // If running on file:// with a deep path, '../../' still works.
+    // If running on a custom domain root, '../../' still works.
+    return '../../';
+  }
+
   global.FEIAccess = {
     init: init,
     getStatus: getStatus,
@@ -225,6 +279,7 @@
     recordLessonOpened: recordLessonOpened,
     markPaid: markPaid,
     clearCache: clearCache,
+    gateLessonPage: gateLessonPage,
     FREE_SKILLS: FREE_SKILLS,
     FREE_CREATION_LIMIT: FREE_CREATION_LIMIT
   };
