@@ -1718,6 +1718,19 @@
       } catch (e) {}
     }
 
+    // 0b. Detect lesson-paywall redirect — student tried to open a locked lesson
+    //     and was bounced back to home. Show the paywall on arrival so they
+    //     understand why they're here.
+    const paywallParam = urlParams.get('paywall');
+    let pendingPaywall = null;
+    if (paywallParam === 'skills' || paywallParam === 'creation') {
+      pendingPaywall = paywallParam;
+      try {
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+      } catch (e) {}
+    }
+
     // 1. If Supabase is configured, check for an existing session FIRST
     let supabaseUser = null;
     if (window.FEIAuth && window.FEIAuth._isConfigured()) {
@@ -1733,6 +1746,11 @@
               await window.FEIAccess.markPaid();
               showPaidWelcome();
             } catch (e) { console.warn('[init] markPaid failed', e); }
+          }
+          // Lesson page bounced them back here — show paywall now.
+          // Skip if they just paid (they're already unlocked).
+          if (pendingPaywall && !justPaid) {
+            setTimeout(() => openPaywall({ branch: pendingPaywall }), 400);
           }
           // Listen for sign-out from another tab
           window.FEIAuth.onAuthChange((event) => {
@@ -1750,6 +1768,8 @@
     if (userProfile) {
       if (justPaid) showPaidWelcome();  // legacy paid path
       showHome();
+      // Legacy access-code users have full access; paywall param is irrelevant
+      // for them, so we ignore pendingPaywall on this branch.
     } else {
       // No profile at all — but they just paid. Ask them to sign in / sign up
       // with the email they used at Stripe so we can link the payment.
@@ -1757,6 +1777,12 @@
         showSignIn();
         setTimeout(() => {
           showAuthInfo('✓ Payment received! Sign in or create your account with the same email you used at checkout — your access will unlock automatically.');
+        }, 100);
+      } else if (pendingPaywall) {
+        // Bounced from a lesson but not signed in — show sign-in first
+        showSignIn();
+        setTimeout(() => {
+          showAuthInfo('Sign in or create an account to continue with that lesson.');
         }, 100);
       } else {
         showSignIn();
