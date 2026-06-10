@@ -1088,12 +1088,17 @@
       ready: true
     },
     {
+      // Round 40 fixes:
+      //   ① href: 'lesson-4-box/' → 'lesson-4-giftbox/' (theme-oriented naming, matches Cup style)
+      //   ② ready: false → true (Round 39 built this — 4 demo videos provided)
+      //   ③ title: 'The Box' → 'Gift Box' (Faye: course theme = a gift box)
+      //   ④ subtitle: 'Cube · real world' → 'Cube · gift box' (course-specific framing)
       id: 'box',
-      title: 'The Box',
-      subtitle: 'Cube · real world',
-      emoji: '📦',
-      href: 'lessons/lesson-4-box/',
-      ready: false
+      title: 'Gift Box',
+      subtitle: 'Cube · gift box',
+      emoji: '🎁',
+      href: 'lessons/lesson-4-giftbox/',
+      ready: true
     },
     {
       id: 'icecream',
@@ -1104,12 +1109,13 @@
       ready: false
     },
     {
+      // Round 41: activated — 4 videos provided + course built (lesson-10-papercrane)
       id: 'papercrane',
       title: 'Paper Crane',
       subtitle: 'Intersecting planes · finale',
       emoji: '🕊️',
       href: 'lessons/lesson-10-papercrane/',
-      ready: false
+      ready: true
     }
   ];
   
@@ -1279,8 +1285,8 @@
         : `Foundation A · ${doneCount}/${totalCount} done`;
     
     // Creation track: static "Collections open" message + count of completed Creation lessons.
-    // Currently 3 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art).
-    const creationLessons = ['lfc054', 'lfc017', 'lfc018'];
+    // Currently 4 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art + lfc019 Rousseau).
+    const creationLessons = ['lfc054', 'lfc017', 'lfc018', 'lfc019'];
     const creationDone = creationLessons.filter(id => completed.includes(id)).length;
     const progressEl = document.getElementById('creation-progress');
     if (progressEl) {
