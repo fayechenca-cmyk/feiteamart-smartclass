@@ -985,9 +985,9 @@
   <!-- Foundation A certificate footer -->
   <div class="badge-footer" id="badge-footer">
     <div class="badge-footer-icon">🏆</div>
-    <div class="badge-footer-title">Foundation A Certificate</div>
+    <div class="badge-footer-title">Basic Sketch</div>
     <div class="badge-footer-sub" id="badge-footer-sub">
-      Complete all 11 practice sessions to earn your certificate.
+      Complete all 11 practice sessions to earn your Basic Sketch badge.
     </div>
   </div>
 
@@ -1101,12 +1101,13 @@
       ready: true
     },
     {
+      // Round 42: activated — 4 videos provided + course built (lesson-8-icecream)
       id: 'icecream',
       title: 'The Ice Cream',
       subtitle: 'Cone · real world',
       emoji: '🍦',
       href: 'lessons/lesson-8-icecream/',
-      ready: false
+      ready: true
     },
     {
       // Round 41: activated — 4 videos provided + course built (lesson-10-papercrane)
@@ -1386,11 +1387,11 @@
     const badgeSub = document.getElementById('badge-footer-sub');
     if (doneCount === totalCount) {
       badgeFooter.classList.add('unlocked');
-      badgeSub.textContent = "Earned. You've completed Foundation A.";
+      badgeSub.textContent = "Earned. Welcome to your Basic Sketch badge.";
     } else {
       badgeFooter.classList.remove('unlocked');
       const remaining = totalCount - doneCount;
-      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? 'session' : 'sessions'} to earn your certificate.`;
+      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? "session" : "sessions"} to earn your Basic Sketch badge.`;
     }
   }
   
