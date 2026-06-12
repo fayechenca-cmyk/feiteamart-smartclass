@@ -901,7 +901,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .onboard-card { background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); border-radius: var(--radius-xl); padding: 28px 24px; max-width: 360px; width: 100%; position: relative; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); text-align: center; }
 
 /* ═══════════════════════════════════════════════════════════════
-   PLAY WITH THE LIGHT — Smart Class signature interaction
+   PLAY WITH THE LIGHT — Art GPS signature interaction
    Drag the sun, see the sphere/cube respond in real time.
    ═══════════════════════════════════════════════════════════════ */
 .play-light-card {
@@ -3462,7 +3462,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <div class="topbar">
   <div class="brand">
     <div class="brand-dot"></div>
-    <div class="brand-text">Fei teamart · smart class</div>
+    <div class="brand-text">Fei teamart · Art GPS</div>
   </div>
   <div class="controls">
     <div class="ctrl" id="music-btn" onclick="toggleMusic()" title="Background music">♪</div>
@@ -3549,7 +3549,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; color: var(--ink-muted); letter-spacing: 1.5px; text-transform: uppercase; text-align: center; padding-top: 14px; border-top: 0.5px solid var(--border);">
-      FEI TeamArt · Smart Class
+      FEI TeamArt · Art GPS
     </div>
   </aside>
 </div>
@@ -3735,7 +3735,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 
 <!-- Welcome page backdrop - shown first, blocks everything else -->
 <!-- ════════════════════════════════════════════════════════════════
-     FIRST GAZE — Large artwork modal (Smart Class signature opening)
+     FIRST GAZE — Large artwork modal (Art GPS signature opening)
      Triggered from artwork cards in first gaze step.
      ════════════════════════════════════════════════════════════════ -->
 <div class="first-gaze-modal-backdrop" id="first-gaze-modal" onclick="if(event.target===this) closeFirstGazeModal()">
@@ -3763,7 +3763,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div class="welcome-title">Welcome —</div>
-    <div class="welcome-sub">enter your student code to begin. Smart Class is for FEI students only.</div>
+    <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
     <div class="welcome-field">
       <label class="welcome-label" for="welcome-name-input">Student Code</label>
@@ -4651,8 +4651,8 @@ const UserProfile = {
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1a-2 · STUDENT ROSTER (validated members list)
  *  
- *  Smart Class is members-only. Only IDs in valid-students.json can enter.
- *  Source of truth: /valid-students.json in the Smart Class GitHub repo.
+ *  Art GPS is members-only. Only IDs in valid-students.json can enter.
+ *  Source of truth: /valid-students.json in the Art GPS GitHub repo.
  *  
  *  USAGE:
  *    await StudentRoster.load();              // fetches valid-students.json
@@ -5857,7 +5857,7 @@ const LESSON = {
     // PLAY WITH THE LIGHT — interactive sphere
     // 
     // After the textual Reference step, students get to FEEL light & shadow
-    // by dragging the sun around a sphere. This is the Smart Class signature
+    // by dragging the sun around a sphere. This is the Art GPS signature
     // interaction — the moment when reading turns into discovering.
     // 
     // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
@@ -7232,7 +7232,7 @@ function closeFirstGazeModal() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// PLAY WITH THE LIGHT — Smart Class signature interaction
+// PLAY WITH THE LIGHT — Art GPS signature interaction
 // 
 // Students drag a sun around a sphere/cube and watch the 6 light zones 
 // recompute in real time. This is the moment reading turns into discovering.
