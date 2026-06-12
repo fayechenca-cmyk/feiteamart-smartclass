@@ -121,14 +121,20 @@
 
   async function signInWithGoogle(redirectTo) {
     const c = await init();
-    const { error } = await c.auth.signInWithOAuth({
+    const { data, error } = await c.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: redirectTo || appBaseUrl()
+        redirectTo: redirectTo || appBaseUrl(),
+        skipBrowserRedirect: true,
+        queryParams: {
+          prompt: 'select_account'
+        }
       }
     });
     if (error) throw error;
-    // signInWithOAuth redirects; nothing to return.
+    if (data && data.url) {
+      global.open(data.url, '_blank', 'noopener,noreferrer');
+    }
   }
 
   async function signOut() {
