@@ -730,7 +730,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .onboard-card { background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%); border-radius: var(--radius-xl); padding: 28px 24px; max-width: 360px; width: 100%; position: relative; animation: slideUp .45s ease; box-shadow: 0 30px 80px rgba(0,0,0,0.25); text-align: center; }
 
 /* ═══════════════════════════════════════════════════════════════
-   PLAY WITH THE LIGHT — Smart Class signature interaction
+   PLAY WITH THE LIGHT — Art GPS signature interaction
    Drag the sun, see the sphere/cube respond in real time.
    ═══════════════════════════════════════════════════════════════ */
 .play-light-card {
@@ -3000,7 +3000,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <div class="topbar">
   <div class="brand">
     <div class="brand-dot"></div>
-    <div class="brand-text">Fei teamart · smart class</div>
+    <div class="brand-text">Fei teamart · Art GPS</div>
   </div>
   <div class="controls">
     <div class="ctrl" id="music-btn" onclick="toggleMusic()" title="Background music">♪</div>
@@ -3087,7 +3087,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; color: var(--ink-muted); letter-spacing: 1.5px; text-transform: uppercase; text-align: center; padding-top: 14px; border-top: 0.5px solid var(--border);">
-      FEI TeamArt · Smart Class
+      FEI TeamArt · Art GPS
     </div>
   </aside>
 </div>
@@ -3285,7 +3285,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
     <div class="welcome-lesson-label">Lesson 1: The Cube</div>
     <div class="welcome-title">Welcome —</div>
-    <div class="welcome-sub">enter your student code to begin. Smart Class is for FEI students only.</div>
+    <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
     <div class="welcome-field">
       <label class="welcome-label" for="welcome-name-input">Student Code</label>
@@ -4295,8 +4295,8 @@ const UserProfile = {
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1a-2 · STUDENT ROSTER (validated members list)
  *  
- *  Smart Class is members-only. Only IDs in valid-students.json can enter.
- *  Source of truth: /valid-students.json in the Smart Class GitHub repo.
+ *  Art GPS is members-only. Only IDs in valid-students.json can enter.
+ *  Source of truth: /valid-students.json in the Art GPS GitHub repo.
  *  
  *  USAGE:
  *    await StudentRoster.load();              // fetches valid-students.json
@@ -5092,7 +5092,7 @@ const LESSON = {
     // ═══════════════════════════════════════════════════════════════
     // PLAY WITH THE LIGHT — interactive cube
     // 
-    // Same Smart Class signature interaction as Lesson 1, but on a cube.
+    // Same Art GPS signature interaction as Lesson 1, but on a cube.
     // Students see how a cube's THREE planes shade independently — 
     // very different from the sphere's smooth gradient.
     // ═══════════════════════════════════════════════════════════════
@@ -6248,7 +6248,7 @@ function onClosingLFCComplete() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// PLAY WITH THE LIGHT — Smart Class signature interaction
+// PLAY WITH THE LIGHT — Art GPS signature interaction
 // 
 // Students drag a sun around a sphere/cube and watch the 6 light zones 
 // recompute in real time. This is the moment reading turns into discovering.
@@ -7341,14 +7341,14 @@ function renderVideoSegment(step) {
           </button>
         </div>
         
-        <!-- Smart Class Tip — explains why this pause exists -->
+        <!-- Art GPS Tip — explains why this pause exists -->
         <div style="margin-top:14px; padding-top:14px; 
                     border-top:1px solid rgba(167,139,250,0.15);
                     display:flex; align-items:flex-start; gap:8px;">
           <span style="font-size:14px; line-height:1.6; flex-shrink:0;">💡</span>
           <div style="font-family:'Open Sans',sans-serif; font-size:12px; 
                       color:#7c5fc7; line-height:1.55;">
-            <b style="color:#7c5fc7; font-weight:800;">Smart Class Tip:</b>
+            <b style="color:#7c5fc7; font-weight:800;">Art GPS Tip:</b>
             This is a moment we've highlighted for you to pause, observe, and practice.
           </div>
         </div>
@@ -8299,7 +8299,7 @@ function renderBadgeUnlocked(profileOrLead) {
           <span class="glyph">◈</span> Continue to Lesson 2: Sphere →
         </a>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">
-          ← Back to Smart Class home
+          ← Back to Art GPS home
         </button>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
@@ -8554,7 +8554,7 @@ function nextStep() {
   // ═══════════════════════════════════════════════════════════════
   // ACCESS CONTROL GATE — DISABLED (May 2026)
   //
-  // Smart Class is now members-only via student code at the welcome gate.
+  // Art GPS is now members-only via student code at the welcome gate.
   // Anyone who entered with a valid LILY-01 style code IS a paying member.
   // The Stripe paywall here is hidden until the full subscription system
   // launches (post-Foundation A completion, ~10 lessons total).
