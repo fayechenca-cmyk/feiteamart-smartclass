@@ -1654,6 +1654,19 @@
       // Find which lesson this is by matching href against FOUNDATION_A_PATH
       const match = (typeof FOUNDATION_A_PATH !== 'undefined' ? FOUNDATION_A_PATH : []).find(L => L.href === href);
       if (!match) return;
+      
+      // ════════════════════════════════════════════════════════════════
+      // ROUND 45 — paywall placement rules (per Faye, June 2026):
+      //   • Preparation:  always free (everyone needs the warm-up)
+      //   • Cube:         always free (Lesson 1 of the real path — taste of the work)
+      //   • Sphere onwards: paywall (unless paid)
+      // ════════════════════════════════════════════════════════════════
+      const ALWAYS_FREE = ['preparation', 'cube'];
+      if (ALWAYS_FREE.includes(match.id)) {
+        // Free regardless of payment status — let them through, no checks
+        return;
+      }
+      
       // Only enforce for Supabase users — legacy access code = full access
       const profile = userProfile;
       if (!profile || profile.studentCode) return;  // legacy
