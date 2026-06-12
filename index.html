@@ -1,259 +1,1847 @@
-/**
- * FEI TeamArt · Student Submissions API (Round 44)
- * ═══════════════════════════════════════════════════════════════
- *
- * Standalone: loads Supabase JS SDK from CDN and reads the existing
- * session from localStorage (set by /core/auth.js on the home page).
- *
- * Lessons do NOT need to load core/auth.js. They just need to load
- * this file (and the user must have logged in on the home page first).
- *
- * USAGE in lesson HTML:
- *   <script src="../../core/submissions.js"></script>
- *
- *   const result = await window.FEISubmissions.submit({
- *     imageFile: file,
- *     lessonId: 'sphere',
- *     lessonTitle: 'The Sphere',
- *     courseId: 'foundation-a',
- *     reflectionText: '...'
- *   });
- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art GPS · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-(function () {
-  'use strict';
+<style>
+  /* ════════════════════════════════════════════════════════════════
+     FEI TeamArt · Art GPS Home
+     Game-style learning map with Skills + Creation tracks.
+     ════════════════════════════════════════════════════════════════
+     
+     ARCHITECTURE:
+     - Two parallel tracks: Skills (structured practice) + Creation · Learn from Collections
+     - Skills contains: Drawing (active), Color Theory, Art Theory (coming)
+     - Drawing contains: Foundation A (11 practice sessions: 8 ready + 3 in development)
+     - Course order is CONFIGURABLE (see FOUNDATION_A_PATH array)
+     
+     SCREENS (single-page-app style toggling):
+     1. signin-screen: when no profile
+     2. home-screen: dashboard with Skills + Creation overview
+     3. drawing-screen: Duolingo-style Foundation A unlock path
+     ═══════════════════════════════════════════════════════════════ */
+  
+  :root {
+    --ink: #1a1d2b;
+    --ink-soft: rgba(26, 29, 43, 0.65);
+    --ink-faint: rgba(26, 29, 43, 0.45);
+    --ink-veryfaint: rgba(26, 29, 43, 0.15);
+    --paper: #fafaf8;
+    --paper-soft: #f5f5f7;
+    --gold: #c8a96e;
+    --green: #1d9e75;
+    --purple: #a78bfa;
+    --cyan: #67e8f9;
+    --pink: #f9a8d4;
+    --bg-warm: #fff9f5;
+    /* Art GPS track accent colors (per spec 1.5) */
+    --skills-accent: #5e7a5e;          /* sage — clean, focused, daylight */
+    --creation-accent: #c8a96e;        /* warm gold — heritage, gallery */
+    --creation-bg: #2a2530;            /* deep plum — museum at 6pm */
+    --creation-bg-soft: #3a3340;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* ═══ TOPBAR ═══ */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--ink-veryfaint);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 14px; color: var(--ink);
+    text-decoration: none; letter-spacing: 0.3px;
+  }
+  .brand-mark { color: var(--purple); margin-right: 4px; }
+  .topbar-right {
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Montserrat', sans-serif; font-size: 12px;
+  }
+  .topbar-right a { color: var(--ink-soft); text-decoration: none; }
+  .sign-out-btn {
+    background: none; border: 1px solid var(--ink-veryfaint);
+    border-radius: 16px; padding: 6px 12px; font-size: 11px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    color: var(--ink-soft); cursor: pointer; letter-spacing: 0.3px;
+  }
+  .sign-out-btn:hover { background: var(--paper-soft); color: var(--ink); }
+  
+  /* ═══ SIGN-IN SCREEN ═══
+     Top-anchored with viewport-aware padding instead of forced 100vh
+     flex-center, so the card sits proudly at ~22vh on tall screens
+     (iPad/desktop) rather than floating in the middle of a sea of empty. */
+  .signin-screen {
+    min-height: calc(100vh - 60px);
+    padding: clamp(48px, 14vh, 160px) 20px 60px;
+    display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
+  }
+  .signin-card {
+    background: #fff; border-radius: var(--radius-lg);
+    padding: 36px 28px; max-width: 380px; width: 100%;
+    box-shadow: var(--shadow-lg); text-align: center;
+  }
+  .signin-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 12px;
+  }
+  .signin-title {
+    font-family: 'Montserrat', sans-serif; font-size: 28px;
+    font-weight: 900; margin-bottom: 8px;
+  }
+  .signin-subtitle {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px; color: var(--ink-soft); margin-bottom: 24px;
+    font-weight: 400; line-height: 1.55;
+  }
+  .signin-label {
+    display: block; text-align: left;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .signin-input {
+    width: 100%; padding: 12px 14px; font-size: 15px;
+    border: 1.5px solid var(--ink-veryfaint); border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    letter-spacing: 0.5px; outline: none;
+    transition: border 0.2s;
+  }
+  .signin-input:focus { border-color: var(--purple); }
+  .signin-input.error { border-color: #e74c3c; animation: shake 0.4s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+  .signin-btn {
+    width: 100%; margin-top: 14px; padding: 14px;
+    background: var(--ink); color: #fff; border: none;
+    border-radius: var(--radius-sm); cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 13px; letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .signin-btn:hover:not(:disabled) { background: #2a2f42; }
+  .signin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .signin-error {
+    display: none; margin-top: 12px; font-size: 12px;
+    color: #e74c3c;
+  }
+  .signin-error.visible { display: block; }
+  .signin-help {
+    margin-top: 22px; font-size: 12px; color: var(--ink-faint);
+    line-height: 1.7;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+  }
+  .signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
 
-  // ═══ CONFIG (must match /core/auth.js) ═══
-  const SUPABASE_URL = 'https://rudztwseatwayhztbarj.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
-  // ⚠️ The anon key is PUBLIC by design (safe to embed in client code).
-  //    The student's session is stored in localStorage and used by Supabase
-  //    for row-level security on the server side.
+  /* ═══ New auth UI ═══ */
+  .auth-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--ink-veryfaint);
+    margin-bottom: 18px;
+  }
+  .auth-tab {
+    flex: 1;
+    background: none; border: none; cursor: pointer;
+    padding: 12px 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 0.6px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.18s;
+  }
+  .auth-tab:hover { color: var(--ink); }
+  .auth-tab.active {
+    color: var(--purple);
+    border-bottom-color: var(--purple);
+  }
+  .google-btn {
+    width: 100%;
+    background: #fff;
+    color: var(--ink);
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.18s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .google-btn:hover {
+    border-color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .google-btn:disabled { opacity: 0.5; cursor: wait; }
+  .auth-divider {
+    text-align: center;
+    margin: 16px 0;
+    position: relative;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .auth-divider::before, .auth-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 24px);
+    height: 1px;
+    background: var(--ink-veryfaint);
+  }
+  .auth-divider::before { left: 0; }
+  .auth-divider::after { right: 0; }
+  .auth-divider span { background: #fff; padding: 0 8px; position: relative; }
+  .auth-form { text-align: left; }
+  .signin-info {
+    display: none; margin-top: 12px; font-size: 12px;
+    color: var(--purple); padding: 10px 12px;
+    background: #f5f3ff; border-radius: 8px;
+  }
+  .signin-info.visible { display: block; }
+  .access-code-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ink-veryfaint);
+    text-align: left;
+  }
+  .access-code-section summary {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: 0.5px;
+    text-align: center;
+    padding: 4px 0;
+    user-select: none;
+  }
+  .access-code-section summary:hover { color: var(--ink); }
+  .access-code-section summary span { font-size: 10px; margin-left: 4px; }
+  .access-code-section[open] summary span { display: inline-block; transform: rotate(180deg); }
+  .signin-btn.secondary {
+    background: var(--ink-soft);
+    margin-top: 8px;
+  }
+  .signin-btn.secondary:hover:not(:disabled) { background: var(--ink); }
 
-  const STORAGE_BUCKET = 'student-artwork';
-  const TABLE_NAME = 'student_submissions';
+  /* Paywall modal */
+  .paywall-modal {
+    position: fixed; inset: 0;
+    background: rgba(42, 47, 66, 0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .paywall-modal.visible { display: flex; }
+  .paywall-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+  .paywall-icon { font-size: 44px; margin-bottom: 12px; }
+  .paywall-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .paywall-body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .paywall-cta {
+    display: block;
+    width: 100%;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: background 0.18s;
+  }
+  .paywall-cta:hover { background: #4a26b8; }
+  .paywall-dismiss {
+    background: none; border: none;
+    color: var(--ink-faint);
+    font-size: 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .paywall-dismiss:hover { color: var(--ink); }
+  
+  /* ═══ MAIN CONTAINER ═══ */
+  .container {
+    max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
+  }
+  /* iPad+ : let content breathe horizontally so vertical run is shorter
+     and the page no longer looks like a narrow column on a giant canvas. */
+  @media (min-width: 768px) {
+    .container { max-width: 760px; padding: 36px 28px 80px; }
+  }
+  @media (min-width: 1100px) {
+    .container { max-width: 880px; padding: 44px 32px 100px; }
+  }
+  
+  /* ═══ HERO ═══ */
+  .hero {
+    text-align: center; margin-bottom: 28px;
+  }
+  .hero-greeting {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 6px;
+  }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-size: 26px;
+    font-weight: 900; margin-bottom: 4px;
+  }
+  .hero-title .name { color: var(--purple); }
+  .hero-subtitle {
+    font-size: 13px; color: var(--ink-soft);
+  }
+  
+  /* ═══ RESUME CARD ═══ */
+  .resume-card {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff; border-radius: var(--radius-md);
+    padding: 18px 20px; margin-bottom: 22px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 14px;
+    box-shadow: 0 8px 24px rgba(167,139,250,0.30);
+  }
+  .resume-card.hidden { display: none; }
+  .resume-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    opacity: 0.85; margin-bottom: 4px;
+  }
+  .resume-title {
+    font-family: 'Montserrat', sans-serif; font-size: 16px;
+    font-weight: 800; margin-bottom: 2px;
+  }
+  .resume-sub { font-size: 12px; opacity: 0.85; }
+  .resume-btn {
+    background: rgba(255,255,255,0.25); color: #fff;
+    padding: 10px 16px; border-radius: 22px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 11px; letter-spacing: 0.5px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .resume-btn:hover { background: rgba(255,255,255,0.4); }
+  
+  /* ═══ SECTION HEADING ═══ */
+  .section-heading {
+    margin: 32px 0 14px;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif; font-size: 16px;
+    font-weight: 800; margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 12px; color: var(--ink-soft);
+  }
+  
+  /* ═══ TRACK CARDS (Skills / Creation) ═══ */
+  .tracks {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 480px) {
+    .tracks { grid-template-columns: 1fr; }
+  }
+  @media (min-width: 768px) {
+    .tracks { gap: 18px; margin-bottom: 36px; }
+  }
+  .track-card {
+    background: #fff; border-radius: var(--radius-md);
+    padding: 18px 16px;
+    border: 1.5px solid var(--ink-veryfaint);
+    cursor: pointer; text-decoration: none; color: inherit;
+    transition: all 0.2s;
+    display: flex; flex-direction: column;
+    min-height: 160px;
+  }
+  @media (min-width: 768px) {
+    .track-card { padding: 24px 22px; min-height: 200px; }
+    .track-emoji { font-size: 40px !important; margin-bottom: 12px !important; }
+    .track-name { font-size: 17px !important; }
+    .track-tagline { font-size: 12px !important; }
+  }
+  .track-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .track-card.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .track-card.locked:hover {
+    transform: none; border-color: var(--ink-veryfaint);
+    box-shadow: none;
+  }
+  .track-emoji { font-size: 32px; margin-bottom: 8px; }
+  .track-name {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 900; margin-bottom: 3px;
+  }
+  .track-tagline {
+    font-size: 11px; color: var(--ink-soft);
+    margin-bottom: 12px; line-height: 1.4;
+  }
+  /* NEW (Art GPS): student-voice quote — italic, accent-colored, slightly larger than body */
+  .track-quote {
+    font-family: 'Open Sans', Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 4px 0 10px;
+  }
+  @media (min-width: 768px) {
+    .track-quote { font-size: 14px; }
+  }
+  /* NEW (Art GPS): descriptive paragraph beneath the quote */
+  .track-description {
+    font-size: 11.5px; color: var(--ink-soft);
+    line-height: 1.55; margin-bottom: 14px;
+  }
+  @media (min-width: 768px) {
+    .track-description { font-size: 12.5px; }
+  }
+  /* Track-themed variants — Skills feels like daylight; Creation like gallery at 6pm. */
+  .track-card.track-skills {
+    background: #ffffff;
+    border-color: rgba(94,122,94,0.18);
+  }
+  .track-card.track-skills:hover {
+    border-color: var(--skills-accent);
+  }
+  .track-card.track-skills .track-quote {
+    color: var(--skills-accent);
+  }
+  .track-card.track-skills .track-fill {
+    background: linear-gradient(90deg, var(--skills-accent), #8fb18f);
+  }
+  .track-card.track-creation {
+    background: linear-gradient(135deg, var(--creation-bg) 0%, var(--creation-bg-soft) 100%);
+    border-color: rgba(200,169,110,0.25);
+    color: #f5f1e8;
+  }
+  .track-card.track-creation:hover {
+    border-color: var(--creation-accent);
+    box-shadow: 0 8px 28px rgba(42,37,48,0.32);
+  }
+  .track-card.track-creation .track-name {
+    color: #f5f1e8;
+  }
+  .track-card.track-creation .track-quote {
+    color: var(--creation-accent);
+  }
+  .track-card.track-creation .track-description {
+    color: rgba(245,241,232,0.72);
+  }
+  .track-card.track-creation .track-progress {
+    color: var(--creation-accent);
+  }
+  .track-card.track-creation .track-bar {
+    background: rgba(245,241,232,0.15);
+  }
+  .track-card.track-creation .track-fill {
+    background: linear-gradient(90deg, var(--creation-accent), #d4b884);
+  }
+  .track-progress {
+    margin-top: auto;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 700; color: var(--ink-soft);
+    letter-spacing: 0.5px;
+  }
+  .track-bar {
+    margin-top: 6px;
+    height: 4px; background: var(--ink-veryfaint);
+    border-radius: 2px; overflow: hidden;
+  }
+  .track-fill {
+    height: 100%; background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+  .track-locked-tag {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    background: rgba(200,169,110,0.15); color: var(--gold);
+    padding: 3px 8px; border-radius: 10px;
+    margin-top: auto;
+  }
+  
+  /* ═══ SUB-TRACKS (inside Skills) ═══ */
+  .subtrack {
+    background: #fff; border-radius: var(--radius-md);
+    padding: 14px 16px; margin-bottom: 10px;
+    border: 1.5px solid var(--ink-veryfaint);
+    display: flex; align-items: center; gap: 14px;
+    text-decoration: none; color: inherit;
+    transition: all 0.2s;
+  }
+  .subtrack:hover {
+    border-color: var(--purple);
+    transform: translateX(2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .subtrack.locked {
+    opacity: 0.55; cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .subtrack.locked:hover {
+    transform: none; border-color: var(--ink-veryfaint); box-shadow: none;
+  }
+  .subtrack-emoji {
+    font-size: 28px; flex-shrink: 0;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper-soft); border-radius: 50%;
+  }
+  .subtrack-info { flex: 1; }
+  .subtrack-name {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 800; margin-bottom: 2px;
+  }
+  .subtrack-meta {
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .subtrack-arrow {
+    color: var(--purple); font-size: 18px; font-weight: 700;
+  }
+  
+  /* ═══ BACK BUTTON ═══ */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    color: var(--ink-soft); padding: 6px 0;
+    margin-bottom: 16px;
+  }
+  .back-btn:hover { color: var(--purple); }
+  
+  /* ═══ PATH NODE (Foundation A — game-style) ═══ */
+  .path-header {
+    text-align: center; margin-bottom: 22px;
+  }
+  .path-header-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 6px;
+  }
+  .path-header-title {
+    font-family: 'Montserrat', sans-serif; font-size: 22px;
+    font-weight: 900; margin-bottom: 6px;
+  }
+  .path-header-sub {
+    font-size: 12px; color: var(--ink-soft); margin-bottom: 14px;
+  }
+  .path-header-bar {
+    height: 6px; background: var(--ink-veryfaint);
+    border-radius: 3px; overflow: hidden;
+    max-width: 240px; margin: 0 auto 6px;
+  }
+  .path-header-fill {
+    height: 100%; background: linear-gradient(90deg, var(--purple), var(--cyan));
+    border-radius: 3px;
+    transition: width 0.5s;
+  }
+  .path-header-meta {
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 700; color: var(--ink-soft);
+    letter-spacing: 0.5px;
+  }
+  
+  /* Vertical path nodes */
+  .path-nodes {
+    position: relative;
+    padding: 6px 0;
+  }
+  .path-node {
+    position: relative;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 14px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--ink-veryfaint);
+    text-decoration: none; color: inherit;
+    transition: all 0.2s;
+  }
+  /* Connector line between nodes */
+  .path-node:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 38px;
+    bottom: -14px;
+    width: 2px; height: 14px;
+    background: var(--ink-veryfaint);
+    z-index: 0;
+  }
+  
+  /* DONE state */
+  .path-node.done {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
+    border-color: rgba(29,158,117,0.3);
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .path-node.done:not(:last-child)::after { background: var(--green); }
+  .path-node.done:hover { 
+    transform: translateX(2px); 
+    border-color: var(--green); 
+    box-shadow: 0 4px 14px rgba(29,158,117,0.20);
+  }
+  
+  /* CURRENT state — glowing */
+  .path-node.current {
+    background: #fff;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 20px rgba(200,169,110,0.35), 0 4px 12px rgba(0,0,0,0.06);
+    animation: currentPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes currentPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(200,169,110,0.35), 0 4px 12px rgba(0,0,0,0.06); }
+    50%      { box-shadow: 0 0 30px rgba(200,169,110,0.6), 0 6px 18px rgba(200,169,110,0.20); }
+  }
+  .path-node.current:hover { transform: translateX(2px); }
+  
+  /* LOCKED state */
+  .path-node.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+  }
+  .path-node.locked:hover { transform: none; }
+  
+  /* COMING SOON */
+  .path-node.coming {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: var(--paper-soft);
+    border-style: dashed;
+  }
+  .path-node.coming:hover { transform: none; }
+  
+  /* Node icon (circle) */
+  .node-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    background: var(--paper-soft);
+    z-index: 1; position: relative;
+  }
+  .path-node.done .node-icon {
+    background: var(--green); color: #fff;
+    box-shadow: 0 4px 12px rgba(29,158,117,0.30);
+  }
+  .path-node.current .node-icon {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(167,139,250,0.40);
+  }
+  .path-node.locked .node-icon,
+  .path-node.coming .node-icon {
+    background: var(--ink-veryfaint);
+    color: var(--ink-faint);
+  }
+  
+  /* Node info */
+  .node-info { flex: 1; min-width: 0; }
+  .node-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 3px;
+  }
+  .path-node.done .node-kicker { color: var(--green); }
+  .path-node.current .node-kicker { color: var(--gold); }
+  .node-title {
+    font-family: 'Montserrat', sans-serif; font-size: 15px;
+    font-weight: 800; margin-bottom: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .node-tag {
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .node-arrow {
+    color: var(--ink-faint); font-size: 18px;
+    flex-shrink: 0;
+  }
+  .path-node.current .node-arrow { color: var(--gold); }
+  
+  /* ═══ BADGE FOOTER ═══ */
+  .badge-footer {
+    margin-top: 28px;
+    padding: 24px 18px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fce7f3 100%);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .badge-footer-icon {
+    font-size: 42px; margin-bottom: 8px;
+    opacity: 0.5;
+  }
+  .badge-footer.unlocked .badge-footer-icon {
+    opacity: 1;
+    animation: badgeSpin 2s ease infinite alternate;
+  }
+  @keyframes badgeSpin {
+    from { transform: rotate(-5deg) scale(1); }
+    to   { transform: rotate(5deg) scale(1.08); }
+  }
+  .badge-footer-title {
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    font-weight: 900; letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .badge-footer-sub {
+    font-size: 12px; color: var(--ink-soft);
+  }
+  
+  /* ═══ CREATION SCREEN (placeholder) ═══ */
+  .creation-placeholder {
+    background: linear-gradient(135deg, #fef3f7 0%, #f5f3ff 100%);
+    border-radius: var(--radius-lg);
+    padding: 40px 24px; text-align: center;
+    margin-bottom: 24px;
+  }
+  .creation-placeholder-icon { font-size: 56px; margin-bottom: 12px; }
+  .creation-placeholder-title {
+    font-family: 'Montserrat', sans-serif; font-size: 20px;
+    font-weight: 900; margin-bottom: 8px;
+  }
+  .creation-placeholder-text {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.7; max-width: 360px; margin: 0 auto 16px;
+  }
+  .creation-coming-pill {
+    display: inline-block;
+    background: rgba(200,169,110,0.15);
+    color: var(--gold);
+    padding: 6px 14px; border-radius: 18px;
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+  }
 
-  let _client = null;
-  let _ready = false;
-  let _loadPromise = null;
+</style>
+</head>
+<body>
 
-  /**
-   * Load the Supabase JS SDK from CDN and create a client.
-   * Idempotent — safe to call many times.
-   */
-  function _loadClient() {
-    if (_loadPromise) return _loadPromise;
-    _loadPromise = new Promise((resolve, reject) => {
-      if (window.supabase && window.supabase.createClient) {
-        // SDK already loaded (e.g., by core/auth.js on home page)
-        _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-          auth: {
-            storage: window.localStorage,
-            storageKey: 'fei_supabase_auth',  // must match core/auth.js
-            persistSession: true,
-            autoRefreshToken: true
-          }
-        });
-        _ready = true;
-        resolve(_client);
+<!-- ═══════════════════════════════════════════════════════════
+     TOPBAR
+     ═══════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="./" class="brand" title="Guided Practice Studio"><span class="brand-mark">●</span> FEI · Art GPS</a>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SIGN-IN SCREEN
+     ═══════════════════════════════════════════════════════════ -->
+<div class="signin-screen" id="signin-screen" style="display:none;">
+  <div class="signin-card">
+    <div class="signin-kicker">Art GPS</div>
+    <h1 class="signin-title">Welcome to your studio.</h1>
+    <p class="signin-subtitle" id="signin-subtitle">A guided practice studio for art students, families, and teachers. Sign in or create a free account to begin.</p>
+
+    <!-- Tabs: Sign Up / Log In -->
+    <div class="auth-tabs" id="auth-tabs">
+      <button class="auth-tab active" data-tab="signup" onclick="switchAuthTab('signup')">Sign up</button>
+      <button class="auth-tab" data-tab="login" onclick="switchAuthTab('login')">Log in</button>
+    </div>
+
+    <!-- Google login -->
+    <button class="google-btn" id="google-btn" onclick="handleGoogleSignIn()">
+      <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right:8px; vertical-align:-3px;">
+        <path fill="#4285F4" d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="auth-divider"><span>or</span></div>
+
+    <!-- Sign Up form -->
+    <form class="auth-form" id="auth-signup-form" onsubmit="handleSignUp(event)">
+      <label class="signin-label" for="signup-name">Your name</label>
+      <input type="text" class="signin-input" id="signup-name"
+             placeholder="What should we call you?" autocomplete="name" required />
+
+      <label class="signin-label" for="signup-email" style="margin-top:12px;">Email</label>
+      <input type="email" class="signin-input" id="signup-email"
+             placeholder="you@example.com" autocomplete="email" required />
+
+      <label class="signin-label" for="signup-password" style="margin-top:12px;">Password</label>
+      <input type="password" class="signin-input" id="signup-password"
+             placeholder="Minimum 6 characters" autocomplete="new-password" minlength="6" required />
+
+      <button type="submit" class="signin-btn" id="signup-submit">Start practicing →</button>
+    </form>
+
+    <!-- Log In form -->
+    <form class="auth-form" id="auth-login-form" onsubmit="handleLogIn(event)" style="display:none;">
+      <label class="signin-label" for="login-email">Email</label>
+      <input type="email" class="signin-input" id="login-email"
+             placeholder="you@example.com" autocomplete="email" required />
+
+      <label class="signin-label" for="login-password" style="margin-top:12px;">Password</label>
+      <input type="password" class="signin-input" id="login-password"
+             placeholder="Your password" autocomplete="current-password" required />
+
+      <button type="submit" class="signin-btn" id="login-submit">Continue practicing →</button>
+    </form>
+
+    <p class="signin-error" id="signin-error">Something went wrong. Please try again.</p>
+    <p class="signin-info" id="signin-info"></p>
+
+    <!-- Access code (legacy) collapsed section -->
+    <details class="access-code-section">
+      <summary>Have a student access code? <span>↓</span></summary>
+      <label class="signin-label" for="signin-code" style="margin-top:10px;">Student Code</label>
+      <input type="text" class="signin-input" id="signin-code"
+             placeholder="e.g. LILY-01" autocomplete="off"
+             autocapitalize="characters" spellcheck="false" />
+      <button class="signin-btn secondary" id="signin-btn" disabled>Continue with code →</button>
+      <p class="signin-help" style="margin-top:10px;">
+        <a href="#" id="try-code-link">Try the demo (TRYNEW)</a>
+      </p>
+    </details>
+
+    <p class="signin-help">
+      Questions? <a href="https://www.feiteamart.com/contact" target="_blank">Contact your teacher or write us →</a>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HOME SCREEN — Skills + Creation tracks
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="home-screen" style="display:none;">
+  
+  <div class="hero">
+    <div class="hero-greeting" id="hero-greeting">Welcome back to the studio</div>
+    <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
+    <p class="hero-subtitle">What kind of practice today?</p>
+  </div>
+  
+  <!-- Resume card -->
+  <div class="resume-card hidden" id="resume-card">
+    <div>
+      <div class="resume-kicker">Pick up where you left off</div>
+      <div class="resume-title" id="resume-title">Lesson 1: Sphere</div>
+      <div class="resume-sub" id="resume-sub">Your last practice session</div>
+    </div>
+    <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
+  </div>
+  
+  <!-- Two tracks -->
+  <div class="section-heading">
+    <div class="section-title">Two ways to practice</div>
+    <div class="section-sub">Choose what matches where you are right now. You can move between them anytime.</div>
+  </div>
+  
+  <div class="tracks">
+    <a href="#" class="track-card track-skills" id="track-skills" onclick="event.preventDefault(); showSkills();">
+      <!-- DESIGNER: replace emoji with custom SVG per Section 4.4 (geometric primitives / pencil + line / steps / grid). Color: var(--skills-accent). -->
+      <div class="track-emoji" aria-hidden="true">✏️</div>
+      <div class="track-name">Skills</div>
+      <div class="track-quote">&ldquo;I have no idea what to do. Guide me step by step.&rdquo;</div>
+      <div class="track-description">A teacher walks you through every step. You finish something real — a shape, a character, a small drawing — and build confidence one practice at a time.</div>
+      <div class="track-progress" id="skills-progress">0 of 11 practice sessions</div>
+      <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
+    </a>
+    
+    <a href="creation/" class="track-card track-creation" id="track-creation">
+      <!-- DESIGNER: replace emoji with custom SVG per Section 4.5 (framed artwork / archway / magnifier / open book). Color: var(--creation-accent). -->
+      <div class="track-emoji" aria-hidden="true">🖼</div>
+      <div class="track-name">Creation &middot; Learn from Collections</div>
+      <div class="track-quote">&ldquo;I want to learn from artists and create my own work.&rdquo;</div>
+      <div class="track-description">Step into a curated collection of artists, artworks, and movements. Look closely. Take inspiration. Then create your own response in our open studio.</div>
+      <div class="track-progress" id="creation-progress">Collections open</div>
+      <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
+    </a>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SKILLS SCREEN — sub-tracks
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="skills-screen" style="display:none;">
+  
+  <button class="back-btn" onclick="showHome()">← Back to Art GPS</button>
+  
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">Skills &middot; Step-by-Step Practice</div>
+    <div class="section-sub">Follow clear, guided lessons. Build real skills, one practice at a time.</div>
+  </div>
+  
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
+    <div class="subtrack-emoji">✏️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Drawing</div>
+      <div class="subtrack-meta" id="drawing-meta">Foundation A · in progress</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+  
+  <div class="subtrack locked">
+    <div class="subtrack-emoji">🎨</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Color Theory</div>
+      <div class="subtrack-meta">Coming soon</div>
+    </div>
+  </div>
+  
+  <div class="subtrack locked">
+    <div class="subtrack-emoji">📐</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Art Theory</div>
+      <div class="subtrack-meta">Coming soon</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DRAWING SCREEN — Foundation A unlock path (Duolingo style)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="drawing-screen" style="display:none;">
+  
+  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+  
+  <div class="path-header">
+    <div class="path-header-kicker">Drawing · Foundation A</div>
+    <div class="path-header-title">Form &amp; Structure</div>
+    <div class="path-header-sub">
+      Learn to see and construct objects through guided practice sessions. Each one builds on the last.
+    </div>
+    <div class="path-header-bar">
+      <div class="path-header-fill" id="path-fill" style="width:0%"></div>
+    </div>
+    <div class="path-header-meta" id="path-meta">0 of 11 practice sessions unlocked</div>
+  </div>
+  
+  <!-- Path nodes will be rendered here -->
+  <div class="path-nodes" id="path-nodes"></div>
+  
+  <!-- Foundation A certificate footer -->
+  <div class="badge-footer" id="badge-footer">
+    <div class="badge-footer-icon">🏆</div>
+    <div class="badge-footer-title">Basic Sketch</div>
+    <div class="badge-footer-sub" id="badge-footer-sub">
+      Complete all 11 practice sessions to earn your Basic Sketch badge.
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAYWALL MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="paywall-modal" id="paywall-modal" onclick="if(event.target===this) closePaywall()">
+  <div class="paywall-card">
+    <div class="paywall-icon" id="paywall-icon">🖼</div>
+    <div class="paywall-title" id="paywall-title">Unlock your full Art GPS studio</div>
+    <div class="paywall-body" id="paywall-body">
+      You've finished your free practice sessions and Collections previews. Unlock everything in Skills and Creation with one upgrade.
+    </div>
+    <a class="paywall-cta" id="paywall-cta-link" href="upgrade/">See teacher-supported plans →</a>
+    <button class="paywall-dismiss" onclick="closePaywall()">Not yet</button>
+  </div>
+</div>
+
+<script src="core/auth.js"></script>
+<script src="core/access.js"></script>
+<script>
+  // ═══════════════════════════════════════════════════════════
+  // CONFIG
+  // ═══════════════════════════════════════════════════════════
+  
+  const ROSTER_PATH = 'core/student-access-codes.js';
+  const PROFILE_KEY = 'fei_user_profile';
+  
+  // ═══════════════════════════════════════════════════════════
+  // FOUNDATION A PATH — order is configurable!
+  // 改这个数组就能调换顺序 (per Faye's request: flexible reordering)
+  // ═══════════════════════════════════════════════════════════
+  const FOUNDATION_A_PATH = [
+    {
+      id: 'preparation',
+      title: 'Preparation',
+      subtitle: 'Before you draw',
+      emoji: '✏️',
+      href: 'lessons/preparation/',
+      ready: true
+    },
+    {
+      id: 'cube',
+      title: 'The Cube',
+      subtitle: 'Geometric form',
+      emoji: '◧',
+      href: 'lessons/lesson-3-cube/',
+      ready: true
+    },
+    {
+      id: 'sphere',
+      title: 'The Sphere',
+      subtitle: 'Geometric form',
+      emoji: '⬤',
+      href: 'lessons/lesson-1-sphere/',
+      ready: true
+    },
+    {
+      id: 'cylinder',
+      title: 'The Cylinder',
+      subtitle: 'Geometric form',
+      emoji: '◗',
+      href: 'lessons/lesson-5-cylinder/',
+      ready: true
+    },
+    {
+      id: 'cup',
+      title: 'The Cup',
+      subtitle: 'Cylinder · real world',
+      emoji: '☕',
+      href: 'lessons/lesson-6-cup/',
+      ready: true
+    },
+    {
+      id: 'apple',
+      title: 'The Apple',
+      subtitle: 'Sphere · real world',
+      emoji: '🍎',
+      href: 'lessons/lesson-2-sphere-realworld/',
+      ready: true
+    },
+    {
+      id: 'cone',
+      title: 'The Cone',
+      subtitle: 'Geometric form · ice cream cousin',
+      emoji: '🔺',
+      href: 'lessons/lesson-7-cone/',
+      ready: true
+    },
+    {
+      id: 'intersecting',
+      title: 'Intersecting Geometry',
+      subtitle: 'Two forms, one space',
+      emoji: '💎',
+      href: 'lessons/lesson-9-intersecting/',
+      ready: true
+    },
+    {
+      // Round 40 fixes:
+      //   ① href: 'lesson-4-box/' → 'lesson-4-giftbox/' (theme-oriented naming, matches Cup style)
+      //   ② ready: false → true (Round 39 built this — 4 demo videos provided)
+      //   ③ title: 'The Box' → 'Gift Box' (Faye: course theme = a gift box)
+      //   ④ subtitle: 'Cube · real world' → 'Cube · gift box' (course-specific framing)
+      id: 'box',
+      title: 'Gift Box',
+      subtitle: 'Cube · gift box',
+      emoji: '🎁',
+      href: 'lessons/lesson-4-giftbox/',
+      ready: true
+    },
+    {
+      // Round 42: activated — 4 videos provided + course built (lesson-8-icecream)
+      id: 'icecream',
+      title: 'The Ice Cream',
+      subtitle: 'Cone · real world',
+      emoji: '🍦',
+      href: 'lessons/lesson-8-icecream/',
+      ready: true
+    },
+    {
+      // Round 41: activated — 4 videos provided + course built (lesson-10-papercrane)
+      id: 'papercrane',
+      title: 'Paper Crane',
+      subtitle: 'Intersecting planes · finale',
+      emoji: '🕊️',
+      href: 'lessons/lesson-10-papercrane/',
+      ready: true
+    }
+  ];
+  
+  // ═══════════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════════
+  
+  let validStudents = new Map();
+  let userProfile = null;
+  
+  // ═══════════════════════════════════════════════════════════
+  // STUDENT ROSTER
+  // ═══════════════════════════════════════════════════════════
+  
+  async function loadRoster() {
+    try {
+      const response = await fetch(ROSTER_PATH, { cache: 'no-cache' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const text = await response.text();
+      
+      const blockRegex = /\{[^{}]*\}/g;
+      let block;
+      while ((block = blockRegex.exec(text)) !== null) {
+        const blockText = block[0];
+        const idMatch    = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+        const nameMatch  = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+        const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
+        
+        if (!idMatch || !nameMatch) continue;
+        
+        validStudents.set(
+          idMatch[1].toUpperCase(),
+          { displayName: nameMatch[1], isTrial: trialMatch ? trialMatch[1] === 'true' : false }
+        );
+      }
+      
+      console.log('[ArtGPS Home] Loaded ' + validStudents.size + ' codes');
+    } catch (err) {
+      console.warn('[ArtGPS Home] Failed to load roster:', err);
+    }
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // PROFILE
+  // ═══════════════════════════════════════════════════════════
+  
+  function loadProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      userProfile = raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      userProfile = null;
+    }
+  }
+  
+  function saveProfile(p) {
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+      userProfile = p;
+    } catch (e) {
+      console.warn('Save failed:', e);
+    }
+  }
+  
+  function clearProfile() {
+    try {
+      localStorage.removeItem(PROFILE_KEY);
+      userProfile = null;
+    } catch (e) {}
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SCREEN SWITCHING
+  // ═══════════════════════════════════════════════════════════
+  
+  function hideAllScreens() {
+    document.getElementById('signin-screen').style.display = 'none';
+    document.getElementById('home-screen').style.display = 'none';
+    document.getElementById('skills-screen').style.display = 'none';
+    document.getElementById('drawing-screen').style.display = 'none';
+  }
+  
+  function showSignIn() {
+    hideAllScreens();
+    document.getElementById('signin-screen').style.display = 'flex';
+    document.getElementById('topbar-right').innerHTML = `
+      <a href="https://www.feiteamart.com" target="_blank">feiteamart.com</a>
+    `;
+    
+    const urlCode = new URLSearchParams(window.location.search).get('code');
+    if (urlCode) {
+      document.getElementById('signin-code').value = urlCode.toUpperCase();
+      updateSignInBtn();
+    }
+  }
+  
+  function showHome() {
+    hideAllScreens();
+    document.getElementById('home-screen').style.display = 'block';
+    renderHome();
+    window.scrollTo(0, 0);
+  }
+  window.showHome = showHome;
+  
+  function showSkills() {
+    hideAllScreens();
+    document.getElementById('skills-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showSkills = showSkills;
+  
+  function showDrawing() {
+    hideAllScreens();
+    document.getElementById('drawing-screen').style.display = 'block';
+    renderDrawingPath();
+    window.scrollTo(0, 0);
+  }
+  window.showDrawing = showDrawing;
+  
+  // ═══════════════════════════════════════════════════════════
+  // RENDER HOME
+  // ═══════════════════════════════════════════════════════════
+  
+  function renderHome() {
+    // Topbar
+    const tier = userProfile.tier === 'trial' ? '· Trial' : '';
+    document.getElementById('topbar-right').innerHTML = `
+      <span style="font-size:12px; color:var(--ink-soft);">
+        ${userProfile.name} ${tier}
+      </span>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    `;
+    
+    // Hero
+    const completed = userProfile.completedLessons || [];
+    document.getElementById('hero-greeting').textContent = 
+      completed.length > 0 ? 'Welcome back to the studio' : 'Welcome to the studio';
+    document.getElementById('hero-name').textContent = userProfile.name;
+    
+    // Resume card
+    if (completed.length > 0) {
+      const next = pickNextLesson();
+      if (next) {
+        const card = document.getElementById('resume-card');
+        card.classList.remove('hidden');
+        document.getElementById('resume-title').textContent = next.title;
+        document.getElementById('resume-sub').textContent = next.subtitle;
+        document.getElementById('resume-btn').href = next.href;
+      }
+    } else {
+      document.getElementById('resume-card').classList.add('hidden');
+    }
+    
+    // Skills track progress
+    const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
+    const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
+    const totalCount = FOUNDATION_A_PATH.length;
+    const pct = Math.round((doneCount / totalCount) * 100);
+    document.getElementById('skills-progress').textContent = 
+      `${doneCount} of ${totalCount} practice sessions`;
+    document.getElementById('skills-bar').style.width = pct + '%';
+    
+    // Drawing sub-track meta
+    document.getElementById('drawing-meta').textContent = 
+      doneCount === 0
+        ? `Foundation A · practice path`
+        : `Foundation A · ${doneCount}/${totalCount} done`;
+    
+    // Creation track: static "Collections open" message + count of completed Creation lessons.
+    // Currently 4 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art + lfc019 Rousseau).
+    const creationLessons = ['lfc054', 'lfc017', 'lfc018', 'lfc019'];
+    const creationDone = creationLessons.filter(id => completed.includes(id)).length;
+    const progressEl = document.getElementById('creation-progress');
+    if (progressEl) {
+      if (creationDone === creationLessons.length) {
+        progressEl.textContent = 'All Collections explored';
+      } else if (creationDone > 0) {
+        progressEl.textContent = `${creationDone} of ${creationLessons.length} Collections explored`;
+      }
+      // else: keep the default "Collections open" text
+    }
+  }
+  
+  // Find the next lesson the student should do
+  function pickNextLesson() {
+    const completed = userProfile.completedLessons || [];
+    // Find the first lesson in order that they haven't completed and is ready
+    for (const lesson of FOUNDATION_A_PATH) {
+      if (!lesson.ready) continue;
+      if (!completed.includes(lesson.id)) {
+        return {
+          title: lesson.title,
+          subtitle: lesson.subtitle,
+          href: lesson.href
+        };
+      }
+    }
+    return null;  // All done
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // RENDER DRAWING PATH (Foundation A unlock map)
+  // ═══════════════════════════════════════════════════════════
+  
+  function renderDrawingPath() {
+    const completed = userProfile.completedLessons || [];
+    const container = document.getElementById('path-nodes');
+    
+    // Determine state for each node
+    let foundCurrent = false;
+    const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
+      let state = 'locked';
+      let icon = lesson.emoji;
+      let kicker = `Practice ${idx + 1} · Locked`;
+      let arrow = '🔒';
+      let clickable = false;
+      
+      if (!lesson.ready) {
+        state = 'coming';
+        kicker = `Practice ${idx + 1} · In development`;
+        arrow = '⏳';
+      } else if (completed.includes(lesson.id)) {
+        state = 'done';
+        icon = '✓';
+        kicker = `Practice ${idx + 1} · Complete ✓`;
+        arrow = '↻';
+        clickable = true;
+      } else if (!foundCurrent) {
+        state = 'current';
+        kicker = `Practice ${idx + 1} · Start now`;
+        arrow = '→';
+        clickable = true;
+        foundCurrent = true;
+      }
+      
+      const tag = state === 'done' ? 'Practice complete · +1 Practice Point'
+                : state === 'current' ? lesson.subtitle
+                : state === 'coming' ? 'In development with our teaching team'
+                : `Complete previous to unlock`;
+      
+      const tagEl = clickable ? 'a' : 'div';
+      const hrefAttr = clickable ? `href="${lesson.href}"` : '';
+      
+      return `
+        <${tagEl} class="path-node ${state}" ${hrefAttr}>
+          <div class="node-icon">${icon}</div>
+          <div class="node-info">
+            <div class="node-kicker">${kicker}</div>
+            <div class="node-title">${lesson.title}</div>
+            <div class="node-tag">${tag}</div>
+          </div>
+          <div class="node-arrow">${arrow}</div>
+        </${tagEl}>
+      `;
+    }).join('');
+    
+    container.innerHTML = nodesHTML;
+    
+    // Header progress
+    const doneCount = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
+    const totalCount = FOUNDATION_A_PATH.length;
+    const pct = Math.round((doneCount / totalCount) * 100);
+    document.getElementById('path-fill').style.width = pct + '%';
+    document.getElementById('path-meta').textContent = `${doneCount} of ${totalCount} practice sessions unlocked`;
+    
+    // Certificate state
+    const badgeFooter = document.getElementById('badge-footer');
+    const badgeSub = document.getElementById('badge-footer-sub');
+    if (doneCount === totalCount) {
+      badgeFooter.classList.add('unlocked');
+      badgeSub.textContent = "Earned. Welcome to your Basic Sketch badge.";
+    } else {
+      badgeFooter.classList.remove('unlocked');
+      const remaining = totalCount - doneCount;
+      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? "session" : "sessions"} to earn your Basic Sketch badge.`;
+    }
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SIGN-IN FLOW
+  // ═══════════════════════════════════════════════════════════
+  
+  function updateSignInBtn() {
+    const input = document.getElementById('signin-code');
+    const btn = document.getElementById('signin-btn');
+    btn.disabled = input.value.trim().length < 3;
+  }
+  
+  function attemptSignIn() {
+    const input = document.getElementById('signin-code');
+    const error = document.getElementById('signin-error');
+    const code = input.value.trim().toUpperCase();
+    
+    if (!code) return;
+    
+    const match = validStudents.get(code);
+    if (!match) {
+      input.classList.add('error');
+      error.classList.add('visible');
+      setTimeout(() => input.classList.remove('error'), 400);
+      return;
+    }
+    
+    const profile = {
+      id: code,
+      studentCode: code,
+      name: match.displayName,
+      tier: match.isTrial ? 'trial' : 'member',
+      memberSince: Date.now(),
+      currentLesson: 'cube',
+      currentStepIdx: 0,
+      completedLessons: [],
+      totalXP: 0,
+      createdAt: Date.now(),
+      lastSeenAt: Date.now()
+    };
+    saveProfile(profile);
+    showHome();
+  }
+  
+  // ═══════════════════════════════════════════════════════════
+  // SIGN OUT
+  // ═══════════════════════════════════════════════════════════
+  
+  function signOut() {
+    if (!confirm('Sign out of Art GPS? Your practice progress is saved on this device.')) return;
+    (async () => {
+      try {
+        if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+          await window.FEIAuth.signOut();
+        }
+      } catch (e) { console.warn('[signOut] supabase signOut failed', e); }
+      clearProfile();
+      try { localStorage.removeItem('fei_supabase_auth'); } catch (e) {}
+      window.FEIAccess && window.FEIAccess.clearCache();
+      window.location.reload();
+    })();
+  }
+  window.signOut = signOut;
+
+  // ═══════════════════════════════════════════════════════════
+  // NEW AUTH FLOW (Supabase: email + Google)
+  // ═══════════════════════════════════════════════════════════
+
+  let currentAuthTab = 'signup';
+
+  function switchAuthTab(tab) {
+    currentAuthTab = tab;
+    document.querySelectorAll('.auth-tab').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+    });
+    document.getElementById('auth-signup-form').style.display = (tab === 'signup') ? 'block' : 'none';
+    document.getElementById('auth-login-form').style.display  = (tab === 'login')  ? 'block' : 'none';
+    document.getElementById('signin-error').classList.remove('visible');
+    document.getElementById('signin-info').classList.remove('visible');
+  }
+  window.switchAuthTab = switchAuthTab;
+
+  function showAuthError(msg) {
+    const el = document.getElementById('signin-error');
+    el.textContent = msg;
+    el.classList.add('visible');
+    document.getElementById('signin-info').classList.remove('visible');
+  }
+
+  function showAuthInfo(msg) {
+    const el = document.getElementById('signin-info');
+    el.textContent = msg;
+    el.classList.add('visible');
+    document.getElementById('signin-error').classList.remove('visible');
+  }
+
+  function setSubmitBusy(formId, busy) {
+    const btn = document.querySelector('#' + formId + ' .signin-btn');
+    if (!btn) return;
+    btn.disabled = !!busy;
+    if (busy) {
+      btn.dataset.origText = btn.textContent;
+      btn.textContent = 'Working…';
+    } else if (btn.dataset.origText) {
+      btn.textContent = btn.dataset.origText;
+    }
+  }
+
+  async function handleSignUp(event) {
+    event.preventDefault();
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Sign-up is not configured yet. Please use a student access code below.');
+      return;
+    }
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
+    setSubmitBusy('auth-signup-form', true);
+    try {
+      const { user, session, error } = await window.FEIAuth.signUpWithEmail(email, password, name);
+      if (error) { showAuthError(error.message || 'Could not create account. Please try again.'); return; }
+      if (session && user) {
+        // Email confirmation disabled — straight to home
+        await onAuthSuccess(user);
+      } else {
+        // Email confirmation required — Supabase sent the email
+        showAuthInfo('✓ Check your email for a confirmation link, then log in.');
+        switchAuthTab('login');
+        document.getElementById('login-email').value = email;
+      }
+    } catch (e) {
+      console.error(e);
+      showAuthError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitBusy('auth-signup-form', false);
+    }
+  }
+  window.handleSignUp = handleSignUp;
+
+  async function handleLogIn(event) {
+    event.preventDefault();
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Log-in is not configured yet. Please use a student access code below.');
+      return;
+    }
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    setSubmitBusy('auth-login-form', true);
+    try {
+      const { user, error } = await window.FEIAuth.signInWithEmail(email, password);
+      if (error) { showAuthError(error.message || 'Wrong email or password.'); return; }
+      if (user) await onAuthSuccess(user);
+    } catch (e) {
+      console.error(e);
+      showAuthError('Something went wrong. Please try again.');
+    } finally {
+      setSubmitBusy('auth-login-form', false);
+    }
+  }
+  window.handleLogIn = handleLogIn;
+
+  async function handleGoogleSignIn() {
+    if (!window.FEIAuth || !window.FEIAuth._isConfigured()) {
+      showAuthError('Google sign-in is not configured yet.');
+      return;
+    }
+    const btn = document.getElementById('google-btn');
+    btn.disabled = true;
+    try {
+      await window.FEIAuth.signInWithGoogle();
+      // auth.js computes the correct app-base URL automatically
+      // Redirect happens; nothing to do here
+    } catch (e) {
+      console.error(e);
+      showAuthError('Could not start Google sign-in. Please try again.');
+      btn.disabled = false;
+    }
+  }
+  window.handleGoogleSignIn = handleGoogleSignIn;
+
+  async function onAuthSuccess(user) {
+    // Sync to legacy profile shape so the rest of the UI works
+    const name = window.FEIAuth.displayName(user);
+    const existing = (function () {
+      try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); }
+      catch (e) { return null; }
+    })();
+    const profile = {
+      id: user.id,
+      studentCode: null,                  // null → Supabase user (not legacy code)
+      supabaseUserId: user.id,
+      email: user.email || null,
+      name: name,
+      ageGroup: existing ? existing.ageGroup : 'youth',
+      tier: 'member',                     // tier here = "is signed in"; paywall uses FEIAccess.membership
+      memberSince: existing ? existing.memberSince : Date.now(),
+      currentLesson: existing ? existing.currentLesson : 'cube',
+      currentStepIdx: existing ? existing.currentStepIdx : 0,
+      completedLessons: existing ? (existing.completedLessons || []) : [],
+      totalXP: existing ? (existing.totalXP || 0) : 0,
+      visitCount: ((existing && existing.visitCount) || 0) + 1,
+      createdAt: existing ? existing.createdAt : Date.now(),
+      lastSeenAt: Date.now()
+    };
+    saveProfile(profile);
+
+    // Pre-load access status (creates row if needed)
+    try {
+      if (window.FEIAccess) {
+        await window.FEIAccess.init();
+        await window.FEIAccess.getStatus();
+      }
+    } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
+
+    showHome();
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAYWALL
+  // ═══════════════════════════════════════════════════════════
+  function openPaywall(opts) {
+    opts = opts || {};
+    const branch = opts.branch || 'creation';
+    const icon = document.getElementById('paywall-icon');
+    const title = document.getElementById('paywall-title');
+    const body = document.getElementById('paywall-body');
+    const cta = document.getElementById('paywall-cta-link');
+    if (branch === 'skills') {
+      icon.textContent = '📐';
+      title.textContent = "You've finished your free practice sessions.";
+      body.textContent = "The first two practice sessions are on the house. Unlock the full Foundation A practice path — plus access to our Collections studio.";
+    } else {
+      icon.textContent = '🖼';
+      title.textContent = "You've explored two Collections.";
+      body.textContent = "You've used your free Collections previews. Unlock everything — the full Skills practice path, every artist Collection, and your choice of teacher support.";
+    }
+    cta.href = 'upgrade/?reason=paywall_' + branch + '&branch=' + branch;
+    document.getElementById('paywall-modal').classList.add('visible');
+  }
+  function closePaywall() {
+    document.getElementById('paywall-modal').classList.remove('visible');
+  }
+  window.openPaywall = openPaywall;
+  window.closePaywall = closePaywall;
+
+  // ═══════════════════════════════════════════════════════════
+  // INTERCEPT SKILLS LESSON CLICKS for paywall
+  // ═══════════════════════════════════════════════════════════
+  function attachSkillsLessonGuard() {
+    const container = document.getElementById('path-nodes');
+    if (!container) return;
+    if (container.dataset.guardAttached === '1') return;
+    container.dataset.guardAttached = '1';
+    container.addEventListener('click', async function (e) {
+      const a = e.target.closest('a.path-node');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      // Find which lesson this is by matching href against FOUNDATION_A_PATH
+      const match = (typeof FOUNDATION_A_PATH !== 'undefined' ? FOUNDATION_A_PATH : []).find(L => L.href === href);
+      if (!match) return;
+      
+      // ════════════════════════════════════════════════════════════════
+      // ROUND 45 — paywall placement rules (per Faye, June 2026):
+      //   • Preparation:  always free (everyone needs the warm-up)
+      //   • Cube:         always free (Lesson 1 of the real path — taste of the work)
+      //   • Sphere onwards: paywall (unless paid)
+      // ════════════════════════════════════════════════════════════════
+      const ALWAYS_FREE = ['preparation', 'cube'];
+      if (ALWAYS_FREE.includes(match.id)) {
+        // Free regardless of payment status — let them through, no checks
         return;
       }
-      // Load SDK from CDN
-      const s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
-      s.async = true;
-      s.onload = () => {
-        try {
-          _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: {
-              storage: window.localStorage,
-              storageKey: 'fei_supabase_auth',
-              persistSession: true,
-              autoRefreshToken: true
-            }
-          });
-          _ready = true;
-          resolve(_client);
-        } catch (e) {
-          reject(e);
+      
+      // Only enforce for Supabase users — legacy access code = full access
+      const profile = userProfile;
+      if (!profile || profile.studentCode) return;  // legacy
+      // Check access
+      if (!window.FEIAccess) return;
+      e.preventDefault();
+      try {
+        const check = await window.FEIAccess.canOpenLesson('skills', match.id);
+        if (check.allowed) {
+          await window.FEIAccess.recordLessonOpened('skills', match.id);
+          window.location.href = href;
+        } else {
+          openPaywall({ branch: 'skills' });
         }
-      };
-      s.onerror = () => reject(new Error('Failed to load Supabase SDK'));
-      document.head.appendChild(s);
-    });
-    return _loadPromise;
-  }
-
-  // Kick off load immediately
-  _loadClient().catch(err => {
-    console.warn('[FEISubmissions] SDK load failed:', err);
-  });
-
-  /**
-   * Generate a safe storage key.
-   * Example: "abc123-user-id/sphere/1718294021_artwork.jpg"
-   */
-  function _makeStorageKey(userId, lessonId, fileName) {
-    const ts = Date.now();
-    const ext = (fileName && fileName.includes('.'))
-      ? fileName.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg'
-      : 'jpg';
-    return `${userId}/${lessonId}/${ts}_artwork.${ext}`;
-  }
-
-  /**
-   * Get the current Supabase user from localStorage session.
-   */
-  async function _getCurrentUser() {
-    try {
-      await _loadClient();
-      const { data, error } = await _client.auth.getUser();
-      if (error || !data?.user) return null;
-      return data.user;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /**
-   * Upload an image to Storage.
-   */
-  async function uploadImage(file, userId, lessonId) {
-    if (!file) {
-      return { ok: false, error: 'No file selected.' };
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      return { ok: false, error: 'File too large (max 10 MB).' };
-    }
-    if (!file.type.startsWith('image/')) {
-      return { ok: false, error: 'Only image files are allowed.' };
-    }
-
-    await _loadClient();
-    if (!_client) return { ok: false, error: 'Storage not available.' };
-
-    const storageKey = _makeStorageKey(userId, lessonId, file.name);
-
-    try {
-      const { data, error } = await _client.storage
-        .from(STORAGE_BUCKET)
-        .upload(storageKey, file, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: file.type
-        });
-      
-      if (error) {
-        console.error('[FEISubmissions] Upload failed:', error);
-        return { ok: false, error: error.message || 'Upload failed' };
+      } catch (err) {
+        console.warn('[skills click] access check failed, allowing through', err);
+        window.location.href = href;
       }
-
-      const { data: publicData } = _client.storage
-        .from(STORAGE_BUCKET)
-        .getPublicUrl(storageKey);
-      
-      return { ok: true, imageUrl: publicData?.publicUrl || '', storageKey };
-    } catch (err) {
-      console.error('[FEISubmissions] Upload threw:', err);
-      return { ok: false, error: err.message || 'Network error' };
-    }
-  }
-
-  /**
-   * Create a submission record.
-   */
-  async function createRecord(params) {
-    await _loadClient();
-    if (!_client) return { ok: false, error: 'Database not available.' };
-
-    try {
-      const { data, error } = await _client
-        .from(TABLE_NAME)
-        .insert([{
-          user_id: params.userId,
-          user_email: params.userEmail,
-          user_name: params.userName,
-          course_id: params.courseId,
-          lesson_id: params.lessonId,
-          lesson_title: params.lessonTitle,
-          image_url: params.imageUrl,
-          reflection_text: params.reflectionText || null,
-          status: 'pending'
-        }])
-        .select()
-        .single();
-      
-      if (error) {
-        console.error('[FEISubmissions] Insert failed:', error);
-        return { ok: false, error: error.message || 'Save failed' };
-      }
-      return { ok: true, submission: data };
-    } catch (err) {
-      console.error('[FEISubmissions] Insert threw:', err);
-      return { ok: false, error: err.message || 'Network error' };
-    }
-  }
-
-  /**
-   * Main one-call submission function.
-   */
-  async function submit(params) {
-    const user = await _getCurrentUser();
-    if (!user) {
-      return { ok: false, error: 'Please sign in to submit your work.' };
-    }
-
-    // Derive display name
-    const name = user.user_metadata?.name 
-      || user.user_metadata?.full_name 
-      || (user.email ? user.email.split('@')[0] : 'Anonymous');
-
-    // Step 1: Upload image
-    const upload = await uploadImage(params.imageFile, user.id, params.lessonId);
-    if (!upload.ok) return upload;
-
-    // Step 2: Create database record
-    const record = await createRecord({
-      userId: user.id,
-      userEmail: user.email,
-      userName: name,
-      courseId: params.courseId || 'foundation-a',
-      lessonId: params.lessonId,
-      lessonTitle: params.lessonTitle,
-      imageUrl: upload.imageUrl,
-      reflectionText: params.reflectionText || ''
     });
-
-    return record;
   }
-
-  /**
-   * Get student's own submissions (used by /my-work/ in Round 45).
-   */
-  async function getMySubmissions() {
-    await _loadClient();
-    if (!_client) return { ok: false, error: 'Not available.', submissions: [] };
-    try {
-      const { data, error } = await _client
-        .from(TABLE_NAME)
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) return { ok: false, error: error.message, submissions: [] };
-      return { ok: true, submissions: data || [] };
-    } catch (err) {
-      return { ok: false, error: err.message, submissions: [] };
-    }
-  }
-
-  // Public API
-  window.FEISubmissions = {
-    submit: submit,
-    uploadImage: uploadImage,
-    createRecord: createRecord,
-    getMySubmissions: getMySubmissions,
-    _getClient: () => _client,
-    _isReady: () => _ready
+  // Wrap showDrawing to also attach guard
+  const _origShowDrawing = window.showDrawing;
+  window.showDrawing = function () {
+    _origShowDrawing.apply(this, arguments);
+    setTimeout(attachSkillsLessonGuard, 50);
   };
 
-  console.log('[FEISubmissions] Module initialized');
-})();
+  // ═══════════════════════════════════════════════════════════
+  // EVENT LISTENERS (legacy access-code path still wired)
+  // ═══════════════════════════════════════════════════════════
+
+  document.getElementById('signin-code').addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();
+    updateSignInBtn();
+    document.getElementById('signin-error').classList.remove('visible');
+  });
+
+  document.getElementById('signin-code').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') attemptSignIn();
+  });
+
+  document.getElementById('signin-btn').addEventListener('click', attemptSignIn);
+
+  document.getElementById('try-code-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('signin-code').value = 'TRYNEW';
+    updateSignInBtn();
+  });
+
+  // ═══════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════
+
+  (async function init() {
+    await loadRoster();
+    loadProfile();
+
+    // 0. Detect Stripe success return — mark this user as paid
+    //    Stripe redirects come in as ?paid=success (set in Stripe Dashboard)
+    const urlParams = new URLSearchParams(window.location.search);
+    const paidParam = urlParams.get('paid');
+    let justPaid = false;
+    if (paidParam === 'success') {
+      justPaid = true;
+      // Clean the URL so refreshing doesn't re-trigger
+      try {
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+      } catch (e) {}
+    }
+
+    // 0b. Detect lesson-paywall redirect — student tried to open a locked lesson
+    //     and was bounced back to home. Show the paywall on arrival so they
+    //     understand why they're here.
+    const paywallParam = urlParams.get('paywall');
+    let pendingPaywall = null;
+    if (paywallParam === 'skills' || paywallParam === 'creation') {
+      pendingPaywall = paywallParam;
+      try {
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, '', cleanUrl);
+      } catch (e) {}
+    }
+
+    // 1. If Supabase is configured, check for an existing session FIRST
+    let supabaseUser = null;
+    if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+      try {
+        await window.FEIAuth.init();
+        supabaseUser = await window.FEIAuth.getUser();
+        if (supabaseUser) {
+          // Returning Supabase user — sync local profile
+          await onAuthSuccess(supabaseUser);
+          // Stripe just paid — mark them and show confetti
+          if (justPaid && window.FEIAccess) {
+            try {
+              await window.FEIAccess.markPaid();
+              showPaidWelcome();
+            } catch (e) { console.warn('[init] markPaid failed', e); }
+          }
+          // Lesson page bounced them back here — show paywall now.
+          // Skip if they just paid (they're already unlocked).
+          if (pendingPaywall && !justPaid) {
+            setTimeout(() => openPaywall({ branch: pendingPaywall }), 400);
+          }
+          // Listen for sign-out from another tab
+          window.FEIAuth.onAuthChange((event) => {
+            if (event === 'SIGNED_OUT') {
+              clearProfile();
+              window.location.reload();
+            }
+          });
+          return;
+        }
+      } catch (e) { console.warn('[init] FEIAuth check failed', e); }
+    }
+
+    // 2. Fall back to legacy access-code profile
+    if (userProfile) {
+      if (justPaid) showPaidWelcome();  // legacy paid path
+      showHome();
+      // Legacy access-code users have full access; paywall param is irrelevant
+      // for them, so we ignore pendingPaywall on this branch.
+    } else {
+      // No profile at all — but they just paid. Ask them to sign in / sign up
+      // with the email they used at Stripe so we can link the payment.
+      if (justPaid) {
+        showSignIn();
+        setTimeout(() => {
+          showAuthInfo('✓ Payment received! Sign in or create your account with the same email you used at checkout — your access will unlock automatically.');
+        }, 100);
+      } else if (pendingPaywall) {
+        // Bounced from a lesson but not signed in — show sign-in first
+        showSignIn();
+        setTimeout(() => {
+          showAuthInfo('Sign in or create an account to continue with that lesson.');
+        }, 100);
+      } else {
+        showSignIn();
+      }
+    }
+  })();
+
+  // Show a brief paid-welcome toast (no obstruction; just gentle confirmation)
+  function showPaidWelcome() {
+    // Build a soft top-banner that fades out
+    let banner = document.getElementById('paid-welcome-banner');
+    if (banner) return;
+    banner = document.createElement('div');
+    banner.id = 'paid-welcome-banner';
+    banner.style.cssText = `
+      position: fixed; top: 60px; left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #6841d4; color: #fff;
+      padding: 14px 28px; border-radius: 999px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px; font-weight: 700;
+      box-shadow: 0 8px 28px rgba(104,65,212,0.32);
+      z-index: 9999; opacity: 0;
+      transition: opacity 0.4s, transform 0.4s;
+    `;
+    banner.textContent = 'Welcome to your full Art GPS studio — your practice and collections are now open.';
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => {
+      banner.style.opacity = '1';
+      banner.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(() => {
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateX(-50%) translateY(-20px)';
+      setTimeout(() => banner.remove(), 500);
+    }, 6000);
+  }
+  window.showPaidWelcome = showPaidWelcome;
+</script>
+
+</body>
+</html>
