@@ -2990,6 +2990,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
 </style>
+<script src="../../core/submissions.js"></script>
 </head>
 <body>
 
@@ -8573,8 +8574,11 @@ function nextStep() {
       state.xp += LESSON.steps[curr].xp || 0;
     }
     renderRailDots();
-    openPaywall();
-    return;
+    // ROUND_45_LEGACY_PAYWALL_DISABLED — Faye June 2026:
+    // The in-lesson paywall is removed. Gate now lives ONLY at the home page
+    // (FEIAccess.canOpenLesson), which checks before this lesson loads.
+    // If user got here, they're allowed — just continue.
+    console.log('[Legacy paywall trigger neutralized — Round 45]');
   }
   */
   
@@ -9334,7 +9338,58 @@ function skipUpload() {
   setTimeout(() => nextStep(), 400);
 }
 
-function submitUpload() {
+
+// ═══════════════════════════════════════════════════════════════
+// ROUND 44: Real Supabase submission integration
+// ═══════════════════════════════════════════════════════════════
+async function submitToSupabase() {
+  if (!window.FEISubmissions) {
+    console.warn('[Submit] FEISubmissions not loaded');
+    return { ok: false, error: 'service_not_loaded' };
+  }
+  if (!state.uploadedFile) {
+    return { ok: false, error: 'no_file' };
+  }
+  
+  let reflectionText = '';
+  if (typeof JournalStorage !== 'undefined' && JournalStorage.getAll) {
+    const entries = JournalStorage.getAll().filter(e => 
+      e.lessonId === LESSON.id || e.lesson_id === LESSON.id
+    );
+    if (entries.length > 0) {
+      reflectionText = entries.map(e => 
+        `[${e.momentKey || 'reflection'}] ${e.studentText || ''}`
+      ).join('\n---\n');
+    }
+  }
+  
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
+  
+  console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id });
+  
+  try {
+    const result = await window.FEISubmissions.submit({
+      imageFile: state.uploadedFile,
+      lessonId: LESSON.id,
+      lessonTitle: LESSON.title || LESSON.id,
+      courseId: courseId,
+      reflectionText: reflectionText
+    });
+    
+    if (result.ok) {
+      Analytics.track('submission_supabase_success', { lesson_id: LESSON.id, submission_id: result.submission?.id });
+    } else {
+      Analytics.track('submission_supabase_failed', { lesson_id: LESSON.id, error: result.error });
+    }
+    return result;
+  } catch (err) {
+    console.error('[Submit] Threw:', err);
+    return { ok: false, error: err.message };
+  }
+}
+
+async function submitUpload() {
   if (!state.uploadChoice) { showBubble("Pick a feedback option first!", 2500); return; }
   const choice = state.uploadChoice;
   Analytics.track('artwork_uploaded', { 
@@ -9343,6 +9398,15 @@ function submitUpload() {
     file_size: state.uploadedFile?.size || 0,
     skipped: !state.uploadedFile
   });
+  
+  // ROUND 44: real Supabase upload (if file selected + service loaded)
+  if (state.uploadedFile && window.FEISubmissions) {
+    showBubble("Uploading your work… ⏳", 3000);
+    const result = await submitToSupabase();
+    if (!result.ok) {
+      showBubble("⚠️ Upload didn't save — but feedback is being prepared.", 4500);
+    }
+  }
   
   closeUploadModal();
   
