@@ -3452,6 +3452,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .members-lock-icon-large { font-size: 50px; }
 }
 </style>
+<script src="../../core/submissions.js"></script>
 </head>
 <body>
 
@@ -9136,8 +9137,11 @@ function nextStep() {
       state.xp += LESSON.steps[curr].xp || 0;
     }
     renderRailDots();
-    openPaywall();
-    return;
+    // ROUND_45_LEGACY_PAYWALL_DISABLED — Faye June 2026:
+    // The in-lesson paywall is removed. Gate now lives ONLY at the home page
+    // (FEIAccess.canOpenLesson), which checks before this lesson loads.
+    // If user got here, they're allowed — just continue.
+    console.log('[Legacy paywall trigger neutralized — Round 45]');
   }
   
   if (!state.completedSteps.includes(curr)) {
@@ -9720,7 +9724,77 @@ function onUploadFileSelected(event) {
   reader.readAsDataURL(file);
 }
 
-function submitUpload() {
+
+// ═══════════════════════════════════════════════════════════════
+// ROUND 44: Real Supabase submission integration
+// ───────────────────────────────────────────────────────────────
+// Wraps the legacy submitUpload() flow. When the student has actually
+// selected a file AND Supabase is available, we upload to Storage and
+// create a student_submissions record. UI behavior unchanged.
+// ═══════════════════════════════════════════════════════════════
+async function submitToSupabase() {
+  if (!window.FEISubmissions) {
+    console.warn('[Submit] FEISubmissions not loaded — skipping real submit');
+    return { ok: false, error: 'service_not_loaded' };
+  }
+  if (!state.uploadedFile) {
+    return { ok: false, error: 'no_file' };
+  }
+  
+  // Build submission payload from LESSON metadata
+  const profile = (typeof UserProfile !== 'undefined' && UserProfile.current) 
+    ? UserProfile.current() 
+    : null;
+  
+  // Reflection — pull from journal entries on this lesson if any
+  let reflectionText = '';
+  if (typeof JournalStorage !== 'undefined' && JournalStorage.getAll) {
+    const entries = JournalStorage.getAll().filter(e => 
+      e.lessonId === LESSON.id || e.lesson_id === LESSON.id
+    );
+    if (entries.length > 0) {
+      reflectionText = entries.map(e => 
+        `[${e.momentKey || 'reflection'}] ${e.studentText || ''}`
+      ).join('\n---\n');
+    }
+  }
+  
+  // Determine course id (Foundation A vs Creation)
+  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
+  
+  console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id, hasFile: !!state.uploadedFile });
+  
+  try {
+    const result = await window.FEISubmissions.submit({
+      imageFile: state.uploadedFile,
+      lessonId: LESSON.id,
+      lessonTitle: LESSON.title || LESSON.id,
+      courseId: courseId,
+      reflectionText: reflectionText
+    });
+    
+    if (result.ok) {
+      console.log('[Submit] Success', result.submission?.id);
+      Analytics.track('submission_supabase_success', {
+        lesson_id: LESSON.id,
+        submission_id: result.submission?.id
+      });
+    } else {
+      console.warn('[Submit] Failed:', result.error);
+      Analytics.track('submission_supabase_failed', {
+        lesson_id: LESSON.id,
+        error: result.error
+      });
+    }
+    return result;
+  } catch (err) {
+    console.error('[Submit] Threw:', err);
+    return { ok: false, error: err.message };
+  }
+}
+
+async function submitUpload() {
   if (!state.uploadChoice) { showBubble("Pick a feedback option first!", 2500); return; }
   
   // Upload is optional — file may be null (student didn't pick one but pressed Send anyway)
@@ -9731,6 +9805,19 @@ function submitUpload() {
     file_size: state.uploadedFile?.size || 0,
     skipped: !state.uploadedFile
   });
+  
+  // ═══════════════════════════════════════════════════════════════
+  // ROUND 44: real Supabase upload (only if file selected + service loaded)
+  // ═══════════════════════════════════════════════════════════════
+  if (state.uploadedFile && window.FEISubmissions) {
+    showBubble("Uploading your work… ⏳", 3000);
+    const result = await submitToSupabase();
+    if (!result.ok) {
+      showBubble("⚠️ Upload didn't save — but feedback is being prepared. We'll retry.", 4500);
+      Analytics.track('submission_visible_error_shown', { error: result.error });
+      // Don't block: still continue to lesson complete
+    }
+  }
   
   closeUploadModal();
   
