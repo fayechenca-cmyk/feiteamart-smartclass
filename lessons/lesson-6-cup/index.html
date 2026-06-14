@@ -5697,18 +5697,12 @@ const HONEST_WELCOME = {
   
   sections: [
     {
-      // Hero visual - cup reference image (placeholder until uploaded)
+      // Hero visual - cup reference image (Round 50: Faye's URL)
       type: 'image',
-      src: '',
+      src: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a040160e8910a5a166624f1_69eb3208ab44e1f03dbe592d0b1f9418.jpg',
       placeholderEmoji: '☕',
-      placeholderLabel: 'Cup image — coming soon',
-      placeholderNote: 'A hero photo of the cup will appear here'
-    },
-    {
-      // Intro video placeholder
-      type: 'videoPlaceholder',
-      label: 'Intro video — coming soon',
-      note: 'A short introduction video to the cup will appear here'
+      placeholderLabel: 'Today\'s cup · reference',
+      placeholderNote: ''
     },
     {
       // Opening - build on Cylinder
@@ -5856,7 +5850,7 @@ const LESSON = {
       partLabel: 'Part a · preparation',
       type: 'reference',
       title: 'Where curve meets flat',
-      intro: 'Before we draw, let\'s learn how light behaves on a cylinder. The side curves like a sphere. The top stays flat like a cube face. One light, two different surfaces — see how each one responds.',
+      intro: 'A cup has two very different surfaces sharing one body. The curved side rolls light smoothly around it — a soft transition. The rim sits flat, catching light on one defined edge. Even the handle is its own little study: a tube bent into a curve. One cup, three lighting puzzles. See how each one responds.',
       xp: 0
     },
     // ═══════════════════════════════════════════════════════════════
@@ -5875,7 +5869,7 @@ const LESSON = {
       partLabel: '✨ Observe the cup',
       type: 'cupObservation',
       title: 'Observe today\'s cup',
-      intro: 'Take a moment to look at the cup you\'ll be drawing today. Notice its handle, rim thickness, surface material, and proportions. Real-world details are what separate a cup from a basic cylinder.',
+      intro: 'Take a moment to really look at the cup you\'ll draw today. Notice the handle, the rim, its thickness, the surface material. These four details are what make a cup specifically a cup — your eyes have to learn them before your hand can.',
       xp: 5
     },
     {
@@ -8304,53 +8298,147 @@ function renderReference(step) {
 }
 
 function renderCupObservation(step) {
-  // Round 38 #8.3 — replaces the cylinder playLight in Cup with a 
-  // cup-specific observation step (handle, rim, material, proportion).
+  // Round 50 (per Faye) — interactive observation:
+  // Real cup image with SVG overlay. Hovering each of 4 detail cards
+  // (Handle / Rim / Thickness / Surface) highlights the corresponding
+  // region on the cup image. Click also locks the highlight (mobile-friendly).
+  //
+  // Coordinates are my BEST GUESS for the cup image Faye provided.
+  // She'll review and tell me how to adjust if positions are off.
+  const cupImageUrl = 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a040160e8910a5a166624f1_69eb3208ab44e1f03dbe592d0b1f9418.jpg';
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <!-- Main cup image / video area -->
-      <div class="cup-main-visual"
-           style="margin: 18px 0; padding: 36px 20px; text-align: center;
-                  background: linear-gradient(135deg, #faf8ff, #ecfeff);
-                  border: 2px dashed rgba(167,139,250,0.4);
-                  border-radius: 14px;">
-        <div style="font-size: 64px; opacity: 0.55; margin-bottom: 10px;">☕</div>
-        <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
-                    color: #7c5fc7; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">Today's cup — image / observation video coming soon</div>
-        <div style="font-size: 12px; color: rgba(26,29,43,0.6); font-style: italic;">A photo or short observation video of the cup you'll draw today will appear here</div>
+      <!-- Main cup image with interactive overlay -->
+      <div class="cup-observe-stage"
+           style="position: relative; margin: 18px 0; border-radius: 14px; overflow: hidden;
+                  background: #f8f5ff; border: 1px solid rgba(167,139,250,0.2);
+                  max-width: 480px; margin-left: auto; margin-right: auto;">
+        <img src="${cupImageUrl}" 
+             alt="Today's cup — observe carefully"
+             style="display: block; width: 100%; height: auto;">
+        <!-- SVG overlay — sized to match image with viewBox -->
+        <svg id="cup-overlay" 
+             viewBox="0 0 100 100" preserveAspectRatio="none"
+             style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
+          <!-- HANDLE region: right side of cup, approximate center -->
+          <ellipse id="cup-zone-handle" cx="78" cy="50" rx="13" ry="22"
+                   fill="rgba(245,158,11,0)" stroke="rgba(245,158,11,0)" stroke-width="0.8"
+                   style="transition: fill 0.3s ease, stroke 0.3s ease;"/>
+          <!-- RIM region: top oval of cup -->
+          <ellipse id="cup-zone-rim" cx="42" cy="18" rx="28" ry="6"
+                   fill="rgba(59,130,246,0)" stroke="rgba(59,130,246,0)" stroke-width="0.8"
+                   style="transition: fill 0.3s ease, stroke 0.3s ease;"/>
+          <!-- THICKNESS region: edge of rim, slightly inside -->
+          <path id="cup-zone-thickness" 
+                d="M 14 18 Q 14 14, 42 14 Q 70 14, 70 18 L 68 19 Q 68 16, 42 16 Q 16 16, 16 19 Z"
+                fill="rgba(16,185,129,0)" stroke="rgba(16,185,129,0)" stroke-width="0.5"
+                style="transition: fill 0.3s ease, stroke 0.3s ease;"/>
+          <!-- SURFACE region: main body of cup -->
+          <path id="cup-zone-surface"
+                d="M 18 22 Q 18 70, 30 88 L 56 88 Q 68 70, 68 22 Z"
+                fill="rgba(236,72,153,0)" stroke="rgba(236,72,153,0)" stroke-width="0.6"
+                style="transition: fill 0.3s ease, stroke 0.3s ease;"/>
+        </svg>
       </div>
       
-      <!-- 3 detail cards -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px;">
-        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
-          <div style="font-size: 28px; margin-bottom: 6px;">🤝</div>
-          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">HANDLE</div>
-          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">A separate form that attaches and visually balances the cup.</div>
+      <!-- 4 interactive detail cards -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;
+                  max-width: 480px; margin-left: auto; margin-right: auto;">
+        <div class="cup-detail-card" data-zone="handle"
+             onmouseenter="highlightCupZone('handle', true)" 
+             onmouseleave="highlightCupZone('handle', false)"
+             onclick="lockCupZone('handle')"
+             style="padding: 12px 10px; background: #fff; border-radius: 10px; 
+                    border: 1px solid rgba(245,158,11,0.3); text-align: center; cursor: pointer;
+                    transition: all 0.25s ease;">
+          <div style="font-size: 24px; margin-bottom: 4px;">🤝</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #d97706; letter-spacing: 1px; margin-bottom: 4px;">HANDLE</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">A separate form attached to the side — balances the cup visually.</div>
         </div>
-        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
-          <div style="font-size: 28px; margin-bottom: 6px;">⭕</div>
-          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">RIM THICKNESS</div>
-          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">The lip has measurable depth — not just a line.</div>
+        <div class="cup-detail-card" data-zone="rim"
+             onmouseenter="highlightCupZone('rim', true)" 
+             onmouseleave="highlightCupZone('rim', false)"
+             onclick="lockCupZone('rim')"
+             style="padding: 12px 10px; background: #fff; border-radius: 10px; 
+                    border: 1px solid rgba(59,130,246,0.3); text-align: center; cursor: pointer;
+                    transition: all 0.25s ease;">
+          <div style="font-size: 24px; margin-bottom: 4px;">⭕</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #2563eb; letter-spacing: 1px; margin-bottom: 4px;">RIM</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">The opening at the top — its ellipse defines the cup's perspective.</div>
         </div>
-        <div style="padding: 14px 10px; background: #fff; border-radius: 10px; border: 1px solid rgba(167,139,250,0.2); text-align: center;">
-          <div style="font-size: 28px; margin-bottom: 6px;">✨</div>
-          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #1a1d2b; letter-spacing: 1px; margin-bottom: 4px;">SURFACE</div>
-          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">Ceramic, glass, metal — each catches light differently.</div>
+        <div class="cup-detail-card" data-zone="thickness"
+             onmouseenter="highlightCupZone('thickness', true)" 
+             onmouseleave="highlightCupZone('thickness', false)"
+             onclick="lockCupZone('thickness')"
+             style="padding: 12px 10px; background: #fff; border-radius: 10px; 
+                    border: 1px solid rgba(16,185,129,0.3); text-align: center; cursor: pointer;
+                    transition: all 0.25s ease;">
+          <div style="font-size: 24px; margin-bottom: 4px;">📏</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #059669; letter-spacing: 1px; margin-bottom: 4px;">THICKNESS</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">The lip has measurable depth — not just a single line.</div>
+        </div>
+        <div class="cup-detail-card" data-zone="surface"
+             onmouseenter="highlightCupZone('surface', true)" 
+             onmouseleave="highlightCupZone('surface', false)"
+             onclick="lockCupZone('surface')"
+             style="padding: 12px 10px; background: #fff; border-radius: 10px; 
+                    border: 1px solid rgba(236,72,153,0.3); text-align: center; cursor: pointer;
+                    transition: all 0.25s ease;">
+          <div style="font-size: 24px; margin-bottom: 4px;">✨</div>
+          <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: #db2777; letter-spacing: 1px; margin-bottom: 4px;">SURFACE</div>
+          <div style="font-size: 11px; color: rgba(26,29,43,0.7); line-height: 1.4;">Ceramic, glass, metal — each material catches light differently.</div>
         </div>
       </div>
       
       <div class="pro-tip">
-        <div class="pro-tip-label">💡 Why observation matters</div>
-        <div class="pro-tip-text">The cylinder was abstract — pure geometry. The cup is observed — a real object with handle, rim, material, and proportions you have to look at carefully. This step is where geometry meets the real world.</div>
+        <div class="pro-tip-label">💡 Hover the cards above</div>
+        <div class="pro-tip-text">Move your cursor (or tap on mobile) over each detail card. The matching part on the cup image will light up. The cup is a real object — train your eyes to see its parts.</div>
       </div>
       
       <div class="btn-stack">
         <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> I've observed — continue</button>
       </div>
     </div>`;
+}
+
+// Round 50 — interactive zone highlighting for cup observation
+const CUP_ZONE_COLORS = {
+  handle:    'rgba(245,158,11,0.30)',  // amber
+  rim:       'rgba(59,130,246,0.30)',  // blue
+  thickness: 'rgba(16,185,129,0.30)',  // green
+  surface:   'rgba(236,72,153,0.25)'   // pink (slightly more transparent — bigger area)
+};
+const CUP_ZONE_STROKES = {
+  handle:    'rgba(245,158,11,0.85)',
+  rim:       'rgba(59,130,246,0.85)',
+  thickness: 'rgba(16,185,129,0.85)',
+  surface:   'rgba(236,72,153,0.85)'
+};
+let _lockedCupZone = null;
+
+function highlightCupZone(zone, on) {
+  // If a zone is locked, hover doesn't override it
+  if (_lockedCupZone && _lockedCupZone !== zone) return;
+  const el = document.getElementById('cup-zone-' + zone);
+  if (!el) return;
+  el.setAttribute('fill', on ? CUP_ZONE_COLORS[zone] : 'rgba(0,0,0,0)');
+  el.setAttribute('stroke', on ? CUP_ZONE_STROKES[zone] : 'rgba(0,0,0,0)');
+}
+
+function lockCupZone(zone) {
+  // Toggle lock: tap once to lock, tap again to unlock
+  if (_lockedCupZone === zone) {
+    _lockedCupZone = null;
+    highlightCupZone(zone, false);
+  } else {
+    // Clear previous lock first
+    if (_lockedCupZone) highlightCupZone(_lockedCupZone, false);
+    _lockedCupZone = zone;
+    highlightCupZone(zone, true);
+  }
 }
 
 function renderTools(step) {
@@ -9372,6 +9460,16 @@ function triggerPause(p) {
   if (ytPlayer && ytPlayer.pauseVideo) {
     try { ytPlayer.pauseVideo(); } catch(e) {}
   }
+  
+  // ROUND 50 FIX (BUG 3 per Faye): Exit fullscreen so pause overlay is visible
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) {}
+  
   const overlay = document.getElementById('pause-overlay');
   const bar = document.getElementById('pause-timer-bar');
   document.getElementById('pause-title').textContent = p.title;
