@@ -5153,7 +5153,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 3 of 5',
+      partLabel: 'Part b · teacher demo · video 3 of 4',
       type: 'videoSegment',
       videoId: 'c4de5ce55e5109dc622cd010300d2b16',  // cube 3 (3:47) — Cloudflare Stream UID
       videoNumber: 3,
@@ -5167,7 +5167,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · optional finish · 4 of 5',
+      partLabel: 'Part b · optional finish · 4 of 4',
       type: 'videoSegment',
       videoId: '6d946c502719811ef5235137cbbb6bdb',  // cube 4 (4:20) — Cloudflare Stream UID
       videoNumber: 4,
@@ -5179,20 +5179,7 @@ const LESSON = {
       isOptional: true,
       xp: 5
     },
-    {
-      part: 'B',
-      partLabel: 'Part b · optional finish · 5 of 5',
-      type: 'videoSegment',
-      videoId: 'af20cfc9c1313d4313b332e50be4a17b',  // cube 5 (3:17) — Cloudflare Stream UID
-      videoNumber: 5,
-      videoTitle: 'Step 5 · Finishing Tone',
-      stepName: 'Finishing Tone',
-      teacher: 'Mrs. Dawn',
-      title: 'Finishing Tone',
-      intro: '🎯 OPTIONAL. The final tonal adjustments — polishing the cube from "drawn" to "alive". Skip if you\'re done after step 2.',
-      isOptional: true,
-      xp: 5
-    },
+    // (Step 5 "Finishing Tone" moved to OPTIONAL section below — Round 50 per Faye)
     // (LFC moment "beforeDemo" removed — Lesson 2 follows the same 
     //  honest-LFC principle as Lesson 1. The opening LFC and closing 
     //  LFC carry the meaning. Don't strain to insert master images.)
@@ -5221,6 +5208,23 @@ const LESSON = {
       partLabel: '🎯 Optional challenge',
       type: 'optionalFinish',
       title: 'Go Further',
+      xp: 0  // does not count toward main lesson XP
+    },
+    // ===== BONUS · Step 5 Finishing Tone =====
+    // Round 50 (per Faye): Step 5 "Finishing Tone" moved from main demo flow
+    // to here. Course is considered COMPLETE after step 4. This is truly bonus.
+    {
+      part: 'OPT',
+      partLabel: '🎁 Bonus · Final polish',
+      type: 'videoSegment',
+      videoId: 'af20cfc9c1313d4313b332e50be4a17b',  // cube 5 (3:17) — Cloudflare Stream UID
+      videoNumber: 5,
+      videoTitle: 'Finishing Tone (Bonus)',
+      stepName: 'Finishing Tone',
+      teacher: 'Mrs. Dawn',
+      title: 'Finishing Tone — Bonus Polish',
+      intro: '🎁 BONUS. Your cube is already complete! This bonus video shows the final tonal adjustments that polish a cube from "drawn" to "alive". Take it if you have extra time and want to push further.',
+      isOptional: true,
       xp: 0  // does not count toward main lesson XP
     },
     // ===== CLOSING LFC — Take it home (with cross-lesson sphere reflection)
@@ -7430,6 +7434,28 @@ function initVideoSegment(step) {
   if (vsState.watcher) { clearInterval(vsState.watcher); vsState.watcher = null; }
   if (vsState.countdown) { clearInterval(vsState.countdown); vsState.countdown = null; }
   
+  // ───────────────────────────────────────────────────────────────
+  // ROUND 50 FIX (BUG 2 per Faye): If student already completed this 
+  // step, immediately show the "video complete — ready for next?" hint.
+  // Otherwise the Continue button looks dead on re-visit because it
+  // doesn't pulse until the video ends, and student gets confused.
+  // ───────────────────────────────────────────────────────────────
+  const currStepIdx = state.currentStepIndex;
+  if (state.completedSteps.includes(currStepIdx)) {
+    setTimeout(() => {
+      const hint = document.getElementById(`video-complete-hint-${step.videoNumber}`);
+      if (hint) {
+        hint.style.display = 'block';
+        // Add a friendlier "re-watched? continue" message
+        hint.innerHTML = '✓ You already watched this — continue, or rewatch to refresh';
+      }
+      const btn = document.getElementById(`vs-continue-btn-${step.videoNumber}`);
+      if (btn) {
+        btn.style.boxShadow = '0 8px 24px rgba(167,139,250,0.35)';
+      }
+    }, 250);
+  }
+  
   // If this video has no pauses, do nothing fancy — just let it play
   if (vsState.pauses.length === 0) {
     console.log('[VideoSegment] No pauses for', step.videoId, '— playing straight through');
@@ -7573,6 +7599,20 @@ function triggerVSPause(idx) {
   
   // Pause the video (Cloudflare Stream API)
   try { vsState.player.pause(); } catch (e) {}
+  
+  // ───────────────────────────────────────────────────────────────
+  // ROUND 50 FIX (BUG 3 per Faye): If iframe is in fullscreen mode, 
+  // exit fullscreen so the pause analysis panel (which sits BELOW the
+  // video in document flow) becomes visible. Student can press the 
+  // fullscreen button again after reading the pause note.
+  // ───────────────────────────────────────────────────────────────
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) { /* ignore — student can manually exit fullscreen */ }
   
   const n = vsState.videoNumber;
   
