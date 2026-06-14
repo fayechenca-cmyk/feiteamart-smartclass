@@ -9303,6 +9303,16 @@ function triggerPause(p) {
   if (ytPlayer && ytPlayer.pauseVideo) {
     try { ytPlayer.pauseVideo(); } catch(e) {}
   }
+  
+  // ROUND 50 FIX (BUG 3 per Faye): Exit fullscreen so pause overlay is visible
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) {}
+  
   const overlay = document.getElementById('pause-overlay');
   const bar = document.getElementById('pause-timer-bar');
   document.getElementById('pause-title').textContent = p.title;
