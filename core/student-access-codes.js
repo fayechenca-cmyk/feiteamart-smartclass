@@ -23,4 +23,5 @@ export const studentAccessCodes = [
   { id: "ALISSIE-05", displayName: "Alissie" },
   { id: "NATALIE-17", displayName: "Natalie" },
   { id: "RAINIE-08", displayName: "Rainie" },
-];
+  { id: "SELENA-23", displayName: "Selena" },
+  { id: "XIDA-25", displayName: "Xida" },
