@@ -5698,18 +5698,20 @@ const HONEST_WELCOME = {
   
   sections: [
     {
-      // Hero visual - cylinder reference image
+      // Hero visual - cylinder reference image (Round 50: Faye's URL)
       type: 'image',
-      src: '',  // Reserved — add cylinder hero image URL when ready
+      src: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04015ab9ca88ca7443c9b5_13c170a0-dc4c-4939-82fe-b67443f69ffd.png',
       placeholderEmoji: '◗',
-      placeholderLabel: 'Cylinder image — coming soon',
-      placeholderNote: 'A hero photo or illustration of the cylinder will appear here'
+      placeholderLabel: 'The cylinder · reference',
+      placeholderNote: ''
     },
     {
-      // Intro video placeholder
-      type: 'videoPlaceholder',
-      label: 'Intro video — coming soon',
-      note: 'A short introduction video to the cylinder will appear here'
+      // Intro visual - secondary cylinder image (Round 50: Faye replaced placeholder with image)
+      type: 'image',
+      src: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a05f01239dce22e7426971a_ChatGPT%20Image%20May%2014%2C%202026%2C%2008_53_19%20AM.png',
+      placeholderEmoji: '◗',
+      placeholderLabel: 'The cylinder · in context',
+      placeholderNote: ''
     },
     {
       // Opening - acknowledge what this is
@@ -6020,6 +6022,28 @@ const LESSON = {
     // 
     // This replaces the old "afterFinal" LFC with Morandi/Kapoor — which 
     // was forced. The skill they just trained is the real reward; we 
+    // ═══════════════════════════════════════════════════════════════
+    // ROUND 50 (per Faye) — "Fallen Cylinder Perspective" question
+    // 
+    // Cylinder courses often stop at upright orientation. But in real
+    // life — cups on tables, bottles fallen on side, jars rolling —
+    // cylinders frequently appear in dramatic perspective. Plant a 
+    // seed of curiosity here.
+    // ═══════════════════════════════════════════════════════════════
+    {
+      part: 'CLOSE',
+      partLabel: '🤔 One more thing',
+      type: 'closingLFC',
+      title: 'Cylinders don\'t always stand up',
+      intro: 'When a cylinder falls on its side — a bottle on a table, a jar rolling, a can lying down — something dramatic happens. The two ellipses change. The perspective stretches. Look at this image and ask yourself: how would YOU draw this?',
+      heroImage: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a2f2876de5c19bff7636ef9_13220361129964829691.jpg',
+      heroCaption: 'A fallen cylinder — notice how perspective stretches the form',
+      reflection: 'You\'ve learned the upright cylinder today. Next time you see a fallen one — a wine bottle, a coffee can, a paper roll on its side — pause and look. Where are the ellipses now? How does the centerline tilt? These are questions for tomorrow\'s drawing.',
+      xp: 5
+    },
+    // (CLOSING LFC — Take it home — unchanged, follows after the perspective moment)
+    // The opening + perspective moment + closing form a complete arc.
+    // CLOSE step: original "Take this with you" — kept as final reflection. The student now has 
     // just point them home with it.
     {
       part: 'CLOSE',
@@ -9915,6 +9939,16 @@ function triggerPause(p) {
   if (ytPlayer && ytPlayer.pauseVideo) {
     try { ytPlayer.pauseVideo(); } catch(e) {}
   }
+  
+  // ROUND 50 FIX (BUG 3 per Faye): Exit fullscreen so pause overlay is visible
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) {}
+  
   const overlay = document.getElementById('pause-overlay');
   const bar = document.getElementById('pause-timer-bar');
   document.getElementById('pause-title').textContent = p.title;
