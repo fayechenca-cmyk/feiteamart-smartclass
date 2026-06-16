@@ -3166,6 +3166,68 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 /* PAUSE OVERLAY (on top of YouTube iframe) — upgraded: clear "your turn" feel */
 .pause-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.9) 100%); backdrop-filter: blur(14px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
 .pause-overlay.show { display: flex; animation: fadeIn .3s ease; }
+
+/* ROUND 50d · Demo Pause Overlay (Cup Step 1 pauses with annotated images) */
+.demo-pause-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(76,29,149,0.93) 100%);
+  backdrop-filter: blur(16px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 60; padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+.demo-pause-overlay[style*="flex"] { display: flex !important; }
+.demo-pause-card {
+  background: #fff; border-radius: 18px;
+  padding: 18px; max-width: 520px; width: 100%;
+  max-height: calc(100vh - 40px); overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+}
+.demo-pause-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 800;
+  color: #7c5fc7; letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px; text-align: center;
+}
+.demo-pause-image-wrap {
+  border-radius: 12px; overflow: hidden;
+  background: #f8f5ff; margin-bottom: 14px;
+  border: 1px solid rgba(167,139,250,0.2);
+  max-height: 280px;
+}
+.demo-pause-image {
+  display: block; width: 100%; height: auto;
+  max-height: 280px; object-fit: contain;
+}
+.demo-pause-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px; font-weight: 800;
+  color: #1a1d2b; margin-bottom: 8px;
+  text-align: center; line-height: 1.3;
+}
+.demo-pause-text {
+  font-size: 13px; line-height: 1.55;
+  color: rgba(26,29,43,0.78);
+  margin-bottom: 14px; text-align: center;
+}
+.demo-pause-timer {
+  height: 4px; background: #f0ecfa; border-radius: 4px;
+  overflow: hidden; margin-bottom: 12px;
+}
+.demo-pause-timer-bar {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, #a78bfa 0%, #67e8f9 100%);
+  border-radius: 4px;
+}
+.demo-pause-actions {
+  display: flex; flex-direction: column; gap: 8px;
+}
+@media (min-width: 600px) {
+  .demo-pause-card { padding: 24px; }
+  .demo-pause-image-wrap { max-height: 320px; }
+  .demo-pause-image { max-height: 320px; }
+}
 .pause-card { background: linear-gradient(180deg, #fff 0%, #f5f3ff 100%); border-radius: var(--radius-lg); padding: 26px 22px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: slideUp .4s ease; position: relative; }
 .pause-kicker { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green); background: rgba(29,158,117,0.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; border: 0.5px solid rgba(29,158,117,0.2); }
 .pause-ico { font-size: 40px; margin-bottom: 10px; animation: pauseIcoBreathe 2s ease-in-out infinite; }
@@ -5906,6 +5968,50 @@ const LESSON = {
       intro: 'Start with the cup as a cylinder — outer rectangle, center line, top and bottom ellipses. Then locate the handle attachment points. Construction first, finished form second.',
       quote: 'A cup is just a cylinder with a handle and a personality. Build the cylinder right first; the cup will follow.',
       tip: 'Keep all construction lines light. They will guide everything that follows but must disappear under your shading later.',
+      // ════════════════════════════════════════════════════════════════
+      // ROUND 50d — Pause points for Step 1 "Build the Cup Structure"
+      // 6 pauses tied to Faye's annotated reference images. At each time
+      // the video pauses, shows a teaching image + caption, and resumes
+      // when student clicks Continue (or auto-resumes after 25s).
+      // ════════════════════════════════════════════════════════════════
+      pauses: [
+        {
+          time: 150,  // 2:30
+          title: 'Cup rim has thickness',
+          text: 'The rim is not a single flat ellipse — even when it\'s thin, it still has thickness. Use two close ellipses to show the outer and inner edges of the rim.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0a764579-a296-4b3d-2a28-4fce49144300/public'
+        },
+        {
+          time: 226,  // 3:46
+          title: 'Extend the rim thickness around',
+          text: 'Continue the rim thickness around the cup. The thickness wraps inward following the ellipse — not as a vertical band downward. This shows the cup is a real 3D object, not a flat shape.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/7391bd62-f1d7-4b82-f324-69be119bad00/public'
+        },
+        {
+          time: 286,  // 4:46
+          title: 'Cup body curves inward',
+          text: 'The cup is related to a cylinder, but it\'s not a perfect cylinder. The body gently curves inward toward the bottom — overall tapering inward, not flaring outward.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/c1dc3e94-116c-4542-5682-0c0ab2d31c00/public'
+        },
+        {
+          time: 326,  // 5:26
+          title: 'Start the handle with tangent lines',
+          text: 'Begin the handle by finding the upper, middle, and lower turning points first. These key points control the size and direction of the handle — much easier than drawing one loose curve.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2141b3d8-5e1f-4885-ca17-1036a3268e00/public'
+        },
+        {
+          time: 392,  // 6:32
+          title: 'Build the handle edge with tangents',
+          text: 'The outside edge of the handle is built with straight tangent lines first. Tangent lines make the curve stronger and easier to control — then smooth them into a rounded edge.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e1c6e845-1392-4e0f-f23b-ae365bc5c900/public'
+        },
+        {
+          time: 434,  // 7:14
+          title: 'Handle thickness',
+          text: 'The handle also has thickness. Observe both the outer edge and the inner edge. The handle turns in space — it should not look like a flat line attached to the cup.',
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e24fe367-810c-4c48-d23d-f9bdf76c3700/public'
+        }
+      ],
       xp: 10
     },
     {
@@ -6072,7 +6178,12 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); break;
+    case 'demo':       el.innerHTML = renderDemo(step); 
+                       // ROUND 50d: if step has pauses, init the pause-tracking system
+                       if (step.pauses && step.pauses.length > 0) {
+                         setTimeout(initDemoPauses, 100);
+                       }
+                       break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -8737,11 +8848,39 @@ function selectPlan(tier) {
 
 function renderDemo(step) {
   // Cloudflare Stream migration: each demo step now has its own videoId.
+  // ROUND 50d: optional `pauses` array enables teaching pauses with image annotations.
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
+  const hasPauses = step.pauses && step.pauses.length > 0;
   
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
+    : '';
+  
+  // Render the pause overlay only if there are pauses configured
+  const pauseOverlayHTML = hasPauses ? `
+    <div class="demo-pause-overlay" id="demo-pause-overlay" style="display: none;">
+      <div class="demo-pause-card">
+        <div class="demo-pause-kicker">⏸ Pause &amp; observe</div>
+        <div class="demo-pause-image-wrap">
+          <img id="demo-pause-image" src="" alt="Teaching image" class="demo-pause-image">
+        </div>
+        <div class="demo-pause-title" id="demo-pause-title"></div>
+        <div class="demo-pause-text" id="demo-pause-text"></div>
+        <div class="demo-pause-timer">
+          <div class="demo-pause-timer-bar" id="demo-pause-timer-bar"></div>
+        </div>
+        <div class="demo-pause-actions">
+          <button class="btn btn-primary" onclick="demoResumeNow()"><span class="glyph">◈</span> Got it — continue</button>
+          <button class="btn btn-ghost" onclick="demoStayPaused()">Stay paused, I need more time</button>
+        </div>
+      </div>
+    </div>
+  ` : '';
+  
+  // Stash pauses + videoId on a data attribute so JS can pick them up
+  const dataPauses = hasPauses 
+    ? `data-pauses='${JSON.stringify(step.pauses).replace(/'/g, '&#39;')}'`
     : '';
   
   return `
@@ -8749,8 +8888,13 @@ function renderDemo(step) {
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
       
-      <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
+      <div class="video-frame demo-video-frame" 
+           id="demo-video-container"
+           ${dataPauses}
+           data-video-id="${videoId || ''}"
+           style="background: #000; cursor: default; padding: 0; position: relative;">
         ${videoId ? `<iframe 
+          id="demo-cf-iframe"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
@@ -8758,10 +8902,11 @@ function renderDemo(step) {
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
           allowfullscreen="true"></iframe>` 
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
+        ${pauseOverlayHTML}
       </div>
       
       <div class="video-meta">
-        <span class="video-meta-tip">Watch, then draw at your own pace</span>
+        <span class="video-meta-tip">${hasPauses ? 'The video will pause at key moments — watch the visual notes' : 'Watch, then draw at your own pace'}</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
@@ -8777,6 +8922,169 @@ function renderDemo(step) {
         <button class="btn btn-ghost" onclick="nextStep()">Skip this step →</button>
       </div>
     </div>`;
+}
+
+// ════════════════════════════════════════════════════════════════════
+// ROUND 50d · Demo Video Pause System (Cloudflare Stream)
+// ────────────────────────────────────────────────────────────────────
+// Tracks the Stream player's currentTime via JS SDK. When time crosses
+// a defined pause point AND that pause hasn't been triggered yet, we 
+// pause the video and show an annotated teaching image overlay.
+// User clicks Continue to resume (or pause auto-resumes after 25s).
+// ════════════════════════════════════════════════════════════════════
+const demoPauseState = {
+  player: null,
+  pauses: [],
+  triggered: new Set(),
+  currentPauseIdx: -1,
+  watcher: null,
+  autoResumeTimer: null,
+  videoId: null
+};
+
+function _ensureStreamSDKLoaded(cb) {
+  if (window.Stream) { cb(); return; }
+  if (window._streamSDKLoading) {
+    const wait = setInterval(() => {
+      if (window.Stream) { clearInterval(wait); cb(); }
+    }, 100);
+    return;
+  }
+  window._streamSDKLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  s.async = true;
+  s.onload = () => cb();
+  s.onerror = () => { window._streamSDKLoading = false; console.warn('[demoPauses] Stream SDK failed to load — pauses disabled'); };
+  document.head.appendChild(s);
+}
+
+function initDemoPauses() {
+  const container = document.getElementById('demo-video-container');
+  if (!container) return;
+  
+  const pausesAttr = container.getAttribute('data-pauses');
+  if (!pausesAttr) return;  // no pauses configured for this step
+  
+  let pauses;
+  try { pauses = JSON.parse(pausesAttr); } catch (e) { 
+    console.error('[demoPauses] failed to parse', e); return; 
+  }
+  if (!pauses || !pauses.length) return;
+  
+  // Clean up any prior state
+  if (demoPauseState.watcher) { clearInterval(demoPauseState.watcher); demoPauseState.watcher = null; }
+  if (demoPauseState.autoResumeTimer) { clearTimeout(demoPauseState.autoResumeTimer); demoPauseState.autoResumeTimer = null; }
+  demoPauseState.pauses = pauses;
+  demoPauseState.triggered = new Set();
+  demoPauseState.currentPauseIdx = -1;
+  demoPauseState.videoId = container.getAttribute('data-video-id') || null;
+  
+  _ensureStreamSDKLoaded(() => {
+    const iframe = document.getElementById('demo-cf-iframe');
+    if (!iframe) return;
+    
+    try {
+      const player = window.Stream(iframe);
+      demoPauseState.player = player;
+      
+      player.addEventListener('loadedmetadata', () => {
+        console.log('[demoPauses] Stream player ready, pauses:', pauses.length);
+      });
+      
+      // Poll currentTime every 250ms — Stream doesn't fire timeupdate frequently
+      demoPauseState.watcher = setInterval(() => {
+        if (!demoPauseState.player) return;
+        // Don't trigger when overlay is already showing
+        const overlay = document.getElementById('demo-pause-overlay');
+        if (overlay && overlay.style.display === 'flex') return;
+        
+        let t;
+        try { t = demoPauseState.player.currentTime; } catch (e) { return; }
+        if (typeof t !== 'number' || isNaN(t)) return;
+        
+        // Find next un-triggered pause whose time has passed
+        for (let i = 0; i < demoPauseState.pauses.length; i++) {
+          if (demoPauseState.triggered.has(i)) continue;
+          if (t >= demoPauseState.pauses[i].time) {
+            _showDemoPause(i);
+            break;
+          }
+        }
+      }, 250);
+    } catch (e) {
+      console.warn('[demoPauses] Stream player init failed', e);
+    }
+  });
+}
+
+function _showDemoPause(idx) {
+  const p = demoPauseState.pauses[idx];
+  if (!p) return;
+  demoPauseState.triggered.add(idx);
+  demoPauseState.currentPauseIdx = idx;
+  
+  // Pause the video
+  try { demoPauseState.player.pause(); } catch (e) {}
+  
+  // ROUND 50 FIX (BUG 3): Exit fullscreen so pause overlay is visible
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) {}
+  
+  // Populate + show overlay
+  document.getElementById('demo-pause-image').src = p.image || '';
+  document.getElementById('demo-pause-title').textContent = p.title || '';
+  document.getElementById('demo-pause-text').textContent = p.text || '';
+  document.getElementById('demo-pause-overlay').style.display = 'flex';
+  
+  // Animate the timer bar
+  const bar = document.getElementById('demo-pause-timer-bar');
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '100%';
+    setTimeout(() => {
+      bar.style.transition = 'width 25s linear';
+      bar.style.width = '0%';
+    }, 50);
+  }
+  
+  // Auto-resume after 25 seconds
+  if (demoPauseState.autoResumeTimer) clearTimeout(demoPauseState.autoResumeTimer);
+  demoPauseState.autoResumeTimer = setTimeout(demoResumeNow, 25000);
+  
+  try {
+    Analytics.track('demo_pause_triggered', {
+      pause_idx: idx,
+      pause_title: p.title,
+      pause_time: p.time,
+      video_id: demoPauseState.videoId
+    });
+  } catch (e) {}
+}
+
+function demoResumeNow() {
+  const overlay = document.getElementById('demo-pause-overlay');
+  if (overlay) overlay.style.display = 'none';
+  if (demoPauseState.autoResumeTimer) {
+    clearTimeout(demoPauseState.autoResumeTimer);
+    demoPauseState.autoResumeTimer = null;
+  }
+  try { demoPauseState.player && demoPauseState.player.play(); } catch (e) {}
+}
+
+function demoStayPaused() {
+  const overlay = document.getElementById('demo-pause-overlay');
+  if (overlay) overlay.style.display = 'none';
+  if (demoPauseState.autoResumeTimer) {
+    clearTimeout(demoPauseState.autoResumeTimer);
+    demoPauseState.autoResumeTimer = null;
+  }
+  // Don't play — student wanted more time. They can press the video play button.
 }
 
 function renderFinalSubmit(step) {
