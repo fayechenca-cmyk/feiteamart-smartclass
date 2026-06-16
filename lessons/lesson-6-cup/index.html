@@ -3167,66 +3167,31 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.9) 100%); backdrop-filter: blur(14px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
 .pause-overlay.show { display: flex; animation: fadeIn .3s ease; }
 
-/* ROUND 50d · Demo Pause Overlay (Cup Step 1 pauses with annotated images) */
-.demo-pause-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(76,29,149,0.93) 100%);
-  backdrop-filter: blur(16px);
-  display: none; align-items: center; justify-content: center;
-  z-index: 60; padding: 16px;
-  animation: fadeIn 0.3s ease;
+/* ROUND 50f · Demo Pause with Image — extends Cylinder's .pause-card style
+   (per Faye: "use the previous design, just add the image") */
+.pause-card.pause-card-with-image {
+  max-width: 380px;
+  padding: 18px 16px 16px;
 }
-.demo-pause-overlay[style*="flex"] { display: flex !important; }
-.demo-pause-card {
-  background: #fff; border-radius: 18px;
-  padding: 18px; max-width: 520px; width: 100%;
-  max-height: calc(100vh - 40px); overflow-y: auto;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-}
-.demo-pause-kicker {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 10px; font-weight: 800;
-  color: #7c5fc7; letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 12px; text-align: center;
-}
-.demo-pause-image-wrap {
-  border-radius: 12px; overflow: hidden;
-  background: #f8f5ff; margin-bottom: 14px;
+.pause-card-image-wrap {
+  border-radius: 10px; overflow: hidden;
+  background: #f8f5ff; margin: 0 0 12px;
   border: 1px solid rgba(167,139,250,0.2);
-  max-height: 280px;
+  max-height: 180px;
 }
-.demo-pause-image {
+.pause-card-image {
   display: block; width: 100%; height: auto;
-  max-height: 280px; object-fit: contain;
-}
-.demo-pause-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 17px; font-weight: 800;
-  color: #1a1d2b; margin-bottom: 8px;
-  text-align: center; line-height: 1.3;
-}
-.demo-pause-text {
-  font-size: 13px; line-height: 1.55;
-  color: rgba(26,29,43,0.78);
-  margin-bottom: 14px; text-align: center;
-}
-.demo-pause-timer {
-  height: 4px; background: #f0ecfa; border-radius: 4px;
-  overflow: hidden; margin-bottom: 12px;
-}
-.demo-pause-timer-bar {
-  height: 100%; width: 100%;
-  background: linear-gradient(90deg, #a78bfa 0%, #67e8f9 100%);
-  border-radius: 4px;
-}
-.demo-pause-actions {
-  display: flex; flex-direction: column; gap: 8px;
+  max-height: 180px; object-fit: contain;
 }
 @media (min-width: 600px) {
-  .demo-pause-card { padding: 24px; }
-  .demo-pause-image-wrap { max-height: 320px; }
-  .demo-pause-image { max-height: 320px; }
+  .pause-card.pause-card-with-image { max-width: 440px; padding: 22px 20px 18px; }
+  .pause-card-image-wrap { max-height: 220px; }
+  .pause-card-image { max-height: 220px; }
+}
+@media (max-height: 700px) {
+  /* Mobile / short viewport — make image smaller so buttons fit */
+  .pause-card-image-wrap { max-height: 130px; }
+  .pause-card-image { max-height: 130px; }
 }
 .pause-card { background: linear-gradient(180deg, #fff 0%, #f5f3ff 100%); border-radius: var(--radius-lg); padding: 26px 22px 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 30px 70px rgba(0,0,0,0.4); animation: slideUp .4s ease; position: relative; }
 .pause-kicker { display: inline-block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green); background: rgba(29,158,117,0.08); padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; border: 0.5px solid rgba(29,158,117,0.2); }
@@ -5969,17 +5934,16 @@ const LESSON = {
       quote: 'A cup is just a cylinder with a handle and a personality. Build the cylinder right first; the cup will follow.',
       tip: 'Keep all construction lines light. They will guide everything that follows but must disappear under your shading later.',
       // ════════════════════════════════════════════════════════════════
-      // ROUND 50d — Pause points for Step 1 "Build the Cup Structure"
-      // 6 pauses tied to Faye's annotated reference images. At each time
-      // the video pauses, shows a teaching image + caption, and resumes
-      // when student clicks Continue (or auto-resumes after 25s).
+      // ROUND 50f (per Faye) — 6 pauses with Cylinder-style UI.
+      // Image order updated per Faye's latest URL list (this is the
+      // correct order — times stay the same, images re-mapped).
       // ════════════════════════════════════════════════════════════════
       pauses: [
         {
           time: 150,  // 2:30
           title: 'Cup rim has thickness',
           text: 'The rim is not a single flat ellipse — even when it\'s thin, it still has thickness. Use two close ellipses to show the outer and inner edges of the rim.',
-          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0a764579-a296-4b3d-2a28-4fce49144300/public'
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/c1dc3e94-116c-4542-5682-0c0ab2d31c00/public'
         },
         {
           time: 226,  // 3:46
@@ -5991,25 +5955,25 @@ const LESSON = {
           time: 286,  // 4:46
           title: 'Cup body curves inward',
           text: 'The cup is related to a cylinder, but it\'s not a perfect cylinder. The body gently curves inward toward the bottom — overall tapering inward, not flaring outward.',
-          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/c1dc3e94-116c-4542-5682-0c0ab2d31c00/public'
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2141b3d8-5e1f-4885-ca17-1036a3268e00/public'
         },
         {
           time: 326,  // 5:26
           title: 'Start the handle with tangent lines',
           text: 'Begin the handle by finding the upper, middle, and lower turning points first. These key points control the size and direction of the handle — much easier than drawing one loose curve.',
-          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2141b3d8-5e1f-4885-ca17-1036a3268e00/public'
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0a764579-a296-4b3d-2a28-4fce49144300/public'
         },
         {
           time: 392,  // 6:32
           title: 'Build the handle edge with tangents',
           text: 'The outside edge of the handle is built with straight tangent lines first. Tangent lines make the curve stronger and easier to control — then smooth them into a rounded edge.',
-          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e1c6e845-1392-4e0f-f23b-ae365bc5c900/public'
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e24fe367-810c-4c48-d23d-f9bdf76c3700/public'
         },
         {
           time: 434,  // 7:14
           title: 'Handle thickness',
           text: 'The handle also has thickness. Observe both the outer edge and the inner edge. The handle turns in space — it should not look like a flat line attached to the cup.',
-          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e24fe367-810c-4c48-d23d-f9bdf76c3700/public'
+          image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e1c6e845-1392-4e0f-f23b-ae365bc5c900/public'
         }
       ],
       xp: 10
@@ -8848,7 +8812,8 @@ function selectPlan(tier) {
 
 function renderDemo(step) {
   // Cloudflare Stream migration: each demo step now has its own videoId.
-  // ROUND 50d: optional `pauses` array enables teaching pauses with image annotations.
+  // ROUND 50f (per Faye): pauses use Cylinder-style .pause-overlay/.pause-card
+  // UI, but with an annotated image added in the card. 30-sec timer.
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   const hasPauses = step.pauses && step.pauses.length > 0;
@@ -8857,28 +8822,29 @@ function renderDemo(step) {
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
   
-  // Render the pause overlay only if there are pauses configured
+  // Pause overlay — reuses .pause-overlay / .pause-card classes for visual consistency with Cylinder warmup
   const pauseOverlayHTML = hasPauses ? `
-    <div class="demo-pause-overlay" id="demo-pause-overlay" style="display: none;">
-      <div class="demo-pause-card">
-        <div class="demo-pause-kicker">⏸ Pause &amp; observe</div>
-        <div class="demo-pause-image-wrap">
-          <img id="demo-pause-image" src="" alt="Teaching image" class="demo-pause-image">
+    <div class="pause-overlay" id="demo-pause-overlay">
+      <div class="pause-card pause-card-with-image">
+        <div class="pause-kicker">⏸ Your turn</div>
+        <div class="pause-card-image-wrap">
+          <img id="demo-pause-image" src="" alt="Teaching image" class="pause-card-image">
         </div>
-        <div class="demo-pause-title" id="demo-pause-title"></div>
-        <div class="demo-pause-text" id="demo-pause-text"></div>
-        <div class="demo-pause-timer">
-          <div class="demo-pause-timer-bar" id="demo-pause-timer-bar"></div>
+        <div class="pause-title" id="demo-pause-title"></div>
+        <div class="pause-text" id="demo-pause-text"></div>
+        <div class="pause-timer">
+          <div class="pause-timer-bar" id="demo-pause-timer-bar"></div>
         </div>
-        <div class="demo-pause-actions">
-          <button class="btn btn-primary" onclick="demoResumeNow()"><span class="glyph">◈</span> Got it — continue</button>
-          <button class="btn btn-ghost" onclick="demoStayPaused()">Stay paused, I need more time</button>
+        <div class="pause-timer-label">Video resumes automatically in 30s</div>
+        <div class="pause-actions">
+          <button class="btn btn-primary" onclick="demoResumeNow()"><span class="glyph">◈</span> OK, I got it — continue</button>
+          <button class="btn btn-ghost" onclick="demoStayPaused()">Keep paused, I need more time</button>
         </div>
       </div>
     </div>
   ` : '';
   
-  // Stash pauses + videoId on a data attribute so JS can pick them up
+  // Stash pauses + videoId on data attributes so JS can pick them up
   const dataPauses = hasPauses 
     ? `data-pauses='${JSON.stringify(step.pauses).replace(/'/g, '&#39;')}'`
     : '';
@@ -8906,7 +8872,7 @@ function renderDemo(step) {
       </div>
       
       <div class="video-meta">
-        <span class="video-meta-tip">${hasPauses ? 'The video will pause at key moments — watch the visual notes' : 'Watch, then draw at your own pace'}</span>
+        <span class="video-meta-tip">${hasPauses ? 'The video will pause at key moments — read the note and continue when ready' : 'Watch, then draw at your own pace'}</span>
       </div>
       
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
@@ -8925,12 +8891,12 @@ function renderDemo(step) {
 }
 
 // ════════════════════════════════════════════════════════════════════
-// ROUND 50d · Demo Video Pause System (Cloudflare Stream)
+// ROUND 50d/50f · Demo Video Pause System (Cloudflare Stream)
 // ────────────────────────────────────────────────────────────────────
 // Tracks the Stream player's currentTime via JS SDK. When time crosses
 // a defined pause point AND that pause hasn't been triggered yet, we 
 // pause the video and show an annotated teaching image overlay.
-// User clicks Continue to resume (or pause auto-resumes after 25s).
+// 50f: Reuses Cylinder .pause-overlay/.pause-card classes. 30s timer.
 // ════════════════════════════════════════════════════════════════════
 const demoPauseState = {
   player: null,
@@ -8964,7 +8930,7 @@ function initDemoPauses() {
   if (!container) return;
   
   const pausesAttr = container.getAttribute('data-pauses');
-  if (!pausesAttr) return;  // no pauses configured for this step
+  if (!pausesAttr) return;
   
   let pauses;
   try { pauses = JSON.parse(pausesAttr); } catch (e) { 
@@ -8992,18 +8958,16 @@ function initDemoPauses() {
         console.log('[demoPauses] Stream player ready, pauses:', pauses.length);
       });
       
-      // Poll currentTime every 250ms — Stream doesn't fire timeupdate frequently
+      // Poll currentTime every 250ms
       demoPauseState.watcher = setInterval(() => {
         if (!demoPauseState.player) return;
-        // Don't trigger when overlay is already showing
         const overlay = document.getElementById('demo-pause-overlay');
-        if (overlay && overlay.style.display === 'flex') return;
+        if (overlay && overlay.classList.contains('show')) return;
         
         let t;
         try { t = demoPauseState.player.currentTime; } catch (e) { return; }
         if (typeof t !== 'number' || isNaN(t)) return;
         
-        // Find next un-triggered pause whose time has passed
         for (let i = 0; i < demoPauseState.pauses.length; i++) {
           if (demoPauseState.triggered.has(i)) continue;
           if (t >= demoPauseState.pauses[i].time) {
@@ -9027,7 +8991,9 @@ function _showDemoPause(idx) {
   // Pause the video
   try { demoPauseState.player.pause(); } catch (e) {}
   
-  // ROUND 50 FIX (BUG 3): Exit fullscreen so pause overlay is visible
+  // ROUND 50 FIX (BUG 3 per Faye): Exit fullscreen so the pause card is visible.
+  // This is required because the pause card sits in the document, NOT inside
+  // the iframe — when iframe is fullscreen, the card is hidden behind it.
   try {
     if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
       if (document.exitFullscreen) document.exitFullscreen();
@@ -9036,26 +9002,26 @@ function _showDemoPause(idx) {
     }
   } catch (e) {}
   
-  // Populate + show overlay
+  // Populate the overlay
   document.getElementById('demo-pause-image').src = p.image || '';
   document.getElementById('demo-pause-title').textContent = p.title || '';
   document.getElementById('demo-pause-text').textContent = p.text || '';
-  document.getElementById('demo-pause-overlay').style.display = 'flex';
+  document.getElementById('demo-pause-overlay').classList.add('show');
   
-  // Animate the timer bar
+  // Animate the 30s timer bar
   const bar = document.getElementById('demo-pause-timer-bar');
   if (bar) {
     bar.style.transition = 'none';
     bar.style.width = '100%';
     setTimeout(() => {
-      bar.style.transition = 'width 25s linear';
+      bar.style.transition = 'width 30s linear';
       bar.style.width = '0%';
     }, 50);
   }
   
-  // Auto-resume after 25 seconds
+  // Auto-resume after 30 seconds
   if (demoPauseState.autoResumeTimer) clearTimeout(demoPauseState.autoResumeTimer);
-  demoPauseState.autoResumeTimer = setTimeout(demoResumeNow, 25000);
+  demoPauseState.autoResumeTimer = setTimeout(demoResumeNow, 30000);
   
   try {
     Analytics.track('demo_pause_triggered', {
@@ -9069,7 +9035,7 @@ function _showDemoPause(idx) {
 
 function demoResumeNow() {
   const overlay = document.getElementById('demo-pause-overlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) overlay.classList.remove('show');
   if (demoPauseState.autoResumeTimer) {
     clearTimeout(demoPauseState.autoResumeTimer);
     demoPauseState.autoResumeTimer = null;
@@ -9079,12 +9045,12 @@ function demoResumeNow() {
 
 function demoStayPaused() {
   const overlay = document.getElementById('demo-pause-overlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) overlay.classList.remove('show');
   if (demoPauseState.autoResumeTimer) {
     clearTimeout(demoPauseState.autoResumeTimer);
     demoPauseState.autoResumeTimer = null;
   }
-  // Don't play — student wanted more time. They can press the video play button.
+  // Don't resume — student wanted more time. They can hit play.
 }
 
 function renderFinalSubmit(step) {
