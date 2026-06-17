@@ -1491,6 +1491,30 @@
   
   function _doSignOut() {
     (async () => {
+      // ROUND 51a (per Faye): BUG 3 fix — Before clearing localStorage,
+      // back up the profile under a key tagged with the user's email/id,
+      // so that when the same user signs back in, their progress can be
+      // restored. This avoids the "every sign-in starts from lesson 1"
+      // problem caused by aggressive sign-out clearing.
+      try {
+        const currentProfile = localStorage.getItem(PROFILE_KEY);
+        if (currentProfile) {
+          const p = JSON.parse(currentProfile);
+          // Key the backup by email (Supabase users) or studentCode (legacy)
+          const backupKey = p.email
+            ? 'fei_user_profile_backup__' + p.email.toLowerCase()
+            : (p.studentCode ? 'fei_user_profile_backup__code_' + p.studentCode : null);
+          if (backupKey) {
+            // Store the backup OUTSIDE the fei_ prefix so it survives the wipe below
+            localStorage.setItem(
+              backupKey.replace(/^fei_/, 'feiBackup_'),  // rename to escape wipe
+              currentProfile
+            );
+            console.log('[signOut] profile backed up under', backupKey.replace(/^fei_/, 'feiBackup_'));
+          }
+        }
+      } catch (e) { console.warn('[signOut] backup failed', e); }
+      
       // 1. Try Supabase signOut (silent if not configured)
       try {
         if (window.FEIAuth && window.FEIAuth._isConfigured()) {
@@ -1502,6 +1526,7 @@
       clearProfile();
       
       // 3. Aggressively clear ALL fei_* localStorage keys (catches access code users)
+      //    Note: feiBackup_ keys ARE PRESERVED (different prefix)
       try {
         const keysToRemove = [];
         for (let i = 0; i < localStorage.length; i++) {
@@ -1513,7 +1538,7 @@
         keysToRemove.forEach(k => {
           try { localStorage.removeItem(k); } catch(e) {}
         });
-        console.log('[signOut] cleared', keysToRemove.length, 'localStorage keys');
+        console.log('[signOut] cleared', keysToRemove.length, 'localStorage keys (backup keys preserved)');
       } catch (e) { console.warn('[signOut] localStorage clear failed', e); }
       
       // 4. Clear access cache
@@ -1524,6 +1549,30 @@
     })();
   }
   window.signOut = signOut;
+  
+  // ROUND 51a (per Faye): BUG 3 fix — Restore profile backup on sign-in.
+  // If a user signs in (via Supabase/Google or access code) and we find 
+  // a backup keyed to their identity, merge it into the new profile so 
+  // their progress (completedLessons, totalXP, etc.) is recovered.
+  function _restoreProfileBackup(identifier) {
+    if (!identifier) return null;
+    try {
+      const idLower = String(identifier).toLowerCase();
+      const backupKey = idLower.includes('@')
+        ? 'feiBackup_user_profile_backup__' + idLower
+        : 'feiBackup_user_profile_backup__code_' + identifier;
+      const raw = localStorage.getItem(backupKey);
+      if (raw) {
+        const backup = JSON.parse(raw);
+        console.log('[signIn] restored profile backup for', identifier, 
+                    '— lessons:', backup.completedLessons?.length || 0,
+                    'XP:', backup.totalXP || 0);
+        return backup;
+      }
+    } catch (e) { console.warn('[signIn] backup restore failed', e); }
+    return null;
+  }
+  window._restoreProfileBackup = _restoreProfileBackup;
 
   // ═══════════════════════════════════════════════════════════
   // NEW AUTH FLOW (Supabase: email + Google)
@@ -1645,10 +1694,23 @@
   async function onAuthSuccess(user) {
     // Sync to legacy profile shape so the rest of the UI works
     const name = window.FEIAuth.displayName(user);
-    const existing = (function () {
+    let existing = (function () {
       try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); }
       catch (e) { return null; }
     })();
+    
+    // ROUND 51a (per Faye): BUG 3 fix — If no existing profile, look for a
+    // backup keyed by email (saved in _doSignOut). This restores progress
+    // for users who signed out and signed back in with the same email.
+    if (!existing && user.email) {
+      const backup = window._restoreProfileBackup(user.email);
+      if (backup) {
+        existing = backup;
+        console.log('[onAuthSuccess] restored from backup — completedLessons:', 
+                    backup.completedLessons?.length || 0);
+      }
+    }
+    
     const profile = {
       id: user.id,
       studentCode: null,                  // null → Supabase user (not legacy code)
