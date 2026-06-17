@@ -1420,17 +1420,26 @@
       return;
     }
     
+    // ROUND 51a (per Faye): BUG 3 fix — Check for a backup of THIS access code's
+    // profile (saved during a previous sign-out). If found, restore completedLessons
+    // and totalXP so progress survives sign-out/sign-in cycles for the 4 paid
+    // students (JOJO-10, A7Q9-FOX, XIDA-25, SELENA-23).
+    let existing = null;
+    if (window._restoreProfileBackup) {
+      existing = window._restoreProfileBackup(code);  // code (no @) → looks up backup by code
+    }
+    
     const profile = {
       id: code,
       studentCode: code,
       name: match.displayName,
       tier: match.isTrial ? 'trial' : 'member',
-      memberSince: Date.now(),
-      currentLesson: 'cube',
-      currentStepIdx: 0,
-      completedLessons: [],
-      totalXP: 0,
-      createdAt: Date.now(),
+      memberSince: existing ? existing.memberSince : Date.now(),
+      currentLesson: existing ? existing.currentLesson : 'cube',
+      currentStepIdx: existing ? existing.currentStepIdx : 0,
+      completedLessons: existing ? (existing.completedLessons || []) : [],
+      totalXP: existing ? (existing.totalXP || 0) : 0,
+      createdAt: existing ? existing.createdAt : Date.now(),
       lastSeenAt: Date.now()
     };
     saveProfile(profile);
