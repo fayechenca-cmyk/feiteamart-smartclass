@@ -8009,6 +8009,18 @@ async function continueToNextLessonGuarded(nextLessonId, nextLessonPath) {
     window.location.href = nextLessonPath;
     return;
   }
+  // ROUND 51a FIX (per Faye): access-code students bypass paywall
+  try {
+    const profileRaw = localStorage.getItem('fei_user_profile');
+    if (profileRaw) {
+      const profile = JSON.parse(profileRaw);
+      if (profile && profile.studentCode) {
+        console.log('[Paywall] access-code student bypass:', profile.studentCode);
+        window.location.href = nextLessonPath;
+        return;
+      }
+    }
+  } catch (e) {}
   if (window.FEIAccess && typeof window.FEIAccess.canOpenLesson === 'function') {
     try {
       const result = await window.FEIAccess.canOpenLesson(nextLessonId);
