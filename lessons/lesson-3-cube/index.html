@@ -7921,6 +7921,22 @@ async function continueToNextLessonGuarded(nextLessonId, nextLessonPath) {
     return;
   }
   
+  // ROUND 51a FIX (per Faye): Access-code students (JOJO-10, A7Q9-FOX, XIDA-25, 
+  // SELENA-23) bypass the paywall — they're private studio students with full
+  // access. Their profile has `studentCode` set; Supabase users have it null.
+  // This mirrors the home guard's "if (profile.studentCode) return" rule.
+  try {
+    const profileRaw = localStorage.getItem('fei_user_profile');
+    if (profileRaw) {
+      const profile = JSON.parse(profileRaw);
+      if (profile && profile.studentCode) {
+        console.log('[Paywall] access-code student bypass:', profile.studentCode);
+        window.location.href = nextLessonPath;
+        return;
+      }
+    }
+  } catch (e) { /* fall through to normal check */ }
+  
   // Check FEIAccess if available
   if (window.FEIAccess && typeof window.FEIAccess.canOpenLesson === 'function') {
     try {
