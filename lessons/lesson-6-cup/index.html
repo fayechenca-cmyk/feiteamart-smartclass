@@ -3487,11 +3487,16 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="brand">
+  <!-- ROUND 51a (per Faye): brand is now a real link back to home page.
+       Previously this was a non-clickable div, leaving students stranded
+       mid-lesson with no way back to the map. -->
+  <a href="../../" class="brand" style="text-decoration: none; color: inherit; cursor: pointer;" title="Back to Art GPS home">
     <div class="brand-dot"></div>
     <div class="brand-text">Fei teamart · Art GPS</div>
-  </div>
+  </a>
   <div class="controls">
+    <!-- ROUND 51a: explicit home icon for clarity (per Faye) -->
+    <a href="../../" class="ctrl" title="Back to Art GPS home" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">←</a>
     <div class="ctrl" id="music-btn" onclick="toggleMusic()" title="Background music">♪</div>
     <div class="ctrl on" id="sound-btn" onclick="toggleSound()" title="Mute all">🔔</div>
   </div>
@@ -8742,6 +8747,37 @@ function checkLocalMode() {
  *  selectPlan() handles: continue_preview / waitlist / human_needed
  * ═══════════════════════════════════════════════════════════════════════════ */
 
+// ════════════════════════════════════════════════════════════════════
+// ROUND 51a (per Faye): BUG 2 fix — Guarded next-lesson navigation
+// ════════════════════════════════════════════════════════════════════
+async function continueToNextLessonGuarded(nextLessonId, nextLessonPath) {
+  const ALWAYS_FREE = ['preparation', 'cube'];
+  if (ALWAYS_FREE.includes(nextLessonId)) {
+    window.location.href = nextLessonPath;
+    return;
+  }
+  if (window.FEIAccess && typeof window.FEIAccess.canOpenLesson === 'function') {
+    try {
+      const result = await window.FEIAccess.canOpenLesson(nextLessonId);
+      const allowed = result === true || (result && result.allowed === true);
+      if (allowed) {
+        window.location.href = nextLessonPath;
+        return;
+      } else {
+        console.log('[Paywall] Next lesson blocked:', nextLessonId);
+        try { openPaywall(); } catch (e) {
+          window.location.href = '../../?paywall=' + encodeURIComponent(nextLessonId);
+        }
+        return;
+      }
+    } catch (e) {
+      console.warn('[Paywall] check failed, allowing through:', e);
+    }
+  }
+  window.location.href = nextLessonPath;
+}
+window.continueToNextLessonGuarded = continueToNextLessonGuarded;
+
 function openPaywall() {
   document.getElementById('paywall-modal').classList.add('show');
   playTone(880, 0.15);
@@ -9302,9 +9338,7 @@ function renderLessonComplete(profileOrLead) {
       </div>
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <a href="../lesson-2-sphere-realworld/" class="btn btn-primary" style="text-decoration:none;">
-          <span class="glyph">→</span> Continue to Lesson 6: Apple →
-        </a>
+        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('apple', '../lesson-2-sphere-realworld/')"><span class="glyph">→</span> Continue to Lesson 6: Apple →</button>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
