@@ -8874,76 +8874,142 @@ function selectPlan(tier) {
 
 function renderDemo(step) {
   // Cloudflare Stream migration: each demo step now has its own videoId.
-  // ROUND 50f (per Faye): pauses use Cylinder-style .pause-overlay/.pause-card
-  // UI, but with an annotated image added in the card. 30-sec timer.
+  // ROUND 52: migrated to Sphere-style UI — image replaces video on pause,
+  // teaching panel appears below the video frame (not floating on top).
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
   const hasPauses = step.pauses && step.pauses.length > 0;
-  
+
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
-  
-  // Pause overlay — reuses .pause-overlay / .pause-card classes for visual consistency with Cylinder warmup
-  const pauseOverlayHTML = hasPauses ? `
-    <div class="pause-overlay" id="demo-pause-overlay">
-      <div class="pause-card pause-card-with-image">
-        <div class="pause-kicker">⏸ Your turn</div>
-        <div class="pause-card-image-wrap">
-          <img id="demo-pause-image" src="" alt="Teaching image" class="pause-card-image">
+
+  // Image overlay — sits INSIDE .video-frame, absolute, covers iframe when paused
+  const pauseImgOverlayHTML = hasPauses ? `
+        <div id="demo-pause-img-overlay"
+             style="display:none; position:absolute; inset:0; z-index:10;
+                    background:#fff; cursor:zoom-in;"
+             onclick="window.open(document.getElementById('demo-pause-image').src,'_blank')">
+          <img id="demo-pause-image" src="" alt="Reference"
+               style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;">
+          <div style="position:absolute; bottom:12px; right:12px;
+                      background:rgba(26,29,43,0.85); color:#fff; padding:6px 12px;
+                      border-radius:14px; font-family:'Montserrat',sans-serif;
+                      font-size:10px; font-weight:800; letter-spacing:1px;
+                      text-transform:uppercase; pointer-events:none;">
+            🔍 Tap to enlarge
+          </div>
+          <div id="demo-pause-img-badge"
+               style="position:absolute; top:12px; left:12px;
+                      background:linear-gradient(135deg,#a78bfa,#67e8f9); color:#fff;
+                      padding:6px 14px; border-radius:14px;
+                      font-family:'Montserrat',sans-serif; font-size:10px;
+                      font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                      pointer-events:none; box-shadow:0 3px 10px rgba(167,139,250,0.4);">
+            ⏸ Key moment 1
+          </div>
         </div>
-        <div class="pause-title" id="demo-pause-title"></div>
-        <div class="pause-text" id="demo-pause-text"></div>
-        <div class="pause-timer">
-          <div class="pause-timer-bar" id="demo-pause-timer-bar"></div>
+  ` : '';
+
+  // Teaching panel — sits BELOW .video-frame, hidden by default
+  const pausePanelHTML = hasPauses ? `
+      <div id="demo-pause-panel"
+           style="display:none; margin-top:14px; padding:18px 20px;
+                  border-radius:14px; background:#fff;
+                  box-shadow:0 4px 18px rgba(167,139,250,0.16);
+                  border:1px solid rgba(167,139,250,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:12px; padding-bottom:10px;
+                    border-bottom:1px solid rgba(167,139,250,0.15);">
+          <span id="demo-pause-counter"
+                style="font-family:'Montserrat',sans-serif; font-size:10px;
+                       font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                       color:#7c5fc7;">⏸ Key moment 1</span>
+          <span style="font-family:'Montserrat',sans-serif; font-size:11px;
+                       font-weight:800; color:#1d9e75;">30s</span>
         </div>
-        <div class="pause-timer-label">Video resumes automatically in 30s</div>
-        <div class="pause-actions">
-          <button class="btn btn-primary" onclick="demoResumeNow()"><span class="glyph">◈</span> OK, I got it — continue</button>
-          <button class="btn btn-ghost" onclick="demoStayPaused()">Keep paused, I need more time</button>
+        <div style="height:3px; background:rgba(167,139,250,0.15); border-radius:2px;
+                    margin-bottom:14px; overflow:hidden;">
+          <div id="demo-pause-timer-bar"
+               style="height:100%; width:100%;
+                      background:linear-gradient(90deg,#a78bfa,#67e8f9);"></div>
+        </div>
+        <div id="demo-pause-title"
+             style="font-family:'Montserrat',sans-serif; font-size:15px;
+                    font-weight:800; color:#1a1d2b; margin-bottom:6px;
+                    line-height:1.4;"></div>
+        <div id="demo-pause-text"
+             style="font-family:'Open Sans',sans-serif; font-size:13px;
+                    color:#4a4f5e; line-height:1.6; margin-bottom:14px;"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button onclick="demoResumeNow()"
+                  style="flex:1; min-width:140px; padding:12px 16px;
+                         background:#1a1d2b; color:#fff; border:none; border-radius:24px;
+                         font-family:'Montserrat',sans-serif; font-weight:800;
+                         font-size:12px; letter-spacing:0.8px; text-transform:uppercase;
+                         cursor:pointer;">
+            ✨ Got it — continue
+          </button>
+          <button onclick="demoStayPaused()"
+                  style="flex:1; min-width:140px; padding:12px 16px;
+                         background:#fff; color:#4a4f5e; border:1px solid rgba(0,0,0,0.12);
+                         border-radius:24px; font-family:'Montserrat',sans-serif;
+                         font-weight:700; font-size:11.5px; letter-spacing:0.6px;
+                         cursor:pointer;">
+            Need more time
+          </button>
         </div>
       </div>
-    </div>
   ` : '';
-  
+
   // Stash pauses + videoId on data attributes so JS can pick them up
-  const dataPauses = hasPauses 
+  const dataPauses = hasPauses
     ? `data-pauses='${JSON.stringify(step.pauses).replace(/'/g, '&#39;')}'`
     : '';
-  
+
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
-      <div class="video-frame demo-video-frame" 
+
+      ${hasPauses ? `
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px;
+                    letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
+          <span>📹 ${step.title}</span>
+          <span>${step.pauses.length} key moments</span>
+        </div>
+      ` : ''}
+
+      <div class="video-frame demo-video-frame"
            id="demo-video-container"
            ${dataPauses}
            data-video-id="${videoId || ''}"
            style="background: #000; cursor: default; padding: 0; position: relative;">
-        ${videoId ? `<iframe 
+        ${videoId ? `<iframe
           id="demo-cf-iframe"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
           style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen="true"></iframe>` 
+          allowfullscreen="true"></iframe>`
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
-        ${pauseOverlayHTML}
+        ${pauseImgOverlayHTML}
       </div>
-      
+      ${pausePanelHTML}
+
       <div class="video-meta">
-        <span class="video-meta-tip">${hasPauses ? 'The video will pause at key moments — read the note and continue when ready' : 'Watch, then draw at your own pace'}</span>
+        <span class="video-meta-tip">${hasPauses ? `Video has ${step.pauses.length} key moments — pauses with reference images` : 'Watch, then draw at your own pace'}</span>
       </div>
-      
+
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
-      
+
       <div class="pro-tip">
         <div class="pro-tip-label">Pro tip</div>
         <div class="pro-tip-text">${step.tip}</div>
       </div>
-      
+
       <div class="btn-stack">
         <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Done — next step</button>
         <button class="btn btn-secondary" onclick="openChat()">Ask Artchi a question</button>
@@ -8967,7 +9033,8 @@ const demoPauseState = {
   currentPauseIdx: -1,
   watcher: null,
   autoResumeTimer: null,
-  videoId: null
+  videoId: null,
+  paused: false
 };
 
 function _ensureStreamSDKLoaded(cb) {
@@ -9023,8 +9090,7 @@ function initDemoPauses() {
       // Poll currentTime every 250ms
       demoPauseState.watcher = setInterval(() => {
         if (!demoPauseState.player) return;
-        const overlay = document.getElementById('demo-pause-overlay');
-        if (overlay && overlay.classList.contains('show')) return;
+        if (demoPauseState.paused) return;
         
         let t;
         try { t = demoPauseState.player.currentTime; } catch (e) { return; }
@@ -9064,12 +9130,27 @@ function _showDemoPause(idx) {
     }
   } catch (e) {}
   
-  // Populate the overlay
+  const total = demoPauseState.pauses.length;
+  const counterText = `⏸ Key moment ${idx + 1} of ${total}`;
+
+  // Image overlay — replaces video visually
   document.getElementById('demo-pause-image').src = p.image || '';
+  document.getElementById('demo-pause-img-badge').textContent = counterText;
+  document.getElementById('demo-pause-img-overlay').style.display = 'block';
+
+  // Teaching panel below video
+  document.getElementById('demo-pause-counter').textContent = counterText;
   document.getElementById('demo-pause-title').textContent = p.title || '';
   document.getElementById('demo-pause-text').textContent = p.text || '';
-  document.getElementById('demo-pause-overlay').classList.add('show');
-  
+  document.getElementById('demo-pause-panel').style.display = 'block';
+  demoPauseState.paused = true;
+
+  // Scroll panel into view
+  setTimeout(() => {
+    const panel = document.getElementById('demo-pause-panel');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+
   // Animate the 30s timer bar
   const bar = document.getElementById('demo-pause-timer-bar');
   if (bar) {
@@ -9080,7 +9161,7 @@ function _showDemoPause(idx) {
       bar.style.width = '0%';
     }, 50);
   }
-  
+
   // Auto-resume after 30 seconds
   if (demoPauseState.autoResumeTimer) clearTimeout(demoPauseState.autoResumeTimer);
   demoPauseState.autoResumeTimer = setTimeout(demoResumeNow, 30000);
@@ -9096,8 +9177,11 @@ function _showDemoPause(idx) {
 }
 
 function demoResumeNow() {
-  const overlay = document.getElementById('demo-pause-overlay');
-  if (overlay) overlay.classList.remove('show');
+  const imgOverlay = document.getElementById('demo-pause-img-overlay');
+  if (imgOverlay) imgOverlay.style.display = 'none';
+  const panel = document.getElementById('demo-pause-panel');
+  if (panel) panel.style.display = 'none';
+  demoPauseState.paused = false;
   if (demoPauseState.autoResumeTimer) {
     clearTimeout(demoPauseState.autoResumeTimer);
     demoPauseState.autoResumeTimer = null;
@@ -9106,8 +9190,11 @@ function demoResumeNow() {
 }
 
 function demoStayPaused() {
-  const overlay = document.getElementById('demo-pause-overlay');
-  if (overlay) overlay.classList.remove('show');
+  const imgOverlay = document.getElementById('demo-pause-img-overlay');
+  if (imgOverlay) imgOverlay.style.display = 'none';
+  const panel = document.getElementById('demo-pause-panel');
+  if (panel) panel.style.display = 'none';
+  demoPauseState.paused = false;
   if (demoPauseState.autoResumeTimer) {
     clearTimeout(demoPauseState.autoResumeTimer);
     demoPauseState.autoResumeTimer = null;
