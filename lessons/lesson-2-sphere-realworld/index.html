@@ -6098,7 +6098,11 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); break;
+    case 'demo':       el.innerHTML = renderDemo(step);
+                       if (step.pauses && step.pauses.length > 0) {
+                         setTimeout(initDemoPauses, 100);
+                       }
+                       break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -8612,40 +8616,142 @@ function selectPlan(tier) {
 
 function renderDemo(step) {
   // Cloudflare Stream migration: each demo step now has its own videoId.
+  // ROUND 52: migrated to Sphere-style UI — image replaces video on pause,
+  // teaching panel appears below the video frame (not floating on top).
   const videoId = step.videoId;
   const CF_CUSTOMER = 'customer-a78os4oj56dr67ab';
-  
+  const hasPauses = step.pauses && step.pauses.length > 0;
+
   const embedUrl = videoId
     ? `https://${CF_CUSTOMER}.cloudflarestream.com/${videoId}/iframe?muted=true&poster=https%3A%2F%2F${CF_CUSTOMER}.cloudflarestream.com%2F${videoId}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600`
     : '';
-  
+
+  // Image overlay — sits INSIDE .video-frame, absolute, covers iframe when paused
+  const pauseImgOverlayHTML = hasPauses ? `
+        <div id="demo-pause-img-overlay"
+             style="display:none; position:absolute; inset:0; z-index:10;
+                    background:#fff; cursor:zoom-in;"
+             onclick="window.open(document.getElementById('demo-pause-image').src,'_blank')">
+          <img id="demo-pause-image" src="" alt="Reference"
+               style="width:100%; height:100%; object-fit:contain; display:block; background:#fff;">
+          <div style="position:absolute; bottom:12px; right:12px;
+                      background:rgba(26,29,43,0.85); color:#fff; padding:6px 12px;
+                      border-radius:14px; font-family:'Montserrat',sans-serif;
+                      font-size:10px; font-weight:800; letter-spacing:1px;
+                      text-transform:uppercase; pointer-events:none;">
+            🔍 Tap to enlarge
+          </div>
+          <div id="demo-pause-img-badge"
+               style="position:absolute; top:12px; left:12px;
+                      background:linear-gradient(135deg,#a78bfa,#67e8f9); color:#fff;
+                      padding:6px 14px; border-radius:14px;
+                      font-family:'Montserrat',sans-serif; font-size:10px;
+                      font-weight:800; letter-spacing:1.2px; text-transform:uppercase;
+                      pointer-events:none; box-shadow:0 3px 10px rgba(167,139,250,0.4);">
+            ⏸ Key moment 1
+          </div>
+        </div>
+  ` : '';
+
+  // Teaching panel — sits BELOW .video-frame, hidden by default
+  const pausePanelHTML = hasPauses ? `
+      <div id="demo-pause-panel"
+           style="display:none; margin-top:14px; padding:18px 20px;
+                  border-radius:14px; background:#fff;
+                  box-shadow:0 4px 18px rgba(167,139,250,0.16);
+                  border:1px solid rgba(167,139,250,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:12px; padding-bottom:10px;
+                    border-bottom:1px solid rgba(167,139,250,0.15);">
+          <span id="demo-pause-counter"
+                style="font-family:'Montserrat',sans-serif; font-size:10px;
+                       font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+                       color:#7c5fc7;">⏸ Key moment 1</span>
+          <span style="font-family:'Montserrat',sans-serif; font-size:11px;
+                       font-weight:800; color:#1d9e75;">30s</span>
+        </div>
+        <div style="height:3px; background:rgba(167,139,250,0.15); border-radius:2px;
+                    margin-bottom:14px; overflow:hidden;">
+          <div id="demo-pause-timer-bar"
+               style="height:100%; width:100%;
+                      background:linear-gradient(90deg,#a78bfa,#67e8f9);"></div>
+        </div>
+        <div id="demo-pause-title"
+             style="font-family:'Montserrat',sans-serif; font-size:15px;
+                    font-weight:800; color:#1a1d2b; margin-bottom:6px;
+                    line-height:1.4;"></div>
+        <div id="demo-pause-text"
+             style="font-family:'Open Sans',sans-serif; font-size:13px;
+                    color:#4a4f5e; line-height:1.6; margin-bottom:14px;"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button onclick="demoResumeNow()"
+                  style="flex:1; min-width:140px; padding:12px 16px;
+                         background:#1a1d2b; color:#fff; border:none; border-radius:24px;
+                         font-family:'Montserrat',sans-serif; font-weight:800;
+                         font-size:12px; letter-spacing:0.8px; text-transform:uppercase;
+                         cursor:pointer;">
+            ✨ Got it — continue
+          </button>
+          <button onclick="demoStayPaused()"
+                  style="flex:1; min-width:140px; padding:12px 16px;
+                         background:#fff; color:#4a4f5e; border:1px solid rgba(0,0,0,0.12);
+                         border-radius:24px; font-family:'Montserrat',sans-serif;
+                         font-weight:700; font-size:11.5px; letter-spacing:0.6px;
+                         cursor:pointer;">
+            Need more time
+          </button>
+        </div>
+      </div>
+  ` : '';
+
+  // Stash pauses + videoId on data attributes so JS can pick them up
+  const dataPauses = hasPauses
+    ? `data-pauses='${JSON.stringify(step.pauses).replace(/'/g, '&#39;')}'`
+    : '';
+
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
-      <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        ${videoId ? `<iframe 
+
+      ${hasPauses ? `
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:14px; font-family:'Montserrat',sans-serif; font-size:11px;
+                    letter-spacing:1.2px; color:#7c5fc7; text-transform:uppercase; font-weight:800;">
+          <span>📹 ${step.title}</span>
+          <span>${step.pauses.length} key moments</span>
+        </div>
+      ` : ''}
+
+      <div class="video-frame demo-video-frame"
+           id="demo-video-container"
+           ${dataPauses}
+           data-video-id="${videoId || ''}"
+           style="background: #000; cursor: default; padding: 0; position: relative;">
+        ${videoId ? `<iframe
+          id="demo-cf-iframe"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
           style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen="true"></iframe>` 
+          allowfullscreen="true"></iframe>`
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
+        ${pauseImgOverlayHTML}
       </div>
-      
+      ${pausePanelHTML}
+
       <div class="video-meta">
-        <span class="video-meta-tip">Watch, then draw at your own pace</span>
+        <span class="video-meta-tip">${hasPauses ? `Video has ${step.pauses.length} key moments — pauses with reference images` : 'Watch, then draw at your own pace'}</span>
       </div>
-      
+
       ${step.quote ? `<div class="quote">${step.quote}<span class="quote-author">From the workshop</span></div>` : ''}
-      
+
       <div class="pro-tip">
         <div class="pro-tip-label">Pro tip</div>
         <div class="pro-tip-text">${step.tip}</div>
       </div>
-      
+
       <div class="btn-stack">
         <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Done — next step</button>
         <button class="btn btn-secondary" onclick="openChat()">Ask Artchi a question</button>
@@ -8654,13 +8760,197 @@ function renderDemo(step) {
     </div>`;
 }
 
+// ════════════════════════════════════════════════════════════════════
+// ROUND 50d/50f · Demo Video Pause System (Cloudflare Stream)
+// ────────────────────────────────────────────────────────────────────
+// Tracks the Stream player's currentTime via JS SDK. When time crosses
+// a defined pause point AND that pause hasn't been triggered yet, we
+// pause the video and show an annotated teaching image overlay.
+// 50f: Reuses Cylinder .pause-overlay/.pause-card classes. 30s timer.
+// ════════════════════════════════════════════════════════════════════
+const demoPauseState = {
+  player: null,
+  pauses: [],
+  triggered: new Set(),
+  currentPauseIdx: -1,
+  watcher: null,
+  autoResumeTimer: null,
+  videoId: null,
+  paused: false
+};
+
+function _ensureStreamSDKLoaded(cb) {
+  if (window.Stream) { cb(); return; }
+  if (window._streamSDKLoading) {
+    const wait = setInterval(() => {
+      if (window.Stream) { clearInterval(wait); cb(); }
+    }, 100);
+    return;
+  }
+  window._streamSDKLoading = true;
+  const s = document.createElement('script');
+  s.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  s.async = true;
+  s.onload = () => cb();
+  s.onerror = () => { window._streamSDKLoading = false; console.warn('[demoPauses] Stream SDK failed to load — pauses disabled'); };
+  document.head.appendChild(s);
+}
+
+function initDemoPauses() {
+  const container = document.getElementById('demo-video-container');
+  if (!container) return;
+
+  const pausesAttr = container.getAttribute('data-pauses');
+  if (!pausesAttr) return;
+
+  let pauses;
+  try { pauses = JSON.parse(pausesAttr); } catch (e) {
+    console.error('[demoPauses] failed to parse', e); return;
+  }
+  if (!pauses || !pauses.length) return;
+
+  // Clean up any prior state
+  if (demoPauseState.watcher) { clearInterval(demoPauseState.watcher); demoPauseState.watcher = null; }
+  if (demoPauseState.autoResumeTimer) { clearTimeout(demoPauseState.autoResumeTimer); demoPauseState.autoResumeTimer = null; }
+  demoPauseState.pauses = pauses;
+  demoPauseState.triggered = new Set();
+  demoPauseState.currentPauseIdx = -1;
+  demoPauseState.videoId = container.getAttribute('data-video-id') || null;
+
+  _ensureStreamSDKLoaded(() => {
+    const iframe = document.getElementById('demo-cf-iframe');
+    if (!iframe) return;
+
+    try {
+      const player = window.Stream(iframe);
+      demoPauseState.player = player;
+
+      player.addEventListener('loadedmetadata', () => {
+        console.log('[demoPauses] Stream player ready, pauses:', pauses.length);
+      });
+
+      // Poll currentTime every 250ms
+      demoPauseState.watcher = setInterval(() => {
+        if (!demoPauseState.player) return;
+        if (demoPauseState.paused) return;
+
+        let t;
+        try { t = demoPauseState.player.currentTime; } catch (e) { return; }
+        if (typeof t !== 'number' || isNaN(t)) return;
+
+        for (let i = 0; i < demoPauseState.pauses.length; i++) {
+          if (demoPauseState.triggered.has(i)) continue;
+          if (t >= demoPauseState.pauses[i].time) {
+            _showDemoPause(i);
+            break;
+          }
+        }
+      }, 250);
+    } catch (e) {
+      console.warn('[demoPauses] Stream player init failed', e);
+    }
+  });
+}
+
+function _showDemoPause(idx) {
+  const p = demoPauseState.pauses[idx];
+  if (!p) return;
+  demoPauseState.triggered.add(idx);
+  demoPauseState.currentPauseIdx = idx;
+
+  // Pause the video
+  try { demoPauseState.player.pause(); } catch (e) {}
+
+  // ROUND 50 FIX (BUG 3 per Faye): Exit fullscreen so the pause card is visible.
+  // This is required because the pause card sits in the document, NOT inside
+  // the iframe — when iframe is fullscreen, the card is hidden behind it.
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    }
+  } catch (e) {}
+
+  const total = demoPauseState.pauses.length;
+  const counterText = `⏸ Key moment ${idx + 1} of ${total}`;
+
+  // Image overlay — replaces video visually
+  document.getElementById('demo-pause-image').src = p.image || '';
+  document.getElementById('demo-pause-img-badge').textContent = counterText;
+  document.getElementById('demo-pause-img-overlay').style.display = 'block';
+
+  // Teaching panel below video
+  document.getElementById('demo-pause-counter').textContent = counterText;
+  document.getElementById('demo-pause-title').textContent = p.title || '';
+  document.getElementById('demo-pause-text').textContent = p.text || '';
+  document.getElementById('demo-pause-panel').style.display = 'block';
+  demoPauseState.paused = true;
+
+  // Scroll panel into view
+  setTimeout(() => {
+    const panel = document.getElementById('demo-pause-panel');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+
+  // Animate the 30s timer bar
+  const bar = document.getElementById('demo-pause-timer-bar');
+  if (bar) {
+    bar.style.transition = 'none';
+    bar.style.width = '100%';
+    setTimeout(() => {
+      bar.style.transition = 'width 30s linear';
+      bar.style.width = '0%';
+    }, 50);
+  }
+
+  // Auto-resume after 30 seconds
+  if (demoPauseState.autoResumeTimer) clearTimeout(demoPauseState.autoResumeTimer);
+  demoPauseState.autoResumeTimer = setTimeout(demoResumeNow, 30000);
+
+  try {
+    Analytics.track('demo_pause_triggered', {
+      pause_idx: idx,
+      pause_title: p.title,
+      pause_time: p.time,
+      video_id: demoPauseState.videoId
+    });
+  } catch (e) {}
+}
+
+function demoResumeNow() {
+  const imgOverlay = document.getElementById('demo-pause-img-overlay');
+  if (imgOverlay) imgOverlay.style.display = 'none';
+  const panel = document.getElementById('demo-pause-panel');
+  if (panel) panel.style.display = 'none';
+  demoPauseState.paused = false;
+  if (demoPauseState.autoResumeTimer) {
+    clearTimeout(demoPauseState.autoResumeTimer);
+    demoPauseState.autoResumeTimer = null;
+  }
+  try { demoPauseState.player && demoPauseState.player.play(); } catch (e) {}
+}
+
+function demoStayPaused() {
+  const imgOverlay = document.getElementById('demo-pause-img-overlay');
+  if (imgOverlay) imgOverlay.style.display = 'none';
+  const panel = document.getElementById('demo-pause-panel');
+  if (panel) panel.style.display = 'none';
+  demoPauseState.paused = false;
+  if (demoPauseState.autoResumeTimer) {
+    clearTimeout(demoPauseState.autoResumeTimer);
+    demoPauseState.autoResumeTimer = null;
+  }
+  // Don't resume — student wanted more time. They can hit play.
+}
+
 function renderFinalSubmit(step) {
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
-      <div class="video-frame upload-drop-zone" 
+
+      <div class="video-frame upload-drop-zone"
            style="aspect-ratio: 1; background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
            onclick="submitFinal()"
            role="button"
