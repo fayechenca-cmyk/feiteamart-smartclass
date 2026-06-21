@@ -1216,6 +1216,121 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   WIDGET — Goals Checklist (widget-4)
+   ═══════════════════════════════════════════════════════════════ */
+.opening-lfc-widget {
+  margin: 28px 0 0;
+  padding: 22px 24px;
+  background: rgba(200,169,110,0.06);
+  border: 1px solid rgba(200,169,110,0.2);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.6s ease, border-color 0.6s ease;
+}
+.opening-lfc-widget.complete {
+  background: linear-gradient(135deg, rgba(200,169,110,0.18) 0%, rgba(220,185,120,0.12) 100%);
+  border-color: rgba(200,169,110,0.5);
+}
+.widget-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.goal-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 4px;
+  cursor: pointer;
+  border-bottom: 0.5px solid rgba(200,169,110,0.12);
+  border-radius: 6px;
+  user-select: none;
+}
+.goal-row:last-of-type { border-bottom: none; }
+.goal-row:hover .goal-apple-svg { transform: scale(1.15); }
+.goal-apple-svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+.goal-apple-svg .apple-body {
+  fill: #c8c8c8;
+  transition: fill 0.3s ease;
+}
+.goal-apple-svg .apple-stem {
+  fill: #a8a8a8;
+  transition: fill 0.3s ease;
+}
+.goal-row.checked .goal-apple-svg .apple-body {
+  fill: #d94f38;
+  animation: appleBounceCk 0.45s cubic-bezier(.36,.07,.19,.97);
+}
+.goal-row.checked .goal-apple-svg .apple-stem { fill: #7a3520; }
+.goal-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.goal-row.checked .goal-text {
+  color: var(--ink-muted);
+  opacity: 0.55;
+  text-decoration: line-through;
+  text-decoration-color: rgba(200,169,110,0.45);
+}
+.goal-completion {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.5s ease 0.1s, max-height 0.5s ease;
+  text-align: center;
+}
+.goal-completion.show {
+  opacity: 1;
+  max-height: 80px;
+  padding-top: 18px;
+}
+.goal-completion-msg {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.goal-completion-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--gold);
+  margin-top: 4px;
+}
+.apple-rain-particle {
+  position: absolute;
+  top: -30px;
+  font-size: 20px;
+  pointer-events: none;
+  animation: appleRainFall 1.4s cubic-bezier(.23,1,.32,1) forwards;
+  z-index: 10;
+}
+@keyframes appleBounceCk {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.4) rotate(-8deg); }
+  55%  { transform: scale(0.9) rotate(4deg); }
+  75%  { transform: scale(1.15) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes appleRainFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(210px) rotate(var(--rain-rot, 20deg)); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    CLOSING LFC — Take It Home
    The last thing the student sees before claiming badge.
    Quiet, reflective, museum-exit feel.
@@ -5758,8 +5873,16 @@ const HONEST_WELCOME = {
       ]
     },
     {
-      type: 'heading',
-      label: 'OUR HOPE'
+      type: 'widget',
+      widgetId: 'goals-checklist',
+      items: [
+        "I observe before I draw",
+        "I don't try for 'perfect'",
+        "I take my time",
+        "I notice the dimples and bumps"
+      ],
+      completionMessage: "🍎 Cézanne would be proud.",
+      completionSubtext: "He painted apples his whole life."
     },
     {
       type: 'prose',
@@ -6961,6 +7084,9 @@ function renderOpeningLFC(step) {
         </div>
       `;
     }
+    if (section.type === 'widget') {
+      return renderWidget(section);
+    }
     return '';
   }).join('');
   
@@ -6982,6 +7108,38 @@ function renderOpeningLFC(step) {
   `;
 }
 
+function renderWidget(block) {
+  if (block.widgetId === 'goals-checklist') {
+    const saved = (() => {
+      try { return JSON.parse(localStorage.getItem('apple_goals_v1') || '[]'); }
+      catch(e) { return []; }
+    })();
+    const allChecked = block.items.length > 0 && block.items.every((_, i) => saved.includes(i));
+    const rows = block.items.map((item, i) => {
+      const checked = saved.includes(i);
+      return `
+        <div class="goal-row${checked ? ' checked' : ''}" id="goal-row-${i}" onclick="onGoalToggle(${i})">
+          <svg class="goal-apple-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path class="apple-stem" d="M12 4 C12 4 13.5 1.5 15.5 2 C15.5 2 14 4.5 12 4Z"/>
+            <path class="apple-body" d="M12 5.5 C9.5 5.5 6 7.5 5.5 11.5 C5 15.5 7 19.5 9.5 20.5 C10.5 21 11.5 20.5 12 20.5 C12.5 20.5 13.5 21 14.5 20.5 C17 19.5 19 15.5 18.5 11.5 C18 7.5 14.5 5.5 12 5.5Z"/>
+            <path class="apple-body" d="M12 5.5 C9.5 4 8 3 8 5 C9 5 10.5 5.2 12 5.5Z" opacity="0.6"/>
+          </svg>
+          <span class="goal-text">${escapeHtml(item)}</span>
+        </div>`;
+    }).join('');
+    return `
+      <div class="opening-lfc-widget${allChecked ? ' complete' : ''}" id="goals-checklist-card">
+        <div class="widget-label">MY INTENTIONS FOR TODAY</div>
+        ${rows}
+        <div class="goal-completion${allChecked ? ' show' : ''}" id="goal-completion">
+          <div class="goal-completion-msg">${escapeHtml(block.completionMessage)}</div>
+          <div class="goal-completion-sub">${escapeHtml(block.completionSubtext)}</div>
+        </div>
+      </div>`;
+  }
+  return '';
+}
+
 function onOpeningLFCComplete() {
   Analytics.track('opening_lfc_completed', { 
     lesson_id: LESSON.id,
@@ -7001,9 +7159,66 @@ function onOpeningLFCComplete() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// WIDGET 4 — Goals Checklist
+// ═══════════════════════════════════════════════════════════════════════════
+function onGoalToggle(idx) {
+  const section = HONEST_WELCOME.sections.find(s => s.widgetId === 'goals-checklist');
+  if (!section) return;
+  const saved = (() => {
+    try { return JSON.parse(localStorage.getItem('apple_goals_v1') || '[]'); }
+    catch(e) { return []; }
+  })();
+  const wasChecked = saved.includes(idx);
+  const updated = wasChecked ? saved.filter(i => i !== idx) : [...saved, idx];
+  try { localStorage.setItem('apple_goals_v1', JSON.stringify(updated)); } catch(e) {}
+
+  const row = document.getElementById('goal-row-' + idx);
+  if (row) row.classList.toggle('checked', !wasChecked);
+
+  const allChecked = section.items.every((_, i) => updated.includes(i));
+  const card = document.getElementById('goals-checklist-card');
+  if (allChecked) {
+    if (card) card.classList.add('complete');
+    _triggerAppleRain(card);
+    _showCompletionMessage();
+  } else {
+    if (card) card.classList.remove('complete');
+    _hideCompletionMessage();
+  }
+}
+
+function _triggerAppleRain(container) {
+  const target = container || document.getElementById('goals-checklist-card');
+  if (!target) return;
+  const count = 5 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const p = document.createElement('span');
+      p.className = 'apple-rain-particle';
+      p.textContent = '🍎';
+      p.style.left = (10 + Math.random() * 80) + '%';
+      p.style.setProperty('--rain-rot', (Math.random() * 60 - 30) + 'deg');
+      p.style.animationDuration = (1.1 + Math.random() * 0.5) + 's';
+      target.appendChild(p);
+      setTimeout(() => p.remove(), 1800);
+    }, i * 90);
+  }
+}
+
+function _showCompletionMessage() {
+  const el = document.getElementById('goal-completion');
+  if (el) el.classList.add('show');
+}
+
+function _hideCompletionMessage() {
+  const el = document.getElementById('goal-completion');
+  if (el) el.classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // CLOSING LFC — Take It Home
-// 
-// Renders the closing LFC moment. The student has just finished the 
+//
+// Renders the closing LFC moment. The student has just finished the
 // drawing work. Now we close with three layers:
 //   1. Affirm what they trained today
 //   2. Invite them to look at three rounded things in their life
