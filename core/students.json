@@ -1,0 +1,2527 @@
+[
+  {
+    "id": "REGINA-16",
+    "display_name": "Regina",
+    "teacher": "Feiyi Chen",
+    "plan": "premium",
+    "teacher_note": "Regina is a calm, highly disciplined learner with a strong technical foundation. She follows complex steps with clarity and finishes efficiently, showing accurate proportion, clean construction, and confident value control. Recent studies of skull, facial muscles, and feature perspectives have noticeably improved her portrait structure. The next stage is to channel her quiet strength into personal voice—using narrative, color mood, and design choices.",
+    "tags": [
+      "Mature",
+      "Thoughtful",
+      "Efficient",
+      "Technically-Skilled",
+      "Observant"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-08-15"
+      },
+      {
+        "badge_id": "landscape",
+        "date": "2025-09-01"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-09-10"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2025-09-20"
+      },
+      {
+        "badge_id": "portrait_master",
+        "date": "2025-10-05"
+      },
+      {
+        "badge_id": "costume_design",
+        "date": "2025-10-15"
+      },
+      {
+        "badge_id": "art_painting",
+        "date": "2025-11-01"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-10"
+      },
+      {
+        "badge_id": "art_history",
+        "date": "2025-11-15"
+      },
+      {
+        "badge_id": "scene_designer",
+        "date": "2025-11-20"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-08-30"
+      },
+      {
+        "badge_id": "interior_design",
+        "date": "2025-09-25"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "critical_thinker"
+        },
+        {
+          "id": "sustainable_creator"
+        },
+        {
+          "id": "storyteller"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Regina, Merry Christmas! It has been a joy watching your technical skills grow so strong this year—your discipline with portraits is truly professional. In 2026, I hope you relax, have fun, and let your unique personal colors shine even brighter in your art.",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "featured_art": [
+      {
+        "title": "Jewel Design: Charoite Ring",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/685de1fbdabfd86614b1cf78_51fa0ecd4bb5cbc6da67369e35741a63.JPG",
+        "caption": "Elegant ring concept inspired by her favorite color purple."
+      },
+      {
+        "title": "Very First Portrait",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6902539ea61b05b23399e28f_ac62c22dfccb6d5fce6f27412647f022.JPG",
+        "caption": "A successful first portrait study demonstrating strong structure. I look forward to her upcoming pieces!"
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Portrait Sketching and Personal Expression",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Tuesday 4:30 PM",
+      "zoom_link": "https://zoom.us/your-regina-link",
+      "lesson_focus": "Building portrait structure while developing personal voice through mood, narrative, and design choices."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "portfolio_builder",
+        "title": "Portfolio Building Path",
+        "description": "Curate strong works, organize process, and prepare polished presentation pieces.",
+        "link": "https://www.feiteamart.com/portfolio-building"
+      },
+      {
+        "badge_id": "critical_thinker",
+        "title": "Critical Thinking for Young Artists",
+        "description": "Learn how to analyze artworks, connect ideas, and express thoughtful opinions.",
+        "link": "https://www.feiteamart.com/critical-thinking"
+      },
+      {
+        "badge_id": "storyteller",
+        "title": "Visual Storytelling Studio",
+        "description": "Transform technical skill into personal narrative through illustration and concept development.",
+        "link": "https://www.feiteamart.com/visual-storytelling"
+      },
+      {
+        "badge_id": "sustainable_creator",
+        "title": "Sustainable Creator Lab",
+        "description": "Explore meaningful making through material awareness and reflective design thinking.",
+        "link": "https://www.feiteamart.com/sustainable-creator"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Jewel Design: Charoite Ring",
+        "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/685de1fbdabfd86614b1cf78_51fa0ecd4bb5cbc6da67369e35741a63.JPG",
+        "caption": "Elegant ring concept inspired by her favorite color purple.",
+        "category": "Design"
+      },
+      {
+        "title": "Very First Portrait",
+        "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6902539ea61b05b23399e28f_ac62c22dfccb6d5fce6f27412647f022.JPG",
+        "caption": "A successful first portrait study demonstrating strong structure.",
+        "category": "Portrait"
+      }
+    ],
+    "portal_access": {
+      "lfc": true,
+      "art_history": true,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": true
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "JOJO-10",
+    "display_name": "Jojo",
+    "teacher": "Feiyi Chen",
+    "plan": "standard",
+    "teacher_note": "Jojo is an exceptionally bold and imaginative young artist who is not afraid to try new ideas and explore unexpected directions. Her creativity stands out clearly among her peers—she brings a fearless energy into her work that is rare and valuable. At the same time, her current challenge is to slow down and stay with a piece long enough to develop it fully. By learning to observe details and focus on composition, she will be able to transform her powerful ideas into more complete and impactful artworks. The goal is not to reduce her creativity, but to help her carry it through to completion.",
+    "tags": [
+      "Bold",
+      "Experimental",
+      "Highly Creative",
+      "Expressive",
+      "Risk-Taking"
+    ],
+    "achievements": [
+      {
+        "badge_id": "art_painting",
+        "date": "2025-07-20"
+      },
+      {
+        "badge_id": "abstract_explorer",
+        "date": "2025-08-01"
+      },
+      {
+        "badge_id": "illustrator",
+        "date": "2025-08-15"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "composition_builder"
+        },
+        {
+          "id": "figure_sketch"
+        },
+        {
+          "id": "hand_crafter"
+        },
+        {
+          "id": "realism_expert"
+        }
+      ]
+    },
+    "featured_art": [
+      {
+        "title": "Abstract Painting Exploration",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-abstract.jpg",
+        "caption": "A bold abstract piece showing Jojo’s fearless approach to color and form."
+      },
+      {
+        "title": "Illustration Experiment",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-illustration.jpg",
+        "caption": "An expressive illustration filled with imaginative ideas and strong personal style."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Creative Focus and Composition Practice",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-jojo-link",
+      "lesson_focus": "Helping Jojo slow down, observe details, and build stronger composition while keeping her creative energy alive."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "composition_builder",
+        "title": "Composition and Focus Studio",
+        "description": "Learn how to organize ideas and stay focused to complete strong artworks.",
+        "link": "https://www.feiteamart.com/composition"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "title": "Figure Drawing Practice",
+        "description": "Strengthen observation and drawing structure for more confident expression.",
+        "link": "https://www.feiteamart.com/figure-sketch"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "title": "Creative Handcraft Lab",
+        "description": "Explore hands-on making while developing patience and attention to detail.",
+        "link": "https://www.feiteamart.com/handcraft"
+      },
+      {
+        "badge_id": "realism_expert",
+        "title": "Observation and Realism Training",
+        "description": "Train your eyes to see details and improve control in drawing.",
+        "link": "https://www.feiteamart.com/realism-expert"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Abstract Painting",
+        "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e117809f4b6abd0181f95e_IMG_7005.jpg",
+        "caption": "A spontaneous abstract painting driven by emotion and experimentation.",
+        "category": "Painting"
+      },
+      {
+        "title": "Collage",
+        "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e117a7e7d95f99e80ec905_Screenshot%202026-04-16%20at%2010.08.43%E2%80%AFAM.png",
+        "caption": "An imaginative illustration showing Jojo’s strong creative voice.",
+        "category": "Illustration"
+      }
+    ],
+    "portal_access": {
+      "lfc": true,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "SERENA-09",
+    "display_name": "Serena",
+    "teacher": "Feiyi Chen",
+    "plan": "advanced",
+    "teacher_note": "Serena is a thoughtful and taste-driven learner with a strong sense of aesthetic awareness. She naturally observes, compares, and evaluates visual elements with sensitivity, which makes her especially suited for critical thinking and aesthetic development. Unlike skill-focused learners, her strength lies in perception and judgment. The next stage is to deepen her ability to articulate visual decisions—through aesthetic studies, idea development, and curated thinking—so she can build her own direction with clarity and confidence.",
+    "tags": [
+      "Aesthetic Sense",
+      "Thoughtful",
+      "Independent",
+      "Observant",
+      "Critical Thinking"
+    ],
+    "achievements": [
+      {
+        "badge_id": "interior_design",
+        "date": "2025-09-25"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "ideal_inventor"
+        },
+        {
+          "id": "aesthetic_thinker"
+        },
+        {
+          "id": "illustrator"
+        },
+        {
+          "id": "digital_creator"
+        },
+        {
+          "id": "art_history"
+        }
+      ]
+    },
+    "featured_art": [
+      {
+        "title": "Interior Design Concept",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-interior.jpg",
+        "caption": "A refined design project reflecting Serena’s strong sense of space and aesthetic control."
+      },
+      {
+        "title": "Visual Idea Study",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-aesthetic.jpg",
+        "caption": "An exploration of visual ideas showing her growing ability to observe and evaluate."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Aesthetic Thinking and Visual Judgment",
+      "subtitle": "Live Session with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-serena-link",
+      "lesson_focus": "Developing aesthetic awareness, critical thinking, and the ability to understand and guide visual direction."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "aesthetic_thinker",
+        "title": "Aesthetic Thinking Studio",
+        "description": "Train your eye to understand beauty, balance, and visual decisions across different artworks.",
+        "link": "https://www.feiteamart.com/aesthetic-thinking"
+      },
+      {
+        "badge_id": "ideal_inventor",
+        "title": "Idea Development Lab",
+        "description": "Explore how ideas are formed, refined, and translated into visual concepts.",
+        "link": "https://www.feiteamart.com/idea-lab"
+      },
+      {
+        "badge_id": "illustrator",
+        "title": "Common Illustration Practice",
+        "description": "Support visual thinking through simple and effective illustration techniques.",
+        "link": "https://www.feiteamart.com/illustration"
+      },
+      {
+        "badge_id": "digital_creator",
+        "title": "Digital Creation Studio",
+        "description": "Explore digital tools as a medium for visual expression and experimentation.",
+        "link": "https://www.feiteamart.com/digital-creator"
+      },
+      {
+        "badge_id": "art_history",
+        "title": "Art History and Context",
+        "description": "Understand artistic movements and visual culture to strengthen aesthetic judgment.",
+        "link": "https://www.feiteamart.com/100-classes-catalog"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Interior Design Project",
+        "image": "https://cdn.prod.website-files.com/placeholder-interior.jpg",
+        "caption": "A completed design project demonstrating her aesthetic sensitivity and spatial thinking.",
+        "category": "Design"
+      }
+    ],
+    "portal_access": {
+      "lfc": true,
+      "art_history": true,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": true
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "A7Q9-FOX",
+    "display_name": "Amy",
+    "teacher": "Feiyi Chen",
+    "plan": "standard",
+    "teacher_note": "Amy is a highly imaginative and expressive young artist with strong creative instincts. She is now able to independently draw figures at home and express her own ideas visually, which shows growing confidence and originality. She has a natural gift for turning stories and feelings into images, and she has also explored animation in a playful way. The next stage is to support her figure drawing, strengthen observation, and gradually guide her ideas into clearer structure and stronger visual communication.",
+    "tags": [
+      "Creative",
+      "Imaginative",
+      "Expressive",
+      "Independent",
+      "Story-Driven"
+    ],
+    "achievements": [
+      {
+        "badge_id": "material_explore",
+        "date": "2025-07-01"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-07-10"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-08-01"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-08-20"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "figure_sketch"
+        },
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "animator_creator"
+        },
+        {
+          "id": "community_builder"
+        }
+      ]
+    },
+    "featured_art": [
+      {
+        "title": "Character Story Drawing",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-character.jpg",
+        "caption": "A character-based artwork showing Amy’s growing ability to tell stories through drawing."
+      },
+      {
+        "title": "Creative Handcraft Project",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-craft.jpg",
+        "caption": "A strong example of her hands-on creativity and playful material exploration."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Figure Drawing and Creative Story Expression",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-amy-link",
+      "lesson_focus": "Developing figure drawing, independent expression, and visual storytelling through imagination and observation."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "figure_sketch",
+        "title": "Figure Sketch for Young Creators",
+        "description": "Practice drawing people with more confidence, structure, and movement.",
+        "link": "https://www.feiteamart.com/figure-sketch"
+      },
+      {
+        "badge_id": "realism_expert",
+        "title": "Observation and Realism Practice",
+        "description": "Strengthen seeing skills and build confidence in drawing what you observe.",
+        "link": "https://www.feiteamart.com/realism-expert"
+      },
+      {
+        "badge_id": "animator_creator",
+        "title": "Animation Imagination Studio",
+        "description": "Turn characters and stories into simple animation ideas and visual movement.",
+        "link": "https://www.feiteamart.com/animation"
+      },
+      {
+        "badge_id": "community_builder",
+        "title": "Communication Through Art",
+        "description": "Learn how to share ideas, feelings, and stories more clearly through images.",
+        "link": "https://www.feiteamart.com/communication-through-art"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Character Story Drawing",
+        "image": "https://cdn.prod.website-files.com/placeholder-character.jpg",
+        "caption": "An imaginative character drawing that shows independent thinking and storytelling.",
+        "category": "Character Design"
+      },
+      {
+        "title": "Creative Handcraft Project",
+        "image": "https://cdn.prod.website-files.com/placeholder-craft.jpg",
+        "caption": "A handmade artwork showing her creative exploration with materials.",
+        "category": "Craft"
+      }
+    ],
+    "portal_access": {
+      "lfc": true,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "BELLA-16",
+    "display_name": "Bella",
+    "teachers": [
+      "Feiyi Chen",
+      "Dawn Wang"
+    ],
+    "plan": "standard",
+    "teacher_note": "Bella has made a very meaningful improvement since she started. At the beginning, it was difficult for her to complete a full artwork, but now she is able to sit down and finish a piece with guidance. This shows a growing sense of patience and commitment. Bella is a slow starter, and her progress depends on building confidence step by step. At this stage, the most important goal is not complexity, but consistency—finishing small works such as a simple character head, a small flower, or even a tiny drawing. Each completed piece will help her gain confidence and move forward steadily.",
+    "tags": [
+      "Patient Growth",
+      "Sensitive",
+      "Developing Confidence",
+      "Steady",
+      "Slow Starter"
+    ],
+    "achievements": [],
+    "badges": {
+      "should_target": [
+        {
+          "id": "observation_detective"
+        },
+        {
+          "id": "character_designer"
+        },
+        {
+          "id": "idea_inventor"
+        },
+        {
+          "id": "hand_crafter"
+        }
+      ]
+    },
+    "featured_art": [
+      {
+        "title": "Animated Girl",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e11c4485e3d3ab9b2f2563_Screenshot%202026-04-16%20at%2010.28.23%E2%80%AFAM.png",
+        "caption": "A completed drawing figure created step-by-step, showing Bella’s growing ability to stay focused."
+      },
+      {
+        "title": "New Year Nian Shou",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e11f67b8152737a64b15c0_Screenshot%202026-04-16%20at%2010.41.54%E2%80%AFAM.png",
+        "caption": "Simple practice work that helps build confidence through completion."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Step-by-Step Drawing Confidence Training",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-bella-link",
+      "lesson_focus": "Building confidence through small, complete drawings and guided observation practice."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "observation_detective",
+        "title": "Observation Drawing Basics",
+        "description": "Learn to carefully observe and draw simple objects step by step.",
+        "link": "https://www.feiteamart.com/observation"
+      },
+      {
+        "badge_id": "character_designer",
+        "title": "Character Drawing Starter",
+        "description": "Practice drawing simple characters and facial expressions with guidance.",
+        "link": "https://www.feiteamart.com/character-design"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "title": "Idea Sketching Practice",
+        "description": "Encourage simple ideas and turn them into small, complete drawings.",
+        "link": "https://www.feiteamart.com/idea-lab"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "title": "Material Board and Handcraft",
+        "description": "Explore materials and build patience through hands-on making.",
+        "link": "https://www.feiteamart.com/handcraft"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Simple Character Study",
+        "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e11c4485e3d3ab9b2f2563_Screenshot%202026-04-16%20at%2010.28.23%E2%80%AFAM.png",
+        "caption": "A small completed drawing showing focus and progress.",
+        "category": "Practice"
+      }
+    ],
+    "portal_access": {
+      "lfc": false,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "Katy-06",
+    "display_name": "Katy",
+    "teachers": [
+      {
+        "name": "Feiyi Chen",
+        "role": "Lead Instructor"
+      }
+    ],
+    "plan": "standard",
+    "teacher_note": "KT is a highly imaginative and adventurous young creator who is very willing to try bold and unusual ideas. She already shows strong initiative in creative thinking and brings her own voice into the work. At this stage, the most important next step is to guide her toward more complete visual outcomes by helping her explore more materials, observe more carefully, and finish one to two stronger illustration pieces. She does not lack ideas—she needs structure, guidance, and repeated practice to bring those ideas into fuller form.",
+    "tags": [
+      "Creative",
+      "Bold",
+      "Experimental",
+      "Idea-Driven",
+      "Open to Trying"
+    ],
+    "achievements": [],
+    "badges": {
+      "should_target": [
+        {
+          "id": "material_explore"
+        },
+        {
+          "id": "observation_detective"
+        },
+        {
+          "id": "hand_crafter"
+        },
+        {
+          "id": "digital_creator"
+        },
+        {
+          "id": "calm_illustration"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Continue Material Explore through trying more tools and surfaces.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Strengthen Observation Detective by looking more carefully at shapes, details, and reference images.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Build Hand Crafter confidence through creative making and material-based projects.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Develop Calm Illustration through one to two more complete illustration works.",
+        "due": "Current Focus"
+      },
+      {
+        "text": "Study one or two strong master or reference works through guided imitation practice.",
+        "due": "Next Step"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2026-04-15",
+        "strength": "KT has a strong willingness to experiment and is not afraid to try new ideas. She already shows a lively imagination and a personal way of thinking.",
+        "next": "Guide her to slow down, explore more possibilities through materials, and complete fuller illustration pieces with more structure."
+      },
+      {
+        "date": "2026-04-15",
+        "strength": "She naturally carries the spirit of Idea Inventor, even if this has not yet been marked as completed.",
+        "next": "Help her turn ideas into resolved visual outcomes instead of stopping at the exciting beginning stage."
+      }
+    ],
+    "notes": [
+      {
+        "date": "2026-04-15",
+        "text": "KT is currently in an ongoing stage with Material Explore, Observation Detective, Hand Crafter, and early Digital Creator practice."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Main focus for the coming stage: Calm Illustration. The goal is to complete one to two fuller illustration works with more patience and observation."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Recommended next learning action: study one or two strong artworks or master examples through guided imitation."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Creative Experiment Study",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-kt-1.jpg",
+        "caption": "An experimental work showing KT’s bold and imaginative approach."
+      },
+      {
+        "title": "Illustration Practice",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-kt-2.jpg",
+        "caption": "A developing illustration piece that reflects her growing storytelling potential."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Creative Exploration and Illustration Building",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-kt-link",
+      "lesson_focus": "Exploring materials, observing more carefully, and completing stronger illustration outcomes."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "calm_illustration",
+        "title": "Calm Illustration Practice",
+        "description": "Build one to two more complete illustration works with stronger observation and structure.",
+        "link": "https://www.feiteamart.com/calm-illustration"
+      },
+      {
+        "badge_id": "material_explore",
+        "title": "Material Exploration Studio",
+        "description": "Try more art materials and learn how different tools create different visual results.",
+        "link": "https://www.feiteamart.com/material-explore"
+      },
+      {
+        "badge_id": "observation_detective",
+        "title": "Observation Practice for Young Artists",
+        "description": "Train the eye to notice shapes, details, and visual relationships more clearly.",
+        "link": "https://www.feiteamart.com/observation-detective"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "title": "Creative Handcraft Lab",
+        "description": "Develop patience and playful making through hands-on creative projects.",
+        "link": "https://www.feiteamart.com/handcrafter"
+      },
+      {
+        "badge_id": "digital_creator",
+        "title": "Digital Creator Starter",
+        "description": "Continue exploring digital making through guided visual experiments.",
+        "link": "https://www.feiteamart.com/digital-creator"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Creative Experiment",
+        "image": "https://cdn.prod.website-files.com/placeholder-kt-1.jpg",
+        "caption": "A bold exploratory work showing imagination and willingness to experiment.",
+        "category": "Creative Practice"
+      },
+      {
+        "title": "Illustration Development",
+        "image": "https://cdn.prod.website-files.com/placeholder-kt-2.jpg",
+        "caption": "An illustration study in progress with growing clarity and potential.",
+        "category": "Illustration"
+      }
+    ],
+    "portal_access": {
+      "lfc": false,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "AMY-11",
+    "display_name": "Amy G",
+    "teacher_note": "Amy listens well to arrangements, brings her own ideas, and expresses her needs clearly. She is a joy to work with! My goal is to encourage her to propose more of her own project themes and build simple stories behind her characters so she can grow into a student-led creator.",
+    "tags": [
+      "Easy-Going",
+      "Communicative",
+      "Character-Interest",
+      "Cooperative"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-10-01"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-11-15"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2025-11-28"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "idea_inventor"
+        },
+        {
+          "id": "storyteller"
+        },
+        {
+          "id": "student_led"
+        },
+        {
+          "id": "costume_design"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Propose your own project theme.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Build a simple story behind your character.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-28",
+        "strength": "Expresses needs clearly and listens well to guidance.",
+        "next": "Take the lead on small parts of the process like color choices."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Handcraft Fun Night",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6929eca8709cc1f9afc34495_Screenshot%202025-11-28%20at%2010.40.36%E2%80%AFAM.png",
+        "caption": "Collage."
+      }
+    ]
+  },
+  {
+    "id": "ELSA-09",
+    "display_name": "Elsa",
+    "teachers": [
+      {
+        "name": "Feiyi Chen",
+        "role": "Lead Instructor"
+      }
+    ],
+    "plan": "standard",
+    "teacher_note": "Elsa is a steady and thoughtful learner with strong patience and a very cooperative attitude. She is able to receive guidance well while still keeping her own ideas alive, which makes her a very promising student for more developed and complex work. Over time, she has shown that she can stay with a process, respond carefully to instruction, and gradually bring more of her own imagination into the artwork. The next stage is to continue building her confidence through more complete landscape, illustration, and painting-based works, while helping her observe more closely and develop richer visual decisions.",
+    "tags": [
+      "Patient",
+      "Steady",
+      "Cooperative",
+      "Thoughtful",
+      "Imaginative"
+    ],
+    "achievements": [],
+    "badges": {
+      "should_target": [
+        {
+          "id": "idea_inventor"
+        },
+        {
+          "id": "landscape"
+        },
+        {
+          "id": "observation_detective"
+        },
+        {
+          "id": "calm_illustration"
+        },
+        {
+          "id": "art_painting"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Continue developing Idea Inventor through personal visual ideas and creative decisions.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Bring Landscape work closer to completion through more careful observation and finished detail.",
+        "due": "Almost Finished"
+      },
+      {
+        "text": "Strengthen Observation Detective through closer looking and more specific visual study.",
+        "due": "Next Focus"
+      },
+      {
+        "text": "Continue Calm Illustration with richer imagination and more complete visual storytelling.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Develop Art Painting through more complex and complete painting-based work.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2026-04-15",
+        "strength": "Elsa is very patient and cooperative. She is able to receive direction well while still holding onto her own ideas.",
+        "next": "Support her in making more complete and complex works so her imagination can grow into stronger finished pieces."
+      },
+      {
+        "date": "2026-04-15",
+        "strength": "She can sit down, stay with the process, and gradually build work with care, which is a very valuable quality.",
+        "next": "Guide her toward closer observation and more confident visual decisions, especially in landscape and illustration."
+      }
+    ],
+    "notes": [
+      {
+        "date": "2026-04-15",
+        "text": "Idea Inventor is currently ongoing and continues to reflect Elsa’s growing imagination."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Landscape work is close to completion but still in progress, with more detail and finishing needed."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Observation Detective is recommended as the next step to support stronger looking and more confident detail work."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Calm Illustration remains ongoing, and Art Painting is also developing as an important direction."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Landscape in Progress",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e117a73d26ca6f54a04c2d_Screenshot%202026-04-16%20at%2010.08.31%E2%80%AFAM.png",
+        "caption": "A nearly finished landscape work showing patience and growing attention to visual structure."
+      },
+      {
+        "title": "Acylic Flower Pot",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e121528ab45180e65ac57d_Screenshot%202026-04-16%20at%2010.50.07%E2%80%AFAM.png",
+        "caption": "An illustration piece that reflects Elsa’s imagination and her willingness to build a fuller composition with acylic paints."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Landscape, Illustration, and Observation Practice",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-elsa-link",
+      "lesson_focus": "Building more complete works through patience, observation, and thoughtful creative decisions."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "observation_detective",
+        "title": "Observation Detective Practice",
+        "description": "Train the eye to see details more clearly and use observation to support stronger finished work.",
+        "link": "https://www.feiteamart.com/observation-detective"
+      },
+      {
+        "badge_id": "landscape",
+        "title": "Landscape Development Studio",
+        "description": "Continue shaping landscape work into more complete and visually confident pieces.",
+        "link": "https://www.feiteamart.com/landscape"
+      },
+      {
+        "badge_id": "calm_illustration",
+        "title": "Calm Illustration Practice",
+        "description": "Use imagination and patience to build stronger illustration work step by step.",
+        "link": "https://www.feiteamart.com/calm-illustration"
+      },
+      {
+        "badge_id": "art_painting",
+        "title": "Art Painting Studio",
+        "description": "Develop painting ability through more complete and layered visual work.",
+        "link": "https://www.feiteamart.com/art-painting"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Landscape in Progress",
+        "image": "https://cdn.prod.website-files.com/placeholder-elsa-1.jpg",
+        "caption": "A landscape piece developing toward a more complete final result.",
+        "category": "Landscape"
+      },
+      {
+        "title": "Illustration Development",
+        "image": "https://cdn.prod.website-files.com/placeholder-elsa-2.jpg",
+        "caption": "An imaginative illustration work showing patience and openness to guidance.",
+        "category": "Illustration"
+      }
+    ],
+    "portal_access": {
+      "lfc": false,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "REBECCA-20",
+    "display_name": "Rebecca",
+    "teacher_note": "Rebecca learns fast and executes with precision. Her drawing level is among the top in the group. Perfectionism can sometimes slow down her choices, so we will focus on time-boxing decisions to balance quality with speed. She is ready to pair portrait mastery with original concepts and a small student-led project.",
+    "tags": [
+      "Advanced-Drawing",
+      "Precision",
+      "High-Potential",
+      "Perfectionist"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2024-05-10"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2024-06-15"
+      },
+      {
+        "badge_id": "landscape",
+        "date": "2024-08-20"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2024-10-05"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2024-11-10"
+      },
+      {
+        "badge_id": "realism_expert",
+        "date": "2025-01-15"
+      },
+      {
+        "badge_id": "calm_illustration",
+        "date": "2025-03-10"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2025-05-20"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-08-05"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-10-15"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portrait_master"
+        },
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "critical_thinker"
+        },
+        {
+          "id": "student_led"
+        },
+        {
+          "id": "animation_beginner"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Complete two timed portrait studies (45 min each).",
+        "due": "2025-12-15"
+      },
+      {
+        "text": "Create one original concept: make A/B choice within 10 mins.",
+        "due": "2025-12-20"
+      },
+      {
+        "text": "Select 6–10 portfolio-ready works with process notes.",
+        "due": "2026-01-10"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-28",
+        "strength": "Top-tier drawing skills with high precision.",
+        "next": "Practice faster decision-making (ship v1, then polish)."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Collage Landscape",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/690254dff7fe8ab0da931abb_Screenshot%202025-10-29%20at%2010.49.40%E2%80%AFAM.png",
+        "caption": "Collage + Watercolour."
+      }
+    ]
+  },
+  {
+    "id": "MELODY-21",
+    "display_name": "Melody",
+    "teacher_note": "Melody is naturally expressive and creative. Even though she didn’t focus much on technical training, she developed strong storytelling and idea-based creativity during our classes. She earned several important badges early on, showing her potential in narrative thinking and illustration. With her warm personality and imaginative mind, she has everything she needs to grow into a confident young artist.",
+    "tags": [
+      "Warm",
+      "Sociable",
+      "Storyteller",
+      "Expressive"
+    ],
+    "achievements": [
+      {
+        "badge_id": "idea_inventor",
+        "date": "2024-02-10"
+      },
+      {
+        "badge_id": "student_led",
+        "date": "2024-03-15"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2024-04-20"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2024-05-05"
+      },
+      {
+        "badge_id": "costume_design",
+        "date": "2024-06-01"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "character_designer"
+        },
+        {
+          "id": "figure_sketch"
+        },
+        {
+          "id": "landscape"
+        },
+        {
+          "id": "still_life"
+        },
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "digital_creator"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Build confidence with human proportions (Figure Sketch).",
+        "due": "Recommended"
+      },
+      {
+        "text": "Learn digital tools to match storytelling ability.",
+        "due": "Future"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2024-06-15",
+        "strength": "Natural ability to turn life experiences into artistic ideas.",
+        "next": "Strengthen foundation and accuracy through Still Life and Realism."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "A beautiful European Chair",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/685df2402427c13e600d9279_Screen%20Shot%202024-01-13%20at%202.59.10%20PM.png",
+        "caption": "Acrylic Markers."
+      }
+    ]
+  },
+  {
+    "id": "WALLACE-49X8",
+    "display_name": "Wallace",
+    "teachers": [
+      {
+        "name": "Feiyi Chen",
+        "role": "Lead Instructor"
+      }
+    ],
+    "plan": "standard",
+    "teacher_note": "Wallace is a student with clear potential and strong underlying ability, especially when he is interested in the subject. His current challenge is not talent, but patience and sustained focus. At this stage, he may find it hard to sit with one task for a long time, but this does not limit his future. With the right direction and engaging projects, he can grow significantly. His ongoing work in sketching, observation, realism, and digital creation shows that he is building important foundations. In the long term, digital art, animation, and game-related visual development may become meaningful directions for him, helping him connect art with something he genuinely enjoys.",
+    "tags": [
+      "Potential",
+      "Energetic",
+      "Developing Focus",
+      "Observant",
+      "Digitally-Oriented"
+    ],
+    "achievements": [],
+    "badges": {
+      "should_target": [
+        {
+          "id": "basic_sketch"
+        },
+        {
+          "id": "still_life"
+        },
+        {
+          "id": "material_explore"
+        },
+        {
+          "id": "observation_detective"
+        },
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "figure_sketch"
+        },
+        {
+          "id": "digital_creator"
+        },
+        {
+          "id": "animation_beginner"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Continue Basic Sketch practice to strengthen control, structure, and drawing confidence.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Develop Still Life through more patient looking and careful completion.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Continue Material Explore to expand visual possibilities through different tools and surfaces.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Strengthen Observation Detective through closer looking and more careful visual study.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Build Realism Expert gradually through patient observation and repeated practice.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Continue Figure Sketch to support body understanding and more confident character-related drawing.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Develop Digital Creator as a future direction connected to his interests.",
+        "due": "Recommended"
+      },
+      {
+        "text": "Explore Animator Creator as a possible long-term path related to games and digital storytelling.",
+        "due": "Recommended"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2026-04-15",
+        "strength": "Wallace has real ability and can learn well when the subject connects to his interest. He has strong potential across observation, drawing, and digital directions.",
+        "next": "Support him in staying with tasks longer and completing work more patiently, without reducing his energy."
+      },
+      {
+        "date": "2026-04-15",
+        "strength": "He responds well to paths that feel meaningful and exciting to him, especially digital and game-related directions.",
+        "next": "Use digital creation and animation as motivating bridges so he can see how art can connect with the things he already enjoys."
+      }
+    ],
+    "notes": [
+      {
+        "date": "2026-04-15",
+        "text": "Wallace is currently ongoing in Still Life, Basic Sketch, Material Explore, Observation Detective, Realism Expert, and Figure Sketch."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Digital Creator is a recommended direction, and Animator Creator is also a strong future possibility."
+      },
+      {
+        "date": "2026-04-15",
+        "text": "Because he enjoys games, digital art and animation may help him find a more personal reason to continue developing artistic skills."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "New Year Nian Shou",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e120e6f0b983e63312d4c5_Screenshot%202026-04-16%20at%2010.48.18%E2%80%AFAM.png",
+        "caption": "A practice piece showing Wallace’s ability to observe and build skill when guided with focus."
+      },
+      {
+        "title": "Digital Exploration",
+        "thumb": "https://cdn.prod.website-files.com/placeholder-wallace-2.jpg",
+        "caption": "An early digital work pointing toward future potential in game-related and animation-based art."
+      }
+    ],
+    "live_class": {
+      "enabled": true,
+      "title": "Focus Building Through Drawing and Digital Practice",
+      "subtitle": "Live Class with Feiyi",
+      "time": "Flexible Schedule",
+      "zoom_link": "https://zoom.us/your-wallace-link",
+      "lesson_focus": "Building focus and patience through drawing foundations while opening digital and animation pathways."
+    },
+    "recommended_courses": [
+      {
+        "badge_id": "basic_sketch",
+        "title": "Basic Sketch Practice",
+        "description": "Strengthen foundational drawing through simple forms, structure, and confident lines.",
+        "link": "https://www.feiteamart.com/basic-sketch"
+      },
+      {
+        "badge_id": "observation_detective",
+        "title": "Observation Detective",
+        "description": "Train the eye to notice more clearly and improve patience through careful visual study.",
+        "link": "https://www.feiteamart.com/observation-detective"
+      },
+      {
+        "badge_id": "digital_creator",
+        "title": "Digital Creator Studio",
+        "description": "Explore digital art as a creative direction that connects strongly with his interests.",
+        "link": "https://www.feiteamart.com/digital-creator"
+      },
+      {
+        "badge_id": "animation_beginner",
+        "title": "Animator Creator Path",
+        "description": "Start exploring motion, game-related creativity, and animation thinking through visual storytelling.",
+        "link": "https://www.feiteamart.com/animation"
+      }
+    ],
+    "portfolio": [
+      {
+        "title": "Observation Practice Study",
+        "image": "https://cdn.prod.website-files.com/placeholder-wallace-1.jpg",
+        "caption": "A drawing practice showing real potential when focus is sustained.",
+        "category": "Practice"
+      },
+      {
+        "title": "Digital Exploration",
+        "image": "https://cdn.prod.website-files.com/placeholder-wallace-2.jpg",
+        "caption": "An early digital direction that may connect well with Wallace’s interest in games.",
+        "category": "Digital"
+      }
+    ],
+    "portal_access": {
+      "lfc": false,
+      "art_history": false,
+      "self_study": true,
+      "live_class": true,
+      "portfolio": true,
+      "ai_curator": false
+    },
+    "dashboard_sections": {
+      "show_live_class": true,
+      "show_report": true,
+      "show_recommended_courses": true,
+      "show_portfolio": true,
+      "show_self_study": true
+    }
+  },
+  {
+    "id": "CHLOE-01",
+    "display_name": "Chloe",
+    "teacher_note": "Chloe is one of the youngest students but shows a very strong creative drive. At home, she can stay focused on art-making for hours. In class, she is quiet but highly engaged, always adding new ideas. She has earned the Idea Inventor badge for her ability to generate constant, original ideas. I am excited to guide this creativity into structured projects.",
+    "tags": [
+      "Youngest",
+      "Focused",
+      "Creative-Drive",
+      "Self-Directed"
+    ],
+    "achievements": [
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-11-28"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "character_designer"
+        },
+        {
+          "id": "material_explore"
+        },
+        {
+          "id": "focus_sprinter"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Character Design: Build characters with personality and story.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Focus Sprint: Strengthen hand control through regular practice.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-28",
+        "strength": "Exceptional concentration for her age (worked 2 hours continuously).",
+        "next": "Guide natural creativity into more structured projects."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "A Winter Sweater",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6929ec898833adf424f2ca5a_d846c80ab802f04244365483b552fbb5.JPG",
+        "caption": "Acrylic Marker."
+      }
+    ]
+  },
+  {
+    "id": "CAMERON-11",
+    "display_name": "Cameron",
+    "teacher_note": "Cameron is a quiet, focused learner who benefits from clear structure and visible outcomes. While not overly expressive, he is dependable and calm. I recommend continuing with foundation work while gently encouraging his creative voice.",
+    "tags": [
+      "Patient",
+      "Calm-Focus",
+      "Quality-Seeker",
+      "Foundation-Complete"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-08-10"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-08-17"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2025-08-24"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-09-01"
+      },
+      {
+        "badge_id": "calm_illustration",
+        "date": "2025-09-10"
+      },
+      {
+        "badge_id": "little_architect",
+        "date": "2025-09-15"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-09-30"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-10-05"
+      },
+      {
+        "badge_id": "art_painting",
+        "date": "2025-10-12"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "portrait_master"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "digital_creator"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Complete a realistic drawing with accurate proportion.",
+        "due": "2025-11-30"
+      },
+      {
+        "text": "Digital Art: Explore design tools and layers.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-10-23",
+        "strength": "Produces clean and high-quality outcomes with patience.",
+        "next": "Try to express more personal preference or creative direction."
+      }
+    ],
+    "christmas_gift": {
+      "message": "Dear Cameron, Thank you for creating with me this year. I love how you notice small details and turn them into calm, thoughtful drawings. You are building a strong foundation step by step. I hope you keep exploring new ideas and enjoying art in 2026.",
+      "link": "https://www.amazon.com/gc/redeem",
+      "code_display": "CODE: CAMERON-XMAS-25"
+    },
+    "featured_art": [
+      {
+        "title": "Paper House",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/682e2a36bb79aa9af43daa19_Screen%20Shot%202023-10-17%20at%208.16.23%20PM.png",
+        "caption": "He is so patient to finish this Cardboard House. It is one of my favourite handmade Houses."
+      }
+    ]
+  },
+  {
+    "id": "JUDY-07",
+    "display_name": "Judy",
+    "teacher_note": "Judy shows solid creativity and independent thinking. Though new, she learns fast and has strong artistic genes (similar to her sister Rebecca). She is strong-minded and works confidently. My goal is to help her refine her attention to detail and finishing quality while keeping her independent creative spirit alive.",
+    "tags": [
+      "Independent",
+      "Fast-Learner",
+      "Strong-Minded",
+      "High-Potential"
+    ],
+    "achievements": [
+      {
+        "badge_id": "material_explore",
+        "date": "2025-10-10"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-10-25"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-11-15"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "storyteller"
+        },
+        {
+          "id": "character_designer"
+        },
+        {
+          "id": "digital_creator"
+        },
+        {
+          "id": "realism_expert"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Storytelling: Organize narrative details for clarity (Level 2).",
+        "due": "Next Month"
+      },
+      {
+        "text": "Detail Focus: Complete one fine-art style piece with high finish quality.",
+        "due": "2025-12-20"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-28",
+        "strength": "Quick learner with confident, original ideas.",
+        "next": "Focus on attention to detail and patience in finishing work."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Creative Creature",
+        "thumb": "https://placehold.co/400x400?text=Creature+Concept",
+        "caption": "Fantasy-themed drawing showing early creativity."
+      }
+    ]
+  },
+  {
+    "id": "XINYUE-12",
+    "display_name": "Xinyue",
+    "teacher_note": "Xinyue is one of the most inventive and student-led learners in the studio. She constantly brings fresh ideas and playful imagination to class. The focus now is to guide her to slow down, observe deeply, and strengthen technical realism while protecting her creativity and freedom.",
+    "tags": [
+      "Idea-Inventor",
+      "Digital-Creator",
+      "Student-Led",
+      "Creative-Lead"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-11-27"
+      },
+      {
+        "badge_id": "costume_design",
+        "date": "2025-11-27"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "portrait_master"
+        },
+        {
+          "id": "art_history"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Xinyue, Merry Christmas! 🎄 You are such a spark of energy in our studio. I love how you always lead with fresh ideas and playful imagination. In 2026, I hope you keep that creative fire burning while finding the patience to observe the world deeply and master new details!",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Develop patience and precision through one realism or portrait study.",
+        "due": "2025-12-20"
+      },
+      {
+        "text": "Explore an art historical theme and create an artwork inspired by a master’s style.",
+        "due": "2026-01-15"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Exceptionally imaginative and self-driven; often the first to propose new ideas.",
+        "next": "Encourage deeper focus and slower working habits to refine technical quality."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Digital Illustration",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69e121bea05313602049373e_IMG_5879.PNG",
+        "caption": "A vivid digital illustration combining fantasy elements and strong narrative charm."
+      }
+    ]
+  },
+  {
+    "id": "KAILYNN-15",
+    "display_name": "Kailynn",
+    "teacher_note": "Kailynn is a highly gifted and self-motivated student. Her ability to learn independently sets her apart—I still remember her personal animation project with over 120 layers! She has a natural sense of composition and accuracy that is rare for her age. I believe she has the potential to succeed in any field of visual art, especially animation.",
+    "tags": [
+      "Gifted",
+      "Animator",
+      "Independent",
+      "Self-Motivated"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2024-05-10"
+      },
+      {
+        "badge_id": "landscape",
+        "date": "2024-06-20"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2024-08-15"
+      },
+      {
+        "badge_id": "animation_beginner",
+        "date": "2024-10-01"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2024-11-10"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-01-20"
+      },
+      {
+        "badge_id": "student_led",
+        "date": "2025-03-15"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "still_life"
+        },
+        {
+          "id": "realism_expert"
+        },
+        {
+          "id": "storyteller"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "critical_thinker"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Continue nurturing your animation path.",
+        "due": "Future"
+      },
+      {
+        "text": "Strengthen foundations with Still Life and Realism studies.",
+        "due": "Recommended"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-28",
+        "strength": "Drawing accuracy without needing guidance; perseverance in complex projects (120+ layers!).",
+        "next": "Expand artistic language through Art History and Realism."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Animation Project",
+        "thumb": "https://placehold.co/400x400?text=120+Layer+Animation",
+        "caption": "A massive personal project featuring over 120 layers."
+      }
+    ]
+  },
+  {
+    "id": "ADRIAN-22",
+    "display_name": "Adrian",
+    "teacher_note": "Adrian has become one of our strongest storytelling students, combining refined personal taste with rich narrative imagination. He thinks naturally in scenes and sequences. My goal is to protect his unique creative voice while quietly strengthening the technical tools—like structure and detail—that will support the powerful stories he wants to tell.",
+    "tags": [
+      "Narrative-Driven",
+      "Refined-Taste",
+      "Creative-Thinker",
+      "Atmospheric"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-08-20"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-09-05"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-09-15"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-09-30"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2025-10-10"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-10-25"
+      },
+      {
+        "badge_id": "scene_designer",
+        "date": "2025-11-05"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-20"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portrait_master"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "animation_beginner"
+        },
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "realism_expert"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Adrian, Thank you for drawing with me this year. I really admire your focus and the way you explore darker, more dramatic ideas in your art. Your style is becoming sharper and more confident. I hope you keep training your lines and using your imagination bravely in 2026.",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "CODE: ADRIAN-XMAS-25"
+    },
+    "goals": [
+      {
+        "text": "Portrait Master: Focus on facial structure while keeping your style.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Realism Practice: One focused piece to study detail.",
+        "due": "2025-12-15"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Designs characters and frames scenes with natural cinematic instinct.",
+        "next": "Strengthen technical structure to support your moody, atmospheric style."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Forest Chase Horror",
+        "thumb": "https://placehold.co/400x400?text=Horror+Scene",
+        "caption": "Evocative horror chase scene showing atmospheric depth."
+      }
+    ]
+  },
+  {
+    "id": "SERENA-13",
+    "display_name": "Serena",
+    "teacher_note": "Serena continues to grow as a thoughtful and efficient art student. Her strength lies in her focus and technical clarity. While she may not always express herself outwardly, her work reveals a strong sense of visual order and problem-solving. As she moves forward, the next step is to stretch her creative voice through storytelling, concept design, and more personalized expression.",
+    "tags": [
+      "Consistent",
+      "Technically-Capable",
+      "Efficient",
+      "Design-Focused"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-08-15"
+      },
+      {
+        "badge_id": "interior_design",
+        "date": "2025-09-25"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-10"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-09-10"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "figure_sketch"
+        },
+        {
+          "id": "still_life"
+        },
+        {
+          "id": "storyteller"
+        },
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "critical_thinker"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Serena, 🎄\nThank you for spending your time drawing with me this year. I really appreciate your calm, independent way of learning and how you always find your own balance between study and life. I hope art can stay as a relaxing, happy space for you in 2026.",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Complete full Figure Sketch Level 1 requirements.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Finish one observational Still Life project.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Strong confidence in line work and proportions.",
+        "next": "Focus on connecting visuals with meaning and narration."
+      }
+    ],
+    "featured_art": []
+  },
+  {
+    "id": "TEMP-09",
+    "display_name": "Temp",
+    "teacher_note": "Temp is one of the most naturally talented and thoughtful young learners. She absorbs knowledge instantly, responds with meaningful ideas, and shows mature understanding beyond her age. Even when she says “I have no idea,” a small inspiration is enough for her to unlock rich feedback and creativity. This sets her apart from many students—she thinks deeply, expresses warmly, and always tries her best.",
+    "tags": [
+      "Independent",
+      "Fast-Learner",
+      "Multi-Talented",
+      "Mature"
+    ],
+    "achievements": [
+      {
+        "badge_id": "realism_expert",
+        "date": "2025-11-20"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-11-15"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-11-10"
+      },
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-10-01"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-10-15"
+      },
+      {
+        "badge_id": "little_architect",
+        "date": "2025-10-20"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-11-05"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-25"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-11-26"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portrait_master"
+        },
+        {
+          "id": "scene_designer"
+        },
+        {
+          "id": "landscape"
+        },
+        {
+          "id": "animation_beginner"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Temp, Merry Christmas! 🎄 You are such a thoughtful and naturally talented artist. I am always amazed by how quickly you absorb new ideas and how much heart you put into your work. Even when you feel unsure, you always find a brilliant solution. Keep trusting your instincts in 2026!",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "featured_art": [
+      {
+        "title": "A Realistic Dog",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68daf5253dc15612a294ffb6_88f00564162f6054a7e7e03c9dfe94e7.JPG",
+        "caption": "Colored pencil study showing great attention to texture."
+      }
+    ]
+  },
+  {
+    "id": "CODY-22",
+    "display_name": "Cody",
+    "teacher_note": "Cody is a truly exceptional student with a rare combination of intelligence and technical intuition. He is currently our most advanced student in AI tools and gaming concepts. When he locks into a topic, his performance is outstanding. My goal is to help him strengthen his concentration while supporting his passion for building worlds through both hand-drawn and AI-powered methods.",
+    "tags": [
+      "Tech-Savvy",
+      "AI-Expert",
+      "Game-Design",
+      "Creative-Thinker"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2024-05-15"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2024-06-20"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2024-07-10"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2024-09-05"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-02-15"
+      },
+      {
+        "badge_id": "gaming_creator",
+        "date": "2025-05-20"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-08-10"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-10-01"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-11-15"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "focus_sprinter"
+        },
+        {
+          "id": "animation_beginner"
+        },
+        {
+          "id": "realism_expert"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Cody, Merry Christmas! 🎄 It is rare to see a student with such a sharp mind for both technology and art. Your world-building skills are incredible. I look forward to seeing what new digital worlds you create (with laser focus!) in 2026.",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Focus Sprinter: Practice sustaining concentration for 20-minute blocks.",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Animation: Create a simple loop using AI + hand-drawing.",
+        "due": "2025-12-15"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Unique technical creativity; mastery of AI prompting far beyond his age.",
+        "next": "Build foundational discipline (Realism) to support your digital ideas."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "A Badge Design",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/692617da8041d3d9ce2e5caa_feiteamart%20digtal%20gaming%20creator.PNG",
+        "caption": "Digital Design created for the Gaming Creator badge."
+      }
+    ]
+  },
+  {
+    "id": "SAM-18",
+    "display_name": "Sam",
+    "teacher_note": "Sam is one of the most well-rounded, capable, and self-driven students I’ve ever taught. She learns incredibly fast, producing solid work with precision and independence. Although she is preparing for a future in law, her artistic training has sharpened her visual communication and analytical thinking—skills that will serve her well in any academic path.",
+    "tags": [
+      "Ambitious",
+      "Well-Rounded",
+      "Fast-Learner",
+      "Disciplined"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2022-05-10"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2022-08-15"
+      },
+      {
+        "badge_id": "landscape",
+        "date": "2022-11-20"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2023-02-10"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2023-04-05"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2023-06-15"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2023-08-20"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2023-10-30"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2024-01-15"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2024-03-10"
+      },
+      {
+        "badge_id": "interior_design",
+        "date": "2024-05-20"
+      },
+      {
+        "badge_id": "little_architect",
+        "date": "2024-07-05"
+      },
+      {
+        "badge_id": "costume_design",
+        "date": "2024-09-15"
+      },
+      {
+        "badge_id": "art_painting",
+        "date": "2024-11-10"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-01-20"
+      },
+      {
+        "badge_id": "portrait_master",
+        "date": "2025-04-15"
+      },
+      {
+        "badge_id": "art_history",
+        "date": "2025-08-10"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "critical_thinker"
+        }
+      ]
+    },
+    "goals": [
+      {
+        "text": "Curate a small Art Portfolio to support university applications.",
+        "due": "2025-12-30"
+      },
+      {
+        "text": "Critical Thinking: Connect art analysis with your writing skills.",
+        "due": "Ongoing"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Accomplishes almost anything she decides to do with efficiency and patience.",
+        "next": "Use your art background to strengthen your analytical and storytelling skills for Law."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Illustration",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/682e2a53d38d56bbb93da054_WechatIMG455.jpeg",
+        "caption": "Markers."
+      }
+    ]
+  },
+  {
+    "id": "ALISSIE-05",
+    "display_name": "Alissie",
+    "teacher_note": "Alissie is a bright and joyful young artist who is highly efficient at learning new skills. She is confident, expressive, and unafraid to engage with challenges. With her intelligence and curiosity, she is well on her way to becoming a well-rounded and expressive artist.",
+    "tags": [
+      "Joyful",
+      "Efficient",
+      "Expressive",
+      "Multi-Talented"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-09-01"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2025-09-15"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-09-25"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2025-10-05"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-10-15"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-10-25"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-11-05"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-11-15"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-20"
+      },
+      {
+        "badge_id": "portrait_master",
+        "date": "2025-11-25"
+      },
+      {
+        "badge_id": "realism_expert",
+        "date": "2025-11-27"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "scene_designer"
+        },
+        {
+          "id": "interior_design"
+        },
+        {
+          "id": "costume_design"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "portfolio_builder"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Alissie, Merry Christmas! 🎄 Your joy and confidence make our studio brighter every week. I love how fearless you are when learning new skills—you pick things up so fast! In 2026, I can't wait to see you build even bigger worlds and scenes for your characters.",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Scene Designer: Build environments around your characters.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Portfolio: Begin collecting and curating your growing body of work.",
+        "due": "2025-12-20"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Highly efficient at learning new skills; grasps concepts quickly.",
+        "next": "Continue developing realism skills beyond the introductory level."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Manga Portrait",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69308ab602fb8f7e33564999_9AC00B77-10F0-4FF2-BE02-98652E900992.jpg",
+        "caption": "Marker + Colored Pencil."
+      }
+    ]
+  },
+  {
+    "id": "NATALIE-17",
+    "display_name": "Natalie",
+    "teacher_note": "Natalie is a warm, sociable, and generous student who brings a special light to the classroom. She is emotionally intelligent, deeply independent, and determined. Now balancing high school life, she is showing great maturity by shifting her focus toward refining technical drawing skills and embracing challenges she doesn't yet love.",
+    "tags": [
+      "Sociable",
+      "Independent",
+      "Emotionally-Intelligent",
+      "Determined"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2024-09-10"
+      },
+      {
+        "badge_id": "still_life",
+        "date": "2024-10-15"
+      },
+      {
+        "badge_id": "landscape",
+        "date": "2024-11-20"
+      },
+      {
+        "badge_id": "material_explore",
+        "date": "2025-01-10"
+      },
+      {
+        "badge_id": "observation_detective",
+        "date": "2025-02-15"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-03-20"
+      },
+      {
+        "badge_id": "art_painting",
+        "date": "2025-04-25"
+      },
+      {
+        "badge_id": "portrait_master",
+        "date": "2025-05-30"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2025-06-10"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-07-20"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-08-15"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-09-25"
+      },
+      {
+        "badge_id": "animation_beginner",
+        "date": "2025-11-27"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "community_builder"
+        },
+        {
+          "id": "critical_thinker"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Natalie, Merry Christmas! 🎄 You bring such a special light to our classroom. I admire your emotional intelligence and how you are balancing high school life with such determination. Watching you embrace technical challenges shows true maturity. Keep shining bright in 2026!",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Refine technical drawing skills (structure & form).",
+        "due": "Ongoing"
+      },
+      {
+        "text": "Start curating best works for a future portfolio.",
+        "due": "2025-12-30"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Natural ability to connect; willing to embrace difficult tasks with a growth mindset.",
+        "next": "Deepen understanding of art history to build context for your expressive style."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Digital Illustration",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/682e2a53d38d56bbb93da054_WechatIMG455.jpeg",
+        "caption": "Markers."
+      }
+    ]
+  },
+  {
+    "id": "RAINIE-08",
+    "display_name": "Rainie",
+    "teacher_note": "Rainie has leveled up significantly! Her fundamentals—lines, structure, composition—are much more solid, and she now works like an independent creator. She shines brightest in animation, showing strong initiative and patience with details. She has real potential to become a remarkable young creator.",
+    "tags": [
+      "Animator-Focus",
+      "Independent",
+      "Creative",
+      "Leveled-Up"
+    ],
+    "achievements": [
+      {
+        "badge_id": "basic_sketch",
+        "date": "2025-08-10"
+      },
+      {
+        "badge_id": "idea_inventor",
+        "date": "2025-08-25"
+      },
+      {
+        "badge_id": "storyteller",
+        "date": "2025-09-10"
+      },
+      {
+        "badge_id": "figure_sketch",
+        "date": "2025-09-25"
+      },
+      {
+        "badge_id": "hand_crafter",
+        "date": "2025-10-05"
+      },
+      {
+        "badge_id": "scene_designer",
+        "date": "2025-10-20"
+      },
+      {
+        "badge_id": "character_designer",
+        "date": "2025-11-01"
+      },
+      {
+        "badge_id": "digital_creator",
+        "date": "2025-11-15"
+      },
+      {
+        "badge_id": "animation_beginner",
+        "date": "2025-11-27"
+      }
+    ],
+    "badges": {
+      "should_target": [
+        {
+          "id": "portfolio_builder"
+        },
+        {
+          "id": "landscape"
+        },
+        {
+          "id": "art_painting"
+        },
+        {
+          "id": "art_history"
+        },
+        {
+          "id": "realism_expert"
+        }
+      ]
+    },
+    "christmas_gift": {
+      "message": "Dear Rainie, Merry Christmas! 🎄 It has been amazing to watch you 'level up' this year. Your dedication to animation—especially your patience with details—is inspiring. You are becoming a true independent creator. I can't wait to see what characters you bring to life in 2026!",
+      "link": "https://www.amazon.ca/g/YOUR_GIFT_CODE_HERE",
+      "code_display": "STATUS: GIFT SHIPPING TO YOUR HOME 🚚"
+    },
+    "goals": [
+      {
+        "text": "Portfolio: Organize animation clips and character designs.",
+        "due": "Next Month"
+      },
+      {
+        "text": "Realism: Complete one detailed study to understand depth.",
+        "due": "2025-12-20"
+      }
+    ],
+    "critiques": [
+      {
+        "date": "2025-11-27",
+        "strength": "Consistently brings new ideas without needing outside encouragement.",
+        "next": "Practice larger scenes (Landscape) to create richer story worlds."
+      }
+    ],
+    "featured_art": [
+      {
+        "title": "Digital Illustration",
+        "thumb": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/685dedc234be002fc7874a8f_dfcbf8de2febb64ef40faf1cb3516e6d.JPG",
+        "caption": "Procreate."
+      }
+    ]
+  }
+]

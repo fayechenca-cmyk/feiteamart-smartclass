@@ -839,6 +839,118 @@
     font-size: 18px; color: var(--purple);
   }
 
+  /* ═══ STUDENT BADGE COLLECTION ═══
+     Ported from the original Student Portal (fei-teamart-studentbadge).
+     Gold-glow unlocked nodes, dashed-pulse recommended nodes,
+     grayscale locked nodes — same visual identity as the original. */
+  .studio-badge-progress {
+    margin: 10px 0 18px;
+  }
+  .studio-badge-progress-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+    color: var(--ink-soft); margin-bottom: 6px;
+  }
+  .badge-grid {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 22px; min-height: 100px; padding-top: 4px;
+  }
+  .map-node {
+    width: 96px; text-align: center; position: relative;
+    animation: studioPopIn 0.45s ease-out;
+  }
+  .map-node:hover { transform: translateY(-4px); cursor: pointer; }
+  .node-visual {
+    width: 68px; height: 68px; margin: 0 auto 6px;
+    border-radius: 50%; background: #fff; border: 4px solid #e5e7eb;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    display: grid; place-items: center; position: relative;
+    transition: all 0.3s ease; overflow: hidden;
+  }
+  .node-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+  .node-icon-fallback { font-size: 26px; }
+  .node-label {
+    font-size: 10.5px; font-weight: 700; line-height: 1.2;
+    color: var(--ink); margin-bottom: 1px;
+  }
+  .badge-credit {
+    font-size: 8.5px; color: var(--purple); text-transform: uppercase;
+    letter-spacing: 0.5px; margin-top: 2px; font-weight: 700; opacity: 0.9;
+  }
+  .map-node.locked .node-visual {
+    opacity: 0.5; filter: grayscale(100%); background: #f0f0f0;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  }
+  .map-node.unlocked .node-visual {
+    border: 3px solid #ffb700;
+    background: radial-gradient(circle, #ffffff 30%, #fff7e0 100%);
+    box-shadow: 0 0 15px rgba(255, 183, 0, 0.6), 0 5px 10px rgba(0,0,0,0.1);
+    transform: scale(1.08); z-index: 2;
+  }
+  .map-node.unlocked .node-icon-fallback { font-size: 32px; }
+  .map-node.unlocked .node-label { color: var(--ink); font-weight: 800; }
+  .map-node.recommended .node-visual {
+    border: 3px dashed #f59e0b !important;
+    animation: studioPulse 2s infinite;
+    background: #fffbeb; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+  }
+  .check-mark {
+    position: absolute; top: -4px; right: 6px;
+    background: #10b981; color: white; border: 2px solid white;
+    border-radius: 50%; width: 20px; height: 20px;
+    display: grid; place-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 12px; font-weight: bold;
+  }
+  .quest-mark { position: absolute; top: -4px; right: 6px; font-size: 20px; }
+  @keyframes studioPopIn {
+    from { opacity: 0; transform: scale(0.5) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes studioPulse {
+    0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); }
+  }
+
+  /* ═══ STUDENT ART JOURNEY (spotlight + portfolio) ═══
+     Ported from the original Student Portal. Polaroid-style rotated
+     frames for featured/spotlight pieces; clean grid for portfolio. */
+  .spotlight-grid, .portfolio-grid {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .spotlight-item, .portfolio-item { width: 140px; text-align: center; }
+  .spotlight-frame {
+    width: 100%; height: 140px; background: #fff; padding: 6px;
+    box-sizing: border-box; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: rotate(-2deg); transition: transform 0.3s;
+    margin-bottom: 6px; border-radius: 4px; border: 1px solid #eee;
+  }
+  .spotlight-item:nth-child(even) .spotlight-frame { transform: rotate(2deg); }
+  .spotlight-frame:hover { transform: rotate(0) scale(1.05); z-index: 5; }
+  .spotlight-img, .portfolio-img { width: 100%; height: 100%; object-fit: cover; }
+  .spotlight-caption, .portfolio-title { font-size: 12px; font-weight: 700; color: var(--ink); }
+  .spotlight-sub, .portfolio-sub { font-size: 10px; color: var(--ink-faint); }
+  .portfolio-frame {
+    width: 100%; height: 140px; background: #fff; padding: 6px;
+    box-sizing: border-box; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-radius: 8px; border: 1px solid #eee; margin-bottom: 6px;
+  }
+
+  /* ═══ TEACHER NOTE (Feedback) ═══
+     Ported styling: quoted note + strength tags, same warmth as the
+     original Student Portal's "Teacher's Summary" card. */
+  .studio-teacher-note {
+    font-size: 13px; color: var(--ink); line-height: 1.6;
+    font-style: italic; margin-bottom: 10px;
+  }
+  .studio-tag-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .studio-tag {
+    font-size: 10px; font-weight: 700; color: var(--purple);
+    background: rgba(167,139,250,0.12); border-radius: 20px;
+    padding: 4px 10px;
+  }
+
   /* ═══ CREATION SCREEN (placeholder) ═══ */
   .creation-placeholder {
     background: linear-gradient(135deg, #fef3f7 0%, #f5f3ff 100%);
@@ -1049,34 +1161,41 @@
       <a href="#" class="studio-cta" onclick="event.preventDefault(); showDrawing();">View full path →</a>
     </div>
 
-    <!-- FEEDBACK — placeholder, pending Student Portal migration -->
+    <!-- FEEDBACK — teacher note + strength tags, from /core/students.json -->
     <div class="studio-card">
       <div class="studio-card-head">
         <div class="studio-card-emoji">📝</div>
         <div class="studio-card-title">Feedback</div>
       </div>
-      <div class="studio-card-body">Notes from your teacher will appear here.</div>
-      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+      <div class="studio-teacher-note" id="studio-feedback-note">Notes from your teacher will appear here.</div>
+      <div class="studio-tag-row" id="studio-feedback-tags"></div>
     </div>
 
-    <!-- BADGES — placeholder, pending Student Portal migration -->
-    <div class="studio-card">
+    <!-- BADGES — full collection (earned / recommended / locked), from /core/badge-catalog.js + students.json -->
+    <div class="studio-card studio-card-full">
       <div class="studio-card-head">
         <div class="studio-card-emoji">🏆</div>
         <div class="studio-card-title">Badges</div>
       </div>
-      <div class="studio-card-body" id="studio-badges-body">Loading…</div>
-      <div class="studio-card-placeholder">Full badge collection coming in a future update.</div>
+      <div class="studio-badge-progress">
+        <div class="studio-badge-progress-row">
+          <span id="studio-badges-count">0 / 29 Badges</span>
+          <span id="studio-badges-pct">0%</span>
+        </div>
+        <div class="track-bar"><div class="track-fill" id="studio-badges-bar" style="width:0%"></div></div>
+      </div>
+      <div class="badge-grid" id="studio-badge-grid"></div>
     </div>
 
-    <!-- STUDENT ART JOURNEY — placeholder, full width -->
+    <!-- STUDENT ART JOURNEY — masterpiece spotlight + portfolio, from /core/students.json -->
     <div class="studio-card studio-card-full">
       <div class="studio-card-head">
         <div class="studio-card-emoji">🎨</div>
         <div class="studio-card-title">Student Art Journey</div>
       </div>
-      <div class="studio-card-body">A record of your work over time — submissions, milestones, and the story of your practice.</div>
-      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+      <div class="studio-card-body" style="margin-bottom:10px;">A record of your work over time — submissions, milestones, and the story of your practice.</div>
+      <div class="spotlight-grid" id="studio-spotlight-grid"></div>
+      <div class="portfolio-grid" id="studio-portfolio-grid"></div>
     </div>
 
   </div>
@@ -1172,12 +1291,14 @@
 
 <script src="core/auth.js"></script>
 <script src="core/access.js"></script>
+<script src="core/badge-catalog.js"></script>
 <script>
   // ═══════════════════════════════════════════════════════════
   // CONFIG
   // ═══════════════════════════════════════════════════════════
-  
+
   const ROSTER_PATH = 'core/student-access-codes.js';
+  const STUDENTS_PATH = 'core/students.json';
   const PROFILE_KEY = 'fei_user_profile';
   
   // ═══════════════════════════════════════════════════════════
@@ -1288,6 +1409,7 @@
   
   let validStudents = new Map();
   let userProfile = null;
+  let studentRecords = [];
   
   // ═══════════════════════════════════════════════════════════
   // STUDENT ROSTER
@@ -1320,7 +1442,33 @@
       console.warn('[ArtGPS Home] Failed to load roster:', err);
     }
   }
-  
+
+  // ═══════════════════════════════════════════════════════════
+  // STUDENT PORTAL RECORDS (Feedback / Badges / Art Journey)
+  // Migrated from the original Student Portal repo. Looked up by
+  // the student's access code (userProfile.studentCode). Students
+  // who signed in by email/Google won't have a match — that's
+  // expected and handled with a friendly fallback, not an error.
+  // ═══════════════════════════════════════════════════════════
+  async function loadStudentRecords() {
+    try {
+      const response = await fetch(STUDENTS_PATH, { cache: 'no-cache' });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      studentRecords = await response.json();
+      console.log('[ArtGPS Home] Loaded ' + studentRecords.length + ' student records');
+    } catch (err) {
+      console.warn('[ArtGPS Home] Failed to load student records:', err);
+      studentRecords = [];
+    }
+  }
+
+  function findStudentRecord() {
+    const code = userProfile && userProfile.studentCode;
+    if (!code) return null;
+    const normalized = String(code).trim().toUpperCase();
+    return studentRecords.find(s => String(s.id || '').toUpperCase() === normalized) || null;
+  }
+
   // ═══════════════════════════════════════════════════════════
   // PROFILE
   // ═══════════════════════════════════════════════════════════
@@ -1457,10 +1605,8 @@
     document.getElementById('studio-progress-value').textContent = `${doneCount} / ${totalCount}`;
     document.getElementById('studio-progress-bar').style.width = pct + '%';
 
-    // My Studio · Badges (placeholder summary — only the one real badge today)
-    document.getElementById('studio-badges-body').textContent = doneCount >= totalCount
-      ? 'Basic Sketch badge earned!'
-      : `${doneCount} of ${totalCount} sessions toward your Basic Sketch badge.`;
+    // My Studio · Feedback, Badges, Student Art Journey
+    renderStudentPortalSection();
 
     // Drawing sub-track meta
     document.getElementById('drawing-meta').textContent =
@@ -1482,7 +1628,126 @@
       // else: keep the default "Collections open" text
     }
   }
-  
+
+  // ═══════════════════════════════════════════════════════════
+  // RENDER STUDENT PORTAL SECTION — Feedback / Badges / Art Journey
+  // Migrated from the original Student Portal. Looks up the current
+  // student's record by access code. If there's no match (e.g. an
+  // email/Google sign-in, or a code not yet in students.json), shows
+  // a friendly fallback instead of breaking.
+  // ═══════════════════════════════════════════════════════════
+  function renderStudentPortalSection() {
+    const record = findStudentRecord();
+
+    // Feedback — teacher note + strength tags
+    const noteEl = document.getElementById('studio-feedback-note');
+    const tagsEl = document.getElementById('studio-feedback-tags');
+    if (record && record.teacher_note) {
+      noteEl.textContent = `"${record.teacher_note}"`;
+    } else {
+      noteEl.textContent = 'Notes from your teacher will appear here once added.';
+    }
+    tagsEl.innerHTML = '';
+    if (record && Array.isArray(record.tags) && record.tags.length > 0) {
+      record.tags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'studio-tag';
+        span.textContent = tag;
+        tagsEl.appendChild(span);
+      });
+    }
+
+    // Badges — full collection, earned / recommended / locked
+    const catalog = window.BADGE_CATALOG || [];
+    const earnedIds = (record && Array.isArray(record.achievements))
+      ? record.achievements.map(a => String(a.badge_id || '').toLowerCase())
+      : [];
+    const recommendedIds = (record && record.badges && Array.isArray(record.badges.should_target))
+      ? record.badges.should_target.map(t => String(t.id || '').toLowerCase())
+      : [];
+
+    const badgeTotal = catalog.length;
+    const badgeCount = earnedIds.length;
+    const badgePct = badgeTotal > 0 ? Math.round((badgeCount / badgeTotal) * 100) : 0;
+    document.getElementById('studio-badges-count').textContent = `${badgeCount} / ${badgeTotal} Badges`;
+    document.getElementById('studio-badges-pct').textContent = `${badgePct}%`;
+    document.getElementById('studio-badges-bar').style.width = badgePct + '%';
+
+    const grid = document.getElementById('studio-badge-grid');
+    grid.innerHTML = '';
+    catalog.forEach((page, index) => {
+      const pageId = String(page.id).toLowerCase();
+      const isUnlocked = earnedIds.includes(pageId);
+      const isRecommended = !isUnlocked && recommendedIds.includes(pageId);
+
+      const node = document.createElement('div');
+      let statusClass = 'locked';
+      if (isUnlocked) statusClass = 'unlocked';
+      else if (isRecommended) statusClass = 'recommended';
+      node.className = `map-node ${statusClass}`;
+      node.style.animationDelay = `${index * 0.04}s`;
+
+      const hasImage = page.imgUrl && page.imgUrl.length > 5;
+      const imageHTML = hasImage
+        ? `<img src="${page.imgUrl}" class="node-img">`
+        : `<div class="node-icon-fallback">${page.emoji}</div>`;
+
+      node.innerHTML = `
+        <div class="node-visual">
+          ${imageHTML}
+          ${isUnlocked ? '<div class="check-mark">✓</div>' : ''}
+          ${isRecommended ? '<div class="quest-mark">⭐</div>' : ''}
+        </div>
+        <div class="node-label">${page.title}</div>
+        <div class="badge-credit">${page.artist || ''}</div>
+      `;
+      grid.appendChild(node);
+    });
+
+    // Student Art Journey — spotlight (featured art) + portfolio
+    const spotGrid = document.getElementById('studio-spotlight-grid');
+    spotGrid.innerHTML = '';
+    const featuredArt = record && record.featured_art
+      ? (Array.isArray(record.featured_art) ? record.featured_art : [record.featured_art])
+      : [];
+    if (featuredArt.length > 0) {
+      featuredArt.forEach(art => {
+        const div = document.createElement('div');
+        div.className = 'spotlight-item';
+        div.innerHTML = `
+          <div class="spotlight-frame">
+            <img src="${art.thumb}" class="spotlight-img" onerror="this.src='https://placehold.co/150x150?text=Art'">
+          </div>
+          <div class="spotlight-caption">${art.title || ''}</div>
+          <div class="spotlight-sub">${art.caption || ''}</div>
+        `;
+        spotGrid.appendChild(div);
+      });
+    }
+
+    const portGrid = document.getElementById('studio-portfolio-grid');
+    portGrid.innerHTML = '';
+    const portfolio = record && record.portfolio
+      ? (Array.isArray(record.portfolio) ? record.portfolio : [record.portfolio])
+      : [];
+    portfolio.forEach(work => {
+      const item = document.createElement('div');
+      item.className = 'portfolio-item';
+      item.innerHTML = `
+        <div class="portfolio-frame">
+          <img src="${work.image}" class="portfolio-img" onerror="this.src='https://placehold.co/220x220?text=Portfolio'">
+        </div>
+        <div class="portfolio-title">${work.title || ''}</div>
+        <div class="portfolio-sub">${work.category || ''}${work.caption ? ' · ' + work.caption : ''}</div>
+      `;
+      portGrid.appendChild(item);
+    });
+
+    if (featuredArt.length === 0 && portfolio.length === 0) {
+      spotGrid.innerHTML = '<p style="font-size:12px; color:var(--ink-faint); font-style:italic;">No artwork added yet — check back soon.</p>';
+    }
+  }
+
   // Find the next lesson the student should do
   function pickNextLesson() {
     const completed = userProfile.completedLessons || [];
@@ -2044,6 +2309,7 @@
 
   (async function init() {
     await loadRoster();
+    await loadStudentRecords();
     loadProfile();
 
     // 0. Detect Stripe success return — mark this user as paid
