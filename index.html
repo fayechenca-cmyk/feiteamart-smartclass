@@ -752,7 +752,93 @@
   .badge-footer-sub {
     font-size: 12px; color: var(--ink-soft);
   }
-  
+
+  /* ═══ STUDIO DASHBOARD (Guided Practice Studio) ═══
+     Scaffold only — placeholder sections wired to real
+     userProfile fields where data exists today.
+     ═══════════════════════════════════════════════════ */
+  .studio-header {
+    margin-bottom: 24px;
+  }
+  .studio-header-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 6px;
+  }
+  .studio-header-title {
+    font-family: 'Montserrat', sans-serif; font-size: 22px;
+    font-weight: 900; margin-bottom: 6px;
+  }
+  .studio-header-sub {
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .studio-grid {
+    display: grid; grid-template-columns: 1fr; gap: 14px;
+  }
+  @media (min-width: 768px) {
+    .studio-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .studio-card {
+    background: #fff;
+    border: 1px solid var(--ink-veryfaint);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .studio-card-full {
+    grid-column: 1 / -1;
+  }
+  .studio-card-head {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .studio-card-emoji { font-size: 18px; }
+  .studio-card-title {
+    font-family: 'Montserrat', sans-serif; font-size: 13px;
+    font-weight: 800;
+  }
+  .studio-card-body {
+    font-size: 12px; color: var(--ink-soft); line-height: 1.5;
+  }
+  .studio-stat-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .studio-stat-value {
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 18px;
+    color: var(--ink);
+  }
+  .studio-card-placeholder {
+    font-size: 11px; color: var(--ink-faint); font-style: italic;
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--ink-veryfaint);
+  }
+  .studio-cta {
+    display: inline-block; margin-top: 10px;
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
+    color: var(--purple); text-decoration: none;
+  }
+  .studio-cta:hover { text-decoration: underline; }
+
+  /* Entry point link shown on home-screen */
+  .studio-entry-link {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, #f5f3ff 0%, #fdf2f8 100%);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .studio-entry-link-text {
+    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800;
+  }
+  .studio-entry-link-sub {
+    font-size: 11px; color: var(--ink-soft); margin-top: 2px;
+  }
+  .studio-entry-link-arrow {
+    font-size: 18px; color: var(--purple);
+  }
+
   /* ═══ CREATION SCREEN (placeholder) ═══ */
   .creation-placeholder {
     background: linear-gradient(135deg, #fef3f7 0%, #f5f3ff 100%);
@@ -890,7 +976,16 @@
     </div>
     <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
   </div>
-  
+
+  <!-- Guided Practice Studio dashboard entry point -->
+  <a href="#" class="studio-entry-link" onclick="event.preventDefault(); showStudio();">
+    <div>
+      <div class="studio-entry-link-text">My Studio Dashboard</div>
+      <div class="studio-entry-link-sub">Courses · Progress · Feedback · Badges · Art Journey</div>
+    </div>
+    <div class="studio-entry-link-arrow">→</div>
+  </a>
+
   <!-- Two tracks -->
   <div class="section-heading">
     <div class="section-title">Two ways to practice</div>
@@ -989,6 +1084,96 @@
     <div class="badge-footer-sub" id="badge-footer-sub">
       Complete all 11 practice sessions to earn your Basic Sketch badge.
     </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GUIDED PRACTICE STUDIO — Dashboard (scaffold)
+     Top-level screen, linked from home-screen.
+     Cards: My Courses · Current Lesson · Progress · Feedback ·
+     Badges · Student Art Journey.
+     Wired to real userProfile fields where data exists today
+     (name, tier, completedLessons). Everything else is a
+     clearly-labeled placeholder pending second-pass migration
+     from the Student Portal report-card data.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="studio-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showHome()">← Back to Art GPS</button>
+
+  <div class="studio-header">
+    <div class="studio-header-kicker">Guided Practice Studio</div>
+    <div class="studio-header-title">My Studio Dashboard</div>
+    <div class="studio-header-sub">One place for your courses, progress, feedback, badges, and art journey.</div>
+  </div>
+
+  <div class="studio-grid">
+
+    <!-- MY COURSES — wired to FOUNDATION_A_PATH + userProfile.completedLessons -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📚</div>
+        <div class="studio-card-title">My Courses</div>
+      </div>
+      <div class="studio-card-body" id="studio-courses-body">Loading…</div>
+      <a href="#" class="studio-cta" onclick="event.preventDefault(); showSkills();">Go to Skills →</a>
+    </div>
+
+    <!-- CURRENT LESSON — wired via pickNextLesson() (same helper as home-screen resume card) -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">▶️</div>
+        <div class="studio-card-title">Current Lesson</div>
+      </div>
+      <div class="studio-card-body" id="studio-current-lesson-body">Loading…</div>
+      <a href="#" class="studio-cta" id="studio-current-lesson-cta">Continue →</a>
+    </div>
+
+    <!-- PROGRESS — wired to userProfile.completedLessons -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📈</div>
+        <div class="studio-card-title">Progress</div>
+      </div>
+      <div class="studio-stat-row">
+        <span>Foundation A</span>
+        <span class="studio-stat-value" id="studio-progress-value">0 / 11</span>
+      </div>
+      <div class="track-bar"><div class="track-fill" id="studio-progress-bar" style="width:0%"></div></div>
+      <a href="#" class="studio-cta" onclick="event.preventDefault(); showDrawing();">View full path →</a>
+    </div>
+
+    <!-- FEEDBACK — placeholder, pending Student Portal migration -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📝</div>
+        <div class="studio-card-title">Feedback</div>
+      </div>
+      <div class="studio-card-body">Notes from your teacher will appear here.</div>
+      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+    </div>
+
+    <!-- BADGES — placeholder, pending Student Portal migration -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">🏆</div>
+        <div class="studio-card-title">Badges</div>
+      </div>
+      <div class="studio-card-body" id="studio-badges-body">Loading…</div>
+      <div class="studio-card-placeholder">Full badge collection coming in a future update.</div>
+    </div>
+
+    <!-- STUDENT ART JOURNEY — placeholder, full width -->
+    <div class="studio-card studio-card-full">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">🎨</div>
+        <div class="studio-card-title">Student Art Journey</div>
+      </div>
+      <div class="studio-card-body">A record of your work over time — submissions, milestones, and the story of your practice.</div>
+      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+    </div>
+
   </div>
 
 </div>
@@ -1197,6 +1382,7 @@
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('skills-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
+    document.getElementById('studio-screen').style.display = 'none';
   }
   
   function showSignIn() {
@@ -1235,7 +1421,58 @@
     window.scrollTo(0, 0);
   }
   window.showDrawing = showDrawing;
-  
+
+  function showStudio() {
+    hideAllScreens();
+    document.getElementById('studio-screen').style.display = 'block';
+    renderStudio();
+    window.scrollTo(0, 0);
+  }
+  window.showStudio = showStudio;
+
+  // ═══════════════════════════════════════════════════════════
+  // RENDER STUDIO — Guided Practice Studio dashboard (scaffold)
+  // Uses the same userProfile fields and pickNextLesson() helper
+  // as renderHome(). Feedback / Badges (detail) / Art Journey
+  // stay as placeholders until Student Portal data is migrated
+  // in a later pass.
+  // ═══════════════════════════════════════════════════════════
+  function renderStudio() {
+    const completed = (userProfile && userProfile.completedLessons) || [];
+    const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
+    const totalCount = readyLessons.length;
+    const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
+    const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+
+    // My Courses
+    const nextLesson = pickNextLesson();
+    document.getElementById('studio-courses-body').innerHTML = nextLesson
+      ? `Foundation A · Drawing<br>Next up: <strong>${nextLesson.title}</strong>`
+      : `Foundation A · Drawing<br>All current practice sessions complete — nice work!`;
+
+    // Current Lesson — same helper as the home-screen resume card
+    const currentBody = document.getElementById('studio-current-lesson-body');
+    const currentCta = document.getElementById('studio-current-lesson-cta');
+    if (nextLesson) {
+      currentBody.innerHTML = `<strong>${nextLesson.title}</strong><br>${nextLesson.subtitle}`;
+      currentCta.href = nextLesson.href;
+      currentCta.style.display = 'inline-block';
+    } else {
+      currentBody.textContent = 'No lesson in progress — all current sessions complete.';
+      currentCta.style.display = 'none';
+    }
+
+    // Progress
+    document.getElementById('studio-progress-value').textContent = `${doneCount} / ${totalCount}`;
+    document.getElementById('studio-progress-bar').style.width = pct + '%';
+
+    // Badges (placeholder summary — only the one real badge today)
+    document.getElementById('studio-badges-body').textContent = doneCount >= totalCount && totalCount > 0
+      ? 'Basic Sketch badge earned!'
+      : `${doneCount} of ${totalCount} sessions toward your Basic Sketch badge.`;
+  }
+  window.renderStudio = renderStudio;
+
   // ═══════════════════════════════════════════════════════════
   // RENDER HOME
   // ═══════════════════════════════════════════════════════════
