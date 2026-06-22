@@ -960,49 +960,47 @@
      HOME SCREEN — Skills + Creation tracks
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="home-screen" style="display:none;">
-  
+
   <div class="hero">
     <div class="hero-greeting" id="hero-greeting">Welcome back to the studio</div>
     <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
     <p class="hero-subtitle">What kind of practice today?</p>
   </div>
-  
-  <!-- Resume card -->
+
+  <!-- ═══ CONTINUE LEARNING ═══
+       First thing the student sees after the header. Shows the
+       current / next recommended lesson. Always shown, even for
+       brand-new students (points to Lesson 1 as "Start here"). -->
+  <div class="section-heading">
+    <div class="section-title">Continue Learning</div>
+  </div>
+
   <div class="resume-card hidden" id="resume-card">
     <div>
-      <div class="resume-kicker">Pick up where you left off</div>
+      <div class="resume-kicker" id="resume-kicker">Pick up where you left off</div>
       <div class="resume-title" id="resume-title">Lesson 1: Sphere</div>
       <div class="resume-sub" id="resume-sub">Your last practice session</div>
     </div>
     <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
   </div>
 
-  <!-- Guided Practice Studio dashboard entry point -->
-  <a href="#" class="studio-entry-link" onclick="event.preventDefault(); showStudio();">
-    <div>
-      <div class="studio-entry-link-text">My Studio Dashboard</div>
-      <div class="studio-entry-link-sub">Courses · Progress · Feedback · Badges · Art Journey</div>
-    </div>
-    <div class="studio-entry-link-arrow">→</div>
-  </a>
-
-  <!-- Two tracks -->
+  <!-- ═══ LEARNING PATHS ═══ -->
   <div class="section-heading">
-    <div class="section-title">Two ways to practice</div>
+    <div class="section-title">Learning Paths</div>
     <div class="section-sub">Choose what matches where you are right now. You can move between them anytime.</div>
   </div>
-  
+
   <div class="tracks">
     <a href="#" class="track-card track-skills" id="track-skills" onclick="event.preventDefault(); showSkills();">
       <!-- DESIGNER: replace emoji with custom SVG per Section 4.4 (geometric primitives / pencil + line / steps / grid). Color: var(--skills-accent). -->
       <div class="track-emoji" aria-hidden="true">✏️</div>
-      <div class="track-name">Skills</div>
+      <div class="track-name">Skill</div>
       <div class="track-quote">&ldquo;I have no idea what to do. Guide me step by step.&rdquo;</div>
       <div class="track-description">A teacher walks you through every step. You finish something real — a shape, a character, a small drawing — and build confidence one practice at a time.</div>
       <div class="track-progress" id="skills-progress">0 of 11 practice sessions</div>
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
-    
+
     <a href="creation/" class="track-card track-creation" id="track-creation">
       <!-- DESIGNER: replace emoji with custom SVG per Section 4.5 (framed artwork / archway / magnifier / open book). Color: var(--creation-accent). -->
       <div class="track-emoji" aria-hidden="true">🖼</div>
@@ -1012,6 +1010,75 @@
       <div class="track-progress" id="creation-progress">Collections open</div>
       <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
+  </div>
+
+  <!-- ═══ STUDENT PORTAL SECTION (My Studio) ═══
+       Same dashboard, same visual system — not a separate page.
+       My Courses / Progress live today (wired to FOUNDATION_A_PATH +
+       userProfile.completedLessons). Feedback / Badges / Student Art
+       Journey stay as clearly-labeled placeholders until the second
+       migration pass from the Student Portal report-card data. -->
+  <div class="section-heading">
+    <div class="section-title">My Studio</div>
+    <div class="section-sub">Courses, progress, feedback, badges, and your art journey — all in one place.</div>
+  </div>
+
+  <div class="studio-grid">
+
+    <!-- MY COURSES — wired to FOUNDATION_A_PATH -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📚</div>
+        <div class="studio-card-title">My Courses</div>
+      </div>
+      <div class="studio-card-body" id="studio-courses-body">Loading…</div>
+      <a href="#" class="studio-cta" onclick="event.preventDefault(); showSkills();">Go to Skills →</a>
+    </div>
+
+    <!-- PROGRESS — wired to userProfile.completedLessons -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📈</div>
+        <div class="studio-card-title">Progress</div>
+      </div>
+      <div class="studio-stat-row">
+        <span>Foundation A</span>
+        <span class="studio-stat-value" id="studio-progress-value">0 / 11</span>
+      </div>
+      <div class="track-bar"><div class="track-fill" id="studio-progress-bar" style="width:0%"></div></div>
+      <a href="#" class="studio-cta" onclick="event.preventDefault(); showDrawing();">View full path →</a>
+    </div>
+
+    <!-- FEEDBACK — placeholder, pending Student Portal migration -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">📝</div>
+        <div class="studio-card-title">Feedback</div>
+      </div>
+      <div class="studio-card-body">Notes from your teacher will appear here.</div>
+      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+    </div>
+
+    <!-- BADGES — placeholder, pending Student Portal migration -->
+    <div class="studio-card">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">🏆</div>
+        <div class="studio-card-title">Badges</div>
+      </div>
+      <div class="studio-card-body" id="studio-badges-body">Loading…</div>
+      <div class="studio-card-placeholder">Full badge collection coming in a future update.</div>
+    </div>
+
+    <!-- STUDENT ART JOURNEY — placeholder, full width -->
+    <div class="studio-card studio-card-full">
+      <div class="studio-card-head">
+        <div class="studio-card-emoji">🎨</div>
+        <div class="studio-card-title">Student Art Journey</div>
+      </div>
+      <div class="studio-card-body">A record of your work over time — submissions, milestones, and the story of your practice.</div>
+      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
+    </div>
+
   </div>
 
 </div>
@@ -1084,96 +1151,6 @@
     <div class="badge-footer-sub" id="badge-footer-sub">
       Complete all 11 practice sessions to earn your Basic Sketch badge.
     </div>
-  </div>
-
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════
-     GUIDED PRACTICE STUDIO — Dashboard (scaffold)
-     Top-level screen, linked from home-screen.
-     Cards: My Courses · Current Lesson · Progress · Feedback ·
-     Badges · Student Art Journey.
-     Wired to real userProfile fields where data exists today
-     (name, tier, completedLessons). Everything else is a
-     clearly-labeled placeholder pending second-pass migration
-     from the Student Portal report-card data.
-     ═══════════════════════════════════════════════════════════ -->
-<div class="container" id="studio-screen" style="display:none;">
-
-  <button class="back-btn" onclick="showHome()">← Back to Art GPS</button>
-
-  <div class="studio-header">
-    <div class="studio-header-kicker">Guided Practice Studio</div>
-    <div class="studio-header-title">My Studio Dashboard</div>
-    <div class="studio-header-sub">One place for your courses, progress, feedback, badges, and art journey.</div>
-  </div>
-
-  <div class="studio-grid">
-
-    <!-- MY COURSES — wired to FOUNDATION_A_PATH + userProfile.completedLessons -->
-    <div class="studio-card">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">📚</div>
-        <div class="studio-card-title">My Courses</div>
-      </div>
-      <div class="studio-card-body" id="studio-courses-body">Loading…</div>
-      <a href="#" class="studio-cta" onclick="event.preventDefault(); showSkills();">Go to Skills →</a>
-    </div>
-
-    <!-- CURRENT LESSON — wired via pickNextLesson() (same helper as home-screen resume card) -->
-    <div class="studio-card">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">▶️</div>
-        <div class="studio-card-title">Current Lesson</div>
-      </div>
-      <div class="studio-card-body" id="studio-current-lesson-body">Loading…</div>
-      <a href="#" class="studio-cta" id="studio-current-lesson-cta">Continue →</a>
-    </div>
-
-    <!-- PROGRESS — wired to userProfile.completedLessons -->
-    <div class="studio-card">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">📈</div>
-        <div class="studio-card-title">Progress</div>
-      </div>
-      <div class="studio-stat-row">
-        <span>Foundation A</span>
-        <span class="studio-stat-value" id="studio-progress-value">0 / 11</span>
-      </div>
-      <div class="track-bar"><div class="track-fill" id="studio-progress-bar" style="width:0%"></div></div>
-      <a href="#" class="studio-cta" onclick="event.preventDefault(); showDrawing();">View full path →</a>
-    </div>
-
-    <!-- FEEDBACK — placeholder, pending Student Portal migration -->
-    <div class="studio-card">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">📝</div>
-        <div class="studio-card-title">Feedback</div>
-      </div>
-      <div class="studio-card-body">Notes from your teacher will appear here.</div>
-      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
-    </div>
-
-    <!-- BADGES — placeholder, pending Student Portal migration -->
-    <div class="studio-card">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">🏆</div>
-        <div class="studio-card-title">Badges</div>
-      </div>
-      <div class="studio-card-body" id="studio-badges-body">Loading…</div>
-      <div class="studio-card-placeholder">Full badge collection coming in a future update.</div>
-    </div>
-
-    <!-- STUDENT ART JOURNEY — placeholder, full width -->
-    <div class="studio-card studio-card-full">
-      <div class="studio-card-head">
-        <div class="studio-card-emoji">🎨</div>
-        <div class="studio-card-title">Student Art Journey</div>
-      </div>
-      <div class="studio-card-body">A record of your work over time — submissions, milestones, and the story of your practice.</div>
-      <div class="studio-card-placeholder">Not connected yet — coming in a future update.</div>
-    </div>
-
   </div>
 
 </div>
@@ -1382,7 +1359,6 @@
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('skills-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
-    document.getElementById('studio-screen').style.display = 'none';
   }
   
   function showSignIn() {
@@ -1422,57 +1398,6 @@
   }
   window.showDrawing = showDrawing;
 
-  function showStudio() {
-    hideAllScreens();
-    document.getElementById('studio-screen').style.display = 'block';
-    renderStudio();
-    window.scrollTo(0, 0);
-  }
-  window.showStudio = showStudio;
-
-  // ═══════════════════════════════════════════════════════════
-  // RENDER STUDIO — Guided Practice Studio dashboard (scaffold)
-  // Uses the same userProfile fields and pickNextLesson() helper
-  // as renderHome(). Feedback / Badges (detail) / Art Journey
-  // stay as placeholders until Student Portal data is migrated
-  // in a later pass.
-  // ═══════════════════════════════════════════════════════════
-  function renderStudio() {
-    const completed = (userProfile && userProfile.completedLessons) || [];
-    const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
-    const totalCount = readyLessons.length;
-    const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
-    const pct = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
-
-    // My Courses
-    const nextLesson = pickNextLesson();
-    document.getElementById('studio-courses-body').innerHTML = nextLesson
-      ? `Foundation A · Drawing<br>Next up: <strong>${nextLesson.title}</strong>`
-      : `Foundation A · Drawing<br>All current practice sessions complete — nice work!`;
-
-    // Current Lesson — same helper as the home-screen resume card
-    const currentBody = document.getElementById('studio-current-lesson-body');
-    const currentCta = document.getElementById('studio-current-lesson-cta');
-    if (nextLesson) {
-      currentBody.innerHTML = `<strong>${nextLesson.title}</strong><br>${nextLesson.subtitle}`;
-      currentCta.href = nextLesson.href;
-      currentCta.style.display = 'inline-block';
-    } else {
-      currentBody.textContent = 'No lesson in progress — all current sessions complete.';
-      currentCta.style.display = 'none';
-    }
-
-    // Progress
-    document.getElementById('studio-progress-value').textContent = `${doneCount} / ${totalCount}`;
-    document.getElementById('studio-progress-bar').style.width = pct + '%';
-
-    // Badges (placeholder summary — only the one real badge today)
-    document.getElementById('studio-badges-body').textContent = doneCount >= totalCount && totalCount > 0
-      ? 'Basic Sketch badge earned!'
-      : `${doneCount} of ${totalCount} sessions toward your Basic Sketch badge.`;
-  }
-  window.renderStudio = renderStudio;
-
   // ═══════════════════════════════════════════════════════════
   // RENDER HOME
   // ═══════════════════════════════════════════════════════════
@@ -1493,31 +1418,52 @@
       completed.length > 0 ? 'Welcome back to the studio' : 'Welcome to the studio';
     document.getElementById('hero-name').textContent = userProfile.name;
     
-    // Resume card
-    if (completed.length > 0) {
-      const next = pickNextLesson();
-      if (next) {
-        const card = document.getElementById('resume-card');
-        card.classList.remove('hidden');
-        document.getElementById('resume-title').textContent = next.title;
-        document.getElementById('resume-sub').textContent = next.subtitle;
-        document.getElementById('resume-btn').href = next.href;
-      }
+    // Resume card / Continue Learning — always shown, even for new students
+    const next = pickNextLesson();
+    if (completed.length > 0 && next) {
+      const card = document.getElementById('resume-card');
+      card.classList.remove('hidden');
+      document.getElementById('resume-kicker').textContent = 'Pick up where you left off';
+      document.getElementById('resume-title').textContent = next.title;
+      document.getElementById('resume-sub').textContent = next.subtitle;
+      document.getElementById('resume-btn').href = next.href;
+    } else if (next) {
+      // Nothing completed yet — point to the first lesson as a clear starting point
+      const card = document.getElementById('resume-card');
+      card.classList.remove('hidden');
+      document.getElementById('resume-kicker').textContent = 'Start here';
+      document.getElementById('resume-title').textContent = next.title;
+      document.getElementById('resume-sub').textContent = next.subtitle;
+      document.getElementById('resume-btn').href = next.href;
     } else {
       document.getElementById('resume-card').classList.add('hidden');
     }
-    
+
     // Skills track progress
     const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
     const doneCount = readyLessons.filter(l => completed.includes(l.id)).length;
     const totalCount = FOUNDATION_A_PATH.length;
     const pct = Math.round((doneCount / totalCount) * 100);
-    document.getElementById('skills-progress').textContent = 
+    document.getElementById('skills-progress').textContent =
       `${doneCount} of ${totalCount} practice sessions`;
     document.getElementById('skills-bar').style.width = pct + '%';
-    
+
+    // My Studio · My Courses
+    document.getElementById('studio-courses-body').innerHTML = next
+      ? `Foundation A · Drawing<br>Next up: <strong>${next.title}</strong>`
+      : `Foundation A · Drawing<br>All current practice sessions complete — nice work!`;
+
+    // My Studio · Progress
+    document.getElementById('studio-progress-value').textContent = `${doneCount} / ${totalCount}`;
+    document.getElementById('studio-progress-bar').style.width = pct + '%';
+
+    // My Studio · Badges (placeholder summary — only the one real badge today)
+    document.getElementById('studio-badges-body').textContent = doneCount >= totalCount
+      ? 'Basic Sketch badge earned!'
+      : `${doneCount} of ${totalCount} sessions toward your Basic Sketch badge.`;
+
     // Drawing sub-track meta
-    document.getElementById('drawing-meta').textContent = 
+    document.getElementById('drawing-meta').textContent =
       doneCount === 0
         ? `Foundation A · practice path`
         : `Foundation A · ${doneCount}/${totalCount} done`;
