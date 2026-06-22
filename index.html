@@ -97,7 +97,14 @@
     min-height: calc(100vh - 60px);
     padding: clamp(48px, 14vh, 160px) 20px 60px;
     display: flex; flex-direction: column; align-items: center;
-    background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
+    background:
+      linear-gradient(135deg, rgba(245,243,255,0.55) 0%, rgba(236,254,255,0.45) 50%, rgba(254,243,247,0.55) 100%),
+      url('https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68252a640958b39e299823c4_Screenshot%202025-05-14%20at%204.42.05%E2%80%AFPM.png') center center / cover no-repeat,
+      linear-gradient(135deg, #f5f3ff 0%, #ecfeff 50%, #fef3f7 100%);
+    background-attachment: fixed;
+  }
+  @media (max-width: 600px) {
+    .signin-screen { background-attachment: scroll; }
   }
   .signin-card {
     background: #fff; border-radius: var(--radius-lg);
