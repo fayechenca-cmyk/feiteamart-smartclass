@@ -5987,8 +5987,8 @@ const LESSON = {
       part: 'A',
       partLabel: 'Part a · preparation',
       type: 'reference',
-      title: 'Where curve meets flat',
-      intro: 'Before we draw, let\'s learn how light behaves on a cylinder. The side curves like a sphere. The top stays flat like a cube face. One light, two different surfaces — see how each one responds.',
+      title: 'Light meets the apple',
+      intro: 'An apple is a sphere with a dent, a lean, and a stem. Light treats it almost the same way.',
       xp: 0
     },
     // ═══════════════════════════════════════════════════════════════
@@ -8573,83 +8573,57 @@ function renderReference(step) {
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
+
       <div class="ref-grid">
-        <div class="ref-card wide" style="background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 50%, #fef3f7 100%);">
-          <svg width="100%" height="100%" viewBox="0 0 400 240" style="max-width: 360px;">
+        <div class="ref-card wide" style="background: linear-gradient(135deg, #fefcf8 0%, #f5efe4 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 320 200" style="max-width: 520px;">
             <defs>
-              <!-- Cylinder side gradient: bright on left (light from upper-left), darkening rightward -->
-              <linearGradient id="cylRef" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#cdd5dd"/>
-                <stop offset="22%" stop-color="#f1f5f9"/>
-                <stop offset="40%" stop-color="#cbd5e1"/>
-                <stop offset="65%" stop-color="#475569"/>
-                <stop offset="85%" stop-color="#334155"/>
-                <stop offset="100%" stop-color="#64748b"/>
-              </linearGradient>
-              <!-- Top ellipse: flat, slightly lit -->
-              <radialGradient id="cylTopRef" cx="40%" cy="40%" r="80%">
-                <stop offset="0%" stop-color="#e2e8f0"/>
-                <stop offset="100%" stop-color="#94a3b8"/>
+              <radialGradient id="refAppleFill" cx="36%" cy="30%" r="70%">
+                <stop offset="0%"   stop-color="#ece8df"/>
+                <stop offset="28%"  stop-color="#c8bdb0"/>
+                <stop offset="60%"  stop-color="#8a7d6e"/>
+                <stop offset="86%"  stop-color="#5a4e42"/>
+                <stop offset="100%" stop-color="#6a5e54"/>
               </radialGradient>
             </defs>
-            
-            <!-- Cast shadow -->
-            <ellipse cx="220" cy="208" rx="100" ry="11" fill="#475569" opacity="0.32"/>
-            
-            <!-- Cylinder side (rectangle with gradient) -->
-            <rect x="155" y="80" width="130" height="125" fill="url(#cylRef)" stroke="#1a1d2b" stroke-width="1"/>
-            
-            <!-- Bottom edge (visible curve, dashed - it's behind the form) -->
-            <ellipse cx="220" cy="205" rx="65" ry="10" fill="none" stroke="#1a1d2b" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
-            
-            <!-- Top ellipse (flat shaded) -->
-            <ellipse cx="220" cy="80" rx="65" ry="10" fill="url(#cylTopRef)" stroke="#1a1d2b" stroke-width="1"/>
-            
-            <!-- Highlight band on the side (vertical) -->
-            <rect x="180" y="84" width="6" height="118" fill="rgba(255,255,255,0.55)" style="filter: blur(1.5px);"/>
-            
-            <!-- Reflected light hint on shadow side -->
-            <rect x="265" y="115" width="3" height="80" fill="rgba(207,250,254,0.4)"/>
-            
-            <!-- Labels with leader lines -->
-            <line x1="183" y1="100" x2="80" y2="50" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="78" y="48" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">1 HIGHLIGHT</text>
-            
-            <line x1="208" y1="80" x2="80" y2="20" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="78" y="18" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">2 TOP (FLAT TONE)</text>
-            
-            <line x1="200" y1="140" x2="320" y2="60" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="322" y="58" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">3 HALFTONE</text>
-            
-            <line x1="240" y1="140" x2="338" y2="115" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="340" y="118" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">4 CORE SHADOW</text>
-            
-            <line x1="266" y1="155" x2="345" y2="170" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="347" y="173" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">5 REFLECTED LIGHT</text>
-            
-            <line x1="270" y1="208" x2="60" y2="220" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="222" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">6 CAST SHADOW</text>
-            
-            <line x1="208" y1="92" x2="58" y2="92" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="56" y="95" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">EDGE</text>
+
+            <!-- Cast shadow on ground -->
+            <ellipse cx="152" cy="168" rx="56" ry="9" fill="#3a3028" opacity="0.25"/>
+
+            <!-- Apple body -->
+            <path d="M 150 48 C 130 38 108 55 108 82 C 108 122 124 148 150 153 C 176 148 192 122 192 82 C 192 55 170 38 150 48 Z"
+                  fill="url(#refAppleFill)" stroke="#1a1d2b" stroke-width="1"/>
+
+            <!-- Top dent -->
+            <path d="M 138 51 C 142 44 158 44 162 51"
+                  fill="none" stroke="#1a1d2b" stroke-width="0.8" opacity="0.45"/>
+
+            <!-- Stem -->
+            <path d="M 150 48 C 148 36 153 24 157 18"
+                  fill="none" stroke="#5a3e28" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- Leaf -->
+            <path d="M 153 34 C 162 25 173 27 170 37 C 164 32 157 32 153 34 Z"
+                  fill="#7a9a5a" opacity="0.72"/>
+
+            <!-- LIGHT SIDE -->
+            <line x1="112" y1="88" x2="58" y2="74" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="56" y="71" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">LIGHT SIDE</text>
+
+            <!-- SHADOW SIDE -->
+            <line x1="189" y1="90" x2="236" y2="76" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="238" y="73" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">SHADOW SIDE</text>
+
+            <!-- CAST SHADOW -->
+            <line x1="154" y1="157" x2="72" y2="174" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
+            <text x="70" y="177" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">CAST SHADOW</text>
           </svg>
-          <div class="ref-label">Cylinder · the six zones translated</div>
+          <div class="ref-label">Apple · three zones of light</div>
         </div>
       </div>
-      
-      <div class="vocab">
-        <div class="vocab-row"><div class="vocab-num">1</div><div class="vocab-body"><div class="vocab-term">Highlight</div><div class="vocab-def">The brightest vertical strip on the curved side — where light hits the surface most directly. On a cylinder it's a strip, not a dot.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">2</div><div class="vocab-body"><div class="vocab-term">Top (flat tone)</div><div class="vocab-def">The flat ellipse on top is ONE tone — no gradient. Treat it like a single face of a cube. Often the brightest area when light is overhead.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">3</div><div class="vocab-body"><div class="vocab-term">Halftone</div><div class="vocab-def">The middle gradient on the curved side — between the highlight and the core shadow. Most of the cylinder's "side" is halftone.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">4</div><div class="vocab-body"><div class="vocab-term">Core shadow</div><div class="vocab-def">A vertical band of the deepest tone on the side, where the curve turns furthest from the light. Note: it's a strip, not a curve.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">5</div><div class="vocab-body"><div class="vocab-term">Reflected light</div><div class="vocab-def">A subtle lift of value on the very edge of the shadow side — bounce light from surroundings. Must stay darker than halftones.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">6</div><div class="vocab-body"><div class="vocab-term">Cast shadow</div><div class="vocab-def">The shadow the cylinder throws on the floor — stretched and softened with distance. Anchors the form to the ground.</div></div></div>
-        <div class="vocab-row" style="background: rgba(167,139,250,0.08); border-radius: 8px; padding: 10px;"><div class="vocab-num" style="background: #a78bfa; color: white;">★</div><div class="vocab-body"><div class="vocab-term" style="color: #6d28d9;">The Edge (special to cylinder)</div><div class="vocab-def">Where the curved side meets the flat top. This sharp line is what makes a cylinder read AS a cylinder. Lose this edge, and your form looks like an egg.</div></div></div>
-      </div>
-      
+
       <div class="btn-stack">
-        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> I understand — continue</button>
+        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Got it — continue</button>
       </div>
     </div>`;
 }
