@@ -1079,6 +1079,94 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   APPLE ROTATE — interactive 3D rotation viewer
+   ═══════════════════════════════════════════════════════════════ */
+.apple-rotate-card {
+  background: linear-gradient(180deg, #fefcf8 0%, #f5f0e8 100%);
+  border-radius: var(--radius-xl);
+  padding: 22px 20px 24px;
+  border: 1px solid rgba(200,169,110,0.18);
+}
+.apple-rotate-stage {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #f8f5ee 0%, #ede6d5 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 14px 0 16px;
+  border: 1px solid rgba(200,169,110,0.22);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.apple-rotate-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+}
+.apple-rotate-hint {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26,29,43,0.88);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  animation: playLightHintBounce 1.8s ease-in-out infinite;
+}
+.apple-rotate-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(200,169,110,0.3);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  line-height: 1;
+  padding-bottom: 1px;
+}
+.apple-rotate-arrow:hover {
+  background: rgba(200,169,110,0.18);
+  border-color: var(--gold);
+  transform: translateY(-50%) scale(1.1);
+}
+.apple-rotate-arrow:active { transform: translateY(-50%) scale(0.94); }
+.apple-rotate-arrow-left  { left: 10px; }
+.apple-rotate-arrow-right { right: 10px; }
+@media (max-width: 520px) {
+  .apple-rotate-card { padding: 18px 16px 20px; }
+  .apple-rotate-arrow { width: 30px; height: 30px; font-size: 15px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    OPENING LFC — Honest Welcome
    The first thing the student sees in Lesson 1.
    Pure prose. Calm, honest, museum-text feel.
@@ -6004,10 +6092,10 @@ const LESSON = {
     // ═══════════════════════════════════════════════════════════════
     {
       part: 'A',
-      partLabel: '✨ Play with the light',
-      type: 'playLight',
-      title: 'Now feel it — drag the sun',
-      intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
+      partLabel: '✨ See it in 3D',
+      type: 'appleRotate',
+      title: 'Spin the apple',
+      intro: 'Notice what changes.',
       xp: 5
     },
     {
@@ -6363,9 +6451,8 @@ function renderStep() {
     case 'lfcMoment':   el.innerHTML = renderLFCMoment(step); break;
     
     case 'reference':   el.innerHTML = renderReference(step); break;
-    case 'playLight':   el.innerHTML = renderPlayLight(step); 
-                        // Defer interactive setup until DOM is in place
-                        setTimeout(() => initPlayLight('cylinder'), 50);
+    case 'appleRotate': el.innerHTML = renderAppleRotate(step);
+                        setTimeout(() => initAppleRotate(), 50);
                         break;
     case 'tools':      el.innerHTML = renderTools(step); break;
     case 'ready':      el.innerHTML = renderReady(step); break;
@@ -7663,6 +7750,53 @@ function renderPlayLight(step) {
     </div>`;
 }
 
+function renderAppleRotate(step) {
+  return `
+    <div class="step-card apple-rotate-card">
+      <div class="play-light-kicker">✨ INTERACTIVE</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-intro">${step.intro}</div>
+
+      <div class="apple-rotate-stage" id="apple-rotate-stage">
+        <svg class="apple-rotate-svg" id="apple-rotate-svg"
+             viewBox="0 0 300 260"
+             preserveAspectRatio="xMidYMid meet"
+             xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="arApple" cx="36%" cy="28%" r="74%">
+              <stop offset="0%"   stop-color="#e0f098"/>
+              <stop offset="35%"  stop-color="#b8d448"/>
+              <stop offset="68%"  stop-color="#7a9828"/>
+              <stop offset="100%" stop-color="#506018"/>
+            </radialGradient>
+            <filter id="arSketch" x="-6%" y="-6%" width="112%" height="112%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.038" numOctaves="3" seed="11" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+          <g id="apple-rotate-frame"><!-- filled by initAppleRotate --></g>
+        </svg>
+
+        <div class="apple-rotate-hint" id="apple-rotate-hint">
+          <span>↔</span> Drag to rotate
+        </div>
+
+        <button class="apple-rotate-arrow apple-rotate-arrow-left"
+                id="apple-rotate-left"
+                onclick="appleRotateStep(-1)" aria-label="Rotate left">&#8249;</button>
+        <button class="apple-rotate-arrow apple-rotate-arrow-right"
+                id="apple-rotate-right"
+                onclick="appleRotateStep(1)" aria-label="Rotate right">&#8250;</button>
+      </div>
+
+      <div class="btn-stack" style="margin-top: 18px;">
+        <button class="btn btn-primary" onclick="nextStep()">
+          <span class="glyph">◈</span> Got it — let's draw
+        </button>
+      </div>
+    </div>`;
+}
+
 // ─── Play Light state ──────────────────────────────────────────────
 const PlayLight = {
   shape: 'sphere',
@@ -8566,6 +8700,184 @@ function resetPlayLight() {
   PlayLight.lightAngleDeg = 225;
   PlayLight.lightDistance = 150;
   updatePlayLight();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// APPLE ROTATE — 3D rotation viewer
+// 12 discrete keyframe silhouettes, 30° apart. Drag or arrow buttons to spin.
+// ═══════════════════════════════════════════════════════════════════════════
+const AppleRotate = {
+  currentAngle: 0,
+  hasInteracted: false
+};
+
+// Four body path shapes (hw = half-width at each angle band).
+// Apple centered at (150,128), viewBox 300×260.
+// Shape: shoulders narrow near stem dent, widest ~upper-third, tapers at bottom.
+// Widths: w50=full front/back, w47=30°off, w42=60°off, w40=side view.
+const _AB = {
+  w50: `M 150 72 C 140 58,116 56,104 68 C 96 78,96 96,100 116 C 102 144,112 176,130 196 C 138 202,144 206,150 206 C 156 206,162 202,170 196 C 188 176,198 144,200 116 C 204 96,204 78,196 68 C 184 56,160 58,150 72 Z`,
+  w47: `M 150 72 C 141 58,118 56,107 68 C 99 78,99 96,103 116 C 105 144,114 176,131 196 C 139 202,144 206,150 206 C 156 206,161 202,169 196 C 186 176,195 144,197 116 C 201 96,201 78,193 68 C 182 56,159 58,150 72 Z`,
+  w42: `M 150 72 C 142 58,121 56,111 68 C 105 78,105 96,108 116 C 110 144,118 176,133 196 C 140 202,145 206,150 206 C 155 206,160 202,167 196 C 182 176,190 144,192 116 C 195 96,195 78,189 68 C 179 56,158 58,150 72 Z`,
+  w40: `M 150 72 C 142 58,123 56,113 68 C 107 78,107 96,110 116 C 112 144,120 176,134 196 C 140 202,145 206,150 206 C 155 206,160 202,166 196 C 180 176,188 144,190 116 C 193 96,193 78,187 68 C 177 56,158 58,150 72 Z`
+};
+
+// 12 keyframes. Each: b=body path, rx=cast shadow half-width, m=detail marks.
+// Stem visible 0°→90° and 270°→360°; hidden/obscured 120°→240°.
+// Blemish A visible 30°→90° (front-right surface).
+// Blemish B visible 150°→240° (back-left surface).
+const AR_FRAMES = [
+  // 0° — front view (hw=50)
+  { b: _AB.w50, rx: 46, m: `
+    <path d="M 140 74 C 144 66,156 66,160 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.5"/>
+    <path d="M 149 72 C 147 60,150 48,153 42" fill="none" stroke="#3d2810" stroke-width="1.9" stroke-linecap="round"/>
+    <path d="M 152 56 C 159 47,170 47,168 56 C 163 52,156 52,152 56 Z" fill="#5a7828" opacity="0.82"/>
+  ` },
+  // 30° (hw=47)
+  { b: _AB.w47, rx: 43, m: `
+    <path d="M 143 74 C 147 66,159 66,163 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.44"/>
+    <path d="M 153 72 C 152 60,155 48,157 42" fill="none" stroke="#3d2810" stroke-width="1.9" stroke-linecap="round"/>
+    <path d="M 156 56 C 164 47,174 48,172 56 C 167 53,160 53,156 56 Z" fill="#5a7828" opacity="0.76"/>
+    <ellipse cx="116" cy="106" rx="5.5" ry="4" fill="none" stroke="#2a4018" stroke-width="1" opacity="0.48"/>
+  ` },
+  // 60° (hw=42)
+  { b: _AB.w42, rx: 38, m: `
+    <path d="M 147 74 C 151 66,163 66,167 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.34"/>
+    <path d="M 158 72 C 157 60,159 48,161 42" fill="none" stroke="#3d2810" stroke-width="1.9" stroke-linecap="round"/>
+    <path d="M 160 55 C 167 47,177 48,175 56 C 170 53,164 53,160 55 Z" fill="#5a7828" opacity="0.55"/>
+    <ellipse cx="114" cy="108" rx="6.5" ry="4.2" fill="none" stroke="#2a4018" stroke-width="1.1" opacity="0.72"/>
+  ` },
+  // 90° — side view (hw=40)
+  { b: _AB.w40, rx: 36, m: `
+    <path d="M 161 72 C 160 62,162 51,163 44" fill="none" stroke="#3d2810" stroke-width="1.5" stroke-linecap="round" opacity="0.62"/>
+    <ellipse cx="116" cy="110" rx="5" ry="3.5" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.38"/>
+  ` },
+  // 120° (hw=42) — stem going behind
+  { b: _AB.w42, rx: 38, m: `
+    <ellipse cx="183" cy="100" rx="5.5" ry="4" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.46"/>
+  ` },
+  // 150° (hw=47) — stem obscured
+  { b: _AB.w47, rx: 43, m: `
+    <ellipse cx="185" cy="104" rx="6.5" ry="4.2" fill="none" stroke="#2a4018" stroke-width="1" opacity="0.58"/>
+  ` },
+  // 180° — back view (hw=50), stem hidden
+  { b: _AB.w50, rx: 46, m: `
+    <path d="M 140 74 C 144 66,156 66,160 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.26"/>
+    <ellipse cx="183" cy="108" rx="6.5" ry="4.5" fill="none" stroke="#2a4018" stroke-width="1.1" opacity="0.66"/>
+  ` },
+  // 210° (hw=47) — stem barely reappearing
+  { b: _AB.w47, rx: 43, m: `
+    <path d="M 140 72 C 138 62,140 51,142 44" fill="none" stroke="#3d2810" stroke-width="1.4" stroke-linecap="round" opacity="0.28"/>
+    <ellipse cx="179" cy="108" rx="6" ry="4.2" fill="none" stroke="#2a4018" stroke-width="1" opacity="0.52"/>
+  ` },
+  // 240° (hw=42) — stem partially visible from left
+  { b: _AB.w42, rx: 38, m: `
+    <path d="M 136 72 C 134 61,136 49,138 43" fill="none" stroke="#3d2810" stroke-width="1.7" stroke-linecap="round" opacity="0.52"/>
+    <ellipse cx="171" cy="110" rx="5.5" ry="3.8" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.36"/>
+  ` },
+  // 270° — other side (hw=40), stem at left edge
+  { b: _AB.w40, rx: 36, m: `
+    <path d="M 137 72 C 136 62,137 51,138 44" fill="none" stroke="#3d2810" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+  ` },
+  // 300° (hw=42) — stem back in view from left
+  { b: _AB.w42, rx: 38, m: `
+    <path d="M 133 74 C 137 66,149 66,153 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.32"/>
+    <path d="M 141 72 C 139 60,141 48,143 42" fill="none" stroke="#3d2810" stroke-width="1.9" stroke-linecap="round"/>
+    <path d="M 140 56 C 133 47,122 48,124 56 C 129 53,136 53,140 56 Z" fill="#5a7828" opacity="0.55"/>
+  ` },
+  // 330° (hw=47)
+  { b: _AB.w47, rx: 43, m: `
+    <path d="M 137 74 C 141 66,153 66,157 74" fill="none" stroke="#2a4018" stroke-width="0.9" opacity="0.44"/>
+    <path d="M 145 72 C 143 60,145 48,148 42" fill="none" stroke="#3d2810" stroke-width="1.9" stroke-linecap="round"/>
+    <path d="M 147 56 C 140 47,129 48,131 56 C 136 53,143 53,147 56 Z" fill="#5a7828" opacity="0.72"/>
+    <ellipse cx="120" cy="106" rx="5.5" ry="4" fill="none" stroke="#2a4018" stroke-width="0.8" opacity="0.32"/>
+  ` }
+];
+
+function renderFrame(angle) {
+  const frameEl = document.getElementById('apple-rotate-frame');
+  if (!frameEl) return;
+  const norm = ((angle % 360) + 360) % 360;
+  const idx = Math.round(norm / 30) % 12;
+  const f = AR_FRAMES[idx];
+  frameEl.innerHTML = `
+    <ellipse cx="150" cy="214" rx="${f.rx}" ry="7" fill="rgba(50,70,20,0.18)"/>
+    <path d="${f.b}" fill="url(#arApple)" stroke="#2a4018" stroke-width="1.2" filter="url(#arSketch)"/>
+    ${f.m}
+  `;
+}
+
+function initAppleRotate() {
+  AppleRotate.currentAngle = 0;
+  AppleRotate.hasInteracted = false;
+  renderFrame(0);
+
+  const stage = document.getElementById('apple-rotate-stage');
+  if (!stage) return;
+
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartAngle = 0;
+
+  function markInteracted() {
+    if (!AppleRotate.hasInteracted) {
+      AppleRotate.hasInteracted = true;
+      const hint = document.getElementById('apple-rotate-hint');
+      if (hint) hint.style.opacity = '0';
+    }
+  }
+
+  function onDragStart(clientX) {
+    dragging = true;
+    dragStartX = clientX;
+    dragStartAngle = AppleRotate.currentAngle;
+    document.body.style.userSelect = 'none';
+  }
+
+  function onDragMove(clientX) {
+    if (!dragging) return;
+    markInteracted();
+    const dx = clientX - dragStartX;
+    // ~2px per degree
+    AppleRotate.currentAngle = (dragStartAngle + dx * 0.5 + 3600) % 360;
+    renderFrame(AppleRotate.currentAngle);
+  }
+
+  function onDragEnd() {
+    if (!dragging) return;
+    dragging = false;
+    document.body.style.userSelect = '';
+    // Snap to nearest 30° keyframe on release
+    AppleRotate.currentAngle = Math.round(AppleRotate.currentAngle / 30) * 30 % 360;
+    renderFrame(AppleRotate.currentAngle);
+  }
+
+  stage.addEventListener('mousedown', (e) => { e.preventDefault(); onDragStart(e.clientX); });
+  document.addEventListener('mousemove', (e) => { onDragMove(e.clientX); });
+  document.addEventListener('mouseup', onDragEnd);
+
+  stage.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    if (t) onDragStart(t.clientX);
+  }, { passive: false });
+  document.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const t = e.touches[0];
+    if (t) onDragMove(t.clientX);
+    e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('touchend', onDragEnd);
+}
+
+function appleRotateStep(dir) {
+  if (!AppleRotate.hasInteracted) {
+    AppleRotate.hasInteracted = true;
+    const hint = document.getElementById('apple-rotate-hint');
+    if (hint) hint.style.opacity = '0';
+  }
+  AppleRotate.currentAngle = ((AppleRotate.currentAngle + dir * 30) + 360) % 360;
+  renderFrame(AppleRotate.currentAngle);
 }
 
 function renderReference(step) {
