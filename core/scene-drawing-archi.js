@@ -40,7 +40,7 @@ const ARTCHI_LINES = {
     'good check. perspective gets easier when you can name what you did.'
   ],
   idleClick: [
-    'ready to build your room?', 'tap a step to keep going!', 'i\u0027m right here ✨'
+    'ready to build your room?', 'tap a step to keep going!', 'i’m right here ✨'
   ]
 };
 function artchiRandomLine(category) {
@@ -137,6 +137,8 @@ function artchiMarkup() {
         <button class="btn btn-ink" style="margin-top: 6px;" onclick="closeArtchiOnboard()">Let's go →</button>
       </div>
     </div>
+
+    ${artchiChatMarkup()}
   `;
 }
 
@@ -182,14 +184,132 @@ function closeArtchiBubble() {
   if (label) label.classList.remove('muted');
 }
 
+// ─── SOUND (ported from Foundation A's playTone — same synthesized tone,
+// no audio files needed, respects a simple on/off toggle) ───
+let sceneDrawingSoundOn = true;
+function artchiPlayTone(freq, dur) {
+  if (!sceneDrawingSoundOn) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
+  } catch (e) { /* Web Audio unavailable — fail silently, never block the click */ }
+}
+
 function onArtchiClick() {
   const a = document.getElementById('artchi-character');
   if (a) {
     a.classList.add('excited');
     setTimeout(() => a.classList.remove('excited'), 1800);
   }
-  showArtchiBubble(artchiRandomLine('idleClick'), 2800);
+  artchiPlayTone(880, 0.15);
+  setTimeout(() => artchiPlayTone(1100, 0.15), 100);
+  openArtchiChat();
 }
+
+// ─── CHAT (ported shell from Foundation A's chat modal — same look and
+// greeting, but canned encouragement instead of a real AI backend, since
+// Scene Drawing has no chat API yet) ───
+function artchiChatMarkup() {
+  return `
+    <div class="artchi-chat" id="artchi-chat">
+      <div class="artchi-chat-head">
+        <div class="artchi-chat-head-info">
+          <b>Artchi</b>
+          <span>● Online · here to help</span>
+        </div>
+        <div class="artchi-chat-close" onclick="closeArtchiChat()">×</div>
+      </div>
+      <div class="artchi-chat-body" id="artchi-chat-body">
+        <div class="artchi-msg bot">Hi! I'm Artchi ✨ Ask me anything about this lesson!</div>
+      </div>
+      <div class="artchi-chat-input-wrap">
+        <input type="text" class="artchi-chat-input" placeholder="Type your question..." id="artchi-chat-inp"
+          onkeypress="if(event.key==='Enter') sendArtchiChat()">
+        <button class="artchi-chat-send" onclick="sendArtchiChat()">Send</button>
+      </div>
+    </div>
+  `;
+}
+
+const ARTCHI_CHAT_REPLIES = [
+  "Try dragging the VP and watch what happens to the lines!",
+  "Remember: the horizon line is your eye level.",
+  "You've got this — one step at a time ✨",
+  "Check the Teacher Tip on this step for a hint.",
+  "I'm not a full AI chat yet, but I'm cheering you on either way!"
+];
+function openArtchiChat() {
+  const chat = document.getElementById('artchi-chat');
+  if (chat) chat.classList.add('show');
+  closeArtchiBubble();
+}
+function closeArtchiChat() {
+  const chat = document.getElementById('artchi-chat');
+  if (chat) chat.classList.remove('show');
+}
+function sendArtchiChat() {
+  const inp = document.getElementById('artchi-chat-inp');
+  const body = document.getElementById('artchi-chat-body');
+  if (!inp || !body || !inp.value.trim()) return;
+  const userText = inp.value.trim();
+  body.innerHTML += `<div class="artchi-msg user">${userText}</div>`;
+  inp.value = '';
+  const reply = ARTCHI_CHAT_REPLIES[Math.floor(Math.random() * ARTCHI_CHAT_REPLIES.length)];
+  setTimeout(() => {
+    body.innerHTML += `<div class="artchi-msg bot">${reply}</div>`;
+    body.scrollTop = body.scrollHeight;
+  }, 350);
+  body.scrollTop = body.scrollHeight;
+}
+
+// ─── SIDE PANEL (tablet/desktop only — mirrors Foundation A's Actions
+// panel: My Journey / Upload my work / Bring Artchi back / About Artchi) ───
+function sidePanelMarkup() {
+  return `
+    <div class="side-panel-title">Actions</div>
+    <div class="side-artchi-preview">
+      <svg width="60" height="60" viewBox="0 0 100 100" style="display:block; margin:0 auto 8px;">
+        <defs>
+          <linearGradient id="sidePreviewBody" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e9d5ff"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#sidePreviewBody)"/>
+        <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#sidePreviewBody)"/>
+        <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+        <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+        <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+        <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="side-artchi-preview-name">Artchi lives in the corner</div>
+      <div class="side-artchi-preview-sub">Tap her to chat. Use buttons below for actions.</div>
+    </div>
+    <div class="side-actions">
+      <button class="side-action-btn primary" onclick="if(typeof openMyJourney === 'function') openMyJourney(); else showArtchiBubble('My Journey opens from the main app menu ✨', 2600);">
+        <span class="side-action-btn-ico">📖</span><span>My Journey</span>
+      </button>
+      <button class="side-action-btn" onclick="document.querySelector('.upload-drop-zone') ? document.querySelector('.upload-drop-zone').scrollIntoView({behavior:'smooth'}) : showArtchiBubble('Upload from the lesson wrap-up screen ✨', 2600);">
+        <span class="side-action-btn-ico">📸</span><span>Upload my work</span>
+      </button>
+      <button class="side-action-btn" onclick="showArtchi(); showArtchiBubble('I’m back! ✨', 2200);">
+        <span class="side-action-btn-ico">🧚</span><span>Bring Artchi back</span>
+      </button>
+      <button class="side-action-btn" onclick="openArtchiAbout()">
+        <span class="side-action-btn-ico">ℹ️</span><span>About Artchi</span>
+      </button>
+    </div>
+  `;
+}
+function openArtchiAbout() { openArtchiOnboard(); }
 
 function openArtchiOnboard() {
   const el = document.getElementById('artchi-onboard');
