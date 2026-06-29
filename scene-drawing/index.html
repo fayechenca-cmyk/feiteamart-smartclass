@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Scene Drawing Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../core/scene-drawing-style.css">
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-text">FEI TeamArt</div>
+    </div>
+    <a class="ctrl" href="../" title="Back to home">←</a>
+  </div>
+
+  <div id="course-overview-root"></div>
+</div>
+
+<!-- Artchi mascot — same character used across the rest of the platform -->
+<div id="artchi-mount"></div>
+
+<!-- Engine + data. To add a new lesson later: add its <script> tag here
+     AND in lesson/index.html, then add it to COURSE.lessons in course-data.js -->
+<script src="../core/scene-drawing-platform-bridge.js"></script>
+<script src="../core/scene-drawing-archi.js"></script>
+<script src="../core/scene-drawing-app.js"></script>
+<script src="../core/interactive-perspective-block.js"></script>
+<script src="lesson-1-one-point-street.js"></script>
+<script src="lesson-2-two-point-bedroom.js"></script>
+<script src="course-data.js"></script>
+<script>
+  document.getElementById('course-overview-root').innerHTML = renderCourseOverview(COURSE);
+  document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+  initArtchiDrag();
+  showArtchi();
+</script>
+</body>
+</html>
