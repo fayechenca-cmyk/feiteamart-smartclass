@@ -1221,7 +1221,7 @@
     <div class="section-sub">Follow clear, guided lessons. Build real skills, one practice at a time.</div>
   </div>
   
-  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawingCourses();">
     <div class="subtrack-emoji">✏️</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Drawing</div>
@@ -1249,11 +1249,43 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
+     DRAWING COURSES SCREEN — choose a drawing course
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="drawing-courses-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">Drawing</div>
+    <div class="section-sub">Choose a course to start or continue.</div>
+  </div>
+
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
+    <div class="subtrack-emoji">✏️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Foundation A</div>
+      <div class="subtrack-meta">Form &amp; Structure</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+  <a href="scene-drawing/" class="subtrack">
+    <div class="subtrack-emoji">🏙️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Scene Sketch</div>
+      <div class="subtrack-meta">Perspective Scene Drawing</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
      DRAWING SCREEN — Foundation A unlock path (Duolingo style)
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="drawing-screen" style="display:none;">
-  
-  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+
+  <button class="back-btn" onclick="showDrawingCourses();">← Back to Drawing</button>
   
   <div class="path-header">
     <div class="path-header-kicker">Drawing · Foundation A</div>
@@ -1513,6 +1545,7 @@
     document.getElementById('signin-screen').style.display = 'none';
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('skills-screen').style.display = 'none';
+    document.getElementById('drawing-courses-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
   }
   
@@ -1545,6 +1578,13 @@
   }
   window.showSkills = showSkills;
   
+  function showDrawingCourses() {
+    hideAllScreens();
+    document.getElementById('drawing-courses-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showDrawingCourses = showDrawingCourses;
+
   function showDrawing() {
     hideAllScreens();
     document.getElementById('drawing-screen').style.display = 'block';
