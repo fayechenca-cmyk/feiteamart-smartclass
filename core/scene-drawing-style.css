@@ -230,8 +230,8 @@ body {
 
 /* ═══ ARTCHI MASCOT (ported from the platform's existing lessons) ═══ */
 .artchi-mascot {
-  position: fixed; right: 22px; bottom: 22px;
-  width: 84px; height: 84px;
+  position: fixed; right: 18px; bottom: 18px;
+  width: 72px; height: 72px;
   cursor: grab; z-index: 60; user-select: none;
   transition: transform .3s;
   filter: drop-shadow(0 6px 20px rgba(167,139,250,0.45));
@@ -299,6 +299,93 @@ body {
 .artchi-onboard-sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 4px; }
 @keyframes artchiFadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes artchiSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ═══ ARTCHI CHAT (ported from Foundation A — same shell, canned replies
+   instead of a real AI backend since Scene Drawing has no chat API) ═══ */
+.artchi-chat {
+  display: none; position: fixed; bottom: 18px; right: 18px;
+  width: calc(100vw - 36px); max-width: 320px;
+  background: #fff; border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18); z-index: 200;
+  overflow: hidden; border: 0.5px solid var(--border);
+}
+.artchi-chat.show { display: block; animation: artchiSlideUp .35s ease; }
+.artchi-chat-head { padding: 14px 16px; background: linear-gradient(135deg, var(--ink) 0%, #374151 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.artchi-chat-head-info b { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; }
+.artchi-chat-head-info span { font-family: 'Montserrat', sans-serif; font-size: 9px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; display: block; margin-top: 2px; }
+.artchi-chat-close { color: rgba(255,255,255,0.7); font-size: 20px; font-weight: 700; cursor: pointer; padding: 2px 8px; }
+.artchi-chat-body { padding: 14px; max-height: 220px; overflow-y: auto; background: var(--paper); }
+.artchi-msg { padding: 10px 12px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.5; margin-bottom: 8px; max-width: 85%; }
+.artchi-msg.bot { background: #fff; color: var(--ink); border-left: 3px solid var(--accent); }
+.artchi-msg.user { background: var(--ink); color: #fff; margin-left: auto; }
+.artchi-chat-input-wrap { display: flex; gap: 6px; padding: 10px 12px; border-top: 0.5px solid var(--border); background: #fff; }
+.artchi-chat-input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Open Sans', sans-serif; font-size: 12px; outline: none; }
+.artchi-chat-input:focus { border-color: var(--ink); }
+.artchi-chat-send { padding: 9px 12px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--ink); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ═══ SIDE PANEL (tablet landscape + desktop only — see @media block below) ═══ */
+.side-panel { display: none; }
+.side-panel-title {
+  font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted);
+  margin-bottom: 4px; text-align: center;
+}
+.side-artchi-preview {
+  padding: 16px 14px;
+  background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, rgba(167,139,250,0.03) 70%);
+  border-radius: var(--radius-md); border: 0.5px dashed rgba(167,139,250,0.3);
+}
+.side-artchi-preview-name { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: var(--ink); letter-spacing: 1px; text-align: center; }
+.side-artchi-preview-sub { font-size: 10px; color: var(--ink-muted); text-align: center; margin-top: 2px; }
+.side-actions { display: flex; flex-direction: column; gap: 8px; }
+.side-action-btn {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--ink); cursor: pointer; transition: all .2s; text-align: left;
+  letter-spacing: 0.3px; width: 100%;
+}
+.side-action-btn:hover { border-color: var(--ink); background: var(--paper); transform: translateX(2px); }
+.side-action-btn-ico { font-size: 16px; }
+.side-action-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.side-action-btn.primary .side-action-btn-ico { color: var(--accent); }
+.side-user-info { font-size: 11px; color: var(--ink-soft); text-align: center; }
+
+/* ═══ RESPONSIVE: SMALL TABLET (521–819px) ═══ */
+@media (min-width: 521px) and (max-width: 819px) {
+  body { padding: 30px 20px; }
+  .app { max-width: 540px; }
+  .artchi-mascot { width: 84px; height: 84px; right: 22px; bottom: 22px; }
+  .artchi-chat { max-width: 360px; width: calc(100vw - 40px); }
+}
+
+/* ═══ RESPONSIVE: IPAD LANDSCAPE + DESKTOP (≥820px) — split layout,
+   same breakpoint and structure as Foundation A's lessons ═══ */
+@media (min-width: 820px) {
+  body { padding: 30px 24px; align-items: flex-start; }
+  .app { max-width: 1120px; min-height: 780px; }
+
+  .content {
+    display: grid; grid-template-columns: 1fr 320px; gap: 28px;
+    padding: 24px 28px 40px; align-items: start;
+  }
+  .content > .course-hero, .content > .lesson-grid, .content > .step-card,
+  .content > .btn, .content > #progress-rail-mount, .content > #step-content { grid-column: 1; }
+
+  .side-panel {
+    display: flex; grid-column: 2; grid-row: 1 / span 10;
+    position: sticky; top: 20px;
+    background: linear-gradient(180deg, #faf8ff 0%, #f5f3ff 100%);
+    border-radius: var(--radius-lg); border: 0.5px solid var(--border);
+    padding: 20px 18px; min-height: 480px; flex-direction: column;
+    gap: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  }
+
+  .artchi-mascot { right: 28px; bottom: 28px; width: 92px; height: 92px; z-index: 70; }
+  .artchi-label { right: 28px; bottom: 10px; }
+  .artchi-bubble { right: 28px; bottom: 134px; max-width: 260px; }
+  .artchi-chat { right: 28px; bottom: 28px; max-width: 380px; width: calc(100vw - 56px); }
+}
 
 /* ═══ MULTIPLE CHOICE / CHECKBOX REFLECTION (replaces open-text questions) ═══ */
 .mc-question-card { background: #fff; border-radius: var(--radius-lg); padding: 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.05); margin-bottom: 12px; }
