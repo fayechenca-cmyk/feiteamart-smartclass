@@ -40,7 +40,7 @@ const ARTCHI_LINES = {
     'good check. perspective gets easier when you can name what you did.'
   ],
   idleClick: [
-    ‘ready to build your room?’, ‘tap a step to keep going!’, ‘i\u0027m right here ✨’
+    'ready to build your room?', 'tap a step to keep going!', 'i\u0027m right here ✨'
   ]
 };
 function artchiRandomLine(category) {
