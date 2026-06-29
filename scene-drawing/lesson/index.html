@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Scene Drawing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../core/scene-drawing-style.css">
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-text">FEI TeamArt</div>
+    </div>
+    <a class="ctrl" href="../" title="All lessons">←</a>
+  </div>
+
+  <!-- Intro screen (lesson goal + start button) -->
+  <div id="lesson-detail-root"></div>
+
+  <!-- Step-by-step view (hidden until "Start lesson" is pressed) -->
+  <div id="step-view" style="display:none;">
+    <div class="content" style="padding-top: 18px;">
+      <div id="progress-rail-mount"></div>
+      <div id="step-content"></div>
+    </div>
+    <div class="step-nav">
+      <button class="btn step-nav-prev" id="step-nav-prev-btn" onclick="goToPrevStep()">←</button>
+      <button class="btn btn-ink step-nav-next" id="step-nav-next-btn">Next step →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Artchi mascot -->
+<div id="artchi-mount"></div>
+
+<!-- Engine + data -->
+<script src="../../core/scene-drawing-platform-bridge.js"></script>
+<script src="../../core/scene-drawing-archi.js"></script>
+<script src="../../core/scene-drawing-app.js"></script>
+<script src="../../core/interactive-perspective-block.js"></script>
+<script src="../lesson-1-one-point-street.js"></script>
+<script src="../lesson-2-two-point-bedroom.js"></script>
+<script src="../course-data.js"></script>
+<script>
+  // ── Read ?id= from the URL and find the matching lesson ──
+  const params = new URLSearchParams(window.location.search);
+  const lessonId = params.get('id');
+  const lessonIndex = COURSE.lessons.findIndex(l => l.id === lessonId);
+  const lesson = lessonIndex >= 0 ? COURSE.lessons[lessonIndex] : COURSE.lessons[0];
+  window.CURRENT_LESSON = lesson;
+
+  document.title = `FEI TeamArt · ${lesson.title}`;
+  document.getElementById('lesson-detail-root').innerHTML = renderLessonDetail(lesson, Math.max(lessonIndex, 0));
+  document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+  initArtchiDrag();
+  showArtchi();
+
+  // "Start/Continue lesson" calls goToStep(n) from the engine, which lives
+  // in scene-drawing-app.js. We just need to swap from the intro screen to
+  // the step view the first time it's called.
+  const originalGoToStep = goToStep;
+  goToStep = function(index) {
+    document.getElementById('lesson-detail-root').style.display = 'none';
+    document.getElementById('step-view').style.display = 'block';
+    originalGoToStep(index);
+  };
+
+  function goToPrevStep() {
+    const progress = sceneDrawingGetLessonProgress(lesson.id);
+    goToStep(Math.max(0, progress.currentStep - 1));
+  }
+
+  // If the student already started this lesson, jump straight back in.
+  const existingProgress = sceneDrawingGetLessonProgress(lesson.id);
+  if (existingProgress.completedSteps.length > 0 || existingProgress.currentStep > 0) {
+    // Stay on the intro screen — "Continue lesson" button handles resuming.
+    // (We don't auto-jump so returning students always see the lesson goal.)
+  }
+</script>
+</body>
+</html>
