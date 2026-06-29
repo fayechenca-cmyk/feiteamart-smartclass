@@ -144,6 +144,7 @@ function renderCourseOverview(course) {
       ${lessonCardsHtml}
       <button class="btn btn-ghost" onclick="if(typeof openMyJourney === 'function') openMyJourney(); else if(typeof showArtchiBubble === 'function') showArtchiBubble('My Journey opens from the main app menu ✨', 2600);">View in My Journey →</button>
     </div>
+    <aside class="side-panel">${typeof sidePanelMarkup === 'function' ? sidePanelMarkup() : ''}</aside>
   `;
 }
 
@@ -162,14 +163,12 @@ function renderLessonDetail(lesson, lessonIndex) {
       <div class="course-title">${lesson.title}</div>
       <div class="course-desc">${lesson.lessonGoal}</div>
     </div>
-    <div class="content" style="padding-top: 4px;">
-      <div class="step-card">
-        <div class="step-kicker">📋 What you'll need</div>
-        <div class="step-explanation" style="margin-bottom:0;">${lesson.steps.length} guided steps · pencil, eraser, ruler, grey marker, paper</div>
-      </div>
-      <button class="btn btn-ink" style="margin-bottom: 10px;" onclick="goToStep(${progress.completedSteps.length})">${startLabel}</button>
-      <a class="btn btn-ghost" href="../" style="display:block; text-align:center;">← Back to all lessons</a>
+    <div class="step-card">
+      <div class="step-kicker">📋 What you'll need</div>
+      <div class="step-explanation" style="margin-bottom:0;">${lesson.steps.length} guided steps · pencil, eraser, ruler, grey marker, paper</div>
     </div>
+    <button class="btn btn-ink" style="margin-bottom: 10px;" onclick="goToStep(${progress.completedSteps.length})">${startLabel}</button>
+    <a class="btn btn-ghost" href="../" style="display:block; text-align:center;">← Back to all lessons</a>
   `;
 }
 
