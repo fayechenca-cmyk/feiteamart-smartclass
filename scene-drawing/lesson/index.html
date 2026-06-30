@@ -18,13 +18,15 @@
   </div>
 
   <!-- Intro screen (lesson goal + start button) -->
-  <div id="lesson-detail-root"></div>
+  <div class="content" id="lesson-detail-root"></div>
+  <aside class="side-panel" id="side-panel-intro"></aside>
 
   <!-- Step-by-step view (hidden until "Start lesson" is pressed) -->
   <div id="step-view" style="display:none;">
     <div class="content" style="padding-top: 18px;">
       <div id="progress-rail-mount"></div>
       <div id="step-content"></div>
+      <aside class="side-panel" id="side-panel-step"></aside>
     </div>
     <div class="step-nav">
       <button class="btn step-nav-prev" id="step-nav-prev-btn" onclick="goToPrevStep()">←</button>
@@ -55,6 +57,10 @@
   document.title = `FEI TeamArt · ${lesson.title}`;
   document.getElementById('lesson-detail-root').innerHTML = renderLessonDetail(lesson, Math.max(lessonIndex, 0));
   document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+  if (typeof sidePanelMarkup === 'function') {
+    document.getElementById('side-panel-intro').innerHTML = sidePanelMarkup();
+    document.getElementById('side-panel-step').innerHTML = sidePanelMarkup();
+  }
   initArtchiDrag();
   showArtchi();
 
