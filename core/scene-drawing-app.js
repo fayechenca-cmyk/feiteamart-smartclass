@@ -169,6 +169,7 @@ function renderLessonDetail(lesson, lessonIndex) {
     </div>
     <button class="btn btn-ink" style="margin-bottom: 10px;" onclick="goToStep(${progress.completedSteps.length})">${startLabel}</button>
     <a class="btn btn-ghost" href="../" style="display:block; text-align:center;">← Back to all lessons</a>
+    <aside class="side-panel">${typeof sidePanelMarkup === 'function' ? sidePanelMarkup() : ''}</aside>
   `;
 }
 
