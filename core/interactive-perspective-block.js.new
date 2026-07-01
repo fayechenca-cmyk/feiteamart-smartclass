@@ -1,0 +1,1132 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  InteractivePerspectiveBlock
+ *  Reusable component for Scene Drawing lessons. Renders a small SVG
+ *  "perspective simulator" the student can drag, click, or replay — instead
+ *  of a static image/video placeholder.
+ *
+ *  WHY THIS EXISTS (per Faye, June 2026)
+ *  Lesson 1 felt too text-heavy and flat. Students should learn perspective
+ *  by dragging, watching, lighting up, and comparing — not reading.
+ *
+ *  HOW TO USE
+ *  Give a step this shape instead of (or alongside) the old static fields:
+ *
+ *    {
+ *      stepNumber: 3,
+ *      title: 'Move the Horizon Line',
+ *      shortInstruction: 'Move the horizon line. The camera angle changes.',
+ *      studentTask: 'Drag',          // short verb shown on the task chip
+ *      teacherTip: 'Eye level decides what kind of view you get.',
+ *      checkPoint: 'Try all three camera heights.',
+ *      interactive: {
+ *        type: 'horizon-line-drag',  // | 'vp-drag' | 'camera-angle-demo'
+ *                                    // | 'guide-line-animation' | 'construction-toggle'
+ *        title: 'Camera Angle + Horizon Line',
+ *        labels: { high: 'Higher camera angle', mid: 'Normal eye level', low: 'Lower camera angle' },
+ *        showReplay: true,
+ *        showConstructionToggle: false,
+ *        relatedStepId: 4
+ *      }
+ *    }
+ *
+ *  Then in the step-card renderer, call:
+ *      renderInteractiveBlock(step.interactive, uniqueDomId)
+ *  instead of the old renderPlaceholderFrame() calls, and after inserting
+ *  the returned HTML into the DOM, call:
+ *      mountInteractiveBlock(step.interactive, uniqueDomId)
+ *  to wire up the actual drag/click/animate behavior (SVG needs to exist in
+ *  the DOM before listeners can attach).
+ *
+ *  ADDING A NEW INTERACTIVE TYPE LATER (e.g. Lesson 2's "two VP drag" or
+ *  "room frame construction")
+ *  1. Add a new render*() function below that returns the SVG/HTML markup
+ *  2. Add a new mount*() function that wires up its specific drag/click logic
+ *  3. Add both to the `type` switch in renderInteractiveBlock / mountInteractiveBlock
+ *  No other files need to change — lesson data files just set interactive.type.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+// Shared SVG scene geometry — every interactive type draws the same simple
+// street so the visual language stays consistent across steps.
+const PERSPECTIVE_SVG_W = 320;
+const PERSPECTIVE_SVG_H = 200;
+
+function perspectiveBuildStreetPaths(horizonY, vpX) {
+  // horizonY / vpX in SVG coordinate space (0-200 / 0-320)
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const roadHalfWidthNear = 70;
+  const sidewalkExtra = 24;
+
+  // Road: two lines from bottom corners of the road, converging at VP
+  const roadLeft = `M ${vpX - 3} ${horizonY} L ${w/2 - roadHalfWidthNear} ${h}`;
+  const roadRight = `M ${vpX + 3} ${horizonY} L ${w/2 + roadHalfWidthNear} ${h}`;
+
+  // Sidewalks: just outside the road, same VP
+  const sidewalkLeft = `M ${vpX - 8} ${horizonY} L ${w/2 - roadHalfWidthNear - sidewalkExtra} ${h}`;
+  const sidewalkRight = `M ${vpX + 8} ${horizonY} L ${w/2 + roadHalfWidthNear + sidewalkExtra} ${h}`;
+
+  // Building guide lines: a few diagonals on each side fanning to the VP
+  const buildingGuides = [];
+  [0.3, 0.55, 0.8].forEach(f => {
+    const leftX = (w/2 - roadHalfWidthNear - sidewalkExtra) * (1 - f) + 0 * f;
+    const rightX = (w/2 + roadHalfWidthNear + sidewalkExtra) * (1 - f) + w * f;
+    buildingGuides.push(`M ${vpX} ${horizonY} L ${leftX} ${h * 0.3 + (h*0.7)*(1-f)}`);
+    buildingGuides.push(`M ${vpX} ${horizonY} L ${rightX} ${h * 0.3 + (h*0.7)*(1-f)}`);
+  });
+
+  return { roadLeft, roadRight, sidewalkLeft, sidewalkRight, buildingGuides };
+}
+
+function perspectiveBuildingsSvg(horizonY) {
+  // Simple static building silhouettes — they don't move with horizon/VP,
+  // they're just there so dragging the horizon visibly changes "how much
+  // sky vs ground" the student sees, like a real camera tilt.
+  const h = PERSPECTIVE_SVG_H;
+  return `
+    <rect x="14" y="${horizonY - 64}" width="40" height="64" fill="#cbd5e1" opacity="0.55" rx="2"/>
+    <rect x="60" y="${horizonY - 42}" width="28" height="42" fill="#cbd5e1" opacity="0.4" rx="2"/>
+    <rect x="266" y="${horizonY - 56}" width="40" height="56" fill="#cbd5e1" opacity="0.55" rx="2"/>
+    <rect x="232" y="${horizonY - 34}" width="28" height="34" fill="#cbd5e1" opacity="0.4" rx="2"/>
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 1 · horizon-line-drag
+// ─────────────────────────────────────────────────────────────────────────
+function renderHorizonLineDrag(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const startY = h / 2;
+  const vpX = w / 2;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="horizon-line-drag" data-vpx="${vpX}">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#dbeafe"/>
+          <g id="${domId}-buildings">${perspectiveBuildingsSvg(startY)}</g>
+          <g id="${domId}-street"></g>
+          <line id="${domId}-horizon" x1="0" y1="${startY}" x2="${w}" y2="${startY}" stroke="#1a1d2b" stroke-width="2"/>
+          <g id="${domId}-handle" class="ipb-handle-group" style="cursor: grab;">
+            <rect x="0" y="${startY - 13}" width="${w}" height="26" fill="transparent"/>
+            <circle cx="${w - 22}" cy="${startY}" r="11" fill="#67e8f9" stroke="#1a1d2b" stroke-width="2"/>
+            <text x="${w - 22}" y="${startY + 4}" font-size="11" text-anchor="middle" font-weight="800" fill="#1a1d2b">↕</text>
+          </g>
+        </svg>
+        <div class="ipb-camera-icon" id="${domId}-camera">📷</div>
+      </div>
+      <div class="ipb-readout" id="${domId}-readout">Normal eye level</div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Drag the horizon line up or down.'}</div>
+    </div>
+  `;
+}
+
+function mountHorizonLineDrag(cfg, domId) {
+  const wrap = document.getElementById(domId);
+  if (!wrap) return;
+  const svg = document.getElementById(`${domId}-svg`);
+  const horizonLine = document.getElementById(`${domId}-horizon`);
+  const handleGroup = document.getElementById(`${domId}-handle`);
+  const streetGroup = document.getElementById(`${domId}-street`);
+  const buildingsGroup = document.getElementById(`${domId}-buildings`);
+  const cameraIcon = document.getElementById(`${domId}-camera`);
+  const readout = document.getElementById(`${domId}-readout`);
+  const vpX = parseFloat(wrap.dataset.vpx);
+  const h = PERSPECTIVE_SVG_H;
+  const minY = 40, maxY = h - 40;
+  const labels = cfg.labels || {};
+
+  function draw(y) {
+    horizonLine.setAttribute('y1', y);
+    horizonLine.setAttribute('y2', y);
+    handleGroup.querySelector('circle').setAttribute('cy', y);
+    handleGroup.querySelector('text').setAttribute('y', y + 4);
+    handleGroup.querySelector('rect').setAttribute('y', y - 13);
+    buildingsGroup.innerHTML = perspectiveBuildingsSvg(y);
+    const paths = perspectiveBuildStreetPaths(y, vpX);
+    streetGroup.innerHTML = `
+      <path d="${paths.sidewalkLeft}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      <path d="${paths.sidewalkRight}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      <path d="${paths.roadLeft}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
+      <path d="${paths.roadRight}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
+    `;
+
+    const mid = h / 2;
+    const band = (maxY - minY) * 0.16;
+    let label, camTop;
+    if (y < mid - band) { label = labels.high || 'Higher camera angle'; camTop = '8%'; }
+    else if (y > mid + band) { label = labels.low || 'Lower camera angle'; camTop = '78%'; }
+    else { label = labels.mid || 'Normal eye level'; camTop = '42%'; }
+    readout.textContent = label;
+    cameraIcon.style.top = camTop;
+  }
+
+  draw(h / 2);
+
+  let dragging = false;
+  function clientYToSvgY(clientY) {
+    const rect = svg.getBoundingClientRect();
+    const relY = (clientY - rect.top) / rect.height * h;
+    return Math.max(minY, Math.min(maxY, relY));
+  }
+  function onDown(e) {
+    dragging = true;
+    handleGroup.style.cursor = 'grabbing';
+    e.preventDefault();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    draw(clientYToSvgY(clientY));
+  }
+  function onUp() { dragging = false; handleGroup.style.cursor = 'grab'; }
+
+  handleGroup.addEventListener('mousedown', onDown);
+  handleGroup.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 2 · vp-drag
+// ─────────────────────────────────────────────────────────────────────────
+function renderVpDrag(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = h / 2;
+  const startVpX = w / 2;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="vp-drag" data-horizony="${horizonY}">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#dbeafe"/>
+          <g id="${domId}-buildings">${perspectiveBuildingsSvg(horizonY)}</g>
+          <g id="${domId}-street"></g>
+          <line x1="0" y1="${horizonY}" x2="${w}" y2="${horizonY}" stroke="#1a1d2b" stroke-width="2"/>
+          <g id="${domId}-vp" class="ipb-handle-group" style="cursor: grab;">
+            <circle cx="${startVpX}" cy="${horizonY}" r="9" fill="#c8a96e" stroke="#1a1d2b" stroke-width="2"/>
+            <text x="${startVpX}" y="${horizonY - 16}" font-size="10" text-anchor="middle" font-weight="800" fill="#c8a96e">VP</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ipb-readout" id="${domId}-readout">All depth lines move toward the VP.</div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Drag the VP and watch the street turn.'}</div>
+    </div>
+  `;
+}
+
+function mountVpDrag(cfg, domId) {
+  const wrap = document.getElementById(domId);
+  if (!wrap) return;
+  const svg = document.getElementById(`${domId}-svg`);
+  const vpGroup = document.getElementById(`${domId}-vp`);
+  const streetGroup = document.getElementById(`${domId}-street`);
+  const horizonY = parseFloat(wrap.dataset.horizony);
+  const w = PERSPECTIVE_SVG_W;
+  const minX = 30, maxX = w - 30;
+
+  function draw(vpX) {
+    vpGroup.querySelector('circle').setAttribute('cx', vpX);
+    vpGroup.querySelector('text').setAttribute('x', vpX);
+    const paths = perspectiveBuildStreetPaths(horizonY, vpX);
+    streetGroup.innerHTML = `
+      ${paths.buildingGuides.map(d => `<path d="${d}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.55"/>`).join('')}
+      <path d="${paths.sidewalkLeft}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      <path d="${paths.sidewalkRight}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      <path d="${paths.roadLeft}" stroke="#1a1d2b" stroke-width="2.5" fill="none"/>
+      <path d="${paths.roadRight}" stroke="#1a1d2b" stroke-width="2.5" fill="none"/>
+    `;
+  }
+  draw(w / 2);
+
+  let dragging = false;
+  function clientXToSvgX(clientX) {
+    const rect = svg.getBoundingClientRect();
+    const relX = (clientX - rect.left) / rect.width * w;
+    return Math.max(minX, Math.min(maxX, relX));
+  }
+  function onDown(e) { dragging = true; vpGroup.style.cursor = 'grabbing'; e.preventDefault(); }
+  function onMove(e) {
+    if (!dragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    draw(clientXToSvgX(clientX));
+  }
+  function onUp() { dragging = false; vpGroup.style.cursor = 'grab'; }
+
+  vpGroup.addEventListener('mousedown', onDown);
+  vpGroup.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 3 · camera-angle-demo (click 3 fixed positions, no free drag)
+// ─────────────────────────────────────────────────────────────────────────
+function renderCameraAngleDemo(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const positions = { high: h * 0.28, mid: h * 0.5, low: h * 0.72 };
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="camera-angle-demo">
+      <div class="ipb-camera-row">
+        <button class="ipb-cam-btn" data-pos="high" onclick="ipbSetCameraDemo('${domId}', 'high')">📷<span>High Camera</span></button>
+        <button class="ipb-cam-btn active" data-pos="mid" onclick="ipbSetCameraDemo('${domId}', 'mid')">📷<span>Eye Level</span></button>
+        <button class="ipb-cam-btn" data-pos="low" onclick="ipbSetCameraDemo('${domId}', 'low')">📷<span>Low Camera</span></button>
+      </div>
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg" data-high="${positions.high}" data-mid="${positions.mid}" data-low="${positions.low}">
+          <rect width="${w}" height="${h}" fill="#dbeafe"/>
+          <g id="${domId}-buildings">${perspectiveBuildingsSvg(positions.mid)}</g>
+          <g id="${domId}-street"></g>
+          <line id="${domId}-horizon" x1="0" y1="${positions.mid}" x2="${w}" y2="${positions.mid}" stroke="#1a1d2b" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Tap a camera position.'}</div>
+    </div>
+  `;
+}
+
+function ipbSetCameraDemo(domId, pos) {
+  const svg = document.getElementById(`${domId}-svg`);
+  const y = parseFloat(svg.dataset[pos]);
+  document.getElementById(`${domId}-horizon`).setAttribute('y1', y);
+  document.getElementById(`${domId}-horizon`).setAttribute('y2', y);
+  document.getElementById(`${domId}-buildings`).innerHTML = perspectiveBuildingsSvg(y);
+  const vpX = PERSPECTIVE_SVG_W / 2;
+  const paths = perspectiveBuildStreetPaths(y, vpX);
+  document.getElementById(`${domId}-street`).innerHTML = `
+    <path d="${paths.sidewalkLeft}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+    <path d="${paths.sidewalkRight}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+    <path d="${paths.roadLeft}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
+    <path d="${paths.roadRight}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
+  `;
+  const wrap = document.getElementById(domId);
+  wrap.querySelectorAll('.ipb-cam-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.pos === pos);
+  });
+}
+
+function mountCameraAngleDemo(cfg, domId) {
+  ipbSetCameraDemo(domId, 'mid');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 4 · guide-line-animation (sequential reveal + replay + show/hide)
+// ─────────────────────────────────────────────────────────────────────────
+function renderGuideLineAnimation(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = h / 2, vpX = w / 2;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="guide-line-animation" data-stage="0">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#dbeafe"/>
+          <g id="${domId}-buildings">${perspectiveBuildingsSvg(horizonY)}</g>
+          <g id="${domId}-vp-dot" style="opacity:0; transition: opacity .4s;">
+            <circle cx="${vpX}" cy="${horizonY}" r="5" fill="#c8a96e"/>
+            <text x="${vpX}" y="${horizonY - 12}" font-size="9" text-anchor="middle" font-weight="800" fill="#c8a96e">VP</text>
+          </g>
+          <line id="${domId}-horizon" x1="0" y1="${horizonY}" x2="${w}" y2="${horizonY}" stroke="#1a1d2b" stroke-width="2" style="opacity:0; transition: opacity .4s;"/>
+          <g id="${domId}-road" style="opacity:0; transition: opacity .4s;"></g>
+          <g id="${domId}-guides" style="opacity:0; transition: opacity .4s;"></g>
+        </svg>
+        <div class="ipb-label-chip" id="${domId}-chip">Tap Next to begin</div>
+      </div>
+      <div class="ipb-btn-row">
+        <button class="ipb-mini-btn" onclick="ipbGuideNext('${domId}')">Next Line →</button>
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbGuideReplay('${domId}')">↺ Replay</button>
+      </div>
+      <div class="ipb-btn-row">
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbGuideToggleView('${domId}', 'construction')">Construction View</button>
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbGuideToggleView('${domId}', 'clean')">Clean View</button>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Guide lines help you place the road and buildings.'}</div>
+    </div>
+  `;
+}
+
+const IPB_GUIDE_STAGES = ['VP', 'Horizon Line', 'Road', 'Sidewalk + Guide Lines'];
+
+function ipbGuideNext(domId) {
+  const wrap = document.getElementById(domId);
+  let stage = parseInt(wrap.dataset.stage || '0', 10);
+  stage = Math.min(stage + 1, IPB_GUIDE_STAGES.length);
+  wrap.dataset.stage = stage;
+  ipbGuideRender(domId, stage);
+}
+function ipbGuideReplay(domId) {
+  const wrap = document.getElementById(domId);
+  wrap.dataset.stage = '0';
+  ipbGuideRender(domId, 0);
+}
+function ipbGuideRender(domId, stage) {
+  const vpDot = document.getElementById(`${domId}-vp-dot`);
+  const horizon = document.getElementById(`${domId}-horizon`);
+  const roadGroup = document.getElementById(`${domId}-road`);
+  const guidesGroup = document.getElementById(`${domId}-guides`);
+  const chip = document.getElementById(`${domId}-chip`);
+  const h = PERSPECTIVE_SVG_H, w = PERSPECTIVE_SVG_W, vpX = w/2, horizonY = h/2;
+  const paths = perspectiveBuildStreetPaths(horizonY, vpX);
+
+  vpDot.style.opacity = stage >= 1 ? '1' : '0';
+  horizon.style.opacity = stage >= 2 ? '1' : '0';
+  if (stage >= 3) {
+    roadGroup.innerHTML = `<path d="${paths.roadLeft}" stroke="#1a1d2b" stroke-width="2.5" fill="none"/><path d="${paths.roadRight}" stroke="#1a1d2b" stroke-width="2.5" fill="none"/>`;
+    roadGroup.style.opacity = '1';
+  } else {
+    roadGroup.style.opacity = '0';
+  }
+  if (stage >= 4) {
+    guidesGroup.innerHTML = `
+      <path d="${paths.sidewalkLeft}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      <path d="${paths.sidewalkRight}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+      ${paths.buildingGuides.map(d => `<path d="${d}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.55"/>`).join('')}
+    `;
+    guidesGroup.style.opacity = '1';
+  } else {
+    guidesGroup.style.opacity = '0';
+  }
+  chip.textContent = stage === 0 ? 'Tap Next to begin' : `Showing: ${IPB_GUIDE_STAGES[stage - 1]}`;
+}
+function ipbGuideToggleView(domId, mode) {
+  const wrap = document.getElementById(domId);
+  const stage = mode === 'construction' ? IPB_GUIDE_STAGES.length : 3;
+  wrap.dataset.stage = stage;
+  ipbGuideRender(domId, stage);
+}
+function mountGuideLineAnimation(cfg, domId) {
+  ipbGuideRender(domId, 0);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5 · construction-toggle (Clean View / Construction View slider)
+// Used for building blocks, shop details, grey marker before/after, etc.
+// ─────────────────────────────────────────────────────────────────────────
+function renderConstructionToggle(cfg, domId) {
+  const beforeSrc = (cfg.before && cfg.before.src) || '';
+  const afterSrc = (cfg.after && cfg.after.src) || '';
+  const beforeLabel = (cfg.before && cfg.before.label) || 'Before';
+  const afterLabel = (cfg.after && cfg.after.label) || 'After';
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="construction-toggle" data-mode="before">
+      <div class="ipb-compare-stage">
+        <div class="ipb-compare-pane" id="${domId}-before">
+          ${beforeSrc ? `<img src="${beforeSrc}" alt="${beforeLabel}">` : `<div class="ipb-compare-placeholder">🖼️<span>${beforeLabel}</span></div>`}
+        </div>
+        <div class="ipb-compare-pane" id="${domId}-after" style="display:none;">
+          ${afterSrc ? `<img src="${afterSrc}" alt="${afterLabel}">` : `<div class="ipb-compare-placeholder">🖼️<span>${afterLabel}</span></div>`}
+        </div>
+      </div>
+      <div class="ipb-toggle-row">
+        <button class="ipb-toggle-btn active" id="${domId}-btn-before" onclick="ipbSetCompare('${domId}', 'before')">${beforeLabel}</button>
+        <button class="ipb-toggle-btn" id="${domId}-btn-after" onclick="ipbSetCompare('${domId}', 'after')">${afterLabel}</button>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || ''}</div>
+    </div>
+  `;
+}
+function ipbSetCompare(domId, mode) {
+  document.getElementById(`${domId}-before`).style.display = mode === 'before' ? 'flex' : 'none';
+  document.getElementById(`${domId}-after`).style.display = mode === 'after' ? 'flex' : 'none';
+  document.getElementById(`${domId}-btn-before`).classList.toggle('active', mode === 'before');
+  document.getElementById(`${domId}-btn-after`).classList.toggle('active', mode === 'after');
+}
+function mountConstructionToggle(cfg, domId) {
+  ipbSetCompare(domId, 'before');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5b · INDOOR ROOM SCENE GEOMETRY (shared by all Lesson 2 types)
+// A two-point room is drawn as: horizon line, VP-Left + VP-Right (near the
+// left/right edges so the room doesn't distort), a vertical corner line,
+// and floor/ceiling lines fanning from each VP toward that corner. The
+// standard 2-point convention: lines defining the LEFT wall converge to
+// VP-RIGHT, and lines defining the RIGHT wall converge to VP-LEFT.
+// ─────────────────────────────────────────────────────────────────────────
+function perspectiveBuildRoomPaths(horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY) {
+  const h = PERSPECTIVE_SVG_H, w = PERSPECTIVE_SVG_W;
+  // Corner line (the "first vertical line" / room corner)
+  const cornerLine = `M ${cornerX} ${cornerTopY} L ${cornerX} ${cornerBottomY}`;
+
+  // Compute where a line from a VP through the corner point hits a screen edge.
+  function extendToEdge(vpX, vpY, px, py, edgeX) {
+    const t = (edgeX - vpX) / (px - vpX);
+    const y = vpY + t * (py - vpY);
+    return { x: edgeX, y };
+  }
+  const floorLeftEnd = extendToEdge(vpRightX, horizonY, cornerX, cornerBottomY, 0);
+  const floorRightEnd = extendToEdge(vpLeftX, horizonY, cornerX, cornerBottomY, w);
+  const ceilLeftEnd = extendToEdge(vpRightX, horizonY, cornerX, cornerTopY, 0);
+  const ceilRightEnd = extendToEdge(vpLeftX, horizonY, cornerX, cornerTopY, w);
+
+  const floorL = `M ${cornerX} ${cornerBottomY} L ${floorLeftEnd.x} ${clamp(floorLeftEnd.y, 0, h)}`;
+  const floorR = `M ${cornerX} ${cornerBottomY} L ${floorRightEnd.x} ${clamp(floorRightEnd.y, 0, h)}`;
+  const ceilL = `M ${cornerX} ${cornerTopY} L ${ceilLeftEnd.x} ${clamp(ceilLeftEnd.y, 0, h)}`;
+  const ceilR = `M ${cornerX} ${cornerTopY} L ${ceilRightEnd.x} ${clamp(ceilRightEnd.y, 0, h)}`;
+
+  // Side walls: vertical-ish lines at each screen edge, between floor & ceiling end points
+  const wallL = `M ${floorLeftEnd.x} ${clamp(floorLeftEnd.y, 0, h)} L ${ceilLeftEnd.x} ${clamp(ceilLeftEnd.y, 0, h)}`;
+  const wallR = `M ${floorRightEnd.x} ${clamp(floorRightEnd.y, 0, h)} L ${ceilRightEnd.x} ${clamp(ceilRightEnd.y, 0, h)}`;
+
+  // Dashed VP guide lines (VP to corner top/bottom) so students see the
+  // construction lines themselves, not just the resulting room edges.
+  const vpGuideLeftTop = `M ${vpLeftX} ${horizonY} L ${cornerX} ${cornerTopY}`;
+  const vpGuideLeftBottom = `M ${vpLeftX} ${horizonY} L ${cornerX} ${cornerBottomY}`;
+  const vpGuideRightTop = `M ${vpRightX} ${horizonY} L ${cornerX} ${cornerTopY}`;
+  const vpGuideRightBottom = `M ${vpRightX} ${horizonY} L ${cornerX} ${cornerBottomY}`;
+
+  return { cornerLine, floorL, floorR, ceilL, ceilR, wallL, wallR, vpGuideLeftTop, vpGuideLeftBottom, vpGuideRightTop, vpGuideRightBottom };
+}
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5b-ii · ROOM SHELL (back wall / window / baseboard) + FURNITURE
+// THAT ACTUALLY RESPONDS TO VP POSITION (per Faye, June 2026)
+//
+// Furniture boxes are built the same way the room itself is: a box has a
+// near edge and a far edge, and the lines connecting them converge to a
+// VP. An object against the LEFT wall has its depth lines converge to
+// VP-RIGHT (same rule as the left wall itself); an object against the
+// RIGHT wall converges to VP-LEFT. This is what makes "drag the VP and
+// the furniture stretches with it" actually true, not just decorative.
+// ─────────────────────────────────────────────────────────────────────────
+
+// Build one furniture box: a near face (the face closest to the viewer,
+// drawn as a plain rectangle) plus depth lines from its 4 corners going
+// back toward `vpX` (the vanishing point this object's wall uses).
+function perspectiveFurnitureBox({ nearX, nearY, nearW, nearH, vpX, vpY, depthRatio }) {
+  // depthRatio: how far along the way to the VP the "far face" sits (0–1,
+  // small = shallow object like a rug, larger = deep object like a bed)
+  const corners = [
+    { x: nearX, y: nearY }, { x: nearX + nearW, y: nearY },
+    { x: nearX + nearW, y: nearY + nearH }, { x: nearX, y: nearY + nearH }
+  ];
+  const farCorners = corners.map(c => ({
+    x: c.x + (vpX - c.x) * depthRatio,
+    y: c.y + (vpY - c.y) * depthRatio
+  }));
+  const nearFace = `M ${corners[0].x} ${corners[0].y} L ${corners[1].x} ${corners[1].y} L ${corners[2].x} ${corners[2].y} L ${corners[3].x} ${corners[3].y} Z`;
+  const farFace = `M ${farCorners[0].x} ${farCorners[0].y} L ${farCorners[1].x} ${farCorners[1].y} L ${farCorners[2].x} ${farCorners[2].y} L ${farCorners[3].x} ${farCorners[3].y} Z`;
+  const depthLines = corners.map((c, i) => `M ${c.x} ${c.y} L ${vpX} ${vpY}`);
+  const depthLinesToFar = corners.map((c, i) => `M ${c.x} ${c.y} L ${farCorners[i].x} ${farCorners[i].y}`);
+  return { nearFace, farFace, depthLines, depthLinesToFar, farCorners };
+}
+
+function perspectiveHumanFigureSvg(x, horizonY, groundY) {
+  const headR = 6;
+  const headCY = horizonY - headR * 0.5;
+  const neckY = headCY + headR;
+  const shoulderW = 11, hipW = 8;
+  const shoulderY = neckY + 3;
+  const hipY = groundY - 14;
+  return `
+    <g class="ipb-human-figure">
+      <line x1="${x - 18}" y1="${horizonY}" x2="${x - headR - 2}" y2="${horizonY}" stroke="#c2410c" stroke-width="1" stroke-dasharray="2 2" opacity="0.7"/>
+      <text x="${x - 20}" y="${horizonY - 3}" font-size="6" fill="#c2410c" text-anchor="end" opacity="0.8">eye level</text>
+      <circle cx="${x}" cy="${headCY}" r="${headR}" fill="#ef4444"/>
+      <ellipse cx="${x}" cy="${headCY + headR * 0.3}" rx="${headR * 0.55}" ry="${headR * 0.3}" fill="#dc2626" opacity="0.5"/>
+      <path d="M ${x - shoulderW/2} ${shoulderY} L ${x - shoulderW/2 - 2} ${hipY} L ${x - hipW/2} ${hipY} L ${x - hipW/2 + 1} ${groundY} L ${x + hipW/2 - 1} ${groundY} L ${x + hipW/2} ${hipY} L ${x + shoulderW/2 + 2} ${hipY} L ${x + shoulderW/2} ${shoulderY} Z" fill="#ef4444"/>
+      <path d="M ${x - shoulderW/2} ${shoulderY} L ${x - shoulderW/2 - 6} ${hipY - 10}" stroke="#ef4444" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M ${x + shoulderW/2} ${shoulderY} L ${x + shoulderW/2 + 6} ${hipY - 10}" stroke="#ef4444" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </g>
+  `;
+}
+
+function perspectiveBackWallSvg(cornerX, horizonY, topY, bottomY) {
+  const winW = 32, winH = 28;
+  const winX = cornerX - winW / 2;
+  const winY = topY + (horizonY - topY) * 0.15;
+  return `
+    <rect x="${winX - 2}" y="${winY - 2}" width="${winW + 4}" height="${winH + 4}" rx="1" fill="#475569" opacity="0.6"/>
+    <rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="#bae6fd" opacity="0.9"/>
+    <rect x="${winX}" y="${winY}" width="${winW}" height="${winH * 0.55}" fill="#7dd3fc" opacity="0.7"/>
+    <rect x="${winX}" y="${winY + winH * 0.65}" width="${winW}" height="${winH * 0.35}" fill="#93c5fd" opacity="0.5"/>
+    <line x1="${winX + winW/2}" y1="${winY}" x2="${winX + winW/2}" y2="${winY + winH}" stroke="#475569" stroke-width="1.5"/>
+    <line x1="${winX}" y1="${winY + winH/2}" x2="${winX + winW}" y2="${winY + winH/2}" stroke="#475569" stroke-width="1.5"/>
+    <rect x="${winX + 2}" y="${winY}" width="6" height="${winH}" fill="#d1fae5" opacity="0.25"/>
+    <rect x="${winX}" y="${winY - 4}" width="${winW}" height="4" rx="1" fill="#6b7280" opacity="0.7"/>
+  `;
+}
+
+function perspectiveRoomFurnitureSvg(cornerX, horizonY, h, vpLeftX, vpRightX, mode) {
+  const showGuides = mode !== 'clean';
+  const groundY = h - 6;
+  const w = PERSPECTIVE_SVG_W;
+  const bedNearX = 4, bedNearH = 24;
+  const bedNearW = Math.max(22, cornerX - 24 - bedNearX);
+  const bedNearY = groundY - bedNearH;
+  const bed = perspectiveFurnitureBox({ nearX: bedNearX, nearY: bedNearY, nearW: bedNearW, nearH: bedNearH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.17 });
+  const nsW = 10, nsH = 14;
+  const nsX = bedNearX + bedNearW + 2, nsY = groundY - nsH;
+  const ns = perspectiveFurnitureBox({ nearX: nsX, nearY: nsY, nearW: nsW, nearH: nsH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.12 });
+  const shelfW = 18, shelfH = 36;
+  const shelfX = w - 8 - shelfW, shelfY = groundY - shelfH;
+  const shelf = perspectiveFurnitureBox({ nearX: shelfX, nearY: shelfY, nearW: shelfW, nearH: shelfH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.2 });
+  const deskW = 18, deskH = 9;
+  const deskX = shelfX - 16 - deskW, deskY = groundY - deskH;
+  const desk = perspectiveFurnitureBox({ nearX: deskX, nearY: deskY, nearW: deskW, nearH: deskH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.13 });
+  const rugX = bedNearX + bedNearW + 10, rugW = cornerX - rugX - 8;
+  const rugY = groundY - 8, rugH = 8;
+  const rug = perspectiveFurnitureBox({ nearX: rugX, nearY: rugY, nearW: rugW, nearH: rugH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.3 });
+
+  function drawBox(box, fill, stroke, strokeW) {
+    stroke = stroke || '#1a1d2b'; strokeW = strokeW || 1.2;
+    return `<path d="${box.farFace}" fill="${fill}" opacity="0.45"/>${box.depthLinesToFar.map(d => `<path d="${d}" stroke="${stroke}" stroke-width="${strokeW}" fill="none"/>`).join('')}<path d="${box.nearFace}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW + 0.2}"/>`;
+  }
+  function guides(box) {
+    if (!showGuides) return '';
+    return box.depthLines.map(d => `<path d="${d}" stroke="#67e8f9" stroke-width="0.8" stroke-dasharray="2 3" fill="none" opacity="0.5"/>`).join('');
+  }
+
+  const hbX = bedNearX, hbY = bedNearY - 10, hbW = Math.min(bedNearW * 0.28 + 8, bedNearW * 0.5), hbH = 10;
+  const p1X = bedNearX + 2, p1W = Math.min(12, bedNearW * 0.28), p1H = bedNearH * 0.4;
+  const p2X = p1X + p1W + 3, p2W = p1W * 0.85;
+  const bedDetails = `<rect x="${hbX}" y="${hbY}" width="${hbW}" height="${hbH}" rx="2" fill="#78350f"/><rect x="${hbX + 1}" y="${hbY + 1}" width="${hbW - 2}" height="${hbH - 3}" rx="1.5" fill="#92400e" opacity="0.8"/><rect x="${p1X}" y="${bedNearY + 2}" width="${p1W}" height="${p1H}" rx="3" fill="#f8fafc"/><rect x="${p2X}" y="${bedNearY + 2}" width="${p2W}" height="${p1H * 0.92}" rx="3" fill="#f1f5f9"/><rect x="${bedNearX + 1}" y="${bedNearY + bedNearH * 0.45}" width="${bedNearW - 2}" height="2" rx="1" fill="#94a3b8" opacity="0.5"/><rect x="${bedNearX + 1}" y="${bedNearY + bedNearH * 0.65}" width="${bedNearW - 2}" height="2" rx="1" fill="#94a3b8" opacity="0.3"/>`;
+
+  const lampX = nsX + nsW * 0.5, lampY = nsY - 8;
+  const lampDetails = `<line x1="${lampX}" y1="${nsY}" x2="${lampX}" y2="${lampY + 3}" stroke="#6b7280" stroke-width="1.5"/><ellipse cx="${lampX}" cy="${lampY}" rx="5" ry="3.5" fill="#fde68a" opacity="0.85"/><ellipse cx="${lampX}" cy="${lampY - 1}" rx="3.5" ry="2" fill="#fef3c7" opacity="0.9"/>`;
+
+  const bookColors = ['#ef4444','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ec4899','#06b6d4'];
+  let books = '';
+  for (let s = 0; s < 3; s++) {
+    const sy = shelfY + shelfH * (s + 1) / 4;
+    books += `<line x1="${shelfX}" y1="${sy}" x2="${shelfX + shelfW}" y2="${sy}" stroke="#78350f" stroke-width="1.2" opacity="0.8"/>`;
+    const bn = 4 + s;
+    const bw = (shelfW - 2) / bn;
+    for (let b = 0; b < bn; b++) {
+      const bx = shelfX + 1 + b * bw;
+      const bh = (shelfH / 4) * (0.65 + Math.sin(b * 1.7 + s) * 0.15);
+      books += `<rect x="${bx}" y="${sy - bh}" width="${bw - 1}" height="${bh}" fill="${bookColors[(b + s * 3) % bookColors.length]}" opacity="0.75"/>`;
+    }
+  }
+
+  const monX = deskX + deskW / 2 - 4.5, monY = deskY - 8;
+  const deskDetails = `<rect x="${monX}" y="${monY}" width="9" height="7" rx="1" fill="#1e293b"/><rect x="${monX + 1}" y="${monY + 1}" width="7" height="5" fill="#38bdf8" opacity="0.7"/><rect x="${monX + 3.5}" y="${monY + 7}" width="2" height="2" fill="#475569"/><rect x="${deskX + 2}" y="${deskY - 1}" width="${deskW - 4}" height="1.5" rx="0.5" fill="#94a3b8" opacity="0.6"/>`;
+
+  return `${guides(rug)}${guides(bed)}${guides(ns)}${guides(desk)}${guides(shelf)}<path d="${rug.nearFace}" fill="#d8b4fe" stroke="#a78bfa" stroke-width="0.8" opacity="0.45"/>${rug.depthLinesToFar.map(d => `<path d="${d}" stroke="#a78bfa" stroke-width="0.6" fill="none"/>`).join('')}${drawBox(bed, '#fda4af', '#be185d', 1.2)}${bedDetails}${drawBox(ns, '#d97706', '#92400e', 1)}${lampDetails}${drawBox(shelf, '#92400e', '#78350f', 1.2)}${books}${drawBox(desk, '#a16207', '#78350f', 1)}${deskDetails}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5c · two-vp-room-drag
+// Shared full-room draw routine used by BOTH this type and
+// indoor-camera-angle-demo below, so the room looks identical whether the
+// student is dragging a VP or tapping a camera-height button.
+// ─────────────────────────────────────────────────────────────────────────
+function perspectiveDrawFullRoom({ horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY, mode }) {
+  const h = PERSPECTIVE_SVG_H, w = PERSPECTIVE_SVG_W;
+  const p = perspectiveBuildRoomPaths(horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY);
+  const showGuides = mode !== 'clean';
+  const groundY = h - 6;
+  const humanX = clamp(cornerX + (vpRightX - cornerX) * 0.28, cornerX + 20, vpRightX - 20);
+  const floorLines = [0.15, 0.35, 0.55, 0.75, 0.9].map(f => {
+    const y = cornerBottomY + (groundY - cornerBottomY) * f;
+    return `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="#a8895a" stroke-width="0.4" opacity="0.35"/>`;
+  }).join('');
+  return `
+    <defs>
+      <linearGradient id="ceilGrad${horizonY.toFixed(0)}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f8f4ef"/><stop offset="100%" stop-color="#ede8e0"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="${w}" height="${cornerTopY}" fill="url(#ceilGrad${horizonY.toFixed(0)})"/>
+    <rect x="0" y="${cornerTopY}" width="${w}" height="${cornerBottomY - cornerTopY}" fill="#f0e8da"/>
+    <rect x="0" y="${cornerBottomY}" width="${w}" height="${h - cornerBottomY}" fill="#c8a96e" opacity="0.5"/>
+    ${floorLines}
+    <ellipse cx="${cornerX}" cy="${cornerTopY + 4}" rx="18" ry="4" fill="#fef9c3" opacity="0.55"/>
+    <ellipse cx="${cornerX}" cy="${cornerTopY + 3}" rx="8" ry="2" fill="#fef08a" opacity="0.7"/>
+    ${perspectiveBackWallSvg(cornerX, horizonY, cornerTopY, cornerBottomY)}
+    ${showGuides ? `<path d="${p.vpGuideLeftTop}" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideLeftBottom}" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideRightTop}" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideRightBottom}" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/>` : ''}
+    <path d="${p.floorL}" stroke="#6b5744" stroke-width="2" fill="none"/>
+    <path d="${p.floorR}" stroke="#6b5744" stroke-width="2" fill="none"/>
+    <path d="${p.ceilL}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/>
+    <path d="${p.ceilR}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/>
+    <path d="${p.wallL}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
+    <path d="${p.wallR}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
+    <path d="${p.cornerLine}" stroke="#4b3d2e" stroke-width="2.5" fill="none"/>
+    <path d="${p.floorL}" stroke="#78716c" stroke-width="1.5" fill="none" transform="translate(0,-4)" opacity="0.7"/>
+    <path d="${p.floorR}" stroke="#78716c" stroke-width="1.5" fill="none" transform="translate(0,-4)" opacity="0.7"/>
+    ${perspectiveRoomFurnitureSvg(cornerX, horizonY, h, vpLeftX, vpRightX, mode)}
+    ${perspectiveHumanFigureSvg(humanX, horizonY, groundY)}
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5c · two-vp-room-drag
+// NOW SUPPORTS: drag VP-L/R left-right + drag horizon line up/down
+// (eye level change) all in one combined widget, per Faye June 2026.
+// ─────────────────────────────────────────────────────────────────────────
+function renderTwoVpRoomDrag(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = h * 0.42;
+  const vpLeftX = 26, vpRightX = w - 26;
+  const cornerX = w / 2, cornerTopY = horizonY - 50, cornerBottomY = horizonY + 60;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="two-vp-room-drag" data-horizony="${horizonY}" data-cornerx="${cornerX}" data-mode="construction">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#f5f3ff"/>
+          <g id="${domId}-room"></g>
+          <!-- Horizon line — draggable up/down for eye level -->
+          <g id="${domId}-horizon" style="cursor: ns-resize;">
+            <line x1="0" y1="${horizonY}" x2="${w}" y2="${horizonY}" stroke="#1a1d2b" stroke-width="2"/>
+            <rect x="${w/2 - 28}" y="${horizonY - 8}" width="56" height="16" rx="8" fill="#1a1d2b" opacity="0.82"/>
+            <text x="${w/2}" y="${horizonY + 4}" font-size="8" text-anchor="middle" fill="#fff" font-weight="800" letter-spacing="0.5">↕ EYE LEVEL</text>
+          </g>
+          <g id="${domId}-vpL" class="ipb-handle-group" style="cursor: ew-resize;">
+            <circle cx="${vpLeftX}" cy="${horizonY}" r="9" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+            <text x="${vpLeftX}" y="${horizonY - 16}" font-size="9" text-anchor="middle" font-weight="800" fill="#3b82f6">VP·L</text>
+          </g>
+          <g id="${domId}-vpR" class="ipb-handle-group" style="cursor: ew-resize;">
+            <circle cx="${vpRightX}" cy="${horizonY}" r="9" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+            <text x="${vpRightX}" y="${horizonY - 16}" font-size="9" text-anchor="middle" font-weight="800" fill="#f97316">VP·R</text>
+          </g>
+        </svg>
+        <div class="ipb-label-chip" style="left:auto; right:8px;">Eye Level Reference</div>
+      </div>
+      <div class="ipb-toggle-row">
+        <button class="ipb-toggle-btn active" id="${domId}-btn-construction" onclick="ipbSetRoomDragMode('${domId}', 'construction')">Construction</button>
+        <button class="ipb-toggle-btn" id="${domId}-btn-clean" onclick="ipbSetRoomDragMode('${domId}', 'clean')">Clean View</button>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Drag VP·L / VP·R left-right. Drag the horizon bar up-down to change eye level.'}</div>
+    </div>
+  `;
+}
+function ipbSetRoomDragMode(domId, mode) {
+  const wrap = document.getElementById(domId);
+  wrap.dataset.mode = mode;
+  wrap.querySelector(`#${domId}-btn-construction`).classList.toggle('active', mode === 'construction');
+  wrap.querySelector(`#${domId}-btn-clean`).classList.toggle('active', mode === 'clean');
+  if (wrap._ipbRedraw) wrap._ipbRedraw();
+}
+function mountTwoVpRoomDrag(cfg, domId) {
+  const wrap = document.getElementById(domId);
+  if (!wrap) return;
+  const svg = document.getElementById(`${domId}-svg`);
+  const roomGroup = document.getElementById(`${domId}-room`);
+  const vpLGroup = document.getElementById(`${domId}-vpL`);
+  const vpRGroup = document.getElementById(`${domId}-vpR`);
+  const horizonGroup = document.getElementById(`${domId}-horizon`);
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const cornerX = parseFloat(wrap.dataset.cornerx);
+  let horizonY = parseFloat(wrap.dataset.horizony);
+  let vpLeftX = 26, vpRightX = w - 26;
+
+  function draw() {
+    // Recalculate corner top/bottom relative to current horizonY so the
+    // whole room re-scales when eye level changes.
+    const cornerTopY = horizonY - 50;
+    const cornerBottomY = horizonY + 60;
+    // Move all handle positions to the new horizonY
+    vpLGroup.querySelector('circle').setAttribute('cx', vpLeftX);
+    vpLGroup.querySelector('circle').setAttribute('cy', horizonY);
+    vpLGroup.querySelector('text').setAttribute('x', vpLeftX);
+    vpLGroup.querySelector('text').setAttribute('y', horizonY - 16);
+    vpRGroup.querySelector('circle').setAttribute('cx', vpRightX);
+    vpRGroup.querySelector('circle').setAttribute('cy', horizonY);
+    vpRGroup.querySelector('text').setAttribute('x', vpRightX);
+    vpRGroup.querySelector('text').setAttribute('y', horizonY - 16);
+    horizonGroup.querySelector('line').setAttribute('y1', horizonY);
+    horizonGroup.querySelector('line').setAttribute('y2', horizonY);
+    horizonGroup.querySelector('rect').setAttribute('y', horizonY - 8);
+    horizonGroup.querySelector('text').setAttribute('y', horizonY + 4);
+    roomGroup.innerHTML = perspectiveDrawFullRoom({ horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY, mode: wrap.dataset.mode });
+  }
+  wrap._ipbRedraw = draw;
+  draw();
+
+  let dragging = null; // 'L' | 'R' | 'H' (horizon) | null
+  function svgPt(e) {
+    const rect = svg.getBoundingClientRect();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: (cx - rect.left) / rect.width * w, y: (cy - rect.top) / rect.height * h };
+  }
+  function onDown(which) {
+    return (e) => { dragging = which; e.preventDefault(); e.stopPropagation(); };
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const pt = svgPt(e);
+    if (dragging === 'L') vpLeftX = clamp(pt.x, 6, cornerX - 60);
+    else if (dragging === 'R') vpRightX = clamp(pt.x, cornerX + 60, w - 6);
+    else if (dragging === 'H') horizonY = clamp(pt.y, h * 0.2, h * 0.65);
+    draw();
+  }
+  function onUp() { dragging = null; }
+
+  vpLGroup.addEventListener('mousedown', onDown('L'));
+  vpLGroup.addEventListener('touchstart', onDown('L'), { passive: false });
+  vpRGroup.addEventListener('mousedown', onDown('R'));
+  vpRGroup.addEventListener('touchstart', onDown('R'), { passive: false });
+  horizonGroup.addEventListener('mousedown', onDown('H'));
+  horizonGroup.addEventListener('touchstart', onDown('H'), { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5d · indoor-camera-angle-demo (click 3 fixed horizon heights)
+// ─────────────────────────────────────────────────────────────────────────
+function renderIndoorCameraAngleDemo(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const positions = { high: h * 0.33, mid: h * 0.42, low: h * 0.51 };
+  const vpLeftX = 26, vpRightX = w - 26, cornerX = w / 2;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="indoor-camera-angle-demo" data-mode="clean">
+      <div class="ipb-camera-row">
+        <button class="ipb-cam-btn" data-pos="high" onclick="ipbSetIndoorCameraDemo('${domId}', 'high')">📷<span>Slightly High</span></button>
+        <button class="ipb-cam-btn active" data-pos="mid" onclick="ipbSetIndoorCameraDemo('${domId}', 'mid')">📷<span>Eye Level</span></button>
+        <button class="ipb-cam-btn" data-pos="low" onclick="ipbSetIndoorCameraDemo('${domId}', 'low')">📷<span>Slightly Low</span></button>
+      </div>
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg" data-high="${positions.high}" data-mid="${positions.mid}" data-low="${positions.low}" data-vpl="${vpLeftX}" data-vpr="${vpRightX}" data-cornerx="${cornerX}">
+          <rect width="${w}" height="${h}" fill="#f5f3ff"/>
+          <g id="${domId}-room"></g>
+          <line id="${domId}-horizon" x1="0" y1="${positions.mid}" x2="${w}" y2="${positions.mid}" stroke="#1a1d2b" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Camera height changes how we see the room.'}</div>
+    </div>
+  `;
+}
+function ipbSetIndoorCameraDemo(domId, pos) {
+  const svg = document.getElementById(`${domId}-svg`);
+  const horizonY = parseFloat(svg.dataset[pos]);
+  const vpLeftX = parseFloat(svg.dataset.vpl), vpRightX = parseFloat(svg.dataset.vpr), cornerX = parseFloat(svg.dataset.cornerx);
+  const cornerTopY = horizonY - 50, cornerBottomY = horizonY + 60;
+  document.getElementById(`${domId}-horizon`).setAttribute('y1', horizonY);
+  document.getElementById(`${domId}-horizon`).setAttribute('y2', horizonY);
+  document.getElementById(`${domId}-room`).innerHTML = perspectiveDrawFullRoom({ horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY, mode: 'clean' });
+  document.getElementById(domId).querySelectorAll('.ipb-cam-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.pos === pos);
+  });
+}
+function mountIndoorCameraAngleDemo(cfg, domId) {
+  ipbSetIndoorCameraDemo(domId, 'mid');
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5e · first-vertical-line-room
+// NOW: shows full bedroom ghost behind the draggable corner line so
+// students can see furniture heights react as the line moves.
+// ─────────────────────────────────────────────────────────────────────────
+function renderFirstVerticalLineRoom(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = h * 0.42;
+  const vpLeftX = 26, vpRightX = w - 26;
+  const startCornerX = w / 2, startTopY = horizonY - 40, startBottomY = horizonY + 48;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="first-vertical-line-room" data-horizony="${horizonY}" data-vpl="${vpLeftX}" data-vpr="${vpRightX}">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#f5f3ff"/>
+          <!-- Ghost bedroom (faded, redraws on drag) -->
+          <g id="${domId}-ghost" opacity="0.35"></g>
+          <!-- Construction guide lines from corner to VPs -->
+          <g id="${domId}-guides"></g>
+          <!-- Horizon line -->
+          <line x1="0" y1="${horizonY}" x2="${w}" y2="${horizonY}" stroke="#1a1d2b" stroke-width="1.5" opacity="0.5"/>
+          <!-- VP dots (static) -->
+          <circle cx="${vpLeftX}" cy="${horizonY}" r="6" fill="#3b82f6" stroke="#1e40af" stroke-width="1.5"/>
+          <text x="${vpLeftX}" y="${horizonY - 11}" font-size="8" text-anchor="middle" font-weight="800" fill="#3b82f6">VP·L</text>
+          <circle cx="${vpRightX}" cy="${horizonY}" r="6" fill="#f97316" stroke="#c2410c" stroke-width="1.5"/>
+          <text x="${vpRightX}" y="${horizonY - 11}" font-size="8" text-anchor="middle" font-weight="800" fill="#f97316">VP·R</text>
+          <!-- Draggable corner line (rendered on top of ghost) -->
+          <g id="${domId}-corner" class="ipb-handle-group" style="cursor: grab;">
+            <line x1="${startCornerX}" y1="${startTopY}" x2="${startCornerX}" y2="${startBottomY}" stroke="#fbbf24" stroke-width="3.5"/>
+            <circle cx="${startCornerX}" cy="${startTopY}" r="7" fill="#fbbf24" stroke="#1a1d2b" stroke-width="1.5" data-handle="top"/>
+            <circle cx="${startCornerX}" cy="${startBottomY}" r="7" fill="#fbbf24" stroke="#1a1d2b" stroke-width="1.5" data-handle="bottom"/>
+            <rect x="${startCornerX - 14}" y="${startTopY}" width="28" height="${startBottomY - startTopY}" fill="transparent" data-handle="move"/>
+            <!-- Label on the line -->
+            <rect x="${startCornerX + 10}" y="${horizonY - 12}" width="72" height="14" rx="7" fill="#fbbf24" opacity="0.9"/>
+            <text x="${startCornerX + 46}" y="${horizonY - 2}" font-size="8" text-anchor="middle" font-weight="800" fill="#1a1d2b">ROOM CORNER</text>
+          </g>
+        </svg>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Drag up/down to change corner height. Drag left/right to move position. Watch the room react.'}</div>
+    </div>
+  `;
+}
+function mountFirstVerticalLineRoom(cfg, domId) {
+  const wrap = document.getElementById(domId);
+  if (!wrap) return;
+  const svg = document.getElementById(`${domId}-svg`);
+  const cornerGroup = document.getElementById(`${domId}-corner`);
+  const guidesGroup = document.getElementById(`${domId}-guides`);
+  const ghostGroup = document.getElementById(`${domId}-ghost`);
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = parseFloat(wrap.dataset.horizony);
+  const vpLeftX = parseFloat(wrap.dataset.vpl), vpRightX = parseFloat(wrap.dataset.vpr);
+
+  let cornerX = w / 2, topY = horizonY - 40, bottomY = horizonY + 48;
+
+  function draw() {
+    const line = cornerGroup.querySelector('line');
+    const topHandle = cornerGroup.querySelector('[data-handle="top"]');
+    const bottomHandle = cornerGroup.querySelector('[data-handle="bottom"]');
+    const moveRect = cornerGroup.querySelector('[data-handle="move"]');
+    const label = cornerGroup.querySelector('rect:last-of-type');
+    const labelText = cornerGroup.querySelector('text');
+    const midY = (topY + bottomY) / 2;
+
+    line.setAttribute('x1', cornerX); line.setAttribute('x2', cornerX);
+    line.setAttribute('y1', topY); line.setAttribute('y2', bottomY);
+    topHandle.setAttribute('cx', cornerX); topHandle.setAttribute('cy', topY);
+    bottomHandle.setAttribute('cx', cornerX); bottomHandle.setAttribute('cy', bottomY);
+    moveRect.setAttribute('x', cornerX - 14); moveRect.setAttribute('y', topY);
+    moveRect.setAttribute('height', bottomY - topY);
+    if (label) { label.setAttribute('x', cornerX + 10); label.setAttribute('y', midY - 7); }
+    if (labelText) { labelText.setAttribute('x', cornerX + 46); labelText.setAttribute('y', midY + 3); }
+
+    // Redraw ghost bedroom at the new corner position/height
+    ghostGroup.innerHTML = perspectiveDrawFullRoom({
+      horizonY, vpLeftX, vpRightX,
+      cornerX, cornerTopY: topY, cornerBottomY: bottomY,
+      mode: 'clean'
+    });
+
+    const p = perspectiveBuildRoomPaths(horizonY, vpLeftX, vpRightX, cornerX, topY, bottomY);
+    guidesGroup.innerHTML = `
+      <path d="${p.vpGuideLeftTop}" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideLeftBottom}" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideRightTop}" stroke="#f97316" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideRightBottom}" stroke="#f97316" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+    `;
+  }
+  draw();
+
+  let dragMode = null;
+  let moveStartX = 0, moveStartCornerX = 0;
+  function svgPoint(e) {
+    const rect = svg.getBoundingClientRect();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: (cx - rect.left) / rect.width * w, y: (cy - rect.top) / rect.height * h };
+  }
+  function onDown(e) {
+    dragMode = e.target.dataset.handle || 'move';
+    if (dragMode === 'move') { moveStartX = svgPoint(e).x; moveStartCornerX = cornerX; }
+    e.preventDefault();
+  }
+  function onMove(e) {
+    if (!dragMode) return;
+    const pt = svgPoint(e);
+    if (dragMode === 'top') topY = clamp(pt.y, 4, bottomY - 30);
+    else if (dragMode === 'bottom') bottomY = clamp(pt.y, topY + 30, h - 4);
+    else if (dragMode === 'move') cornerX = clamp(moveStartCornerX + (pt.x - moveStartX), vpLeftX + 50, vpRightX - 50);
+    draw();
+  }
+  function onUp() { dragMode = null; }
+
+  cornerGroup.addEventListener('mousedown', onDown);
+  cornerGroup.addEventListener('touchstart', onDown, { passive: false });
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 5f · room-frame-reveal
+// UPGRADED: each stage now shows a texture fill + floating label so
+// students know which part they just revealed. Much clearer tap prompt.
+// ─────────────────────────────────────────────────────────────────────────
+function renderRoomFrameReveal(cfg, domId) {
+  const w = PERSPECTIVE_SVG_W, h = PERSPECTIVE_SVG_H;
+  const horizonY = h * 0.42;
+  const vpLeftX = 26, vpRightX = w - 26;
+  const cornerX = w / 2, topY = horizonY - 40, bottomY = horizonY + 48;
+  return `
+    <div class="ipb-wrap" id="${domId}" data-type="room-frame-reveal" data-stage="0">
+      <div class="ipb-stage">
+        <svg viewBox="0 0 ${w} ${h}" class="ipb-svg" id="${domId}-svg">
+          <rect width="${w}" height="${h}" fill="#f0e8da"/>
+          <line x1="0" y1="${horizonY}" x2="${w}" y2="${horizonY}" stroke="#8b7d6b" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="${vpLeftX}" cy="${horizonY}" r="6" fill="#3b82f6" opacity="0.7"/>
+          <text x="${vpLeftX}" y="${horizonY - 11}" font-size="8" text-anchor="middle" font-weight="800" fill="#3b82f6" opacity="0.8">VP·L</text>
+          <circle cx="${vpRightX}" cy="${horizonY}" r="6" fill="#f97316" opacity="0.7"/>
+          <text x="${vpRightX}" y="${horizonY - 11}" font-size="8" text-anchor="middle" font-weight="800" fill="#f97316" opacity="0.8">VP·R</text>
+          <g id="${domId}-floor-fill" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-ceil-fill" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-wallL-fill" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-wallR-fill" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-corner" style="opacity:0; transition: opacity .5s;">
+            <line x1="${cornerX}" y1="${topY}" x2="${cornerX}" y2="${bottomY}" stroke="#fbbf24" stroke-width="3.5"/>
+            <rect x="${cornerX + 8}" y="${topY - 1}" width="60" height="14" rx="7" fill="#fbbf24" opacity="0.9"/>
+            <text x="${cornerX + 38}" y="${topY + 9}" font-size="8" text-anchor="middle" font-weight="800" fill="#1a1d2b">Vertical Line</text>
+          </g>
+          <g id="${domId}-floor" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-ceil" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-wallL" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-wallR" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-guides" style="opacity:0; transition: opacity .5s;"></g>
+          <g id="${domId}-labels" style="opacity:0; transition: opacity .5s;"></g>
+        </svg>
+        <div class="ipb-label-chip" id="${domId}-chip" style="cursor:pointer;" onclick="ipbRoomFrameNext('${domId}')">👆 Tap to begin building the room</div>
+      </div>
+      <div class="ipb-btn-row">
+        <button class="ipb-mini-btn" onclick="ipbRoomFrameNext('${domId}')">Show next part →</button>
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbRoomFrameReplay('${domId}')">↺ Replay</button>
+      </div>
+      <div class="ipb-btn-row">
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbRoomFrameToggleView('${domId}', 'construction')">Construction View</button>
+        <button class="ipb-mini-btn ipb-mini-ghost" onclick="ipbRoomFrameToggleView('${domId}', 'clean')">Clean View</button>
+      </div>
+      <div class="ipb-hint">${cfg.shortInstruction || 'Tap "Show next part" to reveal the room piece by piece.'}</div>
+    </div>
+  `;
+}
+const IPB_ROOM_FRAME_STAGES = ['First Vertical Line', 'Floor Lines', 'Ceiling Lines', 'Left Wall', 'Right Wall', 'Room Box'];
+function ipbRoomFrameNext(domId) {
+  const wrap = document.getElementById(domId);
+  let stage = parseInt(wrap.dataset.stage || '0', 10);
+  stage = Math.min(stage + 1, IPB_ROOM_FRAME_STAGES.length);
+  wrap.dataset.stage = stage;
+  ipbRoomFrameRender(domId, stage);
+}
+function ipbRoomFrameReplay(domId) {
+  const wrap = document.getElementById(domId);
+  wrap.dataset.stage = '0';
+  ipbRoomFrameRender(domId, 0);
+}
+function ipbRoomFrameToggleView(domId, mode) {
+  const wrap = document.getElementById(domId);
+  const stage = mode === 'construction' ? IPB_ROOM_FRAME_STAGES.length : 5;
+  wrap.dataset.stage = stage;
+  ipbRoomFrameRender(domId, stage, mode);
+}
+function ipbRoomFrameRender(domId, stage, mode) {
+  const h = PERSPECTIVE_SVG_H, w = PERSPECTIVE_SVG_W;
+  const horizonY = h * 0.42, vpLeftX = 26, vpRightX = w - 26;
+  const cornerX = w / 2, topY = horizonY - 40, bottomY = horizonY + 48;
+  const p = perspectiveBuildRoomPaths(horizonY, vpLeftX, vpRightX, cornerX, topY, bottomY);
+
+  const corner = document.getElementById(`${domId}-corner`);
+  const floorFill = document.getElementById(`${domId}-floor-fill`);
+  const ceilFill = document.getElementById(`${domId}-ceil-fill`);
+  const wallLFill = document.getElementById(`${domId}-wallL-fill`);
+  const wallRFill = document.getElementById(`${domId}-wallR-fill`);
+  const floor = document.getElementById(`${domId}-floor`);
+  const ceil = document.getElementById(`${domId}-ceil`);
+  const wallL = document.getElementById(`${domId}-wallL`);
+  const wallR = document.getElementById(`${domId}-wallR`);
+  const guides = document.getElementById(`${domId}-guides`);
+  const labels = document.getElementById(`${domId}-labels`);
+  const chip = document.getElementById(`${domId}-chip`);
+
+  // helper: polygon from an array of {x,y} points
+  function poly(pts, fill, opacity) {
+    return `<polygon points="${pts.map(p=>p.x+','+p.y).join(' ')}" fill="${fill}" opacity="${opacity}"/>`;
+  }
+
+  // Compute the 4 plane polygons (floor, ceiling, left wall, right wall)
+  // by finding where the room lines hit the edges.
+  const h2 = h, w2 = w;
+  const floorLeftEnd = { x: 0, y: clamp(horizonY + (bottomY - horizonY) / (cornerX - 0) * cornerX, 0, h) };
+  const floorRightEnd = { x: w2, y: clamp(horizonY + (bottomY - horizonY) / (w2 - cornerX) * (w2 - cornerX), 0, h) };
+  const ceilLeftEnd = { x: 0, y: clamp(horizonY + (topY - horizonY) / (cornerX - 0) * cornerX, 0, h) };
+  const ceilRightEnd = { x: w2, y: clamp(horizonY + (topY - horizonY) / (w2 - cornerX) * (w2 - cornerX), 0, h) };
+
+  const floorPoly = poly([{x:cornerX,y:bottomY},{x:floorLeftEnd.x,y:floorLeftEnd.y},{x:0,y:h2},{x:cornerX,y:h2}], '#c8a96e', 0.45);
+  const floorPolyR = poly([{x:cornerX,y:bottomY},{x:floorRightEnd.x,y:floorRightEnd.y},{x:w2,y:h2},{x:cornerX,y:h2}], '#b89658', 0.4);
+  const ceilPoly = poly([{x:cornerX,y:topY},{x:ceilLeftEnd.x,y:ceilLeftEnd.y},{x:0,y:0},{x:cornerX,y:0}], '#f0ece6', 0.6);
+  const ceilPolyR = poly([{x:cornerX,y:topY},{x:ceilRightEnd.x,y:ceilRightEnd.y},{x:w2,y:0},{x:cornerX,y:0}], '#ede8e0', 0.55);
+  const wallLPoly = poly([{x:ceilLeftEnd.x,y:ceilLeftEnd.y},{x:floorLeftEnd.x,y:floorLeftEnd.y},{x:0,y:h2},{x:0,y:0}], '#e8dfd4', 0.55);
+  const wallRPoly = poly([{x:ceilRightEnd.x,y:ceilRightEnd.y},{x:floorRightEnd.x,y:floorRightEnd.y},{x:w2,y:h2},{x:w2,y:0}], '#ddd5ca', 0.5);
+
+  corner.style.opacity = stage >= 1 ? '1' : '0';
+
+  if (stage >= 2) {
+    floorFill.innerHTML = floorPoly + floorPolyR; floorFill.style.opacity = '1';
+    floor.innerHTML = `<path d="${p.floorL}" stroke="#6b5744" stroke-width="2" fill="none"/><path d="${p.floorR}" stroke="#6b5744" stroke-width="2" fill="none"/>`;
+    floor.style.opacity = '1';
+  } else { floorFill.style.opacity = '0'; floor.style.opacity = '0'; }
+
+  if (stage >= 3) {
+    ceilFill.innerHTML = ceilPoly + ceilPolyR; ceilFill.style.opacity = '1';
+    ceil.innerHTML = `<path d="${p.ceilL}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/><path d="${p.ceilR}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/>`;
+    ceil.style.opacity = '1';
+  } else { ceilFill.style.opacity = '0'; ceil.style.opacity = '0'; }
+
+  if (stage >= 4) {
+    wallLFill.innerHTML = wallLPoly; wallLFill.style.opacity = '1';
+    wallL.innerHTML = `<path d="${p.wallL}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>`;
+    wallL.style.opacity = '1';
+  } else { wallLFill.style.opacity = '0'; wallL.style.opacity = '0'; }
+
+  if (stage >= 5) {
+    wallRFill.innerHTML = wallRPoly; wallRFill.style.opacity = '1';
+    wallR.innerHTML = `<path d="${p.wallR}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>`;
+    wallR.style.opacity = '1';
+  } else { wallRFill.style.opacity = '0'; wallR.style.opacity = '0'; }
+
+  if (stage >= 6 && mode !== 'clean') {
+    guides.innerHTML = `
+      <path d="${p.vpGuideLeftTop}" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideLeftBottom}" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideRightTop}" stroke="#f97316" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
+      <path d="${p.vpGuideRightBottom}" stroke="#f97316" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>`;
+    guides.style.opacity = '1';
+  } else { guides.style.opacity = '0'; }
+
+  // Floating part labels — appear with each revealed part, positioned on the plane
+  const midFloorY = (bottomY + h2) / 2;
+  const midCeilY = topY / 2;
+  const partLabels = {
+    2: `<text x="${cornerX - 30}" y="${midFloorY + 4}" font-size="8" font-weight="800" fill="#78350f" opacity="0.8" text-anchor="middle">FLOOR</text>`,
+    3: `<text x="${cornerX - 30}" y="${midFloorY + 4}" font-size="8" font-weight="800" fill="#78350f" opacity="0.8" text-anchor="middle">FLOOR</text><text x="${cornerX - 25}" y="${midCeilY + 4}" font-size="8" font-weight="800" fill="#4b5563" opacity="0.8" text-anchor="middle">CEILING</text>`,
+    4: `<text x="${cornerX - 30}" y="${midFloorY + 4}" font-size="8" font-weight="800" fill="#78350f" opacity="0.8" text-anchor="middle">FLOOR</text><text x="${cornerX - 25}" y="${midCeilY + 4}" font-size="8" font-weight="800" fill="#4b5563" opacity="0.8" text-anchor="middle">CEILING</text><text x="14" y="${horizonY + 4}" font-size="8" font-weight="800" fill="#1e40af" opacity="0.85" transform="rotate(-90,14,${horizonY})">LEFT WALL</text>`,
+    5: `<text x="${cornerX - 30}" y="${midFloorY + 4}" font-size="8" font-weight="800" fill="#78350f" opacity="0.8" text-anchor="middle">FLOOR</text><text x="${cornerX - 25}" y="${midCeilY + 4}" font-size="8" font-weight="800" fill="#4b5563" opacity="0.8" text-anchor="middle">CEILING</text><text x="14" y="${horizonY + 4}" font-size="8" font-weight="800" fill="#1e40af" opacity="0.85" transform="rotate(-90,14,${horizonY})">LEFT WALL</text><text x="${w2 - 14}" y="${horizonY + 4}" font-size="8" font-weight="800" fill="#c2410c" opacity="0.85" transform="rotate(90,${w2 - 14},${horizonY})">RIGHT WALL</text>`,
+    6: `<text x="${cornerX - 30}" y="${midFloorY + 4}" font-size="8" font-weight="800" fill="#78350f" opacity="0.8" text-anchor="middle">FLOOR</text><text x="${cornerX - 25}" y="${midCeilY + 4}" font-size="8" font-weight="800" fill="#4b5563" opacity="0.8" text-anchor="middle">CEILING</text><text x="14" y="${horizonY + 4}" font-size="8" font-weight="800" fill="#1e40af" opacity="0.85" transform="rotate(-90,14,${horizonY})">LEFT WALL</text><text x="${w2 - 14}" y="${horizonY + 4}" font-size="8" font-weight="800" fill="#c2410c" opacity="0.85" transform="rotate(90,${w2 - 14},${horizonY})">RIGHT WALL</text><text x="${cornerX}" y="${(topY + bottomY)/2 + 4}" font-size="8" font-weight="800" fill="#059669" opacity="0.85" text-anchor="middle">ROOM BOX</text>`
+  };
+  if (stage >= 2 && partLabels[Math.min(stage, 6)]) {
+    labels.innerHTML = partLabels[Math.min(stage, 6)];
+    labels.style.opacity = '1';
+  } else { labels.style.opacity = '0'; }
+
+  const stageNames = ['', 'First Vertical Line', 'Floor Lines', 'Ceiling Lines', 'Left Wall', 'Right Wall', 'Room Box'];
+  if (stage === 0) {
+    chip.innerHTML = '👆 Tap to begin building the room';
+  } else if (stage < IPB_ROOM_FRAME_STAGES.length) {
+    chip.innerHTML = `✓ ${stageNames[stage]} — tap to reveal next part →`;
+  } else {
+    chip.innerHTML = mode === 'clean' ? 'Room Box (clean view)' : '🎉 Room Box complete!';
+  }
+}
+function mountRoomFrameReveal(cfg, domId) {
+  ipbRoomFrameRender(domId, 0);
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// SECTION 6 · DISPATCH — render + mount by type
+// ─────────────────────────────────────────────────────────────────────────
+function renderInteractiveBlock(interactiveCfg, domId) {
+  if (!interactiveCfg) return '';
+  switch (interactiveCfg.type) {
+    case 'horizon-line-drag': return renderHorizonLineDrag(interactiveCfg, domId);
+    case 'vp-drag': return renderVpDrag(interactiveCfg, domId);
+    case 'camera-angle-demo': return renderCameraAngleDemo(interactiveCfg, domId);
+    case 'guide-line-animation': return renderGuideLineAnimation(interactiveCfg, domId);
+    case 'construction-toggle': return renderConstructionToggle(interactiveCfg, domId);
+    case 'two-vp-room-drag': return renderTwoVpRoomDrag(interactiveCfg, domId);
+    case 'indoor-camera-angle-demo': return renderIndoorCameraAngleDemo(interactiveCfg, domId);
+    case 'first-vertical-line-room': return renderFirstVerticalLineRoom(interactiveCfg, domId);
+    case 'room-frame-reveal': return renderRoomFrameReveal(interactiveCfg, domId);
+    default: return '';
+  }
+}
+function mountInteractiveBlock(interactiveCfg, domId) {
+  if (!interactiveCfg) return;
+  switch (interactiveCfg.type) {
+    case 'horizon-line-drag': mountHorizonLineDrag(interactiveCfg, domId); break;
+    case 'vp-drag': mountVpDrag(interactiveCfg, domId); break;
+    case 'camera-angle-demo': mountCameraAngleDemo(interactiveCfg, domId); break;
+    case 'guide-line-animation': mountGuideLineAnimation(interactiveCfg, domId); break;
+    case 'construction-toggle': mountConstructionToggle(interactiveCfg, domId); break;
+    case 'two-vp-room-drag': mountTwoVpRoomDrag(interactiveCfg, domId); break;
+    case 'indoor-camera-angle-demo': mountIndoorCameraAngleDemo(interactiveCfg, domId); break;
+    case 'first-vertical-line-room': mountFirstVerticalLineRoom(interactiveCfg, domId); break;
+    case 'room-frame-reveal': mountRoomFrameReveal(interactiveCfg, domId); break;
+  }
+}
