@@ -511,102 +511,98 @@ function perspectiveFurnitureBox({ nearX, nearY, nearW, nearH, vpX, vpY, depthRa
   return { nearFace, farFace, depthLines, depthLinesToFar, farCorners };
 }
 
-// Human figure (eye-level reference): a simple silhouette whose head sits
-// right at the horizon line, so students can directly read "this is the
-// height of a standing person's eyes."
 function perspectiveHumanFigureSvg(x, horizonY, groundY) {
-  // Eyes sit AT the horizon line — that's the whole teaching point. Head
-  // center is drawn slightly above the horizon so the EYES (mid-head) land
-  // exactly on it.
   const headR = 6;
   const headCY = horizonY - headR * 0.5;
   const neckY = headCY + headR;
   const shoulderW = 11, hipW = 8;
   const shoulderY = neckY + 3;
   const hipY = groundY - 14;
-  const bodyBottom = groundY;
   return `
     <g class="ipb-human-figure">
-      <!-- dashed eye-level tick so the connection to the horizon is explicit -->
-      <line x1="${x - 16}" y1="${horizonY}" x2="${x - headR - 2}" y2="${horizonY}" stroke="#c2410c" stroke-width="1" stroke-dasharray="2 2" opacity="0.7"/>
-      <circle cx="${x}" cy="${headCY}" r="${headR}" fill="#c2410c"/>
-      <path d="M ${x - shoulderW/2} ${shoulderY}
-               C ${x - shoulderW/2 - 2} ${hipY}, ${x - hipW/2} ${hipY}, ${x - hipW/2} ${hipY}
-               L ${x - hipW/2 + 1} ${bodyBottom}
-               L ${x + hipW/2 - 1} ${bodyBottom}
-               L ${x + hipW/2} ${hipY}
-               C ${x + hipW/2 + 2} ${hipY}, ${x + shoulderW/2 + 2} ${shoulderY}, ${x + shoulderW/2} ${shoulderY}
-               Z" fill="#c2410c"/>
+      <line x1="${x - 18}" y1="${horizonY}" x2="${x - headR - 2}" y2="${horizonY}" stroke="#c2410c" stroke-width="1" stroke-dasharray="2 2" opacity="0.7"/>
+      <text x="${x - 20}" y="${horizonY - 3}" font-size="6" fill="#c2410c" text-anchor="end" opacity="0.8">eye level</text>
+      <circle cx="${x}" cy="${headCY}" r="${headR}" fill="#ef4444"/>
+      <ellipse cx="${x}" cy="${headCY + headR * 0.3}" rx="${headR * 0.55}" ry="${headR * 0.3}" fill="#dc2626" opacity="0.5"/>
+      <path d="M ${x - shoulderW/2} ${shoulderY} L ${x - shoulderW/2 - 2} ${hipY} L ${x - hipW/2} ${hipY} L ${x - hipW/2 + 1} ${groundY} L ${x + hipW/2 - 1} ${groundY} L ${x + hipW/2} ${hipY} L ${x + shoulderW/2 + 2} ${hipY} L ${x + shoulderW/2} ${shoulderY} Z" fill="#ef4444"/>
+      <path d="M ${x - shoulderW/2} ${shoulderY} L ${x - shoulderW/2 - 6} ${hipY - 10}" stroke="#ef4444" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M ${x + shoulderW/2} ${shoulderY} L ${x + shoulderW/2 + 6} ${hipY - 10}" stroke="#ef4444" stroke-width="3" stroke-linecap="round" fill="none"/>
     </g>
   `;
 }
 
-// Back wall elements: window + a wall picture frame, sitting on the back
-// wall (the room corner's vertical line splits two side walls, but the
-// "back wall" here is represented simply, just behind the corner) — kept
-// intentionally simple since these don't need VP convergence math.
 function perspectiveBackWallSvg(cornerX, horizonY, topY, bottomY) {
-  const winW = 28, winH = 22;
+  const winW = 32, winH = 28;
   const winX = cornerX - winW / 2;
-  const winY = topY + (horizonY - topY) * 0.18; // sits in the upper portion of the back wall, well above eye level
+  const winY = topY + (horizonY - topY) * 0.15;
   return `
-    <rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="#ecfeff" stroke="#1a1d2b" stroke-width="1.4"/>
-    <line x1="${winX + winW/2}" y1="${winY}" x2="${winX + winW/2}" y2="${winY + winH}" stroke="#1a1d2b" stroke-width="1"/>
-    <line x1="${winX}" y1="${winY + winH/2}" x2="${winX + winW}" y2="${winY + winH/2}" stroke="#1a1d2b" stroke-width="1"/>
+    <rect x="${winX - 2}" y="${winY - 2}" width="${winW + 4}" height="${winH + 4}" rx="1" fill="#475569" opacity="0.6"/>
+    <rect x="${winX}" y="${winY}" width="${winW}" height="${winH}" fill="#bae6fd" opacity="0.9"/>
+    <rect x="${winX}" y="${winY}" width="${winW}" height="${winH * 0.55}" fill="#7dd3fc" opacity="0.7"/>
+    <rect x="${winX}" y="${winY + winH * 0.65}" width="${winW}" height="${winH * 0.35}" fill="#93c5fd" opacity="0.5"/>
+    <line x1="${winX + winW/2}" y1="${winY}" x2="${winX + winW/2}" y2="${winY + winH}" stroke="#475569" stroke-width="1.5"/>
+    <line x1="${winX}" y1="${winY + winH/2}" x2="${winX + winW}" y2="${winY + winH/2}" stroke="#475569" stroke-width="1.5"/>
+    <rect x="${winX + 2}" y="${winY}" width="6" height="${winH}" fill="#d1fae5" opacity="0.25"/>
+    <rect x="${winX}" y="${winY - 4}" width="${winW}" height="4" rx="1" fill="#6b7280" opacity="0.7"/>
   `;
 }
 
 function perspectiveRoomFurnitureSvg(cornerX, horizonY, h, vpLeftX, vpRightX, mode) {
-  // mode: 'construction' (show dashed depth-guide lines) | 'clean' (room + furniture only)
   const showGuides = mode !== 'clean';
   const groundY = h - 6;
+  const w = PERSPECTIVE_SVG_W;
+  const bedNearX = 4, bedNearH = 24;
+  const bedNearW = Math.max(22, cornerX - 24 - bedNearX);
+  const bedNearY = groundY - bedNearH;
+  const bed = perspectiveFurnitureBox({ nearX: bedNearX, nearY: bedNearY, nearW: bedNearW, nearH: bedNearH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.17 });
+  const nsW = 10, nsH = 14;
+  const nsX = bedNearX + bedNearW + 2, nsY = groundY - nsH;
+  const ns = perspectiveFurnitureBox({ nearX: nsX, nearY: nsY, nearW: nsW, nearH: nsH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.12 });
+  const shelfW = 18, shelfH = 36;
+  const shelfX = w - 8 - shelfW, shelfY = groundY - shelfH;
+  const shelf = perspectiveFurnitureBox({ nearX: shelfX, nearY: shelfY, nearW: shelfW, nearH: shelfH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.2 });
+  const deskW = 18, deskH = 9;
+  const deskX = shelfX - 16 - deskW, deskY = groundY - deskH;
+  const desk = perspectiveFurnitureBox({ nearX: deskX, nearY: deskY, nearW: deskW, nearH: deskH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.13 });
+  const rugX = bedNearX + bedNearW + 10, rugW = cornerX - rugX - 8;
+  const rugY = groundY - 8, rugH = 8;
+  const rug = perspectiveFurnitureBox({ nearX: rugX, nearY: rugY, nearW: rugW, nearH: rugH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.3 });
 
-  // ── BED — primary demo object, against the LEFT wall, so its depth
-  // lines converge to VP-RIGHT. ──
-  const bedNearX = 8, bedNearY = groundY - 22, bedNearW = Math.max(20, cornerX - 28 - bedNearX), bedNearH = 22;
-  const bed = perspectiveFurnitureBox({ nearX: bedNearX, nearY: bedNearY, nearW: bedNearW, nearH: bedNearH, vpX: vpRightX, vpY: horizonY, depthRatio: 0.16 });
-
-  // ── BOOKSHELF — against the RIGHT wall, converges to VP-LEFT. Tall,
-  // shallow box. ──
-  const shelfNearW = 16, shelfNearH = 30;
-  const shelfNearX = PERSPECTIVE_SVG_W - 10 - shelfNearW, shelfNearY = groundY - shelfNearH;
-  const shelf = perspectiveFurnitureBox({ nearX: shelfNearX, nearY: shelfNearY, nearW: shelfNearW, nearH: shelfNearH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.22 });
-
-  // ── TABLE — smaller, also against the right wall area, in front of the
-  // bookshelf, converges to VP-LEFT. ──
-  const tNearW = 16, tNearH = 10;
-  const tNearX = shelfNearX - 14 - tNearW, tNearY = groundY - tNearH;
-  const table = perspectiveFurnitureBox({ nearX: tNearX, nearY: tNearY, nearW: tNearW, nearH: tNearH, vpX: vpLeftX, vpY: horizonY, depthRatio: 0.14 });
-
-  function drawBox(box, fill) {
-    return `
-      <path d="${box.farFace}" fill="${fill}" opacity="0.5"/>
-      ${box.depthLinesToFar.map(d => `<path d="${d}" stroke="#1a1d2b" stroke-width="1.2" fill="none"/>`).join('')}
-      <path d="${box.nearFace}" fill="${fill}" stroke="#1a1d2b" stroke-width="1.4"/>
-    `;
+  function drawBox(box, fill, stroke, strokeW) {
+    stroke = stroke || '#1a1d2b'; strokeW = strokeW || 1.2;
+    return `<path d="${box.farFace}" fill="${fill}" opacity="0.45"/>${box.depthLinesToFar.map(d => `<path d="${d}" stroke="${stroke}" stroke-width="${strokeW}" fill="none"/>`).join('')}<path d="${box.nearFace}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeW + 0.2}"/>`;
   }
-  function guideLines(box) {
+  function guides(box) {
     if (!showGuides) return '';
-    return box.depthLines.map(d => `<path d="${d}" stroke="#67e8f9" stroke-width="1" stroke-dasharray="2 3" fill="none" opacity="0.55"/>`).join('');
+    return box.depthLines.map(d => `<path d="${d}" stroke="#67e8f9" stroke-width="0.8" stroke-dasharray="2 3" fill="none" opacity="0.5"/>`).join('');
   }
 
-  // Small readability accents so the bed reads as "a bed" and not just a
-  // flat-colored box: a thin headboard strip at its far (wall-side) edge,
-  // and a lighter pillow patch near it. Purely decorative — no VP math.
-  const headboardX = bedNearX, headboardY = bedNearY - 8, headboardW = bedNearW * 0.18 + 6, headboardH = 8;
-  const pillowX = bedNearX + 3, pillowY = bedNearY + 2, pillowW = Math.min(14, bedNearW * 0.3), pillowH = bedNearH * 0.45;
-  const bedAccents = `
-    <rect x="${headboardX}" y="${headboardY}" width="${headboardW}" height="${headboardH}" rx="1.5" fill="#92400e" opacity="0.75"/>
-    <rect x="${pillowX}" y="${pillowY}" width="${pillowW}" height="${pillowH}" rx="2" fill="#ffffff" opacity="0.8"/>
-  `;
+  const hbX = bedNearX, hbY = bedNearY - 10, hbW = Math.min(bedNearW * 0.28 + 8, bedNearW * 0.5), hbH = 10;
+  const p1X = bedNearX + 2, p1W = Math.min(12, bedNearW * 0.28), p1H = bedNearH * 0.4;
+  const p2X = p1X + p1W + 3, p2W = p1W * 0.85;
+  const bedDetails = `<rect x="${hbX}" y="${hbY}" width="${hbW}" height="${hbH}" rx="2" fill="#78350f"/><rect x="${hbX + 1}" y="${hbY + 1}" width="${hbW - 2}" height="${hbH - 3}" rx="1.5" fill="#92400e" opacity="0.8"/><rect x="${p1X}" y="${bedNearY + 2}" width="${p1W}" height="${p1H}" rx="3" fill="#f8fafc"/><rect x="${p2X}" y="${bedNearY + 2}" width="${p2W}" height="${p1H * 0.92}" rx="3" fill="#f1f5f9"/><rect x="${bedNearX + 1}" y="${bedNearY + bedNearH * 0.45}" width="${bedNearW - 2}" height="2" rx="1" fill="#94a3b8" opacity="0.5"/><rect x="${bedNearX + 1}" y="${bedNearY + bedNearH * 0.65}" width="${bedNearW - 2}" height="2" rx="1" fill="#94a3b8" opacity="0.3"/>`;
 
-  return `
-    ${guideLines(bed)}${guideLines(table)}${guideLines(shelf)}
-    ${drawBox(bed, '#fda4af')}
-    ${bedAccents}
-    ${drawBox(table, '#fcd34d')}
-    ${drawBox(shelf, '#a78bfa')}
-  `;
+  const lampX = nsX + nsW * 0.5, lampY = nsY - 8;
+  const lampDetails = `<line x1="${lampX}" y1="${nsY}" x2="${lampX}" y2="${lampY + 3}" stroke="#6b7280" stroke-width="1.5"/><ellipse cx="${lampX}" cy="${lampY}" rx="5" ry="3.5" fill="#fde68a" opacity="0.85"/><ellipse cx="${lampX}" cy="${lampY - 1}" rx="3.5" ry="2" fill="#fef3c7" opacity="0.9"/>`;
+
+  const bookColors = ['#ef4444','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ec4899','#06b6d4'];
+  let books = '';
+  for (let s = 0; s < 3; s++) {
+    const sy = shelfY + shelfH * (s + 1) / 4;
+    books += `<line x1="${shelfX}" y1="${sy}" x2="${shelfX + shelfW}" y2="${sy}" stroke="#78350f" stroke-width="1.2" opacity="0.8"/>`;
+    const bn = 4 + s;
+    const bw = (shelfW - 2) / bn;
+    for (let b = 0; b < bn; b++) {
+      const bx = shelfX + 1 + b * bw;
+      const bh = (shelfH / 4) * (0.65 + Math.sin(b * 1.7 + s) * 0.15);
+      books += `<rect x="${bx}" y="${sy - bh}" width="${bw - 1}" height="${bh}" fill="${bookColors[(b + s * 3) % bookColors.length]}" opacity="0.75"/>`;
+    }
+  }
+
+  const monX = deskX + deskW / 2 - 4.5, monY = deskY - 8;
+  const deskDetails = `<rect x="${monX}" y="${monY}" width="9" height="7" rx="1" fill="#1e293b"/><rect x="${monX + 1}" y="${monY + 1}" width="7" height="5" fill="#38bdf8" opacity="0.7"/><rect x="${monX + 3.5}" y="${monY + 7}" width="2" height="2" fill="#475569"/><rect x="${deskX + 2}" y="${deskY - 1}" width="${deskW - 4}" height="1.5" rx="0.5" fill="#94a3b8" opacity="0.6"/>`;
+
+  return `${guides(rug)}${guides(bed)}${guides(ns)}${guides(desk)}${guides(shelf)}<path d="${rug.nearFace}" fill="#d8b4fe" stroke="#a78bfa" stroke-width="0.8" opacity="0.45"/>${rug.depthLinesToFar.map(d => `<path d="${d}" stroke="#a78bfa" stroke-width="0.6" fill="none"/>`).join('')}${drawBox(bed, '#fda4af', '#be185d', 1.2)}${bedDetails}${drawBox(ns, '#d97706', '#92400e', 1)}${lampDetails}${drawBox(shelf, '#92400e', '#78350f', 1.2)}${books}${drawBox(desk, '#a16207', '#78350f', 1)}${deskDetails}`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -620,34 +616,34 @@ function perspectiveDrawFullRoom({ horizonY, vpLeftX, vpRightX, cornerX, cornerT
   const p = perspectiveBuildRoomPaths(horizonY, vpLeftX, vpRightX, cornerX, cornerTopY, cornerBottomY);
   const showGuides = mode !== 'clean';
   const groundY = h - 6;
-  const humanX = cornerX + (vpRightX - cornerX) * 0.32; // stands a bit right of the corner, in open floor space
-
+  const humanX = clamp(cornerX + (vpRightX - cornerX) * 0.28, cornerX + 20, vpRightX - 20);
+  const floorLines = [0.15, 0.35, 0.55, 0.75, 0.9].map(f => {
+    const y = cornerBottomY + (groundY - cornerBottomY) * f;
+    return `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="#a8895a" stroke-width="0.4" opacity="0.35"/>`;
+  }).join('');
   return `
-    <!-- ceiling vs floor fill so the two read as clearly different planes -->
-    <rect x="0" y="0" width="${w}" height="${cornerTopY}" fill="#eef2ff" opacity="0.4"/>
-    <rect x="0" y="${groundY}" width="${w}" height="${h - groundY}" fill="#d6c4a8" opacity="0.5"/>
-
+    <defs>
+      <linearGradient id="ceilGrad${horizonY.toFixed(0)}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f8f4ef"/><stop offset="100%" stop-color="#ede8e0"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="${w}" height="${cornerTopY}" fill="url(#ceilGrad${horizonY.toFixed(0)})"/>
+    <rect x="0" y="${cornerTopY}" width="${w}" height="${cornerBottomY - cornerTopY}" fill="#f0e8da"/>
+    <rect x="0" y="${cornerBottomY}" width="${w}" height="${h - cornerBottomY}" fill="#c8a96e" opacity="0.5"/>
+    ${floorLines}
+    <ellipse cx="${cornerX}" cy="${cornerTopY + 4}" rx="18" ry="4" fill="#fef9c3" opacity="0.55"/>
+    <ellipse cx="${cornerX}" cy="${cornerTopY + 3}" rx="8" ry="2" fill="#fef08a" opacity="0.7"/>
     ${perspectiveBackWallSvg(cornerX, horizonY, cornerTopY, cornerBottomY)}
-
-    ${showGuides ? `
-      <path d="${p.vpGuideLeftTop}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
-      <path d="${p.vpGuideLeftBottom}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
-      <path d="${p.vpGuideRightTop}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
-      <path d="${p.vpGuideRightBottom}" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity="0.5"/>
-    ` : ''}
-
-    <path d="${p.floorL}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.floorR}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.ceilL}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.ceilR}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.wallL}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.wallR}" stroke="#1a1d2b" stroke-width="2" fill="none"/>
-    <path d="${p.cornerLine}" stroke="#1a1d2b" stroke-width="2.5" fill="none"/>
-
-    <!-- baseboard: a thin offset line just above the floor lines -->
-    <path d="${p.floorL}" stroke="#94a3b8" stroke-width="1" fill="none" transform="translate(0,-3)" opacity="0.6"/>
-    <path d="${p.floorR}" stroke="#94a3b8" stroke-width="1" fill="none" transform="translate(0,-3)" opacity="0.6"/>
-
+    ${showGuides ? `<path d="${p.vpGuideLeftTop}" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideLeftBottom}" stroke="#3b82f6" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideRightTop}" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/><path d="${p.vpGuideRightBottom}" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4 3" fill="none" opacity="0.55"/>` : ''}
+    <path d="${p.floorL}" stroke="#6b5744" stroke-width="2" fill="none"/>
+    <path d="${p.floorR}" stroke="#6b5744" stroke-width="2" fill="none"/>
+    <path d="${p.ceilL}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/>
+    <path d="${p.ceilR}" stroke="#8b7d6b" stroke-width="1.8" fill="none"/>
+    <path d="${p.wallL}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
+    <path d="${p.wallR}" stroke="#9ca3af" stroke-width="1.8" fill="none"/>
+    <path d="${p.cornerLine}" stroke="#4b3d2e" stroke-width="2.5" fill="none"/>
+    <path d="${p.floorL}" stroke="#78716c" stroke-width="1.5" fill="none" transform="translate(0,-4)" opacity="0.7"/>
+    <path d="${p.floorR}" stroke="#78716c" stroke-width="1.5" fill="none" transform="translate(0,-4)" opacity="0.7"/>
     ${perspectiveRoomFurnitureSvg(cornerX, horizonY, h, vpLeftX, vpRightX, mode)}
     ${perspectiveHumanFigureSvg(humanX, horizonY, groundY)}
   `;
