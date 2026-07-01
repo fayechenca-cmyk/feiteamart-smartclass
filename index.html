@@ -1622,6 +1622,7 @@
       document.getElementById('resume-title').textContent = next.title;
       document.getElementById('resume-sub').textContent = next.subtitle;
       document.getElementById('resume-btn').href = next.href;
+      document.getElementById('resume-btn').onclick = (e) => handleResumeClick(e, next.id, next.href);
     } else if (next) {
       // Nothing completed yet — point to the first lesson as a clear starting point
       const card = document.getElementById('resume-card');
@@ -1630,6 +1631,7 @@
       document.getElementById('resume-title').textContent = next.title;
       document.getElementById('resume-sub').textContent = next.subtitle;
       document.getElementById('resume-btn').href = next.href;
+      document.getElementById('resume-btn').onclick = (e) => handleResumeClick(e, next.id, next.href);
     } else {
       document.getElementById('resume-card').classList.add('hidden');
     }
@@ -1803,6 +1805,7 @@
       if (!lesson.ready) continue;
       if (!completed.includes(lesson.id)) {
         return {
+          id: lesson.id,
           title: lesson.title,
           subtitle: lesson.subtitle,
           href: lesson.href
@@ -2276,6 +2279,38 @@
   // ═══════════════════════════════════════════════════════════
   // INTERCEPT SKILLS LESSON CLICKS for paywall
   // ═══════════════════════════════════════════════════════════
+
+  // Guard for the Resume / "Continue Learning" button on the home screen.
+  // Mirrors attachSkillsLessonGuard exactly — same legacy bypass, same
+  // canOpenLesson check, same fail-open on error. ALWAYS_FREE lessons
+  // (preparation, cube) return allowed:true from canOpenLesson so no
+  // special-casing is needed here.
+  async function handleResumeClick(event, lessonId, href) {
+    event.preventDefault();
+    if (!userProfile || userProfile.studentCode) {
+      // Legacy access-code users have full access — no Supabase round-trip needed
+      window.location.href = href;
+      return;
+    }
+    if (!window.FEIAccess) {
+      window.location.href = href;
+      return;
+    }
+    try {
+      const check = await window.FEIAccess.canOpenLesson('skills', lessonId);
+      if (check.allowed) {
+        await window.FEIAccess.recordLessonOpened('skills', lessonId);
+        window.location.href = href;
+      } else {
+        openPaywall({ branch: 'skills' });
+      }
+    } catch (err) {
+      console.warn('[Resume] access check failed, allowing through:', err);
+      window.location.href = href;
+    }
+  }
+  window.handleResumeClick = handleResumeClick;
+
   function attachSkillsLessonGuard() {
     const container = document.getElementById('path-nodes');
     if (!container) return;
