@@ -19,8 +19,16 @@
  *   FEIAccess.markPaid()                  → Promise<void>   (after Stripe success)
  *
  * Companion Supabase table (created via /core/access-schema.sql):
- *   smartclass_access (user_id PK, membership, opened_creation_lessons jsonb,
+ *   smartclass_access (user_id PK, membership, membership_type,
+ *                      opened_creation_lessons jsonb,
  *                      opened_skill_lessons jsonb, paid_at, updated_at, created_at)
+ *
+ * membership_type (added for Stripe 3-tier auto-unlock):
+ *   'ai_feedback' | 'ai_teacher' | 'live_class' | null
+ *   All three paid tiers set membership = 'paid' (full lesson access,
+ *   no change to canOpenLesson() below). membership_type only adds
+ *   extra info — currently just whether the live-class submit button
+ *   should show (isLiveClass = membership_type === 'live_class').
  *
  * Skills free set: preparation, cube
  * (preparation does not count toward badges; both are free.)
@@ -106,6 +114,8 @@
     if (_isLegacyAccessCode()) {
       return {
         membership: 'paid',
+        membershipType: null,
+        isLiveClass: false,
         openedCreationLessons: [],
         openedSkillLessons: [],
         isLegacy: true,
@@ -117,6 +127,8 @@
     if (!user) {
       return {
         membership: null,
+        membershipType: null,
+        isLiveClass: false,
         openedCreationLessons: [],
         openedSkillLessons: [],
         isLegacy: false,
@@ -127,6 +139,8 @@
     const row = await _fetchOrCreateRow(user.id);
     return {
       membership: row.membership || 'free',
+      membershipType: row.membership_type || null,
+      isLiveClass: row.membership_type === 'live_class',
       openedCreationLessons: Array.isArray(row.opened_creation_lessons) ? row.opened_creation_lessons : [],
       openedSkillLessons: Array.isArray(row.opened_skill_lessons) ? row.opened_skill_lessons : [],
       isLegacy: false,
@@ -198,14 +212,19 @@
     _cache = data;
   }
 
-  async function markPaid() {
+  // plan (optional): 'ai_feedback' | 'ai_teacher' | 'live_class' — from the
+  // Stripe success redirect (?plan=X). All three unlock full access the same
+  // way; plan is stored as membership_type so isLiveClass can be derived.
+  async function markPaid(plan) {
     if (_isLegacyAccessCode()) return;
     const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
     if (!user) return;
     const sb = _supabase();
+    const patch = { membership: 'paid', paid_at: new Date().toISOString() };
+    if (plan) patch.membership_type = plan;
     const { data, error } = await sb
       .from('smartclass_access')
-      .update({ membership: 'paid', paid_at: new Date().toISOString() })
+      .update(patch)
       .eq('user_id', user.id)
       .select()
       .single();

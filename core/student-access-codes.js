@@ -1,4 +1,5 @@
 export const studentAccessCodes = [
+  { id: "FAYE-00", displayName: "Faye", isLiveClass: true, isAdmin: true },
   { id: "REGINA-16", displayName: "Regina" },
   { id: "JOJO-10", displayName: "Jojo", isLiveClass: true },
   { id: "SERENA-09", displayName: "Serena" },

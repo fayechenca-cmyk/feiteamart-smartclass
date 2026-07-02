@@ -5036,8 +5036,14 @@ const StudentRoster = {
 function isLiveClassStudent() {
   try {
     const profile = UserProfile.current();
-    if (!profile || !profile.studentCode) return false;
-    return StudentRoster.isLiveClass(profile.studentCode);
+    if (!profile) return false;
+    // Check 1: direct flag on profile (set after Stripe live_class payment)
+    if (profile.isLiveClass === true) return true;
+    // Check 2: roster flag (set for legacy access-code students like Xida/Jojo)
+    if (profile.studentCode && StudentRoster.isLiveClass(profile.studentCode)) return true;
+    // Check 3: membershipType from Stripe payment
+    if (profile.membershipType === 'live_class') return true;
+    return false;
   } catch(e) {
     return false;
   }

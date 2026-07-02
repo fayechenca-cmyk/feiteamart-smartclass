@@ -2237,11 +2237,33 @@
     };
     saveProfile(profile);
 
-    // Pre-load access status (creates row if needed)
+    // Pre-load access status (creates row if needed) and sync membership
+    // tier (membershipType/isLiveClass) so it survives across devices —
+    // not just at the moment of payment.
     try {
       if (window.FEIAccess) {
         await window.FEIAccess.init();
-        await window.FEIAccess.getStatus();
+
+        // If they paid before creating/signing into an account, the plan
+        // was stashed in localStorage (see init() "no profile" branch).
+        // Apply it now that we have a real Supabase user.
+        let pendingPlan = null;
+        try { pendingPlan = localStorage.getItem('fei_pending_stripe_plan'); } catch (e) {}
+        if (pendingPlan) {
+          try {
+            await window.FEIAccess.markPaid(pendingPlan);
+            localStorage.removeItem('fei_pending_stripe_plan');
+          } catch (e) { console.warn('[onAuthSuccess] markPaid (pending plan) failed', e); }
+        }
+
+        const status = await window.FEIAccess.getStatus();
+        if (status && status.membershipType) {
+          saveProfile(Object.assign({}, userProfile, {
+            membershipType: status.membershipType,
+            isLiveClass: !!status.isLiveClass
+          }));
+        }
+        if (pendingPlan) showPaidWelcome(pendingPlan);
       }
     } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
 
@@ -2396,8 +2418,11 @@
 
     // 0. Detect Stripe success return — mark this user as paid
     //    Stripe redirects come in as ?paid=success (set in Stripe Dashboard)
+    //    ?plan=ai_feedback|ai_teacher|live_class identifies which of the
+    //    3 Stripe products they bought (see markPaid(plan) in core/access.js)
     const urlParams = new URLSearchParams(window.location.search);
     const paidParam = urlParams.get('paid');
+    const plan = urlParams.get('plan');
     let justPaid = false;
     if (paidParam === 'success') {
       justPaid = true;
@@ -2433,8 +2458,14 @@
           // Stripe just paid — mark them and show confetti
           if (justPaid && window.FEIAccess) {
             try {
-              await window.FEIAccess.markPaid();
-              showPaidWelcome();
+              await window.FEIAccess.markPaid(plan);
+              if (plan) {
+                saveProfile(Object.assign({}, userProfile, {
+                  membershipType: plan,
+                  isLiveClass: plan === 'live_class'
+                }));
+              }
+              showPaidWelcome(plan);
             } catch (e) { console.warn('[init] markPaid failed', e); }
           }
           // Lesson page bounced them back here — show paywall now.
@@ -2456,7 +2487,17 @@
 
     // 2. Fall back to legacy access-code profile
     if (userProfile) {
-      if (justPaid) showPaidWelcome();  // legacy paid path
+      if (justPaid) {
+        // legacy paid path — access-code students already have full access;
+        // plan is just recorded locally so isLiveClassStudent() picks it up.
+        if (plan) {
+          saveProfile(Object.assign({}, userProfile, {
+            membershipType: plan,
+            isLiveClass: plan === 'live_class'
+          }));
+        }
+        showPaidWelcome(plan);
+      }
       showHome();
       // Legacy access-code users have full access; paywall param is irrelevant
       // for them, so we ignore pendingPaywall on this branch.
@@ -2464,6 +2505,10 @@
       // No profile at all — but they just paid. Ask them to sign in / sign up
       // with the email they used at Stripe so we can link the payment.
       if (justPaid) {
+        // Stash the plan so onAuthSuccess() can apply it once they sign in.
+        if (plan) {
+          try { localStorage.setItem('fei_pending_stripe_plan', plan); } catch (e) {}
+        }
         showSignIn();
         setTimeout(() => {
           showAuthInfo('✓ Payment received! Sign in or create your account with the same email you used at checkout — your access will unlock automatically.');
@@ -2481,7 +2526,12 @@
   })();
 
   // Show a brief paid-welcome toast (no obstruction; just gentle confirmation)
-  function showPaidWelcome() {
+  const PAID_WELCOME_MESSAGES = {
+    ai_feedback: '🎉 Welcome! Your Smart Class access is now unlocked.',
+    ai_teacher: '🎉 Welcome! Your Smart Class + Teacher feedback is now unlocked.',
+    live_class: '🎉 Welcome! Your Live Class access is now unlocked — you\'ll see the live class submit button in each lesson.'
+  };
+  function showPaidWelcome(plan) {
     // Build a soft top-banner that fades out
     let banner = document.getElementById('paid-welcome-banner');
     if (banner) return;
@@ -2498,7 +2548,8 @@
       z-index: 9999; opacity: 0;
       transition: opacity 0.4s, transform 0.4s;
     `;
-    banner.textContent = 'Welcome to your full Art GPS studio — your practice and collections are now open.';
+    banner.textContent = (plan && PAID_WELCOME_MESSAGES[plan])
+      || 'Welcome to your full Art GPS studio — your practice and collections are now open.';
     document.body.appendChild(banner);
     requestAnimationFrame(() => {
       banner.style.opacity = '1';
