@@ -310,6 +310,68 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .btn-secondary:hover { border-color: var(--ink); }
 .btn-gold { background: var(--gold); color: #fff; }
 .btn-gold:hover { background: #b8975e; }
+
+/* ═══ LIVE CLASS SUBMIT BLOCK ═══ */
+.live-class-submit-block {
+  background: linear-gradient(135deg, #fffbf0 0%, #fff8e8 100%);
+  border: 2px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 20px 18px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.live-class-submit-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.live-class-submit-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.live-class-submit-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.live-class-submit-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+  padding: 14px 24px;
+  border-radius: 30px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.live-class-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200,169,110,0.35);
+  text-decoration: none;
+  color: #fff;
+}
+.self-paced-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  text-align: center;
+}
+@media (max-width: 520px) {
+  .live-class-submit-block { padding: 16px 14px; }
+  .live-class-submit-title { font-size: 16px; }
+  .live-class-submit-btn { font-size: 12px; padding: 12px 20px; }
+}
 .btn-ghost { background: transparent; color: var(--ink-muted); font-size: 10px; letter-spacing: 1.5px; padding: 10px; }
 .btn-ghost:hover { color: var(--ink); }
 
@@ -4705,15 +4767,17 @@ const StudentRoster = {
           const idMatch       = blockText.match(/id\s*:\s*["']([^"']+)["']/);
           const nameMatch     = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
           const trialMatch    = blockText.match(/isTrial\s*:\s*(true|false)/);
+          const liveClassMatch = blockText.match(/isLiveClass\s*:\s*(true|false)/);
           
           if (!idMatch || !nameMatch) continue;  // skip malformed entries
           
           const id = idMatch[1].trim();
           const displayName = nameMatch[1].trim();
           const isTrial = trialMatch ? (trialMatch[1] === 'true') : false;
+          const isLiveClass = liveClassMatch ? (liveClassMatch[1] === 'true') : false;
           
           if (id && displayName) {
-            map.set(id.toUpperCase(), { displayName, isTrial });
+            map.set(id.toUpperCase(), { displayName, isTrial, isLiveClass });
           }
         }
         
@@ -4752,11 +4816,29 @@ const StudentRoster = {
     return entry ? Boolean(entry.isTrial) : false;
   },
   
+  /** Check whether this student is a live class student (real teacher, not self-paced) */
+  isLiveClass(code) {
+    if (!this._students || !code) return false;
+    const entry = this._students.get(code.trim().toUpperCase());
+    return entry ? Boolean(entry.isLiveClass) : false;
+  },
+  
   /** Returns a normalized version of the code (uppercase, trimmed) */
   normalize(code) {
     return (code || '').trim().toUpperCase();
   }
 };
+
+/** Check whether the currently signed-in student is a live class (real teacher) student */
+function isLiveClassStudent() {
+  try {
+    const profile = UserProfile.current();
+    if (!profile || !profile.studentCode) return false;
+    return StudentRoster.isLiveClass(profile.studentCode);
+  } catch(e) {
+    return false;
+  }
+}
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -8661,11 +8743,32 @@ function renderDemo(step) {
 }
 
 function renderFinalSubmit(step) {
+  const showLiveClass = isLiveClassStudent();
+  // Build live class section — only shown to isLiveClass students
+  const liveClassHTML = `
+    <div class="live-class-submit-block" id="live-class-submit-block">
+      <div class="live-class-submit-kicker">👩‍🎨 LIVE CLASS STUDENTS</div>
+      <div class="live-class-submit-title">Submit to your teacher</div>
+      <div class="live-class-submit-desc">
+        You're in a live class with a real teacher.
+        Submit your artwork here for teacher review.
+      </div>
+      <a href="https://www.feiteamart.com/foundation-of-sketch-a-access"
+         target="_blank"
+         rel="noopener"
+         class="btn btn-gold live-class-submit-btn">
+        📋 Submit to live class →
+      </a>
+    </div>
+  `;
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
+
+      ${showLiveClass ? liveClassHTML : ''}
       
+      <div class="self-paced-kicker">📷 SELF-PACED · AI FEEDBACK</div>
       <div class="video-frame upload-drop-zone" 
            style="aspect-ratio: 1; background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
            onclick="submitFinal()"
@@ -8685,7 +8788,7 @@ function renderFinalSubmit(step) {
       </div>
       
       <div class="btn-stack">
-        <button class="btn btn-gold" onclick="submitFinal()"><span style="margin-right: 6px;">📸</span> Upload my drawing</button>
+        <button class="btn btn-gold" onclick="submitFinal()"><span style="margin-right: 6px;">📸</span> Upload for AI feedback</button>
         <button class="btn btn-ghost" onclick="showLessonCompleteFork()">Skip — I'll submit later</button>
       </div>
       

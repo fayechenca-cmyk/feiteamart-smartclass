@@ -1,8 +1,8 @@
 export const studentAccessCodes = [
   { id: "REGINA-16", displayName: "Regina" },
-  { id: "JOJO-10", displayName: "Jojo" },
+  { id: "JOJO-10", displayName: "Jojo", isLiveClass: true },
   { id: "SERENA-09", displayName: "Serena" },
-  { id: "A7Q9-FOX", displayName: "Amy" },
+  { id: "A7Q9-FOX", displayName: "Amy", isLiveClass: true },
   { id: "BELLA-16", displayName: "Bella" },
   { id: "Katy-06", displayName: "Katy" },
   { id: "AMY-11", displayName: "Amy G" },
@@ -23,5 +23,6 @@ export const studentAccessCodes = [
   { id: "ALISSIE-05", displayName: "Alissie" },
   { id: "NATALIE-17", displayName: "Natalie" },
   { id: "RAINIE-08", displayName: "Rainie" },
-  { id: "SELENA-23", displayName: "Selena" },
-  { id: "XIDA-25", displayName: "Xida" },
+  { id: "SELENA-23", displayName: "Selena", isLiveClass: true },
+  { id: "XIDA-25", displayName: "Xida", isLiveClass: true },
+];
