@@ -884,6 +884,10 @@
     font-size: 8.5px; color: var(--purple); text-transform: uppercase;
     letter-spacing: 0.5px; margin-top: 2px; font-weight: 700; opacity: 0.9;
   }
+  .badge-progress {
+    font-size: 9px; color: var(--ink); opacity: 0.55;
+    margin-top: 3px; font-weight: 800; letter-spacing: 0.3px;
+  }
   .map-node.locked .node-visual {
     opacity: 0.5; filter: grayscale(100%); background: #f0f0f0;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
@@ -1332,6 +1336,7 @@
 <script src="core/auth.js"></script>
 <script src="core/access.js"></script>
 <script src="core/badge-catalog.js"></script>
+<script src="core/course-badge-registry.js"></script>
 <script>
   // ═══════════════════════════════════════════════════════════
   // CONFIG
@@ -1709,9 +1714,19 @@
 
     // Badges — full collection, earned / recommended / locked
     const catalog = window.BADGE_CATALOG || [];
-    const earnedIds = (record && Array.isArray(record.achievements))
+    const manualEarnedIds = (record && Array.isArray(record.achievements))
       ? record.achievements.map(a => String(a.badge_id || '').toLowerCase())
       : [];
+    // Course badges (Scene Designer, Art History, ...) are earned
+    // automatically the moment a student finishes the required lessons —
+    // see core/course-badge-registry.js. Manually-curated badges in
+    // students.json (teacher-awarded, not tied to a specific course) still
+    // work exactly as before; this just adds the automatic ones on top.
+    const autoProgress = window.getCourseBadgeProgress ? window.getCourseBadgeProgress() : {};
+    const autoEarnedIds = Object.keys(autoProgress)
+      .filter(id => autoProgress[id].isComplete)
+      .map(id => id.toLowerCase());
+    const earnedIds = Array.from(new Set([...manualEarnedIds, ...autoEarnedIds]));
     const recommendedIds = (record && record.badges && Array.isArray(record.badges.should_target))
       ? record.badges.should_target.map(t => String(t.id || '').toLowerCase())
       : [];
@@ -1742,6 +1757,13 @@
         ? `<img src="${page.imgUrl}" class="node-img">`
         : `<div class="node-icon-fallback">${page.emoji}</div>`;
 
+      // "X / Y lessons" progress line for badges tied to a real course
+      // (see core/course-badge-registry.js) that aren't earned yet.
+      const progress = autoProgress[pageId];
+      const progressHTML = (!isUnlocked && progress && progress.totalCount > 0)
+        ? `<div class="badge-progress">${progress.doneCount}/${progress.totalCount}</div>`
+        : '';
+
       node.innerHTML = `
         <div class="node-visual">
           ${imageHTML}
@@ -1750,6 +1772,7 @@
         </div>
         <div class="node-label">${page.title}</div>
         <div class="badge-credit">${page.artist || ''}</div>
+        ${progressHTML}
       `;
       grid.appendChild(node);
     });

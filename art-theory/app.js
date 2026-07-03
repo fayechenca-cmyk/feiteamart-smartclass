@@ -483,6 +483,19 @@
         saveState();
         renderMap();
         setTimeout(closeModal, 650);
+
+        // write into the shared Art GPS profile so the homepage badge grid
+        // and Artchi's celebration reflect real progress, not just this
+        // widget's own local track state
+        if (typeof artHistoryMarkLessonComplete === "function") {
+          const courseId = `art-history-${state.activeTrack}-${currentLevelId}`;
+          const badgeResult = artHistoryMarkLessonComplete(courseId);
+          if (badgeResult.justUnlocked && typeof showArtchiBubble === "function") {
+            setTimeout(() => showArtchiBubble("you earned the Art History badge! 🏺✨", 4000), 800);
+          } else if (typeof showArtchiBubble === "function") {
+            setTimeout(() => showArtchiBubble(artchiRandomLine ? artchiRandomLine("lessonComplete") : "nice work! ✨", 2600), 800);
+          }
+        }
       }
     } else {
       fb.innerHTML = `<div class="fei-feedback bad">Score: ${correct}/${quiz.length}. Try again.</div>`;

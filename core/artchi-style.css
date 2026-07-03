@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  Artchi — shared platform-wide companion styles
+ *  Extracted from core/scene-drawing-style.css so any module (Art Theory,
+ *  future Foundation A rollout, etc.) can include Artchi without pulling in
+ *  Scene Drawing's unrelated layout CSS. Rules are unchanged — same look,
+ *  same behavior, everywhere Artchi appears on the platform.
+ *  Pairs with core/scene-drawing-archi.js (also shared, unchanged).
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ink: #1a1d2b;
+  --ink-soft: #475569;
+  --ink-muted: #94a3b8;
+  --border: #e8ecf2;
+  --paper: #faf8ff;
+  --accent: #67e8f9;
+  --purple: #a78bfa;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+.artchi-mascot {
+  position: fixed; right: 18px; bottom: 18px;
+  width: 72px; height: 72px;
+  cursor: grab; z-index: 60; user-select: none;
+  transition: transform .3s;
+  filter: drop-shadow(0 6px 20px rgba(167,139,250,0.45));
+}
+.artchi-mascot:active { cursor: grabbing; }
+.artchi-mascot.awake { animation: artchiBreathe 3s ease-in-out infinite; }
+.artchi-mascot.excited { animation: artchiBounce .6s ease-in-out 3; }
+.artchi-mascot.sleep .artchi-eye { transform: scaleY(0.1); transform-origin: center; }
+.artchi-mascot.sleep::after {
+  content: 'z'; position: absolute; top: -4px; right: -6px;
+  font-size: 18px; color: var(--ink-muted); font-weight: 900;
+  animation: artchiZzz 2s ease-in-out infinite;
+  font-style: italic; font-family: 'Montserrat', sans-serif;
+}
+.artchi-mascot.hidden { display: none; }
+.artchi-mascot.awake::before {
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.18) 0%, transparent 70%);
+  z-index: -1; animation: artchiHalo 2.8s ease-in-out infinite; pointer-events: none;
+}
+@keyframes artchiHalo { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 0.85; transform: scale(1.1); } }
+@keyframes artchiBreathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes artchiBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-13px) rotate(-5deg); } }
+@keyframes artchiZzz { 0%,100% { opacity: 0; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-6px); } }
+
+.artchi-bubble {
+  position: fixed; right: 22px; bottom: 112px; max-width: 200px;
+  background: #fff; padding: 10px 12px; border-radius: var(--radius-md);
+  font-size: 12px; color: var(--ink); line-height: 1.45;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1.5px solid var(--border);
+  z-index: 59; font-weight: 600; display: none;
+}
+.artchi-bubble::after {
+  content: ''; position: absolute; bottom: -7px; right: 26px;
+  width: 12px; height: 12px; background: #fff; transform: rotate(45deg);
+  border-right: 1.5px solid var(--border); border-bottom: 1.5px solid var(--border);
+}
+.artchi-bubble.show { display: block; animation: artchiBubblePop .3s ease; }
+.artchi-bubble-close { position: absolute; top: 3px; right: 7px; color: var(--ink-muted); font-size: 13px; cursor: pointer; font-weight: 800; }
+@keyframes artchiBubblePop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+.artchi-label {
+  position: fixed; right: 22px; bottom: 4px;
+  background: var(--purple); color: #fff; padding: 5px 12px; border-radius: 12px;
+  font-family: 'Montserrat', sans-serif; font-size: 9.5px; font-weight: 800;
+  letter-spacing: 0.6px; z-index: 61; pointer-events: none;
+  box-shadow: 0 4px 14px rgba(167,139,250,0.4); white-space: nowrap;
+  transition: opacity .3s ease;
+}
+.artchi-label.hidden { display: none; }
+.artchi-label.muted { opacity: 0; visibility: hidden; }
+
+.artchi-onboard-backdrop {
+  position: fixed; inset: 0; background: rgba(15,23,42,0.55); backdrop-filter: blur(8px);
+  z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.artchi-onboard-backdrop.show { display: flex; animation: artchiFadeIn .35s ease; }
+.artchi-onboard-card {
+  background: #fff; border-radius: var(--radius-lg); padding: 26px 22px;
+  max-width: 300px; width: 100%; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: artchiSlideUp .4s ease;
+}
+.artchi-onboard-svg-wrap { margin: 0 auto 12px; width: 80px; }
+.artchi-onboard-title { font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.artchi-onboard-sub { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 4px; }
+@keyframes artchiFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes artchiSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ═══ ARTCHI CHAT — shell only. Canned encouragement, not a real AI backend
+   yet. When Faye connects a real AI assistant later, only sendArtchiChat()
+   in scene-drawing-archi.js needs to change — this markup/CSS stays. ═══ */
+.artchi-chat {
+  display: none; position: fixed; bottom: 18px; right: 18px;
+  width: calc(100vw - 36px); max-width: 320px;
+  background: #fff; border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18); z-index: 200;
+  overflow: hidden; border: 0.5px solid var(--border);
+}
+.artchi-chat.show { display: block; animation: artchiSlideUp .35s ease; }
+.artchi-chat-head { padding: 14px 16px; background: linear-gradient(135deg, var(--ink) 0%, #374151 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.artchi-chat-head-info b { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800; }
+.artchi-chat-head-info span { font-family: 'Montserrat', sans-serif; font-size: 9px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; display: block; margin-top: 2px; }
+.artchi-chat-close { color: rgba(255,255,255,0.7); font-size: 20px; font-weight: 700; cursor: pointer; padding: 2px 8px; }
+.artchi-chat-body { padding: 14px; max-height: 220px; overflow-y: auto; background: var(--paper); }
+.artchi-msg { padding: 10px 12px; border-radius: var(--radius-sm); font-size: 12px; line-height: 1.5; margin-bottom: 8px; max-width: 85%; }
+.artchi-msg.bot { background: #fff; color: var(--ink); border-left: 3px solid var(--accent); }
+.artchi-msg.user { background: var(--ink); color: #fff; margin-left: auto; }
+.artchi-chat-input-wrap { display: flex; gap: 6px; padding: 10px 12px; border-top: 0.5px solid var(--border); background: #fff; }
+.artchi-chat-input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Open Sans', sans-serif; font-size: 12px; outline: none; }
+.artchi-chat-input:focus { border-color: var(--ink); }
+.artchi-chat-send { padding: 9px 12px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--ink); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+
+@media (min-width: 521px) and (max-width: 819px) {
+  .artchi-mascot { width: 84px; height: 84px; right: 22px; bottom: 22px; }
+  .artchi-chat { max-width: 360px; width: calc(100vw - 40px); }
+}
+@media (min-width: 820px) {
+  .artchi-mascot { right: 28px; bottom: 28px; width: 92px; height: 92px; z-index: 70; }
+  .artchi-label { right: 28px; bottom: 10px; }
+  .artchi-bubble { right: 28px; bottom: 134px; max-width: 260px; }
+  .artchi-chat { right: 28px; bottom: 28px; max-width: 380px; width: calc(100vw - 56px); }
+}

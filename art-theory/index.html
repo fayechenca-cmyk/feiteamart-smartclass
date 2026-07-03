@@ -6,6 +6,7 @@
 <title>FEI TeamArt · Art Theory</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../core/artchi-style.css">
 <style>
   html, body { margin:0; padding:0; background:#f7f5f2; }
   .art-theory-topbar{
@@ -44,8 +45,19 @@
   <div id="fei-art-history"></div>
 </div>
 
+<!-- Artchi mascot — same character used across the rest of the platform -->
+<div id="artchi-mount"></div>
+
+<script src="../core/course-badge-registry.js"></script>
+<script src="../core/art-history-platform-bridge.js"></script>
+<script src="../core/scene-drawing-archi.js"></script>
 <script src="curriculum.js"></script>
 <script src="app.js"></script>
+<script>
+  document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+  initArtchiDrag();
+  showArtchi();
+</script>
 
 </body>
 </html>

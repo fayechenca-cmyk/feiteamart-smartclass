@@ -26,8 +26,9 @@
  *  Drawing's lesson `id` fields are already short ('one-point-street',
  *  'two-point-bedroom' — see scene-drawing/lesson-*.js) and used
  *  throughout the URL, localStorage progress, and JournalStorage entries,
- *  so SCENE_DRAWING_COURSE_IDS below mirrors those exact ids rather than
- *  introducing a second naming scheme.
+ *  so those exact ids are what core/course-badge-registry.js's
+ *  scene_designer.requiredIds mirrors, rather than introducing a second
+ *  naming scheme.
  *
  *  BADGE PHILOSOPHY (per Faye, confirmed June 2026)
  *  Per Faye's standing rule (same one already in the codebase, Apr 2026):
@@ -35,9 +36,11 @@
  *  Drawing Foundation is one growing course (2 lessons now, 8-10 planned).
  *  The 'scene_designer' badge (redefined per Faye's explicit instruction —
  *  it previously belonged to 3 students for unrelated work; Faye will
- *  handle those records herself) unlocks only when ALL lessons in
- *  SCENE_DRAWING_TOTAL_LESSONS are in completedLessons — not after Lesson
- *  1 or 2 alone.
+ *  handle those records herself) unlocks only when ALL lessons listed in
+ *  core/course-badge-registry.js are in completedLessons — not after
+ *  Lesson 1 or 2 alone. (As of July 2026, the required-id list moved out
+ *  of this file into that shared registry — see sceneDrawingCourseBadgeProgress
+ *  below.)
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 // ── JournalStorage — copied verbatim from the platform's existing lessons ──
@@ -139,24 +142,12 @@ const SceneDrawingProfileBridge = {
 };
 
 // ── Course-level badge progress (NOT per-lesson — see philosophy note above) ──
-// IDs here MUST match each lesson's `id` field exactly (see
-// scene-drawing/lesson-1-one-point-street.js / lesson-2-two-point-bedroom.js).
-// These are intentionally short (not 'scene-drawing-one-point-street') —
-// they're already what gets written into the URL (?id=...), localStorage
-// progress keys, and JournalStorage's courseId field, so this list just
-// mirrors that existing convention instead of introducing a second one.
-const SCENE_DRAWING_COURSE_IDS = ['one-point-street', 'two-point-bedroom'];
-
+// The required lesson id list now lives in ONE place:
+// core/course-badge-registry.js (window.COURSE_BADGE_REGISTRY.scene_designer).
+// This file no longer keeps its own copy, so the two can't drift apart.
 function sceneDrawingCourseBadgeProgress() {
-  const profile = SceneDrawingProfileBridge.current();
-  const completed = (profile && profile.completedLessons) || [];
-  const doneCount = SCENE_DRAWING_COURSE_IDS.filter(id => completed.includes(id)).length;
-  return {
-    doneCount,
-    totalCount: SCENE_DRAWING_COURSE_IDS.length,
-    isComplete: doneCount === SCENE_DRAWING_COURSE_IDS.length,
-    pct: Math.round((doneCount / SCENE_DRAWING_COURSE_IDS.length) * 100)
-  };
+  const progress = (window.getCourseBadgeProgress ? window.getCourseBadgeProgress() : {}).scene_designer;
+  return progress || { doneCount: 0, totalCount: 0, isComplete: false, pct: 0 };
 }
 
 // Called once per lesson, at the lesson-complete screen. Writes to the
