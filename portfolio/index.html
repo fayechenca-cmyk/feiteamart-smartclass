@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #E2D1F9 0%, #9BEBEB 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #1a1d2b;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+  .topbar .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: #1a1d2b; }
+  .topbar .brand-text { font-weight: 800; font-size: 13px; }
+  .topbar a { margin-left: auto; text-decoration: none; color: #1a1d2b; font-weight: 700; font-size: 13px; }
+
+  .header-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, #a78bfa 0%, #67e8f9 100%);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 20px; flex-shrink: 0;
+  }
+  .student-name { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin: 0; }
+  .student-sub { font-size: 12px; color: #4b4b5a; margin-top: 2px; }
+  .actions { margin-left: auto; display: flex; gap: 10px; }
+  .btn {
+    padding: 10px 16px; border-radius: 10px; font-size: 12px; font-weight: 800;
+    cursor: pointer; border: none; font-family: 'Montserrat', sans-serif;
+  }
+  .btn-primary { background: #1a1d2b; color: #fff; }
+  .btn-secondary { background: transparent; border: 1px solid #1a1d2b; color: #1a1d2b; }
+  .btn:disabled { opacity: 0.5; cursor: default; }
+
+  .note-box {
+    background: rgba(255,255,255,0.6); border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 32px;
+  }
+  .note-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.6px;
+    text-transform: uppercase; color: #534AB7; margin-bottom: 6px;
+  }
+  .note-text { font-size: 14px; line-height: 1.7; color: #1a1d2b; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .art-card {
+    background: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 12px; overflow: hidden;
+  }
+  .art-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #eee; }
+  .art-title { font-size: 13px; font-weight: 800; padding: 12px 14px 2px; }
+  .art-cat { font-size: 10.5px; font-weight: 700; color: #534AB7; text-transform: uppercase; letter-spacing: 0.4px; padding: 0 14px 4px; }
+  .art-caption { font-size: 11.5px; color: #4b4b5a; padding: 0 14px 14px; line-height: 1.5; }
+
+  .empty-state {
+    text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.6);
+    border-radius: 16px;
+  }
+  .empty-state h1 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 8px; }
+  .empty-state p { font-size: 13px; color: #4b4b5a; }
+
+  @media print {
+    body { background: #fff !important; }
+    .topbar a, .actions { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand-dot"></div>
+    <div class="brand-text">FEI TeamArt</div>
+    <a href="../" title="Back to Art GPS">← Back to Art GPS</a>
+  </div>
+
+  <div id="portfolio-root">
+    <div class="empty-state"><h1>Loading portfolio…</h1></div>
+  </div>
+</div>
+
+<script>
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function initials(name) {
+  if (!name) return '?';
+  const parts = String(name).trim().split(/\s+/);
+  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+async function loadPortfolio() {
+  const id = getParam('id');
+  const root = document.getElementById('portfolio-root');
+
+  if (!id) {
+    root.innerHTML = '<div class="empty-state"><h1>No portfolio specified</h1><p>This link is missing a portfolio id.</p></div>';
+    return;
+  }
+
+  let records = [];
+  try {
+    const res = await fetch('../core/students.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    records = await res.json();
+  } catch (e) {
+    root.innerHTML = '<div class="empty-state"><h1>Could not load portfolio</h1><p>Please try again later.</p></div>';
+    return;
+  }
+
+  const normalized = String(id).trim().toUpperCase();
+  const record = records.find(r => String(r.id || '').toUpperCase() === normalized) || null;
+  const portfolio = (record && Array.isArray(record.portfolio)) ? record.portfolio : [];
+
+  if (!record || portfolio.length === 0) {
+    root.innerHTML = '<div class="empty-state"><h1>Portfolio not available yet</h1><p>Check back once your teacher has added portfolio pieces.</p></div>';
+    return;
+  }
+
+  window.currentRecord = record;
+  window.currentPortfolio = portfolio;
+
+  const name = record.display_name || 'Student';
+  const noteHtml = record.teacher_note
+    ? `<div class="note-box"><div class="note-label">Teacher note</div><div class="note-text">${escapeHtml(record.teacher_note)}</div></div>`
+    : '';
+
+  const cardsHtml = portfolio.map(work => `
+    <div class="art-card">
+      <img class="art-img" src="${escapeHtml(work.image)}" alt="${escapeHtml(work.title || '')}"
+           onerror="this.src='https://placehold.co/400x300?text=Artwork'">
+      <div class="art-title">${escapeHtml(work.title || '')}</div>
+      ${work.category ? `<div class="art-cat">${escapeHtml(work.category)}</div>` : ''}
+      ${work.caption ? `<div class="art-caption">${escapeHtml(work.caption)}</div>` : ''}
+    </div>
+  `).join('');
+
+  root.innerHTML = `
+    <div class="header-row">
+      <div class="avatar">${initials(name)}</div>
+      <div>
+        <h1 class="student-name">${escapeHtml(name)}</h1>
+        <div class="student-sub">Portfolio &middot; FEI TeamArt</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-pdf" onclick="downloadPdf()">Download PDF</button>
+        <button class="btn btn-secondary" id="btn-link" onclick="copyLink()">Copy link</button>
+      </div>
+    </div>
+    ${noteHtml}
+    <div class="grid">${cardsHtml}</div>
+  `;
+}
+
+function copyLink() {
+  const btn = document.getElementById('btn-link');
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = original; }, 1800);
+  }).catch(() => {
+    alert('Could not copy automatically. Portfolio link:\n' + window.location.href);
+  });
+}
+
+function loadImageAsDataUrl(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        resolve({ dataUrl: canvas.toDataURL('image/jpeg', 0.85), width: img.naturalWidth, height: img.naturalHeight });
+      } catch (e) {
+        resolve(null);
+      }
+    };
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+async function downloadPdf() {
+  const btn = document.getElementById('btn-pdf');
+  const record = window.currentRecord;
+  const portfolio = window.currentPortfolio || [];
+  if (!record) return;
+
+  btn.disabled = true;
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Preparing…';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 54;
+    let y = margin;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(24);
+    doc.text(record.display_name || 'Student', margin, y);
+    y += 20;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(90, 90, 100);
+    doc.text('Portfolio · FEI TeamArt', margin, y);
+    doc.setTextColor(20, 20, 30);
+    y += 30;
+
+    if (record.teacher_note) {
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text('TEACHER NOTE', margin, y);
+      y += 14;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(11);
+      const noteLines = doc.splitTextToSize(record.teacher_note, pageWidth - margin * 2);
+      doc.text(noteLines, margin, y);
+      y += noteLines.length * 14 + 20;
+    }
+
+    for (const work of portfolio) {
+      const imgBoxHeight = 220;
+      const captionHeight = 60;
+      const blockHeight = imgBoxHeight + captionHeight;
+
+      if (y + blockHeight > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+
+      const loaded = await loadImageAsDataUrl(work.image);
+      if (loaded) {
+        const maxW = pageWidth - margin * 2;
+        const scale = Math.min(maxW / loaded.width, imgBoxHeight / loaded.height);
+        const drawW = loaded.width * scale;
+        const drawH = loaded.height * scale;
+        doc.addImage(loaded.dataUrl, 'JPEG', margin, y, drawW, drawH);
+      }
+      y += imgBoxHeight + 10;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.text(work.title || '', margin, y);
+      y += 15;
+
+      if (work.category) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(83, 74, 183);
+        doc.text(String(work.category).toUpperCase(), margin, y);
+        doc.setTextColor(20, 20, 30);
+        y += 13;
+      }
+
+      if (work.caption) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        const capLines = doc.splitTextToSize(work.caption, pageWidth - margin * 2);
+        doc.text(capLines, margin, y);
+        y += capLines.length * 12;
+      }
+
+      y += 20;
+    }
+
+    const fileName = (record.display_name || 'portfolio').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '-portfolio.pdf';
+    doc.save(fileName);
+  } catch (e) {
+    alert('Something went wrong building the PDF. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
+}
+
+loadPortfolio();
+</script>
+
+</body>
+</html>

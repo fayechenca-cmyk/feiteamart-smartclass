@@ -945,6 +945,13 @@
     box-sizing: border-box; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     border-radius: 8px; border: 1px solid #eee; margin-bottom: 6px;
   }
+  .studio-portfolio-btn {
+    display: inline-block; padding: 10px 20px; border-radius: 10px;
+    background: linear-gradient(135deg, #E2D1F9 0%, #9BEBEB 100%);
+    color: #1a1d2b; font-size: 13px; font-weight: 700;
+    text-decoration: none; text-align: center;
+  }
+  .studio-portfolio-btn:hover { opacity: 0.9; }
 
   /* ═══ TEACHER NOTE (Feedback) ═══
      Ported styling: quoted note + strength tags, same warmth as the
@@ -1207,6 +1214,11 @@
       <div class="studio-card-body" style="margin-bottom:10px;">A record of your work over time — submissions, milestones, and the story of your practice.</div>
       <div class="spotlight-grid" id="studio-spotlight-grid"></div>
       <div class="portfolio-grid" id="studio-portfolio-grid"></div>
+      <div id="studio-portfolio-cta" style="display:none; margin-top:14px;">
+        <a id="studio-portfolio-link" href="#" class="studio-portfolio-btn">
+          Build my portfolio →
+        </a>
+      </div>
     </div>
 
   </div>
@@ -1829,6 +1841,19 @@
 
     if (featuredArt.length === 0 && portfolio.length === 0) {
       spotGrid.innerHTML = '<p style="font-size:12px; color:var(--ink-faint); font-style:italic;">No artwork added yet — check back soon.</p>';
+    }
+
+    // Portfolio builder CTA — only once the teacher has flagged at least
+    // one piece as portfolio-worthy. Links to the shareable portfolio page
+    // by record id (not email — that page is meant to be sent to schools/
+    // employers who don't have an Art GPS account).
+    const portfolioCta = document.getElementById('studio-portfolio-cta');
+    const portfolioLink = document.getElementById('studio-portfolio-link');
+    if (record && portfolio.length > 0) {
+      portfolioLink.href = 'portfolio/?id=' + encodeURIComponent(record.id);
+      portfolioCta.style.display = 'block';
+    } else {
+      portfolioCta.style.display = 'none';
     }
   }
 
