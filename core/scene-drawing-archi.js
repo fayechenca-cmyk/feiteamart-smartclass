@@ -238,13 +238,24 @@ function artchiChatMarkup() {
   `;
 }
 
-const ARTCHI_CHAT_REPLIES = [
-  "Try dragging the VP and watch what happens to the lines!",
-  "Remember: the horizon line is your eye level.",
-  "You've got this — one step at a time ✨",
-  "Check the Teacher Tip on this step for a hint.",
-  "I'm not a full AI chat yet, but I'm cheering you on either way!"
-];
+// ─── AI chat, via a Supabase Edge Function proxy — the Anthropic API key
+// never touches this file or the browser. See supabase/functions/artchi-chat.
+// window.ARTCHI_LESSON_CONTEXT can be set by the host page (e.g. Scene
+// Drawing, Art Theory) before this script runs, so Artchi knows what
+// lesson the student is currently on. Falls back to the page title.
+const ARTCHI_FUNCTION_URL = 'https://rudztwseatwayhztbarj.supabase.co/functions/v1/artchi-chat';
+const ARTCHI_ANON_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
+
+function artchiStudentEmail() {
+  try {
+    const raw = localStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    return (profile && profile.email) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
 function openArtchiChat() {
   const chat = document.getElementById('artchi-chat');
   if (chat) chat.classList.add('show');
@@ -254,18 +265,47 @@ function closeArtchiChat() {
   const chat = document.getElementById('artchi-chat');
   if (chat) chat.classList.remove('show');
 }
-function sendArtchiChat() {
+async function sendArtchiChat() {
   const inp = document.getElementById('artchi-chat-inp');
   const body = document.getElementById('artchi-chat-body');
   if (!inp || !body || !inp.value.trim()) return;
   const userText = inp.value.trim();
   body.innerHTML += `<div class="artchi-msg user">${userText}</div>`;
   inp.value = '';
-  const reply = ARTCHI_CHAT_REPLIES[Math.floor(Math.random() * ARTCHI_CHAT_REPLIES.length)];
-  setTimeout(() => {
-    body.innerHTML += `<div class="artchi-msg bot">${reply}</div>`;
+  body.scrollTop = body.scrollHeight;
+
+  const email = artchiStudentEmail();
+  if (!email) {
+    body.innerHTML += `<div class="artchi-msg bot">Sign in first so I know who I'm chatting with! ✨</div>`;
     body.scrollTop = body.scrollHeight;
-  }, 350);
+    return;
+  }
+
+  const typingId = 'artchi-typing-' + Date.now();
+  body.innerHTML += `<div class="artchi-msg bot" id="${typingId}">…</div>`;
+  body.scrollTop = body.scrollHeight;
+
+  try {
+    const res = await fetch(ARTCHI_FUNCTION_URL, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'apikey': ARTCHI_ANON_KEY,
+        'authorization': 'Bearer ' + ARTCHI_ANON_KEY
+      },
+      body: JSON.stringify({
+        email: email,
+        message: userText,
+        lessonContext: window.ARTCHI_LESSON_CONTEXT || document.title || ''
+      })
+    });
+    const data = await res.json();
+    const typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.textContent = data.reply || "I'm not sure what to say — try asking a different way!";
+  } catch (e) {
+    const typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.textContent = "I couldn't connect just now — try again in a moment!";
+  }
   body.scrollTop = body.scrollHeight;
 }
 
