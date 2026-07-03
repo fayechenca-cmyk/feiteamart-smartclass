@@ -1508,6 +1508,17 @@
   }
 
   function findStudentRecord() {
+    // Real students (signed up via Supabase) have an email and no
+    // studentCode — match those first. The 4 legacy access-code students
+    // (JOJO-10, AMY-11, etc.) have no email in their record, so this can't
+    // accidentally cross-match them.
+    const email = userProfile && userProfile.email;
+    if (email) {
+      const normalizedEmail = String(email).trim().toLowerCase();
+      const byEmail = studentRecords.find(s => String(s.email || '').trim().toLowerCase() === normalizedEmail);
+      if (byEmail) return byEmail;
+    }
+
     const code = userProfile && userProfile.studentCode;
     if (!code) return null;
     const normalized = String(code).trim().toUpperCase();
