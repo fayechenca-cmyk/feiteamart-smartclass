@@ -10108,14 +10108,50 @@ function sendChat() {
   body.appendChild(m);
   inp.value = '';
   body.scrollTop = body.scrollHeight;
-  setTimeout(() => {
-    const r = document.createElement('div');
-    r.className = 'msg bot';
-    r.innerHTML = 'Great question! In the real app, I would give you a detailed answer using the FEI TeamArt teaching method 💫';
-    body.appendChild(r);
-    body.scrollTop = body.scrollHeight;
-    playTone(660, 0.1);
-  }, 700);
+
+  const ARTCHI_FUNCTION_URL = 'https://rudztwseatwayhztbarj.supabase.co/functions/v1/artchi-chat';
+  const ARTCHI_ANON_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
+  let studentEmail = null;
+  try {
+    const raw = localStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    studentEmail = (profile && profile.email) || null;
+  } catch (e) {}
+
+  const r = document.createElement('div');
+  r.className = 'msg bot';
+  body.appendChild(r);
+  body.scrollTop = body.scrollHeight;
+
+  if (!studentEmail) {
+    r.innerHTML = "Sign in first so I know who I'm chatting with! ✨";
+    return;
+  }
+
+  r.textContent = '…';
+  fetch(ARTCHI_FUNCTION_URL, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'apikey': ARTCHI_ANON_KEY,
+      'authorization': 'Bearer ' + ARTCHI_ANON_KEY
+    },
+    body: JSON.stringify({
+      email: studentEmail,
+      message: text,
+      lessonContext: 'Foundation A · Cone'
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      r.innerHTML = data.reply || "I'm not sure what to say — try asking a different way!";
+      body.scrollTop = body.scrollHeight;
+      playTone(660, 0.1);
+    })
+    .catch(() => {
+      r.textContent = "I couldn't connect just now — try again in a moment!";
+      body.scrollTop = body.scrollHeight;
+    });
 }
 function micStart() {
   document.getElementById('mic-btn').classList.add('recording');
