@@ -8742,57 +8742,70 @@ function nextStep() {
   }
   */
   
-  if (!state.completedSteps.includes(curr)) {
+  // BUG FIX (re-entry Continue button): the mark-complete/XP/persist side
+  // effects only make sense the FIRST time a step is completed, but the
+  // actual advance (ritual + goToStep) must run every time Continue is
+  // clicked — including when revisiting an already-completed step (e.g.
+  // via a rail dot, or landing back on one after leaving and re-entering
+  // the lesson). Previously the whole ritual+navigation call was nested
+  // inside this guard, so Continue silently did nothing on revisit.
+  const alreadyCompletedStep = state.completedSteps.includes(curr);
+
+  if (!alreadyCompletedStep) {
     state.completedSteps.push(curr);
     state.xp += LESSON.steps[curr].xp || 0;
-    Analytics.track('step_completed', { 
-      step_index: curr, 
-      step_type: currStep?.type, 
+    Analytics.track('step_completed', {
+      step_index: curr,
+      step_type: currStep?.type,
       step_title: currStep?.title,
       xp_earned: currStep?.xp || 0,
-      total_xp: state.xp 
+      total_xp: state.xp
     });
     // Persist progress to UserProfile (so "Welcome back" can resume)
-    UserProfile.update({ 
+    UserProfile.update({
       currentStepIdx: curr + 1,  // where they'll be on next visit
-      totalXP: state.xp 
+      totalXP: state.xp
     });
-    // ✨ Step completion ritual — brief animation before advancing
-    showStepCompleteRitual(currStep, () => {
-      if (curr < LESSON.steps.length - 1) {
-        goToStep(curr + 1);
-        showBubble(randomEncouragement(), 3000);
-        resetSleep();
-      } else {
-        // End of lesson — reached badge gate (not yet claimed)
-        // BUG FIX #7: This fires when user REACHES the badge area, not when they CLAIM the badge.
-        // True badge claim fires 'badge_email_submitted' inside submitBadgeEmail().
-        Analytics.track('lesson_completed', { 
-          lesson_id: LESSON.id,
-          badge_name: LESSON.badge.name, 
-          total_xp: state.xp,
-          steps_completed: state.completedSteps.length,
-          thought_count_this_course: JournalStorage.count(AccessControl.currentCourseId)
-        });
-        // Mark lesson as complete in profile (survives across devices when Supabase enabled)
-        UserProfile.completeLesson(LESSON.id);
-        celebrate();
-        playTone(660, 0.15);
-        setTimeout(() => playTone(880, 0.15), 120);
-        setTimeout(() => playTone(1320, 0.3), 280);
-        setTimeout(() => playTone(1760, 0.4), 500);
-        showBubble("🎉 You did it! Badge unlocked!", 5000);
-        const a = document.getElementById('artchi');
-        a.classList.add('excited');
-        setTimeout(() => a.classList.remove('excited'), 1800);
-        const el = document.getElementById('step-content');
-        el.innerHTML = renderBadgeUnlock();
-        document.getElementById('part-badge').innerHTML = 'Part e · achievement unlocked';
-        document.getElementById('upload-fab').classList.add('hidden');
-        renderRailDots();
-      }
-    }); // end showStepCompleteRitual callback
   }
+
+  // ✨ Step completion ritual — brief animation before advancing.
+  // On revisit (already completed), pass xp:0 so the ritual uses its
+  // existing "skip animation, just advance" fast path instead of
+  // showing an inaccurate "+XP" popup for XP that wasn't actually earned.
+  showStepCompleteRitual(alreadyCompletedStep ? { ...currStep, xp: 0 } : currStep, () => {
+    if (curr < LESSON.steps.length - 1) {
+      goToStep(curr + 1);
+      showBubble(randomEncouragement(), 3000);
+      resetSleep();
+    } else {
+      // End of lesson — reached badge gate (not yet claimed)
+      // BUG FIX #7: This fires when user REACHES the badge area, not when they CLAIM the badge.
+      // True badge claim fires 'badge_email_submitted' inside submitBadgeEmail().
+      Analytics.track('lesson_completed', {
+        lesson_id: LESSON.id,
+        badge_name: LESSON.badge.name,
+        total_xp: state.xp,
+        steps_completed: state.completedSteps.length,
+        thought_count_this_course: JournalStorage.count(AccessControl.currentCourseId)
+      });
+      // Mark lesson as complete in profile (survives across devices when Supabase enabled)
+      UserProfile.completeLesson(LESSON.id);
+      celebrate();
+      playTone(660, 0.15);
+      setTimeout(() => playTone(880, 0.15), 120);
+      setTimeout(() => playTone(1320, 0.3), 280);
+      setTimeout(() => playTone(1760, 0.4), 500);
+      showBubble("🎉 You did it! Badge unlocked!", 5000);
+      const a = document.getElementById('artchi');
+      a.classList.add('excited');
+      setTimeout(() => a.classList.remove('excited'), 1800);
+      const el = document.getElementById('step-content');
+      el.innerHTML = renderBadgeUnlock();
+      document.getElementById('part-badge').innerHTML = 'Part e · achievement unlocked';
+      document.getElementById('upload-fab').classList.add('hidden');
+      renderRailDots();
+    }
+  }); // end showStepCompleteRitual callback
 }
 
 // ✨ Step completion ritual — lightweight green ring + XP pop + sound
