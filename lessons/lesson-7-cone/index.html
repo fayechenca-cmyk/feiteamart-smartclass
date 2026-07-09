@@ -72,6 +72,26 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .ref-card.wide { grid-column: span 2; aspect-ratio: 16/9; }
 .ref-label { position: absolute; bottom: 8px; left: 8px; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--ink); background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 4px; }
 
+/* CONE OPENING WIDGET — "What does this shape remind you of?" */
+.cone-opening-cone-stage { display: flex; align-items: center; justify-content: center; padding: 10px 0 6px; margin-bottom: 4px; }
+.cone-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+.cone-option-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 16px 10px; background: var(--paper);
+  border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+  cursor: pointer; transition: border-color .18s, transform .18s, box-shadow .18s;
+  text-align: center;
+}
+.cone-option-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+.cone-option-card.selected { border-color: var(--gold); box-shadow: 0 6px 18px rgba(200,169,110,0.25); background: #fffbf0; }
+.cone-option-card svg { display: block; }
+.cone-option-label { font-family: 'Montserrat', sans-serif; font-size: 11.5px; font-weight: 700; color: var(--ink); }
+.cone-response-text {
+  font-family: 'Open Sans', sans-serif; font-size: 13px; color: var(--ink-soft);
+  line-height: 1.5; text-align: center; padding: 12px 14px; margin-top: 14px;
+  background: var(--paper); border-left: 3px solid var(--gold); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
 /* VOCABULARY */
 .vocab { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .vocab-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; background: var(--paper); border-radius: var(--radius-sm); border-left: 3px solid var(--gold); }
@@ -5939,30 +5959,29 @@ const LESSON = {
     // was a forced LFC. We learned: don't strain to insert images when
     // the lesson's actual subject is foundational skill training.
     // ═══════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════
+    // OPENING WIDGET — "What does this shape remind you of?"
+    // Round 52 (per Faye): replaced the wordy "Meet the cone" prose,
+    // "Where curve meets flat" reference step, and "Pencil Kit" step —
+    // all repeated content already covered earlier in Foundation A.
+    // This interactive recognition widget replaces them as a lighter,
+    // faster opening.
+    // ═══════════════════════════════════════════════════════════════
     {
-      part: 'OPEN',
+      part: 'A',
       partLabel: '✨ Before we start',
-      type: 'openingLFC',
-      title: 'Meet the cone',
+      type: 'coneOpeningWidget',
+      title: 'What does this shape remind you of?',
       intro: '',
       xp: 5
     },
-    // ===== PART A · PREPARATION =====
-    {
-      part: 'A',
-      partLabel: 'Part a · preparation',
-      type: 'reference',
-      title: 'Where curve meets flat',
-      intro: 'Before we draw, let\'s learn how light behaves on a cylinder. The side curves like a sphere. The top stays flat like a cube face. One light, two different surfaces — see how each one responds.',
-      xp: 0
-    },
     // ═══════════════════════════════════════════════════════════════
     // PLAY WITH THE LIGHT — interactive sphere
-    // 
+    //
     // After the textual Reference step, students get to FEEL light & shadow
     // by dragging the sun around a sphere. This is the Art GPS signature
     // interaction — the moment when reading turns into discovering.
-    // 
+    //
     // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
     // Critical thinking happens through hands, not through reading.
     // "学生可以直接理解,而不是我在下面去讲,这个就更智能"
@@ -5974,14 +5993,6 @@ const LESSON = {
       title: 'Now feel it — drag the sun',
       intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
       xp: 5
-    },
-    {
-      part: 'A',
-      partLabel: 'Part a · preparation',
-      type: 'tools',
-      title: 'Your pencil toolkit',
-      intro: 'Different pencils do different jobs. These aren\'t strict rules — they\'re guidelines that make your shading more controlled.',
-      xp: 0
     },
     {
       part: 'A',
@@ -6190,7 +6201,9 @@ function renderStep() {
     case 'lfcMoment':   el.innerHTML = renderLFCMoment(step); break;
     
     case 'reference':   el.innerHTML = renderReference(step); break;
-    case 'playLight':   el.innerHTML = renderPlayLight(step); 
+    case 'coneOpeningWidget': el.innerHTML = renderConeOpeningWidget(step);
+                          break;
+    case 'playLight':   el.innerHTML = renderPlayLight(step);
                         // Defer interactive setup until DOM is in place
                         setTimeout(() => initPlayLight('cylinder'), 50);
                         break;
@@ -8297,6 +8310,127 @@ function resetPlayLight() {
   PlayLight.lightAngleDeg = 225;
   PlayLight.lightDistance = 150;
   updatePlayLight();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONE OPENING WIDGET — "What does this shape remind you of?"
+// Round 52 (per Faye): replaces the old prose-heavy "Meet the cone" /
+// "Where curve meets flat" / "Pencil Kit" steps with a quick recognition
+// widget. All 4 answers are "correct" — the point is recognition, not
+// testing. Uses a scoped hand-drawn sketch filter (#cone-sketch) since
+// this file doesn't already define one.
+// ═══════════════════════════════════════════════════════════════
+const CONE_OPENING_OPTIONS = [
+  {
+    key: 'icecream',
+    emoji: '🍦',
+    label: 'Ice cream cone',
+    response: 'Yes! The cone is literally named after this.',
+    svg: `
+      <path d="M20 8 L34 8 L27 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M15 8 Q27 -4 39 8 Q34 14 27 13 Q20 14 15 8 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
+    `
+  },
+  {
+    key: 'partyhat',
+    emoji: '🎉',
+    label: 'Party hat',
+    response: 'Exactly — same geometry, different occasion.',
+    svg: `
+      <path d="M27 6 L40 46 Q27 52 14 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
+      <circle cx="27" cy="6" r="2.4" fill="#c8a96e" stroke="none"/>
+      <path d="M14 46 Q27 50 40 46" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linecap="round"/>
+    `
+  },
+  {
+    key: 'trafficcone',
+    emoji: '🚧',
+    label: 'Traffic cone',
+    response: 'Right! Engineers use this shape for a reason.',
+    svg: `
+      <path d="M22 6 L32 6 L42 44 L12 44 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
+      <rect x="16" y="30" width="22" height="6" fill="none" stroke="#1a1d2b" stroke-width="1.4"/>
+      <rect x="10" y="44" width="34" height="5" rx="1.5" fill="none" stroke="#1a1d2b" stroke-width="1.6"/>
+    `
+  },
+  {
+    key: 'rocket',
+    emoji: '🚀',
+    label: 'Rocket nose',
+    response: 'The nose cone — where aerodynamics meet geometry.',
+    svg: `
+      <path d="M27 4 L34 40 L20 40 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M20 40 L14 50 L20 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M34 40 L40 50 L34 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linejoin="round"/>
+    `
+  }
+];
+
+function renderConeOpeningWidget(step) {
+  const optionsHtml = CONE_OPENING_OPTIONS.map(opt => `
+    <div class="cone-option-card" id="cone-option-${opt.key}"
+         onclick="selectConeOption('${opt.key}')"
+         role="button" tabindex="0"
+         onkeypress="if(event.key==='Enter'||event.key===' ')selectConeOption('${opt.key}')">
+      <svg viewBox="0 0 54 54" width="44" height="44">${opt.svg}</svg>
+      <div class="cone-option-label">${opt.emoji} ${opt.label}</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="step-card">
+      <div class="step-title">${step.title}</div>
+
+      <div class="cone-opening-cone-stage">
+        <svg viewBox="0 0 120 130" width="140" height="150" filter="url(#cone-sketch)">
+          <defs>
+            <filter id="cone-sketch" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2"/>
+            </filter>
+          </defs>
+          <path d="M60 8 L100 112 L20 112 Z" fill="none" stroke="#1a1d2b" stroke-width="2.4" stroke-linejoin="round"/>
+          <ellipse cx="60" cy="112" rx="40" ry="8" fill="none" stroke="#1a1d2b" stroke-width="2.4"/>
+        </svg>
+      </div>
+
+      <div class="step-intro" style="text-align:center; margin-top: 6px;">
+        This shape is hiding in everyday life. Which of these do you recognize it in?
+      </div>
+
+      <div class="cone-options-grid">
+        ${optionsHtml}
+      </div>
+
+      <div class="cone-response-text" id="cone-response-text" style="display:none;"></div>
+
+      <div id="cone-continue-block" style="display:none; margin-top: 18px;">
+        <div class="step-intro" style="text-align:center; font-weight: 700; color: var(--ink);">
+          Today we learn to draw the foundation of all of them.
+        </div>
+        <div class="btn-stack" style="margin-top: 14px;">
+          <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Continue</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function selectConeOption(key) {
+  const opt = CONE_OPENING_OPTIONS.find(o => o.key === key);
+  if (!opt) return;
+
+  document.querySelectorAll('.cone-option-card').forEach(card => card.classList.remove('selected'));
+  const selectedEl = document.getElementById('cone-option-' + key);
+  if (selectedEl) selectedEl.classList.add('selected');
+
+  const responseEl = document.getElementById('cone-response-text');
+  if (responseEl) {
+    responseEl.textContent = opt.response;
+    responseEl.style.display = 'block';
+  }
+
+  const continueBlock = document.getElementById('cone-continue-block');
+  if (continueBlock) continueBlock.style.display = 'block';
 }
 
 function renderReference(step) {
