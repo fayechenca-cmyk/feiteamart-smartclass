@@ -5975,25 +5975,11 @@ const LESSON = {
       intro: '',
       xp: 5
     },
-    // ═══════════════════════════════════════════════════════════════
-    // PLAY WITH THE LIGHT — interactive sphere
-    //
-    // After the textual Reference step, students get to FEEL light & shadow
-    // by dragging the sun around a sphere. This is the Art GPS signature
-    // interaction — the moment when reading turns into discovering.
-    //
-    // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
-    // Critical thinking happens through hands, not through reading.
-    // "学生可以直接理解,而不是我在下面去讲,这个就更智能"
-    // ═══════════════════════════════════════════════════════════════
-    {
-      part: 'A',
-      partLabel: '✨ Play with the light',
-      type: 'playLight',
-      title: 'Now feel it — drag the sun',
-      intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
-      xp: 5
-    },
+    // Round 53 (per Faye): removed the playLight ("drag the sun") step —
+    // wrong concept for a cone (it dragged light around a cylinder/sphere
+    // stand-in). renderPlayLight()/PlayLight/initPlayLight() stay defined
+    // in this file since other lessons may still use them; only the step
+    // data and dispatch case for this lesson were removed.
     {
       part: 'A',
       partLabel: 'Part a · preparation',
@@ -6203,10 +6189,6 @@ function renderStep() {
     case 'reference':   el.innerHTML = renderReference(step); break;
     case 'coneOpeningWidget': el.innerHTML = renderConeOpeningWidget(step);
                           break;
-    case 'playLight':   el.innerHTML = renderPlayLight(step);
-                        // Defer interactive setup until DOM is in place
-                        setTimeout(() => initPlayLight('cylinder'), 50);
-                        break;
     case 'tools':      el.innerHTML = renderTools(step); break;
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
@@ -8326,43 +8308,28 @@ const CONE_OPENING_OPTIONS = [
     emoji: '🍦',
     label: 'Ice cream cone',
     response: 'Yes! The cone is literally named after this.',
-    svg: `
-      <path d="M20 8 L34 8 L27 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
-      <path d="M15 8 Q27 -4 39 8 Q34 14 27 13 Q20 14 15 8 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
-    `
+    photo: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400'
   },
   {
     key: 'partyhat',
     emoji: '🎉',
     label: 'Party hat',
     response: 'Exactly — same geometry, different occasion.',
-    svg: `
-      <path d="M27 6 L40 46 Q27 52 14 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
-      <circle cx="27" cy="6" r="2.4" fill="#c8a96e" stroke="none"/>
-      <path d="M14 46 Q27 50 40 46" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linecap="round"/>
-    `
+    photo: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=400'
   },
   {
     key: 'trafficcone',
     emoji: '🚧',
     label: 'Traffic cone',
     response: 'Right! Engineers use this shape for a reason.',
-    svg: `
-      <path d="M22 6 L32 6 L42 44 L12 44 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
-      <rect x="16" y="30" width="22" height="6" fill="none" stroke="#1a1d2b" stroke-width="1.4"/>
-      <rect x="10" y="44" width="34" height="5" rx="1.5" fill="none" stroke="#1a1d2b" stroke-width="1.6"/>
-    `
+    photo: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400'
   },
   {
     key: 'rocket',
     emoji: '🚀',
     label: 'Rocket nose',
     response: 'The nose cone — where aerodynamics meet geometry.',
-    svg: `
-      <path d="M27 4 L34 40 L20 40 Z" fill="none" stroke="#1a1d2b" stroke-width="1.6" stroke-linejoin="round"/>
-      <path d="M20 40 L14 50 L20 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linejoin="round"/>
-      <path d="M34 40 L40 50 L34 46 Z" fill="none" stroke="#1a1d2b" stroke-width="1.4" stroke-linejoin="round"/>
-    `
+    photo: 'https://images.unsplash.com/photo-1516849677043-ef67c9557e16?w=400'
   }
 ];
 
@@ -8372,7 +8339,10 @@ function renderConeOpeningWidget(step) {
          onclick="selectConeOption('${opt.key}')"
          role="button" tabindex="0"
          onkeypress="if(event.key==='Enter'||event.key===' ')selectConeOption('${opt.key}')">
-      <svg viewBox="0 0 54 54" width="44" height="44">${opt.svg}</svg>
+      <img src="${opt.photo}"
+           alt="${opt.label}"
+           style="width: 100%; height: 120px; object-fit: cover;
+                  border-radius: 8px; display: block; margin-bottom: 8px;">
       <div class="cone-option-label">${opt.emoji} ${opt.label}</div>
     </div>
   `).join('');
