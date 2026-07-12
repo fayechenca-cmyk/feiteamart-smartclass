@@ -831,6 +831,53 @@ html, body {
   line-height: 1.6;
 }
 .reflection-textarea:focus { outline: none; border-color: var(--jungle-mid); }
+
+/* ───── Discover Henri Rousseau (video + tap-to-select) ───── */
+.discover-teacher-note {
+  font-family: 'Caveat', cursive;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 14px 4px 0;
+}
+.discover-teacher-note-sig {
+  display: block;
+  margin-top: 6px;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--jungle-mid);
+}
+.discover-question-block { margin-top: 26px; }
+.discover-question-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--jungle-flame);
+  color: var(--moon);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.discover-hint {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  font-size: 13px;
+  color: var(--muted);
+}
+.discover-microfeedback {
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  color: var(--jungle-flame);
+  min-height: 22px;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.discover-microfeedback.show { opacity: 1; }
 .upload-area {
   background: var(--paper-warm);
   border: 2px dashed var(--jungle-mid);
@@ -1506,9 +1553,12 @@ const LESSON_ID = 'rousseau-jungle';
 const LESSON_TITLE = 'Jungle Layers';
 const LESSON_ARTIST = 'Henri Rousseau';
 const COURSE_ID = 'creation';
-const LESSON_XP_TOTAL = 80;
+const LESSON_XP_TOTAL = 90;
 // Per-step XP (sums to LESSON_XP_TOTAL)
-const STEP_XP = [10, 14, 12, 18, 12, 14];
+// Round 55 (per Faye's Rousseau v2.0 spec): inserted "Discover Henri
+// Rousseau" (10 XP) at index 4, before "Make the Paper Jungle" — the
+// old index-4/5 values (12, 14) shifted to index 5/6.
+const STEP_XP = [10, 14, 12, 18, 10, 12, 14];
 
 // ════════════════════════════════════════════════════════════════
 // SECTION 2 — UserProfile (contract-compliant, shared with Skills)
@@ -1721,20 +1771,32 @@ const LESSON = {
       xp: STEP_XP[3]
     },
     {
+      // Round 55 (per Faye's Rousseau v2.0 spec): NEW section, inserted
+      // before "Make the Paper Jungle". Faye's original YouTube teaching
+      // video + tap-to-select reflection (no text inputs — see
+      // ROUSSEAU_DISCOVER_QUESTIONS and renderRousseauDiscover below).
       idx: 4,
-      key: 'paper-jungle',
-      title: 'Make the Paper Jungle',
-      lede: 'Now bring your layered world into your hands.',
-      cta: 'Reflect on My Jungle',
+      key: 'discover-rousseau',
+      title: 'Discover the Art of Henri Rousseau',
+      lede: 'See the master before you make anything. <em>Watch, then tap what you notice.</em>',
+      cta: 'Make the Paper Jungle',
       xp: STEP_XP[4]
     },
     {
       idx: 5,
+      key: 'paper-jungle',
+      title: 'Make the Paper Jungle',
+      lede: 'Now bring your layered world into your hands.',
+      cta: 'Reflect on My Jungle',
+      xp: STEP_XP[5]
+    },
+    {
+      idx: 6,
       key: 'share-world',
       title: 'Share the World You Built',
       lede: '<em>What kind of world did you build?</em>',
       cta: 'Finish Lesson',
-      xp: STEP_XP[5]
+      xp: STEP_XP[6]
     }
   ]
 };
@@ -1874,6 +1936,77 @@ const SYMBOL_REFLECTIONS = [
 ];
 
 // ════════════════════════════════════════════════════════════════
+// Step "Discover Henri Rousseau" — tap-to-select reflection (no text
+// inputs; younger students skip blank text boxes — per Faye, Rousseau
+// v2.0 spec §1.1). Each option may carry its own `feedback` micro-line;
+// falls back to the question's `defaultFeedback` if not set.
+// ════════════════════════════════════════════════════════════════
+const ROUSSEAU_DISCOVER_QUESTIONS = [
+  {
+    id: 'q1',
+    type: 'single',
+    prompt: 'After watching the video, what stood out to you most about Rousseau?',
+    defaultFeedback: 'Good eye.',
+    options: [
+      { id: 'imagined', emoji: '🌍', label: 'He never went to a real jungle — he made it all up', feedback: 'Yes — that\'s the wildest part.' },
+      { id: 'layered',   emoji: '🌿', label: 'He layered leaves and plants so carefully', feedback: 'Good eye. That layering is his trick.' },
+      { id: 'hidden',    emoji: '🐅', label: 'He hid animals behind the leaves', feedback: 'Right — he tucked animals into every corner.' },
+      { id: 'dreamy',    emoji: '🌙', label: 'His colors feel like a dream' }
+    ]
+  },
+  {
+    id: 'q2',
+    type: 'single',
+    prompt: 'Rousseau\'s jungle reminds you of what kind of place?',
+    defaultFeedback: 'A great place to start.',
+    options: [
+      { id: 'night',     emoji: '🌙', label: 'A quiet nighttime somewhere' },
+      { id: 'forest',    emoji: '🌿', label: 'A secret, mysterious forest' },
+      { id: 'adventure', emoji: '🐅', label: 'An adventure you\'d never forget' },
+      { id: 'imagined',  emoji: '✨', label: 'Somewhere you\'ve never been but always imagined' }
+    ]
+  },
+  {
+    id: 'q3',
+    type: 'multi',
+    prompt: 'If you drew your own jungle, what would you put in it?',
+    hint: '(pick as many as you like)',
+    defaultFeedback: 'Noted — that\'s going in your jungle.',
+    options: [
+      { id: 'animal', emoji: '🐾', label: 'A hidden animal' },
+      { id: 'flower', emoji: '🌺', label: 'One giant flower' },
+      { id: 'moon',   emoji: '🌙', label: 'A moon' },
+      { id: 'odd',    emoji: '🫖', label: 'Something that doesn\'t belong there (a teacup, a toy, a shoe...)', feedback: 'Rousseau would love that.' },
+      { id: 'secret', emoji: '🤫', label: 'A secret only you know about' }
+    ]
+  },
+  {
+    id: 'q4',
+    type: 'single',
+    prompt: 'How did you feel while watching?',
+    defaultFeedback: 'Noted. Feelings matter here.',
+    options: [
+      { id: 'calm',    emoji: '😊', label: 'Calm and a bit lost in it' },
+      { id: 'curious', emoji: '🤔', label: 'Curious — I want to know more' },
+      { id: 'ready',   emoji: '🎨', label: 'Ready to start drawing right now' },
+      { id: 'dreamy',  emoji: '🌙', label: 'A little dreamy, like a story' }
+    ]
+  },
+  {
+    id: 'q5',
+    type: 'single',
+    prompt: 'What do you want to try next?',
+    defaultFeedback: 'Perfect — let\'s go.',
+    options: [
+      { id: 'paint',   emoji: '🖼', label: 'Try painting a layered jungle myself' },
+      { id: 'paper',   emoji: '✂️', label: 'Make a paper jungle by hand', feedback: 'Perfect — that\'s exactly what\'s next.' },
+      { id: 'animal',  emoji: '🐾', label: 'Design an animal that could hide in a jungle' },
+      { id: 'explore', emoji: '📖', label: 'Look at more Rousseau paintings' }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════════════════════
 // SECTION 5 — AI CHAT MODES (Artchi)
 // ════════════════════════════════════════════════════════════════
 const AI_MODES = {
@@ -1946,11 +2079,21 @@ let lessonState = {
   symbolReflection: null,
   reflectionText: '',
   uploadedImage: null,      // dataURL
+  discoverAnswers: { q1: null, q2: null, q3: [], q4: null, q5: null }, // Round 55: "Discover Henri Rousseau" tap-to-select
   xpAwardedThisSession: new Set() // step keys we've awarded XP for in this session
 };
 
 // In-memory snapshot of last completed step (to award XP idempotently across reloads, also persist in localStorage briefly)
-const SESSION_STATE_KEY = 'fei_lfc019_session_v1';
+// Round 55 (per Faye's Rousseau v2.0 spec): bumped v1 -> v2 because a new
+// step was inserted at idx 4 ("Discover Henri Rousseau"), pushing "Make
+// the Paper Jungle" (was idx 4) and "Share the World" (was idx 5) to
+// idx 5/6. A raw numeric currentStep saved under the old key would now
+// point at the WRONG step for anyone mid-lesson, so restoreLessonState()
+// below reads the old v1 key once, remaps currentStep forward by 1 if it
+// was >= 4, and writes the result under the new v2 key. New saves always
+// go to v2 from then on.
+const SESSION_STATE_KEY = 'fei_lfc019_session_v2';
+const SESSION_STATE_KEY_LEGACY = 'fei_lfc019_session_v1';
 
 function persistLessonState() {
   try {
@@ -1972,6 +2115,7 @@ function persistLessonState() {
       symbolReflection: lessonState.symbolReflection,
       reflectionText: lessonState.reflectionText,
       uploadedImage: lessonState.uploadedImage,
+      discoverAnswers: lessonState.discoverAnswers,
       xpAwardedThisSession: Array.from(lessonState.xpAwardedThisSession)
     };
     localStorage.setItem(key, JSON.stringify(snap));
@@ -1983,10 +2127,27 @@ function restoreLessonState() {
     const profile = UserProfile.current();
     if (!profile) return;
     const key = SESSION_STATE_KEY + '_' + (profile.studentCode || profile.id);
-    const raw = localStorage.getItem(key);
-    if (!raw) return;
+    let raw = localStorage.getItem(key);
+    let migratingFromLegacy = false;
+
+    if (!raw) {
+      // No v2 save yet — check for a pre-Round-55 v1 save to migrate.
+      const legacyKey = SESSION_STATE_KEY_LEGACY + '_' + (profile.studentCode || profile.id);
+      const legacyRaw = localStorage.getItem(legacyKey);
+      if (!legacyRaw) return;
+      raw = legacyRaw;
+      migratingFromLegacy = true;
+    }
+
     const snap = JSON.parse(raw);
-    if (typeof snap.currentStep === 'number') lessonState.currentStep = snap.currentStep;
+    if (typeof snap.currentStep === 'number') {
+      // Remap: anything that was at or past the old "Make the Paper
+      // Jungle" position (old idx 4) shifts forward by 1 to land on the
+      // same actual content, now that "Discover Henri Rousseau" sits there.
+      lessonState.currentStep = (migratingFromLegacy && snap.currentStep >= 4)
+        ? snap.currentStep + 1
+        : snap.currentStep;
+    }
     if (Array.isArray(snap.layersDiscovered)) lessonState.layersDiscovered = new Set(snap.layersDiscovered);
     if (Array.isArray(snap.symbolsSaved)) lessonState.symbolsSaved = snap.symbolsSaved;
     if (snap.worldChoices) {
@@ -2000,7 +2161,14 @@ function restoreLessonState() {
     if (typeof snap.symbolReflection === 'string') lessonState.symbolReflection = snap.symbolReflection;
     if (typeof snap.reflectionText === 'string') lessonState.reflectionText = snap.reflectionText;
     if (typeof snap.uploadedImage === 'string') lessonState.uploadedImage = snap.uploadedImage;
+    if (snap.discoverAnswers && typeof snap.discoverAnswers === 'object') {
+      lessonState.discoverAnswers = Object.assign({}, lessonState.discoverAnswers, snap.discoverAnswers);
+    }
     if (Array.isArray(snap.xpAwardedThisSession)) lessonState.xpAwardedThisSession = new Set(snap.xpAwardedThisSession);
+
+    // Write the (possibly migrated) state under the new v2 key immediately,
+    // so subsequent loads read v2 directly without depending on v1 forever.
+    if (migratingFromLegacy) persistLessonState();
   } catch (e) {}
 }
 
@@ -2402,7 +2570,7 @@ function renderCurrentStep() {
     <div class="step-header">
       <div>
         <span class="step-eyebrow">Henri Rousseau · Learn From Masters</span>
-        <span class="step-num">Step ${step.idx + 1} of 6</span>
+        <span class="step-num">Step ${step.idx + 1} of ${LESSON.steps.length}</span>
       </div>
       <div class="step-title">${step.title}</div>
       <div class="step-lede">${step.lede}</div>
@@ -2417,8 +2585,9 @@ function renderCurrentStep() {
     case 1: renderStep2(body); break;
     case 2: renderStep3(body); break;
     case 3: renderStep4(body); break;
-    case 4: renderStep5(body); break;
-    case 5: renderStep6(body); break;
+    case 4: renderRousseauDiscover(body); break;
+    case 5: renderStep5(body); break;
+    case 6: renderStep6(body); break;
   }
 
   renderNavProgress();
@@ -2460,8 +2629,9 @@ function canAdvance(idx) {
       const layersWithContent = new Set(lessonState.builderPlacements.map(p => p.layerId));
       return layersWithContent.size >= 3;
     }
-    case 4: return true; // making is offline; let students proceed after watching
-    case 5: return lessonState.worldReflection && lessonState.symbolReflection;
+    case 4: return countDiscoverAnswers() >= 1; // at least one tap-to-select answer given
+    case 5: return true; // making is offline; let students proceed after watching
+    case 6: return lessonState.worldReflection && lessonState.symbolReflection;
     default: return true;
   }
 }
@@ -3027,6 +3197,118 @@ function resetBuilder() {
 }
 
 // ════════════════════════════════════════════════════════════════
+// SECTION 11b — Discover Henri Rousseau (video + tap-to-select reflection)
+// Round 55 (per Faye's Rousseau v2.0 spec): NEW step inserted before
+// "Make the Paper Jungle". Faye's original YouTube video, then 5
+// tap-to-select questions — no text inputs (see ROUSSEAU_DISCOVER_QUESTIONS
+// above). Uses the existing .video-wrap / .reflection-tile components for
+// visual consistency with the rest of this lesson.
+// ════════════════════════════════════════════════════════════════
+const ROUSSEAU_DISCOVER_VIDEO_ID = '66UGFOYTMGQ';
+let _discoverMfTimers = {};
+
+function renderRousseauDiscover(body) {
+  const questionsHtml = ROUSSEAU_DISCOVER_QUESTIONS.map((q, qi) => {
+    const optionsHtml = q.options.map(opt => {
+      const isSelected = q.type === 'multi'
+        ? (lessonState.discoverAnswers[q.id] || []).includes(opt.id)
+        : lessonState.discoverAnswers[q.id] === opt.id;
+      return `
+        <button class="reflection-tile ${isSelected ? 'selected' : ''}"
+                onclick="selectDiscoverAnswer('${q.id}','${opt.id}')">${opt.emoji} ${opt.label}</button>
+      `;
+    }).join('');
+
+    return `
+      <div class="discover-question-block">
+        <div class="discover-question-num">${qi + 1}</div>
+        <div class="reflection-prompt">${q.prompt}${q.hint ? ` <span class="discover-hint">${q.hint}</span>` : ''}</div>
+        <div class="reflection-grid">${optionsHtml}</div>
+        <div class="discover-microfeedback" id="discover-mf-${q.id}"></div>
+      </div>
+    `;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/${ROUSSEAU_DISCOVER_VIDEO_ID}?rel=0&modestbranding=1"
+        title="Discover the Art of Henri Rousseau | Jungle & Landscape Illustration"
+        frameborder="0"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy"></iframe>
+    </div>
+
+    <div class="discover-teacher-note">
+      "I made this video a while back, before Art GPS existed. It walks through how Henri Rousseau built his jungles from imagination — even though he had never seen one. Watch it first. Then tap what you notice below."
+      <span class="discover-teacher-note-sig">— Faye</span>
+    </div>
+
+    <div class="choose-section-title" style="margin-top:28px;">Tap what you notice</div>
+    ${questionsHtml}
+  `;
+}
+
+function countDiscoverAnswers() {
+  let n = 0;
+  ROUSSEAU_DISCOVER_QUESTIONS.forEach(q => {
+    const v = lessonState.discoverAnswers[q.id];
+    if (q.type === 'multi') { if (Array.isArray(v) && v.length > 0) n++; }
+    else if (v) { n++; }
+  });
+  return n;
+}
+
+function selectDiscoverAnswer(qId, optionId) {
+  const q = ROUSSEAU_DISCOVER_QUESTIONS.find(x => x.id === qId);
+  if (!q) return;
+  const opt = q.options.find(o => o.id === optionId);
+  if (!opt) return;
+
+  if (q.type === 'multi') {
+    const arr = (lessonState.discoverAnswers[qId] || []).slice();
+    const i = arr.indexOf(optionId);
+    if (i === -1) arr.push(optionId); else arr.splice(i, 1);
+    lessonState.discoverAnswers[qId] = arr;
+  } else {
+    lessonState.discoverAnswers[qId] = optionId;
+  }
+
+  // Save to the Creation Journal — same structured contract every other
+  // reflection in this lesson uses (see pickWorldReflection/pickSymbolReflection).
+  const profile = UserProfile.current();
+  const selectedLabels = q.type === 'multi'
+    ? (lessonState.discoverAnswers[qId] || [])
+        .map(id => (q.options.find(o => o.id === id) || {}).label)
+        .filter(Boolean)
+        .join('; ')
+    : opt.label;
+  JournalStorage.save({
+    courseId: COURSE_ID,
+    lessonId: LESSON_ID,
+    momentKey: 'discover-rousseau-' + qId,
+    ageGroup: profile ? profile.ageGroup : null,
+    promptText: q.prompt,
+    studentText: selectedLabels || '(none selected)',
+    inputType: 'selection'
+  });
+
+  persistLessonState();
+  renderCurrentStep();
+
+  // Micro-feedback — brief, per-question, non-blocking. Runs after
+  // renderCurrentStep() so it targets the freshly-rendered element.
+  const mf = document.getElementById('discover-mf-' + qId);
+  if (mf) {
+    mf.textContent = opt.feedback || q.defaultFeedback || '';
+    mf.classList.add('show');
+    clearTimeout(_discoverMfTimers[qId]);
+    _discoverMfTimers[qId] = setTimeout(() => { mf.classList.remove('show'); }, 2000);
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
 // SECTION 12 — Step 5: Make the Paper Jungle (video + materials + pause)
 // ════════════════════════════════════════════════════════════════
 function renderStep5(body) {
@@ -3322,7 +3604,10 @@ function closeArtchiBubble() {
 }
 
 function updateSuggestedChatMode(stepIdx) {
-  const map = ['jungle_guide','symbol_decoder','world_builder','world_builder','making_companion','final_reflection_helper'];
+  // Round 55: inserted 'jungle_guide' at index 4 for the new "Discover
+  // Henri Rousseau" step (reuses the intro/orientation companion mode —
+  // no new AI_MODES entry needed for this).
+  const map = ['jungle_guide','symbol_decoder','world_builder','world_builder','jungle_guide','making_companion','final_reflection_helper'];
   currentChatMode = map[stepIdx] || 'jungle_guide';
 }
 
@@ -3591,6 +3876,7 @@ window.builderSlotClick = builderSlotClick;
 window.resetBuilder = resetBuilder;
 window.pickWorldReflection = pickWorldReflection;
 window.pickSymbolReflection = pickSymbolReflection;
+window.selectDiscoverAnswer = selectDiscoverAnswer;
 window.onReflectionTextChange = onReflectionTextChange;
 window.handleUpload = handleUpload;
 window.finalizeLesson = finalizeLesson;
