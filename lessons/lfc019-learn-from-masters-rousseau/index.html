@@ -878,6 +878,20 @@ html, body {
   transition: opacity 0.3s ease;
 }
 .discover-microfeedback.show { opacity: 1; }
+.section-optional-pill {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 3px 11px;
+  margin-bottom: 10px;
+}
 .upload-area {
   background: var(--paper-warm);
   border: 2px dashed var(--jungle-mid);
@@ -2007,6 +2021,78 @@ const ROUSSEAU_DISCOVER_QUESTIONS = [
 ];
 
 // ════════════════════════════════════════════════════════════════
+// Step "Make the Paper Jungle" — tap-to-select reflection (Round 56, per
+// Faye's Rousseau Section 3 spec). DIFFERENT namespace/subject matter
+// from ROUSSEAU_DISCOVER_QUESTIONS on purpose: process + material choice
+// + dialogue with the master, not observation. This section is OPTIONAL —
+// no completion gate (see canAdvance, case 5, already `return true`).
+// ════════════════════════════════════════════════════════════════
+const ROUSSEAU_PAPER_JUNGLE_QUESTIONS = [
+  {
+    id: 'q1',
+    type: 'single',
+    prompt: 'After watching, what do you want to do?',
+    options: [
+      { id: 'now',   emoji: '✂️', label: 'Make one right now', feedback: 'Yes — go get your scissors.' },
+      { id: 'later', emoji: '🕐', label: 'Try it later when I have supplies', feedback: 'Good. Bookmark this — it\'ll wait for you.' },
+      { id: 'draw',  emoji: '✏️', label: 'I\'d rather draw my own jungle instead', feedback: 'Drawing is just as good. Both listen to Rousseau.' },
+      { id: 'watch', emoji: '👀', label: 'I\'m just watching for now, and that\'s okay', feedback: 'Watching is a real way of learning too.' }
+    ]
+  },
+  {
+    id: 'q2',
+    type: 'multi',
+    prompt: 'If you were making one, what colors of paper would you use?',
+    hint: '(pick any that feel right)',
+    defaultFeedback: 'Interesting choice. Your jungle already has character.',
+    options: [
+      { id: 'deep-green',  emoji: '🌲', label: 'Deep greens — a mysterious forest' },
+      { id: 'every-green', emoji: '🌿', label: 'Every shade of green — a layered jungle' },
+      { id: 'no-green',    emoji: '🌈', label: 'No green at all — a purple, gold, or unexpected jungle' },
+      { id: 'textured',    emoji: '📰', label: 'Newspaper, old paper — a jungle with texture' },
+      { id: 'undecided',   emoji: '🤔', label: 'I haven\'t decided yet' }
+    ]
+  },
+  {
+    id: 'q3',
+    type: 'multi',
+    prompt: 'What would you hide inside your jungle?',
+    hint: '(pick any that feel right)',
+    defaultFeedback: 'Noted — that\'s going in your jungle.',
+    options: [
+      { id: 'animal',    emoji: '🐅', label: 'An animal (tiger, monkey, owl — whichever you love)' },
+      { id: 'moon-sun',  emoji: '🌙', label: 'A moon or a sun' },
+      { id: 'odd',       emoji: '🫖', label: 'Something that doesn\'t belong (a teacup, a shoe, your name)', feedback: 'Rousseau would smile at that.' },
+      { id: 'eyes',      emoji: '👀', label: 'Just a pair of eyes — nothing else', feedback: 'Now that\'s mysterious.' },
+      { id: 'secret',    emoji: '🤫', label: 'A secret only I\'ll know', feedback: 'Perfect. Some things should stay yours.' }
+    ]
+  },
+  {
+    id: 'q4',
+    type: 'single',
+    prompt: 'What do you think will be the hardest part of making one?',
+    options: [
+      { id: 'cutting',  emoji: '✂️', label: 'Cutting the leaf shapes' },
+      { id: 'layering', emoji: '📚', label: 'Deciding which leaves go in front and which go behind' },
+      { id: 'colors',   emoji: '🎨', label: 'Choosing the colors' },
+      { id: 'starting', emoji: '😌', label: 'Just getting started (not being afraid to try)', feedback: 'That\'s the honest hardest part. Everyone feels it.' },
+      { id: 'ready',    emoji: '💪', label: 'Nothing feels hard — I\'m ready', feedback: 'Beautiful. Let\'s go.' }
+    ]
+  },
+  {
+    id: 'q5',
+    type: 'single',
+    prompt: 'If Rousseau saw your jungle, what would you want him to say?',
+    options: [
+      { id: 'real',       emoji: '🌿', label: '"This is a real jungle."', feedback: 'He\'d mean it.' },
+      { id: 'mysterious', emoji: '🌙', label: '"Your jungle is even more mysterious than mine."', feedback: 'You may already be ahead of him.' },
+      { id: 'colors',     emoji: '🎨', label: '"I never thought of using those colors."', feedback: 'You\'d teach him something.' },
+      { id: 'show-me',    emoji: '✨', label: '"Show me what you hid inside."', feedback: 'That\'s what an artist would say.' }
+    ]
+  }
+];
+
+// ════════════════════════════════════════════════════════════════
 // SECTION 5 — AI CHAT MODES (Artchi)
 // ════════════════════════════════════════════════════════════════
 const AI_MODES = {
@@ -2080,6 +2166,7 @@ let lessonState = {
   reflectionText: '',
   uploadedImage: null,      // dataURL
   discoverAnswers: { q1: null, q2: null, q3: [], q4: null, q5: null }, // Round 55: "Discover Henri Rousseau" tap-to-select
+  paperJungleAnswers: { q1: null, q2: [], q3: [], q4: null, q5: null }, // Round 56: "Make the Paper Jungle" tap-to-select (optional — no completion gate)
   xpAwardedThisSession: new Set() // step keys we've awarded XP for in this session
 };
 
@@ -2116,6 +2203,7 @@ function persistLessonState() {
       reflectionText: lessonState.reflectionText,
       uploadedImage: lessonState.uploadedImage,
       discoverAnswers: lessonState.discoverAnswers,
+      paperJungleAnswers: lessonState.paperJungleAnswers,
       xpAwardedThisSession: Array.from(lessonState.xpAwardedThisSession)
     };
     localStorage.setItem(key, JSON.stringify(snap));
@@ -2163,6 +2251,9 @@ function restoreLessonState() {
     if (typeof snap.uploadedImage === 'string') lessonState.uploadedImage = snap.uploadedImage;
     if (snap.discoverAnswers && typeof snap.discoverAnswers === 'object') {
       lessonState.discoverAnswers = Object.assign({}, lessonState.discoverAnswers, snap.discoverAnswers);
+    }
+    if (snap.paperJungleAnswers && typeof snap.paperJungleAnswers === 'object') {
+      lessonState.paperJungleAnswers = Object.assign({}, lessonState.paperJungleAnswers, snap.paperJungleAnswers);
     }
     if (Array.isArray(snap.xpAwardedThisSession)) lessonState.xpAwardedThisSession = new Set(snap.xpAwardedThisSession);
 
@@ -3309,20 +3400,56 @@ function selectDiscoverAnswer(qId, optionId) {
 }
 
 // ════════════════════════════════════════════════════════════════
-// SECTION 12 — Step 5: Make the Paper Jungle (video + materials + pause)
+// SECTION 12 — Step 5: Make the Paper Jungle (video + materials + pause +
+// tap-to-select reflection). Round 56 (per Faye's Rousseau Section 3
+// spec): real Cloudflare Stream video replaces the old placeholder; a
+// pre-video teacher note explicitly invites without pressuring (this
+// section is OPTIONAL — see canAdvance, case 5, always true); 5 new
+// tap-to-select questions added (process + material choice + dialogue
+// with the master — different subject matter from Section 2 on purpose).
+// The old materials list / pause cards stay — still useful craft
+// reference, not superseded by anything in the new spec.
 // ════════════════════════════════════════════════════════════════
+const ROUSSEAU_PAPER_JUNGLE_VIDEO_ID = '8805acc84eb9030eb31871afe0c914a4';
+
 function renderStep5(body) {
-  body.innerHTML = `
-    <div class="video-wrap" id="video-wrap">
-      <div class="video-placeholder">
-        <div class="play-icon">▶</div>
-        <div class="play-label">Teacher making video</div>
-        <div class="play-sub">Faye walks you through building the paper jungle, back layer first.</div>
-        <div class="play-sub" style="margin-top:14px; font-size:11px; opacity:0.5;">video coming soon · placeholder</div>
+  const questionsHtml = ROUSSEAU_PAPER_JUNGLE_QUESTIONS.map((q, qi) => {
+    const optionsHtml = q.options.map(opt => {
+      const isSelected = q.type === 'multi'
+        ? (lessonState.paperJungleAnswers[q.id] || []).includes(opt.id)
+        : lessonState.paperJungleAnswers[q.id] === opt.id;
+      return `
+        <button class="reflection-tile ${isSelected ? 'selected' : ''}"
+                onclick="selectPaperJungleAnswer('${q.id}','${opt.id}')">${opt.emoji} ${opt.label}</button>
+      `;
+    }).join('');
+
+    return `
+      <div class="discover-question-block">
+        <div class="discover-question-num">${qi + 1}</div>
+        <div class="reflection-prompt">${q.prompt}${q.hint ? ` <span class="discover-hint">${q.hint}</span>` : ''}</div>
+        <div class="reflection-grid">${optionsHtml}</div>
+        <div class="discover-microfeedback" id="paper-jungle-mf-${q.id}"></div>
       </div>
-      <!-- When video is ready, replace placeholder with:
-      <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/PLACEHOLDER/iframe" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
-      -->
+    `;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="section-optional-pill">optional</div>
+
+    <div class="discover-teacher-note" style="padding-top:0;">
+      "Here's a paper craft version of Rousseau's jungle. If you like making things with your hands — cutting, layering, gluing — follow along with me. If you'd rather draw or paint your jungle instead, that's just as good. Both are ways of listening to Rousseau."
+      <span class="discover-teacher-note-sig">— Faye</span>
+    </div>
+
+    <div class="video-wrap" style="margin-top:16px;">
+      <iframe
+        src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${ROUSSEAU_PAPER_JUNGLE_VIDEO_ID}/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F${ROUSSEAU_PAPER_JUNGLE_VIDEO_ID}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+        loading="lazy"
+        style="position:absolute; inset:0; width:100%; height:100%; border:0;"
+        allow="accelerometer; gyroscope; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"
+        title="Henri Rousseau–Inspired Jungle Paper Craft"></iframe>
     </div>
 
     <div class="card" style="margin-top:20px;">
@@ -3340,13 +3467,56 @@ function renderStep5(body) {
       ${PAUSE_CARDS.map(c => `<div class="pause-card">"${c}"</div>`).join('')}
     </div>
 
-    <div class="panel-dark" style="margin-top:24px;">
-      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: var(--jungle-warm); margin-bottom: 6px;">A note from your teacher</div>
-      <div style="font-size:14px; line-height: 1.65; color: rgba(244,233,193,0.92);">
-        Your jungle can be different from mine. You do not need the same exact leaves or colors. <strong>Keep your symbols personal.</strong> The video is a guide, not a copy.
-      </div>
-    </div>
+    <div class="choose-section-title" style="margin-top:28px;">Tap what feels right</div>
+    ${questionsHtml}
   `;
+}
+
+function selectPaperJungleAnswer(qId, optionId) {
+  const q = ROUSSEAU_PAPER_JUNGLE_QUESTIONS.find(x => x.id === qId);
+  if (!q) return;
+  const opt = q.options.find(o => o.id === optionId);
+  if (!opt) return;
+
+  if (q.type === 'multi') {
+    const arr = (lessonState.paperJungleAnswers[qId] || []).slice();
+    const i = arr.indexOf(optionId);
+    if (i === -1) arr.push(optionId); else arr.splice(i, 1);
+    lessonState.paperJungleAnswers[qId] = arr;
+  } else {
+    lessonState.paperJungleAnswers[qId] = optionId;
+  }
+
+  // Different journal namespace from Section 2 on purpose (momentKey
+  // prefix 'paper-jungle-' vs 'discover-rousseau-') — same structured
+  // JournalStorage contract used throughout this lesson.
+  const profile = UserProfile.current();
+  const selectedLabels = q.type === 'multi'
+    ? (lessonState.paperJungleAnswers[qId] || [])
+        .map(id => (q.options.find(o => o.id === id) || {}).label)
+        .filter(Boolean)
+        .join('; ')
+    : opt.label;
+  JournalStorage.save({
+    courseId: COURSE_ID,
+    lessonId: LESSON_ID,
+    momentKey: 'paper-jungle-' + qId,
+    ageGroup: profile ? profile.ageGroup : null,
+    promptText: q.prompt,
+    studentText: selectedLabels || '(none selected)',
+    inputType: 'selection'
+  });
+
+  persistLessonState();
+  renderCurrentStep();
+
+  const mf = document.getElementById('paper-jungle-mf-' + qId);
+  if (mf) {
+    mf.textContent = opt.feedback || q.defaultFeedback || '';
+    mf.classList.add('show');
+    clearTimeout(_discoverMfTimers[qId]);
+    _discoverMfTimers[qId] = setTimeout(() => { mf.classList.remove('show'); }, 2000);
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -3877,6 +4047,7 @@ window.resetBuilder = resetBuilder;
 window.pickWorldReflection = pickWorldReflection;
 window.pickSymbolReflection = pickSymbolReflection;
 window.selectDiscoverAnswer = selectDiscoverAnswer;
+window.selectPaperJungleAnswer = selectPaperJungleAnswer;
 window.onReflectionTextChange = onReflectionTextChange;
 window.handleUpload = handleUpload;
 window.finalizeLesson = finalizeLesson;
