@@ -9644,7 +9644,63 @@ function randomEncouragement() {
 // =============================================================
 function openUploadModal() {
   Analytics.track('upload_modal_opened', { at_step: state.currentStepIndex });
-  
+
+  // Live class students get a completely different modal —
+  // their submission channel is the live class portal, not this upload system
+  if (isLiveClassStudent()) {
+    const content = document.getElementById('upload-modal-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="modal-title">📋 Submit your homework</div>
+        <div class="modal-sub" style="margin-bottom: 20px;">
+          You're in a live class with a real teacher.<br>
+          Submit your work through the class portal — your teacher will review it there.
+        </div>
+
+        <a href="https://www.feiteamart.com/foundation-of-sketch-a-access"
+           target="_blank"
+           rel="noopener"
+           class="btn btn-gold"
+           style="display: flex; align-items: center; justify-content: center;
+                  gap: 8px; text-decoration: none; margin-bottom: 16px;
+                  font-size: 14px; padding: 16px 20px; border-radius: 30px;">
+          📋 Submit to live class →
+        </a>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 16px;
+                    text-align: center;">
+          <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 12px;">
+            Just want to save a photo for your own reference?
+          </div>
+          <div class="upload-file-block">
+            <label for="upload-file-input-lc" class="upload-file-label"
+                   style="padding: 12px 16px;">
+              <div class="upload-file-icon" style="width: 36px; height: 36px;
+                   font-size: 18px;">📷</div>
+              <div class="upload-file-text">
+                <div class="upload-file-text-main" style="font-size: 13px;">
+                  Save photo only
+                </div>
+                <div class="upload-file-text-sub">Stays on your device</div>
+              </div>
+            </label>
+            <input type="file" id="upload-file-input-lc" accept="image/*"
+                   style="display:none"
+                   onchange="onUploadFileSelected(event)">
+          </div>
+        </div>
+
+        <div class="btn-stack" style="margin-top: 16px;">
+          <button class="btn btn-ghost" onclick="closeUploadModal()">
+            Cancel
+          </button>
+        </div>
+      `;
+    }
+    document.getElementById('upload-modal').classList.add('show');
+    return; // ← exit early, don't show the normal tier modal
+  }
+
   // ═══════════════════════════════════════════════════════════════
   // TIER DETECTION (priority-ordered — do NOT rearrange without thinking)
   //   1. FULLY PAID USER (mode='unlocked' + selectedPath set)
