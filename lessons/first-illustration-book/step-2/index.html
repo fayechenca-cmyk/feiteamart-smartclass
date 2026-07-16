@@ -29,7 +29,6 @@
   .comp-card svg { width: 100%; height: auto; display: block; margin-bottom: 6px; }
   .comp-card .cc-label { font-size: 11.5px; font-weight: 800; }
   .comp-card .cc-check { font-size: 10px; color: var(--green); font-weight: 800; margin-top: 2px; height: 12px; }
-  .comp-card.full-width { grid-column: 1 / -1; }
 
   .comp-progress {
     font-size: 11px; color: var(--ink-muted); text-align: center; margin-top: 10px; font-weight: 700;
@@ -111,7 +110,7 @@
   </div>
 
   <div class="card">
-    <div style="font-size: 15px; font-weight: 800; margin-bottom: 2px;">5 ways to frame a page</div>
+    <div style="font-size: 15px; font-weight: 800; margin-bottom: 2px;">7 ways to frame a page</div>
     <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 4px;">Tap each card to see it larger.</div>
     <div class="comp-grid" id="compGrid"></div>
     <div class="comp-progress" id="compProgress"></div>
@@ -120,7 +119,7 @@
   <div class="card">
     <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">📎 Keep this handy</div>
     <div style="font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 10px;">
-      Save all 5 composition types as one reference card in your Practice Journal.
+      Save all 7 composition types as one reference card in your Practice Journal.
     </div>
     <div class="journal-btn-wrap">
       <button class="btn btn-ghost" id="journalBtn" onclick="saveJournalReference()">📌 Save this reference</button>
@@ -139,7 +138,7 @@
 
   <div class="card" id="quizLockedCard">
     <div style="font-size: 12.5px; color: var(--ink-muted); text-align: center;">
-      🔒 Tap all 5 cards above to unlock a quick check.
+      🔒 Tap all 7 cards above to unlock a quick check.
     </div>
   </div>
 
@@ -196,16 +195,43 @@ const COMPOSITIONS = [
       <circle cx="108" cy="80" r="9" fill="#1a1d2b"/></svg>`
   },
   {
-    key: 'angle', icon: '🦅', label: 'Camera angle', sub: "bird's eye · worm's eye · straight-on", full: true,
-    svg: `<svg viewBox="0 0 300 140"><rect x="3" y="3" width="294" height="134" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
-      <circle cx="150" cy="70" r="10" fill="#c8a96e"/>
-      <rect x="141" y="80" width="18" height="26" rx="7" fill="#a78bfa"/>
-      <text x="60" y="30" font-size="20" text-anchor="middle">👁️</text>
-      <path d="M 60 38 L 130 62" stroke="#8a8a9a" stroke-width="2"/>
-      <text x="240" y="30" font-size="20" text-anchor="middle">👁️</text>
-      <path d="M 240 38 L 175 60" stroke="#8a8a9a" stroke-width="2"/>
-      <text x="150" y="128" font-size="20" text-anchor="middle">👁️</text>
-      <path d="M 150 118 L 150 106" stroke="#8a8a9a" stroke-width="2"/></svg>`
+    key: 'eyelevel', icon: '📷', label: 'Normal shot', sub: 'camera at eye level',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <line x1="20" y1="132" x2="140" y2="132" stroke="#8a8a9a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="80" cy="60" r="9" fill="#c8a96e"/>
+      <rect x="71" y="69" width="18" height="28" rx="7" fill="#a78bfa"/>
+      <rect x="73" y="97" width="6" height="35" rx="3" fill="#4b4b5a"/>
+      <rect x="81" y="97" width="6" height="35" rx="3" fill="#4b4b5a"/>
+      <rect x="18" y="53" width="18" height="14" rx="3" fill="#4b4b5a"/>
+      <rect x="24" y="47" width="7" height="6" rx="2" fill="#4b4b5a"/>
+      <circle cx="36" cy="60" r="5" fill="#8a8a9a"/>
+      <line x1="41" y1="60" x2="70" y2="60" stroke="#8a8a9a" stroke-width="2" stroke-dasharray="3 4"/></svg>`
+  },
+  {
+    key: 'lowangle', icon: '⬆️', label: 'Low angle', sub: 'camera below, looking up',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <line x1="20" y1="132" x2="140" y2="132" stroke="#8a8a9a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="80" cy="50" r="11" fill="#c8a96e"/>
+      <rect x="68" y="61" width="24" height="36" rx="9" fill="#a78bfa"/>
+      <rect x="70" y="97" width="8" height="35" rx="4" fill="#4b4b5a"/>
+      <rect x="86" y="97" width="8" height="35" rx="4" fill="#4b4b5a"/>
+      <rect x="20" y="118" width="18" height="14" rx="3" fill="#4b4b5a"/>
+      <rect x="26" y="112" width="7" height="6" rx="2" fill="#4b4b5a"/>
+      <circle cx="38" cy="125" r="5" fill="#8a8a9a"/>
+      <line x1="42" y1="121" x2="71" y2="56" stroke="#8a8a9a" stroke-width="2" stroke-dasharray="3 4"/></svg>`
+  },
+  {
+    key: 'highangle', icon: '⬇️', label: 'High angle', sub: 'camera above, looking down',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <line x1="20" y1="132" x2="140" y2="132" stroke="#8a8a9a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="80" cy="72" r="7" fill="#c8a96e"/>
+      <rect x="74" y="79" width="12" height="20" rx="6" fill="#a78bfa"/>
+      <rect x="75" y="99" width="5" height="33" rx="2.5" fill="#4b4b5a"/>
+      <rect x="83" y="99" width="5" height="33" rx="2.5" fill="#4b4b5a"/>
+      <rect x="110" y="18" width="18" height="14" rx="3" fill="#4b4b5a"/>
+      <rect x="116" y="12" width="7" height="6" rx="2" fill="#4b4b5a"/>
+      <circle cx="112" cy="25" r="5" fill="#8a8a9a"/>
+      <line x1="108" y1="29" x2="85" y2="68" stroke="#8a8a9a" stroke-width="2" stroke-dasharray="3 4"/></svg>`
   },
 ];
 
@@ -221,7 +247,7 @@ function renderCompGrid() {
   const viewed = data.viewedCards || [];
   const grid = document.getElementById('compGrid');
   grid.innerHTML = COMPOSITIONS.map(c => `
-    <div class="comp-card ${c.full ? 'full-width' : ''} ${viewed.includes(c.key) ? 'viewed' : ''}" onclick="openCardModal('${c.key}')">
+    <div class="comp-card ${viewed.includes(c.key) ? 'viewed' : ''}" onclick="openCardModal('${c.key}')">
       ${c.svg}
       <div class="cc-label">${c.icon} ${c.label}</div>
       <div class="cc-check">${viewed.includes(c.key) ? '✓ viewed' : ''}</div>
