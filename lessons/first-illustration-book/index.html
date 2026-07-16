@@ -5,71 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Make My First Illustration Book · FEI TeamArt</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/book-style.css">
 
 <!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
+<!-- Shared step/state module — also loaded by every step-N/index.html page -->
+<script src="shared/book-state.js"></script>
 
 <style>
-  :root {
-    --ink: #1a1d2b;
-    --ink-soft: #4b4b5a;
-    --ink-muted: #8a8a9a;
-    --gold: #c8a96e;
-    --green: #1d9e75;
-    --purple: #a78bfa;
-    --border: rgba(26,29,43,0.1);
-    --peach: #ffd8b8;
-    --butter: #f7dfa0;
-    --sage: #b7c9a3;
-    --rose: #e6b8bf;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(180deg, var(--butter) 0%, var(--peach) 35%, var(--rose) 70%, var(--sage) 100%);
-    background-attachment: fixed;
-    color: var(--ink);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  html, body { overflow-x: hidden; }
 
-  /* ── HEADER ────────────────────────────────────────────── */
-  .topbar {
-    position: sticky; top: 0; z-index: 40;
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px 18px;
-    background: rgba(255,255,255,0.72);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-  }
-  .back-link {
-    text-decoration: none; color: var(--ink); font-weight: 800; font-size: 13px;
-    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
-  }
-  .topbar-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px; font-weight: 700;
-    margin: 0; flex: 1; text-align: center;
-    padding: 0 8px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .stops-pill {
-    flex-shrink: 0;
-    font-size: 10.5px; font-weight: 800; letter-spacing: 0.3px;
-    color: var(--ink-soft);
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 12px;
-    white-space: nowrap;
-  }
-
-  .hero {
-    text-align: center;
-    padding: 28px 24px 8px;
-  }
+  .hero { text-align: center; padding: 28px 24px 8px; }
   .hero h1 {
     font-family: 'Playfair Display', serif;
     font-size: 26px; font-weight: 700; margin: 0 0 6px;
@@ -322,27 +269,11 @@
 /* ============================================================
  * Make My First Illustration Book — Landing Page & Step-Map
  *
- * Scope: this page is the map/companion-model shell only. None of
- * the 10 steps have real content yet (video/canvas/AI/uploads) —
- * tapping a step opens a lightweight preview panel. BookMapState
- * below is a small self-contained stand-in for this page; the
- * shared cross-course auto-save/routing infrastructure is a
- * separate future build and may replace it.
+ * STEPS / TOTAL_STEPS / BookState come from shared/book-state.js
+ * (loaded in <head>). Steps 1, 2, and 5 route to their own real
+ * pages; the rest route to lightweight "still being built" pages —
+ * see each step-N/index.html.
  * ============================================================ */
-
-const STEPS = [
-  { n: 1, icon: '📖', title: 'What Are We Making?', desc: "Get inspired by a book you love, then imagine the one only you could make." },
-  { n: 2, icon: '📷', title: 'Learn Composition', desc: "The visual language illustrators use — full shot, close-up, and everything between." },
-  { n: 3, icon: '✍️', title: 'Find Your Story', desc: "Turn your idea into a 25-sentence storyline, with a gentle assist that never writes it for you." },
-  { n: 4, icon: '🎞️', title: 'Storyboard Your Book', desc: "Sketch tiny thumbnails for every page before you commit to painting." },
-  { n: 5, icon: '✅', title: 'Storyboard Self-Check', desc: "A quick, warm gut-check before you invest in painting each page." },
-  { n: 6, icon: '🖌️', title: 'Paint Each Page', desc: "Bring every page to life, one at a time — at your own pace." },
-  { n: 7, icon: '🎨', title: 'Color Your Pages', desc: "Add color with software or real supplies — whatever you have is enough." },
-  { n: 8, icon: '📐', title: 'Layout in Canva', desc: "Assemble your loose pages into a real book layout, title page and all." },
-  { n: 9, icon: '🧵', title: 'Bind Your Book', desc: "The moment your digital pages become a real, physical book." },
-  { n: 10, icon: '🖼️', title: 'Design Your Cover', desc: "The finishing touch — the face of your book." },
-];
-const TOTAL_STEPS = STEPS.length;
 
 // Layout: a winding S-curve down the page, alternating left/center/right.
 // { xPct, y } — xPct is % of map-nodes width, y is px from top.
@@ -360,72 +291,17 @@ const NODE_LAYOUT = [
   { xPct: 50, y: 1580 }, // finish
 ];
 
-/* ── BookMapState — local, self-contained progress tracker ─── */
-const BookMapState = {
-  KEY: 'fei.books_and_stories.first_illustration_book.map_state.v1',
-
-  _default() {
-    const steps = {};
-    STEPS.forEach(s => { steps[s.n] = 'not_started'; });
-    return { steps };
-  },
-
-  current() {
-    try {
-      const raw = localStorage.getItem(this.KEY);
-      if (!raw) return this._default();
-      const parsed = JSON.parse(raw);
-      return parsed && parsed.steps ? parsed : this._default();
-    } catch (e) {
-      return this._default();
-    }
-  },
-
-  _save(state) {
-    try { localStorage.setItem(this.KEY, JSON.stringify(state)); } catch (e) {}
-  },
-
-  markVisited(n) {
-    const state = this.current();
-    if (state.steps[n] === 'not_started') state.steps[n] = 'visited';
-    this._save(state);
-    return state;
-  },
-
-  markCompleted(n) {
-    const state = this.current();
-    state.steps[n] = 'completed';
-    this._save(state);
-    return state;
-  },
-
-  recommendedNext() {
-    // "completed" isn't set by anything in this preview build (that's for
-    // real step content, added later) — so "next" means first untouched step.
-    const state = this.current();
-    for (const s of STEPS) {
-      if (state.steps[s.n] === 'not_started') return s.n;
-    }
-    return 'finished';
-  },
-
-  visitedCount() {
-    const state = this.current();
-    return STEPS.filter(s => state.steps[s.n] !== 'not_started').length;
-  }
-};
-
 let pendingFrictionStep = null;
 
 function renderMap() {
-  const state = BookMapState.current();
-  const recommended = BookMapState.recommendedNext();
+  const state = BookState.current();
+  const recommended = BookState.recommendedNext();
   const nodesContainer = document.getElementById('mapNodes');
   nodesContainer.innerHTML = '';
 
   STEPS.forEach((step, i) => {
     const pos = NODE_LAYOUT[i];
-    const status = state.steps[step.n];
+    const status = state.steps[step.n].status;
     const isRecommended = recommended === step.n;
 
     const node = document.createElement('div');
@@ -467,15 +343,15 @@ function renderMap() {
 }
 
 function updateStopsPill() {
-  const count = BookMapState.visitedCount();
+  const count = BookState.visitedCount();
   document.getElementById('stopsPill').textContent = count + ' of ' + TOTAL_STEPS + ' stops explored';
 }
 
 function lastTouchedIndex() {
-  const state = BookMapState.current();
+  const state = BookState.current();
   let lastIdx = 0; // default: step 1
   STEPS.forEach((s, i) => {
-    if (state.steps[s.n] !== 'not_started') lastIdx = i;
+    if (state.steps[s.n].status !== 'not_started') lastIdx = i;
   });
   return lastIdx;
 }
@@ -514,7 +390,7 @@ function drawPath() {
 
 /* ── Tap handling: in-order vs. warm-friction out-of-order jump ── */
 function handleStepTap(n) {
-  const recommended = BookMapState.recommendedNext();
+  const recommended = BookState.recommendedNext();
   const recommendedIdx = recommended === 'finished' ? TOTAL_STEPS : STEPS.findIndex(s => s.n === recommended);
   const tappedIdx = STEPS.findIndex(s => s.n === n);
 
@@ -527,11 +403,10 @@ function handleStepTap(n) {
   openStep(n);
 }
 
+// Navigate to the step's own page. Each step-N/index.html marks itself
+// "visited" on load — see shared/book-state.js.
 function openStep(n) {
-  BookMapState.markVisited(n);
-  const step = STEPS.find(s => s.n === n);
-  openSheet(step.icon, 'STEP ' + n + ' OF ' + TOTAL_STEPS, step.title, step.desc);
-  renderMap();
+  window.location.href = 'step-' + n + '/';
 }
 
 function handleFinishTap(allDone) {
@@ -572,7 +447,7 @@ function dismissFriction(goToRecommended) {
   const tapped = pendingFrictionStep;
   pendingFrictionStep = null;
   if (goToRecommended) {
-    const recommended = BookMapState.recommendedNext();
+    const recommended = BookState.recommendedNext();
     if (recommended !== 'finished') openStep(recommended);
   } else if (tapped) {
     openStep(tapped);

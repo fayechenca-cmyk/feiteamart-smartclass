@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 10 · Design Your Cover · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/book-state.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Design Your Cover</p>
+  <div class="stops-pill">STEP 10 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="soon-card">
+    <div class="soon-icon">🖼️</div>
+    <h2>Design Your Cover</h2>
+    <p>This step is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
+    <a class="btn btn-gold" href="../">← Back to map</a>
+  </div>
+</div>
+
+<script>
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  BookState.markVisited(10);
+}
+init();
+</script>
+</body>
+</html>

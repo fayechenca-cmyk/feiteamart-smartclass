@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 5 · Storyboard Self-Check · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/book-state.js"></script>
+
+<style>
+  .check-item { margin-bottom: 20px; }
+  .check-q { font-size: 13.5px; font-weight: 800; margin-bottom: 8px; }
+  .check-options { display: flex; gap: 8px; }
+  .check-opt {
+    flex: 1; text-align: center; padding: 12px 6px; border-radius: 14px;
+    border: 2px solid var(--border); background: #fff; cursor: pointer;
+    transition: border-color .2s ease, transform .15s ease, background .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .check-opt:active { transform: scale(0.97); }
+  .check-opt.selected { border-color: var(--gold); background: rgba(200,169,110,0.08); }
+  .check-opt .co-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+  .check-opt .co-label { font-size: 10.5px; font-weight: 700; line-height: 1.3; }
+  .check-feedback { margin-top: 10px; }
+  .back-step-btn {
+    display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 800;
+    color: var(--gold); text-decoration: none; cursor: pointer;
+  }
+  .checklist-progress {
+    font-size: 11px; color: var(--ink-muted); text-align: center; margin-bottom: 18px; font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Storyboard Self-Check</p>
+  <div class="stops-pill">STEP 5 OF 10</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>Let's look at your storyboard together</h1>
+    <p>Before you start painting, a quick gut-check. No wrong answers — this is just a moment to notice.</p>
+  </div>
+
+  <div class="checklist-progress" id="checklistProgress"></div>
+
+  <div class="card" id="checklistCard"></div>
+
+  <div class="next-footer">
+    <div class="next-label">Recommended next</div>
+    <a class="btn btn-gold" href="../step-6/">Step 6 · Paint Each Page →</a>
+  </div>
+
+</div>
+
+<script>
+const STEP_N = 5;
+
+const QUESTIONS = [
+  {
+    id: 'q1', backStep: 2,
+    text: 'Do you have at least one close-up in your book?',
+    options: [
+      { key: 'yes', icon: '✅', label: 'Yes', ideal: true, feedback: 'Beautiful.' },
+      { key: 'notsure', icon: '🤔', label: 'Not sure', feedback: "No worries — flip back through your pages and look for any close-up. If you don't see one, that's an easy add." },
+      { key: 'no', icon: '❌', label: 'No', feedback: "A close-up would help your reader feel closer to your character. Want a quick refresher?" },
+    ]
+  },
+  {
+    id: 'q2', backStep: 4,
+    text: 'Does your main character look the same on every page?',
+    options: [
+      { key: 'yes', icon: '✅', label: 'Yes', ideal: true, feedback: 'Beautiful.' },
+      { key: 'mostly', icon: '🌱', label: 'Mostly', feedback: "That's a great start — small consistency tweaks (hair, colors, proportions) go a long way." },
+      { key: 'needswork', icon: '🔧', label: 'Needs work', feedback: "This one's worth fixing before you paint. A quick pass through your storyboard can help." },
+    ]
+  },
+  {
+    id: 'q3', backStep: 2,
+    text: 'Do you have rhythm? (not every page is the same shot)',
+    options: [
+      { key: 'yes', icon: '✅', label: 'Yes', ideal: true, feedback: 'Beautiful.' },
+      { key: 'lookagain', icon: '👀', label: 'Let me look again', feedback: "Take another look — sometimes just adding one close-up makes the whole book feel alive." },
+      { key: 'no', icon: '❌', label: 'No', feedback: "Want to go back to Step 2 to see composition types again? Mixing shots keeps every page feeling different." },
+    ]
+  },
+  {
+    id: 'q4', backStep: 3,
+    text: 'Does each page have one sentence?',
+    options: [
+      { key: 'yes', icon: '✅', label: 'Yes', ideal: true, feedback: 'Beautiful.' },
+      { key: 'somemore', icon: '⚠️', label: 'Some pages have more', feedback: "That's okay for a first draft — trimming to one line per page usually makes it stronger." },
+      { key: 'no', icon: '❌', label: 'No', feedback: "Your story step can help you split any crowded pages into more sentences." },
+    ]
+  },
+  {
+    id: 'q5', backStep: 7,
+    text: 'Have you picked a color mood?',
+    options: [
+      { key: 'yes', icon: '✅', label: 'Yes', ideal: true, feedback: 'Beautiful.' },
+      { key: 'tryfew', icon: '🎨', label: 'I want to try a few', feedback: "That's a great instinct — Step 7 is exactly where you'll test colors before committing." },
+      { key: 'notyet', icon: '⭕', label: 'Not yet', feedback: "No rush — you'll pick your palette when you get to Step 7." },
+    ]
+  },
+];
+
+function renderChecklist() {
+  const data = BookState.getStepData(STEP_N);
+  const answers = data.answers || {};
+  const card = document.getElementById('checklistCard');
+
+  card.innerHTML = QUESTIONS.map(q => {
+    const chosenKey = answers[q.id];
+    const chosen = q.options.find(o => o.key === chosenKey);
+    const optionsHtml = q.options.map(o => `
+      <div class="check-opt ${chosenKey === o.key ? 'selected' : ''}" onclick="answerQuestion('${q.id}', '${o.key}')">
+        <span class="co-icon">${o.icon}</span>
+        <span class="co-label">${o.label}</span>
+      </div>
+    `).join('');
+
+    let feedbackHtml = '';
+    if (chosen) {
+      feedbackHtml = `
+        <div class="check-feedback">
+          <div class="artchi-bubble">
+            <div class="ab-icon">✨</div>
+            <div class="ab-text">${chosen.feedback}</div>
+          </div>
+          ${!chosen.ideal ? `<a class="back-step-btn" href="../step-${q.backStep}/">← Back to Step ${q.backStep}</a>` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="check-item">
+        <div class="check-q">${q.text}</div>
+        <div class="check-options">${optionsHtml}</div>
+        ${feedbackHtml}
+      </div>
+    `;
+  }).join('');
+
+  const answeredCount = QUESTIONS.filter(q => answers[q.id]).length;
+  document.getElementById('checklistProgress').textContent = answeredCount + ' of ' + QUESTIONS.length + ' answered';
+}
+
+function answerQuestion(qId, optKey) {
+  const data = BookState.getStepData(STEP_N);
+  const answers = Object.assign({}, data.answers, { [qId]: optKey });
+  BookState.setStepData(STEP_N, { answers });
+  BookState.markInProgress(STEP_N);
+
+  const allAnswered = QUESTIONS.every(q => answers[q.id]);
+  if (allAnswered) BookState.markCompleted(STEP_N);
+
+  renderChecklist();
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+
+  BookState.markVisited(STEP_N);
+  renderChecklist();
+}
+
+init();
+</script>
+</body>
+</html>

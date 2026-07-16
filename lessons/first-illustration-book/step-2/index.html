@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 2 · Learn Composition · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/book-state.js"></script>
+
+<style>
+  .comp-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 12px;
+  }
+  .comp-card {
+    background: #fff; border: 2px solid var(--border); border-radius: 16px;
+    padding: 10px; cursor: pointer; text-align: center;
+    transition: border-color .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .comp-card:active { transform: scale(0.97); }
+  .comp-card.viewed { border-color: var(--gold); }
+  .comp-card svg { width: 100%; height: auto; display: block; margin-bottom: 6px; }
+  .comp-card .cc-label { font-size: 11.5px; font-weight: 800; }
+  .comp-card .cc-check { font-size: 10px; color: var(--green); font-weight: 800; margin-top: 2px; height: 12px; }
+  .comp-card.full-width { grid-column: 1 / -1; }
+
+  .comp-progress {
+    font-size: 11px; color: var(--ink-muted); text-align: center; margin-top: 10px; font-weight: 700;
+  }
+
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(26,29,43,0.5);
+    opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 90;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+  .comp-modal {
+    background: #fff; border-radius: 20px; padding: 22px; max-width: 320px; width: 100%;
+    text-align: center; transform: scale(0.92); transition: transform .2s ease;
+  }
+  .modal-backdrop.show .comp-modal { transform: scale(1); }
+  .comp-modal svg { width: 70%; margin: 0 auto 14px; display: block; }
+  .comp-modal h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin: 0 0 8px; }
+  .comp-modal p { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 18px; }
+
+  .journal-btn-wrap { margin-top: 16px; text-align: center; }
+  .journal-saved-note { font-size: 12px; color: var(--green); font-weight: 800; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Learn Composition</p>
+  <div class="stops-pill">STEP 2 OF 10</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>The visual language of illustrators</h1>
+    <p>Full shot, close-up, and everything between — this is how illustrators decide what the reader sees.</p>
+  </div>
+
+  <div class="video-placeholder">
+    <svg viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="artchiBody2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e9d5ff"/>
+          <stop offset="50%" stop-color="#c4b5fd"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <linearGradient id="artchiWing2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.85"/>
+          <stop offset="50%" stop-color="#fda4af" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0.85"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="50" cy="92" rx="22" ry="4" fill="rgba(0,0,0,0.08)"/>
+      <path d="M 22 50 Q 5 32 12 55 Q 18 70 32 62 Z" fill="url(#artchiWing2)" opacity="0.9"/>
+      <path d="M 78 50 Q 95 32 88 55 Q 82 70 68 62 Z" fill="url(#artchiWing2)" opacity="0.9"/>
+      <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#artchiBody2)"/>
+      <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#artchiBody2)"/>
+      <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+      <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+      <path d="M 34 26 Q 38 20 42 26 Q 40 30 34 28 Z" fill="#c4b5fd"/>
+      <path d="M 66 26 Q 62 20 58 26 Q 60 30 66 28 Z" fill="#c4b5fd"/>
+      <g class="artchi-eye">
+        <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="43" cy="42" r="1" fill="#fff"/>
+        <circle cx="59" cy="42" r="1" fill="#fff"/>
+      </g>
+      <circle cx="36" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+      <circle cx="64" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+      <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="35" cy="72" rx="9" ry="6" fill="#fff"/>
+      <circle cx="31" cy="70" r="2" fill="#ef4444"/>
+      <circle cx="36" cy="70" r="2" fill="#f59e0b"/>
+      <circle cx="34" cy="75" r="2" fill="#1d9e75"/>
+      <circle cx="39" cy="74" r="2" fill="#3b82f6"/>
+    </svg>
+    <div class="vp-text">🎬 ✨ Faye's composition walkthrough is coming soon — hang tight!</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size: 15px; font-weight: 800; margin-bottom: 2px;">5 ways to frame a page</div>
+    <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 4px;">Tap each card to see it larger.</div>
+    <div class="comp-grid" id="compGrid"></div>
+    <div class="comp-progress" id="compProgress"></div>
+  </div>
+
+  <div class="card">
+    <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 6px;">📎 Keep this handy</div>
+    <div style="font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 10px;">
+      Save all 5 composition types as one reference card in your Practice Journal.
+    </div>
+    <div class="journal-btn-wrap">
+      <button class="btn btn-ghost" id="journalBtn" onclick="saveJournalReference()">📌 Save this reference</button>
+      <div class="journal-saved-note" id="journalSavedNote" style="display:none;">Saved to your Practice Journal ✓</div>
+    </div>
+  </div>
+
+  <div class="card" id="quizCard" style="display:none;">
+    <div style="font-size: 15px; font-weight: 800; margin-bottom: 4px;">Quick check</div>
+    <div style="font-size: 13px; color: var(--ink-soft); margin-bottom: 10px;">
+      Which composition would you use to show a character crying?
+    </div>
+    <div id="quizChoiceList"></div>
+    <div id="quizFeedbackSlot"></div>
+  </div>
+
+  <div class="card" id="quizLockedCard">
+    <div style="font-size: 12.5px; color: var(--ink-muted); text-align: center;">
+      🔒 Tap all 5 cards above to unlock a quick check.
+    </div>
+  </div>
+
+  <div class="next-footer">
+    <div class="next-label">Recommended next</div>
+    <a class="btn btn-gold" href="../step-3/">Step 3 · Find Your Story →</a>
+  </div>
+
+</div>
+
+<div class="modal-backdrop" id="cardModalBackdrop" onclick="closeCardModal(event)">
+  <div class="comp-modal" id="cardModalContent"></div>
+</div>
+
+<script>
+const STEP_N = 2;
+
+// Simple flat SVG mini-diagrams — a minimal character cropped at different
+// distances. The outer <svg> clips to its viewBox by default, so "cropping"
+// is just placing the figure so parts of it fall outside the frame.
+const COMPOSITIONS = [
+  {
+    key: 'full', icon: '🖼️', label: 'Full shot', sub: 'the whole scene',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <circle cx="80" cy="52" r="9" fill="#c8a96e"/>
+      <rect x="71" y="61" width="18" height="28" rx="7" fill="#a78bfa"/>
+      <rect x="73" y="89" width="6" height="26" rx="3" fill="#4b4b5a"/>
+      <rect x="81" y="89" width="6" height="26" rx="3" fill="#4b4b5a"/></svg>`
+  },
+  {
+    key: 'medium', icon: '🎯', label: 'Medium shot', sub: 'a specific action',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <circle cx="80" cy="46" r="16" fill="#c8a96e"/>
+      <rect x="55" y="62" width="50" height="60" rx="16" fill="#a78bfa"/>
+      <rect x="30" y="70" width="20" height="14" rx="7" fill="#a78bfa"/>
+      <rect x="110" y="70" width="20" height="14" rx="7" fill="#a78bfa"/></svg>`
+  },
+  {
+    key: 'closeup', icon: '😊', label: 'Close-up', sub: 'facial expression',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <circle cx="80" cy="90" r="66" fill="#f2d9b3"/>
+      <circle cx="58" cy="80" r="7" fill="#1a1d2b"/>
+      <circle cx="102" cy="80" r="7" fill="#1a1d2b"/>
+      <path d="M 55 108 Q 80 128 105 108" stroke="#1a1d2b" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`
+  },
+  {
+    key: 'extreme', icon: '👁️', label: 'Extreme close-up', sub: 'a single detail',
+    svg: `<svg viewBox="0 0 160 160"><rect x="3" y="3" width="154" height="154" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <circle cx="52" cy="80" r="42" fill="#fff"/>
+      <circle cx="108" cy="80" r="42" fill="#fff"/>
+      <circle cx="52" cy="80" r="20" fill="#8b5cf6"/>
+      <circle cx="108" cy="80" r="20" fill="#8b5cf6"/>
+      <circle cx="52" cy="80" r="9" fill="#1a1d2b"/>
+      <circle cx="108" cy="80" r="9" fill="#1a1d2b"/></svg>`
+  },
+  {
+    key: 'angle', icon: '🦅', label: 'Camera angle', sub: "bird's eye · worm's eye · straight-on", full: true,
+    svg: `<svg viewBox="0 0 300 140"><rect x="3" y="3" width="294" height="134" rx="14" fill="#faf6ef" stroke="#e8ecf2" stroke-width="2"/>
+      <circle cx="150" cy="70" r="10" fill="#c8a96e"/>
+      <rect x="141" y="80" width="18" height="26" rx="7" fill="#a78bfa"/>
+      <text x="60" y="30" font-size="20" text-anchor="middle">👁️</text>
+      <path d="M 60 38 L 130 62" stroke="#8a8a9a" stroke-width="2"/>
+      <text x="240" y="30" font-size="20" text-anchor="middle">👁️</text>
+      <path d="M 240 38 L 175 60" stroke="#8a8a9a" stroke-width="2"/>
+      <text x="150" y="128" font-size="20" text-anchor="middle">👁️</text>
+      <path d="M 150 118 L 150 106" stroke="#8a8a9a" stroke-width="2"/></svg>`
+  },
+];
+
+const QUIZ_CHOICES = [
+  { key: 'full', icon: '🖼️', label: 'Full shot', feedback: "That works, but from far away we might miss the tears. A closer view could hit harder." },
+  { key: 'medium', icon: '🎯', label: 'Medium shot', feedback: "Good instinct — we get some context. Want even more feeling? A close-up shows it in the face." },
+  { key: 'closeup', icon: '😊', label: 'Close-up', feedback: "Yes — this is where illustrators usually go for real emotion. The face says everything." },
+  { key: 'extreme', icon: '👁️', label: 'Extreme close-up', feedback: "Yes! Just the eyes, just the tears — this is about as emotional as a page can get." },
+];
+
+function renderCompGrid() {
+  const data = BookState.getStepData(STEP_N);
+  const viewed = data.viewedCards || [];
+  const grid = document.getElementById('compGrid');
+  grid.innerHTML = COMPOSITIONS.map(c => `
+    <div class="comp-card ${c.full ? 'full-width' : ''} ${viewed.includes(c.key) ? 'viewed' : ''}" onclick="openCardModal('${c.key}')">
+      ${c.svg}
+      <div class="cc-label">${c.icon} ${c.label}</div>
+      <div class="cc-check">${viewed.includes(c.key) ? '✓ viewed' : ''}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('compProgress').textContent = viewed.length + ' of ' + COMPOSITIONS.length + ' cards viewed';
+
+  const allViewed = viewed.length >= COMPOSITIONS.length;
+  document.getElementById('quizCard').style.display = allViewed ? 'block' : 'none';
+  document.getElementById('quizLockedCard').style.display = allViewed ? 'none' : 'block';
+  if (allViewed) renderQuiz();
+}
+
+function openCardModal(key) {
+  const comp = COMPOSITIONS.find(c => c.key === key);
+  const data = BookState.getStepData(STEP_N);
+  const viewed = data.viewedCards || [];
+  if (!viewed.includes(key)) {
+    BookState.setStepData(STEP_N, { viewedCards: [...viewed, key] });
+  }
+
+  document.getElementById('cardModalContent').innerHTML = `
+    ${comp.svg}
+    <h3>${comp.icon} ${comp.label}</h3>
+    <p>${comp.sub}</p>
+    <button class="btn btn-primary" onclick="closeCardModal(event)">Got it</button>
+  `;
+  document.getElementById('cardModalBackdrop').classList.add('show');
+  renderCompGrid();
+}
+
+function closeCardModal(event) {
+  if (event) event.stopPropagation();
+  document.getElementById('cardModalBackdrop').classList.remove('show');
+}
+
+function renderQuiz() {
+  const data = BookState.getStepData(STEP_N);
+  const list = document.getElementById('quizChoiceList');
+  list.innerHTML = QUIZ_CHOICES.map(c => `
+    <div class="choice-tap ${data.quizAnswer === c.key ? 'selected' : ''}" onclick="selectQuizAnswer('${c.key}')">
+      <div class="ct-icon">${c.icon}</div>
+      <div class="ct-label">${c.label}</div>
+    </div>
+  `).join('');
+
+  const feedbackSlot = document.getElementById('quizFeedbackSlot');
+  if (data.quizAnswer) {
+    const chosen = QUIZ_CHOICES.find(c => c.key === data.quizAnswer);
+    feedbackSlot.innerHTML = `
+      <div class="artchi-bubble">
+        <div class="ab-icon">✨</div>
+        <div class="ab-text">${chosen.feedback}</div>
+      </div>
+    `;
+  } else {
+    feedbackSlot.innerHTML = '';
+  }
+}
+
+function selectQuizAnswer(key) {
+  BookState.setStepData(STEP_N, { quizAnswer: key });
+  BookState.markInProgress(STEP_N);
+  BookState.markCompleted(STEP_N); // the quiz is the only required prompt in this step
+  renderQuiz();
+}
+
+function alreadySavedToJournal() {
+  return BookState.getJournal().some(item => item.type === 'composition_reference' && item.savedFromStep === STEP_N);
+}
+
+function renderJournalButton() {
+  const saved = alreadySavedToJournal();
+  document.getElementById('journalBtn').style.display = saved ? 'none' : 'block';
+  document.getElementById('journalSavedNote').style.display = saved ? 'block' : 'none';
+}
+
+function saveJournalReference() {
+  if (alreadySavedToJournal()) return;
+  BookState.saveToJournal({
+    type: 'composition_reference',
+    title: 'Composition Types Reference',
+    savedFromStep: STEP_N
+  });
+  renderJournalButton();
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+
+  BookState.markVisited(STEP_N);
+  renderCompGrid();
+  renderJournalButton();
+}
+
+init();
+</script>
+</body>
+</html>
