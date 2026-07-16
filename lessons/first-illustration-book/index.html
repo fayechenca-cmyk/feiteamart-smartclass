@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Make My First Illustration Book · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
+<style>
+  :root {
+    --ink: #1a1d2b;
+    --ink-soft: #4b4b5a;
+    --ink-muted: #8a8a9a;
+    --gold: #c8a96e;
+    --green: #1d9e75;
+    --purple: #a78bfa;
+    --border: rgba(26,29,43,0.1);
+    --peach: #ffd8b8;
+    --butter: #f7dfa0;
+    --sage: #b7c9a3;
+    --rose: #e6b8bf;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(180deg, var(--butter) 0%, var(--peach) 35%, var(--rose) 70%, var(--sage) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ────────────────────────────────────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 40;
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .back-link {
+    text-decoration: none; color: var(--ink); font-weight: 800; font-size: 13px;
+    display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+  }
+  .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700;
+    margin: 0; flex: 1; text-align: center;
+    padding: 0 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stops-pill {
+    flex-shrink: 0;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.3px;
+    color: var(--ink-soft);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 28px 24px 8px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .hero p {
+    font-size: 13px; color: var(--ink-soft); margin: 0; max-width: 360px;
+    margin-left: auto; margin-right: auto; line-height: 1.5;
+  }
+
+  /* ── MAP ───────────────────────────────────────────────── */
+  .map-wrap {
+    position: relative;
+    max-width: 480px;
+    margin: 20px auto 80px;
+    padding: 0 24px;
+  }
+  .map-path-svg {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .map-nodes {
+    position: relative;
+    height: 1650px; /* matches NODE_LAYOUT total span; adjusted in JS on resize */
+  }
+
+  .step-node {
+    position: absolute;
+    width: 78px; height: 78px;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .step-node .node-circle {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    background: #fff;
+    border: 3px solid var(--border);
+    box-shadow: 0 6px 16px rgba(26,29,43,0.12);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
+    position: relative;
+  }
+  .step-node:active .node-circle { transform: scale(0.94); }
+
+  .step-node.not_started .node-circle { filter: grayscale(0.55) opacity(0.65); border-color: var(--border); }
+  .step-node.visited .node-circle { border-color: var(--gold); box-shadow: 0 6px 18px rgba(200,169,110,0.35); }
+  .step-node.completed .node-circle { border-color: var(--green); box-shadow: 0 6px 18px rgba(29,158,117,0.32); }
+
+  .step-node.recommended .node-circle {
+    animation: nodeGlow 2.2s ease-in-out infinite;
+  }
+  @keyframes nodeGlow {
+    0%, 100% { box-shadow: 0 6px 16px rgba(200,169,110,0.3), 0 0 0 0 rgba(200,169,110,0.5); }
+    50% { box-shadow: 0 6px 20px rgba(200,169,110,0.45), 0 0 0 10px rgba(200,169,110,0); }
+  }
+
+  .node-stamp {
+    position: absolute; top: -8px; right: -8px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transform: rotate(-12deg);
+  }
+
+  .node-label {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    width: 110px;
+    text-align: center;
+    font-size: 10.5px; font-weight: 700;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  .node-number {
+    position: absolute; top: -6px; left: -6px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--ink); color: #fff;
+    font-size: 10px; font-weight: 900;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .step-node.finish-node .node-circle {
+    background: linear-gradient(135deg, var(--gold), #fff2d6);
+    font-size: 36px;
+  }
+
+  /* ── ARTCHI (reused mascot, repositioned to travel between nodes) ── */
+  .artchi-wrap {
+    position: absolute;
+    width: 62px; height: 62px;
+    transform: translate(-50%, -105%);
+    transition: top 0.6s ease, left 0.6s ease;
+    z-index: 20;
+    pointer-events: none;
+  }
+  .artchi-wrap svg { width: 100%; height: 100%; animation: breathe 3s ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+  /* ── DETAIL SHEET ──────────────────────────────────────── */
+  .sheet-backdrop, .friction-backdrop {
+    position: fixed; inset: 0; background: rgba(26,29,43,0.4);
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    z-index: 90;
+  }
+  .sheet-backdrop.show, .friction-backdrop.show { opacity: 1; pointer-events: auto; }
+
+  .detail-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    max-width: 480px; margin: 0 auto;
+    background: #fff;
+    border-radius: 22px 22px 0 0;
+    padding: 26px 26px 30px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
+    transform: translateY(105%);
+    transition: transform .32s cubic-bezier(.32,.72,0,1);
+    z-index: 95;
+  }
+  .detail-sheet.show { transform: translateY(0); }
+  .sheet-icon { font-size: 44px; margin-bottom: 10px; }
+  .sheet-kicker {
+    font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 4px;
+  }
+  .sheet-title {
+    font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700;
+    margin: 0 0 10px;
+  }
+  .sheet-desc { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 16px; }
+  .sheet-soon {
+    display: inline-block; font-size: 10.5px; font-weight: 800; color: var(--ink-soft);
+    background: rgba(26,29,43,0.06); border-radius: 20px; padding: 6px 12px; margin-bottom: 18px;
+  }
+  .sheet-btn {
+    width: 100%; padding: 14px; border: none; border-radius: 14px;
+    background: var(--ink); color: #fff; font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 13px; cursor: pointer;
+  }
+
+  /* ── WARM FRICTION BUBBLE ──────────────────────────────── */
+  .friction-bubble {
+    position: fixed; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    max-width: 340px; width: calc(100% - 48px);
+    background: #fff; border-radius: 20px; padding: 24px 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 96;
+    text-align: center;
+  }
+  .friction-bubble.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .friction-artchi { font-size: 40px; margin-bottom: 10px; }
+  .friction-text { font-size: 14px; line-height: 1.55; color: var(--ink); margin-bottom: 18px; }
+  .friction-actions { display: flex; flex-direction: column; gap: 8px; }
+  .friction-btn {
+    padding: 12px; border-radius: 12px; font-weight: 800; font-size: 12.5px;
+    font-family: 'Montserrat', sans-serif; cursor: pointer; border: none;
+  }
+  .friction-btn.primary { background: var(--green); color: #fff; }
+  .friction-btn.secondary { background: rgba(26,29,43,0.06); color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../../creation/">← Studio</a>
+  <p class="topbar-title">Make My First Illustration Book</p>
+  <div class="stops-pill" id="stopsPill">0 of 10 stops explored</div>
+</div>
+
+<div class="hero">
+  <h1>Your journey to a real book</h1>
+  <p>Tap any stop on the path below. Go in order, or jump around — it's your journey.</p>
+</div>
+
+<div class="map-wrap" id="mapWrap">
+  <svg class="map-path-svg" id="pathSvg"></svg>
+  <div class="map-nodes" id="mapNodes"></div>
+  <div class="artchi-wrap" id="artchiWrap">
+    <svg viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="artchiBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e9d5ff"/>
+          <stop offset="50%" stop-color="#c4b5fd"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <linearGradient id="artchiWing" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.85"/>
+          <stop offset="50%" stop-color="#fda4af" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0.85"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="50" cy="92" rx="22" ry="4" fill="rgba(0,0,0,0.08)"/>
+      <path d="M 22 50 Q 5 32 12 55 Q 18 70 32 62 Z" fill="url(#artchiWing)" opacity="0.9"/>
+      <path d="M 78 50 Q 95 32 88 55 Q 82 70 68 62 Z" fill="url(#artchiWing)" opacity="0.9"/>
+      <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#artchiBody)"/>
+      <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#artchiBody)"/>
+      <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+      <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+      <path d="M 34 26 Q 38 20 42 26 Q 40 30 34 28 Z" fill="#c4b5fd"/>
+      <path d="M 66 26 Q 62 20 58 26 Q 60 30 66 28 Z" fill="#c4b5fd"/>
+      <g class="artchi-eye">
+        <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+        <circle cx="43" cy="42" r="1" fill="#fff"/>
+        <circle cx="59" cy="42" r="1" fill="#fff"/>
+      </g>
+      <circle cx="36" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+      <circle cx="64" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+      <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="35" cy="72" rx="9" ry="6" fill="#fff"/>
+      <circle cx="31" cy="70" r="2" fill="#ef4444"/>
+      <circle cx="36" cy="70" r="2" fill="#f59e0b"/>
+      <circle cx="34" cy="75" r="2" fill="#1d9e75"/>
+      <circle cx="39" cy="74" r="2" fill="#3b82f6"/>
+    </svg>
+  </div>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
+<div class="detail-sheet" id="detailSheet">
+  <div class="sheet-icon" id="sheetIcon"></div>
+  <div class="sheet-kicker" id="sheetKicker"></div>
+  <div class="sheet-title" id="sheetTitle"></div>
+  <div class="sheet-desc" id="sheetDesc"></div>
+  <div><span class="sheet-soon" id="sheetSoon">✨ Content coming soon</span></div>
+  <button class="sheet-btn" onclick="closeSheet()">Got it</button>
+</div>
+
+<div class="friction-backdrop" id="frictionBackdrop"></div>
+<div class="friction-bubble" id="frictionBubble">
+  <div class="friction-artchi">💭</div>
+  <div class="friction-text" id="frictionText"></div>
+  <div class="friction-actions">
+    <button class="friction-btn primary" id="frictionGoBtn"></button>
+    <button class="friction-btn secondary" onclick="dismissFriction(false)">Stay here</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+ * Make My First Illustration Book — Landing Page & Step-Map
+ *
+ * Scope: this page is the map/companion-model shell only. None of
+ * the 10 steps have real content yet (video/canvas/AI/uploads) —
+ * tapping a step opens a lightweight preview panel. BookMapState
+ * below is a small self-contained stand-in for this page; the
+ * shared cross-course auto-save/routing infrastructure is a
+ * separate future build and may replace it.
+ * ============================================================ */
+
+const STEPS = [
+  { n: 1, icon: '📖', title: 'What Are We Making?', desc: "Get inspired by a book you love, then imagine the one only you could make." },
+  { n: 2, icon: '📷', title: 'Learn Composition', desc: "The visual language illustrators use — full shot, close-up, and everything between." },
+  { n: 3, icon: '✍️', title: 'Find Your Story', desc: "Turn your idea into a 25-sentence storyline, with a gentle assist that never writes it for you." },
+  { n: 4, icon: '🎞️', title: 'Storyboard Your Book', desc: "Sketch tiny thumbnails for every page before you commit to painting." },
+  { n: 5, icon: '✅', title: 'Storyboard Self-Check', desc: "A quick, warm gut-check before you invest in painting each page." },
+  { n: 6, icon: '🖌️', title: 'Paint Each Page', desc: "Bring every page to life, one at a time — at your own pace." },
+  { n: 7, icon: '🎨', title: 'Color Your Pages', desc: "Add color with software or real supplies — whatever you have is enough." },
+  { n: 8, icon: '📐', title: 'Layout in Canva', desc: "Assemble your loose pages into a real book layout, title page and all." },
+  { n: 9, icon: '🧵', title: 'Bind Your Book', desc: "The moment your digital pages become a real, physical book." },
+  { n: 10, icon: '🖼️', title: 'Design Your Cover', desc: "The finishing touch — the face of your book." },
+];
+const TOTAL_STEPS = STEPS.length;
+
+// Layout: a winding S-curve down the page, alternating left/center/right.
+// { xPct, y } — xPct is % of map-nodes width, y is px from top.
+const NODE_LAYOUT = [
+  { xPct: 50, y: 70 },   // 1
+  { xPct: 76, y: 220 },  // 2
+  { xPct: 50, y: 370 },  // 3
+  { xPct: 24, y: 520 },  // 4
+  { xPct: 50, y: 670 },  // 5
+  { xPct: 76, y: 820 },  // 6
+  { xPct: 50, y: 970 },  // 7
+  { xPct: 24, y: 1120 }, // 8
+  { xPct: 50, y: 1270 }, // 9
+  { xPct: 76, y: 1420 }, // 10
+  { xPct: 50, y: 1580 }, // finish
+];
+
+/* ── BookMapState — local, self-contained progress tracker ─── */
+const BookMapState = {
+  KEY: 'fei.books_and_stories.first_illustration_book.map_state.v1',
+
+  _default() {
+    const steps = {};
+    STEPS.forEach(s => { steps[s.n] = 'not_started'; });
+    return { steps };
+  },
+
+  current() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      if (!raw) return this._default();
+      const parsed = JSON.parse(raw);
+      return parsed && parsed.steps ? parsed : this._default();
+    } catch (e) {
+      return this._default();
+    }
+  },
+
+  _save(state) {
+    try { localStorage.setItem(this.KEY, JSON.stringify(state)); } catch (e) {}
+  },
+
+  markVisited(n) {
+    const state = this.current();
+    if (state.steps[n] === 'not_started') state.steps[n] = 'visited';
+    this._save(state);
+    return state;
+  },
+
+  markCompleted(n) {
+    const state = this.current();
+    state.steps[n] = 'completed';
+    this._save(state);
+    return state;
+  },
+
+  recommendedNext() {
+    // "completed" isn't set by anything in this preview build (that's for
+    // real step content, added later) — so "next" means first untouched step.
+    const state = this.current();
+    for (const s of STEPS) {
+      if (state.steps[s.n] === 'not_started') return s.n;
+    }
+    return 'finished';
+  },
+
+  visitedCount() {
+    const state = this.current();
+    return STEPS.filter(s => state.steps[s.n] !== 'not_started').length;
+  }
+};
+
+let pendingFrictionStep = null;
+
+function renderMap() {
+  const state = BookMapState.current();
+  const recommended = BookMapState.recommendedNext();
+  const nodesContainer = document.getElementById('mapNodes');
+  nodesContainer.innerHTML = '';
+
+  STEPS.forEach((step, i) => {
+    const pos = NODE_LAYOUT[i];
+    const status = state.steps[step.n];
+    const isRecommended = recommended === step.n;
+
+    const node = document.createElement('div');
+    node.className = 'step-node ' + status + (isRecommended ? ' recommended' : '');
+    node.style.left = pos.xPct + '%';
+    node.style.top = pos.y + 'px';
+    node.onclick = () => handleStepTap(step.n);
+
+    node.innerHTML = `
+      <div class="node-circle">
+        <span class="node-number">${step.n}</span>
+        ${step.icon}
+        ${status === 'completed' ? '<span class="node-stamp">✓</span>' : ''}
+      </div>
+      <div class="node-label">${step.title}</div>
+    `;
+    nodesContainer.appendChild(node);
+  });
+
+  // Finish node
+  const finishPos = NODE_LAYOUT[NODE_LAYOUT.length - 1];
+  const allDone = recommended === 'finished';
+  const finishNode = document.createElement('div');
+  finishNode.className = 'step-node finish-node ' + (allDone ? 'completed' : 'not_started');
+  finishNode.style.left = finishPos.xPct + '%';
+  finishNode.style.top = finishPos.y + 'px';
+  finishNode.onclick = () => handleFinishTap(allDone);
+  finishNode.innerHTML = `
+    <div class="node-circle">🎉</div>
+    <div class="node-label">Finished!</div>
+  `;
+  nodesContainer.appendChild(finishNode);
+
+  document.getElementById('mapNodes').style.height = (finishPos.y + 140) + 'px';
+
+  positionArtchi();
+  drawPath();
+  updateStopsPill();
+}
+
+function updateStopsPill() {
+  const count = BookMapState.visitedCount();
+  document.getElementById('stopsPill').textContent = count + ' of ' + TOTAL_STEPS + ' stops explored';
+}
+
+function lastTouchedIndex() {
+  const state = BookMapState.current();
+  let lastIdx = 0; // default: step 1
+  STEPS.forEach((s, i) => {
+    if (state.steps[s.n] !== 'not_started') lastIdx = i;
+  });
+  return lastIdx;
+}
+
+function positionArtchi() {
+  const idx = lastTouchedIndex();
+  const pos = NODE_LAYOUT[idx];
+  const wrap = document.getElementById('artchiWrap');
+  wrap.style.left = pos.xPct + '%';
+  wrap.style.top = pos.y + 'px';
+}
+
+// Draws a smooth dotted path through all node centers using the
+// DOM-measured positions (robust to the container's actual rendered width).
+function drawPath() {
+  const svg = document.getElementById('pathSvg');
+  const nodesContainer = document.getElementById('mapNodes');
+  const containerRect = nodesContainer.getBoundingClientRect();
+  svg.setAttribute('width', containerRect.width);
+  svg.setAttribute('height', containerRect.height);
+
+  const points = NODE_LAYOUT.map(p => ({ x: (p.xPct / 100) * containerRect.width, y: p.y }));
+  if (points.length < 2) return;
+
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i], p1 = points[i + 1];
+    const midX = (p0.x + p1.x) / 2;
+    d += ` Q ${p0.x} ${(p0.y + p1.y) / 2}, ${midX} ${(p0.y + p1.y) / 2}`;
+    d += ` Q ${p1.x} ${(p0.y + p1.y) / 2}, ${p1.x} ${p1.y}`;
+  }
+
+  svg.innerHTML = `<path d="${d}" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
+                    <path d="${d}" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14"/>`;
+}
+
+/* ── Tap handling: in-order vs. warm-friction out-of-order jump ── */
+function handleStepTap(n) {
+  const recommended = BookMapState.recommendedNext();
+  const recommendedIdx = recommended === 'finished' ? TOTAL_STEPS : STEPS.findIndex(s => s.n === recommended);
+  const tappedIdx = STEPS.findIndex(s => s.n === n);
+
+  if (tappedIdx > recommendedIdx && recommended !== 'finished') {
+    pendingFrictionStep = n;
+    showFriction(recommended, n);
+    return;
+  }
+
+  openStep(n);
+}
+
+function openStep(n) {
+  BookMapState.markVisited(n);
+  const step = STEPS.find(s => s.n === n);
+  openSheet(step.icon, 'STEP ' + n + ' OF ' + TOTAL_STEPS, step.title, step.desc);
+  renderMap();
+}
+
+function handleFinishTap(allDone) {
+  if (allDone) {
+    openSheet('🎉', 'FINISHED', 'Your book is complete!', "Celebrate, share it with your class, and add it to your portfolio.");
+  } else {
+    openSheet('🎉', 'ALMOST THERE', "Not quite yet", "This stop unlocks the celebration once you've explored all 10 steps. No rush — come back anytime.");
+  }
+}
+
+/* ── Detail sheet ─────────────────────────────────────────── */
+function openSheet(icon, kicker, title, desc) {
+  document.getElementById('sheetIcon').textContent = icon;
+  document.getElementById('sheetKicker').textContent = kicker;
+  document.getElementById('sheetTitle').textContent = title;
+  document.getElementById('sheetDesc').textContent = desc;
+  document.getElementById('sheetBackdrop').classList.add('show');
+  document.getElementById('detailSheet').classList.add('show');
+}
+function closeSheet() {
+  document.getElementById('sheetBackdrop').classList.remove('show');
+  document.getElementById('detailSheet').classList.remove('show');
+}
+
+/* ── Warm friction bubble (companion-model out-of-order jump) ── */
+function showFriction(recommendedN, tappedN) {
+  document.getElementById('frictionText').textContent =
+    `Sure, we can peek at Step ${tappedN}. Some artists jump around. But Step ${recommendedN} will help make this way easier — want to go there first?`;
+  const goBtn = document.getElementById('frictionGoBtn');
+  goBtn.textContent = 'Go to Step ' + recommendedN;
+  goBtn.onclick = () => dismissFriction(true);
+  document.getElementById('frictionBackdrop').classList.add('show');
+  document.getElementById('frictionBubble').classList.add('show');
+}
+function dismissFriction(goToRecommended) {
+  document.getElementById('frictionBackdrop').classList.remove('show');
+  document.getElementById('frictionBubble').classList.remove('show');
+  const tapped = pendingFrictionStep;
+  pendingFrictionStep = null;
+  if (goToRecommended) {
+    const recommended = BookMapState.recommendedNext();
+    if (recommended !== 'finished') openStep(recommended);
+  } else if (tapped) {
+    openStep(tapped);
+  }
+}
+
+/* ── Bootstrap ─────────────────────────────────────────────── */
+async function init() {
+  // ─── PAYWALL GATE (Art GPS access control) ────────────────
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return; // gateLessonPage already redirected to home
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  // ────────────────────────────────────────────────────────────
+
+  renderMap();
+  window.addEventListener('resize', () => { drawPath(); });
+}
+
+init();
+</script>
+</body>
+</html>

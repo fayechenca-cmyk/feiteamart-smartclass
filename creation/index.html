@@ -1564,6 +1564,7 @@
       featuredCount: 6,
       mode: 'books',
       courses: [
+        { title: 'Make My First Illustration Book', desc: 'write it, storyboard it, paint it, bind it — leave with a real book you made, cover to cover.', meta: 'NEW · YOUR FIRST BOOK', available: true, color: '#c8a96e' },
         { title: 'Surrealism Illustration', desc: 'dreams, distortions, impossible objects — illustrate what cannot be photographed.', meta: 'LFC054 · ILLUSTRATION', available: true, color: '#8a7ab8' },
         { title: 'Learn From Masters: Basquiat', desc: 'decode his symbols, then build your own visual language. crown, words, creatures, layers.', meta: 'LFC017 · LEARN FROM MASTERS', available: true, color: '#d63838' },
         { title: 'Learn From Masters: Pop Art', desc: 'warhol & lichtenstein — take an ordinary image and transform it into pop art, right in your browser.', meta: 'LFC018 · LEARN FROM MASTERS', available: true, color: '#ff2d8e' },
@@ -1582,6 +1583,7 @@
   // Add entries here when new lessons go live.
   // ============================================================
   const COURSE_ROUTES = {
+    'Make My First Illustration Book': '../lessons/first-illustration-book/',
     'Surrealism Illustration': '../lessons/lfc054-illustration-surrealism/',
     'Learn From Masters: Basquiat': '../lessons/lfc017-learn-from-masters-basquiat/',
     'Learn From Masters: Pop Art': '../lessons/lfc018-learn-from-masters-pop-art/',
@@ -1920,6 +1922,7 @@
   // CREATION LESSON IDs (semantic, stable — used by FEIAccess gate)
   // ============================================================
   const COURSE_LESSON_IDS = {
+    'Make My First Illustration Book': 'first-illustration-book',
     'Surrealism Illustration': 'lfc054',
     'Learn From Masters: Basquiat': 'lfc017',
     'Learn From Masters: Pop Art': 'lfc018',
