@@ -9305,10 +9305,17 @@ function nextStep() {
       total_xp: state.xp 
     });
     // Persist progress to UserProfile (so "Welcome back" can resume)
-    UserProfile.update({ 
+    UserProfile.update({
       currentStepIdx: curr + 1,  // where they'll be on next visit
-      totalXP: state.xp 
+      totalXP: state.xp
     });
+    // Background write to Supabase so progress survives across devices
+    // and outlives Safari's ~7-day localStorage ITP wipe (non-fatal if it fails)
+    if (window.FEIProgress) {
+      FEIProgress.saveFromProfile(UserProfile.current()).catch(e =>
+        console.warn('[FEIProgress] Background save failed (non-fatal):', e)
+      );
+    }
     playTone(660, 0.12);
     setTimeout(() => playTone(880, 0.15), 110);
   }
@@ -10402,7 +10409,32 @@ function submitWelcome() {
   const displayName = StudentRoster.getDisplayName(code);
   const isTrial = StudentRoster.isTrial(code);
   const profile = UserProfile.createMember(code, displayName, welcomeSelectedAge, isTrial);
-  
+
+  // Check Supabase for existing progress from another device/browser
+  // (localStorage alone gets wiped by Safari ITP after ~7 days inactive)
+  if (window.FEIProgress) {
+    FEIProgress.load(code).then(supabaseProgress => {
+      if (supabaseProgress) {
+        const merged = FEIProgress.mergeWithLocal(supabaseProgress, UserProfile.current());
+        state.currentStepIndex = merged.currentStepIdx || 0;
+        state.xp = merged.totalXP || 0;
+        state.completedSteps = [];
+        for (let i = 0; i < state.currentStepIndex; i++) {
+          state.completedSteps.push(i);
+        }
+        UserProfile.update({
+          currentStepIdx: merged.currentStepIdx,
+          totalXP: merged.totalXP,
+          completedLessons: merged.completedLessons,
+          ageGroup: merged.ageGroup || profile.ageGroup
+        });
+        renderStep();
+        renderRailDots();
+        console.log('[FEIProgress] Progress restored from Supabase:', merged);
+      }
+    }).catch(e => console.warn('[FEIProgress] Restore failed (non-fatal):', e));
+  }
+
   // Sync to AccessControl for legacy code compatibility
   AccessControl.ageGroup = profile.ageGroup;
   AccessControl.currentUser = { id: profile.id, name: profile.name };
@@ -10463,6 +10495,33 @@ function continueJourney() {
   setTimeout(() => {
     showBubble(`Welcome back, ${profile.name}! 💛`, 4000);
   }, 500);
+
+  // Background check: does Supabase have more progress than this device?
+  // (e.g. student continued on another device since this browser last synced)
+  if (window.FEIProgress && profile.studentCode) {
+    FEIProgress.load(profile.studentCode).then(supabaseProgress => {
+      if (supabaseProgress) {
+        const merged = FEIProgress.mergeWithLocal(supabaseProgress, profile);
+        if ((merged.totalXP || 0) > (profile.totalXP || 0)) {
+          // Supabase has more progress than local — update
+          state.currentStepIndex = merged.currentStepIdx || 0;
+          state.xp = merged.totalXP || 0;
+          state.completedSteps = [];
+          for (let i = 0; i < state.currentStepIndex; i++) {
+            state.completedSteps.push(i);
+          }
+          UserProfile.update({
+            currentStepIdx: merged.currentStepIdx,
+            totalXP: merged.totalXP,
+            completedLessons: merged.completedLessons
+          });
+          renderStep();
+          renderRailDots();
+          console.log('[FEIProgress] Updated from Supabase on re-entry');
+        }
+      }
+    }).catch(e => console.warn('[FEIProgress] Re-entry check failed (non-fatal):', e));
+  }
 }
 
 function restartJourney() {
