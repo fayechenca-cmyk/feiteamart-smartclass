@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>My Portfolio · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared photo storage module -->
+<script src="../shared/book-storage.js"></script>
+
+<style>
+  .unsupported-card {
+    display: none;
+    background: #fff; border: 2px solid var(--rose); border-radius: 16px;
+    padding: 16px; font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .books-grid {
+    display: none; /* JS toggles to 'grid' once we know a book has pages */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px; margin-top: 4px;
+  }
+  .book-card {
+    background: #fff; border-radius: 18px; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(26,29,43,0.08);
+  }
+  .book-cover {
+    width: 100%; aspect-ratio: 3 / 4;
+    background: linear-gradient(135deg, var(--purple) 0%, #c4b5fd 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .book-cover img { width: 100%; height: 100%; object-fit: cover; }
+  .cover-placeholder { font-size: 48px; color: #fff; }
+  .book-info { padding: 14px; }
+  .book-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; margin: 0 0 3px; }
+  .book-author { font-size: 11.5px; color: var(--ink-muted); margin-bottom: 6px; }
+  .book-progress { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); margin-bottom: 10px; }
+  .book-info .btn { padding: 10px 14px; font-size: 12.5px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">My Portfolio</p>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>Your books, all in one place</h1>
+    <p>Every book you make will show up here.</p>
+  </div>
+
+  <div class="unsupported-card" id="unsupportedNotice">
+    ⚠️ Photo storage isn't available in this browser. Try a recent version of Safari or Chrome, and make sure you're not in a private/incognito window.
+  </div>
+
+  <div class="card" id="emptyState" style="text-align:center; display:none;">
+    <div style="font-size:40px; margin-bottom:10px;">🎨</div>
+    <div style="font-weight:800; font-size:15px; margin-bottom:6px;">No books yet</div>
+    <div style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">
+      Upload your painted pages to start your first book.
+    </div>
+    <a class="btn btn-gold" href="../upload/">Start uploading →</a>
+  </div>
+
+  <div class="books-grid" id="booksGrid"></div>
+
+</div>
+
+<script>
+// v1.0: a single hardcoded book. The grid/render logic is written to loop
+// over an array so a future batch can add more books without restructuring.
+const BOOKS = [
+  { bookId: 'book_001', title: 'My First Illustration Book' }
+];
+
+async function resolveAuthorName() {
+  // Legacy access-code students keep their name in this localStorage profile.
+  try {
+    const raw = localStorage.getItem('fei_user_profile');
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && p.name) return p.name;
+    }
+  } catch (e) {}
+  // Supabase-registered students — FEIAuth is already loaded for the paywall gate.
+  try {
+    if (window.FEIAuth) {
+      await window.FEIAuth.init();
+      const user = await window.FEIAuth.getUser();
+      if (user) return window.FEIAuth.displayName(user);
+    }
+  } catch (e) {}
+  return null;
+}
+
+function renderBookCard(book, pageCount, coverUrl, authorText) {
+  const coverHtml = coverUrl
+    ? `<img src="${coverUrl}" alt="${book.title} cover">`
+    : `<div class="cover-placeholder">📖</div>`;
+  return `
+    <div class="book-card">
+      <div class="book-cover">${coverHtml}</div>
+      <div class="book-info">
+        <div class="book-title">${book.title}</div>
+        <div class="book-author">${authorText}</div>
+        <div class="book-progress">${pageCount} of 25 pages uploaded</div>
+        <a class="btn btn-gold" href="../reader/">Open →</a>
+      </div>
+    </div>
+  `;
+}
+
+async function renderPortfolio() {
+  if (!BookStorage.isSupported()) {
+    document.getElementById('unsupportedNotice').style.display = 'block';
+    return;
+  }
+
+  const authorName = await resolveAuthorName();
+  const authorText = 'By ' + (authorName || 'me');
+
+  let anyPages = false;
+  let html = '';
+  for (const book of BOOKS) {
+    let pages = [];
+    try {
+      pages = await BookStorage.listPages(book.bookId);
+    } catch (e) {
+      console.warn('[portfolio] listPages failed', e);
+    }
+    if (pages.length > 0) anyPages = true;
+    const cover = pages.find(p => p.pageIndex === 1);
+    const coverUrl = cover ? BookStorage.blobToObjectURL(cover.blob) : null;
+    html += renderBookCard(book, pages.length, coverUrl, authorText);
+  }
+
+  const grid = document.getElementById('booksGrid');
+  if (!anyPages) {
+    document.getElementById('emptyState').style.display = 'block';
+    grid.style.display = 'none';
+  } else {
+    document.getElementById('emptyState').style.display = 'none';
+    grid.innerHTML = html;
+    grid.style.display = 'grid';
+  }
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+
+  await renderPortfolio();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Read Your Book · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared photo storage module -->
+<script src="../shared/book-storage.js"></script>
+
+<style>
+  .reader-stage {
+    display: none; /* JS toggles to 'flex' once pages load */
+    position: relative;
+    align-items: center; justify-content: center;
+    margin: 10px 0 18px;
+  }
+  .reader-stage-inner {
+    position: relative; width: 100%; max-width: 520px; margin: 0 auto;
+    border-radius: 16px; overflow: hidden; background: #fff;
+    box-shadow: 0 10px 30px rgba(26,29,43,0.12);
+  }
+  #pageImg {
+    display: block; width: 100%; max-height: 65vh; object-fit: contain;
+    background: #f4f1ea; transition: opacity .3s ease;
+  }
+  .reader-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%; background: #fff;
+    border: none; box-shadow: 0 4px 14px rgba(26,29,43,0.18);
+    font-size: 18px; cursor: pointer; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .reader-arrow.prev { left: -20px; }
+  .reader-arrow.next { right: -20px; }
+  /* Arrow buttons are a mouse/desktop affordance — hide on touch devices
+     (swipe handles it there) per spec. */
+  @media (hover: none) {
+    .reader-arrow { display: none; }
+  }
+
+  .reader-bottombar {
+    display: none; /* JS toggles to 'flex' once pages load */
+    align-items: center; justify-content: space-between;
+    gap: 12px; margin-top: 8px;
+  }
+  .reader-page-count { font-size: 12.5px; font-weight: 800; color: var(--ink-soft); }
+  .reader-bottombar .btn { width: auto; padding: 10px 16px; }
+
+  .audio-soon-card {
+    display: none; /* JS toggles to 'block' once pages load */
+    background: rgba(26,29,43,0.04); box-shadow: none;
+    text-align: center; color: var(--ink-muted);
+    font-size: 12.5px; font-weight: 700; padding: 14px; margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Your Book</p>
+</div>
+
+<div class="content-wrap">
+
+  <div class="card" id="emptyState" style="text-align:center; display:none;">
+    <div style="font-size:40px; margin-bottom:10px;">📖</div>
+    <div style="font-weight:800; font-size:15px; margin-bottom:6px;">No pages yet</div>
+    <div id="emptyStateMsg" style="font-size:13px; color:var(--ink-soft); margin-bottom:16px;">
+      Upload some pages to start reading your book.
+    </div>
+    <a class="btn btn-gold" href="../upload/">📷 Upload your photos</a>
+  </div>
+
+  <div class="reader-stage" id="readerStage" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
+    <button class="reader-arrow prev" id="prevBtn" onclick="prevPage()">←</button>
+    <div class="reader-stage-inner">
+      <img id="pageImg" alt="Book page">
+    </div>
+    <button class="reader-arrow next" id="nextBtn" onclick="nextPage()">→</button>
+  </div>
+
+  <div class="reader-bottombar" id="readerBottombar">
+    <div class="reader-page-count" id="pageCount">Page 1 of 1</div>
+    <a class="btn btn-ghost" href="../portfolio/">← Back to portfolio</a>
+  </div>
+
+  <div class="card audio-soon-card" id="audioSoonCard">
+    🎵 Voice narration + background music coming soon
+  </div>
+
+</div>
+
+<script>
+const BOOK_ID = 'book_001';
+
+let pages = [];          // array of stored records, sorted by pageIndex
+const objectUrls = {};   // pageIndex -> object URL
+let currentIndex = 0;    // index into `pages` (not the page's slot number)
+let touchStartX = null;
+
+function showEmptyState(customMsg) {
+  document.getElementById('emptyState').style.display = 'block';
+  document.getElementById('readerStage').style.display = 'none';
+  document.getElementById('readerBottombar').style.display = 'none';
+  document.getElementById('audioSoonCard').style.display = 'none';
+  if (customMsg) document.getElementById('emptyStateMsg').textContent = customMsg;
+}
+
+function renderCurrentPage(useFade) {
+  const img = document.getElementById('pageImg');
+  const apply = () => {
+    img.src = objectUrls[pages[currentIndex].pageIndex];
+    img.style.opacity = '1';
+  };
+  if (useFade) {
+    img.style.opacity = '0';
+    setTimeout(apply, 150);
+  } else {
+    apply();
+  }
+  document.getElementById('pageCount').textContent = 'Page ' + (currentIndex + 1) + ' of ' + pages.length;
+  document.getElementById('prevBtn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').style.visibility = currentIndex === pages.length - 1 ? 'hidden' : 'visible';
+}
+
+function goToPage(newIndex) {
+  if (newIndex < 0 || newIndex >= pages.length || newIndex === currentIndex) return;
+  currentIndex = newIndex;
+  renderCurrentPage(true);
+}
+
+function prevPage() { goToPage(currentIndex - 1); }
+function nextPage() { goToPage(currentIndex + 1); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') prevPage();
+  else if (e.key === 'ArrowRight') nextPage();
+});
+
+function onTouchStart(e) { touchStartX = e.changedTouches[0].clientX; }
+function onTouchEnd(e) {
+  if (touchStartX == null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 40) {
+    if (dx < 0) nextPage(); else prevPage();
+  }
+  touchStartX = null;
+}
+
+async function loadPages() {
+  if (!BookStorage.isSupported()) {
+    showEmptyState("Photo storage isn't available in this browser.");
+    return;
+  }
+  try {
+    pages = await BookStorage.listPages(BOOK_ID);
+  } catch (e) {
+    console.warn('[reader] listPages failed', e);
+    pages = [];
+  }
+
+  if (pages.length === 0) {
+    showEmptyState();
+    return;
+  }
+
+  pages.forEach(p => { objectUrls[p.pageIndex] = BookStorage.blobToObjectURL(p.blob); });
+
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('readerStage').style.display = 'flex';
+  document.getElementById('readerBottombar').style.display = 'flex';
+  document.getElementById('audioSoonCard').style.display = 'block';
+
+  currentIndex = 0;
+  renderCurrentPage(false);
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+
+  await loadPages();
+}
+
+init();
+</script>
+</body>
+</html>

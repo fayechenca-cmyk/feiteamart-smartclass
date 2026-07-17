@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Upload Your Photos · Make My First Illustration Book</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/book-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared photo storage module -->
+<script src="../shared/book-storage.js"></script>
+
+<style>
+  .unsupported-card {
+    display: none;
+    background: #fff; border: 2px solid var(--rose); border-radius: 16px;
+    padding: 16px; font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .slots-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 8px; margin-top: 14px;
+  }
+  .slot {
+    position: relative; aspect-ratio: 1; border-radius: 12px;
+    border: 2px dashed var(--border); background: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; text-align: center; padding: 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .slot.filled { border-style: solid; border-color: var(--gold); }
+  .slot.saving { border-style: solid; border-color: var(--purple); }
+  .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .slot-plus { font-size: 20px; color: var(--ink-muted); line-height: 1; }
+  .slot-label { font-size: 9px; font-weight: 800; color: var(--ink-muted); margin-top: 3px; }
+  .slot-replace {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(26,29,43,0.55); color: #fff;
+    font-size: 9px; font-weight: 800; text-align: center; padding: 3px 0;
+  }
+  .slot-num {
+    position: absolute; top: 3px; left: 4px;
+    font-size: 9px; font-weight: 900; color: var(--ink-muted);
+  }
+  .slot.filled .slot-num, .slot.saving .slot-num {
+    color: #fff; background: rgba(26,29,43,0.45); padding: 1px 5px; border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Upload Your Photos</p>
+  <div class="stops-pill" id="progressPill">0 of 25 pages uploaded</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>Turn your pages into a book</h1>
+    <p>Photograph each finished page — paper, screen, whatever you painted on — and upload it here.</p>
+  </div>
+
+  <div class="unsupported-card" id="unsupportedNotice">
+    ⚠️ Photo storage isn't available in this browser. Try a recent version of Safari or Chrome, and make sure you're not in a private/incognito window.
+  </div>
+
+  <div class="card">
+    <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 2px;">Your 25 pages</div>
+    <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 2px;">Tap any slot to add or replace a photo.</div>
+    <div class="slots-grid" id="slotsGrid"></div>
+  </div>
+
+  <div class="next-footer" id="readyFooter" style="display:none;">
+    <div class="next-label">All 25 pages are in</div>
+    <a class="btn btn-gold" href="../reader/">Ready to read! →</a>
+  </div>
+
+</div>
+
+<input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="onFileSelected(event)">
+
+<script>
+const BOOK_ID = 'book_001';
+const TOTAL_PAGES = 25;
+
+let currentSlot = null;
+let savingSlot = null;
+const pagesMap = {};   // pageIndex -> stored record
+const objectUrls = {}; // pageIndex -> object URL for display
+
+function triggerUpload(n) {
+  currentSlot = n;
+  document.getElementById('fileInput').click();
+}
+
+async function onFileSelected(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = ''; // allow re-selecting the same file next time
+  if (!file || currentSlot == null) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Please choose an image file (JPG or PNG).');
+    return;
+  }
+
+  const slot = currentSlot;
+  savingSlot = slot;
+  renderGrid();
+
+  try {
+    const record = await BookStorage.savePage(BOOK_ID, slot, file);
+    pagesMap[slot] = record;
+    if (objectUrls[slot]) URL.revokeObjectURL(objectUrls[slot]);
+    objectUrls[slot] = BookStorage.blobToObjectURL(record.blob);
+  } catch (e) {
+    console.warn('[upload] savePage failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+
+  savingSlot = null;
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('slotsGrid');
+  let html = '';
+  for (let n = 1; n <= TOTAL_PAGES; n++) {
+    const rec = pagesMap[n];
+    const isSaving = savingSlot === n;
+
+    if (isSaving) {
+      html += `
+        <div class="slot saving">
+          <div class="slot-num">${n}</div>
+          <div class="slot-plus">⏳</div>
+          <div class="slot-label">Saving…</div>
+        </div>`;
+    } else if (rec) {
+      html += `
+        <div class="slot filled" onclick="triggerUpload(${n})">
+          <img src="${objectUrls[n]}" alt="Page ${n}">
+          <div class="slot-num">${n}</div>
+          <div class="slot-replace">🔄 Replace</div>
+        </div>`;
+    } else {
+      html += `
+        <div class="slot empty" onclick="triggerUpload(${n})">
+          <div class="slot-num">${n}</div>
+          <div class="slot-plus">+</div>
+          <div class="slot-label">Add photo</div>
+        </div>`;
+    }
+  }
+  grid.innerHTML = html;
+
+  const count = Object.keys(pagesMap).length;
+  document.getElementById('progressPill').textContent = count + ' of ' + TOTAL_PAGES + ' pages uploaded';
+  document.getElementById('readyFooter').style.display = count >= TOTAL_PAGES ? 'block' : 'none';
+}
+
+async function loadExisting() {
+  if (!BookStorage.isSupported()) {
+    document.getElementById('unsupportedNotice').style.display = 'block';
+    renderGrid();
+    return;
+  }
+  try {
+    const rows = await BookStorage.listPages(BOOK_ID);
+    rows.forEach(r => {
+      pagesMap[r.pageIndex] = r;
+      objectUrls[r.pageIndex] = BookStorage.blobToObjectURL(r.blob);
+    });
+  } catch (e) {
+    console.warn('[upload] listPages failed', e);
+  }
+  renderGrid();
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'first-illustration-book');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+
+  await loadExisting();
+}
+
+init();
+</script>
+</body>
+</html>
