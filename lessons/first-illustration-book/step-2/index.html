@@ -18,6 +18,14 @@
     display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
     margin-top: 12px;
   }
+  /* Reflow to more columns as the (now wider) .content-wrap grows,
+     matching the same breakpoints as the container width change. */
+  @media (min-width: 768px) {
+    .comp-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1100px) {
+    .comp-grid { grid-template-columns: repeat(4, 1fr); }
+  }
   .comp-card {
     background: #fff; border: 2px solid var(--border); border-radius: 16px;
     padding: 10px; cursor: pointer; text-align: center;

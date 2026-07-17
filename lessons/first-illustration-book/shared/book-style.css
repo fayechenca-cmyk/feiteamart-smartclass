@@ -68,6 +68,18 @@ html, body {
   margin: 0 auto;
   padding: 22px 20px 90px;
 }
+/* Wider reading width on tablet/desktop, matching the Rousseau lesson's
+   .lesson container breakpoints so video embeds, grids, and demos have
+   room to display properly. */
+@media (min-width: 768px) {
+  .content-wrap { max-width: 960px; padding: 32px 32px 100px; }
+}
+@media (min-width: 1100px) {
+  .content-wrap { max-width: 1080px; padding: 40px 40px 120px; }
+}
+@media (min-width: 1400px) {
+  .content-wrap { max-width: 1180px; }
+}
 
 .page-hero { text-align: center; padding: 6px 4px 22px; }
 .page-hero h1 {
