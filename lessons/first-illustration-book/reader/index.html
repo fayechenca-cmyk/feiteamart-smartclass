@@ -24,6 +24,17 @@
     position: relative; width: 100%; max-width: 520px; margin: 0 auto;
     border-radius: 16px; overflow: hidden; background: #fff;
     box-shadow: 0 10px 30px rgba(26,29,43,0.12);
+    border: 3px solid transparent; transition: border-color .2s ease;
+  }
+  /* Subtle distinction for Cover / Back Cover pages — a thin gold frame
+     and a small corner label, not a big banner. */
+  .reader-stage-inner.is-special { border-color: var(--gold); }
+  .page-kind-label {
+    display: none;
+    position: absolute; top: 8px; left: 8px; z-index: 2;
+    background: rgba(26,29,43,0.55); color: #fff;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 10px;
   }
   #pageImg {
     display: block; width: 100%; max-height: 65vh; object-fit: contain;
@@ -80,7 +91,8 @@
 
   <div class="reader-stage" id="readerStage" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
     <button class="reader-arrow prev" id="prevBtn" onclick="prevPage()">←</button>
-    <div class="reader-stage-inner">
+    <div class="reader-stage-inner" id="readerStageInner">
+      <div class="page-kind-label" id="pageKindLabel"></div>
       <img id="pageImg" alt="Book page">
     </div>
     <button class="reader-arrow next" id="nextBtn" onclick="nextPage()">→</button>
@@ -125,6 +137,14 @@ function renderCurrentPage(useFade) {
   } else {
     apply();
   }
+
+  const kind = pages[currentIndex].pageIndex;
+  const kindLabel = kind === 'cover' ? 'Cover' : kind === 'back_cover' ? 'Back Cover' : null;
+  const labelEl = document.getElementById('pageKindLabel');
+  labelEl.textContent = kindLabel || '';
+  labelEl.style.display = kindLabel ? 'block' : 'none';
+  document.getElementById('readerStageInner').classList.toggle('is-special', !!kindLabel);
+
   document.getElementById('pageCount').textContent = 'Page ' + (currentIndex + 1) + ' of ' + pages.length;
   document.getElementById('prevBtn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
   document.getElementById('nextBtn').style.visibility = currentIndex === pages.length - 1 ? 'hidden' : 'visible';

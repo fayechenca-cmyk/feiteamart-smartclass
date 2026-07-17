@@ -102,17 +102,21 @@ async function resolveAuthorName() {
   return null;
 }
 
-function renderBookCard(book, pageCount, coverUrl, authorText) {
+function renderBookCard(book, storyPageCount, hasCover, hasBackCover, coverUrl, authorText) {
   const coverHtml = coverUrl
     ? `<img src="${coverUrl}" alt="${book.title} cover">`
     : `<div class="cover-placeholder">📖</div>`;
+  const pageWord = storyPageCount === 1 ? 'page' : 'pages';
+  const progressText = storyPageCount + ' ' + pageWord
+    + ' · cover ' + (hasCover ? '✓' : '—')
+    + ' · back cover ' + (hasBackCover ? '✓' : '—');
   return `
     <div class="book-card">
       <div class="book-cover">${coverHtml}</div>
       <div class="book-info">
         <div class="book-title">${book.title}</div>
         <div class="book-author">${authorText}</div>
-        <div class="book-progress">${pageCount} of 25 pages uploaded</div>
+        <div class="book-progress">${progressText}</div>
         <a class="btn btn-gold" href="../reader/">Open →</a>
       </div>
     </div>
@@ -138,9 +142,17 @@ async function renderPortfolio() {
       console.warn('[portfolio] listPages failed', e);
     }
     if (pages.length > 0) anyPages = true;
-    const cover = pages.find(p => p.pageIndex === 1);
-    const coverUrl = cover ? BookStorage.blobToObjectURL(cover.blob) : null;
-    html += renderBookCard(book, pages.length, coverUrl, authorText);
+
+    // Cover priority: a real uploaded Cover, else the first story page,
+    // else the illustrated placeholder (handled by renderBookCard).
+    const realCover = pages.find(p => p.pageIndex === 'cover');
+    const page1 = pages.find(p => p.pageIndex === 1);
+    const coverRec = realCover || page1 || null;
+    const coverUrl = coverRec ? BookStorage.blobToObjectURL(coverRec.blob) : null;
+    const hasBackCover = pages.some(p => p.pageIndex === 'back_cover');
+    const storyPageCount = pages.filter(p => typeof p.pageIndex === 'number').length;
+
+    html += renderBookCard(book, storyPageCount, !!realCover, hasBackCover, coverUrl, authorText);
   }
 
   const grid = document.getElementById('booksGrid');

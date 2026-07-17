@@ -9,6 +9,13 @@
  * longest edge is <=1200px, then re-encoded as JPEG at quality 0.85
  * (typically lands ~200-400KB per page).
  *
+ * Page keys: regular story pages use a numeric pageIndex (1, 2, 3...).
+ * Cover and Back Cover use the string keys 'cover' / 'back_cover' —
+ * these can never collide with a numeric page, so no schema/version
+ * change was needed to add them; any pre-existing numeric-only data
+ * keeps working untouched. listPages() always returns cover first,
+ * then numbered pages ascending, then back_cover last.
+ *
  * Caveat: Safari's ITP applies the same ~7-day inactive-storage
  * wipe to IndexedDB that it does to localStorage. No cloud sync
  * yet (that's a later batch) — uploaded photos live only on this
@@ -58,6 +65,13 @@
 
   function makeKey(bookId, pageIndex) {
     return bookId + '::' + pageIndex;
+  }
+
+  // 'cover' sorts before every number, 'back_cover' sorts after every number.
+  function sortWeight(pageIndex) {
+    if (pageIndex === 'cover') return -Infinity;
+    if (pageIndex === 'back_cover') return Infinity;
+    return pageIndex;
   }
 
   // Resize/re-encode an uploaded File/Blob via canvas.
@@ -128,7 +142,8 @@
       });
     },
 
-    /** Returns all stored pages for a book, sorted by pageIndex ascending. */
+    /** Returns all stored pages for a book: cover first, then numbered
+     *  pages ascending, then back_cover last. */
     async listPages(bookId) {
       const db = await openDB();
       return new Promise((resolve, reject) => {
@@ -138,7 +153,7 @@
         const req = index.getAll(IDBKeyRange.only(bookId));
         req.onsuccess = () => {
           const rows = req.result || [];
-          rows.sort((a, b) => a.pageIndex - b.pageIndex);
+          rows.sort((a, b) => sortWeight(a.pageIndex) - sortWeight(b.pageIndex));
           resolve(rows);
         };
         req.onerror = () => reject(req.error);
@@ -153,6 +168,35 @@
         const req = store.delete(makeKey(bookId, pageIndex));
         req.onsuccess = () => resolve();
         req.onerror = () => reject(req.error);
+      });
+    },
+
+    /** Move a stored page's blob from one index to another (verbatim, no
+     *  recompression) and remove the source. Used when a story page is
+     *  deleted so every later page shifts down by one without needlessly
+     *  re-encoding each image. If the source slot is empty, this just
+     *  clears the destination slot (propagating the "gap" forward). */
+    async movePage(bookId, fromIndex, toIndex) {
+      if (fromIndex === toIndex) return;
+      const rec = await this.getPage(bookId, fromIndex);
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        if (rec) {
+          store.put({
+            id: makeKey(bookId, toIndex),
+            bookId: bookId,
+            pageIndex: toIndex,
+            blob: rec.blob,
+            savedAt: rec.savedAt
+          });
+        } else {
+          store.delete(makeKey(bookId, toIndex));
+        }
+        store.delete(makeKey(bookId, fromIndex));
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
       });
     },
 

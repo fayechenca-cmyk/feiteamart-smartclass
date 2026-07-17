@@ -21,6 +21,32 @@
     margin-bottom: 16px;
   }
 
+  .section-label { font-size: 13.5px; font-weight: 800; margin-bottom: 2px; }
+  .section-sub { font-size: 12px; color: var(--ink-muted); margin-bottom: 4px; }
+
+  /* ── Cover / Back Cover — single, larger, gold-accented slot ── */
+  .special-slot-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+  .special-slot {
+    position: relative; width: 140px; height: 140px;
+    border-radius: 16px; border: 3px solid var(--gold); background: rgba(200,169,110,0.07);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; -webkit-tap-highlight-color: transparent;
+  }
+  .special-slot.saving { border-color: var(--purple); background: rgba(167,139,250,0.08); }
+  .special-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .special-slot .slot-plus { font-size: 28px; color: var(--gold); line-height: 1; }
+  .special-slot .slot-label { font-size: 11px; font-weight: 800; color: var(--ink-muted); margin-top: 4px; }
+  .special-slot .slot-replace {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(26,29,43,0.55); color: #fff;
+    font-size: 10px; font-weight: 800; text-align: center; padding: 4px 0;
+  }
+  .slot-fallback-note {
+    font-size: 11px; font-style: italic; color: var(--ink-muted); text-align: center;
+    margin-top: 8px; max-width: 280px; line-height: 1.45;
+  }
+
+  /* ── Story page grid ── */
   .slots-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
     gap: 8px; margin-top: 14px;
@@ -49,6 +75,13 @@
   .slot.filled .slot-num, .slot.saving .slot-num {
     color: #fff; background: rgba(26,29,43,0.45); padding: 1px 5px; border-radius: 8px;
   }
+  .slot-remove {
+    position: absolute; top: 2px; right: 2px; z-index: 2;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(26,29,43,0.55); color: #fff;
+    font-size: 12px; font-weight: 900; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -56,7 +89,7 @@
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
   <p class="topbar-title">Upload Your Photos</p>
-  <div class="stops-pill" id="progressPill">0 of 25 pages uploaded</div>
+  <div class="stops-pill" id="progressPill">0 of 10 pages uploaded</div>
 </div>
 
 <div class="content-wrap">
@@ -70,32 +103,66 @@
     ⚠️ Photo storage isn't available in this browser. Try a recent version of Safari or Chrome, and make sure you're not in a private/incognito window.
   </div>
 
+  <!-- SECTION A: Cover -->
   <div class="card">
-    <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 2px;">Your 25 pages</div>
-    <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 2px;">Tap any slot to add or replace a photo.</div>
+    <div class="section-label">📕 Book Cover</div>
+    <div class="section-sub">This is the face of your book — draw a title, main character, or any special design.</div>
+    <div class="special-slot-wrap" id="coverSlotWrap"></div>
+  </div>
+
+  <!-- SECTION B: Story Pages -->
+  <div class="card">
+    <div class="section-label">📖 Story Pages</div>
+    <div class="section-sub">One picture per page, in the order you want them to be read.</div>
     <div class="slots-grid" id="slotsGrid"></div>
+    <button class="btn btn-ghost" id="addPageBtn" onclick="addPage()" style="margin-top: 12px;">+ Add another page</button>
+  </div>
+
+  <!-- SECTION C: Back Cover -->
+  <div class="card">
+    <div class="section-label">📗 Back Cover</div>
+    <div class="section-sub">The end of your book — often has "The End," an author photo, or a small closing image.</div>
+    <div class="special-slot-wrap" id="backCoverSlotWrap"></div>
   </div>
 
   <div class="next-footer" id="readyFooter" style="display:none;">
-    <div class="next-label">All 25 pages are in</div>
+    <div class="next-label">All your pages are in</div>
     <a class="btn btn-gold" href="../reader/">Ready to read! →</a>
   </div>
 
 </div>
 
-<input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="onFileSelected(event)">
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
 
 <script>
 const BOOK_ID = 'book_001';
-const TOTAL_PAGES = 25;
+const PAGE_COUNT_KEY = 'fei.books_and_stories.first_illustration_book.book_001.page_count';
+const DEFAULT_PAGE_COUNT = 10;
+const MIN_PAGES = 1;
+const MAX_PAGES = 30;
 
-let currentSlot = null;
+let pageCount = DEFAULT_PAGE_COUNT;
+let currentSlot = null;   // number (story page) or 'cover' / 'back_cover'
 let savingSlot = null;
-const pagesMap = {};   // pageIndex -> stored record
-const objectUrls = {}; // pageIndex -> object URL for display
+const pagesMap = {};      // slot -> stored record (numbers and 'cover'/'back_cover' keys coexist fine)
+const objectUrls = {};    // slot -> object URL for display
 
-function triggerUpload(n) {
-  currentSlot = n;
+function loadPageCountPreference() {
+  try {
+    const raw = localStorage.getItem(PAGE_COUNT_KEY);
+    if (raw != null) {
+      const n = parseInt(raw, 10);
+      if (!isNaN(n)) return n;
+    }
+  } catch (e) {}
+  return null;
+}
+function savePageCountPreference(n) {
+  try { localStorage.setItem(PAGE_COUNT_KEY, String(n)); } catch (e) {}
+}
+
+function triggerUpload(slot) {
+  currentSlot = slot;
   document.getElementById('fileInput').click();
 }
 
@@ -110,7 +177,7 @@ async function onFileSelected(event) {
 
   const slot = currentSlot;
   savingSlot = slot;
-  renderGrid();
+  renderAll();
 
   try {
     const record = await BookStorage.savePage(BOOK_ID, slot, file);
@@ -123,15 +190,75 @@ async function onFileSelected(event) {
   }
 
   savingSlot = null;
-  renderGrid();
+  renderAll();
 }
 
-function renderGrid() {
+function addPage() {
+  if (pageCount >= MAX_PAGES) {
+    alert("That's a lot of pages! Consider making a second book.");
+    return;
+  }
+  pageCount += 1;
+  savePageCountPreference(pageCount);
+  renderAll();
+}
+
+async function removePage(n) {
+  if (pageCount <= MIN_PAGES) return;
+  const rec = pagesMap[n];
+  if (rec && !confirm('Delete this page? This can\'t be undone.')) return;
+
+  // Delete this slot, then shift every later page down by one so
+  // numbering stays contiguous — done in IndexedDB, not just on screen.
+  await BookStorage.deletePage(BOOK_ID, n);
+  for (let i = n + 1; i <= pageCount; i++) {
+    await BookStorage.movePage(BOOK_ID, i, i - 1);
+  }
+  pageCount -= 1;
+  savePageCountPreference(pageCount);
+  await refreshFromStorage();
+}
+
+function renderSpecialSlot(kind, containerId, label) {
+  const rec = pagesMap[kind];
+  const isSaving = savingSlot === kind;
+  const container = document.getElementById(containerId);
+  const fallbackNote = kind === 'cover'
+    ? "If you don't upload a cover, we'll use your first page as the cover automatically."
+    : "This is optional. Skip it if you'd rather end on your last story page.";
+
+  if (isSaving) {
+    container.innerHTML = `
+      <div class="special-slot saving">
+        <div class="slot-plus">⏳</div>
+        <div class="slot-label">Saving…</div>
+      </div>`;
+  } else if (rec) {
+    container.innerHTML = `
+      <div class="special-slot" onclick="triggerUpload('${kind}')">
+        <img src="${objectUrls[kind]}" alt="${label}">
+        <div class="slot-replace">🔄 Replace</div>
+      </div>`;
+  } else {
+    container.innerHTML = `
+      <div class="special-slot" onclick="triggerUpload('${kind}')">
+        <div class="slot-plus">+</div>
+        <div class="slot-label">Add ${label}</div>
+      </div>
+      <div class="slot-fallback-note">${fallbackNote}</div>`;
+  }
+}
+
+function renderPagesGrid() {
   const grid = document.getElementById('slotsGrid');
+  const canRemove = pageCount > MIN_PAGES;
   let html = '';
-  for (let n = 1; n <= TOTAL_PAGES; n++) {
+  for (let n = 1; n <= pageCount; n++) {
     const rec = pagesMap[n];
     const isSaving = savingSlot === n;
+    const removeBtn = canRemove
+      ? `<div class="slot-remove" onclick="event.stopPropagation(); removePage(${n})">×</div>`
+      : '';
 
     if (isSaving) {
       html += `
@@ -145,40 +272,73 @@ function renderGrid() {
         <div class="slot filled" onclick="triggerUpload(${n})">
           <img src="${objectUrls[n]}" alt="Page ${n}">
           <div class="slot-num">${n}</div>
+          ${removeBtn}
           <div class="slot-replace">🔄 Replace</div>
         </div>`;
     } else {
       html += `
         <div class="slot empty" onclick="triggerUpload(${n})">
           <div class="slot-num">${n}</div>
+          ${removeBtn}
           <div class="slot-plus">+</div>
           <div class="slot-label">Add photo</div>
         </div>`;
     }
   }
   grid.innerHTML = html;
-
-  const count = Object.keys(pagesMap).length;
-  document.getElementById('progressPill').textContent = count + ' of ' + TOTAL_PAGES + ' pages uploaded';
-  document.getElementById('readyFooter').style.display = count >= TOTAL_PAGES ? 'block' : 'none';
 }
 
-async function loadExisting() {
+function updateFooterAndPill() {
+  let filled = 0;
+  for (let n = 1; n <= pageCount; n++) { if (pagesMap[n]) filled++; }
+  document.getElementById('progressPill').textContent = filled + ' of ' + pageCount + ' pages uploaded';
+  document.getElementById('readyFooter').style.display = (filled >= pageCount) ? 'block' : 'none';
+}
+
+function renderAll() {
+  renderSpecialSlot('cover', 'coverSlotWrap', 'cover');
+  renderPagesGrid();
+  renderSpecialSlot('back_cover', 'backCoverSlotWrap', 'back cover');
+  updateFooterAndPill();
+}
+
+function revokeAllObjectUrls() {
+  Object.keys(objectUrls).forEach(k => URL.revokeObjectURL(objectUrls[k]));
+  for (const k in objectUrls) delete objectUrls[k];
+}
+
+async function refreshFromStorage() {
+  revokeAllObjectUrls();
+  for (const k in pagesMap) delete pagesMap[k];
+
   if (!BookStorage.isSupported()) {
     document.getElementById('unsupportedNotice').style.display = 'block';
-    renderGrid();
+    renderAll();
     return;
   }
+
+  let rows = [];
   try {
-    const rows = await BookStorage.listPages(BOOK_ID);
-    rows.forEach(r => {
-      pagesMap[r.pageIndex] = r;
-      objectUrls[r.pageIndex] = BookStorage.blobToObjectURL(r.blob);
-    });
+    rows = await BookStorage.listPages(BOOK_ID);
   } catch (e) {
     console.warn('[upload] listPages failed', e);
   }
-  renderGrid();
+
+  let highestNumeric = 0;
+  rows.forEach(r => {
+    pagesMap[r.pageIndex] = r;
+    objectUrls[r.pageIndex] = BookStorage.blobToObjectURL(r.blob);
+    if (typeof r.pageIndex === 'number' && r.pageIndex > highestNumeric) highestNumeric = r.pageIndex;
+  });
+
+  // First load ever: derive a sensible page count from whatever's already
+  // stored (e.g. earlier test data), rather than hiding pages behind the
+  // new default of 10. After that, the saved preference is authoritative.
+  const savedPref = loadPageCountPreference();
+  pageCount = savedPref != null ? savedPref : Math.max(DEFAULT_PAGE_COUNT, highestNumeric);
+  if (savedPref == null) savePageCountPreference(pageCount);
+
+  renderAll();
 }
 
 async function init() {
@@ -192,7 +352,7 @@ async function init() {
     }
   }
 
-  await loadExisting();
+  await refreshFromStorage();
 }
 
 init();
