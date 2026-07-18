@@ -12,48 +12,73 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared photo storage module -->
 <script src="../shared/book-storage.js"></script>
+<!-- StPageFlip: real page-flip book widget, no build step -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
 
 <style>
-  .reader-stage {
     display: none; /* JS toggles to 'flex' once pages load */
-    position: relative;
-    align-items: center; justify-content: center;
-    margin: 10px 0 18px;
+  .dir-toggle {
+    flex-shrink: 0; font-size: 10px; font-weight: 800; letter-spacing: 0.2px;
+    color: var(--ink-soft); background: #fff; border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 10px; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent;
   }
-  .reader-stage-inner {
-    position: relative; width: 100%; max-width: 520px; margin: 0 auto;
-    border-radius: 16px; overflow: hidden; background: #fff;
-    box-shadow: 0 10px 30px rgba(26,29,43,0.12);
-    border: 3px solid transparent; transition: border-color .2s ease;
+
+  /* ── Sparse-book static view ── */
+  #sparseImgWrap { border-radius: 14px; overflow: hidden; border: 2px solid var(--border); }
+  #sparseImg { display: block; width: 100%; max-height: 60vh; object-fit: contain; background: #f4f1ea; }
+  .sparse-nudge { font-size: 13px; color: var(--ink-soft); margin: 12px 0 14px; line-height: 1.55; }
+
+  /* ── Book flip stage ── */
+  .book-shell {
+    display: none; align-items: center; justify-content: center;
+    gap: 10px; margin: 14px 0 18px;
   }
-  /* Subtle distinction for Cover / Back Cover pages — a thin gold frame
-     and a small corner label, not a big banner. */
-  .reader-stage-inner.is-special { border-color: var(--gold); }
-  .page-kind-label {
-    display: none;
+  .book-wrap {
+    position: relative; width: 100%; max-width: 480px; height: 68vh; max-height: 620px; margin: 0 auto;
+  }
+  @media (min-width: 900px) { .book-wrap { max-width: 900px; height: 62vh; max-height: 640px; } }
+  @media (min-width: 1400px) { .book-wrap { max-width: 1200px; height: 66vh; max-height: 720px; } }
+
+  /* Subtle spine shadow down the center seam — only meaningful in spread mode */
+  .book-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 26px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, rgba(0,0,0,0.10), rgba(0,0,0,0) 40%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.10));
+    pointer-events: none; z-index: 3; display: none;
+  }
+  @media (min-width: 900px) { .book-wrap::after { display: block; } }
+
+  #stBook { width: 100%; height: 100%; margin: 0 auto; }
+  #stBook.rtl-mirror { transform: scaleX(-1); }
+  #stBook.rtl-mirror .st-page-inner { transform: scaleX(-1); }
+
+  .st-page {
+    background: #fff; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .st-page-cover { border-color: var(--gold); }
+  .st-page-blank .st-page-inner { background: #fdfaf3; }
+  .st-page-inner { position: relative; width: 100%; height: 100%; }
+  .st-page-inner img { display: block; width: 100%; height: 100%; object-fit: contain; background: #f4f1ea; }
+  .st-corner-label {
     position: absolute; top: 8px; left: 8px; z-index: 2;
     background: rgba(26,29,43,0.55); color: #fff;
     font-size: 10px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase;
     padding: 3px 8px; border-radius: 10px;
   }
-  #pageImg {
-    display: block; width: 100%; max-height: 65vh; object-fit: contain;
-    background: #f4f1ea; transition: opacity .3s ease;
-  }
+
   .reader-arrow {
-    position: absolute; top: 50%; transform: translateY(-50%);
+    flex-shrink: 0;
     width: 44px; height: 44px; border-radius: 50%; background: #fff;
     border: none; box-shadow: 0 4px 14px rgba(26,29,43,0.18);
-    font-size: 18px; cursor: pointer; color: var(--ink);
+    font-size: 20px; cursor: pointer; color: var(--ink);
     display: flex; align-items: center; justify-content: center;
   }
-  .reader-arrow.prev { left: -20px; }
-  .reader-arrow.next { right: -20px; }
+  .reader-arrow[disabled] { opacity: 0.35; pointer-events: none; }
   /* Arrow buttons are a mouse/desktop affordance — hide on touch devices
-     (swipe handles it there) per spec. */
-  @media (hover: none) {
-    .reader-arrow { display: none; }
-  }
+     (StPageFlip's own drag/swipe handles it there) per spec. */
+  @media (hover: none) { .reader-arrow { display: none; } }
 
   .reader-bottombar {
     display: none; /* JS toggles to 'flex' once pages load */
@@ -76,6 +101,7 @@
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
   <p class="topbar-title">Your Book</p>
+  <button class="dir-toggle" id="dirToggle" onclick="toggleDirection()">🔀 Direction: LTR</button>
 </div>
 
 <div class="content-wrap">
@@ -89,17 +115,20 @@
     <a class="btn btn-gold" href="../upload/">📷 Upload your photos</a>
   </div>
 
-  <div class="reader-stage" id="readerStage" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
-    <button class="reader-arrow prev" id="prevBtn" onclick="prevPage()">←</button>
-    <div class="reader-stage-inner" id="readerStageInner">
-      <div class="page-kind-label" id="pageKindLabel"></div>
-      <img id="pageImg" alt="Book page">
-    </div>
-    <button class="reader-arrow next" id="nextBtn" onclick="nextPage()">→</button>
+  <div class="card" id="sparseState" style="text-align:center; display:none;">
+    <div id="sparseImgWrap"><img id="sparseImg" alt="Your book page"></div>
+    <div class="sparse-nudge">Upload more pages to start flipping through your book</div>
+    <a class="btn btn-gold" href="../upload/">📷 Upload more pages</a>
+  </div>
+
+  <div class="book-shell" id="bookShell">
+    <button class="reader-arrow" id="leftBtn">←</button>
+    <div class="book-wrap"><div id="stBook"></div></div>
+    <button class="reader-arrow" id="rightBtn">→</button>
   </div>
 
   <div class="reader-bottombar" id="readerBottombar">
-    <div class="reader-page-count" id="pageCount">Page 1 of 1</div>
+    <div class="reader-page-count" id="pageCountLabel">Page 1 of 1</div>
     <a class="btn btn-ghost" href="../portfolio/">← Back to portfolio</a>
   </div>
 
@@ -111,95 +140,231 @@
 
 <script>
 const BOOK_ID = 'book_001';
+const DIRECTION_KEY = 'fei.books_and_stories.first_illustration_book.reading_direction';
 
-let pages = [];          // array of stored records, sorted by pageIndex
-const objectUrls = {};   // pageIndex -> object URL
-let currentIndex = 0;    // index into `pages` (not the page's slot number)
-let touchStartX = null;
+let direction = 'ltr';           // 'ltr' | 'rtl'
+let coverRec = null;
+let backCoverRec = null;
+let storyRecs = [];              // numeric pages, ascending
+let order = [];                  // flat array of page descriptors currently mounted
+let currentMode = null;          // 'spread' | 'single'
+let pageFlip = null;
+
+const objectUrlCache = new Map(); // record.id -> object URL
+
+function getObjectUrl(rec) {
+  if (!objectUrlCache.has(rec.id)) {
+    objectUrlCache.set(rec.id, BookStorage.blobToObjectURL(rec.blob));
+  }
+  return objectUrlCache.get(rec.id);
+}
+
+function loadDirectionPreference() {
+  try {
+    const v = localStorage.getItem(DIRECTION_KEY);
+    if (v === 'rtl' || v === 'ltr') return v;
+  } catch (e) {}
+  return 'ltr';
+}
+function saveDirectionPreference(v) {
+  try { localStorage.setItem(DIRECTION_KEY, v); } catch (e) {}
+}
+function updateDirToggleLabel() {
+  document.getElementById('dirToggle').textContent = direction === 'rtl' ? '🔀 Direction: RTL' : '🔀 Direction: LTR';
+}
+function toggleDirection() {
+  direction = direction === 'ltr' ? 'rtl' : 'ltr';
+  saveDirectionPreference(direction);
+  updateDirToggleLabel();
+  if (pageFlip) buildAndMount();
+}
 
 function showEmptyState(customMsg) {
   document.getElementById('emptyState').style.display = 'block';
-  document.getElementById('readerStage').style.display = 'none';
+  document.getElementById('sparseState').style.display = 'none';
+  document.getElementById('bookShell').style.display = 'none';
   document.getElementById('readerBottombar').style.display = 'none';
   document.getElementById('audioSoonCard').style.display = 'none';
   if (customMsg) document.getElementById('emptyStateMsg').textContent = customMsg;
 }
 
-function renderCurrentPage(useFade) {
-  const img = document.getElementById('pageImg');
-  const apply = () => {
-    img.src = objectUrls[pages[currentIndex].pageIndex];
-    img.style.opacity = '1';
-  };
-  if (useFade) {
-    img.style.opacity = '0';
-    setTimeout(apply, 150);
-  } else {
-    apply();
+function showSparseState(rec) {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('bookShell').style.display = 'none';
+  document.getElementById('readerBottombar').style.display = 'none';
+  document.getElementById('audioSoonCard').style.display = 'block';
+  document.getElementById('sparseState').style.display = 'block';
+  document.getElementById('sparseImg').src = getObjectUrl(rec);
+}
+
+// [blank?, cover, page1, page2, ..., pageN, blank?, back_cover?] — see summary
+// for the pairing math that keeps every spread balanced.
+function buildFlatOrder(mode) {
+  const list = [];
+  if (mode === 'spread') list.push({ kind: 'blank' });
+  list.push({ kind: 'cover', rec: coverRec });
+  storyRecs.forEach((rec, i) => list.push({ kind: 'page', rec: rec, num: i + 1 }));
+  if (backCoverRec) {
+    if (mode === 'spread' && storyRecs.length % 2 === 0) list.push({ kind: 'blank' });
+    list.push({ kind: 'back_cover', rec: backCoverRec });
+  }
+  return list;
+}
+
+function makePageEl(desc) {
+  const div = document.createElement('div');
+  const isCover = desc.kind === 'cover' || desc.kind === 'back_cover';
+  div.className = 'st-page' + (isCover ? ' st-page-cover' : '') + (desc.kind === 'blank' ? ' st-page-blank' : '');
+  if (isCover) div.dataset.density = 'hard';
+
+  const inner = document.createElement('div');
+  inner.className = 'st-page-inner';
+
+  if (desc.rec) {
+    const img = document.createElement('img');
+    img.src = getObjectUrl(desc.rec);
+    img.alt = desc.kind === 'cover' ? 'Cover' : desc.kind === 'back_cover' ? 'Back Cover' : ('Page ' + desc.num);
+    inner.appendChild(img);
+  }
+  if (isCover) {
+    const label = document.createElement('div');
+    label.className = 'st-corner-label';
+    label.textContent = desc.kind === 'cover' ? 'Cover' : 'Back Cover';
+    inner.appendChild(label);
   }
 
-  const kind = pages[currentIndex].pageIndex;
-  const kindLabel = kind === 'cover' ? 'Cover' : kind === 'back_cover' ? 'Back Cover' : null;
-  const labelEl = document.getElementById('pageKindLabel');
-  labelEl.textContent = kindLabel || '';
-  labelEl.style.display = kindLabel ? 'block' : 'none';
-  document.getElementById('readerStageInner').classList.toggle('is-special', !!kindLabel);
-
-  document.getElementById('pageCount').textContent = 'Page ' + (currentIndex + 1) + ' of ' + pages.length;
-  document.getElementById('prevBtn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
-  document.getElementById('nextBtn').style.visibility = currentIndex === pages.length - 1 ? 'hidden' : 'visible';
+  div.appendChild(inner);
+  return div;
 }
 
-function goToPage(newIndex) {
-  if (newIndex < 0 || newIndex >= pages.length || newIndex === currentIndex) return;
-  currentIndex = newIndex;
-  renderCurrentPage(true);
+function computeMode() {
+  return window.innerWidth < 900 ? 'single' : 'spread';
 }
 
-function prevPage() { goToPage(currentIndex - 1); }
-function nextPage() { goToPage(currentIndex + 1); }
+function destroyReaderInstance() {
+  if (pageFlip) {
+    try { pageFlip.destroy(); } catch (e) {}
+    pageFlip = null;
+  }
+  document.getElementById('stBook').innerHTML = '';
+}
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') prevPage();
-  else if (e.key === 'ArrowRight') nextPage();
+function updatePageIndicator(idx) {
+  const total = order.length;
+  const displayed = direction === 'rtl' ? (total - idx) : (idx + 1);
+  document.getElementById('pageCountLabel').textContent = 'Page ' + displayed + ' of ' + total;
+}
+
+function refreshNavButtons(idx) {
+  const total = order.length;
+  const forwardIdx = direction === 'rtl' ? idx - 1 : idx + 1;
+  const backwardIdx = direction === 'rtl' ? idx + 1 : idx - 1;
+  const forwardBtn = direction === 'rtl' ? document.getElementById('leftBtn') : document.getElementById('rightBtn');
+  const backwardBtn = direction === 'rtl' ? document.getElementById('rightBtn') : document.getElementById('leftBtn');
+  forwardBtn.disabled = forwardIdx < 0 || forwardIdx > total - 1;
+  backwardBtn.disabled = backwardIdx < 0 || backwardIdx > total - 1;
+}
+
+function goForward() { if (pageFlip) { direction === 'rtl' ? pageFlip.flipPrev() : pageFlip.flipNext(); } }
+function goBackward() { if (pageFlip) { direction === 'rtl' ? pageFlip.flipNext() : pageFlip.flipPrev(); } }
+function flipTowardLeft() { direction === 'rtl' ? goForward() : goBackward(); }
+function flipTowardRight() { direction === 'rtl' ? goBackward() : goForward(); }
+
+function buildAndMount() {
+  const mode = computeMode();
+  const baseOrder = buildFlatOrder(mode);
+  order = direction === 'rtl' ? baseOrder.slice().reverse() : baseOrder;
+
+  destroyReaderInstance();
+  currentMode = mode;
+
+  const stBook = document.getElementById('stBook');
+  stBook.classList.toggle('rtl-mirror', direction === 'rtl');
+  order.forEach(desc => stBook.appendChild(makePageEl(desc)));
+
+  const startIdx = Math.max(0, order.findIndex(d => d.kind === 'cover'));
+  const baseW = mode === 'spread' ? 380 : 340;
+  const baseH = mode === 'spread' ? 540 : 480;
+
+  pageFlip = new St.PageFlip(stBook, {
+    width: baseW,
+    height: baseH,
+    size: 'stretch',
+    minWidth: 240,
+    maxWidth: 500,
+    minHeight: 340,
+    maxHeight: 760,
+    maxShadowOpacity: 0.5,
+    usePortrait: mode === 'single',
+    mobileScrollSupport: false,
+    startPage: startIdx
+  });
+
+  pageFlip.on('flip', (e) => { updatePageIndicator(e.data); refreshNavButtons(e.data); });
+  pageFlip.on('init', (e) => { updatePageIndicator(e.data.page); refreshNavButtons(e.data.page); });
+
+  pageFlip.loadFromHtml(stBook.querySelectorAll('.st-page'));
+}
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (pageFlip && computeMode() !== currentMode) buildAndMount();
+  }, 200);
 });
 
-function onTouchStart(e) { touchStartX = e.changedTouches[0].clientX; }
-function onTouchEnd(e) {
-  if (touchStartX == null) return;
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  if (Math.abs(dx) > 40) {
-    if (dx < 0) nextPage(); else prevPage();
-  }
-  touchStartX = null;
-}
+document.getElementById('leftBtn').onclick = flipTowardLeft;
+document.getElementById('rightBtn').onclick = flipTowardRight;
+document.addEventListener('keydown', (e) => {
+  if (!pageFlip) return;
+  if (e.key === 'ArrowLeft') flipTowardLeft();
+  else if (e.key === 'ArrowRight') flipTowardRight();
+});
+
+window.addEventListener('pagehide', () => {
+  objectUrlCache.forEach(url => URL.revokeObjectURL(url));
+  objectUrlCache.clear();
+});
 
 async function loadPages() {
   if (!BookStorage.isSupported()) {
     showEmptyState("Photo storage isn't available in this browser.");
     return;
   }
+  let rows = [];
   try {
-    pages = await BookStorage.listPages(BOOK_ID);
+    rows = await BookStorage.listPages(BOOK_ID);
   } catch (e) {
     console.warn('[reader] listPages failed', e);
-    pages = [];
   }
 
-  if (pages.length === 0) {
+  if (rows.length === 0) {
     showEmptyState();
     return;
   }
 
-  pages.forEach(p => { objectUrls[p.pageIndex] = BookStorage.blobToObjectURL(p.blob); });
+  coverRec = rows.find(r => r.pageIndex === 'cover') || null;
+  backCoverRec = rows.find(r => r.pageIndex === 'back_cover') || null;
+  storyRecs = rows.filter(r => typeof r.pageIndex === 'number');
+
+  // Same fallback the upload page promises: no explicit cover uploaded ->
+  // reuse the first story page as the cover (it still also appears as
+  // page 1 in the interior — nothing is removed from the story).
+  if (!coverRec && storyRecs.length > 0) coverRec = storyRecs[0];
+
+  if (rows.length < 2) {
+    showSparseState(rows[0]);
+    return;
+  }
 
   document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('readerStage').style.display = 'flex';
+  document.getElementById('sparseState').style.display = 'none';
+  document.getElementById('bookShell').style.display = 'flex';
   document.getElementById('readerBottombar').style.display = 'flex';
   document.getElementById('audioSoonCard').style.display = 'block';
 
-  currentIndex = 0;
-  renderCurrentPage(false);
+  buildAndMount();
 }
 
 async function init() {
@@ -213,6 +378,8 @@ async function init() {
     }
   }
 
+  direction = loadDirectionPreference();
+  updateDirToggleLabel();
   await loadPages();
 }
 
