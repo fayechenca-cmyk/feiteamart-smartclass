@@ -149,11 +149,20 @@ let order = [];                  // flat array of page descriptors currently mou
 let currentMode = null;          // 'spread' | 'single'
 let pageFlip = null;
 
-const objectUrlCache = new Map(); // record.id -> object URL
+const objectUrlCache = new Map(); // record.id -> data URL
 
-function getObjectUrl(rec) {
+function blobToDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function getObjectUrl(rec) {
   if (!objectUrlCache.has(rec.id)) {
-    objectUrlCache.set(rec.id, BookStorage.blobToObjectURL(rec.blob));
+    objectUrlCache.set(rec.id, await blobToDataURL(rec.blob));
   }
   return objectUrlCache.get(rec.id);
 }
@@ -187,13 +196,13 @@ function showEmptyState(customMsg) {
   if (customMsg) document.getElementById('emptyStateMsg').textContent = customMsg;
 }
 
-function showSparseState(rec) {
+async function showSparseState(rec) {
   document.getElementById('emptyState').style.display = 'none';
   document.getElementById('bookShell').style.display = 'none';
   document.getElementById('readerBottombar').style.display = 'none';
   document.getElementById('audioSoonCard').style.display = 'block';
   document.getElementById('sparseState').style.display = 'block';
-  document.getElementById('sparseImg').src = getObjectUrl(rec);
+  document.getElementById('sparseImg').src = await getObjectUrl(rec);
 }
 
 // [blank?, cover, page1, page2, ..., pageN, blank?, back_cover?] — see summary
@@ -221,7 +230,7 @@ function makePageEl(desc) {
 
   if (desc.rec) {
     const img = document.createElement('img');
-    img.src = getObjectUrl(desc.rec);
+    img.src = objectUrlCache.get(desc.rec.id);
     img.alt = desc.kind === 'cover' ? 'Cover' : desc.kind === 'back_cover' ? 'Back Cover' : ('Page ' + desc.num);
     inner.appendChild(img);
   }
@@ -269,10 +278,12 @@ function goBackward() { if (pageFlip) { direction === 'rtl' ? pageFlip.flipNext(
 function flipTowardLeft() { direction === 'rtl' ? goForward() : goBackward(); }
 function flipTowardRight() { direction === 'rtl' ? goBackward() : goForward(); }
 
-function buildAndMount() {
+async function buildAndMount() {
   const mode = computeMode();
   const baseOrder = buildFlatOrder(mode);
   order = direction === 'rtl' ? baseOrder.slice().reverse() : baseOrder;
+
+  await Promise.all(order.filter(d => d.rec).map(d => getObjectUrl(d.rec)));
 
   destroyReaderInstance();
   currentMode = mode;
@@ -302,7 +313,7 @@ function buildAndMount() {
   pageFlip.on('flip', (e) => { updatePageIndicator(e.data); refreshNavButtons(e.data); });
   pageFlip.on('init', (e) => { updatePageIndicator(e.data.page); refreshNavButtons(e.data.page); });
 
-  pageFlip.loadFromHtml(stBook.querySelectorAll('.st-page'));
+  pageFlip.loadFromHTML(stBook.querySelectorAll('.st-page'));
 }
 
 let resizeTimer = null;
@@ -319,11 +330,6 @@ document.addEventListener('keydown', (e) => {
   if (!pageFlip) return;
   if (e.key === 'ArrowLeft') flipTowardLeft();
   else if (e.key === 'ArrowRight') flipTowardRight();
-});
-
-window.addEventListener('pagehide', () => {
-  objectUrlCache.forEach(url => URL.revokeObjectURL(url));
-  objectUrlCache.clear();
 });
 
 async function loadPages() {
@@ -353,7 +359,7 @@ async function loadPages() {
   if (!coverRec && storyRecs.length > 0) coverRec = storyRecs[0];
 
   if (rows.length < 2) {
-    showSparseState(rows[0]);
+    await showSparseState(rows[0]);
     return;
   }
 
