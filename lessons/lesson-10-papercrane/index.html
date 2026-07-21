@@ -4847,6 +4847,39 @@ function isLiveClassStudent() {
   }
 }
 
+// Access-code students (login with a code like XIDA-25 — not Google/
+// email) never get a Supabase Auth session, so FEISubmissions.submit()
+// (core/submissions.js) can never actually save their file for them —
+// its internal auth.getUser() check always returns null, and the upload
+// silently "succeeds" from the student's point of view. Used to redirect
+// them instead of showing a file picker that can't work (see
+// openUploadModal() and submitUpload() below).
+function isAccessCodeStudent() {
+  try {
+    const profile = UserProfile.current();
+    return !!(profile && profile.studentCode);
+  } catch (e) {
+    return false;
+  }
+}
+
+// Authoritative (not inferred) check: is there a real Supabase Auth
+// session right now? Used as a defense-in-depth guard immediately before
+// the actual upload call in submitUpload(), in case state.uploadedFile
+// somehow got set without going through the isAccessCodeStudent() gate
+// in openUploadModal().
+async function hasSupabaseAuthSession() {
+  try {
+    if (!window.FEISubmissions || !window.FEISubmissions._getClient) return false;
+    const client = window.FEISubmissions._getClient();
+    if (!client) return false;
+    const { data, error } = await client.auth.getUser();
+    return !error && !!(data && data.user);
+  } catch (e) {
+    return false;
+  }
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1b · ANALYTICS
@@ -9721,6 +9754,39 @@ function openUploadModal() {
     return; // ← exit early, don't show the normal tier modal
   }
 
+  // Access-code students (no Supabase Auth session) can't have artwork
+  // saved through this upload system — redirect them to the class
+  // submission form instead of showing a file picker that can't work.
+  if (isAccessCodeStudent()) {
+    const content = document.getElementById('upload-modal-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="modal-title">📋 Submit your artwork</div>
+        <div class="modal-sub" style="margin-bottom: 20px;">
+          To submit your artwork, please use the class submission form →
+        </div>
+
+        <a href="https://tally.so/r/3NN4VW"
+           target="_blank"
+           rel="noopener"
+           class="btn btn-gold"
+           style="display: flex; align-items: center; justify-content: center;
+                  gap: 8px; text-decoration: none; margin-bottom: 16px;
+                  font-size: 14px; padding: 16px 20px; border-radius: 30px;">
+          📋 Open class submission form →
+        </a>
+
+        <div class="btn-stack" style="margin-top: 16px;">
+          <button class="btn btn-ghost" onclick="closeUploadModal()">
+            Cancel
+          </button>
+        </div>
+      `;
+    }
+    document.getElementById('upload-modal').classList.add('show');
+    return; // ← exit early, don't show the normal tier modal
+  }
+
   // ═══════════════════════════════════════════════════════════════
   // TIER DETECTION (priority-ordered — do NOT rearrange without thinking)
   //   1. FULLY PAID USER (mode='unlocked' + selectedPath set)
@@ -10031,14 +10097,23 @@ async function submitUpload() {
   
   // ═══════════════════════════════════════════════════════════════
   // ROUND 44: real Supabase upload (only if file selected + service loaded)
+  // Access-code students have no Supabase Auth session, so the upload
+  // would silently fail — check for a real session first (see also the
+  // isAccessCodeStudent() gate in openUploadModal(), which normally
+  // keeps them from reaching this point with a file at all).
   // ═══════════════════════════════════════════════════════════════
+  let blockedNoSession = false;
   if (state.uploadedFile && window.FEISubmissions) {
-    showBubble("Uploading your work… ⏳", 3000);
-    const result = await submitToSupabase();
-    if (!result.ok) {
-      showBubble("⚠️ Upload didn't save — but feedback is being prepared. We'll retry.", 4500);
-      Analytics.track('submission_visible_error_shown', { error: result.error });
-      // Don't block: still continue to lesson complete
+    if (await hasSupabaseAuthSession()) {
+      showBubble("Uploading your work… ⏳", 3000);
+      const result = await submitToSupabase();
+      if (!result.ok) {
+        showBubble("⚠️ Upload didn't save — but feedback is being prepared. We'll retry.", 4500);
+        Analytics.track('submission_visible_error_shown', { error: result.error });
+        // Don't block: still continue to lesson complete
+      }
+    } else {
+      blockedNoSession = true;
     }
   }
   
@@ -10046,7 +10121,9 @@ async function submitUpload() {
   
   // Customized confirmation based on what was chosen
   let msg = "✓ Sent! ";
-  if (choice === 'ai') {
+  if (blockedNoSession) {
+    msg = 'To submit your artwork, please use the <a href="https://tally.so/r/3NN4VW" target="_blank" rel="noopener">class submission form →</a>';
+  } else if (choice === 'ai') {
     msg += "Artchi feedback ready in a moment 🤖";
   } else if (choice === 'teacher_annotate' || choice === 'teacher_text') {
     msg += "Teacher will reply in ~48h 🎨";
@@ -10079,7 +10156,7 @@ async function submitUpload() {
     msg += "Feedback coming soon!";
   }
   
-  showBubble(msg, 5500);
+  showBubble(msg, blockedNoSession ? 9000 : 5500);
   playTone(880, 0.15);
   setTimeout(() => playTone(1100, 0.2), 150);
   
