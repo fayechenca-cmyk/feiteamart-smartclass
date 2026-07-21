@@ -317,6 +317,12 @@
     font-size: 14px;
   }
 
+  .card-student-email {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
   .card-meta {
     font-size: 12px;
     color: var(--ink-faint);
@@ -535,7 +541,7 @@
   // teacher_feedback / teacher-voice must come from RLS policies on
   // the Supabase project itself, not from this page.
   const SUPABASE_URL = 'https://rudztwseatwayhztbarj.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
 
   // Every function below is declared inside this same IIFE, so they all
   // already have closure access to the consts above. Also attach them to
@@ -560,57 +566,15 @@
   const SESSION_KEY = 'fei_teacher_admin_authed';
   const TEACHER_CODE_KEY = 'fei_teacher_admin_code';
 
-  // Hardcoded from core/student-access-codes.js (read-only reference —
-  // student_submissions rows carry user_name/user_email, not these
-  // codes, so matching below is best-effort by name).
-  const STUDENT_CODES = [
-    { id: 'FAYE-00', name: 'Faye' },
-    { id: 'REGINA-16', name: 'Regina' },
-    { id: 'JOJO-10', name: 'Jojo' },
-    { id: 'SERENA-09', name: 'Serena' },
-    { id: 'A7Q9-FOX', name: 'Amy' },
-    { id: 'BELLA-16', name: 'Bella' },
-    { id: 'Katy-06', name: 'Katy' },
-    { id: 'AMY-11', name: 'Amy G' },
-    { id: 'ELSA-09', name: 'Elsa' },
-    { id: 'REBECCA-20', name: 'Rebecca' },
-    { id: 'MELODY-21', name: 'Melody' },
-    { id: 'WALLACE-49X8', name: 'Wallace' },
-    { id: 'CHLOE-01', name: 'Chloe' },
-    { id: 'CAMERON-11', name: 'Cameron' },
-    { id: 'JUDY-07', name: 'Judy' },
-    { id: 'XINYUE-12', name: 'Xinyue' },
-    { id: 'KAILYNN-15', name: 'Kailynn' },
-    { id: 'ADRIAN-22', name: 'Adrian' },
-    { id: 'SERENA-13', name: 'Serena' },
-    { id: 'TEMP-09', name: 'Temp' },
-    { id: 'CODY-22', name: 'Cody' },
-    { id: 'SAM-18', name: 'Sam' },
-    { id: 'ALISSIE-05', name: 'Alissie' },
-    { id: 'NATALIE-17', name: 'Natalie' },
-    { id: 'RAINIE-08', name: 'Rainie' },
-    { id: 'SELENA-23', name: 'Selena' },
-    { id: 'XIDA-25', name: 'Xida' }
-  ];
-
-  function norm(s) {
-    return (s || '').toString().toLowerCase().replace(/[^a-z0-9]/g, '');
-  }
-
-  function matchStudentCode(sub) {
-    const nameN = norm(sub.user_name);
-    const emailLocal = sub.user_email ? sub.user_email.split('@')[0] : '';
-    const emailN = norm(emailLocal);
-    for (const c of STUDENT_CODES) {
-      const dispN = norm(c.name);
-      if (dispN && (dispN === nameN || dispN === emailN)) return c;
-    }
-    for (const c of STUDENT_CODES) {
-      const dispN = norm(c.name);
-      if (dispN && (nameN.includes(dispN) || emailN.includes(dispN))) return c;
-    }
-    return null;
-  }
+  // NOTE on student identity: student_submissions has no student_code
+  // column, and there's no way to derive one — student_progress (see
+  // core/progress.js) has no user_id column to join against, and
+  // FEISubmissions.submit() (core/submissions.js) requires an active
+  // Supabase Auth session, so legacy access-code students (JOJO-10 etc.,
+  // who sign in with a plain code, no Supabase session) can never submit
+  // through this system in the first place. Every row that CAN exist here
+  // already carries its real identity directly as user_name/user_email —
+  // that's used as-is below, no lookup/matching needed.
 
   function sbHeaders(extra) {
     return Object.assign({
@@ -851,16 +815,18 @@
     emptyState.hidden = true;
     groupsContainer.hidden = false;
 
-    // Group by matched student code, falling back to email as the key
-    // so unmatched students still get their own group.
+    // Group by the student's real Supabase identity (email is the
+    // stable unique key; user_id would be more precise but isn't always
+    // present on older rows, so email — required for every submitter,
+    // since submitting requires a signed-in Supabase Auth session — is
+    // what's used here).
     const groups = new Map();
     filtered.forEach(sub => {
-      const match = matchStudentCode(sub);
-      const key = match ? match.id : ('email:' + (sub.user_email || sub.id));
+      const key = sub.user_email || sub.user_id || ('row:' + sub.id);
       if (!groups.has(key)) {
         groups.set(key, {
-          label: match ? match.name : (sub.user_name || sub.user_email || 'Unknown student'),
-          code: match ? match.id : null,
+          label: sub.user_name || sub.user_email || 'Unknown student',
+          email: sub.user_email || null,
           submissions: []
         });
       }
@@ -877,24 +843,24 @@
       const header = document.createElement('div');
       header.className = 'student-group-header';
       header.textContent = group.label;
-      if (group.code) {
+      if (group.email) {
         const tag = document.createElement('span');
         tag.className = 'code-tag';
-        tag.textContent = group.code;
+        tag.textContent = group.email;
         header.appendChild(tag);
       }
       section.appendChild(header);
 
       const grid = document.createElement('div');
       grid.className = 'cards-grid';
-      group.submissions.forEach(sub => grid.appendChild(buildCard(sub, group)));
+      group.submissions.forEach(sub => grid.appendChild(buildCard(sub)));
       section.appendChild(grid);
 
       groupsContainer.appendChild(section);
     });
   }
 
-  function buildCard(sub, group) {
+  function buildCard(sub) {
     const feedbackRow = appState.feedbackBySubmissionId.get(sub.id);
 
     const card = document.createElement('div');
@@ -912,8 +878,15 @@
 
     const title = document.createElement('div');
     title.className = 'card-title';
-    title.textContent = (group.code || group.label) + ' · ' + group.label;
+    title.textContent = sub.user_name || sub.user_email || 'Unknown student';
     body.appendChild(title);
+
+    if (sub.user_email) {
+      const studentSub = document.createElement('div');
+      studentSub.className = 'card-student-email';
+      studentSub.textContent = sub.user_email;
+      body.appendChild(studentSub);
+    }
 
     const meta = document.createElement('div');
     meta.className = 'card-meta';
@@ -1033,9 +1006,8 @@
           voiceUrl = await uploadVoice(voiceFile, sub);
         }
 
-        const match = matchStudentCode(sub);
         const feedbackData = {
-          student_code: match ? match.id : (sub.user_email || sub.user_name || null),
+          student_code: sub.user_email || sub.user_name || null,
           lesson_id: sub.lesson_id || null,
           submission_id: sub.id,
           text_comment: textComment || null,
