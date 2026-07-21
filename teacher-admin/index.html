@@ -658,21 +658,26 @@
 
   document.getElementById('signOutBtn').addEventListener('click', () => {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
-    dashboard.hidden = true;
-    loginScreen.hidden = false;
+    dashboard.style.display = 'none';
+    loginScreen.style.display = 'flex';
     teacherCodeInput.value = '';
     loginError.hidden = true;
   });
 
   function showDashboard() {
-    loginScreen.hidden = true;
-    dashboard.hidden = false;
+    loginScreen.style.display = 'none';
+    dashboard.style.display = 'flex';
     if (!appState.loaded) loadData();
   }
 
   let alreadyAuthed = false;
   try { alreadyAuthed = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
-  if (alreadyAuthed) showDashboard();
+  if (alreadyAuthed) {
+    showDashboard();
+  } else {
+    dashboard.style.display = 'none';
+    loginScreen.style.display = 'flex';
+  }
 
   // ── Data loading ─────────────────────────────────────────────
 
