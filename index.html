@@ -386,6 +386,68 @@
   }
   .badge-detail-date { font-size: 11px; color: var(--ink-faint); margin-bottom: 20px; }
 
+  /* ═══ TEACHER FEEDBACK NOTIFICATION ═══ */
+  .feedback-notif-card {
+    border: 2px solid var(--gold);
+    background: #fffbf0;
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+  .feedback-notif-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .feedback-notif-title {
+    font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 800;
+    margin-bottom: 14px;
+  }
+  .feedback-notif-item {
+    padding: 14px 0;
+    border-top: 1px solid var(--ink-veryfaint);
+  }
+  .feedback-notif-item:first-child { border-top: none; padding-top: 0; }
+  .feedback-notif-meta {
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 12px; color: var(--ink-faint); margin-bottom: 8px;
+  }
+  .feedback-notif-comment {
+    font-style: italic;
+    border-left: 3px solid var(--gold);
+    background: rgba(200,169,110,0.06);
+    padding: 8px 14px;
+    margin-bottom: 10px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .feedback-audio-player {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .feedback-notif-dismiss {
+    display: block;
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--ink-veryfaint);
+    color: var(--ink-soft);
+    padding: 7px 14px;
+    border-radius: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .feedback-notif-dismiss:hover { background: var(--paper-soft); border-color: var(--gold); }
+
+  @media (max-width: 480px) {
+    .feedback-notif-card { padding: 16px; }
+    .feedback-notif-dismiss { width: 100%; margin-left: 0; }
+  }
+
   /* ═══ MAIN CONTAINER ═══ */
   .container {
     max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
@@ -1301,6 +1363,15 @@
     <p class="hero-subtitle">What kind of practice today?</p>
   </div>
 
+  <!-- ═══ TEACHER FEEDBACK NOTIFICATION ═══
+       Hidden by default, populated + shown by renderFeedbackNotification()
+       only when checkUnreadFeedback() finds unread teacher_feedback rows. -->
+  <div class="feedback-notif-card" id="feedback-notif-card" style="display:none;">
+    <div class="feedback-notif-kicker">TEACHER FEEDBACK</div>
+    <div class="feedback-notif-title" id="feedback-notif-title">Your teacher left you feedback</div>
+    <div id="feedback-notif-items"></div>
+  </div>
+
   <!-- ═══ CONTINUE LEARNING ═══
        First thing the student sees after the header. Shows the
        current / next recommended lesson. Always shown, even for
@@ -1602,6 +1673,12 @@
   const ROSTER_PATH = 'core/student-access-codes.js';
   const STUDENTS_PATH = 'core/students.json';
   const PROFILE_KEY = 'fei_user_profile';
+
+  // Teacher feedback notification — same Supabase project, same JWT
+  // anon key core/submissions.js already uses successfully against
+  // student_submissions / teacher_feedback.
+  const FB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
+  const FB_URL = 'https://rudztwseatwayhztbarj.supabase.co';
   
   // ═══════════════════════════════════════════════════════════
   // FOUNDATION A PATH — order is configurable!
@@ -1965,6 +2042,128 @@
     // all 11 Foundation A lessons are complete.
     checkAndUnlockBadge();
   }
+
+  // ═══════════════════════════════════════════════════════════
+  // TEACHER FEEDBACK NOTIFICATION
+  // Checks teacher_feedback (written by teacher-admin/index.html) for
+  // unread rows matching this student, and surfaces them at the top of
+  // the dashboard. Non-blocking by design — a failure here should never
+  // break the dashboard, so checkUnreadFeedback() swallows its own
+  // errors silently; callers additionally wrap it in .catch() as a
+  // second safety net (see the call sites in attemptSignIn(),
+  // onAuthSuccess(), and init()'s returning-legacy-profile branch).
+  // ═══════════════════════════════════════════════════════════
+
+  function feedbackEscapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
+
+  function feedbackLessonName(lessonId) {
+    if (!lessonId) return 'Lesson';
+    const match = FOUNDATION_A_PATH.find(l => l.id === lessonId);
+    return match ? match.title : lessonId;
+  }
+
+  function feedbackFormatDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const startOfDay = (dt) => new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime();
+    const diffDays = Math.round((startOfDay(new Date()) - startOfDay(d)) / 86400000);
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays > 1 && diffDays < 7) return diffDays + ' days ago';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  async function checkUnreadFeedback() {
+    try {
+      if (!userProfile) return;
+      const identifier = userProfile.studentCode || userProfile.email;
+      if (!identifier) return;
+
+      const res = await fetch(
+        `${FB_URL}/rest/v1/teacher_feedback?student_code=eq.${encodeURIComponent(identifier)}&is_read=eq.false`,
+        {
+          headers: {
+            apikey: FB_KEY,
+            Authorization: 'Bearer ' + FB_KEY
+          }
+        }
+      );
+      if (!res.ok) return;
+
+      const items = await res.json();
+      if (Array.isArray(items) && items.length > 0) {
+        renderFeedbackNotification(items);
+      }
+    } catch (e) {
+      // Fails silently by design — a broken feedback lookup should never
+      // block or break the dashboard for a student.
+    }
+  }
+  window.checkUnreadFeedback = checkUnreadFeedback;
+
+  function renderFeedbackNotification(items) {
+    const card = document.getElementById('feedback-notif-card');
+    const titleEl = document.getElementById('feedback-notif-title');
+    const itemsEl = document.getElementById('feedback-notif-items');
+    if (!card || !titleEl || !itemsEl) return;
+
+    titleEl.textContent = `Your teacher left you ${items.length} comment${items.length === 1 ? '' : 's'}`;
+
+    itemsEl.innerHTML = items.map(item => `
+      <div class="feedback-notif-item" id="feedback-item-${feedbackEscapeHtml(item.id)}">
+        <div class="feedback-notif-meta">${feedbackEscapeHtml(feedbackLessonName(item.lesson_id))} · ${feedbackFormatDate(item.created_at)}</div>
+        ${item.text_comment ? `<div class="feedback-notif-comment">"${feedbackEscapeHtml(item.text_comment)}"</div>` : ''}
+        ${item.voice_url ? `<audio class="feedback-audio-player" controls src="${feedbackEscapeHtml(item.voice_url)}"></audio>` : ''}
+        <button class="feedback-notif-dismiss" onclick="markFeedbackRead('${item.id}')">Mark as read</button>
+      </div>
+    `).join('');
+
+    card.style.display = 'block';
+  }
+  window.renderFeedbackNotification = renderFeedbackNotification;
+
+  async function markFeedbackRead(id) {
+    try {
+      const res = await fetch(
+        `${FB_URL}/rest/v1/teacher_feedback?id=eq.${encodeURIComponent(id)}`,
+        {
+          method: 'PATCH',
+          headers: {
+            apikey: FB_KEY,
+            Authorization: 'Bearer ' + FB_KEY,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal'
+          },
+          body: JSON.stringify({ is_read: true })
+        }
+      );
+      if (!res.ok) return;
+
+      const itemEl = document.getElementById('feedback-item-' + id);
+      if (itemEl) itemEl.remove();
+
+      const itemsEl = document.getElementById('feedback-notif-items');
+      const card = document.getElementById('feedback-notif-card');
+      if (!itemsEl || !card) return;
+
+      if (itemsEl.children.length === 0) {
+        card.style.display = 'none';
+      } else {
+        const titleEl = document.getElementById('feedback-notif-title');
+        const remaining = itemsEl.children.length;
+        if (titleEl) {
+          titleEl.textContent = `Your teacher left you ${remaining} comment${remaining === 1 ? '' : 's'}`;
+        }
+      }
+    } catch (e) {
+      // Fails silently by design
+    }
+  }
+  window.markFeedbackRead = markFeedbackRead;
 
   // ═══════════════════════════════════════════════════════════
   // BASIC SKETCH BADGE
@@ -2521,8 +2720,9 @@
     };
     saveProfile(profile);
     showHome();
+    checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
   }
-  
+
   // ═══════════════════════════════════════════════════════════
   // SIGN OUT
   // ═══════════════════════════════════════════════════════════
@@ -2847,6 +3047,7 @@
     } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
 
     showHome();
+    checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -3089,6 +3290,7 @@
         showPaidWelcome(plan);
       }
       showHome();
+      checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
       // Legacy access-code users have full access; paywall param is irrelevant
       // for them, so we ignore pendingPaywall on this branch.
     } else {
