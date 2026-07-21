@@ -5083,6 +5083,137 @@ async function hasSupabaseAuthSession() {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// Direct upload for access-code students (no Supabase Auth session).
+// student_submissions now has a student_code column (SQL migration),
+// so this saves straight via REST + Storage with the anon key —
+// no Auth session needed. Separate from state.uploadedFile/
+// submitToSupabase() (the Google/email-auth path above), which
+// requires a real session and can't work for these students.
+// ═══════════════════════════════════════════════════════════════
+const ACCESS_UPLOAD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
+const ACCESS_UPLOAD_URL = 'https://rudztwseatwayhztbarj.supabase.co';
+let accessCodeUploadFile = null;
+
+function onAccessCodeFileSelected(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    showBubble('Please pick an image file (JPG or PNG)', 3000);
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showBubble('Image is too large (max 10MB). Try a smaller photo.', 3500);
+    return;
+  }
+
+  accessCodeUploadFile = file;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = document.getElementById('upload-file-preview-ac');
+    const label = document.getElementById('upload-file-label-ac');
+    if (preview) {
+      preview.innerHTML = `
+        <img src="${e.target.result}" alt="Your drawing" class="upload-file-preview-img">
+        <div class="upload-file-preview-meta">
+          <span>✓ ${escapeHtml(file.name)}</span>
+          <span class="upload-file-replace" onclick="document.getElementById('upload-file-input-ac').click()">Replace</span>
+        </div>
+      `;
+      preview.style.display = 'block';
+    }
+    if (label) label.style.display = 'none';
+    const sendBtn = document.getElementById('access-code-send-btn');
+    if (sendBtn) sendBtn.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+
+  Analytics.track('upload_file_selected', {
+    file_size: file.size,
+    file_type: file.type
+  });
+}
+
+async function sendAccessCodeUpload() {
+  if (!accessCodeUploadFile) return;
+
+  const profile = UserProfile.current();
+  if (!profile || !profile.studentCode) {
+    showBubble('Could not identify your student account. Please sign in again.', 4000);
+    return;
+  }
+
+  const statusEl = document.getElementById('access-code-upload-status');
+  const sendBtn = document.getElementById('access-code-send-btn');
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; }
+  if (statusEl) statusEl.textContent = 'Uploading your artwork… ⏳';
+
+  try {
+    const ext = (accessCodeUploadFile.name && accessCodeUploadFile.name.includes('.'))
+      ? accessCodeUploadFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg'
+      : 'jpg';
+    const uploadPath = `${profile.studentCode}/${LESSON.id}/${Date.now()}_artwork.${ext}`;
+
+    const uploadRes = await fetch(`${ACCESS_UPLOAD_URL}/storage/v1/object/student-artwork/${uploadPath}`, {
+      method: 'POST',
+      headers: {
+        apikey: ACCESS_UPLOAD_KEY,
+        Authorization: 'Bearer ' + ACCESS_UPLOAD_KEY,
+        'Content-Type': accessCodeUploadFile.type || 'application/octet-stream'
+      },
+      body: accessCodeUploadFile
+    });
+    if (!uploadRes.ok) {
+      const errText = await uploadRes.text().catch(() => '');
+      throw new Error('Storage upload failed (' + uploadRes.status + ') ' + errText);
+    }
+
+    const imageUrl = `${ACCESS_UPLOAD_URL}/storage/v1/object/public/student-artwork/${uploadPath}`;
+
+    const displayName = (typeof StudentRoster !== 'undefined' && StudentRoster.getDisplayName)
+      ? (StudentRoster.getDisplayName(profile.studentCode) || profile.studentCode)
+      : profile.studentCode;
+
+    const insertRes = await fetch(`${ACCESS_UPLOAD_URL}/rest/v1/student_submissions`, {
+      method: 'POST',
+      headers: {
+        apikey: ACCESS_UPLOAD_KEY,
+        Authorization: 'Bearer ' + ACCESS_UPLOAD_KEY,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({
+        student_code: profile.studentCode,
+        user_name: displayName,
+        user_email: null,
+        lesson_id: LESSON.id,
+        image_url: imageUrl,
+        status: 'submitted'
+      })
+    });
+    if (!insertRes.ok) {
+      const errText = await insertRes.text().catch(() => '');
+      throw new Error('Save failed (' + insertRes.status + ') ' + errText);
+    }
+
+    if (statusEl) statusEl.textContent = '✓ Artwork sent to your teacher!';
+    if (sendBtn) sendBtn.textContent = 'Sent ✓';
+    Analytics.track('submission_access_code_success', { lesson_id: LESSON.id });
+
+    setTimeout(() => closeUploadModal(), 2000);
+  } catch (err) {
+    console.error('[AccessCodeUpload] failed', err);
+    if (statusEl) statusEl.textContent = "⚠️ Couldn't send — please try again, or use the form below.";
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send to teacher →'; }
+    Analytics.track('submission_access_code_failed', {
+      lesson_id: LESSON.id,
+      error: String(err && err.message || err)
+    });
+  }
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1b · ANALYTICS
@@ -10727,27 +10858,52 @@ function openUploadModal() {
     return; // ← exit early, don't show the normal tier modal
   }
 
-  // Access-code students (no Supabase Auth session) can't have artwork
-  // saved through this upload system — redirect them to the class
-  // submission form instead of showing a file picker that can't work.
+  // Access-code students (no Supabase Auth session) get a direct upload
+  // path — student_submissions now has a student_code column, so their
+  // artwork can be saved via plain REST calls with the anon key, no
+  // Supabase Auth session required. Tally stays as a secondary option.
   if (isAccessCodeStudent()) {
     const content = document.getElementById('upload-modal-content');
     if (content) {
       content.innerHTML = `
         <div class="modal-title">📋 Submit your artwork</div>
         <div class="modal-sub" style="margin-bottom: 20px;">
-          To submit your artwork, please use the class submission form →
+          Upload a photo of your artwork — it goes straight to your teacher.
         </div>
 
-        <a href="https://tally.so/r/3NN4VW"
-           target="_blank"
-           rel="noopener"
-           class="btn btn-gold"
-           style="display: flex; align-items: center; justify-content: center;
-                  gap: 8px; text-decoration: none; margin-bottom: 16px;
-                  font-size: 14px; padding: 16px 20px; border-radius: 30px;">
-          📋 Open class submission form →
-        </a>
+        <div class="upload-file-block">
+          <label for="upload-file-input-ac" class="upload-file-label" id="upload-file-label-ac">
+            <div class="upload-file-icon">📷</div>
+            <div class="upload-file-text">
+              <div class="upload-file-text-main">Upload your artwork</div>
+              <div class="upload-file-text-sub">JPG or PNG · From your device</div>
+            </div>
+          </label>
+          <input type="file"
+                 id="upload-file-input-ac"
+                 accept="image/*"
+                 style="display:none"
+                 onchange="onAccessCodeFileSelected(event)">
+          <div class="upload-file-preview" id="upload-file-preview-ac" style="display:none"></div>
+        </div>
+
+        <div id="access-code-upload-status" style="font-size: 12px; color: var(--ink-muted); margin: 10px 0; text-align: center;"></div>
+
+        <button class="btn btn-gold" id="access-code-send-btn"
+                style="display:none; width: 100%; align-items: center; justify-content: center;
+                       margin-bottom: 16px; font-size: 14px; padding: 16px 20px; border-radius: 30px;"
+                onclick="sendAccessCodeUpload()">
+          Send to teacher →
+        </button>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 16px; text-align: center;">
+          <a href="https://tally.so/r/3NN4VW"
+             target="_blank"
+             rel="noopener"
+             style="font-size: 12px; color: var(--ink-muted); text-decoration: underline;">
+            Or submit via form: tally.so/r/3NN4VW
+          </a>
+        </div>
 
         <div class="btn-stack" style="margin-top: 16px;">
           <button class="btn btn-ghost" onclick="closeUploadModal()">
