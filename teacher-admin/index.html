@@ -492,7 +492,7 @@
       <button class="nav-link" data-filter="pending">⏳ Pending Review</button>
     </nav>
     <div class="sidebar-footer">
-      <div class="sidebar-user">Logged in as: <strong>Teacher Faye</strong></div>
+      <div class="sidebar-user">Logged in as: <strong id="loggedInAsName">Teacher Faye</strong></div>
       <button class="sign-out-btn" id="signOutBtn">Sign out</button>
     </div>
   </aside>
@@ -541,8 +541,14 @@
   const FEEDBACK_TABLE = 'teacher_feedback';
   const VOICE_BUCKET = 'teacher-voice';
 
-  const TEACHER_CODES = ['TEACHER-FAYE', 'FAYE-00'];
+  const TEACHER_CODES = ['TEACHER-FAYE', 'FAYE-00', 'TEACHER-DAWN'];
+  const TEACHER_NAMES = {
+    'TEACHER-FAYE': 'Teacher Faye',
+    'FAYE-00': 'Teacher Faye',
+    'TEACHER-DAWN': 'Teacher Dawn'
+  };
   const SESSION_KEY = 'fei_teacher_admin_authed';
+  const TEACHER_CODE_KEY = 'fei_teacher_admin_code';
 
   // Hardcoded from core/student-access-codes.js (read-only reference —
   // student_submissions rows carry user_name/user_email, not these
@@ -603,6 +609,19 @@
     }, extra || {});
   }
 
+  // Plain fetch() has no timeout — if the request hangs (dead network,
+  // blocked host, etc.) it never resolves OR rejects, so code sitting on
+  // `await fetch(...)` waits forever and the loading spinner never clears.
+  // This wraps fetch with an AbortController so a stuck request always
+  // eventually rejects and falls into the caller's catch block.
+  const FETCH_TIMEOUT_MS = 12000;
+  function fetchWithTimeout(url, options) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    return fetch(url, Object.assign({}, options, { signal: controller.signal }))
+      .finally(() => clearTimeout(timer));
+  }
+
   function escapeHtml(str) {
     const d = document.createElement('div');
     d.textContent = str == null ? '' : String(str);
@@ -638,10 +657,19 @@
   const loginError = document.getElementById('loginError');
   const dashboard = document.getElementById('dashboard');
 
+  function setTeacherNameDisplay(code) {
+    const nameEl = document.getElementById('loggedInAsName');
+    if (nameEl) nameEl.textContent = TEACHER_NAMES[code] || 'Teacher Faye';
+  }
+
   function tryLogin() {
     const code = (teacherCodeInput.value || '').trim().toUpperCase();
     if (TEACHER_CODES.includes(code)) {
-      try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+      try {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        sessionStorage.setItem(TEACHER_CODE_KEY, code);
+      } catch (e) {}
+      setTeacherNameDisplay(code);
       showDashboard();
     } else {
       loginError.hidden = false;
@@ -657,7 +685,10 @@
   });
 
   document.getElementById('signOutBtn').addEventListener('click', () => {
-    try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem(TEACHER_CODE_KEY);
+    } catch (e) {}
     dashboard.style.display = 'none';
     loginScreen.style.display = 'flex';
     teacherCodeInput.value = '';
@@ -671,8 +702,13 @@
   }
 
   let alreadyAuthed = false;
-  try { alreadyAuthed = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
+  let storedTeacherCode = null;
+  try {
+    alreadyAuthed = sessionStorage.getItem(SESSION_KEY) === '1';
+    storedTeacherCode = sessionStorage.getItem(TEACHER_CODE_KEY);
+  } catch (e) {}
   if (alreadyAuthed) {
+    setTeacherNameDisplay(storedTeacherCode);
     showDashboard();
   } else {
     dashboard.style.display = 'none';
@@ -694,26 +730,41 @@
   const groupsContainer = document.getElementById('groupsContainer');
 
   async function loadData() {
+    console.log('[TeacherAdmin] Fetching submissions...');
     loadingState.hidden = false;
     emptyState.hidden = true;
     groupsContainer.hidden = true;
 
     try {
       const [subsRes, fbRes] = await Promise.all([
-        fetch(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
+        fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
           headers: sbHeaders()
         }),
-        fetch(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}?select=*`, {
+        fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}?select=*`, {
           headers: sbHeaders()
         })
       ]);
 
+      console.log('[TeacherAdmin] Response status:', subsRes.status);
+
       if (!subsRes.ok) throw new Error('Failed to load submissions (' + subsRes.status + ')');
-      const submissions = await subsRes.json();
+
+      let submissions;
+      try {
+        submissions = await subsRes.json();
+      } catch (parseErr) {
+        throw new Error('Could not parse submissions response: ' + parseErr.message);
+      }
+
+      console.log('[TeacherAdmin] Submissions count:', submissions.length);
 
       let feedback = [];
       if (fbRes.ok) {
-        feedback = await fbRes.json();
+        try {
+          feedback = await fbRes.json();
+        } catch (parseErr) {
+          console.warn('[teacher-admin] Failed to parse teacher_feedback response', parseErr);
+        }
       } else {
         console.warn('[teacher-admin] Failed to load teacher_feedback', fbRes.status);
       }
@@ -726,12 +777,16 @@
       appState.loaded = true;
 
       loadingState.hidden = true;
+      // render() already shows "No submissions yet" immediately when
+      // appState.submissions is empty (see the length===0 check at the
+      // top of render()) — no separate empty-array branch needed here.
       render();
     } catch (err) {
-      console.error('[teacher-admin] loadData failed', err);
+      console.error('[TeacherAdmin] loadData failed', err);
       loadingState.hidden = true;
+      groupsContainer.hidden = true;
       emptyState.hidden = false;
-      emptyStateMsg.textContent = 'Could not load submissions. Check your connection and try refreshing.';
+      emptyStateMsg.textContent = 'Could not load submissions. Check your connection.';
     }
   }
 
