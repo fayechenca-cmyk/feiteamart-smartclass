@@ -323,6 +323,18 @@
     margin-top: 2px;
   }
 
+  .card-student-code {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    color: var(--ink);
+    background: var(--paper-soft);
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin-top: 4px;
+  }
+
   .card-meta {
     font-size: 12px;
     color: var(--ink-faint);
@@ -602,21 +614,6 @@
     return d.innerHTML;
   }
 
-  function timeAgo(iso) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const diffMs = Date.now() - d.getTime();
-    const days = Math.floor(diffMs / 86400000);
-    if (days <= 0) {
-      const hours = Math.floor(diffMs / 3600000);
-      if (hours <= 0) return 'just now';
-      return hours + (hours === 1 ? ' hour ago' : ' hours ago');
-    }
-    if (days === 1) return '1 day ago';
-    if (days < 30) return days + ' days ago';
-    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
   function formatDate(iso) {
     if (!iso) return '';
     return new Date(iso).toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
@@ -709,11 +706,14 @@
   }
 
   async function loadData() {
-    console.log('[TeacherAdmin] Fetching submissions...');
+    console.log('[Admin] Fetching...');
     loadingState.hidden = false;
     emptyState.hidden = true;
     groupsContainer.hidden = true;
 
+    // The whole body runs inside try/finally so the spinner is
+    // GUARANTEED to be hidden when this function exits — success,
+    // empty result, or error — no branch can leave it spinning.
     try {
       const [subsRes, fbRes] = await Promise.all([
         fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
@@ -724,8 +724,6 @@
         })
       ]);
 
-      console.log('[TeacherAdmin] Response status:', subsRes.status);
-
       if (!subsRes.ok) throw new Error('Failed to load submissions (' + subsRes.status + ')');
 
       let submissions;
@@ -735,7 +733,7 @@
         throw new Error('Could not parse submissions response: ' + parseErr.message);
       }
 
-      console.log('[TeacherAdmin] Submissions count:', submissions.length);
+      console.log('[Admin] Status:', subsRes.status, 'Rows:', submissions.length);
 
       let feedback = [];
       if (fbRes.ok) {
@@ -755,17 +753,17 @@
       });
       appState.loaded = true;
 
-      loadingState.hidden = true;
-      // render() already shows "No submissions yet" immediately when
+      // render() shows "No submissions yet" immediately when
       // appState.submissions is empty (see the length===0 check at the
       // top of render()) — no separate empty-array branch needed here.
       render();
     } catch (err) {
-      console.error('[TeacherAdmin] loadData failed', err);
-      loadingState.hidden = true;
+      console.log('[Admin] Error:', err);
       groupsContainer.hidden = true;
       emptyState.hidden = false;
       emptyStateMsg.textContent = 'Could not load submissions. Check your connection.';
+    } finally {
+      loadingState.hidden = true;
     }
   }
 
@@ -815,18 +813,18 @@
     emptyState.hidden = true;
     groupsContainer.hidden = false;
 
-    // Group by the student's real Supabase identity (email is the
-    // stable unique key; user_id would be more precise but isn't always
-    // present on older rows, so email — required for every submitter,
-    // since submitting requires a signed-in Supabase Auth session — is
-    // what's used here).
+    // Group by the student's identity. student_code (access-code
+    // students — no Supabase Auth session, so no user_email/user_id at
+    // all) takes priority since it's the real stable identifier for
+    // those rows; otherwise fall back to user_email (Supabase-authed
+    // students), then user_id, then the row itself as a last resort.
     const groups = new Map();
     filtered.forEach(sub => {
-      const key = sub.user_email || sub.user_id || ('row:' + sub.id);
+      const key = sub.student_code || sub.user_email || sub.user_id || ('row:' + sub.id);
       if (!groups.has(key)) {
         groups.set(key, {
-          label: sub.user_name || sub.user_email || 'Unknown student',
-          email: sub.user_email || null,
+          label: sub.user_name || sub.student_code || sub.user_email || 'Unknown student',
+          identifier: sub.student_code || sub.user_email || null,
           submissions: []
         });
       }
@@ -843,10 +841,10 @@
       const header = document.createElement('div');
       header.className = 'student-group-header';
       header.textContent = group.label;
-      if (group.email) {
+      if (group.identifier) {
         const tag = document.createElement('span');
         tag.className = 'code-tag';
-        tag.textContent = group.email;
+        tag.textContent = group.identifier;
         header.appendChild(tag);
       }
       section.appendChild(header);
@@ -878,10 +876,18 @@
 
     const title = document.createElement('div');
     title.className = 'card-title';
-    title.textContent = sub.user_name || sub.user_email || 'Unknown student';
+    title.textContent = sub.user_name || sub.student_code || sub.user_email || 'Unknown student';
     body.appendChild(title);
 
-    if (sub.user_email) {
+    // Access-code students (student_code set) never have a real email —
+    // show their code prominently instead. Supabase-authed students
+    // (student_code null) show email as before.
+    if (sub.student_code) {
+      const studentCode = document.createElement('div');
+      studentCode.className = 'card-student-code';
+      studentCode.textContent = sub.student_code;
+      body.appendChild(studentCode);
+    } else if (sub.user_email) {
       const studentSub = document.createElement('div');
       studentSub.className = 'card-student-email';
       studentSub.textContent = sub.user_email;
@@ -890,7 +896,7 @@
 
     const meta = document.createElement('div');
     meta.className = 'card-meta';
-    meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—') + ' · Submitted ' + timeAgo(sub.created_at);
+    meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—') + ' · Submitted ' + formatDate(sub.created_at);
     body.appendChild(meta);
 
     if (feedbackRow) {
