@@ -5150,33 +5150,47 @@ async function sendAccessCodeUpload() {
   if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; }
   if (statusEl) statusEl.textContent = 'Uploading your artwork… ⏳';
 
+  const file = accessCodeUploadFile;
+  const fileName = Date.now() + '_' + Math.random().toString(36).slice(2) + '.jpg';
+
+  // Storage upload — tracked independently of the DB insert below (see
+  // note e in the task: only show the error state if BOTH fail).
+  let storageOk = false;
+  let imageUrl = null;
   try {
-    const ext = (accessCodeUploadFile.name && accessCodeUploadFile.name.includes('.'))
-      ? accessCodeUploadFile.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg'
-      : 'jpg';
-    const uploadPath = `${profile.studentCode}/${LESSON.id}/${Date.now()}_artwork.${ext}`;
-
-    const uploadRes = await fetch(`${ACCESS_UPLOAD_URL}/storage/v1/object/student-artwork/${uploadPath}`, {
-      method: 'POST',
-      headers: {
-        apikey: ACCESS_UPLOAD_KEY,
-        Authorization: 'Bearer ' + ACCESS_UPLOAD_KEY,
-        'Content-Type': accessCodeUploadFile.type || 'application/octet-stream'
-      },
-      body: accessCodeUploadFile
-    });
-    if (!uploadRes.ok) {
+    const uploadRes = await fetch(
+      'https://rudztwseatwayhztbarj.supabase.co/storage/v1/object/student-artwork/' + fileName,
+      {
+        method: 'POST',
+        headers: {
+          'apikey': ACCESS_UPLOAD_KEY,
+          'Authorization': 'Bearer ' + ACCESS_UPLOAD_KEY,
+          'Content-Type': file.type,
+          'x-upsert': 'true'
+        },
+        body: file
+      }
+    );
+    if (uploadRes.ok) {
+      storageOk = true;
+      imageUrl = 'https://rudztwseatwayhztbarj.supabase.co/storage/v1/object/public/student-artwork/' + fileName;
+    } else {
       const errText = await uploadRes.text().catch(() => '');
-      throw new Error('Storage upload failed (' + uploadRes.status + ') ' + errText);
+      console.log('[AccessCodeUpload] storage upload failed:', uploadRes.status, errText);
     }
+  } catch (storageErr) {
+    console.log('[AccessCodeUpload] storage upload error:', storageErr);
+  }
 
-    const imageUrl = `${ACCESS_UPLOAD_URL}/storage/v1/object/public/student-artwork/${uploadPath}`;
+  const displayName = (typeof StudentRoster !== 'undefined' && StudentRoster.getDisplayName)
+    ? (StudentRoster.getDisplayName(profile.studentCode) || profile.studentCode)
+    : profile.studentCode;
 
-    const displayName = (typeof StudentRoster !== 'undefined' && StudentRoster.getDisplayName)
-      ? (StudentRoster.getDisplayName(profile.studentCode) || profile.studentCode)
-      : profile.studentCode;
-
-    const insertRes = await fetch(`${ACCESS_UPLOAD_URL}/rest/v1/student_submissions`, {
+  // DB insert — attempted even if storage failed above (image_url will
+  // be null in that case), per the same independent-tracking note.
+  let insertOk = false;
+  try {
+    const insertRes = await fetch('https://rudztwseatwayhztbarj.supabase.co/rest/v1/student_submissions', {
       method: 'POST',
       headers: {
         apikey: ACCESS_UPLOAD_KEY,
@@ -5193,27 +5207,32 @@ async function sendAccessCodeUpload() {
         status: 'submitted'
       })
     });
-    if (!insertRes.ok) {
+    if (insertRes.ok) {
+      insertOk = true;
+    } else {
       const errText = await insertRes.text().catch(() => '');
-      throw new Error('Save failed (' + insertRes.status + ') ' + errText);
+      console.log('[AccessCodeUpload] database insert failed:', insertRes.status, errText);
     }
+  } catch (insertErr) {
+    console.log('[AccessCodeUpload] database insert error:', insertErr);
+  }
 
-    if (statusEl) statusEl.textContent = '✓ Artwork sent to your teacher!';
+  if (storageOk || insertOk) {
+    if (statusEl) statusEl.textContent = '✓ Sent to your teacher!';
     if (sendBtn) sendBtn.textContent = 'Sent ✓';
-    Analytics.track('submission_access_code_success', { lesson_id: LESSON.id });
-
-    setTimeout(() => closeUploadModal(), 2000);
-  } catch (err) {
-    console.error('[AccessCodeUpload] failed', err);
-    if (statusEl) statusEl.textContent = "⚠️ Couldn't send — please try again, or use the form below.";
-    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send to teacher →'; }
-    Analytics.track('submission_access_code_failed', {
+    Analytics.track('submission_access_code_success', {
       lesson_id: LESSON.id,
-      error: String(err && err.message || err)
+      storage_ok: storageOk,
+      insert_ok: insertOk
     });
+    setTimeout(() => closeUploadModal(), 2000);
+  } else {
+    console.log('[AccessCodeUpload] failed — both storage upload and database insert failed');
+    if (statusEl) statusEl.textContent = "⚠️ Couldn't send — please try again.";
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send to teacher →'; }
+    Analytics.track('submission_access_code_failed', { lesson_id: LESSON.id });
   }
 }
-
 
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1b · ANALYTICS
@@ -10843,16 +10862,6 @@ function openUploadModal() {
                 onclick="sendAccessCodeUpload()">
           Send to teacher →
         </button>
-
-        <div style="border-top: 1px solid var(--border); padding-top: 16px; text-align: center;">
-          <a href="https://tally.so/r/3NN4VW"
-             target="_blank"
-             rel="noopener"
-             style="font-size: 12px; color: var(--ink-muted); text-decoration: underline;">
-            Or submit via form: tally.so/r/3NN4VW
-          </a>
-        </div>
-
         <div class="btn-stack" style="margin-top: 16px;">
           <button class="btn btn-ghost" onclick="closeUploadModal()">
             Cancel
