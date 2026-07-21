@@ -537,6 +537,16 @@
   const SUPABASE_URL = 'https://rudztwseatwayhztbarj.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
 
+  // Every function below is declared inside this same IIFE, so they all
+  // already have closure access to the consts above. Also attach them to
+  // window — mirrors core/auth.js attaching its config onto window.FEIAuth
+  // (global.FEIAuth = { ..., SUPABASE_URL, ... }) — so the config is
+  // reachable from outside this file too (console debugging, future
+  // scripts on this page). Safe to expose: this is the sb_publishable_
+  // key, meant to be public in client code (same key core/auth.js uses).
+  window.SUPABASE_URL = SUPABASE_URL;
+  window.SUPABASE_KEY = SUPABASE_KEY;
+
   const SUBMISSIONS_TABLE = 'student_submissions';
   const FEEDBACK_TABLE = 'teacher_feedback';
   const VOICE_BUCKET = 'teacher-voice';
@@ -648,6 +658,25 @@
     return new Date(iso).toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
   }
 
+  // ── Data loading ─────────────────────────────────────────────
+  // Declared before the Login section — showDashboard() (below) can
+  // run synchronously during page load (see the alreadyAuthed check),
+  // and it reads appState.loaded, so appState must already exist by
+  // then or it throws "Cannot access 'appState' before initialization"
+  // (TDZ: a const declared later in the same scope isn't usable yet).
+
+  const appState = {
+    loaded: false,
+    submissions: [],
+    feedbackBySubmissionId: new Map(),
+    filter: 'all'
+  };
+
+  const loadingState = document.getElementById('loadingState');
+  const emptyState = document.getElementById('emptyState');
+  const emptyStateMsg = document.getElementById('emptyStateMsg');
+  const groupsContainer = document.getElementById('groupsContainer');
+
   // ── Login ─────────────────────────────────────────────────────
 
   const loginScreen = document.getElementById('loginScreen');
@@ -714,20 +743,6 @@
     dashboard.style.display = 'none';
     loginScreen.style.display = 'flex';
   }
-
-  // ── Data loading ─────────────────────────────────────────────
-
-  const appState = {
-    loaded: false,
-    submissions: [],
-    feedbackBySubmissionId: new Map(),
-    filter: 'all'
-  };
-
-  const loadingState = document.getElementById('loadingState');
-  const emptyState = document.getElementById('emptyState');
-  const emptyStateMsg = document.getElementById('emptyStateMsg');
-  const groupsContainer = document.getElementById('groupsContainer');
 
   async function loadData() {
     console.log('[TeacherAdmin] Fetching submissions...');
