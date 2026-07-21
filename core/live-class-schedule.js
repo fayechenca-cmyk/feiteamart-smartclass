@@ -37,7 +37,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Introduction to sketching tools, pencil grip, hatching techniques, and basic cube perspective through drawing a cardboard box.',
       date: 'Jun 14, 2026',
       time: '7:00 PM ET',
-      status: 'past', // 'upcoming' | 'past' | 'today'
       zoom: null, // null = use defaultZoom
       smartClassRef: 'cube', // which Smart Class lesson to reference (optional)
       smartClassNote: 'Watch the Cube lesson in Smart Class before this session.',
@@ -55,7 +54,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Learn how to observe and construct a rectangular plaster form, with support from the cube sketching video lesson.',
       date: 'Jun 28, 2026',
       time: '7:00 PM ET',
-      status: 'past',
       zoom: null,
       smartClassRef: 'cube',
       smartClassNote: 'Watch the Cube lesson in Smart Class for reference.',
@@ -76,7 +74,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Apply cube structure to draw a paper bag with full shading, values, and cast shadows.',
       date: 'Jul 12, 2026',
       time: '7:00 PM ET',
-      status: 'past',
       zoom: null,
       smartClassRef: null,
       smartClassNote: null,
@@ -97,7 +94,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Study folded-paper structure through an origami animal, using the paper crane as a visual reference.',
       date: 'Jul 26, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'papercrane',
       smartClassNote: 'The homework for this class is connected to the Paper Crane lesson in Smart Class. Complete it as your reference before drawing.',
@@ -115,7 +111,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Learn circular perspective and draw cylindrical everyday objects with clear structural lines.',
       date: 'Aug 9, 2026',
       time: '7:00 PM Vancouver',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'cylinder',
       smartClassNote: 'Watch the Cylinder lesson in Smart Class before drawing.',
@@ -136,7 +131,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Practice drawing cylinders from different viewpoints and complete a cylinder plaster sketch.',
       date: 'Aug 23, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'cylinder',
       smartClassNote: null,
@@ -157,7 +151,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Draw a glass cup while learning how to observe ellipses, thickness, and transparent form.',
       date: 'Sep 6, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: {
         meetingId: '509 019 0896',
         passcode: '431432',
@@ -182,7 +175,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Learn how to draw a cone with shading, then connect it to more complex intersecting plaster forms.',
       date: 'Sep 20, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'cone',
       smartClassNote: 'Watch the Cone lesson in Smart Class before class.',
@@ -203,7 +195,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Understand how light moves across a sphere and complete a plaster sphere sketch.',
       date: 'Oct 4, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'sphere',
       smartClassNote: 'Watch the Sphere lesson in Smart Class for reference.',
@@ -224,7 +215,6 @@ const LIVE_CLASS_SCHEDULE = {
       topic: 'Apply sphere structure to a small bird drawing, supported by the plaster sphere video lesson.',
       date: 'Oct 18, 2026',
       time: '7:00 PM ET',
-      status: 'upcoming',
       zoom: null,
       smartClassRef: 'sphere',
       smartClassNote: 'Watch the Sphere lesson in Smart Class before drawing.',
@@ -247,19 +237,51 @@ const LIVE_CLASS_SCHEDULE = {
     return this.sessions.find(s => s.id === id) || null;
   },
 
-  // Get the next upcoming session
-  getNextUpcoming() {
-    return this.sessions.find(s => s.status === 'upcoming') || null;
+  // Parses "date" + "time" into a real Date, for computeStatus() below.
+  // time strings carry an informal zone label ('7:00 PM ET', '7:00 PM
+  // Vancouver') that isn't a real IANA identifier, so we deliberately
+  // parse just the clock time in the browser's own local time — there's
+  // no reliable way to convert "ET"/"Vancouver" text to an offset without
+  // a timezone library.
+  _parseSessionDateTime(session) {
+    if (!session || !session.date) return null;
+    const timeMatch = (session.time || '').match(/^(\d{1,2}:\d{2}\s*[AP]M)/i);
+    const timePart = timeMatch ? timeMatch[1] : '12:00 AM';
+    const parsed = new Date(`${session.date} ${timePart}`);
+    return isNaN(parsed.getTime()) ? null : parsed;
   },
 
-  // Get all upcoming sessions
+  // Computes a session's status from today's date instead of a stored
+  // field: 'past' (date has passed), 'today' (same calendar day), or
+  // 'upcoming' (date is in the future). Falls back to 'upcoming' if the
+  // date can't be parsed (fail open, so a malformed entry doesn't get
+  // silently hidden in the past list).
+  computeStatus(session) {
+    const when = this._parseSessionDateTime(session);
+    if (!when) return 'upcoming';
+    const now = new Date();
+    const sameDay = when.getFullYear() === now.getFullYear()
+      && when.getMonth() === now.getMonth()
+      && when.getDate() === now.getDate();
+    if (sameDay) return 'today';
+    return when.getTime() < now.getTime() ? 'past' : 'upcoming';
+  },
+
+  // Get the next upcoming session (today's class counts as "next" too,
+  // if there is one — chronological order in the sessions array does
+  // the rest)
+  getNextUpcoming() {
+    return this.sessions.find(s => this.computeStatus(s) !== 'past') || null;
+  },
+
+  // Get all upcoming sessions (includes today's, if any)
   getUpcoming() {
-    return this.sessions.filter(s => s.status === 'upcoming');
+    return this.sessions.filter(s => this.computeStatus(s) !== 'past');
   },
 
   // Get all past sessions
   getPast() {
-    return this.sessions.filter(s => s.status === 'past');
+    return this.sessions.filter(s => this.computeStatus(s) === 'past');
   },
 
   // Get the Zoom info for a session (falls back to defaultZoom)

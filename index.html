@@ -321,7 +321,71 @@
     font-family: inherit;
   }
   .paywall-dismiss:hover { color: var(--ink); }
-  
+
+  /* ═══ BASIC SKETCH BADGE — UNLOCK CELEBRATION ═══ */
+  .badge-unlock-banner {
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(135deg, #f0deb8, var(--gold));
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 24px rgba(200,169,110,0.35);
+  }
+  .badge-unlock-icon { font-size: 36px; line-height: 1; flex-shrink: 0; }
+  .badge-unlock-text { flex: 1; min-width: 0; }
+  .badge-unlock-title {
+    font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 800;
+    color: var(--ink); margin-bottom: 2px;
+  }
+  .badge-unlock-sub { font-size: 12px; color: rgba(26,29,43,0.7); }
+  .badge-unlock-view-btn {
+    background: var(--ink); color: #fff; border: none;
+    padding: 10px 16px; border-radius: 20px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11.5px;
+    white-space: nowrap; cursor: pointer;
+    transition: background 0.18s;
+  }
+  .badge-unlock-view-btn:hover { background: #2c3047; }
+  @media (max-width: 480px) {
+    .badge-unlock-banner { flex-wrap: wrap; }
+    .badge-unlock-view-btn { width: 100%; }
+  }
+
+  /* Subtle steady-state badge icon in the topbar, once earned */
+  .header-badge-icon { font-size: 15px; margin-right: 2px; }
+
+  /* Badge detail modal — same mechanics as .paywall-modal */
+  .badge-detail-modal {
+    position: fixed; inset: 0;
+    background: rgba(42, 47, 66, 0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .badge-detail-modal.visible { display: flex; }
+  .badge-detail-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+  .badge-detail-icon { font-size: 48px; margin-bottom: 12px; }
+  .badge-detail-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .badge-detail-body {
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.6; margin-bottom: 14px;
+  }
+  .badge-detail-date { font-size: 11px; color: var(--ink-faint); margin-bottom: 20px; }
+
   /* ═══ MAIN CONTAINER ═══ */
   .container {
     max-width: 580px; margin: 0 auto; padding: 24px 18px 60px;
@@ -1217,6 +1281,20 @@
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="home-screen" style="display:none;">
 
+  <!-- ═══ BASIC SKETCH BADGE — UNLOCK CELEBRATION ═══
+       Shown once, the moment checkAndUnlockBadge() first flips
+       basicSketchBadgeUnlocked to true. Hidden on every render after
+       that (see checkAndUnlockBadge() below) — the header icon takes
+       over as the steady-state indicator. -->
+  <div class="badge-unlock-banner" id="badge-unlock-banner" style="display:none;">
+    <div class="badge-unlock-icon">🏆</div>
+    <div class="badge-unlock-text">
+      <div class="badge-unlock-title">Basic Sketch Badge Unlocked!</div>
+      <div class="badge-unlock-sub">You've completed all 11 Foundation A lessons.</div>
+    </div>
+    <button class="badge-unlock-view-btn" onclick="viewBasicSketchBadge()">View Badge</button>
+  </div>
+
   <div class="hero">
     <div class="hero-greeting" id="hero-greeting">Welcome back to the studio</div>
     <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
@@ -1494,6 +1572,19 @@
     </div>
     <a class="paywall-cta" id="paywall-cta-link" href="upgrade/">See teacher-supported plans →</a>
     <button class="paywall-dismiss" onclick="closePaywall()">Not yet</button>
+  </div>
+</div>
+
+<!-- ═══ BASIC SKETCH BADGE — DETAIL MODAL ═══ -->
+<div class="badge-detail-modal" id="badge-detail-modal" onclick="if(event.target===this) closeBadgeDetail()">
+  <div class="badge-detail-card">
+    <div class="badge-detail-icon">🏆</div>
+    <div class="badge-detail-title">Basic Sketch Badge</div>
+    <div class="badge-detail-body">
+      Awarded for completing all 11 Foundation A lessons — Preparation through Paper Crane. You've built the full foundation: geometric form, perspective, light and shadow, and real-world observation.
+    </div>
+    <div class="badge-detail-date" id="badge-detail-date"></div>
+    <button class="paywall-dismiss" onclick="closeBadgeDetail()">Close</button>
   </div>
 </div>
 
@@ -1869,7 +1960,87 @@
 
     // Live Class VIP section — no-op (hides itself) for non-live-class students
     renderLiveClassSection();
+
+    // Basic Sketch badge — runs every dashboard load, unlocks once
+    // all 11 Foundation A lessons are complete.
+    checkAndUnlockBadge();
   }
+
+  // ═══════════════════════════════════════════════════════════
+  // BASIC SKETCH BADGE
+  // Unlocked once completedLessons covers every FOUNDATION_A_PATH id
+  // (11 lessons: preparation, cube, sphere, cylinder, cup, apple, cone,
+  // icecream, intersecting, box, papercrane — confirmed against each
+  // lesson's own LESSON.id / UserProfile.completeLesson(LESSON.id) call,
+  // e.g. lessons/lesson-4-giftbox/index.html:5909 → id: 'box').
+  // ═══════════════════════════════════════════════════════════
+  function checkAndUnlockBadge() {
+    if (!userProfile) return;
+
+    const requiredIds = FOUNDATION_A_PATH.map(l => l.id);
+    const completed = userProfile.completedLessons || [];
+    const allComplete = requiredIds.every(id => completed.includes(id));
+
+    const banner = document.getElementById('badge-unlock-banner');
+
+    if (!allComplete) {
+      if (banner) banner.style.display = 'none';
+      updateHeaderBadgeIcon(false);
+      return;
+    }
+
+    if (!userProfile.basicSketchBadgeUnlocked) {
+      // First time crossing the finish line — persist + celebrate.
+      userProfile.basicSketchBadgeUnlocked = true;
+      userProfile.basicSketchBadgeUnlockedAt = Date.now();
+      saveProfile(userProfile);
+      if (banner) banner.style.display = 'flex';
+      updateHeaderBadgeIcon(false);
+    } else {
+      // Already unlocked in a prior visit — quiet steady state.
+      if (banner) banner.style.display = 'none';
+      updateHeaderBadgeIcon(true);
+    }
+  }
+  window.checkAndUnlockBadge = checkAndUnlockBadge;
+
+  // #topbar-right gets fully replaced by renderHome() above (see the
+  // topbar block near the top of renderHome()) before checkAndUnlockBadge()
+  // runs, so it's safe to just insert/remove this one icon afterward.
+  function updateHeaderBadgeIcon(show) {
+    const topbarRight = document.getElementById('topbar-right');
+    if (!topbarRight) return;
+    let icon = document.getElementById('header-badge-icon');
+    if (show) {
+      if (!icon) {
+        icon = document.createElement('span');
+        icon.id = 'header-badge-icon';
+        icon.className = 'header-badge-icon';
+        icon.title = 'Basic Sketch Badge — earned';
+        icon.textContent = '🏅';
+        topbarRight.insertBefore(icon, topbarRight.firstChild);
+      }
+    } else if (icon) {
+      icon.remove();
+    }
+  }
+
+  function viewBasicSketchBadge() {
+    const dateEl = document.getElementById('badge-detail-date');
+    if (dateEl) {
+      const ts = userProfile && userProfile.basicSketchBadgeUnlockedAt;
+      dateEl.textContent = ts
+        ? 'Unlocked ' + new Date(ts).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })
+        : '';
+    }
+    document.getElementById('badge-detail-modal').classList.add('visible');
+  }
+  window.viewBasicSketchBadge = viewBasicSketchBadge;
+
+  function closeBadgeDetail() {
+    document.getElementById('badge-detail-modal').classList.remove('visible');
+  }
+  window.closeBadgeDetail = closeBadgeDetail;
 
   // ═══════════════════════════════════════════════════════════
   // LIVE CLASS VIP SECTION
