@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Admin · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ════════════════════════════════════════════════════════════════
+     FEI TeamArt · Teacher Admin
+     Standalone page for Faye to review student submissions and send
+     text + voice feedback. Not linked from student-facing navigation.
+     ════════════════════════════════════════════════════════════════ */
+
+  :root {
+    --ink: #1a1d2b;
+    --ink-soft: rgba(26, 29, 43, 0.65);
+    --ink-faint: rgba(26, 29, 43, 0.45);
+    --ink-veryfaint: rgba(26, 29, 43, 0.15);
+    --paper: #fafaf8;
+    --paper-soft: #f5f5f7;
+    --gold: #c8a96e;
+    --green: #1d9e75;
+    --red: #d0483f;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 18px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.10);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  button { font-family: inherit; cursor: pointer; }
+  textarea, input { font-family: inherit; }
+
+  /* ─── Login screen ─────────────────────────────────────────── */
+
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    padding: 24px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 380px;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 40px 32px;
+    text-align: center;
+  }
+
+  .login-card.shake { animation: shake 0.4s; }
+  @keyframes shake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(4px); }
+    30%, 50%, 70% { transform: translateX(-8px); }
+    40%, 60% { transform: translateX(8px); }
+  }
+
+  .login-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .login-brand span { font-weight: 500; color: var(--ink-soft); }
+
+  .login-label {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .login-input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .login-input:focus { border-color: var(--gold); }
+
+  .login-btn {
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    transition: background 0.15s;
+  }
+  .login-btn:hover { background: #2c3047; }
+
+  .login-error {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--red);
+  }
+
+  .login-footer {
+    margin-top: 22px;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* ─── Dashboard layout ─────────────────────────────────────── */
+
+  .dashboard { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
+  }
+
+  .sidebar-header {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+  .sidebar-header span { font-weight: 500; color: rgba(255,255,255,0.55); }
+
+  .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+
+  .nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 11px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-link.active { background: rgba(200,169,110,0.16); color: var(--gold); }
+
+  .sidebar-footer {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .sidebar-user {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 10px;
+  }
+  .sidebar-user strong { color: #fff; }
+
+  .sign-out-btn {
+    width: 100%;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 9px;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    transition: background 0.15s;
+  }
+  .sign-out-btn:hover { background: rgba(255,255,255,0.08); }
+
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px 36px 60px;
+  }
+
+  .main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .main-header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+  }
+
+  .filter-tabs { display: flex; gap: 6px; background: var(--paper-soft); padding: 4px; border-radius: var(--radius-sm); }
+
+  .tab {
+    background: none;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--ink-soft);
+    transition: background 0.15s, color 0.15s;
+  }
+  .tab.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-sm); }
+
+  /* ─── States ────────────────────────────────────────────────── */
+
+  .loading-state, .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--ink-faint);
+  }
+
+  .spinner {
+    width: 34px; height: 34px;
+    border: 3px solid var(--ink-veryfaint);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state-icon { font-size: 32px; margin-bottom: 10px; }
+  .empty-state p { font-size: 14px; max-width: 320px; }
+
+  /* ─── Student groups + cards ───────────────────────────────── */
+
+  .student-group { margin-bottom: 36px; }
+
+  .student-group-header {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ink-veryfaint);
+  }
+  .student-group-header .code-tag {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-left: 6px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--paper-soft);
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body { padding: 16px; }
+
+  .card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+  }
+
+  .card-meta {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: 3px;
+    margin-bottom: 14px;
+  }
+
+  .feedback-box {
+    background: var(--paper-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+
+  .feedback-box-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .feedback-textarea {
+    width: 100%;
+    min-height: 64px;
+    resize: vertical;
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .feedback-textarea:focus { border-color: var(--gold); }
+
+  .voice-row { margin-bottom: 12px; }
+
+  .voice-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .voice-file-btn {
+    display: inline-block;
+    background: #fff;
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .voice-file-btn:hover { border-color: var(--gold); }
+
+  .voice-file-chosen {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: #fff;
+    border-radius: 8px;
+    padding: 7px 10px;
+    border: 1px solid var(--ink-veryfaint);
+  }
+  .voice-file-chosen.visible { display: flex; }
+  .voice-file-remove {
+    background: none; border: none; color: var(--red);
+    font-weight: 700; font-size: 12px; margin-left: auto;
+  }
+
+  .send-btn {
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    padding: 11px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .send-btn:hover { background: #2c3047; }
+  .send-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .send-error {
+    display: none;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .send-error.visible { display: block; }
+
+  .reviewed-banner {
+    margin-top: 14px;
+    background: rgba(29,158,117,0.1);
+    color: var(--green);
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+
+  .reviewed-comment {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    background: var(--paper-soft);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  /* ─── Mobile ────────────────────────────────────────────────── */
+
+  @media (max-width: 800px) {
+    .dashboard { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      gap: 10px;
+    }
+    .sidebar-header { margin-bottom: 0; margin-right: auto; }
+    .sidebar-nav { flex-direction: row; flex: none; overflow-x: auto; }
+    .sidebar-footer {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .sidebar-user { margin-bottom: 0; }
+    .sign-out-btn { width: auto; padding: 8px 12px; }
+    .main { padding: 24px 18px 48px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card" id="loginCard">
+    <div class="login-brand">FEI TeamArt <span>· Teacher Admin</span></div>
+    <label class="login-label" for="teacherCodeInput">Enter teacher code</label>
+    <input class="login-input" id="teacherCodeInput" type="password" autocomplete="off" placeholder="TEACHER CODE" />
+    <button class="login-btn" id="loginBtn">Login →</button>
+    <div class="login-error" id="loginError" hidden>Invalid code</div>
+    <div class="login-footer">This page is for teachers only.</div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="dashboard" id="dashboard" hidden>
+  <aside class="sidebar">
+    <div class="sidebar-header">FEI TeamArt <span>· Admin</span></div>
+    <nav class="sidebar-nav">
+      <button class="nav-link active" data-filter="all">📋 All Submissions</button>
+      <button class="nav-link" data-filter="reviewed">✅ Reviewed</button>
+      <button class="nav-link" data-filter="pending">⏳ Pending Review</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">Logged in as: <strong>Teacher Faye</strong></div>
+      <button class="sign-out-btn" id="signOutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-header">
+      <h1>Student Submissions</h1>
+      <div class="filter-tabs">
+        <button class="tab active" data-filter="all">All</button>
+        <button class="tab" data-filter="pending">Pending</button>
+        <button class="tab" data-filter="reviewed">Reviewed</button>
+      </div>
+    </div>
+
+    <div class="loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <div>Loading submissions…</div>
+    </div>
+
+    <div class="empty-state" id="emptyState" hidden>
+      <div class="empty-state-icon">🗂️</div>
+      <p id="emptyStateMsg">No submissions yet. Students will appear here after they submit their work.</p>
+    </div>
+
+    <div id="groupsContainer" hidden></div>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Supabase config ──────────────────────────────────────────
+  // Same project as core/auth.js. Publishable key is safe to embed in
+  // client code by design, but note: it can read/write anything the
+  // project's Row Level Security policies allow for the anon role.
+  // The "teacher code" login below is a client-side convenience gate
+  // only (view-source defeats it) — it does NOT restrict who can call
+  // the Supabase REST API with this same key. Real protection for
+  // teacher_feedback / teacher-voice must come from RLS policies on
+  // the Supabase project itself, not from this page.
+  const SUPABASE_URL = 'https://rudztwseatwayhztbarj.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
+
+  const SUBMISSIONS_TABLE = 'student_submissions';
+  const FEEDBACK_TABLE = 'teacher_feedback';
+  const VOICE_BUCKET = 'teacher-voice';
+
+  const TEACHER_CODES = ['TEACHER-FAYE', 'FAYE-00'];
+  const SESSION_KEY = 'fei_teacher_admin_authed';
+
+  // Hardcoded from core/student-access-codes.js (read-only reference —
+  // student_submissions rows carry user_name/user_email, not these
+  // codes, so matching below is best-effort by name).
+  const STUDENT_CODES = [
+    { id: 'FAYE-00', name: 'Faye' },
+    { id: 'REGINA-16', name: 'Regina' },
+    { id: 'JOJO-10', name: 'Jojo' },
+    { id: 'SERENA-09', name: 'Serena' },
+    { id: 'A7Q9-FOX', name: 'Amy' },
+    { id: 'BELLA-16', name: 'Bella' },
+    { id: 'Katy-06', name: 'Katy' },
+    { id: 'AMY-11', name: 'Amy G' },
+    { id: 'ELSA-09', name: 'Elsa' },
+    { id: 'REBECCA-20', name: 'Rebecca' },
+    { id: 'MELODY-21', name: 'Melody' },
+    { id: 'WALLACE-49X8', name: 'Wallace' },
+    { id: 'CHLOE-01', name: 'Chloe' },
+    { id: 'CAMERON-11', name: 'Cameron' },
+    { id: 'JUDY-07', name: 'Judy' },
+    { id: 'XINYUE-12', name: 'Xinyue' },
+    { id: 'KAILYNN-15', name: 'Kailynn' },
+    { id: 'ADRIAN-22', name: 'Adrian' },
+    { id: 'SERENA-13', name: 'Serena' },
+    { id: 'TEMP-09', name: 'Temp' },
+    { id: 'CODY-22', name: 'Cody' },
+    { id: 'SAM-18', name: 'Sam' },
+    { id: 'ALISSIE-05', name: 'Alissie' },
+    { id: 'NATALIE-17', name: 'Natalie' },
+    { id: 'RAINIE-08', name: 'Rainie' },
+    { id: 'SELENA-23', name: 'Selena' },
+    { id: 'XIDA-25', name: 'Xida' }
+  ];
+
+  function norm(s) {
+    return (s || '').toString().toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
+  function matchStudentCode(sub) {
+    const nameN = norm(sub.user_name);
+    const emailLocal = sub.user_email ? sub.user_email.split('@')[0] : '';
+    const emailN = norm(emailLocal);
+    for (const c of STUDENT_CODES) {
+      const dispN = norm(c.name);
+      if (dispN && (dispN === nameN || dispN === emailN)) return c;
+    }
+    for (const c of STUDENT_CODES) {
+      const dispN = norm(c.name);
+      if (dispN && (nameN.includes(dispN) || emailN.includes(dispN))) return c;
+    }
+    return null;
+  }
+
+  function sbHeaders(extra) {
+    return Object.assign({
+      apikey: SUPABASE_KEY,
+      Authorization: 'Bearer ' + SUPABASE_KEY
+    }, extra || {});
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
+
+  function timeAgo(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const diffMs = Date.now() - d.getTime();
+    const days = Math.floor(diffMs / 86400000);
+    if (days <= 0) {
+      const hours = Math.floor(diffMs / 3600000);
+      if (hours <= 0) return 'just now';
+      return hours + (hours === 1 ? ' hour ago' : ' hours ago');
+    }
+    if (days === 1) return '1 day ago';
+    if (days < 30) return days + ' days ago';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString(undefined, { month: 'long', day: 'numeric' });
+  }
+
+  // ── Login ─────────────────────────────────────────────────────
+
+  const loginScreen = document.getElementById('loginScreen');
+  const loginCard = document.getElementById('loginCard');
+  const teacherCodeInput = document.getElementById('teacherCodeInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const dashboard = document.getElementById('dashboard');
+
+  function tryLogin() {
+    const code = (teacherCodeInput.value || '').trim().toUpperCase();
+    if (TEACHER_CODES.includes(code)) {
+      try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+      showDashboard();
+    } else {
+      loginError.hidden = false;
+      loginCard.classList.remove('shake');
+      void loginCard.offsetWidth;
+      loginCard.classList.add('shake');
+    }
+  }
+
+  loginBtn.addEventListener('click', tryLogin);
+  teacherCodeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryLogin();
+  });
+
+  document.getElementById('signOutBtn').addEventListener('click', () => {
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+    dashboard.hidden = true;
+    loginScreen.hidden = false;
+    teacherCodeInput.value = '';
+    loginError.hidden = true;
+  });
+
+  function showDashboard() {
+    loginScreen.hidden = true;
+    dashboard.hidden = false;
+    if (!appState.loaded) loadData();
+  }
+
+  let alreadyAuthed = false;
+  try { alreadyAuthed = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
+  if (alreadyAuthed) showDashboard();
+
+  // ── Data loading ─────────────────────────────────────────────
+
+  const appState = {
+    loaded: false,
+    submissions: [],
+    feedbackBySubmissionId: new Map(),
+    filter: 'all'
+  };
+
+  const loadingState = document.getElementById('loadingState');
+  const emptyState = document.getElementById('emptyState');
+  const emptyStateMsg = document.getElementById('emptyStateMsg');
+  const groupsContainer = document.getElementById('groupsContainer');
+
+  async function loadData() {
+    loadingState.hidden = false;
+    emptyState.hidden = true;
+    groupsContainer.hidden = true;
+
+    try {
+      const [subsRes, fbRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
+          headers: sbHeaders()
+        }),
+        fetch(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}?select=*`, {
+          headers: sbHeaders()
+        })
+      ]);
+
+      if (!subsRes.ok) throw new Error('Failed to load submissions (' + subsRes.status + ')');
+      const submissions = await subsRes.json();
+
+      let feedback = [];
+      if (fbRes.ok) {
+        feedback = await fbRes.json();
+      } else {
+        console.warn('[teacher-admin] Failed to load teacher_feedback', fbRes.status);
+      }
+
+      appState.submissions = submissions || [];
+      appState.feedbackBySubmissionId = new Map();
+      (feedback || []).forEach(row => {
+        if (row.submission_id) appState.feedbackBySubmissionId.set(row.submission_id, row);
+      });
+      appState.loaded = true;
+
+      loadingState.hidden = true;
+      render();
+    } catch (err) {
+      console.error('[teacher-admin] loadData failed', err);
+      loadingState.hidden = true;
+      emptyState.hidden = false;
+      emptyStateMsg.textContent = 'Could not load submissions. Check your connection and try refreshing.';
+    }
+  }
+
+  // ── Filters ───────────────────────────────────────────────────
+
+  function setFilter(filter) {
+    appState.filter = filter;
+    document.querySelectorAll('.nav-link').forEach(el => {
+      el.classList.toggle('active', el.dataset.filter === filter);
+    });
+    document.querySelectorAll('.tab').forEach(el => {
+      el.classList.toggle('active', el.dataset.filter === filter);
+    });
+    render();
+  }
+
+  document.querySelectorAll('.nav-link, .tab').forEach(el => {
+    el.addEventListener('click', () => setFilter(el.dataset.filter));
+  });
+
+  // ── Render ────────────────────────────────────────────────────
+
+  function render() {
+    const filtered = appState.submissions.filter(sub => {
+      const isReviewed = appState.feedbackBySubmissionId.has(sub.id);
+      if (appState.filter === 'pending') return !isReviewed;
+      if (appState.filter === 'reviewed') return isReviewed;
+      return true;
+    });
+
+    if (appState.submissions.length === 0) {
+      emptyState.hidden = false;
+      groupsContainer.hidden = true;
+      emptyStateMsg.textContent = 'No submissions yet. Students will appear here after they submit their work.';
+      return;
+    }
+
+    if (filtered.length === 0) {
+      emptyState.hidden = false;
+      groupsContainer.hidden = true;
+      emptyStateMsg.textContent = appState.filter === 'pending'
+        ? 'All caught up! No pending reviews.'
+        : 'Nothing here yet.';
+      return;
+    }
+
+    emptyState.hidden = true;
+    groupsContainer.hidden = false;
+
+    // Group by matched student code, falling back to email as the key
+    // so unmatched students still get their own group.
+    const groups = new Map();
+    filtered.forEach(sub => {
+      const match = matchStudentCode(sub);
+      const key = match ? match.id : ('email:' + (sub.user_email || sub.id));
+      if (!groups.has(key)) {
+        groups.set(key, {
+          label: match ? match.name : (sub.user_name || sub.user_email || 'Unknown student'),
+          code: match ? match.id : null,
+          submissions: []
+        });
+      }
+      groups.get(key).submissions.push(sub);
+    });
+
+    const sortedGroups = Array.from(groups.values()).sort((a, b) => a.label.localeCompare(b.label));
+
+    groupsContainer.innerHTML = '';
+    sortedGroups.forEach(group => {
+      const section = document.createElement('div');
+      section.className = 'student-group';
+
+      const header = document.createElement('div');
+      header.className = 'student-group-header';
+      header.textContent = group.label;
+      if (group.code) {
+        const tag = document.createElement('span');
+        tag.className = 'code-tag';
+        tag.textContent = group.code;
+        header.appendChild(tag);
+      }
+      section.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'cards-grid';
+      group.submissions.forEach(sub => grid.appendChild(buildCard(sub, group)));
+      section.appendChild(grid);
+
+      groupsContainer.appendChild(section);
+    });
+  }
+
+  function buildCard(sub, group) {
+    const feedbackRow = appState.feedbackBySubmissionId.get(sub.id);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const img = document.createElement('img');
+    img.className = 'card-thumb';
+    img.src = sub.image_url || '';
+    img.alt = (sub.lesson_title || sub.lesson_id || 'Submission') + ' artwork';
+    img.loading = 'lazy';
+    card.appendChild(img);
+
+    const body = document.createElement('div');
+    body.className = 'card-body';
+
+    const title = document.createElement('div');
+    title.className = 'card-title';
+    title.textContent = (group.code || group.label) + ' · ' + group.label;
+    body.appendChild(title);
+
+    const meta = document.createElement('div');
+    meta.className = 'card-meta';
+    meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—') + ' · Submitted ' + timeAgo(sub.created_at);
+    body.appendChild(meta);
+
+    if (feedbackRow) {
+      const banner = document.createElement('div');
+      banner.className = 'reviewed-banner';
+      banner.textContent = '✅ Feedback sent on ' + formatDate(feedbackRow.created_at);
+      body.appendChild(banner);
+
+      if (feedbackRow.text_comment) {
+        const comment = document.createElement('div');
+        comment.className = 'reviewed-comment';
+        comment.textContent = feedbackRow.text_comment;
+        body.appendChild(comment);
+      }
+    } else {
+      body.appendChild(buildFeedbackForm(sub));
+    }
+
+    card.appendChild(body);
+    return card;
+  }
+
+  function buildFeedbackForm(sub) {
+    const box = document.createElement('div');
+    box.className = 'feedback-box';
+
+    const label = document.createElement('div');
+    label.className = 'feedback-box-label';
+    label.textContent = 'Teacher Feedback';
+    box.appendChild(label);
+
+    const textarea = document.createElement('textarea');
+    textarea.className = 'feedback-textarea';
+    textarea.placeholder = 'Write a comment for this submission…';
+    box.appendChild(textarea);
+
+    const voiceRow = document.createElement('div');
+    voiceRow.className = 'voice-row';
+
+    const voiceLabel = document.createElement('span');
+    voiceLabel.className = 'voice-label';
+    voiceLabel.textContent = '🎤 Upload voice recording';
+    voiceRow.appendChild(voiceLabel);
+
+    const fileInputId = 'voice-' + sub.id;
+    const fileBtn = document.createElement('label');
+    fileBtn.className = 'voice-file-btn';
+    fileBtn.setAttribute('for', fileInputId);
+    fileBtn.textContent = 'Choose file';
+    voiceRow.appendChild(fileBtn);
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'audio/*';
+    fileInput.id = fileInputId;
+    fileInput.style.display = 'none';
+    voiceRow.appendChild(fileInput);
+
+    const chosen = document.createElement('div');
+    chosen.className = 'voice-file-chosen';
+    const chosenName = document.createElement('span');
+    chosen.appendChild(chosenName);
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'voice-file-remove';
+    removeBtn.textContent = 'Remove';
+    chosen.appendChild(removeBtn);
+    voiceRow.appendChild(chosen);
+
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files && fileInput.files[0];
+      if (f) {
+        chosenName.textContent = f.name;
+        chosen.classList.add('visible');
+      } else {
+        chosen.classList.remove('visible');
+      }
+    });
+    removeBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      chosen.classList.remove('visible');
+    });
+
+    box.appendChild(voiceRow);
+
+    const errorEl = document.createElement('div');
+    errorEl.className = 'send-error';
+    box.appendChild(errorEl);
+
+    const sendBtn = document.createElement('button');
+    sendBtn.type = 'button';
+    sendBtn.className = 'send-btn';
+    sendBtn.textContent = 'Send Feedback →';
+    box.appendChild(sendBtn);
+
+    sendBtn.addEventListener('click', async () => {
+      const textComment = textarea.value.trim();
+      const voiceFile = fileInput.files && fileInput.files[0];
+
+      if (!textComment && !voiceFile) {
+        errorEl.textContent = 'Add a comment or a voice recording before sending.';
+        errorEl.classList.add('visible');
+        return;
+      }
+
+      errorEl.classList.remove('visible');
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending…';
+
+      try {
+        let voiceUrl = null;
+        if (voiceFile) {
+          voiceUrl = await uploadVoice(voiceFile, sub);
+        }
+
+        const match = matchStudentCode(sub);
+        const feedbackData = {
+          student_code: match ? match.id : (sub.user_email || sub.user_name || null),
+          lesson_id: sub.lesson_id || null,
+          submission_id: sub.id,
+          text_comment: textComment || null,
+          voice_url: voiceUrl,
+          is_read: false
+        };
+
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}`, {
+          method: 'POST',
+          headers: sbHeaders({
+            'Content-Type': 'application/json',
+            Prefer: 'return=representation'
+          }),
+          body: JSON.stringify(feedbackData)
+        });
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error('Save failed (' + res.status + ') ' + errText);
+        }
+
+        const inserted = await res.json().catch(() => null);
+        const row = Array.isArray(inserted) ? inserted[0] : (inserted || feedbackData);
+        if (!row.created_at) row.created_at = new Date().toISOString();
+        appState.feedbackBySubmissionId.set(sub.id, row);
+
+        render();
+      } catch (err) {
+        console.error('[teacher-admin] send feedback failed', err);
+        errorEl.textContent = 'Could not send feedback. Please try again.';
+        errorEl.classList.add('visible');
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send Feedback →';
+      }
+    });
+
+    return box;
+  }
+
+  async function uploadVoice(file, sub) {
+    const ext = (file.name && file.name.includes('.'))
+      ? file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '') || 'webm'
+      : 'webm';
+    const fileName = `${sub.id}/${Date.now()}_feedback.${ext}`;
+
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${fileName}`, {
+      method: 'POST',
+      headers: sbHeaders({ 'Content-Type': file.type || 'application/octet-stream' }),
+      body: file
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error('Voice upload failed (' + res.status + ') ' + errText);
+    }
+
+    return `${SUPABASE_URL}/storage/v1/object/public/${VOICE_BUCKET}/${fileName}`;
+  }
+})();
+</script>
+</body>
+</html>
