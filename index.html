@@ -1910,15 +1910,29 @@
     return FOUNDATION_A_PATH.find(l => l.id === refId) || null;
   }
 
+  // Live Class VIP section only ever renders for isLiveClassStudent()
+  // (see renderLiveClassSection()'s guard), so these smartClassRef links
+  // are only ever shown to live class students in the first place. They
+  // still go through goToSmartClassLesson() below — a dedicated handler
+  // that just navigates, with NO FEIAccess.canOpenLesson() call — so the
+  // lesson opens directly and can never be intercepted by the Foundation A
+  // paywall/order gate (unlike attachSkillsLessonGuard, which only guards
+  // clicks inside #path-nodes and never sees these links at all).
   function renderLiveClassSmartRef(session, icon) {
     if (!session.smartClassRef) return '';
     const lesson = smartClassLessonInfo(session.smartClassRef);
     const note = session.smartClassNote || 'Watch the related lesson in Smart Class first.';
     const link = lesson
-      ? `<a href="${lesson.href}">→ Go to ${liveClassEscapeHtml(lesson.title)} Lesson</a>`
+      ? `<a href="${lesson.href}" onclick="goToSmartClassLesson(event, '${lesson.href}')">→ Go to ${liveClassEscapeHtml(lesson.title)} Lesson</a>`
       : '';
     return `<div class="live-class-smart-ref">${icon} ${liveClassEscapeHtml(note)} ${link}</div>`;
   }
+
+  function goToSmartClassLesson(event, href) {
+    event.preventDefault();
+    window.location.href = href;
+  }
+  window.goToSmartClassLesson = goToSmartClassLesson;
 
   function renderLiveClassNextCard(next, schedule) {
     if (!next) {
@@ -2708,6 +2722,12 @@
       window.location.href = href;
       return;
     }
+    if (isLiveClassStudent()) {
+      // Live class students get every Foundation A lesson regardless of
+      // completion order — skip the FEIAccess round-trip entirely.
+      window.location.href = href;
+      return;
+    }
     if (!window.FEIAccess) {
       window.location.href = href;
       return;
@@ -2755,6 +2775,11 @@
       // Only enforce for Supabase users — legacy access code = full access
       const profile = userProfile;
       if (!profile || profile.studentCode) return;  // legacy
+
+      // Live class students get every Foundation A lesson regardless of
+      // completion order — bypass the paywall check entirely.
+      if (isLiveClassStudent()) return;
+
       // Check access
       if (!window.FEIAccess) return;
       e.preventDefault();
