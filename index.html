@@ -395,7 +395,133 @@
   .section-sub {
     font-size: 12px; color: var(--ink-soft);
   }
-  
+
+  /* ═══ LIVE CLASS VIP SECTION ═══ */
+  .live-class-vip-section {
+    background: linear-gradient(135deg, #1a1d2b 0%, #2a2f42 100%);
+    border: 1px solid rgba(200,169,110,0.3);
+    border-radius: var(--radius-lg);
+    padding: 26px 20px;
+    margin-bottom: 28px;
+    color: #fff;
+  }
+  @media (min-width: 768px) {
+    .live-class-vip-section { padding: 32px 30px; }
+  }
+  .live-class-vip-header { margin-bottom: 18px; }
+  .live-class-vip-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .live-class-vip-title {
+    font-family: 'Montserrat', sans-serif; font-size: 20px;
+    font-weight: 800; margin-bottom: 4px;
+  }
+  .live-class-vip-subtitle { font-size: 12px; color: rgba(255,255,255,0.65); }
+
+  .live-class-next-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(200,169,110,0.28);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .live-class-next-label {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .live-class-next-meta { font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+  .live-class-next-title {
+    font-family: 'Montserrat', sans-serif; font-size: 17px;
+    font-weight: 800; margin-bottom: 14px;
+  }
+  .live-class-next-actions,
+  .live-class-session-detail-actions {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
+  }
+  .live-class-zoom-btn {
+    background: var(--gold); color: var(--ink);
+    padding: 10px 18px; border-radius: 22px; text-decoration: none;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.18s;
+  }
+  .live-class-zoom-btn:hover { background: #d8bc85; }
+  .live-class-materials-btn {
+    background: rgba(255,255,255,0.1); color: #fff;
+    padding: 10px 18px; border-radius: 22px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.18s;
+  }
+  .live-class-materials-btn:hover { background: rgba(255,255,255,0.18); }
+  .live-class-smart-ref {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    background: rgba(200,169,110,0.1); border-radius: 10px;
+    padding: 10px 12px; font-size: 12px; color: rgba(255,255,255,0.85);
+    margin-bottom: 10px;
+  }
+  .live-class-smart-ref a {
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .live-class-smart-ref a:hover { text-decoration: underline; }
+
+  .live-class-sessions-list { margin-bottom: 14px; }
+  .live-class-session-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 10px; border-radius: 8px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .live-class-session-row:hover { background: rgba(255,255,255,0.06); }
+  .live-class-session-row.past { opacity: 0.5; }
+  .live-class-session-row-left { display: flex; flex-direction: column; gap: 2px; }
+  .live-class-session-row-num {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800; color: var(--gold);
+  }
+  .live-class-session-row-title { font-size: 13px; font-weight: 600; }
+  .live-class-session-row-toggle {
+    font-size: 11px; color: rgba(255,255,255,0.5);
+    font-family: 'Montserrat', sans-serif; font-weight: 700; white-space: nowrap;
+  }
+  .live-class-session-detail {
+    display: none;
+    padding: 4px 10px 16px; margin-bottom: 4px; border-radius: 8px;
+    background: rgba(255,255,255,0.04);
+  }
+  .live-class-session-detail.open { display: block; }
+  .live-class-session-detail-topic {
+    font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.5;
+    padding-top: 10px; margin-bottom: 12px;
+  }
+  .live-class-homework-note {
+    font-size: 12px; color: rgba(255,255,255,0.75); margin-bottom: 10px; line-height: 1.5;
+  }
+  .live-class-submit-btn {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: 9px 14px; border-radius: 20px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11.5px;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.18s;
+  }
+  .live-class-submit-btn:hover { background: rgba(200,169,110,0.12); }
+
+  .live-class-toggle-past {
+    width: 100%; background: none; border: 1px dashed rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7); border-radius: 10px; padding: 10px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.4px; transition: border-color 0.15s, color 0.15s;
+  }
+  .live-class-toggle-past:hover { border-color: var(--gold); color: #fff; }
+
+  @media (max-width: 480px) {
+    .live-class-next-actions, .live-class-session-detail-actions { flex-direction: column; }
+    .live-class-zoom-btn, .live-class-materials-btn, .live-class-submit-btn { justify-content: center; }
+    .live-class-session-row { align-items: flex-start; }
+  }
+
   /* ═══ TRACK CARDS (Skills / Creation) ═══ */
   .tracks {
     display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
@@ -1114,6 +1240,32 @@
     <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
   </div>
 
+  <!-- ═══ LIVE CLASS VIP SECTION — only for isLiveClass students ═══
+       Hidden by default (inline style), unhidden by renderLiveClassSection()
+       only after isLiveClassStudent() passes. See RENDER HOME below. -->
+  <div class="live-class-vip-section" id="live-class-section" style="display:none;">
+
+    <div class="live-class-vip-header">
+      <div class="live-class-vip-kicker">🎓 YOUR LIVE CLASS</div>
+      <div class="live-class-vip-title" id="live-class-vip-title">Foundation of Sketch A</div>
+      <div class="live-class-vip-subtitle" id="live-class-vip-subtitle">Form, Light &amp; Perspective · 10 Sessions</div>
+    </div>
+
+    <div class="live-class-next-card" id="live-class-next-card">
+      <!-- populated by renderLiveClassSection() -->
+    </div>
+
+    <div class="live-class-sessions-list" id="live-class-sessions-list">
+      <!-- populated by renderLiveClassSection() -->
+    </div>
+
+    <button class="live-class-toggle-past" id="live-class-toggle-past"
+            onclick="togglePastSessions()" style="display:none;">
+      Show past sessions ↓
+    </button>
+
+  </div>
+
   <!-- ═══ LEARNING PATHS ═══ -->
   <div class="section-heading">
     <div class="section-title">Learning Paths</div>
@@ -1486,15 +1638,20 @@
       let block;
       while ((block = blockRegex.exec(text)) !== null) {
         const blockText = block[0];
-        const idMatch    = blockText.match(/id\s*:\s*["']([^"']+)["']/);
-        const nameMatch  = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
-        const trialMatch = blockText.match(/isTrial\s*:\s*(true|false)/);
-        
+        const idMatch        = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+        const nameMatch      = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
+        const trialMatch     = blockText.match(/isTrial\s*:\s*(true|false)/);
+        const liveClassMatch = blockText.match(/isLiveClass\s*:\s*(true|false)/);
+
         if (!idMatch || !nameMatch) continue;
-        
+
         validStudents.set(
           idMatch[1].toUpperCase(),
-          { displayName: nameMatch[1], isTrial: trialMatch ? trialMatch[1] === 'true' : false }
+          {
+            displayName: nameMatch[1],
+            isTrial: trialMatch ? trialMatch[1] === 'true' : false,
+            isLiveClass: liveClassMatch ? liveClassMatch[1] === 'true' : false
+          }
         );
       }
       
@@ -1709,7 +1866,179 @@
       }
       // else: keep the default "Collections open" text
     }
+
+    // Live Class VIP section — no-op (hides itself) for non-live-class students
+    renderLiveClassSection();
   }
+
+  // ═══════════════════════════════════════════════════════════
+  // LIVE CLASS VIP SECTION
+  // Reads window.LIVE_CLASS_SCHEDULE (core/live-class-schedule.js).
+  // Visible ONLY to isLiveClassStudent() — everyone else never sees
+  // the section render (it stays display:none from the static HTML).
+  // ═══════════════════════════════════════════════════════════
+
+  // Mirrors isLiveClassStudent() in the lesson pages (e.g.
+  // lessons/lesson-3-cube/index.html), adapted to this page's own
+  // userProfile / validStudents instead of UserProfile / StudentRoster.
+  function isLiveClassStudent() {
+    try {
+      if (!userProfile) return false;
+      if (userProfile.isLiveClass === true) return true;
+      if (userProfile.studentCode) {
+        const entry = validStudents.get(String(userProfile.studentCode).toUpperCase());
+        if (entry && entry.isLiveClass) return true;
+      }
+      if (userProfile.membershipType === 'live_class') return true;
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+  window.isLiveClassStudent = isLiveClassStudent;
+
+  function liveClassEscapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
+
+  // Looks up the matching Smart Class lesson (title + href) for a
+  // session's smartClassRef (e.g. 'cup' → The Cup / lessons/lesson-6-cup/).
+  function smartClassLessonInfo(refId) {
+    if (!refId) return null;
+    return FOUNDATION_A_PATH.find(l => l.id === refId) || null;
+  }
+
+  function renderLiveClassSmartRef(session, icon) {
+    if (!session.smartClassRef) return '';
+    const lesson = smartClassLessonInfo(session.smartClassRef);
+    const note = session.smartClassNote || 'Watch the related lesson in Smart Class first.';
+    const link = lesson
+      ? `<a href="${lesson.href}">→ Go to ${liveClassEscapeHtml(lesson.title)} Lesson</a>`
+      : '';
+    return `<div class="live-class-smart-ref">${icon} ${liveClassEscapeHtml(note)} ${link}</div>`;
+  }
+
+  function renderLiveClassNextCard(next, schedule) {
+    if (!next) {
+      return `
+        <div class="live-class-next-label">ALL CAUGHT UP</div>
+        <div class="live-class-next-title">No upcoming session scheduled right now.</div>
+        <div class="live-class-next-meta">Check back soon, or ask your teacher about the next class.</div>
+      `;
+    }
+    const zoom = schedule.getZoom(next);
+    const materialsBtn = next.materials
+      ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(next.materials.url)}" target="_blank" rel="noopener">📎 ${liveClassEscapeHtml(next.materials.label)}</a>`
+      : '';
+    return `
+      <div class="live-class-next-label">NEXT CLASS</div>
+      <div class="live-class-next-meta">Class ${next.classNumber} · ${liveClassEscapeHtml(next.date)} · ${liveClassEscapeHtml(next.time)}</div>
+      <div class="live-class-next-title">${liveClassEscapeHtml(next.title)}</div>
+      <div class="live-class-next-actions">
+        <a class="live-class-zoom-btn" href="${liveClassEscapeHtml(zoom.joinUrl)}" target="_blank" rel="noopener">🔗 Join Zoom →</a>
+        ${materialsBtn}
+      </div>
+      ${renderLiveClassSmartRef(next, '💡')}
+    `;
+  }
+
+  // Renders one session as a collapsed row + its expandable detail block.
+  // Detail includes Zoom / materials / Smart Class link / homework +
+  // a "Submit Homework" link out to the live class portal (there's no
+  // openUploadModal() on this page — that only exists inside lesson
+  // pages — so this links straight to the same destination it ultimately
+  // sends students to).
+  function renderLiveClassSessionRow(session, schedule, isPast) {
+    const zoom = schedule.getZoom(session);
+    const materialsBtn = session.materials
+      ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(session.materials.url)}" target="_blank" rel="noopener">📎 ${liveClassEscapeHtml(session.materials.label)}</a>`
+      : '';
+    const homework = session.homework
+      ? `
+        <div class="live-class-homework-note">📝 ${liveClassEscapeHtml(session.homework.description)}</div>
+        ${session.homework.downloadUrl ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(session.homework.downloadUrl)}" target="_blank" rel="noopener">⬇️ ${liveClassEscapeHtml(session.homework.downloadLabel || 'Download')}</a>` : ''}
+      `
+      : '';
+    return `
+      <div class="live-class-session-row${isPast ? ' past' : ''}" data-session-id="${session.id}" onclick="toggleSessionDetail('${session.id}')">
+        <div class="live-class-session-row-left">
+          <div class="live-class-session-row-num">Class ${session.classNumber} · ${liveClassEscapeHtml(session.date)}</div>
+          <div class="live-class-session-row-title">${liveClassEscapeHtml(session.title)}</div>
+        </div>
+        <div class="live-class-session-row-toggle" id="toggle-label-${session.id}">Details ↓</div>
+      </div>
+      <div class="live-class-session-detail" id="detail-${session.id}">
+        <div class="live-class-session-detail-topic">${liveClassEscapeHtml(session.topic || '')}</div>
+        <div class="live-class-session-detail-actions">
+          <a class="live-class-zoom-btn" href="${liveClassEscapeHtml(zoom.joinUrl)}" target="_blank" rel="noopener">🔗 Join Zoom →</a>
+          ${materialsBtn}
+        </div>
+        ${renderLiveClassSmartRef(session, '📚')}
+        ${homework}
+        <a class="live-class-submit-btn" href="https://www.feiteamart.com/foundation-of-sketch-a-access" target="_blank" rel="noopener">📸 Submit Homework →</a>
+      </div>
+    `;
+  }
+
+  function toggleSessionDetail(id) {
+    const detail = document.getElementById('detail-' + id);
+    const label = document.getElementById('toggle-label-' + id);
+    if (!detail) return;
+    const isOpen = detail.classList.toggle('open');
+    if (label) label.textContent = isOpen ? 'Hide ↑' : 'Details ↓';
+  }
+  window.toggleSessionDetail = toggleSessionDetail;
+
+  function togglePastSessions() {
+    const list = document.getElementById('live-class-past-list');
+    const btn = document.getElementById('live-class-toggle-past');
+    if (!list || !btn) return;
+    const showing = list.style.display !== 'none';
+    list.style.display = showing ? 'none' : 'block';
+    btn.textContent = showing ? 'Show past sessions ↓' : 'Hide past sessions ↑';
+  }
+  window.togglePastSessions = togglePastSessions;
+
+  function renderLiveClassSection() {
+    const section = document.getElementById('live-class-section');
+    if (!section) return;
+
+    const schedule = window.LIVE_CLASS_SCHEDULE;
+    if (!isLiveClassStudent() || !schedule) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    document.getElementById('live-class-vip-title').textContent = schedule.course.title;
+    document.getElementById('live-class-vip-subtitle').textContent =
+      `${schedule.course.subtitle} · ${schedule.course.totalClasses} Sessions`;
+
+    const next = schedule.getNextUpcoming();
+    document.getElementById('live-class-next-card').innerHTML = renderLiveClassNextCard(next, schedule);
+
+    const upcoming = schedule.getUpcoming().filter(s => !next || s.id !== next.id);
+    const past = schedule.getPast();
+
+    let sessionsHtml = upcoming.map(s => renderLiveClassSessionRow(s, schedule, false)).join('');
+    if (past.length > 0) {
+      sessionsHtml += `<div id="live-class-past-list" style="display:none;">`
+        + past.map(s => renderLiveClassSessionRow(s, schedule, true)).join('')
+        + `</div>`;
+    }
+    document.getElementById('live-class-sessions-list').innerHTML = sessionsHtml;
+
+    const toggleBtn = document.getElementById('live-class-toggle-past');
+    if (past.length > 0) {
+      toggleBtn.style.display = 'block';
+      toggleBtn.textContent = 'Show past sessions ↓';
+    } else {
+      toggleBtn.style.display = 'none';
+    }
+  }
+  window.renderLiveClassSection = renderLiveClassSection;
 
   // ═══════════════════════════════════════════════════════════
   // RENDER STUDENT PORTAL SECTION — Feedback / Badges / Art Journey
@@ -1996,6 +2325,7 @@
       studentCode: code,
       name: match.displayName,
       tier: match.isTrial ? 'trial' : 'member',
+      isLiveClass: !!match.isLiveClass,
       memberSince: existing ? existing.memberSince : Date.now(),
       currentLesson: existing ? existing.currentLesson : 'cube',
       currentStepIdx: existing ? existing.currentStepIdx : 0,
