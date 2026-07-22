@@ -1740,8 +1740,15 @@
     scheduleSaveBtn.textContent = 'Saving…';
     scheduleModalStatus.hidden = true;
 
+    // class_number isn't an editable field in this form (see the STEP 4
+    // field list — it was never one of the inputs), so it's carried over
+    // from the session's existing row rather than read from the form.
+    const existingSession = appState.scheduleSessions.find(s => s.id === id);
+    const classNumber = existingSession ? existingSession.class_number : null;
+
     const payload = {
       id: id,
+      class_number: classNumber,
       title: document.getElementById('sf-title').value.trim(),
       date: document.getElementById('sf-date').value.trim() || null,
       time: document.getElementById('sf-time').value.trim() || null,
@@ -1755,8 +1762,7 @@
       homework_download_url: document.getElementById('sf-homework-url').value.trim() || null,
       smart_class_ref: document.getElementById('sf-smart-ref').value || null,
       smart_class_note: document.getElementById('sf-smart-note').value.trim() || null,
-      updated_by: getCurrentTeacherCode(),
-      updated_at: new Date().toISOString()
+      updated_by: getCurrentTeacherCode()
     };
 
     try {
@@ -1764,7 +1770,7 @@
         method: 'POST',
         headers: sbHeaders({
           'Content-Type': 'application/json',
-          Prefer: 'resolution=merge-duplicates,return=representation'
+          Prefer: 'resolution=merge-duplicates,return=minimal'
         }),
         body: JSON.stringify(payload)
       });
@@ -1775,12 +1781,11 @@
         throw new Error('Save failed (' + res.status + ') ' + errText);
       }
 
-      const saved = await res.json().catch(() => null);
-      const row = Array.isArray(saved) ? saved[0] : (saved || payload);
-
+      // return=minimal means an empty response body — no row to read back,
+      // so update local state directly from what we just sent.
       const idx = appState.scheduleSessions.findIndex(s => s.id === id);
-      if (idx >= 0) appState.scheduleSessions[idx] = row;
-      else appState.scheduleSessions.push(row);
+      if (idx >= 0) appState.scheduleSessions[idx] = Object.assign({}, appState.scheduleSessions[idx], payload);
+      else appState.scheduleSessions.push(payload);
       renderScheduleList();
 
       showScheduleStatus(scheduleModalStatus, '✅ Session updated — students will see changes immediately.', 'success');
