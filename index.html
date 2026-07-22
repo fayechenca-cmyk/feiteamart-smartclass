@@ -2035,8 +2035,10 @@
       // else: keep the default "Collections open" text
     }
 
-    // Live Class VIP section — no-op (hides itself) for non-live-class students
-    renderLiveClassSection();
+    // Live Class VIP section — no-op (hides itself) for non-live-class students.
+    // Now async (fetches live_class_sessions from Supabase before falling
+    // back to the static schedule), so the call site needs a .catch().
+    renderLiveClassSection().catch(e => console.warn('[LiveClass]', e));
 
     // Basic Sketch badge — runs every dashboard load, unlocks once
     // all 11 Foundation A lessons are complete.
@@ -2385,20 +2387,121 @@
   }
   window.togglePastSessions = togglePastSessions;
 
-  function renderLiveClassSection() {
+  // ── Supabase-backed schedule, falling back to LIVE_CLASS_SCHEDULE ──
+  // Lets a teacher's edits in teacher-admin/index.html's Course Schedule
+  // tab show up here without a code deploy. Falls back to the static
+  // core/live-class-schedule.js data if Supabase is empty or unreachable.
+
+  async function fetchLiveClassSessions() {
+    try {
+      const res = await fetch(
+        'https://rudztwseatwayhztbarj.supabase.co/rest/v1/live_class_sessions?order=class_number.asc',
+        {
+          headers: {
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk'
+          }
+        }
+      );
+      if (!res.ok) return null;
+      const rows = await res.json();
+      if (!Array.isArray(rows) || rows.length === 0) return null;
+      return rows;
+    } catch (e) {
+      console.warn('[LiveClass] Supabase fetch failed, using default:', e);
+      return null;
+    }
+  }
+
+  // computeSessionStatus(date, time) — a thin wrapper, not a duplicate.
+  // The one real date-parsing/comparison implementation lives in
+  // LIVE_CLASS_SCHEDULE.computeStatus() (core/live-class-schedule.js).
+  // This just adapts it to a plain (date, time) signature so it works
+  // for a Supabase row before that row has been wrapped into a full
+  // session-shaped object.
+  function computeSessionStatus(date, time) {
+    if (window.LIVE_CLASS_SCHEDULE && window.LIVE_CLASS_SCHEDULE.computeStatus) {
+      return window.LIVE_CLASS_SCHEDULE.computeStatus({ date, time });
+    }
+    return 'upcoming'; // fail open, matches computeStatus()'s own fallback
+  }
+
+  function convertSupabaseRow(row) {
+    return {
+      id: row.id,
+      classNumber: row.class_number,
+      title: row.title,
+      topic: row.topic,
+      date: row.date,
+      time: row.time,
+      status: computeSessionStatus(row.date, row.time),
+      zoom: row.zoom_url ? {
+        joinUrl: row.zoom_url,
+        meetingId: row.zoom_meeting_id,
+        passcode: row.zoom_passcode
+      } : null,
+      materials: row.materials_url ? {
+        url: row.materials_url,
+        label: row.materials_label || 'Class Materials'
+      } : null,
+      smartClassRef: row.smart_class_ref,
+      smartClassNote: row.smart_class_note,
+      homework: {
+        description: row.homework_description,
+        downloadUrl: row.homework_download_url,
+        downloadLabel: row.homework_download_label
+      }
+    };
+  }
+
+  // Wraps a plain sessions array (each already carrying .status, per
+  // convertSupabaseRow above, or attached below for the fallback path)
+  // with the same getNextUpcoming/getUpcoming/getPast/getZoom interface
+  // LIVE_CLASS_SCHEDULE exposes, so the render functions below take
+  // "a schedule-shaped object" regardless of which source it came from.
+  function buildSessionsSchedule(sessions, defaultZoom) {
+    return {
+      sessions: sessions,
+      defaultZoom: defaultZoom || null,
+      getZoom(session) { return session.zoom || this.defaultZoom; },
+      getNextUpcoming() { return this.sessions.find(s => s.status !== 'past') || null; },
+      getUpcoming() { return this.sessions.filter(s => s.status !== 'past'); },
+      getPast() { return this.sessions.filter(s => s.status === 'past'); }
+    };
+  }
+
+  async function renderLiveClassSection() {
     const section = document.getElementById('live-class-section');
     if (!section) return;
 
-    const schedule = window.LIVE_CLASS_SCHEDULE;
-    if (!isLiveClassStudent() || !schedule) {
+    if (!isLiveClassStudent()) {
+      section.style.display = 'none';
+      return;
+    }
+
+    const staticSchedule = window.LIVE_CLASS_SCHEDULE;
+    const supabaseRows = await fetchLiveClassSessions();
+
+    let schedule;
+    if (supabaseRows) {
+      console.log('[LiveClass] Using Supabase data:', supabaseRows.length, 'sessions');
+      const sessions = supabaseRows.map(convertSupabaseRow);
+      schedule = buildSessionsSchedule(sessions, staticSchedule ? staticSchedule.defaultZoom : null);
+    } else if (staticSchedule) {
+      console.log('[LiveClass] Using default schedule (fallback)');
+      const sessions = staticSchedule.sessions.map(s => Object.assign({}, s, { status: staticSchedule.computeStatus(s) }));
+      schedule = buildSessionsSchedule(sessions, staticSchedule.defaultZoom);
+    } else {
       section.style.display = 'none';
       return;
     }
 
     section.style.display = 'block';
-    document.getElementById('live-class-vip-title').textContent = schedule.course.title;
-    document.getElementById('live-class-vip-subtitle').textContent =
-      `${schedule.course.subtitle} · ${schedule.course.totalClasses} Sessions`;
+    const courseInfo = staticSchedule ? staticSchedule.course : null;
+    document.getElementById('live-class-vip-title').textContent = courseInfo ? courseInfo.title : 'Live Class';
+    document.getElementById('live-class-vip-subtitle').textContent = courseInfo
+      ? `${courseInfo.subtitle} · ${courseInfo.totalClasses} Sessions`
+      : `${schedule.sessions.length} Sessions`;
 
     const next = schedule.getNextUpcoming();
     document.getElementById('live-class-next-card').innerHTML = renderLiveClassNextCard(next, schedule);
