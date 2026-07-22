@@ -968,7 +968,7 @@
 
     const voiceLabel = document.createElement('span');
     voiceLabel.className = 'voice-label';
-    voiceLabel.textContent = '🎤 Upload voice recording';
+    voiceLabel.textContent = '🎤 Upload voice or image feedback';
     voiceRow.appendChild(voiceLabel);
 
     const fileInputId = 'voice-' + sub.id;
@@ -980,7 +980,7 @@
 
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'audio/*';
+    fileInput.accept = 'audio/*,image/*';
     fileInput.id = fileInputId;
     fileInput.style.display = 'none';
     voiceRow.appendChild(fileInput);
