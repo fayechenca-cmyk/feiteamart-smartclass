@@ -456,6 +456,175 @@
     padding: 10px 12px;
   }
 
+  .card-lesson-pill {
+    display: inline-block;
+    background: rgba(200,169,110,0.16);
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 10.5px;
+    letter-spacing: 0.3px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
+  /* ─── Lesson filter (sidebar) ──────────────────────────────── */
+
+  .lesson-nav-section { margin-top: 18px; }
+  .lesson-nav-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding: 0 12px;
+    margin-bottom: 6px;
+  }
+  .lesson-nav-list { display: flex; flex-direction: column; gap: 1px; max-height: 320px; overflow-y: auto; }
+  .lesson-nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .lesson-nav-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .lesson-nav-link.active { background: rgba(200,169,110,0.16); color: var(--gold); border-left-color: var(--gold); }
+
+  /* ─── Course Schedule view ─────────────────────────────────── */
+
+  .schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .schedule-header h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 24px; }
+  .schedule-seed-btn {
+    background: var(--ink); color: #fff; border: none;
+    padding: 11px 18px; border-radius: 22px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    white-space: nowrap; transition: background 0.15s, opacity 0.15s;
+  }
+  .schedule-seed-btn:hover { background: #2c3047; }
+  .schedule-seed-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .schedule-status {
+    font-size: 12.5px; color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+  .schedule-status.success { color: var(--green); font-weight: 700; }
+  .schedule-status.error { color: var(--red); font-weight: 700; }
+
+  .schedule-list { display: flex; flex-direction: column; gap: 10px; }
+  .schedule-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    background: #fff; border: 1px solid var(--ink-veryfaint);
+    border-radius: var(--radius-md); padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .schedule-row-main { min-width: 0; }
+  .schedule-row-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .schedule-row-title .num { color: var(--gold); margin-right: 6px; }
+  .schedule-row-meta { font-size: 12px; color: var(--ink-faint); }
+  .schedule-row-updated { font-size: 11px; color: var(--ink-faint); margin-top: 4px; font-style: italic; }
+  .schedule-edit-btn {
+    background: var(--paper-soft); border: 1px solid var(--ink-veryfaint);
+    color: var(--ink); padding: 9px 16px; border-radius: 18px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px;
+    white-space: nowrap; transition: border-color 0.15s;
+  }
+  .schedule-edit-btn:hover { border-color: var(--gold); }
+
+  /* ─── Schedule edit modal ──────────────────────────────────── */
+
+  .schedule-modal {
+    position: fixed; inset: 0;
+    background: rgba(42, 47, 66, 0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: flex-start; justify-content: center;
+    z-index: 300;
+    padding: 32px 20px;
+    overflow-y: auto;
+  }
+  .schedule-modal.visible { display: flex; }
+  .schedule-modal-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 30px 28px;
+    max-width: 560px; width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+  .schedule-modal-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .schedule-field { margin-bottom: 14px; }
+  .schedule-field label {
+    display: block;
+    font-family: 'Montserrat', sans-serif; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 5px;
+  }
+  .schedule-field input[type="text"],
+  .schedule-field select,
+  .schedule-field textarea {
+    width: 100%;
+    border: 1.5px solid var(--ink-veryfaint);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+  }
+  .schedule-field input[type="text"]:focus,
+  .schedule-field select:focus,
+  .schedule-field textarea:focus { border-color: var(--gold); }
+  .schedule-field textarea { min-height: 60px; resize: vertical; }
+  .schedule-field-row { display: flex; gap: 10px; }
+  .schedule-field-row .schedule-field { flex: 1; }
+  .schedule-field-file {
+    display: flex; align-items: center; gap: 8px; margin-top: 6px;
+  }
+  .schedule-field-file input[type="file"] { font-size: 11px; max-width: 100%; }
+  .schedule-field-hint { font-size: 11px; color: var(--ink-faint); margin-top: 4px; }
+
+  .schedule-modal-actions {
+    display: flex; gap: 10px; margin-top: 22px;
+  }
+  .schedule-save-btn {
+    flex: 1;
+    background: var(--ink); color: #fff; border: none;
+    padding: 13px; border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  .schedule-save-btn:hover { background: #2c3047; }
+  .schedule-save-btn:disabled { opacity: 0.6; cursor: default; }
+  .schedule-cancel-btn {
+    background: none; border: 1px solid var(--ink-veryfaint);
+    color: var(--ink-soft); padding: 13px 18px; border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12.5px;
+  }
+  .schedule-cancel-btn:hover { background: var(--paper-soft); }
+
   /* ─── Mobile ────────────────────────────────────────────────── */
 
   @media (max-width: 800px) {
@@ -483,6 +652,10 @@
     .sign-out-btn { width: auto; padding: 8px 12px; }
     .main { padding: 24px 18px 48px; }
     .cards-grid { grid-template-columns: 1fr; }
+    .lesson-nav-section { width: 100%; order: 10; margin-top: 8px; }
+    .lesson-nav-list { flex-direction: row; flex-wrap: wrap; max-height: none; overflow-y: visible; }
+    .schedule-field-row { flex-direction: column; }
+    .schedule-modal-card { padding: 22px 18px; }
   }
 </style>
 </head>
@@ -508,7 +681,16 @@
       <button class="nav-link active" data-filter="all">📋 All Submissions</button>
       <button class="nav-link" data-filter="reviewed">✅ Reviewed</button>
       <button class="nav-link" data-filter="pending">⏳ Pending Review</button>
+      <button class="nav-link" data-view="schedule" id="scheduleNavBtn">📅 Course Schedule</button>
     </nav>
+
+    <div class="lesson-nav-section">
+      <div class="lesson-nav-title">Foundation A Lessons</div>
+      <div class="lesson-nav-list" id="lessonNavList">
+        <!-- populated by renderLessonNav() -->
+      </div>
+    </div>
+
     <div class="sidebar-footer">
       <div class="sidebar-user">Logged in as: <strong id="loggedInAsName">Teacher Faye</strong></div>
       <button class="sign-out-btn" id="signOutBtn">Sign out</button>
@@ -516,28 +698,155 @@
   </aside>
 
   <main class="main">
-    <div class="main-header">
-      <h1>Student Submissions</h1>
-      <div class="filter-tabs">
-        <button class="tab active" data-filter="all">All</button>
-        <button class="tab" data-filter="pending">Pending</button>
-        <button class="tab" data-filter="reviewed">Reviewed</button>
+
+    <!-- ═══ SUBMISSIONS VIEW ═══ -->
+    <div id="submissionsView">
+      <div class="main-header">
+        <h1>Student Submissions</h1>
+        <div class="filter-tabs">
+          <button class="tab active" data-filter="all">All</button>
+          <button class="tab" data-filter="pending">Pending</button>
+          <button class="tab" data-filter="reviewed">Reviewed</button>
+        </div>
       </div>
+
+      <div class="loading-state" id="loadingState">
+        <div class="spinner"></div>
+        <div>Loading submissions…</div>
+      </div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <div class="empty-state-icon">🗂️</div>
+        <p id="emptyStateMsg">No submissions yet. Students will appear here after they submit their work.</p>
+      </div>
+
+      <div id="groupsContainer" hidden></div>
     </div>
 
-    <div class="loading-state" id="loadingState">
-      <div class="spinner"></div>
-      <div>Loading submissions…</div>
+    <!-- ═══ COURSE SCHEDULE VIEW ═══ -->
+    <div id="scheduleView" hidden>
+      <div class="schedule-header">
+        <h1>Foundation A · Live Class Schedule</h1>
+        <button class="schedule-seed-btn" id="scheduleSeedBtn">📥 Load default schedule from code</button>
+      </div>
+
+      <div class="schedule-status" id="scheduleStatus" hidden></div>
+
+      <div class="loading-state" id="scheduleLoadingState">
+        <div class="spinner"></div>
+        <div>Loading schedule…</div>
+      </div>
+
+      <div class="empty-state" id="scheduleEmptyState" hidden>
+        <div class="empty-state-icon">📅</div>
+        <p id="scheduleEmptyMsg">No sessions in database yet. Sessions will be seeded from the default schedule.</p>
+      </div>
+
+      <div class="schedule-list" id="scheduleList" hidden></div>
     </div>
 
-    <div class="empty-state" id="emptyState" hidden>
-      <div class="empty-state-icon">🗂️</div>
-      <p id="emptyStateMsg">No submissions yet. Students will appear here after they submit their work.</p>
-    </div>
-
-    <div id="groupsContainer" hidden></div>
   </main>
 </div>
+
+<!-- ═══ SCHEDULE EDIT MODAL ═══ -->
+<div class="schedule-modal" id="scheduleModal" onclick="if(event.target===this) closeScheduleEdit()">
+  <div class="schedule-modal-card">
+    <div class="schedule-modal-title" id="scheduleModalTitle">Edit Session</div>
+    <form id="scheduleForm">
+      <div class="schedule-field">
+        <label for="sf-title">Title</label>
+        <input type="text" id="sf-title" required>
+      </div>
+      <div class="schedule-field-row">
+        <div class="schedule-field">
+          <label for="sf-date">Date</label>
+          <input type="text" id="sf-date" placeholder="Sep 6, 2026">
+        </div>
+        <div class="schedule-field">
+          <label for="sf-time">Time</label>
+          <input type="text" id="sf-time" placeholder="7:00 PM ET">
+        </div>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-zoom-url">Zoom URL</label>
+        <input type="text" id="sf-zoom-url">
+      </div>
+      <div class="schedule-field-row">
+        <div class="schedule-field">
+          <label for="sf-zoom-id">Zoom Meeting ID</label>
+          <input type="text" id="sf-zoom-id">
+        </div>
+        <div class="schedule-field">
+          <label for="sf-zoom-passcode">Zoom Passcode</label>
+          <input type="text" id="sf-zoom-passcode">
+        </div>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-materials-label">Materials label</label>
+        <input type="text" id="sf-materials-label" placeholder="Class Materials (PPT)">
+      </div>
+      <div class="schedule-field">
+        <label for="sf-materials-url">Materials URL</label>
+        <input type="text" id="sf-materials-url">
+        <div class="schedule-field-file">
+          <input type="file" id="sf-materials-file">
+          <span class="schedule-field-hint" id="sf-materials-file-status"></span>
+        </div>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-homework-desc">Homework description</label>
+        <textarea id="sf-homework-desc"></textarea>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-homework-label">Homework download label</label>
+        <input type="text" id="sf-homework-label" placeholder="Download Homework Reference">
+      </div>
+      <div class="schedule-field">
+        <label for="sf-homework-url">Homework reference URL</label>
+        <input type="text" id="sf-homework-url">
+        <div class="schedule-field-file">
+          <input type="file" id="sf-homework-file">
+          <span class="schedule-field-hint" id="sf-homework-file-status"></span>
+        </div>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-smart-ref">Smart Class reference</label>
+        <select id="sf-smart-ref">
+          <option value="">none</option>
+          <option value="cube">cube</option>
+          <option value="sphere">sphere</option>
+          <option value="cylinder">cylinder</option>
+          <option value="cup">cup</option>
+          <option value="apple">apple</option>
+          <option value="cone">cone</option>
+          <option value="icecream">icecream</option>
+          <option value="papercrane">papercrane</option>
+          <option value="intersecting">intersecting</option>
+          <option value="preparation">preparation</option>
+        </select>
+      </div>
+      <div class="schedule-field">
+        <label for="sf-smart-note">Smart Class note</label>
+        <input type="text" id="sf-smart-note">
+      </div>
+
+      <div class="schedule-status" id="scheduleModalStatus" hidden></div>
+
+      <div class="schedule-modal-actions">
+        <button type="submit" class="schedule-save-btn" id="scheduleSaveBtn">Save</button>
+        <button type="button" class="schedule-cancel-btn" onclick="closeScheduleEdit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Needed for seedScheduleFromCode() — this page was previously fully
+     self-contained with no external script dependencies, but the Course
+     Schedule seed action reads window.LIVE_CLASS_SCHEDULE, which only
+     this file defines. Loaded before the main inline script block below
+     so it's always ready by the time a teacher could click the seed
+     button. -->
+<script src="../core/live-class-schedule.js"></script>
 
 <script>
 (function () {
@@ -567,7 +876,27 @@
 
   const SUBMISSIONS_TABLE = 'student_submissions';
   const FEEDBACK_TABLE = 'teacher_feedback';
+  const SCHEDULE_TABLE = 'live_class_sessions';
   const VOICE_BUCKET = 'teacher-voice';
+
+  // lesson_id -> display name for the sidebar lesson filter + card pills.
+  // Verified against the real LESSON.id values in each lesson file —
+  // NOT the same as the lesson folder names (e.g. the Gift Box lesson's
+  // real id is 'box', not 'giftbox'; Apple's is 'apple', not
+  // 'sphere-realworld' — that's just the folder name).
+  const LESSON_DISPLAY_NAMES = {
+    preparation: 'Preparation',
+    cube: 'Cube',
+    sphere: 'Sphere',
+    cylinder: 'Cylinder',
+    box: 'Gift Box',
+    cup: 'Cup',
+    apple: 'Apple',
+    cone: 'Cone',
+    icecream: 'Ice Cream',
+    intersecting: 'Intersecting Forms',
+    papercrane: 'Paper Crane'
+  };
 
   const TEACHER_CODES = ['TEACHER-FAYE', 'FAYE-00', 'TEACHER-DAWN'];
   const TEACHER_NAMES = {
@@ -630,13 +959,32 @@
     loaded: false,
     submissions: [],
     feedbackBySubmissionId: new Map(),
-    filter: 'all'
+    filter: 'all',
+    lessonFilter: null,        // null = "All Lessons", else a lesson_id
+    view: 'submissions',       // 'submissions' | 'schedule'
+    scheduleSessions: [],
+    scheduleLoaded: false
   };
 
   const loadingState = document.getElementById('loadingState');
   const emptyState = document.getElementById('emptyState');
   const emptyStateMsg = document.getElementById('emptyStateMsg');
   const groupsContainer = document.getElementById('groupsContainer');
+  const submissionsView = document.getElementById('submissionsView');
+  const scheduleView = document.getElementById('scheduleView');
+  const scheduleNavBtn = document.getElementById('scheduleNavBtn');
+  const lessonNavList = document.getElementById('lessonNavList');
+  const scheduleStatus = document.getElementById('scheduleStatus');
+  const scheduleLoadingState = document.getElementById('scheduleLoadingState');
+  const scheduleEmptyState = document.getElementById('scheduleEmptyState');
+  const scheduleEmptyMsg = document.getElementById('scheduleEmptyMsg');
+  const scheduleList = document.getElementById('scheduleList');
+  const scheduleSeedBtn = document.getElementById('scheduleSeedBtn');
+  const scheduleModal = document.getElementById('scheduleModal');
+  const scheduleModalTitle = document.getElementById('scheduleModalTitle');
+  const scheduleForm = document.getElementById('scheduleForm');
+  const scheduleModalStatus = document.getElementById('scheduleModalStatus');
+  const scheduleSaveBtn = document.getElementById('scheduleSaveBtn');
 
   // ── Login ─────────────────────────────────────────────────────
 
@@ -797,30 +1145,71 @@
     }
   }
 
-  // ── Filters ───────────────────────────────────────────────────
+  // ── Filters / views ───────────────────────────────────────────
+
+  function updateNavActiveStates() {
+    document.querySelectorAll('.nav-link[data-filter]').forEach(el => {
+      el.classList.toggle('active', appState.view === 'submissions' && el.dataset.filter === appState.filter);
+    });
+    document.querySelectorAll('.tab').forEach(el => {
+      el.classList.toggle('active', el.dataset.filter === appState.filter);
+    });
+    scheduleNavBtn.classList.toggle('active', appState.view === 'schedule');
+    document.querySelectorAll('.lesson-nav-link').forEach(el => {
+      const lessonId = el.dataset.lesson || null;
+      el.classList.toggle('active', appState.view === 'submissions' && lessonId === appState.lessonFilter);
+    });
+  }
+
+  function showView(view) {
+    appState.view = view;
+    submissionsView.hidden = view !== 'submissions';
+    scheduleView.hidden = view !== 'schedule';
+    updateNavActiveStates();
+    if (view === 'submissions') {
+      render();
+    } else if (view === 'schedule' && !appState.scheduleLoaded) {
+      loadScheduleSessions();
+    }
+  }
 
   function setFilter(filter) {
     appState.filter = filter;
-    document.querySelectorAll('.nav-link').forEach(el => {
-      el.classList.toggle('active', el.dataset.filter === filter);
-    });
-    document.querySelectorAll('.tab').forEach(el => {
-      el.classList.toggle('active', el.dataset.filter === filter);
-    });
-    render();
+    showView('submissions');
   }
 
-  document.querySelectorAll('.nav-link, .tab').forEach(el => {
+  function setLessonFilter(lessonId) {
+    appState.lessonFilter = lessonId || null;
+    showView('submissions');
+  }
+
+  document.querySelectorAll('.nav-link[data-filter], .tab').forEach(el => {
     el.addEventListener('click', () => setFilter(el.dataset.filter));
   });
+  scheduleNavBtn.addEventListener('click', () => showView('schedule'));
+
+  function renderLessonNav() {
+    const items = [{ id: null, label: 'All Lessons' }].concat(
+      Object.keys(LESSON_DISPLAY_NAMES).map(id => ({ id, label: LESSON_DISPLAY_NAMES[id] }))
+    );
+    lessonNavList.innerHTML = items.map(item =>
+      `<button class="lesson-nav-link" data-lesson="${item.id || ''}">${escapeHtml(item.label)}</button>`
+    ).join('');
+    lessonNavList.querySelectorAll('.lesson-nav-link').forEach(el => {
+      el.addEventListener('click', () => setLessonFilter(el.dataset.lesson || null));
+    });
+    updateNavActiveStates();
+  }
+  renderLessonNav();
 
   // ── Render ────────────────────────────────────────────────────
 
   function render() {
     const filtered = appState.submissions.filter(sub => {
       const isReviewed = appState.feedbackBySubmissionId.has(sub.id);
-      if (appState.filter === 'pending') return !isReviewed;
-      if (appState.filter === 'reviewed') return isReviewed;
+      if (appState.filter === 'pending' && isReviewed) return false;
+      if (appState.filter === 'reviewed' && !isReviewed) return false;
+      if (appState.lessonFilter && sub.lesson_id !== appState.lessonFilter) return false;
       return true;
     });
 
@@ -834,9 +1223,14 @@
     if (filtered.length === 0) {
       emptyState.hidden = false;
       groupsContainer.hidden = true;
-      emptyStateMsg.textContent = appState.filter === 'pending'
-        ? 'All caught up! No pending reviews.'
-        : 'Nothing here yet.';
+      const lessonLabel = appState.lessonFilter ? (LESSON_DISPLAY_NAMES[appState.lessonFilter] || appState.lessonFilter) : null;
+      if (lessonLabel) {
+        emptyStateMsg.textContent = 'No ' + (appState.filter === 'pending' ? 'pending ' : appState.filter === 'reviewed' ? 'reviewed ' : '') + lessonLabel + ' submissions.';
+      } else {
+        emptyStateMsg.textContent = appState.filter === 'pending'
+          ? 'All caught up! No pending reviews.'
+          : 'Nothing here yet.';
+      }
       return;
     }
 
@@ -903,6 +1297,14 @@
 
     const body = document.createElement('div');
     body.className = 'card-body';
+
+    const lessonName = LESSON_DISPLAY_NAMES[sub.lesson_id] || sub.lesson_title || sub.lesson_id;
+    if (lessonName) {
+      const pill = document.createElement('div');
+      pill.className = 'card-lesson-pill';
+      pill.textContent = lessonName;
+      body.appendChild(pill);
+    }
 
     const title = document.createElement('div');
     title.className = 'card-title';
@@ -1102,6 +1504,292 @@
 
     return `${SUPABASE_URL}/storage/v1/object/public/${VOICE_BUCKET}/${fileName}`;
   }
+
+  // ── Course Schedule ───────────────────────────────────────────
+  // Reads/writes a Supabase table (live_class_sessions) whose exact
+  // column names aren't independently confirmed the way student_
+  // submissions/teacher_feedback's were in earlier work — these are a
+  // reasonable flat-column mapping of core/live-class-schedule.js's own
+  // JS shape. If the real table uses different column names, upserts
+  // will fail with a 400 the console.log below will show.
+
+  function getCurrentTeacherCode() {
+    try { return sessionStorage.getItem(TEACHER_CODE_KEY) || 'unknown'; } catch (e) { return 'unknown'; }
+  }
+
+  function showScheduleStatus(el, text, kind) {
+    el.textContent = text;
+    el.hidden = false;
+    el.className = 'schedule-status' + (kind ? ' ' + kind : '');
+  }
+
+  // .loading-state/.empty-state/.schedule-list all set `display` (flex)
+  // unconditionally in the CSS, which always overrides the browser's
+  // `[hidden] { display: none }` default regardless of specificity —
+  // the same trap already fixed for #loadingState/#dashboard/#loginScreen
+  // earlier in this file. Using style.display directly here from the
+  // start avoids reintroducing that bug for the new schedule elements.
+  async function loadScheduleSessions() {
+    scheduleLoadingState.style.display = 'flex';
+    scheduleEmptyState.style.display = 'none';
+    scheduleList.style.display = 'none';
+
+    try {
+      const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SCHEDULE_TABLE}?select=*&order=class_number.asc`, {
+        headers: sbHeaders()
+      });
+      console.log('[Admin] schedule response status:', res.status);
+      if (!res.ok) throw new Error('Failed to load schedule (' + res.status + ')');
+
+      const rows = await res.json();
+      console.log('[Admin] schedule rows:', rows.length);
+
+      appState.scheduleSessions = rows || [];
+      appState.scheduleLoaded = true;
+      renderScheduleList();
+    } catch (err) {
+      console.log('[Admin] schedule load error:', err);
+      scheduleEmptyMsg.textContent = 'Could not load the schedule. Check your connection.';
+      scheduleEmptyState.style.display = 'flex';
+      scheduleList.style.display = 'none';
+    } finally {
+      scheduleLoadingState.style.display = 'none';
+    }
+  }
+
+  function renderScheduleList() {
+    const rows = appState.scheduleSessions;
+
+    if (rows.length === 0) {
+      scheduleEmptyMsg.textContent = 'No sessions in database yet. Sessions will be seeded from the default schedule.';
+      scheduleEmptyState.style.display = 'flex';
+      scheduleList.style.display = 'none';
+      return;
+    }
+
+    scheduleEmptyState.style.display = 'none';
+    scheduleList.style.display = 'flex';
+    scheduleList.innerHTML = rows.map(s => `
+      <div class="schedule-row">
+        <div class="schedule-row-main">
+          <div class="schedule-row-title"><span class="num">Class ${s.class_number != null ? s.class_number : '—'}</span>${escapeHtml(s.title || 'Untitled session')}</div>
+          <div class="schedule-row-meta">${escapeHtml(s.date || '—')} · ${escapeHtml(s.time || '—')}</div>
+          ${s.updated_by ? `<div class="schedule-row-updated">Last updated by ${escapeHtml(s.updated_by)}${s.updated_at ? ' on ' + formatDate(s.updated_at) : ''}</div>` : ''}
+        </div>
+        <button class="schedule-edit-btn" onclick="openScheduleEdit('${s.id}')">✏️ Edit</button>
+      </div>
+    `).join('');
+  }
+
+  async function seedScheduleFromCode() {
+    const schedule = window.LIVE_CLASS_SCHEDULE;
+    if (!schedule || !Array.isArray(schedule.sessions)) {
+      showScheduleStatus(scheduleStatus, '⚠️ core/live-class-schedule.js not loaded — cannot seed.', 'error');
+      return;
+    }
+
+    scheduleSeedBtn.disabled = true;
+    scheduleSeedBtn.textContent = 'Loading…';
+    showScheduleStatus(scheduleStatus, 'Loading default schedule into the database…');
+
+    const teacherCode = getCurrentTeacherCode();
+    const nowIso = new Date().toISOString();
+
+    const rows = schedule.sessions.map(s => {
+      const zoom = schedule.getZoom(s);
+      return {
+        id: s.id,
+        class_number: s.classNumber,
+        title: s.title,
+        topic: s.topic || null,
+        date: s.date,
+        time: s.time,
+        zoom_url: zoom ? zoom.joinUrl : null,
+        zoom_meeting_id: zoom ? zoom.meetingId : null,
+        zoom_passcode: zoom ? zoom.passcode : null,
+        materials_label: s.materials ? s.materials.label : null,
+        materials_url: s.materials ? s.materials.url : null,
+        homework_description: s.homework ? s.homework.description : null,
+        homework_download_url: s.homework ? s.homework.downloadUrl : null,
+        homework_download_label: s.homework ? s.homework.downloadLabel : null,
+        smart_class_ref: s.smartClassRef || null,
+        smart_class_note: s.smartClassNote || null,
+        updated_by: teacherCode,
+        updated_at: nowIso
+      };
+    });
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${SCHEDULE_TABLE}`, {
+        method: 'POST',
+        headers: sbHeaders({
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates,return=minimal'
+        }),
+        body: JSON.stringify(rows)
+      });
+      console.log('[Admin] seed response status:', res.status);
+
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '');
+        throw new Error('Seed failed (' + res.status + ') ' + errText);
+      }
+
+      showScheduleStatus(scheduleStatus, `✅ ${rows.length} sessions loaded into database.`, 'success');
+      appState.scheduleLoaded = false; // force a fresh reload below
+      await loadScheduleSessions();
+    } catch (err) {
+      console.log('[Admin] seed error:', err);
+      showScheduleStatus(scheduleStatus, "⚠️ Couldn't load default schedule — see console for details.", 'error');
+    } finally {
+      scheduleSeedBtn.disabled = false;
+      scheduleSeedBtn.textContent = '📥 Load default schedule from code';
+    }
+  }
+  scheduleSeedBtn.addEventListener('click', seedScheduleFromCode);
+
+  function openScheduleEdit(id) {
+    const session = appState.scheduleSessions.find(s => s.id === id);
+    if (!session) return;
+
+    scheduleForm.dataset.sessionId = id;
+    scheduleModalTitle.textContent = 'Edit ' + (session.title || id);
+
+    document.getElementById('sf-title').value = session.title || '';
+    document.getElementById('sf-date').value = session.date || '';
+    document.getElementById('sf-time').value = session.time || '';
+    document.getElementById('sf-zoom-url').value = session.zoom_url || '';
+    document.getElementById('sf-zoom-id').value = session.zoom_meeting_id || '';
+    document.getElementById('sf-zoom-passcode').value = session.zoom_passcode || '';
+    document.getElementById('sf-materials-label').value = session.materials_label || '';
+    document.getElementById('sf-materials-url').value = session.materials_url || '';
+    document.getElementById('sf-homework-desc').value = session.homework_description || '';
+    document.getElementById('sf-homework-label').value = session.homework_download_label || '';
+    document.getElementById('sf-homework-url').value = session.homework_download_url || '';
+    document.getElementById('sf-smart-ref').value = session.smart_class_ref || '';
+    document.getElementById('sf-smart-note').value = session.smart_class_note || '';
+
+    document.getElementById('sf-materials-file').value = '';
+    document.getElementById('sf-materials-file-status').textContent = '';
+    document.getElementById('sf-homework-file').value = '';
+    document.getElementById('sf-homework-file-status').textContent = '';
+
+    scheduleModalStatus.hidden = true;
+    scheduleModal.classList.add('visible');
+  }
+  window.openScheduleEdit = openScheduleEdit;
+
+  function closeScheduleEdit() {
+    scheduleModal.classList.remove('visible');
+  }
+  window.closeScheduleEdit = closeScheduleEdit;
+
+  // Reuses the same teacher-voice bucket the voice-feedback upload uses
+  // (per the task: "upload it to the teacher-voice Storage bucket the
+  // same way audio files are uploaded"), namespaced under schedule/ so
+  // it can't collide with per-submission feedback file paths.
+  async function uploadScheduleFile(file, kind, sessionId) {
+    const safeName = (file.name || 'file').toLowerCase().replace(/[^a-z0-9.]/g, '-');
+    const fileName = `schedule/${sessionId}/${kind}_${Date.now()}_${safeName}`;
+
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${fileName}`, {
+      method: 'POST',
+      headers: sbHeaders({ 'Content-Type': file.type || 'application/octet-stream' }),
+      body: file
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '');
+      throw new Error('File upload failed (' + res.status + ') ' + errText);
+    }
+
+    return `${SUPABASE_URL}/storage/v1/object/public/${VOICE_BUCKET}/${fileName}`;
+  }
+
+  function wireScheduleFileInput(fileInputId, urlInputId, statusId, kind) {
+    const fileInput = document.getElementById(fileInputId);
+    const urlInput = document.getElementById(urlInputId);
+    const statusEl = document.getElementById(statusId);
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      const sessionId = scheduleForm.dataset.sessionId || 'unassigned';
+      statusEl.textContent = 'Uploading…';
+      try {
+        const url = await uploadScheduleFile(file, kind, sessionId);
+        urlInput.value = url;
+        statusEl.textContent = '✓ Uploaded';
+      } catch (err) {
+        console.log('[Admin] schedule file upload error:', err);
+        statusEl.textContent = "⚠️ Upload failed — type a URL instead.";
+      }
+    });
+  }
+  wireScheduleFileInput('sf-materials-file', 'sf-materials-url', 'sf-materials-file-status', 'materials');
+  wireScheduleFileInput('sf-homework-file', 'sf-homework-url', 'sf-homework-file-status', 'homework');
+
+  scheduleForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = scheduleForm.dataset.sessionId;
+    if (!id) return;
+
+    scheduleSaveBtn.disabled = true;
+    scheduleSaveBtn.textContent = 'Saving…';
+    scheduleModalStatus.hidden = true;
+
+    const payload = {
+      id: id,
+      title: document.getElementById('sf-title').value.trim(),
+      date: document.getElementById('sf-date').value.trim() || null,
+      time: document.getElementById('sf-time').value.trim() || null,
+      zoom_url: document.getElementById('sf-zoom-url').value.trim() || null,
+      zoom_meeting_id: document.getElementById('sf-zoom-id').value.trim() || null,
+      zoom_passcode: document.getElementById('sf-zoom-passcode').value.trim() || null,
+      materials_label: document.getElementById('sf-materials-label').value.trim() || null,
+      materials_url: document.getElementById('sf-materials-url').value.trim() || null,
+      homework_description: document.getElementById('sf-homework-desc').value.trim() || null,
+      homework_download_label: document.getElementById('sf-homework-label').value.trim() || null,
+      homework_download_url: document.getElementById('sf-homework-url').value.trim() || null,
+      smart_class_ref: document.getElementById('sf-smart-ref').value || null,
+      smart_class_note: document.getElementById('sf-smart-note').value.trim() || null,
+      updated_by: getCurrentTeacherCode(),
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${SCHEDULE_TABLE}`, {
+        method: 'POST',
+        headers: sbHeaders({
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates,return=representation'
+        }),
+        body: JSON.stringify(payload)
+      });
+      console.log('[Admin] schedule save response status:', res.status);
+
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '');
+        throw new Error('Save failed (' + res.status + ') ' + errText);
+      }
+
+      const saved = await res.json().catch(() => null);
+      const row = Array.isArray(saved) ? saved[0] : (saved || payload);
+
+      const idx = appState.scheduleSessions.findIndex(s => s.id === id);
+      if (idx >= 0) appState.scheduleSessions[idx] = row;
+      else appState.scheduleSessions.push(row);
+      renderScheduleList();
+
+      showScheduleStatus(scheduleModalStatus, '✅ Session updated — students will see changes immediately.', 'success');
+      setTimeout(() => closeScheduleEdit(), 1500);
+    } catch (err) {
+      console.log('[Admin] schedule save error:', err);
+      showScheduleStatus(scheduleModalStatus, "⚠️ Couldn't save — see console for details.", 'error');
+    } finally {
+      scheduleSaveBtn.disabled = false;
+      scheduleSaveBtn.textContent = 'Save';
+    }
+  });
 })();
 </script>
 </body>
