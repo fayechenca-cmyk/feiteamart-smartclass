@@ -85,7 +85,7 @@ const BOOKS = [
 async function resolveAuthorName() {
   // Legacy access-code students keep their name in this localStorage profile.
   try {
-    const raw = localStorage.getItem('fei_user_profile');
+    const raw = sessionStorage.getItem('fei_user_profile');
     if (raw) {
       const p = JSON.parse(raw);
       if (p && p.name) return p.name;

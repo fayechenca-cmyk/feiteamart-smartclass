@@ -4225,7 +4225,7 @@ const UserProfile = {
   current() {
     if (this._cached) return this._cached;
     try {
-      const raw = localStorage.getItem(this.config.storageKey);
+      const raw = sessionStorage.getItem(this.config.storageKey);
       this._cached = raw ? JSON.parse(raw) : null;
       return this._cached;
     } catch(e) {
@@ -4321,7 +4321,7 @@ const UserProfile = {
   clear() {
     this._cached = null;
     try {
-      localStorage.removeItem(this.config.storageKey);
+      sessionStorage.removeItem(this.config.storageKey);
     } catch(e) {}
   },
   
@@ -4335,7 +4335,7 @@ const UserProfile = {
   _save(profile) {
     this._cached = profile;
     try {
-      localStorage.setItem(this.config.storageKey, JSON.stringify(profile));
+      sessionStorage.setItem(this.config.storageKey, JSON.stringify(profile));
     } catch(e) {
       console.warn('[UserProfile] Save failed:', e);
     }
@@ -8228,7 +8228,7 @@ async function continueToNextLessonGuarded(nextLessonId, nextLessonPath) {
   // access. Their profile has `studentCode` set; Supabase users have it null.
   // This mirrors the home guard's "if (profile.studentCode) return" rule.
   try {
-    const profileRaw = localStorage.getItem('fei_user_profile');
+    const profileRaw = sessionStorage.getItem('fei_user_profile');
     if (profileRaw) {
       const profile = JSON.parse(profileRaw);
       if (profile && profile.studentCode) {
@@ -10043,7 +10043,7 @@ function sendChat() {
   const ARTCHI_ANON_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
   let studentEmail = null;
   try {
-    const raw = localStorage.getItem('fei_user_profile');
+    const raw = sessionStorage.getItem('fei_user_profile');
     const profile = raw ? JSON.parse(raw) : null;
     studentEmail = (profile && profile.email) || null;
   } catch (e) {}

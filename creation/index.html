@@ -1947,7 +1947,7 @@
     // Identify legacy code user (bypass paywall)
     let legacy = false;
     try {
-      const raw = localStorage.getItem('fei_user_profile');
+      const raw = sessionStorage.getItem('fei_user_profile');
       if (raw) {
         const p = JSON.parse(raw);
         legacy = !!(p && p.studentCode && !p.supabaseUserId);

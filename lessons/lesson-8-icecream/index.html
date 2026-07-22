@@ -4581,7 +4581,7 @@ const UserProfile = {
   current() {
     if (this._cached) return this._cached;
     try {
-      const raw = localStorage.getItem(this.config.storageKey);
+      const raw = sessionStorage.getItem(this.config.storageKey);
       this._cached = raw ? JSON.parse(raw) : null;
       return this._cached;
     } catch(e) {
@@ -4677,7 +4677,7 @@ const UserProfile = {
   clear() {
     this._cached = null;
     try {
-      localStorage.removeItem(this.config.storageKey);
+      sessionStorage.removeItem(this.config.storageKey);
     } catch(e) {}
   },
   
@@ -4691,7 +4691,7 @@ const UserProfile = {
   _save(profile) {
     this._cached = profile;
     try {
-      localStorage.setItem(this.config.storageKey, JSON.stringify(profile));
+      sessionStorage.setItem(this.config.storageKey, JSON.stringify(profile));
     } catch(e) {
       console.warn('[UserProfile] Save failed:', e);
     }
@@ -9068,7 +9068,7 @@ function renderBadgeUnlock() {
   const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
   let _completedFromProfile = [];
   try {
-    const _raw = localStorage.getItem('fei_user_profile');
+    const _raw = sessionStorage.getItem('fei_user_profile');
     if (_raw) {
       const _prof = JSON.parse(_raw);
       _completedFromProfile = (_prof.completedLessons || []).filter(id => FOUNDATION_IDS.includes(id));
@@ -10443,7 +10443,7 @@ function sendChat() {
   const ARTCHI_ANON_KEY = 'sb_publishable_NvPeY8sJYN8v4CoP1_X0BQ_RdluuoYT';
   let studentEmail = null;
   try {
-    const raw = localStorage.getItem('fei_user_profile');
+    const raw = sessionStorage.getItem('fei_user_profile');
     const profile = raw ? JSON.parse(raw) : null;
     studentEmail = (profile && profile.email) || null;
   } catch (e) {}
