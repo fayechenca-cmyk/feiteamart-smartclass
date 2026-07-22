@@ -1694,7 +1694,10 @@
 
     const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${VOICE_BUCKET}/${fileName}`, {
       method: 'POST',
-      headers: sbHeaders({ 'Content-Type': file.type || 'application/octet-stream' }),
+      headers: sbHeaders({
+        'Content-Type': file.type || 'application/octet-stream',
+        'x-upsert': 'true'
+      }),
       body: file
     });
 
