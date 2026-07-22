@@ -706,15 +706,30 @@
   }
 
   async function loadData() {
-    console.log('[Admin] Fetching...');
     loadingState.hidden = false;
     emptyState.hidden = true;
     groupsContainer.hidden = true;
+
+    // Watchdog: if nothing below has hidden the spinner within 10s (an
+    // unanticipated hang that even fetchWithTimeout's own 12s abort
+    // doesn't cover — e.g. a hang in JSON parsing or rendering, not the
+    // network request itself), force it closed rather than leaving the
+    // teacher staring at a spinner forever. Cleared in finally below on
+    // every normal exit, so it never fires after loadData() has already
+    // finished.
+    const watchdogTimer = setTimeout(() => {
+      console.log('[Admin] Watchdog fired — still loading after 10s, forcing spinner off');
+      loadingState.hidden = true;
+      groupsContainer.hidden = true;
+      emptyState.hidden = false;
+      emptyStateMsg.textContent = 'Could not load — please refresh.';
+    }, 10000);
 
     // The whole body runs inside try/finally so the spinner is
     // GUARANTEED to be hidden when this function exits — success,
     // empty result, or error — no branch can leave it spinning.
     try {
+      console.log('[Admin] Starting fetch...');
       const [subsRes, fbRes] = await Promise.all([
         fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
           headers: sbHeaders()
@@ -723,6 +738,9 @@
           headers: sbHeaders()
         })
       ]);
+
+      console.log('[Admin] Response status:', subsRes.status);
+      console.log('[Admin] Response ok:', subsRes.ok);
 
       if (!subsRes.ok) throw new Error('Failed to load submissions (' + subsRes.status + ')');
 
@@ -733,7 +751,8 @@
         throw new Error('Could not parse submissions response: ' + parseErr.message);
       }
 
-      console.log('[Admin] Status:', subsRes.status, 'Rows:', submissions.length);
+      console.log('[Admin] Data length:', submissions.length);
+      console.log('[Admin] First item:', JSON.stringify(submissions[0]));
 
       let feedback = [];
       if (fbRes.ok) {
@@ -757,12 +776,14 @@
       // appState.submissions is empty (see the length===0 check at the
       // top of render()) — no separate empty-array branch needed here.
       render();
+      console.log('[Admin] Render complete');
     } catch (err) {
       console.log('[Admin] Error:', err);
       groupsContainer.hidden = true;
       emptyState.hidden = false;
       emptyStateMsg.textContent = 'Could not load submissions. Check your connection.';
     } finally {
+      clearTimeout(watchdogTimer);
       loadingState.hidden = true;
     }
   }
