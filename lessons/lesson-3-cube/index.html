@@ -4643,7 +4643,9 @@ async function sendAccessCodeUpload() {
         student_code: profile.studentCode,
         user_name: displayName,
         user_email: null,
+        course_id: 'foundation-a',
         lesson_id: LESSON.id,
+        lesson_title: LESSON.title || LESSON.id,
         image_url: imageUrl,
         status: 'submitted'
       })
