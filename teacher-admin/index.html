@@ -178,6 +178,42 @@
   .nav-link:hover { background: rgba(255,255,255,0.06); color: #fff; }
   .nav-link.active { background: rgba(200,169,110,0.16); color: var(--gold); }
 
+  .nav-divider {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 16px 0 12px;
+  }
+
+  .nav-section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    padding: 0 12px;
+    margin-bottom: 6px;
+  }
+
+  .nav-item {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 11px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s;
+  }
+
+  .live-homework-btn {
+    border: 1px solid rgba(200,169,110,0.4);
+    color: var(--gold);
+  }
+  .live-homework-btn:hover { background: rgba(200,169,110,0.1); }
+
   .sidebar-footer {
     border-top: 1px solid rgba(255,255,255,0.12);
     padding-top: 16px;
@@ -683,6 +719,15 @@
       <button class="nav-link" data-filter="pending">⏳ Pending Review</button>
       <button class="nav-link" data-view="schedule" id="scheduleNavBtn">📅 Course Schedule</button>
     </nav>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">TALLY SUBMISSIONS</div>
+    <a href="https://tally.so/r/3NN4VW"
+       target="_blank"
+       rel="noopener"
+       class="nav-item live-homework-btn">
+      📋 Live Class Homework
+    </a>
 
     <div class="lesson-nav-section">
       <div class="lesson-nav-title">Foundation A Lessons</div>
