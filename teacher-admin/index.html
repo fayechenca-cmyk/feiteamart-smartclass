@@ -706,11 +706,20 @@
   }
 
   async function loadData() {
-    loadingState.hidden = false;
+    // .loading-state sets `display: flex` unconditionally in the author
+    // stylesheet (see the CSS block above), which always overrides the
+    // browser's default `[hidden] { display: none }` UA rule regardless
+    // of selector specificity — so toggling the `hidden` IDL property
+    // here was a no-op the whole time. That's the actual bug: the
+    // spinner shows real cards fine underneath, but never visually
+    // hides. Using style.display directly (inline styles beat the class
+    // rule) actually works — same fix already applied to #loginScreen/
+    // #dashboard earlier in this file.
+    loadingState.style.display = 'flex';
     emptyState.hidden = true;
     groupsContainer.hidden = true;
 
-    // Watchdog: if nothing below has hidden the spinner within 10s (an
+    // Fallback: if nothing below has hidden the spinner within 5s (an
     // unanticipated hang that even fetchWithTimeout's own 12s abort
     // doesn't cover — e.g. a hang in JSON parsing or rendering, not the
     // network request itself), force it closed rather than leaving the
@@ -718,12 +727,12 @@
     // every normal exit, so it never fires after loadData() has already
     // finished.
     const watchdogTimer = setTimeout(() => {
-      console.log('[Admin] Watchdog fired — still loading after 10s, forcing spinner off');
-      loadingState.hidden = true;
+      console.log('[Admin] Fallback timeout fired — still loading after 5s, forcing spinner off');
+      loadingState.style.display = 'none';
       groupsContainer.hidden = true;
       emptyState.hidden = false;
       emptyStateMsg.textContent = 'Could not load — please refresh.';
-    }, 10000);
+    }, 5000);
 
     // The whole body runs inside try/finally so the spinner is
     // GUARANTEED to be hidden when this function exits — success,
@@ -784,7 +793,7 @@
       emptyStateMsg.textContent = 'Could not load submissions. Check your connection.';
     } finally {
       clearTimeout(watchdogTimer);
-      loadingState.hidden = true;
+      loadingState.style.display = 'none';
     }
   }
 
