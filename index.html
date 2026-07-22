@@ -2684,9 +2684,10 @@
     const input = document.getElementById('signin-code');
     const error = document.getElementById('signin-error');
     const code = input.value.trim().toUpperCase();
-    
+    console.log('[Login] Code submitted:', code);
+
     if (!code) return;
-    
+
     const match = validStudents.get(code);
     if (!match) {
       input.classList.add('error');
@@ -2718,7 +2719,12 @@
       createdAt: existing ? existing.createdAt : Date.now(),
       lastSeenAt: Date.now()
     };
+    console.log('[Login] Profile created:', JSON.stringify(profile));
+
+    console.log('[Login] Saving to localStorage...');
     saveProfile(profile);
+    console.log('[Login] localStorage saved:', localStorage.getItem('fei_user_profile')?.substring(0, 100));
+
     showHome();
     checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
   }
