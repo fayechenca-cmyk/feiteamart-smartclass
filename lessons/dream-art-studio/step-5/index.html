@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 5 · Draw Together · Dream Art Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/studio-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/studio-state.js"></script>
+
+<style>
+  .objects-progress {
+    text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .empty-hint {
+    text-align: center; font-size: 13px; color: var(--ink-soft);
+    background: #fff; border-radius: 16px; padding: 20px; line-height: 1.6;
+  }
+  .empty-hint a { color: var(--gold); font-weight: 800; text-decoration: none; }
+
+  .draw-card {
+    background: #fff; border-radius: 18px; padding: 18px;
+    box-shadow: 0 4px 16px rgba(26,29,43,0.08); margin-bottom: 14px;
+    transition: opacity .2s ease;
+  }
+  .draw-card.drawn { opacity: 0.55; }
+
+  .draw-card-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .draw-card-head .dc-emoji { font-size: 26px; flex-shrink: 0; }
+  .draw-card-head .dc-body { flex: 1; min-width: 0; }
+  .draw-card-head .dc-name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14.5px; margin-bottom: 3px; }
+  .draw-card-head .dc-summary { font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; font-style: italic; }
+  .draw-card-head .dc-check {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--green); color: #fff; font-weight: 900; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .tutorial-placeholder {
+    background: linear-gradient(135deg, var(--purple) 0%, #c4b5fd 100%);
+    border-radius: 16px; padding: 16px 14px; text-align: center; color: #fff;
+    margin-bottom: 12px; position: relative; overflow: hidden;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .tutorial-placeholder svg { width: 52px; height: 52px; flex-shrink: 0; }
+  .tutorial-placeholder .tp-text {
+    font-size: 12px; font-weight: 700; line-height: 1.45; text-align: left;
+  }
+
+  .drawn-btn {
+    width: 100%; padding: 13px; border: none; border-radius: 14px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer;
+  }
+  .drawn-btn.pending { background: var(--green); color: #fff; }
+  .drawn-btn.drawn { background: rgba(29,158,117,0.15); color: var(--green); }
+  .drawn-btn:active { transform: scale(0.98); }
+
+  .skip-wrap { text-align: center; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Draw Together</p>
+  <div class="stops-pill">STEP 5 OF 12</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>Let's draw your objects!</h1>
+    <p>One by one. Take your time.</p>
+  </div>
+
+  <div class="objects-progress" id="objectsProgress"></div>
+
+  <div id="objectsList"></div>
+
+  <div id="emptyHintSlot"></div>
+
+  <div class="next-footer" id="nextFooter" style="display:none;">
+    <button class="btn btn-gold" id="continueBtn" onclick="goNext()">Continue →</button>
+    <div class="skip-wrap" id="skipWrap">
+      <button class="btn btn-ghost" onclick="goNext()" style="font-size:12px; padding:10px;">Skip</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STEP_N = 5;
+
+// Same object catalog as Step 3/4 (each page is self-contained).
+const OBJECT_BY_KEY = {
+  easel: { icon: '🎨', label: 'Easel' },
+  plants: { icon: '🪴', label: 'Plants' },
+  sofa: { icon: '🛋', label: 'Sofa' },
+  chair: { icon: '🪑', label: 'Chair' },
+  paintings: { icon: '🖼', label: 'Paintings' },
+  cat: { icon: '🐱', label: 'Cat' },
+  dog: { icon: '🐶', label: 'Dog' },
+  toys: { icon: '🧸', label: 'Toys' },
+  books: { icon: '📚', label: 'Books' },
+  moon_window: { icon: '🌙', label: 'Moon Window' },
+  whale: { icon: '🐋', label: 'Whale' },
+  rainbow: { icon: '🌈', label: 'Rainbow' },
+  piano: { icon: '🎹', label: 'Piano' },
+  balloon: { icon: '🎈', label: 'Balloon' },
+  butterfly: { icon: '🦋', label: 'Butterfly' },
+  guitar: { icon: '🎸', label: 'Guitar' },
+  vase: { icon: '🏺', label: 'Vase' },
+  candles: { icon: '🕯', label: 'Candles' },
+  mirror: { icon: '🪞', label: 'Mirror' },
+  masks: { icon: '🎭', label: 'Masks' },
+};
+
+// Same summary-sentence grammar helpers as Step 4, so the sentence
+// shown here matches exactly what the student saw when they designed it.
+const MATERIAL_ADJ = { Wood: 'wooden', Magic: 'magical' };
+const PATTERN_NOUN = { Stars: 'star', Dots: 'dot', Stripes: 'stripe', Leaves: 'leaf' };
+const MAGIC_VERB = {
+  'Can fly': 'fly',
+  'Changes color': 'change color',
+  'Grows flowers': 'grow flowers',
+  'Has tiny wheels': 'have tiny wheels',
+  'Glows in dark': 'glow in the dark',
+  'Plays music': 'play music',
+  'Talks': 'talk',
+  'Invisible sometimes': 'be invisible sometimes',
+};
+
+function buildSummary(objectLabel, c) {
+  if (!c.shape || !c.color || !c.material || !c.pattern || !c.magic) return null;
+  const material = (MATERIAL_ADJ[c.material] || c.material).toLowerCase();
+  const patternWord = PATTERN_NOUN[c.pattern] || c.pattern;
+  const pattern = patternWord === 'Egyptian' ? patternWord : patternWord.toLowerCase();
+  const magic = MAGIC_VERB[c.magic] || c.magic.toLowerCase();
+  return `A ${c.shape.toLowerCase()} ${c.color.toLowerCase()} ${material} ${objectLabel.toLowerCase()} `
+    + `with ${pattern} patterns that can ${magic}.`;
+}
+
+const ARTCHI_SVG = `
+  <svg viewBox="0 0 100 100">
+    <defs>
+      <linearGradient id="artchiBody5" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e9d5ff"/>
+        <stop offset="50%" stop-color="#c4b5fd"/>
+        <stop offset="100%" stop-color="#a78bfa"/>
+      </linearGradient>
+      <linearGradient id="artchiWing5" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#fda4af" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0.85"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="50" cy="92" rx="22" ry="4" fill="rgba(0,0,0,0.08)"/>
+    <path d="M 22 50 Q 5 32 12 55 Q 18 70 32 62 Z" fill="url(#artchiWing5)" opacity="0.9"/>
+    <path d="M 78 50 Q 95 32 88 55 Q 82 70 68 62 Z" fill="url(#artchiWing5)" opacity="0.9"/>
+    <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#artchiBody5)"/>
+    <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#artchiBody5)"/>
+    <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
+    <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
+    <path d="M 34 26 Q 38 20 42 26 Q 40 30 34 28 Z" fill="#c4b5fd"/>
+    <path d="M 66 26 Q 62 20 58 26 Q 60 30 66 28 Z" fill="#c4b5fd"/>
+    <g class="artchi-eye">
+      <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
+      <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
+      <circle cx="43" cy="42" r="1" fill="#fff"/>
+      <circle cx="59" cy="42" r="1" fill="#fff"/>
+    </g>
+    <circle cx="36" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+    <circle cx="64" cy="50" r="2.5" fill="#fda4af" opacity="0.7"/>
+    <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="35" cy="72" rx="9" ry="6" fill="#fff"/>
+    <circle cx="31" cy="70" r="2" fill="#ef4444"/>
+    <circle cx="36" cy="70" r="2" fill="#f59e0b"/>
+    <circle cx="34" cy="75" r="2" fill="#1d9e75"/>
+    <circle cx="39" cy="74" r="2" fill="#3b82f6"/>
+  </svg>
+`;
+
+function getDrawn() {
+  return DreamState.getStepData(STEP_N).drawn || {};
+}
+
+function designedObjectKeys() {
+  const customizations = DreamState.getStepData(4).customizations || {};
+  return Object.keys(customizations).filter(k => customizations[k] && customizations[k].done);
+}
+
+function renderList() {
+  const keys = designedObjectKeys();
+  const customizations = DreamState.getStepData(4).customizations || {};
+  const drawn = getDrawn();
+  const listEl = document.getElementById('objectsList');
+  const emptyHintSlot = document.getElementById('emptyHintSlot');
+
+  if (keys.length === 0) {
+    listEl.innerHTML = '';
+    emptyHintSlot.innerHTML = `
+      <div class="empty-hint">You haven't designed any objects yet — <a href="../step-4/">go back to Step 4</a> to design a few first.</div>
+    `;
+    document.getElementById('objectsProgress').textContent = '';
+    document.getElementById('nextFooter').style.display = 'none';
+    return;
+  }
+  emptyHintSlot.innerHTML = '';
+
+  const drawnCount = keys.filter(k => drawn[k]).length;
+  document.getElementById('objectsProgress').textContent = drawnCount + ' of ' + keys.length + ' objects drawn';
+
+  listEl.innerHTML = keys.map(key => {
+    const obj = OBJECT_BY_KEY[key] || { icon: '✨', label: key };
+    const summary = buildSummary(obj.label, customizations[key] || {});
+    const isDrawn = !!drawn[key];
+
+    return `
+      <div class="draw-card ${isDrawn ? 'drawn' : ''}">
+        <div class="draw-card-head">
+          <div class="dc-emoji">${obj.icon}</div>
+          <div class="dc-body">
+            <div class="dc-name">${obj.label}</div>
+            ${summary ? `<div class="dc-summary">"${summary}"</div>` : ''}
+          </div>
+          ${isDrawn ? '<div class="dc-check">✓</div>' : ''}
+        </div>
+        <div class="tutorial-placeholder">
+          ${ARTCHI_SVG}
+          <div class="tp-text">🎬 Faye's drawing tutorial for your ${obj.label.toLowerCase()} is coming soon!</div>
+        </div>
+        <button class="drawn-btn ${isDrawn ? 'drawn' : 'pending'}" onclick="markDrawn('${key}')">
+          ${isDrawn ? '✓ Drawn!' : "✓ I drew this!"}
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  const footer = document.getElementById('nextFooter');
+  const skipWrap = document.getElementById('skipWrap');
+  if (drawnCount > 0) {
+    footer.style.display = 'block';
+    skipWrap.style.display = drawnCount >= keys.length ? 'none' : 'block';
+  } else {
+    footer.style.display = 'none';
+  }
+}
+
+function markDrawn(key) {
+  const drawn = getDrawn();
+  drawn[key] = !drawn[key]; // tap again to un-mark, in case of a mis-tap
+  DreamState.setStepData(STEP_N, { drawn: drawn });
+  DreamState.markInProgress(STEP_N);
+
+  const keys = designedObjectKeys();
+  const allDrawn = keys.length > 0 && keys.every(k => drawn[k]);
+  if (allDrawn) DreamState.markCompleted(STEP_N);
+
+  renderList();
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-6/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dream-art-studio');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  DreamState.markVisited(STEP_N);
+  renderList();
+}
+
+init();
+</script>
+</body>
+</html>

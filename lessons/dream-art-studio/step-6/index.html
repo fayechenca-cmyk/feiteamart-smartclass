@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 6 · Cut Collection · Dream Art Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/studio-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/studio-state.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Cut Collection</p>
+  <div class="stops-pill">STEP 6 OF 12</div>
+</div>
+
+<div class="content-wrap">
+  <div class="soon-card">
+    <div class="soon-icon">✂️</div>
+    <h2>Cut Collection</h2>
+    <p>This stage is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
+    <a class="btn btn-gold" href="../">← Back to map</a>
+  </div>
+</div>
+
+<script>
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dream-art-studio');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  DreamState.markVisited(6);
+}
+init();
+</script>
+</body>
+</html>

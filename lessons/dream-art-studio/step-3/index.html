@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 3 · Imagine Your Dream Studio · Dream Art Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/studio-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/studio-state.js"></script>
+
+<style>
+  .objects-counter {
+    text-align: center; font-size: 13px; font-weight: 800; color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .objects-guidance {
+    text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 16px;
+  }
+  .objects-guidance.met { color: var(--green); font-weight: 700; }
+
+  .dream-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    margin-bottom: 20px;
+  }
+  @media (min-width: 600px) { .dream-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .dream-grid { grid-template-columns: repeat(4, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Imagine Your Dream Studio</p>
+  <div class="stops-pill">STEP 3 OF 12</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>What would YOU like inside your studio?</h1>
+    <p>Pick 10–15 objects. You'll design each one next.</p>
+  </div>
+
+  <div class="objects-counter" id="objectsCounter">0 objects selected</div>
+  <div class="objects-guidance" id="objectsGuidance">Pick at least 5</div>
+
+  <div class="dream-grid" id="dreamGrid"></div>
+
+  <div class="next-footer">
+    <button class="btn btn-gold" onclick="goNext()">Design your objects →</button>
+  </div>
+
+</div>
+
+<script>
+const STEP_N = 3;
+const MIN_SUGGESTED = 5;
+
+const DREAM_OBJECTS = [
+  { key: 'easel', icon: '🎨', label: 'Easel' },
+  { key: 'plants', icon: '🪴', label: 'Plants' },
+  { key: 'sofa', icon: '🛋', label: 'Sofa' },
+  { key: 'chair', icon: '🪑', label: 'Chair' },
+  { key: 'paintings', icon: '🖼', label: 'Paintings' },
+  { key: 'cat', icon: '🐱', label: 'Cat' },
+  { key: 'dog', icon: '🐶', label: 'Dog' },
+  { key: 'toys', icon: '🧸', label: 'Toys' },
+  { key: 'books', icon: '📚', label: 'Books' },
+  { key: 'moon_window', icon: '🌙', label: 'Moon Window' },
+  { key: 'whale', icon: '🐋', label: 'Whale' },
+  { key: 'rainbow', icon: '🌈', label: 'Rainbow' },
+  { key: 'piano', icon: '🎹', label: 'Piano' },
+  { key: 'balloon', icon: '🎈', label: 'Balloon' },
+  { key: 'butterfly', icon: '🦋', label: 'Butterfly' },
+  { key: 'guitar', icon: '🎸', label: 'Guitar' },
+  { key: 'vase', icon: '🏺', label: 'Vase' },
+  { key: 'candles', icon: '🕯', label: 'Candles' },
+  { key: 'mirror', icon: '🪞', label: 'Mirror' },
+  { key: 'masks', icon: '🎭', label: 'Masks' },
+];
+
+function renderGrid() {
+  const data = DreamState.getStepData(STEP_N);
+  const selected = data.selected || [];
+
+  const grid = document.getElementById('dreamGrid');
+  grid.innerHTML = DREAM_OBJECTS.map(o => `
+    <div class="tap-card ${selected.includes(o.key) ? 'selected' : ''}" onclick="toggleSelect('${o.key}')">
+      <div class="tc-emoji">${o.icon}</div>
+      <div class="tc-label">${o.label}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('objectsCounter').textContent = selected.length + ' object' + (selected.length === 1 ? '' : 's') + ' selected';
+
+  const guidance = document.getElementById('objectsGuidance');
+  if (selected.length >= MIN_SUGGESTED) {
+    guidance.textContent = "You've got a great start!";
+    guidance.classList.add('met');
+  } else {
+    guidance.textContent = 'Pick at least ' + MIN_SUGGESTED;
+    guidance.classList.remove('met');
+  }
+}
+
+function toggleSelect(key) {
+  const data = DreamState.getStepData(STEP_N);
+  const selected = data.selected || [];
+  const idx = selected.indexOf(key);
+  if (idx === -1) selected.push(key);
+  else selected.splice(idx, 1);
+
+  DreamState.setStepData(STEP_N, { selected: selected });
+  DreamState.markInProgress(STEP_N);
+  renderGrid();
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-4/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dream-art-studio');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  DreamState.markVisited(STEP_N);
+  renderGrid();
+}
+
+init();
+</script>
+</body>
+</html>

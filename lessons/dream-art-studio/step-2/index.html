@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 2 · Look Like an Artist · Dream Art Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/studio-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/studio-state.js"></script>
+
+<style>
+  .artwork-frame {
+    position: relative;
+    background: linear-gradient(160deg, #e2564a 0%, #c73f34 45%, #9c2c24 100%);
+    border-radius: 20px;
+    border: 8px solid #fff;
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(26,29,43,0.18);
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .artwork-frame .af-label {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    color: rgba(255,255,255,0.85); text-align: center;
+  }
+  .artwork-frame .af-pulse-ring {
+    position: absolute; inset: 0;
+    border-radius: 12px;
+    border: 4px solid var(--gold);
+    opacity: 0;
+  }
+  .artwork-frame .af-pulse-ring.pulsing { animation: pulseRing 0.9s ease-out; }
+  @keyframes pulseRing {
+    0% { opacity: 0.9; transform: scale(0.94); }
+    100% { opacity: 0; transform: scale(1.04); }
+  }
+  .artwork-caption { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 22px; }
+
+  .objects-progress {
+    text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .objects-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    margin-bottom: 8px;
+  }
+  @media (min-width: 480px) { .objects-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px) { .objects-grid { grid-template-columns: repeat(4, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Look Like an Artist</p>
+  <div class="stops-pill">STEP 2 OF 12</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="page-hero">
+    <h1>What can you find in Matisse's studio?</h1>
+    <p>Look closely — artists notice things other people walk right past.</p>
+  </div>
+
+  <div class="artwork-frame" id="artworkFrame">
+    <div class="af-pulse-ring" id="pulseRing"></div>
+    <div class="af-label">The Red Studio<br>(placeholder — real artwork coming soon)</div>
+  </div>
+  <div class="artwork-caption">Tap an object below each time you spot it in the painting.</div>
+
+  <div class="objects-progress" id="objectsProgress">0 of 12 objects found</div>
+
+  <div class="objects-grid" id="objectsGrid"></div>
+
+  <div id="feedbackSlot"></div>
+
+  <div class="next-footer">
+    <button class="btn btn-gold" id="continueBtn" onclick="goNext()" disabled>Continue →</button>
+    <div id="readyAnywayWrap" style="text-align:center; margin-top:10px;">
+      <button class="btn btn-ghost" onclick="goNext()" style="font-size:12px; padding:10px;">I'm ready to move on</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STEP_N = 2;
+const UNLOCK_THRESHOLD = 8;
+
+const OBJECTS = [
+  { key: 'chair', icon: '🪑', label: 'Chair' },
+  { key: 'easel', icon: '🎨', label: 'Easel' },
+  { key: 'painting', icon: '🖼', label: 'Painting' },
+  { key: 'plant', icon: '🪴', label: 'Plant' },
+  { key: 'rug', icon: '🟥', label: 'Rug' },
+  { key: 'sculpture', icon: '🗿', label: 'Sculpture' },
+  { key: 'window', icon: '🪟', label: 'Window' },
+  { key: 'table', icon: '🛋', label: 'Table' },
+  { key: 'lamp', icon: '💡', label: 'Lamp' },
+  { key: 'frame', icon: '🖼️', label: 'Frame' },
+  { key: 'screen', icon: '🚪', label: 'Screen' },
+  { key: 'books', icon: '📚', label: 'Books' },
+];
+
+const FEEDBACK_LINES = ["Good eye!", "Found it!", "An artist always notices that."];
+let feedbackIdx = 0;
+
+function renderObjects() {
+  const data = DreamState.getStepData(STEP_N);
+  const found = data.found || [];
+
+  const grid = document.getElementById('objectsGrid');
+  grid.innerHTML = OBJECTS.map(o => `
+    <div class="check-card ${found.includes(o.key) ? 'checked' : ''}" onclick="toggleObject('${o.key}')">
+      <div class="check-box">${found.includes(o.key) ? '✓' : ''}</div>
+      <div class="check-label">${o.icon} ${o.label}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('objectsProgress').textContent = found.length + ' of ' + OBJECTS.length + ' objects found';
+
+  const continueBtn = document.getElementById('continueBtn');
+  const readyAnywayWrap = document.getElementById('readyAnywayWrap');
+  if (found.length >= UNLOCK_THRESHOLD) {
+    continueBtn.removeAttribute('disabled');
+    readyAnywayWrap.style.display = 'none';
+  } else {
+    continueBtn.setAttribute('disabled', 'disabled');
+    readyAnywayWrap.style.display = 'block';
+  }
+}
+
+function toggleObject(key) {
+  const data = DreamState.getStepData(STEP_N);
+  const found = data.found || [];
+  const idx = found.indexOf(key);
+  const nowFound = idx === -1;
+
+  if (nowFound) {
+    found.push(key);
+  } else {
+    found.splice(idx, 1);
+  }
+  DreamState.setStepData(STEP_N, { found: found });
+  DreamState.markInProgress(STEP_N);
+
+  if (nowFound) {
+    showFeedback(FEEDBACK_LINES[feedbackIdx % FEEDBACK_LINES.length]);
+    feedbackIdx++;
+    pulseArtwork();
+  }
+
+  renderObjects();
+}
+
+function showFeedback(text) {
+  document.getElementById('feedbackSlot').innerHTML = `
+    <div class="artchi-bubble">
+      <div class="ab-icon">✨</div>
+      <div class="ab-text">${text}</div>
+    </div>
+  `;
+}
+
+function pulseArtwork() {
+  const ring = document.getElementById('pulseRing');
+  ring.classList.remove('pulsing');
+  void ring.offsetWidth; // restart animation
+  ring.classList.add('pulsing');
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-3/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dream-art-studio');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  DreamState.markVisited(STEP_N);
+  renderObjects();
+}
+
+init();
+</script>
+</body>
+</html>

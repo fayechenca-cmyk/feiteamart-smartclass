@@ -1,0 +1,169 @@
+/* ============================================================
+ * FEI TeamArt · Dream Art Studio — shared chrome
+ * Loaded by the map (index.html) and every step-N/index.html page.
+ * Brand vars, page background, header bar, and common content
+ * building blocks — deliberately the same warm Art GPS palette as
+ * lessons/first-illustration-book/shared/book-style.css (peach /
+ * butter / rose / sage / gold), since this course lives in the same
+ * Creation · Learn from Collections track.
+ * ============================================================ */
+
+:root {
+  --ink: #1a1d2b;
+  --ink-soft: #4b4b5a;
+  --ink-muted: #8a8a9a;
+  --gold: #c8a96e;
+  --green: #1d9e75;
+  --purple: #a78bfa;
+  --border: rgba(26,29,43,0.1);
+  --peach: #ffd8b8;
+  --butter: #f7dfa0;
+  --sage: #b7c9a3;
+  --rose: #e6b8bf;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(180deg, var(--butter) 0%, var(--peach) 35%, var(--rose) 70%, var(--sage) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER (identical across the map + every step page) ──── */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.back-link {
+  text-decoration: none; color: var(--ink); font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+  background: none; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
+}
+.topbar-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px; font-weight: 800;
+  margin: 0; flex: 1; text-align: center;
+  padding: 0 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.stops-pill {
+  flex-shrink: 0;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.3px;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+/* ── SHARED CONTENT SHELL ───────────────────────────────────── */
+.content-wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 22px 20px 90px;
+}
+@media (min-width: 768px) {
+  .content-wrap { max-width: 720px; padding: 32px 32px 100px; }
+}
+@media (min-width: 1100px) {
+  .content-wrap { max-width: 860px; padding: 40px 40px 120px; }
+}
+
+.page-hero { text-align: center; padding: 6px 4px 22px; }
+.page-hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px; font-weight: 900; margin: 0 0 8px;
+  color: var(--ink);
+}
+.page-hero p {
+  font-size: 13.5px; color: var(--ink-soft); margin: 0; line-height: 1.55;
+}
+
+.card {
+  background: #fff; border-radius: 20px; padding: 20px;
+  box-shadow: 0 6px 20px rgba(26,29,43,0.08); margin-bottom: 16px;
+}
+
+/* ── ARTCHI MICRO-FEEDBACK BUBBLE ───────────────────────────── */
+.artchi-bubble {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #fff; border-radius: 16px; padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(26,29,43,0.08); margin: 14px 0;
+  animation: bubbleIn .25s ease;
+}
+@keyframes bubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.artchi-bubble .ab-icon { font-size: 20px; flex-shrink: 0; line-height: 1; }
+.artchi-bubble .ab-text { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── BUTTONS ─────────────────────────────────────────────────── */
+.btn {
+  display: block; width: 100%; text-align: center; padding: 15px 18px;
+  border-radius: 18px; font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 14px; cursor: pointer; border: none; text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease;
+}
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-ghost { background: rgba(26,29,43,0.06); color: var(--ink); }
+.btn[disabled] { opacity: 0.4; pointer-events: none; }
+.btn:active { transform: scale(0.98); }
+
+/* ── TAP-TO-SELECT CARDS (grids of choices) ─────────────────── */
+.tap-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
+  background: #fff; border: 2px solid var(--border); border-radius: 18px;
+  padding: 16px 10px; cursor: pointer; text-align: center;
+  transition: border-color .2s ease, transform .15s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tap-card:active { transform: scale(0.96); }
+.tap-card.selected { border-color: var(--gold); background: rgba(200,169,110,0.1); }
+.tap-card .tc-emoji { font-size: 30px; }
+.tap-card .tc-label { font-size: 12px; font-weight: 700; }
+
+/* ── CHECKLIST TAP (checkbox-style rows / grid) ─────────────── */
+.check-card {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 2px solid var(--border); border-radius: 16px;
+  padding: 13px 14px; cursor: pointer;
+  transition: border-color .2s ease, transform .15s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-card:active { transform: scale(0.97); }
+.check-card.checked { border-color: var(--gold); background: rgba(200,169,110,0.08); }
+.check-box {
+  width: 22px; height: 22px; border-radius: 7px;
+  border: 2px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff;
+  transition: background .2s ease, border-color .2s ease;
+}
+.check-card.checked .check-box { background: var(--gold); border-color: var(--gold); }
+.check-label { font-size: 13px; font-weight: 700; }
+
+/* ── RECOMMENDED-NEXT FOOTER ─────────────────────────────────── */
+.next-footer { margin-top: 22px; }
+.next-footer .next-label {
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--ink-muted); text-align: center; margin-bottom: 8px;
+}
+
+/* ── PLACEHOLDER ("still being built") PAGE ─────────────────── */
+.soon-card {
+  background: #fff; border-radius: 20px; padding: 32px 24px; text-align: center;
+  box-shadow: 0 6px 20px rgba(26,29,43,0.08);
+}
+.soon-card .soon-icon { font-size: 40px; margin-bottom: 12px; }
+.soon-card h2 {
+  font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 800; margin: 0 0 8px;
+}
+.soon-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 20px; }

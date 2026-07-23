@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 1 · Welcome · Dream Art Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/studio-style.css">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/studio-state.js"></script>
+
+<style>
+  /* Museum-wall feel for this step only — dark background makes the
+     "paintings" pop, like a real gallery wall. Every other step keeps
+     the shared warm gradient from studio-style.css. */
+  html, body { background: linear-gradient(180deg, #21213a 0%, #16162a 100%); background-attachment: fixed; }
+  .topbar { background: rgba(22,22,42,0.75); border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .back-link, .topbar-title { color: #fff; }
+  .stops-pill { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+
+  .welcome-hero { text-align: center; padding: 30px 10px 6px; }
+  .welcome-hero .kicker {
+    font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .welcome-hero h1 {
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 34px;
+    color: #fff; margin: 0 0 8px;
+  }
+  .welcome-hero p { font-size: 14px; color: rgba(255,255,255,0.65); margin: 0; }
+
+  .paintings-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin: 30px 0 8px;
+  }
+  .painting-card {
+    aspect-ratio: 3 / 4;
+    border-radius: 18px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    padding: 18px 12px;
+    text-align: center;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.4);
+    border: 6px solid rgba(255,255,255,0.9);
+    position: relative;
+    overflow: hidden;
+  }
+  .painting-card .pc-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.22), transparent 65%);
+  }
+  .painting-card .pc-year {
+    font-size: 10.5px; font-weight: 800; letter-spacing: 1px;
+    color: rgba(255,255,255,0.85); margin-bottom: 4px; position: relative;
+  }
+  .painting-card .pc-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px;
+    color: #fff; line-height: 1.3; position: relative;
+  }
+  .painting-pink { background: linear-gradient(160deg, #f4a6c1 0%, #e58bb0 45%, #c85c8f 100%); }
+  .painting-red { background: linear-gradient(160deg, #e2564a 0%, #c73f34 45%, #9c2c24 100%); }
+
+  .welcome-caption {
+    text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.55);
+    margin: 4px 0 32px; line-height: 1.55;
+  }
+
+  .start-btn-wrap { margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Welcome</p>
+  <div class="stops-pill">STEP 1 OF 12</div>
+</div>
+
+<div class="content-wrap">
+
+  <div class="welcome-hero">
+    <div class="kicker">Creation · Learn from Collections</div>
+    <h1>Dream Art Studio</h1>
+    <p>Inspired by Henri Matisse</p>
+  </div>
+
+  <div class="paintings-row">
+    <div class="painting-card painting-pink">
+      <div class="pc-glow"></div>
+      <div class="pc-year">1911</div>
+      <div class="pc-title">The Pink Studio</div>
+    </div>
+    <div class="painting-card painting-red">
+      <div class="pc-glow"></div>
+      <div class="pc-year">1911</div>
+      <div class="pc-title">The Red Studio</div>
+    </div>
+  </div>
+  <div class="welcome-caption">Matisse painted his own studio again and again — filled with color, art, and things he loved. Now it's your turn to imagine yours.</div>
+
+  <div class="start-btn-wrap">
+    <button class="btn btn-gold" onclick="startJourney()">Start Your Journey →</button>
+  </div>
+
+</div>
+
+<script>
+const STEP_N = 1;
+
+function startJourney() {
+  DreamState.markInProgress(STEP_N);
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-2/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dream-art-studio');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  DreamState.markVisited(STEP_N);
+}
+
+init();
+</script>
+</body>
+</html>
