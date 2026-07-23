@@ -5,165 +5,188 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Dream Art Studio · FEI TeamArt</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared/studio-style.css">
 
 <!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
-<!-- Shared step/state module — also loaded by every step-N/index.html page -->
+<!-- Shared step/state module — also loaded by every step-N/index.html page.
+     Only STEPS / TOTAL_STEPS / DreamState are used here; the old shared
+     studio-style.css (winding-path map chrome) is intentionally NOT
+     loaded on this page anymore — none of its classes apply to the new
+     canvas-collage design below. -->
 <script src="shared/studio-state.js"></script>
 
 <style>
-  html, body { overflow-x: hidden; }
+  /* ============================================================
+   * Dream Art Studio — Matisse paper-collage landing page.
+   * Replaces the old Illustration-Book-style winding path.
+   * ============================================================ */
 
-  .hero { text-align: center; padding: 28px 24px 8px; }
-  .hero h1 {
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
-    font-size: 26px; font-weight: 900; margin: 0 0 6px;
-    color: var(--ink);
-  }
-  .hero p {
-    font-size: 13px; color: var(--ink-soft); margin: 0; max-width: 360px;
-    margin-left: auto; margin-right: auto; line-height: 1.5;
-  }
-
-  /* ── MAP (vertical, winding — same pattern as the Illustration
-     Book's adventure map, just with 12 stops and no separate
-     finish node, since stop 12 "Gallery" is the finale itself) ── */
-  .map-wrap {
-    position: relative;
-    max-width: 480px;
-    margin: 20px auto 60px;
-    padding: 0 24px;
-  }
-  @media (min-width: 768px) {
-    .map-wrap { max-width: 620px; }
-  }
-  .map-path-svg {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    overflow: visible;
-  }
-  .map-nodes {
-    position: relative;
-    height: 1900px; /* matches NODE_LAYOUT total span */
+    min-height: 100vh;
+    background-color: #d4c9a8;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
+    background-attachment: fixed;
   }
 
-  .step-node {
-    position: absolute;
-    width: 78px; height: 78px;
-    transform: translate(-50%, -50%);
-    display: flex; align-items: center; justify-content: center;
+  /* ── Header ──────────────────────────────────────────────── */
+  .landing-header { text-align: center; padding: 24px 20px 6px; }
+  .back-link-collage {
+    display: inline-block; margin-bottom: 16px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    color: #6d5440; text-decoration: none;
+  }
+  .back-link-collage:hover { text-decoration: underline; }
+  .collage-title {
+    font-family: Georgia, 'Playfair Display', serif;
+    text-transform: uppercase; letter-spacing: 4px;
+    font-size: 26px; font-weight: 700;
+    color: #2c1e10; margin: 0 0 8px;
+  }
+  .collage-subtitle {
+    font-style: italic; color: #6d5440; font-size: 14px; margin: 0 0 16px;
+  }
+  .progress-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(44,30,16,0.15);
+    border-radius: 20px; padding: 7px 16px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: 0.3px;
+    color: #2c1e10;
+  }
+
+  /* ── Cards grid ──────────────────────────────────────────── */
+  .cards-grid-wrap { max-width: 720px; margin: 28px auto 0; padding: 0 20px; }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .paper-card.tall { grid-row: span 1; }
+  }
+
+  .paper-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px;
+    padding: 10px 8px;
     cursor: pointer;
+    box-shadow: 2px 3px 8px rgba(44,30,16,0.25), 0 1px 2px rgba(44,30,16,0.15);
+    transition: transform .18s ease, box-shadow .18s ease;
     -webkit-tap-highlight-color: transparent;
-  }
-  .step-node .node-circle {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    background: #fff;
-    border: 3px solid var(--border);
-    box-shadow: 0 6px 16px rgba(26,29,43,0.12);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
-    position: relative;
-  }
-  .step-node:active .node-circle { transform: scale(0.94); }
-
-  .step-node.not_started .node-circle { filter: grayscale(0.55) opacity(0.65); border-color: var(--border); }
-  .step-node.visited .node-circle { border-color: var(--gold); box-shadow: 0 6px 18px rgba(200,169,110,0.35); }
-  .step-node.completed .node-circle { border-color: var(--green); box-shadow: 0 6px 18px rgba(29,158,117,0.32); }
-
-  .step-node.recommended .node-circle {
-    animation: nodeGlow 2.2s ease-in-out infinite;
-  }
-  @keyframes nodeGlow {
-    0%, 100% { box-shadow: 0 6px 16px rgba(200,169,110,0.3), 0 0 0 0 rgba(200,169,110,0.5); }
-    50% { box-shadow: 0 6px 20px rgba(200,169,110,0.45), 0 0 0 10px rgba(200,169,110,0); }
-  }
-
-  .step-node.gallery-node .node-circle {
-    background: linear-gradient(135deg, var(--gold), #fff2d6);
-    font-size: 36px;
-  }
-
-  .node-stamp {
-    position: absolute; top: -8px; right: -8px;
-    width: 28px; height: 28px; border-radius: 50%;
-    background: var(--green); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 900;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    transform: rotate(-12deg);
-  }
-
-  .node-label {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 50%; transform: translateX(-50%);
-    width: 110px;
     text-align: center;
-    font-size: 10.5px; font-weight: 700;
-    color: var(--ink-soft);
-    line-height: 1.3;
   }
-  .node-number {
-    position: absolute; top: -6px; left: -6px;
+  .paper-card.wide { grid-column: span 2; }
+  .paper-card.tall { grid-row: span 2; }
+  .paper-card:hover:not(.locked) {
+    transform: scale(1.06) rotate(0deg);
+    box-shadow: 4px 6px 20px rgba(44,30,16,0.35);
+    z-index: 10;
+  }
+  .paper-card.locked { opacity: 0.35; filter: grayscale(0.3); cursor: default; }
+
+  .card-num {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    opacity: 0.85;
+  }
+  .card-emoji { font-size: 28px; line-height: 1; }
+  .card-name { font-size: 12px; font-weight: 800; line-height: 1.25; }
+
+  .lock-badge {
+    position: absolute; top: 6px; right: 7px; font-size: 13px;
+  }
+  .done-badge {
+    position: absolute; top: 6px; right: 6px;
     width: 20px; height: 20px; border-radius: 50%;
-    background: var(--ink); color: #fff;
-    font-size: 10px; font-weight: 900;
+    background: rgba(255,255,255,0.9); color: #2b8a3e;
     display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
 
-  /* ── DETAIL SHEET (used for "coming soon" steps 6-12) ────── */
-  .sheet-backdrop, .friction-backdrop {
-    position: fixed; inset: 0; background: rgba(26,29,43,0.4);
+  .tape {
+    position: absolute;
+    width: 40px; height: 14px;
+    background: rgba(240,220,160,0.55);
+    border: 0.5px solid rgba(180,160,100,0.3);
+    border-radius: 2px;
+    z-index: 2;
+    top: -6px;
+  }
+  .tape.tape-a { left: 18%; transform: rotate(-6deg); }
+  .tape.tape-b { right: 18%; transform: rotate(4deg); }
+
+  /* Bold Matisse palette — one hue per step, text is a light tint of
+     the same hue so it always reads clearly against its own card. */
+  .p1  { background: #c92a2a; color: #fbe8e8; }
+  .p2  { background: #1864ab; color: #e3f0fb; }
+  .p3  { background: #e67700; color: #fdf0e0; }
+  .p4  { background: #2b8a3e; color: #e6f5e8; }
+  .p5  { background: #7b2d8e; color: #f2e5f5; }
+  .p6  { background: #d6336c; color: #fbe5ee; }
+  .p7  { background: #0b7285; color: #e0f3f5; }
+  .p8  { background: #c2255c; color: #fce6ef; }
+  .p9  { background: #5c940d; color: #eef6dc; }
+  .p10 { background: #e8590c; color: #fdece0; }
+  .p11 { background: #364fc7; color: #e6eafc; }
+  .p12 { background: #bf8c2a; color: #f7ecd6; }
+
+  /* Torn-paper edges — six shapes, cycled across the 12 cards. */
+  .t1 { border-radius: 4px 28px 8px 24px; }
+  .t2 { border-radius: 24px 6px 28px 4px; }
+  .t3 { border-radius: 8px 20px 4px 28px; }
+  .t4 { border-radius: 28px 4px 24px 8px; }
+  .t5 { border-radius: 12px 24px 6px 20px; }
+  .t6 { border-radius: 20px 8px 28px 6px; }
+
+  /* Hand-pinned tilt — one fixed rotation per card (a plain class beats
+     the hover rule's specificity comfortably, so no !important needed). */
+  .r1  { transform: rotate(-2.5deg); }
+  .r2  { transform: rotate(1.8deg); }
+  .r3  { transform: rotate(-1.2deg); }
+  .r4  { transform: rotate(2.3deg); }
+  .r5  { transform: rotate(-3deg); }
+  .r6  { transform: rotate(1.1deg); }
+  .r7  { transform: rotate(-1.8deg); }
+  .r8  { transform: rotate(2.7deg); }
+  .r9  { transform: rotate(-0.8deg); }
+  .r10 { transform: rotate(1.5deg); }
+  .r11 { transform: rotate(-2.2deg); }
+  .r12 { transform: rotate(2deg); }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .collage-footer { text-align: center; padding: 40px 20px 60px; }
+  .matisse-quote {
+    font-family: Georgia, serif; font-style: italic; color: #6d5440;
+    font-size: 13px; max-width: 380px; margin: 0 auto; line-height: 1.65;
+  }
+
+  /* ── Warm friction bubble (out-of-order jump within steps 1-5) ──
+     Kept from the previous build — still useful for this grid, just
+     restyled to sit comfortably on the new canvas background. ── */
+  .friction-backdrop {
+    position: fixed; inset: 0; background: rgba(44,30,16,0.45);
     opacity: 0; pointer-events: none; transition: opacity .25s ease;
     z-index: 90;
   }
-  .sheet-backdrop.show, .friction-backdrop.show { opacity: 1; pointer-events: auto; }
-
-  .detail-sheet {
-    position: fixed; left: 0; right: 0; bottom: 0;
-    max-width: 480px; margin: 0 auto;
-    background: #fff;
-    border-radius: 22px 22px 0 0;
-    padding: 26px 26px 30px;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.25);
-    transform: translateY(105%);
-    transition: transform .32s cubic-bezier(.32,.72,0,1);
-    z-index: 95;
-  }
-  .detail-sheet.show { transform: translateY(0); }
-  .sheet-icon { font-size: 44px; margin-bottom: 10px; }
-  .sheet-kicker {
-    font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 4px;
-  }
-  .sheet-title {
-    font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 800;
-    margin: 0 0 10px;
-  }
-  .sheet-desc { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 16px; }
-  .sheet-soon {
-    display: inline-block; font-size: 10.5px; font-weight: 800; color: var(--ink-soft);
-    background: rgba(26,29,43,0.06); border-radius: 20px; padding: 6px 12px; margin-bottom: 18px;
-  }
-  .sheet-btn {
-    width: 100%; padding: 14px; border: none; border-radius: 14px;
-    background: var(--ink); color: #fff; font-family: 'Montserrat', sans-serif;
-    font-weight: 800; font-size: 13px; cursor: pointer;
-  }
-
-  /* ── WARM FRICTION BUBBLE (out-of-order jump within steps 1-5) ── */
+  .friction-backdrop.show { opacity: 1; pointer-events: auto; }
   .friction-bubble {
     position: fixed; left: 50%; top: 50%;
     transform: translate(-50%, -50%) scale(0.9);
     max-width: 340px; width: calc(100% - 48px);
-    background: #fff; border-radius: 20px; padding: 24px 22px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    background: #f6efdc; border-radius: 20px; padding: 24px 22px;
+    box-shadow: 0 20px 60px rgba(44,30,16,0.4);
     opacity: 0; pointer-events: none;
     transition: opacity .25s ease, transform .25s ease;
     z-index: 96;
@@ -171,42 +194,31 @@
   }
   .friction-bubble.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
   .friction-artchi { font-size: 40px; margin-bottom: 10px; }
-  .friction-text { font-size: 14px; line-height: 1.55; color: var(--ink); margin-bottom: 18px; }
+  .friction-text { font-size: 14px; line-height: 1.55; color: #2c1e10; margin-bottom: 18px; }
   .friction-actions { display: flex; flex-direction: column; gap: 8px; }
   .friction-btn {
     padding: 12px; border-radius: 12px; font-weight: 800; font-size: 12.5px;
     font-family: 'Montserrat', sans-serif; cursor: pointer; border: none;
   }
-  .friction-btn.primary { background: var(--green); color: #fff; }
-  .friction-btn.secondary { background: rgba(26,29,43,0.06); color: var(--ink); }
+  .friction-btn.primary { background: #2b8a3e; color: #fff; }
+  .friction-btn.secondary { background: rgba(44,30,16,0.08); color: #2c1e10; }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <a class="back-link" href="../../creation/">← Studio</a>
-  <p class="topbar-title">Dream Art Studio</p>
-  <div class="stops-pill" id="stopsPill">0 of 12 stages completed</div>
+<div class="landing-header">
+  <a class="back-link-collage" href="../../creation/">← Studio</a>
+  <h1 class="collage-title">Dream Art Studio</h1>
+  <p class="collage-subtitle">Inspired by Henri Matisse</p>
+  <div class="progress-pill" id="progressPill">0 of 12 stages completed</div>
 </div>
 
-<div class="hero">
-  <h1>Build your own Dream Art Studio</h1>
-  <p>Tap any stop on the path below. Go in order, or jump around — it's your journey.</p>
+<div class="cards-grid-wrap">
+  <div class="cards-grid" id="cardsGrid"></div>
 </div>
 
-<div class="map-wrap" id="mapWrap">
-  <svg class="map-path-svg" id="pathSvg"></svg>
-  <div class="map-nodes" id="mapNodes"></div>
-</div>
-
-<div class="sheet-backdrop" id="sheetBackdrop" onclick="closeSheet()"></div>
-<div class="detail-sheet" id="detailSheet">
-  <div class="sheet-icon" id="sheetIcon"></div>
-  <div class="sheet-kicker" id="sheetKicker"></div>
-  <div class="sheet-title" id="sheetTitle"></div>
-  <div class="sheet-desc" id="sheetDesc"></div>
-  <div><span class="sheet-soon" id="sheetSoon">✨ Content coming soon</span></div>
-  <button class="sheet-btn" onclick="closeSheet()">Got it</button>
+<div class="collage-footer">
+  <p class="matisse-quote">"I don't paint things. I only paint the difference between things."</p>
 </div>
 
 <div class="friction-backdrop" id="frictionBackdrop"></div>
@@ -221,104 +233,76 @@
 
 <script>
 /* ============================================================
- * Dream Art Studio — Landing Page & Step-Map
+ * Dream Art Studio — Landing Page (paper-collage card grid)
  *
- * STEPS / TOTAL_STEPS / DreamState come from shared/studio-state.js
- * (loaded in <head>). Steps 1-5 route to their own real, interactive
- * pages. Steps 6-12 are built (as lightweight "still being built"
- * pages, matching the Illustration Book convention, for direct-URL
- * safety) but tapping their map node shows the "coming soon" sheet
- * in place rather than navigating, per spec.
+ * STEPS / TOTAL_STEPS / DreamState come from shared/studio-state.js.
+ * Steps 1-5 are real, tappable pages. Steps 6-12 render as locked
+ * cutouts (dimmed, grayscale, 🔒, no hover, not clickable) — this
+ * replaces the old "tap for a coming-soon sheet" behavior, since a
+ * locked card in this design reads as inert by itself.
  * ============================================================ */
 
-const FUNCTIONAL_LIMIT = 5; // steps 1-5 are real; 6-12 show "coming soon" on tap
+const FUNCTIONAL_LIMIT = 5;
 
-// Winding vertical path — x alternates 50/76/50/24, y increases by 150.
-const NODE_LAYOUT = STEPS.map((s, i) => {
-  const xCycle = [50, 76, 50, 24];
-  return { xPct: xCycle[i % 4], y: 70 + i * 150 };
-});
+// torn-edge shape (1-6, cycled) + grid span + tape-strip count per step.
+// Color/rotation classes both just use the step number directly (p1..p12,
+// r1..r12) since every step already has its own unique hue.
+const CARD_META = {
+  1:  { torn: 1, wide: true,  tall: false, tapes: 2 },
+  2:  { torn: 2, wide: false, tall: false, tapes: 1 },
+  3:  { torn: 3, wide: false, tall: false, tapes: 1 },
+  4:  { torn: 4, wide: false, tall: true,  tapes: 1 },
+  5:  { torn: 5, wide: false, tall: false, tapes: 1 },
+  6:  { torn: 6, wide: false, tall: false, tapes: 1 },
+  7:  { torn: 1, wide: false, tall: false, tapes: 1 },
+  8:  { torn: 2, wide: true,  tall: false, tapes: 2 },
+  9:  { torn: 3, wide: false, tall: false, tapes: 1 },
+  10: { torn: 4, wide: false, tall: false, tapes: 1 },
+  11: { torn: 5, wide: false, tall: false, tapes: 1 },
+  12: { torn: 6, wide: true,  tall: false, tapes: 2 },
+};
 
 let pendingFrictionStep = null;
 
-function renderMap() {
+function renderCards() {
   const state = DreamState.current();
-  const recommended = DreamState.recommendedNext();
-  const nodesContainer = document.getElementById('mapNodes');
-  nodesContainer.innerHTML = '';
+  const grid = document.getElementById('cardsGrid');
 
-  STEPS.forEach((step, i) => {
-    const pos = NODE_LAYOUT[i];
-    const status = state.steps[step.n].status;
-    const isRecommended = recommended === step.n && step.n <= FUNCTIONAL_LIMIT;
-    const isGallery = step.n === TOTAL_STEPS;
+  grid.innerHTML = STEPS.map(step => {
+    const meta = CARD_META[step.n];
+    const isLocked = step.n > FUNCTIONAL_LIMIT;
+    const isDone = state.steps[step.n].status === 'completed';
 
-    const node = document.createElement('div');
-    node.className = 'step-node ' + status + (isRecommended ? ' recommended' : '') + (isGallery ? ' gallery-node' : '');
-    node.style.left = pos.xPct + '%';
-    node.style.top = pos.y + 'px';
-    node.onclick = () => handleStepTap(step.n);
+    const classes = [
+      'paper-card', 'p' + step.n, 't' + meta.torn, 'r' + step.n,
+      meta.wide ? 'wide' : '', meta.tall ? 'tall' : '', isLocked ? 'locked' : ''
+    ].filter(Boolean).join(' ');
 
-    node.innerHTML = `
-      <div class="node-circle">
-        <span class="node-number">${step.n}</span>
-        ${step.icon}
-        ${status === 'completed' ? '<span class="node-stamp">✓</span>' : ''}
+    const tapes = meta.tapes === 2
+      ? '<div class="tape tape-a"></div><div class="tape tape-b"></div>'
+      : '<div class="tape tape-a"></div>';
+
+    const badge = isLocked
+      ? '<div class="lock-badge">🔒</div>'
+      : (isDone ? '<div class="done-badge">✓</div>' : '');
+
+    return `
+      <div class="${classes}" ${isLocked ? '' : `onclick="handleCardTap(${step.n})"`}>
+        ${tapes}
+        ${badge}
+        <div class="card-num">Step ${step.n}</div>
+        <div class="card-emoji">${step.icon}</div>
+        <div class="card-name">${step.title}</div>
       </div>
-      <div class="node-label">${step.title}</div>
     `;
-    nodesContainer.appendChild(node);
-  });
+  }).join('');
 
-  const lastPos = NODE_LAYOUT[NODE_LAYOUT.length - 1];
-  document.getElementById('mapNodes').style.height = (lastPos.y + 140) + 'px';
-
-  drawPath();
-  updateStopsPill();
+  document.getElementById('progressPill').textContent =
+    DreamState.completedCount() + ' of ' + TOTAL_STEPS + ' stages completed';
 }
 
-function updateStopsPill() {
-  const count = DreamState.completedCount();
-  document.getElementById('stopsPill').textContent = count + ' of ' + TOTAL_STEPS + ' stages completed';
-}
-
-// Draws a smooth dotted path through all node centers using the
-// DOM-measured positions (robust to the container's actual rendered width).
-function drawPath() {
-  const svg = document.getElementById('pathSvg');
-  const nodesContainer = document.getElementById('mapNodes');
-  const containerRect = nodesContainer.getBoundingClientRect();
-  svg.setAttribute('width', containerRect.width);
-  svg.setAttribute('height', containerRect.height);
-
-  const points = NODE_LAYOUT.map(p => ({ x: (p.xPct / 100) * containerRect.width, y: p.y }));
-  if (points.length < 2) return;
-
-  let d = `M ${points[0].x} ${points[0].y}`;
-  for (let i = 0; i < points.length - 1; i++) {
-    const p0 = points[i], p1 = points[i + 1];
-    const midX = (p0.x + p1.x) / 2;
-    d += ` Q ${p0.x} ${(p0.y + p1.y) / 2}, ${midX} ${(p0.y + p1.y) / 2}`;
-    d += ` Q ${p1.x} ${(p0.y + p1.y) / 2}, ${p1.x} ${p1.y}`;
-  }
-
-  svg.innerHTML = `<path d="${d}" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.6"/>
-                    <path d="${d}" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14"/>`;
-}
-
-/* ── Tap handling ──────────────────────────────────────────── */
-function handleStepTap(n) {
-  const step = STEPS.find(s => s.n === n);
-
-  // Steps 6-12: not built yet — show "coming soon" in place, don't navigate.
-  if (n > FUNCTIONAL_LIMIT) {
-    openSheet(step.icon, 'COMING SOON', step.title,
-      "This stage isn't built yet — it's on its way! The earlier stops are ready for you right now.");
-    return;
-  }
-
-  // Steps 1-5: real pages. Jumping ahead of the recommended step gets a
-  // warm nudge first (same pattern as the Illustration Book map).
+/* ── Tap handling (steps 1-5 only — locked cards have no onclick) ── */
+function handleCardTap(n) {
   const recommended = DreamState.recommendedNext();
   const recommendedIdx = recommended === 'finished' ? FUNCTIONAL_LIMIT
     : Math.min(STEPS.findIndex(s => s.n === recommended), FUNCTIONAL_LIMIT - 1);
@@ -337,20 +321,6 @@ function handleStepTap(n) {
 // "visited" on load — see shared/studio-state.js.
 function openStep(n) {
   window.location.href = 'step-' + n + '/';
-}
-
-/* ── Detail sheet ─────────────────────────────────────────── */
-function openSheet(icon, kicker, title, desc) {
-  document.getElementById('sheetIcon').textContent = icon;
-  document.getElementById('sheetKicker').textContent = kicker;
-  document.getElementById('sheetTitle').textContent = title;
-  document.getElementById('sheetDesc').textContent = desc;
-  document.getElementById('sheetBackdrop').classList.add('show');
-  document.getElementById('detailSheet').classList.add('show');
-}
-function closeSheet() {
-  document.getElementById('sheetBackdrop').classList.remove('show');
-  document.getElementById('detailSheet').classList.remove('show');
 }
 
 /* ── Warm friction bubble (companion-model out-of-order jump) ── */
@@ -390,8 +360,7 @@ async function init() {
   }
   // ────────────────────────────────────────────────────────────
 
-  renderMap();
-  window.addEventListener('resize', () => { drawPath(); });
+  renderCards();
 }
 
 init();

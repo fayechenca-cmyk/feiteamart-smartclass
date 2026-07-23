@@ -14,6 +14,24 @@
 <script src="../shared/studio-state.js"></script>
 
 <style>
+  /* Canvas-collage background for this step only — matches the new
+     landing page's Matisse paper-collage aesthetic (page-scoped
+     override, same technique as Step 1's dark museum-wall background).
+     Every shared class from studio-style.css (.card, .btn, etc.) and
+     every interactive component below is untouched. */
+  html, body {
+    background-color: #d4c9a8;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
+    background-attachment: fixed;
+  }
+  .topbar { background: rgba(212,201,168,0.75); border-bottom: 1px solid rgba(44,30,16,0.15); }
+  .back-link, .topbar-title { color: #2c1e10; }
+  .stops-pill { background: rgba(255,255,255,0.55); border-color: rgba(44,30,16,0.15); color: #2c1e10; }
+  .page-hero h1 { color: #2c1e10; }
+  .page-hero p { color: #6d5440; }
+
   .objects-progress {
     text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
     margin-bottom: 16px;
