@@ -2135,14 +2135,17 @@
 
     titleEl.textContent = `Your teacher left you ${items.length} comment${items.length === 1 ? '' : 's'}`;
 
-    itemsEl.innerHTML = items.map(item => `
+    itemsEl.innerHTML = items.map(item => {
+      const senderName = item.updated_by || 'Your teacher';
+      return `
       <div class="feedback-notif-item" id="feedback-item-${feedbackEscapeHtml(item.id)}">
-        <div class="feedback-notif-meta">${feedbackEscapeHtml(feedbackLessonName(item.lesson_id))} · ${feedbackFormatDate(item.created_at)}</div>
+        <div class="feedback-notif-meta">${feedbackEscapeHtml(senderName)} · ${feedbackEscapeHtml(feedbackLessonName(item.lesson_id))} · ${feedbackFormatDate(item.created_at)}</div>
         ${item.text_comment ? `<div class="feedback-notif-comment">"${feedbackEscapeHtml(item.text_comment)}"</div>` : ''}
         ${renderVoiceOrImage(item.voice_url)}
         <button class="feedback-notif-dismiss" onclick="markFeedbackRead('${item.id}')">Mark as read</button>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     card.style.display = 'block';
   }

@@ -1136,7 +1136,7 @@
         fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=*&order=created_at.desc`, {
           headers: sbHeaders()
         }),
-        fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}?select=*`, {
+        fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}?select=*&order=created_at.asc`, {
           headers: sbHeaders()
         })
       ]);
@@ -1170,7 +1170,11 @@
       appState.submissions = submissions || [];
       appState.feedbackBySubmissionId = new Map();
       (feedback || []).forEach(row => {
-        if (row.submission_id) appState.feedbackBySubmissionId.set(row.submission_id, row);
+        if (!row.submission_id) return;
+        if (!appState.feedbackBySubmissionId.has(row.submission_id)) {
+          appState.feedbackBySubmissionId.set(row.submission_id, []);
+        }
+        appState.feedbackBySubmissionId.get(row.submission_id).push(row);
       });
       appState.loaded = true;
 
@@ -1328,7 +1332,7 @@
   }
 
   function buildCard(sub) {
-    const feedbackRow = appState.feedbackBySubmissionId.get(sub.id);
+    const feedbackRows = appState.feedbackBySubmissionId.get(sub.id) || [];
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -1376,10 +1380,10 @@
     meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—') + ' · Submitted ' + formatDate(sub.created_at);
     body.appendChild(meta);
 
-    if (feedbackRow) {
+    feedbackRows.forEach(feedbackRow => {
       const banner = document.createElement('div');
       banner.className = 'reviewed-banner';
-      banner.textContent = '✅ Feedback sent on ' + formatDate(feedbackRow.created_at);
+      banner.textContent = '✅ Feedback sent by ' + (feedbackRow.updated_by || 'Teacher') + ' on ' + formatDate(feedbackRow.created_at);
       body.appendChild(banner);
 
       if (feedbackRow.text_comment) {
@@ -1388,9 +1392,11 @@
         comment.textContent = feedbackRow.text_comment;
         body.appendChild(comment);
       }
-    } else {
-      body.appendChild(buildFeedbackForm(sub));
-    }
+    });
+
+    // Form always stays visible (even after feedback exists) so more
+    // than one teacher — or the same teacher again — can add feedback.
+    body.appendChild(buildFeedbackForm(sub));
 
     card.appendChild(body);
     return card;
@@ -1489,13 +1495,16 @@
           voiceUrl = await uploadVoice(voiceFile, sub);
         }
 
+        const teacherName = TEACHER_NAMES[getCurrentTeacherCode()] || 'Teacher Faye';
+
         const feedbackData = {
           student_code: sub.student_code || sub.user_email || null,
           lesson_id: sub.lesson_id || null,
           submission_id: sub.id,
           text_comment: textComment || null,
           voice_url: voiceUrl,
-          is_read: false
+          is_read: false,
+          updated_by: teacherName
         };
 
         const res = await fetch(`${SUPABASE_URL}/rest/v1/${FEEDBACK_TABLE}`, {
@@ -1515,8 +1524,16 @@
         const inserted = await res.json().catch(() => null);
         const row = Array.isArray(inserted) ? inserted[0] : (inserted || feedbackData);
         if (!row.created_at) row.created_at = new Date().toISOString();
-        appState.feedbackBySubmissionId.set(sub.id, row);
 
+        if (!appState.feedbackBySubmissionId.has(sub.id)) {
+          appState.feedbackBySubmissionId.set(sub.id, []);
+        }
+        appState.feedbackBySubmissionId.get(sub.id).push(row);
+
+        // render() rebuilds this card from scratch — the new banner
+        // ("✅ Feedback sent by [teacherName]...") appears above a
+        // fresh, empty, re-enabled form so another teacher (or the
+        // same one) can send more feedback right away.
         render();
       } catch (err) {
         console.error('[teacher-admin] send feedback failed', err);
