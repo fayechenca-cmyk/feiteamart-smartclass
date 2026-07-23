@@ -32,7 +32,11 @@
     background-image:
       repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
       repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
-    background-attachment: fixed;
+    /* NOT background-attachment: fixed — repainting a repeating-gradient
+       background as a fixed compositor layer on every scroll frame is a
+       known iOS Safari GPU/memory hog and a real cause of tab crashes on
+       iPad. Default (scroll) attachment is just as visually correct here
+       since the pattern tiles seamlessly either way. */
   }
 
   /* ── Header ──────────────────────────────────────────────── */
@@ -63,31 +67,28 @@
   }
 
   /* ── Cards grid ──────────────────────────────────────────── */
-  .cards-grid-wrap { max-width: 680px; margin: 28px auto 0; padding: 0 20px; }
+  .cards-grid-wrap { max-width: 680px !important; margin: 28px auto 0; padding: 0 20px; }
   .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* NOT grid-auto-rows: 1fr — that's the bug that caused this whole
-       page to break. `1fr` row tracks distribute the grid container's
-       available block-space, but .cards-grid has no explicit height
-       (it's auto-sized from its own content), so there's no real
-       "available space" to distribute — combined with aspect-ratio:1/1
-       on a .wide card (2 columns wide, so its 1:1 height balloons too),
-       this cascaded into a single row filling the whole viewport.
-       grid-auto-rows: auto lets rows size from their actual content
-       (which aspect-ratio already constrains per-card) instead. */
-    grid-auto-rows: auto;
-    gap: 10px;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    grid-auto-rows: auto !important;
+    gap: 10px !important;
   }
   @media (max-width: 600px) {
-    .cards-grid { grid-template-columns: repeat(2, 1fr); }
-    .paper-card.tall { grid-row: span 1; max-height: none; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .paper-card, .paper-card.tall { grid-row: span 1; min-height: 90px; max-height: 130px; }
   }
 
   .paper-card {
     position: relative;
-    aspect-ratio: 1 / 1;
-    min-height: 115px;
+    /* NOT aspect-ratio: 1/1 — combined with grid-auto-rows: auto and a
+       spanning (.wide/.tall) sibling in the same implicit row, WebKit's
+       circular row/column intrinsic-size resolution for aspect-ratio
+       grid items could balloon card size and, on iPad, crash the tab.
+       Explicit min/max-height bounds every card unconditionally instead. */
+    min-height: 100px;
+    max-height: 140px;
+    overflow: hidden;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 5px;
     padding: 10px 8px;
@@ -98,13 +99,14 @@
     text-align: center;
   }
   .paper-card.wide { grid-column: span 2; }
-  .paper-card.tall { grid-row: span 2; max-height: 260px; }
+  .paper-card.tall { grid-row: span 2; min-height: 200px; max-height: 260px; }
   .paper-card:hover:not(.locked) {
-    transform: scale(1.06) rotate(0deg);
+    transform: scale(1.06);
     box-shadow: 4px 6px 20px rgba(44,30,16,0.35);
     z-index: 10;
   }
   .paper-card.locked { opacity: 0.35; filter: grayscale(0.3); cursor: default; }
+  .paper-card.locked:hover { transform: none; box-shadow: 2px 3px 8px rgba(44,30,16,0.25), 0 1px 2px rgba(44,30,16,0.15); }
 
   .card-num {
     font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
