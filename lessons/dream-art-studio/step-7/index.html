@@ -12,6 +12,79 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared step/state module -->
 <script src="../shared/studio-state.js"></script>
+
+<style>
+  /* Canvas-collage background for this step only — matches Step 4 and
+     the landing page's Matisse paper-collage aesthetic (page-scoped
+     override; every shared class from studio-style.css is untouched). */
+  html, body {
+    background-color: #d4c9a8;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
+    background-attachment: fixed;
+  }
+  .topbar { background: rgba(212,201,168,0.75); border-bottom: 1px solid rgba(44,30,16,0.15); }
+  .back-link, .topbar-title { color: #2c1e10; }
+  .stops-pill { background: rgba(255,255,255,0.55); border-color: rgba(44,30,16,0.15); color: #2c1e10; }
+  .page-hero h1 { color: #2c1e10; }
+  .page-hero p { color: #6d5440; }
+
+  /* ── Interactive image map (same pattern as Step 3) ─────────── */
+  .image-map-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(26,29,43,0.15);
+    margin-bottom: 14px;
+    line-height: 0;
+    background: #fff;
+  }
+  .bg-image { display: block; width: 100%; height: auto; }
+
+  .hotspot-layer { position: absolute; inset: 0; }
+  .hotspot {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
+  }
+  .hotspot:hover {
+    border-color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.1);
+  }
+  .hotspot.selected {
+    border-color: var(--gold);
+    background: rgba(200,169,110,0.14);
+    box-shadow: 0 0 15px var(--gold);
+    transform: scale(1.02);
+    animation: hotspotPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes hotspotPulse {
+    0%, 100% { box-shadow: 0 0 15px var(--gold); }
+    50% { box-shadow: 0 0 24px var(--gold); }
+  }
+
+  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 18px; }
+
+  .selected-summary-label {
+    text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .selected-list {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin-bottom: 22px; min-height: 20px;
+  }
+  .selected-list-empty { font-size: 12px; color: var(--ink-muted); }
+  .selected-chip {
+    background: rgba(200,169,110,0.14); border: 1.5px solid var(--gold);
+    color: var(--ink); font-size: 12px; font-weight: 700;
+    border-radius: 16px; padding: 6px 12px;
+  }
+</style>
 </head>
 <body>
 
@@ -22,15 +95,86 @@
 </div>
 
 <div class="content-wrap">
-  <div class="soon-card">
-    <div class="soon-icon">🎨</div>
-    <h2>Build Your Background</h2>
-    <p>This stage is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
-    <a class="btn btn-gold" href="../">← Back to map</a>
+
+  <div class="page-hero">
+    <h1>Build Your Background</h1>
+    <p>Tap the parts that inspire you.</p>
   </div>
+
+  <div class="image-map-wrap" id="imageMapWrap">
+    <img class="bg-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ec44cba6-708b-458e-60b2-9d513e9f0600/public" alt="Two hand-drawn studio background scenes — a pink wallpapered room and a purple floral wallpapered room, each with a window, floor, and door or plant">
+    <div class="hotspot-layer" id="hotspotLayer"></div>
+  </div>
+  <div class="image-map-caption">Tap the wallpaper, windows, floors, and more to pick what you like.</div>
+
+  <div class="selected-summary-label" id="selectedSummaryLabel"></div>
+  <div class="selected-list" id="selectedList"></div>
+
+  <div class="next-footer">
+    <button class="btn btn-gold" onclick="goNext()">Continue →</button>
+  </div>
+
 </div>
 
 <script>
+const STEP_N = 7;
+
+// Rough estimates from the reference image — left/top/width/height are
+// all % of the image's own box, so they scale automatically with it at
+// any size (same convention as Step 3's HOTSPOTS).
+const HOTSPOTS = [
+  { name: 'Pink Wallpaper',    left: 2,  top: 13, width: 38, height: 31 },
+  { name: 'Pink Room Window',  left: 39, top: 14, width: 25, height: 29 },
+  { name: 'Potted Plant',      left: 67, top: 22, width: 21, height: 29 },
+  { name: 'Pink Room Floor',   left: 2,  top: 43, width: 87, height: 9  },
+  { name: 'Purple Wallpaper',  left: 15, top: 52, width: 36, height: 28 },
+  { name: 'Purple Room Window',left: 51, top: 55, width: 20, height: 22 },
+  { name: 'Purple Door',       left: 75, top: 51, width: 25, height: 39 },
+  { name: 'Purple Room Floor', left: 15, top: 80, width: 84, height: 19 },
+];
+
+function renderHotspots() {
+  const data = DreamState.getStepData(STEP_N);
+  const selected = data.selected || [];
+
+  const layer = document.getElementById('hotspotLayer');
+  layer.innerHTML = HOTSPOTS.map(h => `
+    <div class="hotspot ${selected.includes(h.name) ? 'selected' : ''}"
+         data-name="${h.name}"
+         title="${h.name}"
+         style="left:${h.left}%; top:${h.top}%; width:${h.width}%; height:${h.height}%;"
+         onclick="toggleHotspot('${h.name}')">
+    </div>
+  `).join('');
+
+  const listEl = document.getElementById('selectedList');
+  const labelEl = document.getElementById('selectedSummaryLabel');
+  if (selected.length === 0) {
+    labelEl.textContent = '';
+    listEl.innerHTML = '<div class="selected-list-empty">Nothing selected yet.</div>';
+  } else {
+    labelEl.textContent = selected.length + ' part' + (selected.length === 1 ? '' : 's') + ' selected';
+    listEl.innerHTML = selected.map(name => `<span class="selected-chip">${name}</span>`).join('');
+  }
+}
+
+function toggleHotspot(name) {
+  const data = DreamState.getStepData(STEP_N);
+  const selected = data.selected || [];
+  const idx = selected.indexOf(name);
+  if (idx === -1) selected.push(name);
+  else selected.splice(idx, 1);
+
+  DreamState.setStepData(STEP_N, { selected: selected });
+  DreamState.markInProgress(STEP_N);
+  renderHotspots();
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-8/';
+}
+
 async function init() {
   if (window.FEIAccess) {
     try {
@@ -41,8 +185,10 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
-  DreamState.markVisited(7);
+  DreamState.markVisited(STEP_N);
+  renderHotspots();
 }
+
 init();
 </script>
 </body>

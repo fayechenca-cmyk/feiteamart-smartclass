@@ -32,6 +32,15 @@
   .page-hero h1 { color: #2c1e10; }
   .page-hero p { color: #6d5440; }
 
+  .inspo-image-wrap {
+    margin: 0 0 22px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(26,29,43,0.14);
+    line-height: 0;
+  }
+  .inspo-image { display: block; width: 100%; height: auto; }
+
   .objects-progress {
     text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
     margin-bottom: 16px;
@@ -81,13 +90,13 @@
   .category-label {
     font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 8px;
   }
-  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
   .choice-pill {
-    display: inline-flex; align-items: center; gap: 5px;
+    display: inline-flex; align-items: center; gap: 4px;
     background: rgba(26,29,43,0.05);
     border: 2px solid transparent;
-    border-radius: 20px; padding: 8px 14px;
-    font-size: 12px; font-weight: 700; color: var(--ink-soft);
+    border-radius: 16px; padding: 6px 10px;
+    font-size: 11px; font-weight: 700; color: var(--ink-soft);
     cursor: pointer; -webkit-tap-highlight-color: transparent;
     transition: border-color .15s ease, background .15s ease, color .15s ease;
   }
@@ -95,10 +104,19 @@
   .choice-pill.selected {
     background: rgba(200,169,110,0.16); border-color: var(--gold); color: var(--ink);
   }
-  .choice-pill .cp-dot {
-    width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--ink-muted); flex-shrink: 0;
+  .choice-pill .cp-icon { font-size: 13px; line-height: 1; flex-shrink: 0; }
+
+  /* ── Color category: real color swatches instead of text pills ── */
+  .color-row { gap: 10px; padding-top: 2px; }
+  .color-chip {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1.5px rgba(26,29,43,0.12);
+    transition: box-shadow .15s ease, transform .15s ease;
   }
-  .choice-pill.selected .cp-dot { background: var(--gold); border-color: var(--gold); }
+  .color-chip:active { transform: scale(0.92); }
+  .color-chip.selected { box-shadow: 0 0 0 2.5px var(--gold); }
 
   .summary-box {
     background: rgba(200,169,110,0.1); border-radius: 14px; padding: 14px 16px;
@@ -134,6 +152,10 @@
   <div class="page-hero">
     <h1>Design each object your own way</h1>
     <p>Tap through shape, color, pattern, material, and a little magic.</p>
+  </div>
+
+  <div class="inspo-image-wrap">
+    <img class="inspo-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/18808e46-dd25-486c-8c38-3af9048e7000/public" alt="A sheet of hand-drawn studio objects for inspiration — easel, armchair, vase, bookshelf, lamp, cabinet, and more">
   </div>
 
   <div class="objects-progress" id="objectsProgress"></div>
@@ -188,6 +210,24 @@ const CATEGORIES = [
   { key: 'material', label: 'Material?', options: ['Wood', 'Cloud', 'Glass', 'Fabric', 'Stone', 'Metal', 'Paper', 'Magic'] },
   { key: 'magic', label: 'Magic Detail?', options: ['Can fly', 'Changes color', 'Grows flowers', 'Has tiny wheels', 'Glows in dark', 'Plays music', 'Talks', 'Invisible sometimes'] },
 ];
+
+// Compact-pill icons (all categories except color, which uses real
+// swatches below) — purely visual, keyed by the same option strings
+// CATEGORIES already uses, so selection/summary logic is untouched.
+const OPTION_ICONS = {
+  Round: '⚪', Tall: '📏', Floating: '☁️', Funny: '🤪', Curved: '🌀', Tiny: '🔬', Giant: '🦣',
+  Stars: '⭐', Egyptian: '𓋹', Floral: '🌸', Checkerboard: '♟️', Dots: '🔴', Stripes: '〰️', Leaves: '🍃', Plain: '⬜',
+  Wood: '🪵', Cloud: '☁️', Glass: '🔷', Fabric: '🧵', Stone: '🪨', Metal: '🔩', Paper: '📄', Magic: '✨',
+  'Can fly': '🕊️', 'Changes color': '🌈', 'Grows flowers': '🌷', 'Has tiny wheels': '🛞',
+  'Glows in dark': '🌟', 'Plays music': '🎵', 'Talks': '💬', 'Invisible sometimes': '👻',
+};
+
+const COLOR_SWATCHES = {
+  Blue: '#1864ab', Pink: '#e6b8bf', Yellow: '#f2c14e', Green: '#2b8a3e',
+  Red: '#c92a2a', Gold: '#c8a96e',
+  Rainbow: 'linear-gradient(135deg,#c92a2a,#f2c14e,#2b8a3e,#1864ab,#a78bfa)',
+  Monochrome: 'linear-gradient(135deg,#1a1d2b,#8a8a9a,#fff)',
+};
 
 // Small grammar helpers so the auto-generated sentence reads naturally —
 // most options already work as plain lowercase adjectives, these three
@@ -263,12 +303,16 @@ function renderList() {
           ${CATEGORIES.map(cat => `
             <div class="category-block">
               <div class="category-label">${cat.label}</div>
-              <div class="pill-row">
-                ${cat.options.map(opt => `
-                  <div class="choice-pill ${c[cat.key] === opt ? 'selected' : ''}" onclick="event.stopPropagation(); selectOption('${key}', '${cat.key}', '${opt}')">
-                    <span class="cp-dot"></span>${opt}
-                  </div>
-                `).join('')}
+              <div class="pill-row ${cat.key === 'color' ? 'color-row' : ''}">
+                ${cat.key === 'color'
+                  ? cat.options.map(opt => `
+                      <div class="color-chip ${c[cat.key] === opt ? 'selected' : ''}" style="background:${COLOR_SWATCHES[opt]};" title="${opt}" onclick="event.stopPropagation(); selectOption('${key}', '${cat.key}', '${opt}')"></div>
+                    `).join('')
+                  : cat.options.map(opt => `
+                      <div class="choice-pill ${c[cat.key] === opt ? 'selected' : ''}" onclick="event.stopPropagation(); selectOption('${key}', '${cat.key}', '${opt}')">
+                        <span class="cp-icon">${OPTION_ICONS[opt] || '•'}</span>${opt}
+                      </div>
+                    `).join('')}
               </div>
             </div>
           `).join('')}

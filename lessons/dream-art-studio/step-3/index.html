@@ -78,6 +78,29 @@
     color: var(--ink); font-size: 12px; font-weight: 700;
     border-radius: 16px; padding: 6px 12px;
   }
+
+  /* ── Video panel (placeholder — no real video yet) ──────────── */
+  .video-panel {
+    position: relative;
+    height: 200px;
+    background: #f6efdc;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(26,29,43,0.12);
+    margin: 0 0 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 16px;
+    animation: videoPanelIn .22s ease;
+  }
+  @keyframes videoPanelIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .video-panel-close {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; font-size: 13px; font-weight: 800;
+    color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .video-panel-play { font-size: 38px; margin-bottom: 8px; line-height: 1; }
+  .video-panel-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .video-panel-sub { font-size: 12px; color: var(--ink-muted); }
 </style>
 </head>
 <body>
@@ -104,6 +127,8 @@
   </div>
   <div class="image-map-caption">Tap objects directly on the picture to select them.</div>
 
+  <div id="videoPanelSlot"></div>
+
   <div class="selected-list" id="selectedList"></div>
 
   <div class="next-footer">
@@ -115,6 +140,7 @@
 <script>
 const STEP_N = 3;
 const MIN_SUGGESTED = 5;
+let activeVideoObject = null;
 
 // Rough estimates (per Faye) — left/top/width/height are all % of the
 // image's own box, so they scale automatically with it at any size.
@@ -189,7 +215,30 @@ function toggleHotspot(name) {
   // correctly with no changes needed there.
   DreamState.setStepData(STEP_N, { selected: selected });
   DreamState.markInProgress(STEP_N);
+  activeVideoObject = name;
   renderHotspots();
+  renderVideoPanel();
+}
+
+function renderVideoPanel() {
+  const slot = document.getElementById('videoPanelSlot');
+  if (!activeVideoObject) {
+    slot.innerHTML = '';
+    return;
+  }
+  slot.innerHTML = `
+    <div class="video-panel">
+      <button class="video-panel-close" onclick="closeVideoPanel()">✕ close</button>
+      <div class="video-panel-play">▶️</div>
+      <div class="video-panel-title">How to draw: ${activeVideoObject}</div>
+      <div class="video-panel-sub">🎬 Faye's drawing tutorial coming soon</div>
+    </div>
+  `;
+}
+
+function closeVideoPanel() {
+  activeVideoObject = null;
+  renderVideoPanel();
 }
 
 function goNext() {

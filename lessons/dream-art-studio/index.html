@@ -254,7 +254,17 @@
  * locked card in this design reads as inert by itself.
  * ============================================================ */
 
-const FUNCTIONAL_LIMIT = 5;
+// Which steps are real, tappable pages — no longer a simple "n <= limit"
+// range now that Steps 7 and 10 are live ahead of 6, 8, 9. Order matters:
+// it's also the sequence "recommended next" and the friction nudge walk.
+const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 7, 10];
+
+function recommendedFunctionalStep() {
+  for (const n of FUNCTIONAL_STEPS) {
+    if (DreamState.getStatus(n) !== 'completed') return n;
+  }
+  return 'finished';
+}
 
 // torn-edge shape (1-6, cycled) + grid span + tape-strip count per step.
 // Color/rotation classes both just use the step number directly (p1..p12,
@@ -282,7 +292,7 @@ function renderCards() {
 
   grid.innerHTML = STEPS.map(step => {
     const meta = CARD_META[step.n];
-    const isLocked = step.n > FUNCTIONAL_LIMIT;
+    const isLocked = !FUNCTIONAL_STEPS.includes(step.n);
     const isDone = state.steps[step.n].status === 'completed';
 
     const classes = [
@@ -315,12 +325,11 @@ function renderCards() {
 
 /* ── Tap handling (steps 1-5 only — locked cards have no onclick) ── */
 function handleCardTap(n) {
-  const recommended = DreamState.recommendedNext();
-  const recommendedIdx = recommended === 'finished' ? FUNCTIONAL_LIMIT
-    : Math.min(STEPS.findIndex(s => s.n === recommended), FUNCTIONAL_LIMIT - 1);
-  const tappedIdx = STEPS.findIndex(s => s.n === n);
+  const recommended = recommendedFunctionalStep();
+  const recommendedIdx = recommended === 'finished' ? FUNCTIONAL_STEPS.length : FUNCTIONAL_STEPS.indexOf(recommended);
+  const tappedIdx = FUNCTIONAL_STEPS.indexOf(n);
 
-  if (recommended !== 'finished' && recommended <= FUNCTIONAL_LIMIT && tappedIdx > recommendedIdx) {
+  if (recommended !== 'finished' && tappedIdx > recommendedIdx) {
     pendingFrictionStep = n;
     showFriction(recommended, n);
     return;
@@ -351,8 +360,8 @@ function dismissFriction(goToRecommended) {
   const tapped = pendingFrictionStep;
   pendingFrictionStep = null;
   if (goToRecommended) {
-    const recommended = DreamState.recommendedNext();
-    if (recommended !== 'finished' && recommended <= FUNCTIONAL_LIMIT) openStep(recommended);
+    const recommended = recommendedFunctionalStep();
+    if (recommended !== 'finished') openStep(recommended);
   } else if (tapped) {
     openStep(tapped);
   }

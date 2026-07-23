@@ -12,6 +12,86 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared step/state module -->
 <script src="../shared/studio-state.js"></script>
+
+<style>
+  /* Canvas-collage background for this step only — same page-scoped
+     override used on Step 4 and Step 7. */
+  html, body {
+    background-color: #d4c9a8;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
+    background-attachment: fixed;
+  }
+  .topbar { background: rgba(212,201,168,0.75); border-bottom: 1px solid rgba(44,30,16,0.15); }
+  .back-link, .topbar-title { color: #2c1e10; }
+  .stops-pill { background: rgba(255,255,255,0.55); border-color: rgba(44,30,16,0.15); color: #2c1e10; }
+  .page-hero h1 { color: #2c1e10; }
+  .page-hero p { color: #6d5440; }
+
+  /* ── Interactive image map (same pattern as Step 3) ─────────── */
+  .image-map-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(26,29,43,0.15);
+    margin-bottom: 14px;
+    line-height: 0;
+    background: #fff;
+  }
+  .characters-image { display: block; width: 100%; height: auto; }
+
+  .hotspot-layer { position: absolute; inset: 0; }
+  .hotspot {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
+  }
+  .hotspot:hover {
+    border-color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.1);
+  }
+  .hotspot.active {
+    border-color: var(--gold);
+    background: rgba(200,169,110,0.14);
+    box-shadow: 0 0 15px var(--gold);
+    transform: scale(1.02);
+    animation: hotspotPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes hotspotPulse {
+    0%, 100% { box-shadow: 0 0 15px var(--gold); }
+    50% { box-shadow: 0 0 24px var(--gold); }
+  }
+
+  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 18px; }
+
+  /* ── Video panel (placeholder — no real video yet) ──────────── */
+  .video-panel {
+    position: relative;
+    height: 200px;
+    background: #f6efdc;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(26,29,43,0.12);
+    margin: 0 0 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 16px;
+    animation: videoPanelIn .22s ease;
+  }
+  @keyframes videoPanelIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .video-panel-close {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; font-size: 13px; font-weight: 800;
+    color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .video-panel-play { font-size: 38px; margin-bottom: 8px; line-height: 1; }
+  .video-panel-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .video-panel-sub { font-size: 12px; color: var(--ink-muted); }
+</style>
 </head>
 <body>
 
@@ -22,15 +102,89 @@
 </div>
 
 <div class="content-wrap">
-  <div class="soon-card">
-    <div class="soon-icon">🧑‍🎨</div>
-    <h2>Add Yourself</h2>
-    <p>This stage is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
-    <a class="btn btn-gold" href="../">← Back to map</a>
+
+  <div class="page-hero">
+    <h1>Add Yourself to Your Studio</h1>
+    <p>Tap a character to learn how to draw them.</p>
   </div>
+
+  <div class="image-map-wrap" id="imageMapWrap">
+    <img class="characters-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/27db6182-600d-4636-03c2-75cc5d3e4800/public" alt="Six hand-drawn characters to choose from — four people in different poses and outfits, a black cat, and a spotted dog">
+    <div class="hotspot-layer" id="hotspotLayer"></div>
+  </div>
+  <div class="image-map-caption">Tap a character to see how to draw them.</div>
+
+  <div id="videoPanelSlot"></div>
+
+  <div class="next-footer">
+    <button class="btn btn-gold" onclick="goNext()">Continue →</button>
+  </div>
+
 </div>
 
 <script>
+const STEP_N = 10;
+
+// Rough estimates from the reference image — left/top/width/height are
+// all % of the image's own box (same convention as Step 3's HOTSPOTS).
+// Faye will rename these once the real characters are finalized.
+const HOTSPOTS = [
+  { name: 'Character 1', left: 1,  top: 18, width: 19, height: 72 },
+  { name: 'Character 2', left: 16, top: 15, width: 20, height: 75 },
+  { name: 'Character 3', left: 33, top: 15, width: 20, height: 78 },
+  { name: 'Character 4', left: 49, top: 10, width: 22, height: 82 },
+  { name: 'Character 5', left: 67, top: 28, width: 15, height: 50 },
+  { name: 'Character 6', left: 79, top: 22, width: 19, height: 58 },
+];
+
+let activeCharacter = null;
+
+function renderHotspots() {
+  const layer = document.getElementById('hotspotLayer');
+  layer.innerHTML = HOTSPOTS.map(h => `
+    <div class="hotspot ${activeCharacter === h.name ? 'active' : ''}"
+         data-name="${h.name}"
+         title="${h.name}"
+         style="left:${h.left}%; top:${h.top}%; width:${h.width}%; height:${h.height}%;"
+         onclick="tapCharacter('${h.name}')">
+    </div>
+  `).join('');
+}
+
+function tapCharacter(name) {
+  activeCharacter = name;
+  DreamState.markInProgress(STEP_N);
+  renderHotspots();
+  renderVideoPanel();
+}
+
+function renderVideoPanel() {
+  const slot = document.getElementById('videoPanelSlot');
+  if (!activeCharacter) {
+    slot.innerHTML = '';
+    return;
+  }
+  slot.innerHTML = `
+    <div class="video-panel">
+      <button class="video-panel-close" onclick="closeVideoPanel()">✕ close</button>
+      <div class="video-panel-play">▶️</div>
+      <div class="video-panel-title">How to draw: ${activeCharacter}</div>
+      <div class="video-panel-sub">🎬 How to draw this character — Faye's tutorial coming soon</div>
+    </div>
+  `;
+}
+
+function closeVideoPanel() {
+  activeCharacter = null;
+  renderHotspots();
+  renderVideoPanel();
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-11/';
+}
+
 async function init() {
   if (window.FEIAccess) {
     try {
@@ -41,8 +195,10 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
-  DreamState.markVisited(10);
+  DreamState.markVisited(STEP_N);
+  renderHotspots();
 }
+
 init();
 </script>
 </body>
