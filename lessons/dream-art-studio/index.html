@@ -63,21 +63,31 @@
   }
 
   /* ── Cards grid ──────────────────────────────────────────── */
-  .cards-grid-wrap { max-width: 720px; margin: 28px auto 0; padding: 0 20px; }
+  .cards-grid-wrap { max-width: 680px; margin: 28px auto 0; padding: 0 20px; }
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 1fr;
+    /* NOT grid-auto-rows: 1fr — that's the bug that caused this whole
+       page to break. `1fr` row tracks distribute the grid container's
+       available block-space, but .cards-grid has no explicit height
+       (it's auto-sized from its own content), so there's no real
+       "available space" to distribute — combined with aspect-ratio:1/1
+       on a .wide card (2 columns wide, so its 1:1 height balloons too),
+       this cascaded into a single row filling the whole viewport.
+       grid-auto-rows: auto lets rows size from their actual content
+       (which aspect-ratio already constrains per-card) instead. */
+    grid-auto-rows: auto;
     gap: 10px;
   }
   @media (max-width: 600px) {
     .cards-grid { grid-template-columns: repeat(2, 1fr); }
-    .paper-card.tall { grid-row: span 1; }
+    .paper-card.tall { grid-row: span 1; max-height: none; }
   }
 
   .paper-card {
     position: relative;
     aspect-ratio: 1 / 1;
+    min-height: 115px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 5px;
     padding: 10px 8px;
@@ -88,7 +98,7 @@
     text-align: center;
   }
   .paper-card.wide { grid-column: span 2; }
-  .paper-card.tall { grid-row: span 2; }
+  .paper-card.tall { grid-row: span 2; max-height: 260px; }
   .paper-card:hover:not(.locked) {
     transform: scale(1.06) rotate(0deg);
     box-shadow: 4px 6px 20px rgba(44,30,16,0.35);
