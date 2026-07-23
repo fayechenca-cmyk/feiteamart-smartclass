@@ -718,7 +718,12 @@
   }
   /* Track-themed variants — Skills feels like daylight; Creation like gallery at 6pm. */
   .track-card.track-skills {
-    background: #ffffff;
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.85) 100%),
+      url('https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/df3fd373-f889-4ce7-fce6-a211bc1e5f00/public');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-color: rgba(94,122,94,0.18);
   }
   .track-card.track-skills:hover {
@@ -729,6 +734,9 @@
   }
   .track-card.track-skills .track-fill {
     background: linear-gradient(90deg, var(--skills-accent), #8fb18f);
+  }
+  .track-card.track-skills .track-age-pill {
+    background: rgba(94,122,94,0.16); color: var(--skills-accent);
   }
   .track-card.track-creation {
     background-image:
@@ -1438,9 +1446,9 @@
     <a href="#" class="track-card track-skills" id="track-skills" onclick="event.preventDefault(); showSkills();">
       <!-- DESIGNER: replace emoji with custom SVG per Section 4.4 (geometric primitives / pencil + line / steps / grid). Color: var(--skills-accent). -->
       <div class="track-emoji" aria-hidden="true">✏️</div>
-      <div class="track-name">Skill</div>
-      <div class="track-quote">&ldquo;I have no idea what to do. Guide me step by step.&rdquo;</div>
-      <div class="track-description">A teacher walks you through every step. You finish something real — a shape, a character, a small drawing — and build confidence one practice at a time.</div>
+      <div class="track-name">Skill <span class="track-age-pill">Ages 9+</span></div>
+      <div class="track-quote">&ldquo;I want to really learn to draw — the right way.&rdquo;</div>
+      <div class="track-description">Build real technique through focused practice: dynamic gesture, figure and anatomy, realistic drawing, architecture, and scene design. Step-by-step training for serious young artists, ages 9+.</div>
       <div class="track-progress" id="skills-progress">0 of 11 practice sessions</div>
       <div class="track-bar"><div class="track-fill" id="skills-bar" style="width:0%"></div></div>
     </a>
