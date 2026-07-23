@@ -731,7 +731,12 @@
     background: linear-gradient(90deg, var(--skills-accent), #8fb18f);
   }
   .track-card.track-creation {
-    background: linear-gradient(135deg, var(--creation-bg) 0%, var(--creation-bg-soft) 100%);
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.7) 100%),
+      url('https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ac666e69-cd38-4f12-3e37-b91d8e997600/public');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-color: rgba(200,169,110,0.25);
     color: #f5f1e8;
   }
@@ -780,6 +785,14 @@
     background: rgba(200,169,110,0.15); color: var(--gold);
     padding: 3px 8px; border-radius: 10px;
     margin-top: auto;
+  }
+  .track-age-pill {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+    background: rgba(200,169,110,0.22); color: var(--creation-accent);
+    padding: 2px 7px; border-radius: 10px;
+    margin-left: 6px; vertical-align: middle;
   }
   
   /* ═══ SUB-TRACKS (inside Skills) ═══ */
@@ -1435,10 +1448,10 @@
     <a href="creation/" class="track-card track-creation" id="track-creation">
       <!-- DESIGNER: replace emoji with custom SVG per Section 4.5 (framed artwork / archway / magnifier / open book). Color: var(--creation-accent). -->
       <div class="track-emoji" aria-hidden="true">🖼</div>
-      <div class="track-name">Creation &middot; Learn from Collections</div>
-      <div class="track-quote">&ldquo;I want to learn from artists and create my own work.&rdquo;</div>
-      <div class="track-description">Step into a curated collection of artists, artworks, and movements. Look closely. Take inspiration. Then create your own response in our open studio.</div>
-      <div class="track-progress" id="creation-progress">Collections open</div>
+      <div class="track-name">Creation &middot; Learn from Masters <span class="track-age-pill">Ages 4&ndash;8</span></div>
+      <div class="track-quote">&ldquo;I want to meet a real artist and make my own magical art!&rdquo;</div>
+      <div class="track-description">A colorful art playground for young creators, ages 4&ndash;8. Meet a master artist, discover one big idea, and turn it into art that&rsquo;s all their own.</div>
+      <div class="track-progress" id="creation-progress">Masters open</div>
       <div class="track-bar"><div class="track-fill" id="creation-bar" style="width:100%; opacity:0.4;"></div></div>
     </a>
   </div>
@@ -2021,18 +2034,18 @@
         ? `Foundation A · practice path`
         : `Foundation A · ${doneCount}/${totalCount} done`;
     
-    // Creation track: static "Collections open" message + count of completed Creation lessons.
+    // Creation track: static "Masters open" message + count of completed Creation lessons.
     // Currently 4 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art + lfc019 Rousseau).
     const creationLessons = ['lfc054', 'lfc017', 'lfc018', 'lfc019'];
     const creationDone = creationLessons.filter(id => completed.includes(id)).length;
     const progressEl = document.getElementById('creation-progress');
     if (progressEl) {
       if (creationDone === creationLessons.length) {
-        progressEl.textContent = 'All Collections explored';
+        progressEl.textContent = 'All Masters explored';
       } else if (creationDone > 0) {
-        progressEl.textContent = `${creationDone} of ${creationLessons.length} Collections explored`;
+        progressEl.textContent = `${creationDone} of ${creationLessons.length} Masters explored`;
       }
-      // else: keep the default "Collections open" text
+      // else: keep the default "Masters open" text
     }
 
     // Live Class VIP section — no-op (hides itself) for non-live-class students.
