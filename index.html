@@ -2079,6 +2079,26 @@
     return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   }
 
+  // teacher_feedback.voice_url isn't always audio — the teacher-admin
+  // upload accepts images too now, so this checks the actual file
+  // extension before deciding which element to render.
+  function renderVoiceOrImage(url) {
+    if (!url) return '';
+    const lower = url.toLowerCase();
+    const isImage = lower.match(/\.(jpg|jpeg|png|gif|webp|heic)(\?|$)/);
+    const isAudio = lower.match(/\.(mp3|wav|ogg|m4a|aac)(\?|$)/);
+    const safeUrl = feedbackEscapeHtml(url);
+
+    if (isImage) {
+      return `<img src="${safeUrl}" style="width:100%; max-width:400px; border-radius:8px; margin-top:8px; display:block;" alt="Teacher feedback image">`;
+    } else if (isAudio) {
+      return `<audio controls src="${safeUrl}" style="width:100%; margin-top:8px;"></audio>`;
+    } else {
+      // Unknown type — try image first
+      return `<img src="${safeUrl}" style="width:100%; max-width:400px; border-radius:8px; margin-top:8px; display:block;" alt="Teacher feedback" onerror="this.style.display='none'">`;
+    }
+  }
+
   async function checkUnreadFeedback() {
     try {
       if (!userProfile) return;
@@ -2119,7 +2139,7 @@
       <div class="feedback-notif-item" id="feedback-item-${feedbackEscapeHtml(item.id)}">
         <div class="feedback-notif-meta">${feedbackEscapeHtml(feedbackLessonName(item.lesson_id))} · ${feedbackFormatDate(item.created_at)}</div>
         ${item.text_comment ? `<div class="feedback-notif-comment">"${feedbackEscapeHtml(item.text_comment)}"</div>` : ''}
-        ${item.voice_url ? `<audio class="feedback-audio-player" controls src="${feedbackEscapeHtml(item.voice_url)}"></audio>` : ''}
+        ${renderVoiceOrImage(item.voice_url)}
         <button class="feedback-notif-dismiss" onclick="markFeedbackRead('${item.id}')">Mark as read</button>
       </div>
     `).join('');
