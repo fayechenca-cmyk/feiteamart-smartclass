@@ -17,7 +17,9 @@
   /* Museum-wall feel for this step only — dark background makes the
      "paintings" pop, like a real gallery wall. Every other step keeps
      the shared warm gradient from studio-style.css. */
-  html, body { background: linear-gradient(180deg, #21213a 0%, #16162a 100%); background-attachment: fixed; }
+  /* NOT background-attachment: fixed — known iOS Safari GPU/memory crash
+     trigger when repainting a fixed background layer on scroll. */
+  html, body { background: linear-gradient(180deg, #21213a 0%, #16162a 100%); }
   .topbar { background: rgba(22,22,42,0.75); border-bottom: 1px solid rgba(255,255,255,0.1); }
   .back-link, .topbar-title { color: #fff; }
   .stops-pill { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }

@@ -26,7 +26,10 @@ html, body {
   margin: 0; padding: 0;
   font-family: 'Montserrat', sans-serif;
   background: linear-gradient(180deg, var(--butter) 0%, var(--peach) 35%, var(--rose) 70%, var(--sage) 100%);
-  background-attachment: fixed;
+  /* NOT background-attachment: fixed — known iOS Safari GPU/memory
+     crash trigger when repainting a fixed background layer on scroll.
+     This is the default background for every step that doesn't set
+     its own page-scoped override (2, 3, 6, 8, 9, 11, 12). */
   color: var(--ink);
   min-height: 100vh;
 }
