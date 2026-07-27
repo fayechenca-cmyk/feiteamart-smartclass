@@ -1140,6 +1140,58 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .play-light-insight-card { padding: 10px 12px; }
 }
 
+/* ═══ 3D paper crane viewer (Three.js) — same cool sky-gradient
+   "stage" treatment as .play-light-stage, just square + WebGL. ═══ */
+.crane-viewer-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+  margin: 4px auto 14px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(180deg, #f5f3ff 0%, #ecfeff 40%, #e0e7ff 75%, #c7d2fe 100%);
+  border: 1px solid rgba(167,139,250,0.15);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+  touch-action: none;
+  cursor: grab;
+}
+.crane-viewer-wrap:active { cursor: grabbing; }
+#crane-canvas { display: block; width: 100%; height: 100%; }
+
+/* ═══ Paper crane photo + six-zone hotspots (replaces "drag the
+   sun"). Same photo-frame treatment as elsewhere in the site;
+   readout/hint reuse .play-light-readout / .play-light-hint as-is. ═══ */
+.crane-zones-frame {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 204 / 292;
+  margin: 4px auto 14px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-image: url('https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/41bbc5aa-deba-4019-bb4d-ab653c309900/public');
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: 24.88% 0%;
+  border: 1px solid rgba(167,139,250,0.15);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+}
+.crane-zones-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+}
+.crane-zone-hotspot {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    OPENING LFC — Honest Welcome
    The first thing the student sees in Lesson 1.
@@ -3516,6 +3568,12 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 </style>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
+<!-- Three.js (CDN) — for the low-poly 3D paper crane viewer in the
+     "See every plane" reference step. Legacy UMD build + examples/js
+     OrbitControls, loaded as plain globals (no bundler/import map),
+     matching this file's existing plain <script src> convention. -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
@@ -6132,8 +6190,8 @@ const LESSON = {
       part: 'A',
       partLabel: 'Part a · preparation',
       type: 'reference',
-      title: 'Where curve meets flat',
-      intro: 'Before we draw, let\'s learn how light behaves on a cylinder. The side curves like a sphere. The top stays flat like a cube face. One light, two different surfaces — see how each one responds.',
+      title: 'See every plane',
+      intro: 'A paper crane has no curves — only flat planes meeting at sharp creases. Drag to rotate this 3D crane and find every one of them.',
       xp: 0
     },
     // ═══════════════════════════════════════════════════════════════
@@ -6150,9 +6208,9 @@ const LESSON = {
     {
       part: 'A',
       partLabel: '✨ Play with the light',
-      type: 'playLight',
-      title: 'Now feel it — drag the sun',
-      intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
+      type: 'craneZones',
+      title: 'Feel the light on the crane',
+      intro: 'Every plane of the crane catches light differently. Tap or hover each part to see which of the six light zones it belongs to.',
       xp: 5
     },
     {
@@ -6345,10 +6403,16 @@ function renderStep() {
     case 'firstGaze':   el.innerHTML = renderFirstGaze(step); break;
     case 'lfcMoment':   el.innerHTML = renderLFCMoment(step); break;
     
-    case 'reference':   el.innerHTML = renderReference(step); break;
-    case 'playLight':   el.innerHTML = renderPlayLight(step); 
+    case 'reference':   el.innerHTML = renderReference(step);
+                        // Defer 3D setup until the canvas is in the DOM
+                        setTimeout(() => initCraneViewer(), 50);
+                        break;
+    case 'playLight':   el.innerHTML = renderPlayLight(step);
                         // Defer interactive setup until DOM is in place
                         setTimeout(() => initPlayLight('cylinder'), 50);
+                        break;
+    case 'craneZones':  el.innerHTML = renderCraneZones(step);
+                        setTimeout(() => initCraneZones(), 50);
                         break;
     case 'tools':      el.innerHTML = renderTools(step); break;
     case 'ready':      el.innerHTML = renderReady(step); break;
@@ -8498,85 +8562,310 @@ function renderReference(step) {
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
-      
-      <div class="ref-grid">
-        <div class="ref-card wide" style="background: linear-gradient(135deg, #fafaf8 0%, #f0f9ff 50%, #fef3f7 100%);">
-          <svg width="100%" height="100%" viewBox="0 0 400 240" style="max-width: 360px;">
-            <defs>
-              <!-- Cylinder side gradient: bright on left (light from upper-left), darkening rightward -->
-              <linearGradient id="cylRef" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#cdd5dd"/>
-                <stop offset="22%" stop-color="#f1f5f9"/>
-                <stop offset="40%" stop-color="#cbd5e1"/>
-                <stop offset="65%" stop-color="#475569"/>
-                <stop offset="85%" stop-color="#334155"/>
-                <stop offset="100%" stop-color="#64748b"/>
-              </linearGradient>
-              <!-- Top ellipse: flat, slightly lit -->
-              <radialGradient id="cylTopRef" cx="40%" cy="40%" r="80%">
-                <stop offset="0%" stop-color="#e2e8f0"/>
-                <stop offset="100%" stop-color="#94a3b8"/>
-              </radialGradient>
-            </defs>
-            
-            <!-- Cast shadow -->
-            <ellipse cx="220" cy="208" rx="100" ry="11" fill="#475569" opacity="0.32"/>
-            
-            <!-- Cylinder side (rectangle with gradient) -->
-            <rect x="155" y="80" width="130" height="125" fill="url(#cylRef)" stroke="#1a1d2b" stroke-width="1"/>
-            
-            <!-- Bottom edge (visible curve, dashed - it's behind the form) -->
-            <ellipse cx="220" cy="205" rx="65" ry="10" fill="none" stroke="#1a1d2b" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
-            
-            <!-- Top ellipse (flat shaded) -->
-            <ellipse cx="220" cy="80" rx="65" ry="10" fill="url(#cylTopRef)" stroke="#1a1d2b" stroke-width="1"/>
-            
-            <!-- Highlight band on the side (vertical) -->
-            <rect x="180" y="84" width="6" height="118" fill="rgba(255,255,255,0.55)" style="filter: blur(1.5px);"/>
-            
-            <!-- Reflected light hint on shadow side -->
-            <rect x="265" y="115" width="3" height="80" fill="rgba(207,250,254,0.4)"/>
-            
-            <!-- Labels with leader lines -->
-            <line x1="183" y1="100" x2="80" y2="50" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="78" y="48" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">1 HIGHLIGHT</text>
-            
-            <line x1="208" y1="80" x2="80" y2="20" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="78" y="18" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">2 TOP (FLAT TONE)</text>
-            
-            <line x1="200" y1="140" x2="320" y2="60" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="322" y="58" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">3 HALFTONE</text>
-            
-            <line x1="240" y1="140" x2="338" y2="115" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="340" y="118" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">4 CORE SHADOW</text>
-            
-            <line x1="266" y1="155" x2="345" y2="170" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="347" y="173" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">5 REFLECTED LIGHT</text>
-            
-            <line x1="270" y1="208" x2="60" y2="220" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="58" y="222" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">6 CAST SHADOW</text>
-            
-            <line x1="208" y1="92" x2="58" y2="92" stroke="#1a1d2b" stroke-width="0.5" stroke-dasharray="2,2"/>
-            <text x="56" y="95" text-anchor="end" font-family="Montserrat" font-size="9" font-weight="800" fill="#1a1d2b" letter-spacing="1">EDGE</text>
-          </svg>
-          <div class="ref-label">Cylinder · the six zones translated</div>
+
+      <div class="crane-viewer-wrap" id="crane-viewer-wrap">
+        <canvas id="crane-canvas"></canvas>
+        <div class="play-light-hint" id="crane-viewer-hint">
+          <span class="play-light-hint-arrow">↻</span>
+          <span>Drag to see every plane</span>
         </div>
       </div>
-      
-      <div class="vocab">
-        <div class="vocab-row"><div class="vocab-num">1</div><div class="vocab-body"><div class="vocab-term">Highlight</div><div class="vocab-def">The brightest vertical strip on the curved side — where light hits the surface most directly. On a cylinder it's a strip, not a dot.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">2</div><div class="vocab-body"><div class="vocab-term">Top (flat tone)</div><div class="vocab-def">The flat ellipse on top is ONE tone — no gradient. Treat it like a single face of a cube. Often the brightest area when light is overhead.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">3</div><div class="vocab-body"><div class="vocab-term">Halftone</div><div class="vocab-def">The middle gradient on the curved side — between the highlight and the core shadow. Most of the cylinder's "side" is halftone.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">4</div><div class="vocab-body"><div class="vocab-term">Core shadow</div><div class="vocab-def">A vertical band of the deepest tone on the side, where the curve turns furthest from the light. Note: it's a strip, not a curve.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">5</div><div class="vocab-body"><div class="vocab-term">Reflected light</div><div class="vocab-def">A subtle lift of value on the very edge of the shadow side — bounce light from surroundings. Must stay darker than halftones.</div></div></div>
-        <div class="vocab-row"><div class="vocab-num">6</div><div class="vocab-body"><div class="vocab-term">Cast shadow</div><div class="vocab-def">The shadow the cylinder throws on the floor — stretched and softened with distance. Anchors the form to the ground.</div></div></div>
-        <div class="vocab-row" style="background: rgba(167,139,250,0.08); border-radius: 8px; padding: 10px;"><div class="vocab-num" style="background: #a78bfa; color: white;">★</div><div class="vocab-body"><div class="vocab-term" style="color: #6d28d9;">The Edge (special to cylinder)</div><div class="vocab-def">Where the curved side meets the flat top. This sharp line is what makes a cylinder read AS a cylinder. Lose this edge, and your form looks like an egg.</div></div></div>
-      </div>
-      
+
       <div class="btn-stack">
         <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> I understand — continue</button>
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// 3D PAPER CRANE VIEWER (Three.js) — replaces the old cylinder
+// six-zone SVG diagram. Deliberately low-poly and non-realistic: the
+// crane is built entirely from flat triangular planes, each its own
+// grey tone with a dark edge line at every seam — the geometry itself
+// is the lesson: "a paper crane is intersecting planes."
+// ═══════════════════════════════════════════════════════════════════
+let CraneViewer = null;  // { stopped, renderer, scene, onResize }
+
+function disposeCraneViewer() {
+  if (!CraneViewer) return;
+  CraneViewer.stopped = true;
+  window.removeEventListener('resize', CraneViewer.onResize);
+  CraneViewer.scene.traverse(obj => {
+    if (obj.geometry) obj.geometry.dispose();
+    if (obj.material) {
+      if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+      else obj.material.dispose();
+    }
+  });
+  CraneViewer.renderer.dispose();
+  CraneViewer = null;
+}
+
+// Every face is 3 explicit, UNSHARED points so each triangle gets its
+// own flat-shaded grey — visually reinforcing "many planes," not one
+// smooth surface. Coordinates are a stylized abstraction, not a real
+// origami fold simulation.
+function buildLowPolyCrane() {
+  const group = new THREE.Group();
+  const faceDefs = [];
+  const addFace = (points, gray) => faceDefs.push({ points, gray });
+
+  // ── Body: an elongated 6-vertex bipyramid (2 apexes + 4 equatorial) ──
+  const bTop = [0, 0.55, 0.05];
+  const bBottom = [0, -0.55, 0.05];
+  const bFront = [0, 0.05, 0.85];
+  const bBack = [0, 0.05, -0.75];
+  const bLeft = [-0.5, 0.05, 0.05];
+  const bRight = [0.5, 0.05, 0.05];
+  addFace([bTop, bFront, bRight], 0xc9c9d1);
+  addFace([bTop, bLeft, bFront], 0xb7b7c1);
+  addFace([bTop, bBack, bLeft], 0xd6d6dd);
+  addFace([bTop, bRight, bBack], 0xa8a8b3);
+  addFace([bBottom, bRight, bFront], 0x9b9ba6);
+  addFace([bBottom, bFront, bLeft], 0x8d8d99);
+  addFace([bBottom, bLeft, bBack], 0xa2a2ad);
+  addFace([bBottom, bBack, bRight], 0x94949f);
+
+  // ── Neck + head: thin tilted pyramid rising from the body front ──
+  const neckBaseL = [-0.12, 0.05, 0.8];
+  const neckBaseR = [0.12, 0.05, 0.8];
+  const headBack = [0, 0.55, 1.15];
+  const beakTip = [0, 0.45, 1.55];
+  addFace([neckBaseL, neckBaseR, headBack], 0xe4e4ea);
+  addFace([neckBaseR, beakTip, headBack], 0xcfcfd8);
+  addFace([neckBaseL, headBack, beakTip], 0xbdbdc8);
+
+  // ── Tail: a thin flat blade extending up and back from the body ──
+  const tailBaseL = [-0.15, 0.1, -0.7];
+  const tailBaseR = [0.15, 0.1, -0.7];
+  const tailTip = [0, 0.75, -1.35];
+  addFace([tailBaseL, tailBaseR, tailTip], 0xd0d0d8);
+  addFace([tailBaseR, tailBaseL, tailTip], 0xb0b0ba);
+
+  // ── Wings: two flat kite blades spreading up + outward from the top ridge ──
+  function addWing(sign, gray1, gray2) {
+    const rootFront = [sign * 0.15, 0.5, 0.5];
+    const rootBack = [sign * 0.15, 0.5, -0.4];
+    const tip = [sign * 1.35, 1.05, 0.05];
+    addFace([rootFront, tip, rootBack], gray1);
+    addFace([rootBack, tip, rootFront], gray2);
+  }
+  addWing(-1, 0xf1f1f5, 0xd8d8e0);
+  addWing(1, 0xe8e8ee, 0xcecdd6);
+
+  faceDefs.forEach(({ points, gray }) => {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(points.flat()), 3));
+    geometry.computeVertexNormals();
+    const material = new THREE.MeshStandardMaterial({
+      color: gray, flatShading: true, side: THREE.DoubleSide, roughness: 0.85, metalness: 0.02
+    });
+    group.add(new THREE.Mesh(geometry, material));
+
+    // Edge line at this face's seams — the "crease" emphasis.
+    const edges = new THREE.EdgesGeometry(geometry);
+    group.add(new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x2a2a33 })));
+  });
+
+  return group;
+}
+
+function initCraneViewer() {
+  disposeCraneViewer();  // clean up a previous instance if revisiting this step
+
+  const wrap = document.getElementById('crane-viewer-wrap');
+  const canvas = document.getElementById('crane-canvas');
+  if (!wrap || !canvas || typeof THREE === 'undefined') return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(1.8, 1.3, 2.6);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  function sizeToWrap() {
+    const size = wrap.clientWidth;
+    renderer.setSize(size, size, false);
+    camera.aspect = 1;
+    camera.updateProjectionMatrix();
+  }
+  sizeToWrap();
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+  const key = new THREE.DirectionalLight(0xfff2d6, 0.9);
+  key.position.set(3, 4, 2);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xcfe0ff, 0.4);
+  fill.position.set(-3, -1, -2);
+  scene.add(fill);
+
+  scene.add(buildLowPolyCrane());
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.rotateSpeed = 0.9;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.4;
+
+  const hint = document.getElementById('crane-viewer-hint');
+  renderer.domElement.addEventListener('pointerdown', () => {
+    controls.autoRotate = false;
+    if (hint) hint.style.opacity = '0';
+  }, { once: true });
+
+  const state = { stopped: false, renderer, scene, onResize: sizeToWrap };
+  window.addEventListener('resize', state.onResize);
+
+  function animate() {
+    if (state.stopped) return;
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  CraneViewer = state;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CRANE SIX-ZONE HOTSPOTS — replaces "drag the sun" (the old cylinder
+// playLight step). A static photo of the paper crane with six tappable
+// regions, one per plane, each mapped to one of the six light zones
+// from the reference step. Colors are reused directly from that same
+// cylinder diagram's fills (highlight/halftone/core-shadow/reflected-
+// light/cast-shadow), plus the Edge accent purple already used for the
+// diagram's special "Edge" row — no new colors introduced.
+// ═══════════════════════════════════════════════════════════════════
+const CRANE_ZONES = [
+  {
+    key: 'highlight', num: 1, term: 'Highlight', color: '#f1f5f9', strokeColor: '#ffffff',
+    points: '5,90 35,68 42,106 16,122',
+    def: 'The brightest point on the whole crane — usually right at a sharp fold like the beak tip, where the paper catches direct light head-on.'
+  },
+  {
+    key: 'edge', num: 2, term: 'Edge', color: '#a78bfa', strokeColor: '#7c5fc7',
+    points: '35,68 72,58 86,108 42,106',
+    def: 'Where two planes crease together at a hard line — the fold on the neck. This is what makes a crane read as folded paper, not a soft curved form.'
+  },
+  {
+    key: 'halftone', num: 3, term: 'Halftone', color: '#cbd5e1', strokeColor: '#94a3b8',
+    points: '42,106 86,108 132,140 108,222 54,214',
+    def: "The broad, gently-lit face of a plane — the crane's front chest facet. Most of a paper crane's surface sits in halftone, not full light or full shadow."
+  },
+  {
+    key: 'coreShadow', num: 4, term: 'Core Shadow', color: '#334155', strokeColor: '#1e293b',
+    points: '86,58 192,10 166,122 112,140',
+    def: 'The plane turned furthest from the light — the far side of a folded wing. This is the deepest, flattest dark on the model, with almost no gradient.'
+  },
+  {
+    key: 'reflectedLight', num: 5, term: 'Reflected Light', color: '#a5f3fc', strokeColor: '#67e8f9',
+    points: '150,108 192,94 176,142 140,146',
+    def: 'A faint lift of value right at the edge of a shadowed plane, like the tip of the tail — bounced light from the surface around it. Always stays darker than the halftones.'
+  },
+  {
+    key: 'castShadow', num: 6, term: 'Shadow', color: '#475569', strokeColor: '#334155',
+    points: '0,242 204,242 204,292 0,292',
+    def: "The shadow the crane throws onto the table. It grounds the whole form — without it, the crane would look like it's floating."
+  }
+];
+
+function renderCraneZones(step) {
+  return `
+    <div class="step-card play-light-card">
+      <div class="play-light-kicker">✨ INTERACTIVE</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-intro">${step.intro}</div>
+
+      <div class="crane-zones-frame" id="crane-zones-frame">
+        <svg class="crane-zones-svg" id="crane-zones-svg" viewBox="0 0 204 292" preserveAspectRatio="xMidYMid slice">
+          <!-- hotspot polygons injected by initCraneZones() -->
+        </svg>
+        <div class="play-light-hint" id="crane-zones-hint">
+          <span class="play-light-hint-arrow">↓</span>
+          <span>Tap each part of the crane</span>
+        </div>
+      </div>
+
+      <div class="play-light-readout" id="crane-zones-readout">
+        <div class="play-light-readout-zone" id="crane-zones-readout-zone">Tap a part to begin</div>
+        <div class="play-light-readout-hint" id="crane-zones-readout-hint">Each part of the crane belongs to one of the six light zones.</div>
+      </div>
+
+      <div class="btn-stack" style="margin-top: 18px;">
+        <button class="btn btn-primary" onclick="nextStep()"><span class="glyph">◈</span> Got it — let's draw</button>
+      </div>
+    </div>`;
+}
+
+function initCraneZones() {
+  const svg = document.getElementById('crane-zones-svg');
+  if (!svg) return;
+
+  svg.innerHTML = CRANE_ZONES.map(z =>
+    `<polygon class="crane-zone-hotspot" data-key="${z.key}" points="${z.points}"></polygon>`
+  ).join('');
+
+  const hoverCapable = window.matchMedia('(hover: hover)').matches;
+
+  svg.querySelectorAll('.crane-zone-hotspot').forEach(poly => {
+    const key = poly.dataset.key;
+    const show = () => showCraneZone(key, poly);
+    poly.addEventListener('click', show);
+    poly.addEventListener('mouseenter', show);
+    poly.addEventListener('touchstart', (e) => { e.preventDefault(); show(); }, { passive: false });
+    if (hoverCapable) {
+      poly.addEventListener('mouseleave', () => hideCraneZone(poly));
+    }
+  });
+
+  updateCraneZonesReadout(null);
+}
+
+function showCraneZone(key, poly) {
+  const zone = CRANE_ZONES.find(z => z.key === key);
+  if (!zone) return;
+
+  document.querySelectorAll('.crane-zone-hotspot').forEach(p => {
+    p.classList.remove('active');
+    p.style.fill = 'transparent';
+    p.style.stroke = 'transparent';
+  });
+  poly.classList.add('active');
+  poly.style.fill = zone.color;
+  poly.style.fillOpacity = '0.45';
+  poly.style.stroke = zone.strokeColor;
+
+  updateCraneZonesReadout(zone);
+
+  const hint = document.getElementById('crane-zones-hint');
+  if (hint) hint.style.opacity = '0';
+}
+
+// Only clears on mouseleave (desktop hover) — touch taps stay lit
+// until the student taps a different zone, so the highlight doesn't
+// vanish the instant a finger lifts.
+function hideCraneZone(poly) {
+  poly.classList.remove('active');
+  poly.style.fill = 'transparent';
+  poly.style.stroke = 'transparent';
+  updateCraneZonesReadout(null);
+}
+
+function updateCraneZonesReadout(zone) {
+  const zoneEl = document.getElementById('crane-zones-readout-zone');
+  const hintEl = document.getElementById('crane-zones-readout-hint');
+  if (!zoneEl || !hintEl) return;
+  if (!zone) {
+    zoneEl.textContent = 'Tap a part to begin';
+    hintEl.textContent = 'Each part of the crane belongs to one of the six light zones.';
+    return;
+  }
+  zoneEl.textContent = `${zone.num} · ${zone.term}`;
+  hintEl.textContent = zone.def;
 }
 
 function renderTools(step) {
