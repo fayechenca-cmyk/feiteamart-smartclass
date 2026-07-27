@@ -5976,9 +5976,13 @@ const HONEST_WELCOME = {
   
   sections: [
     {
-      // Hero visual - Faye's Box reference image (Round 39)
+      // Two reference images — the paper crane itself, for visual
+      // grounding before the lesson begins.
       type: 'image',
-      src: '',  // Reserved — add paper crane hero image URL when ready
+      srcs: [
+        'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/18a10cb3-efea-43ea-6110-fb39b12dce00/public',
+        'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/41bbc5aa-deba-4019-bb4d-ab653c309900/public'
+      ],
       placeholderEmoji: '🕊️',
       placeholderLabel: 'The paper crane · reference',
       placeholderNote: ''
@@ -7051,6 +7055,19 @@ function renderOpeningLFC(step) {
       }</ul>`;
     }
     if (section.type === 'image') {
+      // Multiple reference images side by side (wrap to stacked on narrow screens)
+      if (section.srcs && section.srcs.length > 0) {
+        return `
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0;">
+            ${section.srcs.map(src => `
+              <div class="opening-lfc-image" style="flex: 1 1 260px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08); line-height: 0;">
+                <img src="${src}" alt="${escapeHtml(section.placeholderLabel || 'Lesson hero image')}"
+                     style="display: block; width: 100%; height: auto;" loading="lazy">
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
       // Hero image or placeholder if src is empty
       if (section.src && section.src.length > 0) {
         return `
