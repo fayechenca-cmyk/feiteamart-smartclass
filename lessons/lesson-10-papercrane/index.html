@@ -3291,6 +3291,9 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-timer-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 800; color: var(--ink-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
+/* Image variant of the pause card (demo video first-second prompt) —
+   same card/overlay chrome, just an image where the icon/title/text sit. */
+.pause-img { width: 100%; max-width: 220px; border-radius: var(--radius-md); margin: 0 auto 14px; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
 
 
 /* ═══ Trial paywall modal CSS (ported from Lesson 2) ═══ */
@@ -3574,6 +3577,10 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
      matching this file's existing plain <script src> convention. -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<!-- Cloudflare Stream Player SDK — needed to get currentTime/timeupdate
+     off the demo video iframes (the existing WARMUP_PAUSES pause system
+     is YouTube-IFrame-API-only and can't attach to a Stream iframe). -->
+<script src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
 </head>
 <body>
 
@@ -6418,7 +6425,11 @@ function renderStep() {
     case 'ready':      el.innerHTML = renderReady(step); break;
     case 'warmup':     el.innerHTML = renderWarmup(step); break;
     case 'lfcMoment':  el.innerHTML = renderLFCMoment(step); break;
-    case 'demo':       el.innerHTML = renderDemo(step); break;
+    case 'demo':       el.innerHTML = renderDemo(step);
+                        // Only wired for crane_observe (the first video) —
+                        // initDemoVideoPause() itself also guards on videoSeg.
+                        setTimeout(() => initDemoVideoPause(step), 50);
+                        break;
     case 'finalSubmit': el.innerHTML = renderFinalSubmit(step); break;
     case 'optionalFinish': el.innerHTML = renderOptionalFinish(step); break;
     case 'badgeUnlock': el.innerHTML = renderBadgeUnlock(step); break;
@@ -9208,14 +9219,33 @@ function renderDemo(step) {
       <div class="step-intro">${step.intro}</div>
       
       <div class="video-frame demo-video-frame" style="background: #000; cursor: default; padding: 0;">
-        ${videoId ? `<iframe 
+        ${videoId ? `<iframe
+          id="demo-video-iframe"
           src="${embedUrl}"
           loading="lazy"
           title="Demo video — ${step.title}"
           style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen="true"></iframe>` 
+          allowfullscreen="true"></iframe>`
         : `<div class="video-placeholder" style="color:#fff;"><div class="video-caption">Video coming soon</div></div>`}
+        ${step.videoSeg === 'crane_observe' ? `
+        <!-- First-video "look closer" image prompt — same .pause-overlay/
+             .pause-card chrome as the (currently unreachable) warmup pause
+             system, driven by the Cloudflare Stream SDK instead of YouTube. -->
+        <div class="pause-overlay" id="demo-pause-overlay">
+          <div class="pause-card">
+            <div class="pause-kicker">✨ Look closer</div>
+            <img src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/57efac1e-1cb7-4b9e-298f-414084eca200/public" alt="A closer look at the paper crane's planes" class="pause-img">
+            <div class="pause-timer">
+              <div class="pause-timer-bar" id="demo-pause-timer-bar"></div>
+            </div>
+            <div class="pause-timer-label">Continuing shortly</div>
+            <div class="pause-actions">
+              <button class="btn btn-primary" onclick="skipDemoPause()">▶ Continue now</button>
+              <button class="btn btn-ghost" onclick="skipDemoPauseAndKeepPaused()">I need more time</button>
+            </div>
+          </div>
+        </div>` : ''}
       </div>
       
       <div class="video-meta">
@@ -9235,6 +9265,96 @@ function renderDemo(step) {
         <button class="btn btn-ghost" onclick="nextStep()">Skip this step →</button>
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FIRST-VIDEO IMAGE PAUSE (crane_observe only) — same visual/behavioral
+// contract as the (unreachable) WARMUP_PAUSES system: auto-pauses the
+// video, shows a card over a blurred backdrop, counts down a timer bar,
+// auto-resumes when it finishes, and offers "continue now" / "need more
+// time" like triggerPause()/skipPause()/skipPauseAndKeepPaused() do.
+// Built separately (not sharing those functions/state) since this one
+// talks to a Cloudflare Stream iframe via the Stream SDK, not YT.Player —
+// this way the existing warmup logic is untouched either way.
+// ═══════════════════════════════════════════════════════════════════
+const DEMO_PAUSE_AT_SECONDS = 1;
+const DEMO_PAUSE_DURATION = 5;
+let demoStreamPlayer = null;
+let demoPauseTriggered = false;
+let demoPauseTimer = null;
+
+function initDemoVideoPause(step) {
+  if (step.videoSeg !== 'crane_observe') return;  // only the first video
+  if (typeof Stream === 'undefined') return;
+
+  const iframe = document.getElementById('demo-video-iframe');
+  if (!iframe) return;
+
+  demoPauseTriggered = false;
+  clearTimeout(demoPauseTimer);
+
+  demoStreamPlayer = Stream(iframe);
+  demoStreamPlayer.addEventListener('timeupdate', () => {
+    if (demoPauseTriggered) return;
+    if (demoStreamPlayer.currentTime >= DEMO_PAUSE_AT_SECONDS) {
+      demoPauseTriggered = true;
+      triggerDemoPause();
+    }
+  });
+}
+
+function triggerDemoPause() {
+  Analytics.track('demo_pause_triggered', {
+    video_seg: 'crane_observe',
+    pause_at_seconds: DEMO_PAUSE_AT_SECONDS
+  });
+
+  if (demoStreamPlayer) {
+    try { demoStreamPlayer.pause(); } catch (e) {}
+  }
+
+  const overlay = document.getElementById('demo-pause-overlay');
+  const bar = document.getElementById('demo-pause-timer-bar');
+  if (!overlay || !bar) return;
+  overlay.classList.add('show');
+  playTone(660, 0.12);
+
+  // Reset & animate timer bar — identical pattern to triggerPause().
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  setTimeout(() => {
+    bar.style.transition = `width ${DEMO_PAUSE_DURATION}s linear`;
+    bar.style.width = '0%';
+  }, 50);
+
+  clearTimeout(demoPauseTimer);
+  demoPauseTimer = setTimeout(() => {
+    resumeFromDemoPause();
+  }, DEMO_PAUSE_DURATION * 1000);
+}
+
+function skipDemoPause() {
+  Analytics.track('demo_pause_skipped', { action: 'continue_now' });
+  clearTimeout(demoPauseTimer);
+  resumeFromDemoPause();
+}
+
+function skipDemoPauseAndKeepPaused() {
+  Analytics.track('demo_pause_skipped', { action: 'need_more_time' });
+  clearTimeout(demoPauseTimer);
+  const overlay = document.getElementById('demo-pause-overlay');
+  if (overlay) overlay.classList.remove('show');
+  showBubble("Take your time! Hit play on the video when you're ready 💛", 4000);
+  playTone(660, 0.1);
+}
+
+function resumeFromDemoPause() {
+  const overlay = document.getElementById('demo-pause-overlay');
+  if (overlay) overlay.classList.remove('show');
+  if (demoStreamPlayer) {
+    try { demoStreamPlayer.play(); } catch (e) {}
+  }
+  playTone(880, 0.1);
 }
 
 function renderFinalSubmit(step) {
