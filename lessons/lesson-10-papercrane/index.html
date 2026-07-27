@@ -1159,37 +1159,47 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .crane-viewer-wrap:active { cursor: grabbing; }
 #crane-canvas { display: block; width: 100%; height: 100%; }
 
-/* ═══ Paper crane photo + six-zone hotspots (replaces "drag the
-   sun"). Same photo-frame treatment as elsewhere in the site;
-   readout/hint reuse .play-light-readout / .play-light-hint as-is. ═══ */
-.crane-zones-frame {
+/* ═══ Paper crane photo + geometry-plane hotspots ("feel the
+   geometry divisions" — replaces the old "drag the sun" light-zone
+   step). Same photo-frame treatment as elsewhere in the site;
+   readout/hint reuse .play-light-readout / .play-light-hint as-is.
+   The reference photo already has each fold plane hand-outlined in
+   its own color, so hotspot glow colors match those paint colors
+   directly instead of introducing a new palette. ═══ */
+.crane-planes-frame {
   position: relative;
   width: 100%;
-  max-width: 300px;
-  aspect-ratio: 204 / 292;
+  max-width: 320px;
+  aspect-ratio: 1;
   margin: 4px auto 14px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background-image: url('https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/41bbc5aa-deba-4019-bb4d-ab653c309900/public');
+  background-image: url('https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/00606cbf-0187-4fd3-b00a-d60c5f232500/public');
   background-repeat: no-repeat;
-  background-size: auto 100%;
-  background-position: 24.88% 0%;
+  background-size: cover;
+  background-position: center;
   border: 1px solid rgba(167,139,250,0.15);
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
 }
-.crane-zones-svg {
+.crane-planes-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  touch-action: manipulation;
+  touch-action: none;
 }
-.crane-zone-hotspot {
+.crane-plane-hotspot {
   fill: transparent;
   stroke: transparent;
-  stroke-width: 2;
+  stroke-width: 1.5;
   cursor: pointer;
-  transition: fill 0.15s ease, stroke 0.15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease, transform 0.15s ease;
+}
+.crane-plane-hotspot.active {
+  stroke-width: 2.5;
+  transform: scale(1.035);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -6202,22 +6212,26 @@ const LESSON = {
       xp: 0
     },
     // ═══════════════════════════════════════════════════════════════
-    // PLAY WITH THE LIGHT — interactive sphere
-    // 
-    // After the textual Reference step, students get to FEEL light & shadow
-    // by dragging the sun around a sphere. This is the Art GPS signature
-    // interaction — the moment when reading turns into discovering.
-    // 
+    // FEEL THE GEOMETRY DIVISIONS — interactive crane photo
+    //
+    // After the 3D crane viewer, students get to FEEL the crane's
+    // construction by touching each individual fold plane on a real
+    // photo (beak, head/neck, spine ridge, chest, tail, wing, legs).
+    // This is the Art GPS signature interaction — the moment when
+    // reading turns into discovering — now applied to geometry, not
+    // light: the goal is decomposing the crane into separate flat
+    // planes, not lighting theory.
+    //
     // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
     // Critical thinking happens through hands, not through reading.
     // "学生可以直接理解,而不是我在下面去讲,这个就更智能"
     // ═══════════════════════════════════════════════════════════════
     {
       part: 'A',
-      partLabel: '✨ Play with the light',
-      type: 'craneZones',
-      title: 'Feel the light on the crane',
-      intro: 'Every plane of the crane catches light differently. Tap or hover each part to see which of the six light zones it belongs to.',
+      partLabel: '✨ Feel the geometry divisions',
+      type: 'cranePlanes',
+      title: 'Feel the geometry divisions',
+      intro: 'A paper crane is built from separate flat planes, each meeting the next at a hard crease. Swipe or tap each part to see where one plane ends and the next begins.',
       xp: 5
     },
     {
@@ -6418,8 +6432,8 @@ function renderStep() {
                         // Defer interactive setup until DOM is in place
                         setTimeout(() => initPlayLight('cylinder'), 50);
                         break;
-    case 'craneZones':  el.innerHTML = renderCraneZones(step);
-                        setTimeout(() => initCraneZones(), 50);
+    case 'cranePlanes': el.innerHTML = renderCranePlanes(step);
+                        setTimeout(() => initCranePlanes(), 50);
                         break;
     case 'tools':      el.innerHTML = renderTools(step); break;
     case 'ready':      el.innerHTML = renderReady(step); break;
@@ -8743,67 +8757,76 @@ function initCraneViewer() {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// CRANE SIX-ZONE HOTSPOTS — replaces "drag the sun" (the old cylinder
-// playLight step). A static photo of the paper crane with six tappable
-// regions, one per plane, each mapped to one of the six light zones
-// from the reference step. Colors are reused directly from that same
-// cylinder diagram's fills (highlight/halftone/core-shadow/reflected-
-// light/cast-shadow), plus the Edge accent purple already used for the
-// diagram's special "Edge" row — no new colors introduced.
+// CRANE GEOMETRY-PLANE HOTSPOTS ("Feel the geometry divisions") —
+// replaces the earlier six light-zone version of this step. The
+// reference photo has each fold plane hand-outlined in its own paint
+// color, so every hotspot's glow color matches that same paint color
+// directly — this step is about decomposing the crane into separate
+// flat planes, not lighting theory.
 // ═══════════════════════════════════════════════════════════════════
-const CRANE_ZONES = [
+const CRANE_PLANES = [
   {
-    key: 'highlight', num: 1, term: 'Highlight', color: '#f1f5f9', strokeColor: '#ffffff',
-    points: '5,90 35,68 42,106 16,122',
-    def: 'The brightest point on the whole crane — usually right at a sharp fold like the beak tip, where the paper catches direct light head-on.'
+    key: 'beak', term: 'Beak', color: '#ec4899', strokeColor: '#f472b6',
+    points: '32,25 18,42 22,44 27,30',
+    def: 'A tiny flat triangle at the very tip. Even the smallest detail on a paper crane is still just a flat plane.'
   },
   {
-    key: 'edge', num: 2, term: 'Edge', color: '#a78bfa', strokeColor: '#7c5fc7',
-    points: '35,68 72,58 86,108 42,106',
-    def: 'Where two planes crease together at a hard line — the fold on the neck. This is what makes a crane read as folded paper, not a soft curved form.'
+    key: 'headNeck', term: 'Head & Neck', color: '#3b82f6', strokeColor: '#60a5fa',
+    points: '24,25 11,58 34,56',
+    def: 'The long front-facing plane that carries the head up and away from the body — one flat fold, no curve.'
   },
   {
-    key: 'halftone', num: 3, term: 'Halftone', color: '#cbd5e1', strokeColor: '#94a3b8',
-    points: '42,106 86,108 132,140 108,222 54,214',
-    def: "The broad, gently-lit face of a plane — the crane's front chest facet. Most of a paper crane's surface sits in halftone, not full light or full shadow."
+    key: 'spineRidge', term: 'Spine Ridge', color: '#22c55e', strokeColor: '#4ade80',
+    points: '27,25 31,25 34,71 29,71',
+    def: 'The narrow crease where the head-plane meets the chest-plane behind it — the ridge line running down the back of the neck.'
   },
   {
-    key: 'coreShadow', num: 4, term: 'Core Shadow', color: '#334155', strokeColor: '#1e293b',
-    points: '86,58 192,10 166,122 112,140',
-    def: 'The plane turned furthest from the light — the far side of a folded wing. This is the deepest, flattest dark on the model, with almost no gradient.'
+    key: 'chest', term: 'Chest', color: '#a78bfa', strokeColor: '#8b5cf6',
+    points: '50,36 40,56 59,55 50,77',
+    def: "The kite-shaped plane facing forward — the crane's chest and belly, folded into a single flat diamond."
   },
   {
-    key: 'reflectedLight', num: 5, term: 'Reflected Light', color: '#a5f3fc', strokeColor: '#67e8f9',
-    points: '150,108 192,94 176,142 140,146',
-    def: 'A faint lift of value right at the edge of a shadowed plane, like the tip of the tail — bounced light from the surface around it. Always stays darker than the halftones.'
+    key: 'tailFeather', term: 'Tail Feather', color: '#eab308', strokeColor: '#facc15',
+    points: '54,62 60,61 76,3',
+    def: 'A long, narrow triangle rising straight up — built exactly like the neck, just folded to point the other way.'
   },
   {
-    key: 'castShadow', num: 6, term: 'Shadow', color: '#475569', strokeColor: '#334155',
-    points: '0,242 204,242 204,292 0,292',
-    def: "The shadow the crane throws onto the table. It grounds the whole form — without it, the crane would look like it's floating."
+    key: 'wing', term: 'Wing', color: '#38bdf8', strokeColor: '#7dd3fc',
+    points: '43,56 56,49 95,57 57,66',
+    def: 'A wide, flat blade reaching out to the side — one plane, folded once and left flat, not curved.'
+  },
+  {
+    key: 'frontLeg', term: 'Front Leg', color: '#fb7185', strokeColor: '#fda4af',
+    points: '22,57 34,57 28,76',
+    def: 'A small triangular plane at the base, tucked under the body — part of what keeps the crane standing.'
+  },
+  {
+    key: 'backLeg', term: 'Back Leg', color: '#a8b23c', strokeColor: '#c1cc5e',
+    points: '51,61 60,60 55,74',
+    def: 'The matching plane on the other side of the base — every crane has a pair of these anchoring it to the table.'
   }
 ];
 
-function renderCraneZones(step) {
+function renderCranePlanes(step) {
   return `
     <div class="step-card play-light-card">
       <div class="play-light-kicker">✨ INTERACTIVE</div>
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
 
-      <div class="crane-zones-frame" id="crane-zones-frame">
-        <svg class="crane-zones-svg" id="crane-zones-svg" viewBox="0 0 204 292" preserveAspectRatio="xMidYMid slice">
-          <!-- hotspot polygons injected by initCraneZones() -->
+      <div class="crane-planes-frame" id="crane-planes-frame">
+        <svg class="crane-planes-svg" id="crane-planes-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+          <!-- hotspot polygons injected by initCranePlanes() -->
         </svg>
-        <div class="play-light-hint" id="crane-zones-hint">
+        <div class="play-light-hint" id="crane-planes-hint">
           <span class="play-light-hint-arrow">↓</span>
-          <span>Tap each part of the crane</span>
+          <span>Swipe or tap each plane</span>
         </div>
       </div>
 
-      <div class="play-light-readout" id="crane-zones-readout">
-        <div class="play-light-readout-zone" id="crane-zones-readout-zone">Tap a part to begin</div>
-        <div class="play-light-readout-hint" id="crane-zones-readout-hint">Each part of the crane belongs to one of the six light zones.</div>
+      <div class="play-light-readout" id="crane-planes-readout">
+        <div class="play-light-readout-zone" id="crane-planes-readout-zone">Touch a plane to begin</div>
+        <div class="play-light-readout-hint" id="crane-planes-readout-hint">Each part of the crane is its own flat, folded plane.</div>
       </div>
 
       <div class="btn-stack" style="margin-top: 18px;">
@@ -8812,71 +8835,89 @@ function renderCraneZones(step) {
     </div>`;
 }
 
-function initCraneZones() {
-  const svg = document.getElementById('crane-zones-svg');
+function initCranePlanes() {
+  const svg = document.getElementById('crane-planes-svg');
   if (!svg) return;
 
-  svg.innerHTML = CRANE_ZONES.map(z =>
-    `<polygon class="crane-zone-hotspot" data-key="${z.key}" points="${z.points}"></polygon>`
+  svg.innerHTML = CRANE_PLANES.map(p =>
+    `<polygon class="crane-plane-hotspot" data-key="${p.key}" points="${p.points}"></polygon>`
   ).join('');
 
   const hoverCapable = window.matchMedia('(hover: hover)').matches;
 
-  svg.querySelectorAll('.crane-zone-hotspot').forEach(poly => {
+  svg.querySelectorAll('.crane-plane-hotspot').forEach(poly => {
     const key = poly.dataset.key;
-    const show = () => showCraneZone(key, poly);
-    poly.addEventListener('click', show);
-    poly.addEventListener('mouseenter', show);
-    poly.addEventListener('touchstart', (e) => { e.preventDefault(); show(); }, { passive: false });
+    poly.addEventListener('click', () => showCranePlane(key, poly));
     if (hoverCapable) {
-      poly.addEventListener('mouseleave', () => hideCraneZone(poly));
+      poly.addEventListener('mouseenter', () => showCranePlane(key, poly));
+      poly.addEventListener('mouseleave', () => hideCranePlane(poly));
     }
   });
 
-  updateCraneZonesReadout(null);
+  // Touch: track the finger across the SVG and light up whichever
+  // plane is currently under it, so swiping across the photo triggers
+  // each region in sequence — no separate tap needed per plane.
+  let lastTouchKey = null;
+  function handleTouch(e) {
+    const touch = e.touches[0];
+    if (!touch) return;
+    e.preventDefault();
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el && el.classList.contains('crane-plane-hotspot') && el.dataset.key !== lastTouchKey) {
+      lastTouchKey = el.dataset.key;
+      showCranePlane(el.dataset.key, el);
+    }
+  }
+  svg.addEventListener('touchstart', handleTouch, { passive: false });
+  svg.addEventListener('touchmove', handleTouch, { passive: false });
+  svg.addEventListener('touchend', () => { lastTouchKey = null; });
+
+  updateCranePlaneReadout(null);
 }
 
-function showCraneZone(key, poly) {
-  const zone = CRANE_ZONES.find(z => z.key === key);
-  if (!zone) return;
+function showCranePlane(key, poly) {
+  const plane = CRANE_PLANES.find(p => p.key === key);
+  if (!plane) return;
 
-  document.querySelectorAll('.crane-zone-hotspot').forEach(p => {
+  document.querySelectorAll('.crane-plane-hotspot').forEach(p => {
     p.classList.remove('active');
     p.style.fill = 'transparent';
     p.style.stroke = 'transparent';
+    p.style.filter = 'none';
   });
   poly.classList.add('active');
-  poly.style.fill = zone.color;
-  poly.style.fillOpacity = '0.45';
-  poly.style.stroke = zone.strokeColor;
+  poly.style.fill = plane.color;
+  poly.style.fillOpacity = '0.4';
+  poly.style.stroke = plane.strokeColor;
+  poly.style.filter = `drop-shadow(0 0 6px ${plane.strokeColor})`;
 
-  updateCraneZonesReadout(zone);
+  updateCranePlaneReadout(plane);
 
-  const hint = document.getElementById('crane-zones-hint');
+  const hint = document.getElementById('crane-planes-hint');
   if (hint) hint.style.opacity = '0';
 }
 
-// Only clears on mouseleave (desktop hover) — touch taps stay lit
-// until the student taps a different zone, so the highlight doesn't
-// vanish the instant a finger lifts.
-function hideCraneZone(poly) {
+// Only clears on mouseleave (desktop hover) — touch stays lit until
+// the finger moves onto a different plane (handled in handleTouch above).
+function hideCranePlane(poly) {
   poly.classList.remove('active');
   poly.style.fill = 'transparent';
   poly.style.stroke = 'transparent';
-  updateCraneZonesReadout(null);
+  poly.style.filter = 'none';
+  updateCranePlaneReadout(null);
 }
 
-function updateCraneZonesReadout(zone) {
-  const zoneEl = document.getElementById('crane-zones-readout-zone');
-  const hintEl = document.getElementById('crane-zones-readout-hint');
-  if (!zoneEl || !hintEl) return;
-  if (!zone) {
-    zoneEl.textContent = 'Tap a part to begin';
-    hintEl.textContent = 'Each part of the crane belongs to one of the six light zones.';
+function updateCranePlaneReadout(plane) {
+  const nameEl = document.getElementById('crane-planes-readout-zone');
+  const hintEl = document.getElementById('crane-planes-readout-hint');
+  if (!nameEl || !hintEl) return;
+  if (!plane) {
+    nameEl.textContent = 'Touch a plane to begin';
+    hintEl.textContent = 'Each part of the crane is its own flat, folded plane.';
     return;
   }
-  zoneEl.textContent = `${zone.num} · ${zone.term}`;
-  hintEl.textContent = zone.def;
+  nameEl.textContent = plane.term;
+  hintEl.textContent = plane.def;
 }
 
 function renderTools(step) {
