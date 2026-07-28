@@ -311,52 +311,6 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .btn-gold { background: var(--gold); color: #fff; }
 .btn-gold:hover { background: #b8975e; }
 
-/* ═══ LIVE CLASS SUBMIT BLOCK ═══ */
-.live-class-submit-block {
-  background: linear-gradient(135deg, #fffbf0 0%, #fff8e8 100%);
-  border: 2px solid var(--gold);
-  border-radius: var(--radius-md);
-  padding: 20px 18px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-.live-class-submit-kicker {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: var(--gold);
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-.live-class-submit-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 6px;
-}
-.live-class-submit-desc {
-  font-size: 13px;
-  color: var(--ink-soft);
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-.live-class-submit-btn {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 13px;
-  padding: 14px 24px;
-  border-radius: 30px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-.live-class-submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(200,169,110,0.35);
-  text-decoration: none;
-  color: #fff;
-}
 .self-paced-kicker {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
@@ -366,11 +320,6 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   margin-bottom: 8px;
   text-transform: uppercase;
   text-align: center;
-}
-@media (max-width: 520px) {
-  .live-class-submit-block { padding: 16px 14px; }
-  .live-class-submit-title { font-size: 16px; }
-  .live-class-submit-btn { font-size: 12px; padding: 12px 20px; }
 }
 .btn-ghost { background: transparent; color: var(--ink-muted); font-size: 10px; letter-spacing: 1.5px; padding: 10px; }
 .btn-ghost:hover { color: var(--ink); }
@@ -3519,6 +3468,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 </style>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
+<script src="../../core/teacher-submission.js"></script>
 </head>
 <body>
 
@@ -4889,150 +4839,10 @@ async function hasSupabaseAuthSession() {
 // submitToSupabase() (the Google/email-auth path above), which
 // requires a real session and can't work for these students.
 // ═══════════════════════════════════════════════════════════════
-const ACCESS_UPLOAD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
-const ACCESS_UPLOAD_URL = 'https://rudztwseatwayhztbarj.supabase.co';
-let accessCodeUploadFile = null;
-
-function onAccessCodeFileSelected(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  if (!file.type.startsWith('image/')) {
-    showBubble('Please pick an image file (JPG or PNG)', 3000);
-    return;
-  }
-  if (file.size > 10 * 1024 * 1024) {
-    showBubble('Image is too large (max 10MB). Try a smaller photo.', 3500);
-    return;
-  }
-
-  accessCodeUploadFile = file;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const preview = document.getElementById('upload-file-preview-ac');
-    const label = document.getElementById('upload-file-label-ac');
-    if (preview) {
-      preview.innerHTML = `
-        <img src="${e.target.result}" alt="Your drawing" class="upload-file-preview-img">
-        <div class="upload-file-preview-meta">
-          <span>✓ ${escapeHtml(file.name)}</span>
-          <span class="upload-file-replace" onclick="document.getElementById('upload-file-input-ac').click()">Replace</span>
-        </div>
-      `;
-      preview.style.display = 'block';
-    }
-    if (label) label.style.display = 'none';
-    const sendBtn = document.getElementById('access-code-send-btn');
-    if (sendBtn) sendBtn.style.display = 'flex';
-  };
-  reader.readAsDataURL(file);
-
-  Analytics.track('upload_file_selected', {
-    file_size: file.size,
-    file_type: file.type
-  });
-}
-
-async function sendAccessCodeUpload() {
-  if (!accessCodeUploadFile) return;
-
-  const profile = UserProfile.current();
-  if (!profile || !profile.studentCode) {
-    showBubble('Could not identify your student account. Please sign in again.', 4000);
-    return;
-  }
-
-  const statusEl = document.getElementById('access-code-upload-status');
-  const sendBtn = document.getElementById('access-code-send-btn');
-  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; }
-  if (statusEl) statusEl.textContent = 'Uploading your artwork… ⏳';
-
-  const file = accessCodeUploadFile;
-  const fileName = Date.now() + '_' + Math.random().toString(36).slice(2) + '.jpg';
-
-  // Storage upload — tracked independently of the DB insert below (see
-  // note e in the task: only show the error state if BOTH fail).
-  let storageOk = false;
-  let imageUrl = null;
-  try {
-    const uploadRes = await fetch(
-      'https://rudztwseatwayhztbarj.supabase.co/storage/v1/object/student-artwork/' + fileName,
-      {
-        method: 'POST',
-        headers: {
-          'apikey': ACCESS_UPLOAD_KEY,
-          'Authorization': 'Bearer ' + ACCESS_UPLOAD_KEY,
-          'Content-Type': file.type,
-          'x-upsert': 'true'
-        },
-        body: file
-      }
-    );
-    if (uploadRes.ok) {
-      storageOk = true;
-      imageUrl = 'https://rudztwseatwayhztbarj.supabase.co/storage/v1/object/public/student-artwork/' + fileName;
-    } else {
-      const errText = await uploadRes.text().catch(() => '');
-      console.log('[AccessCodeUpload] storage upload failed:', uploadRes.status, errText);
-    }
-  } catch (storageErr) {
-    console.log('[AccessCodeUpload] storage upload error:', storageErr);
-  }
-
-  const displayName = (typeof StudentRoster !== 'undefined' && StudentRoster.getDisplayName)
-    ? (StudentRoster.getDisplayName(profile.studentCode) || profile.studentCode)
-    : profile.studentCode;
-
-  // DB insert — attempted even if storage failed above (image_url will
-  // be null in that case), per the same independent-tracking note.
-  let insertOk = false;
-  try {
-    const insertRes = await fetch('https://rudztwseatwayhztbarj.supabase.co/rest/v1/student_submissions', {
-      method: 'POST',
-      headers: {
-        apikey: ACCESS_UPLOAD_KEY,
-        Authorization: 'Bearer ' + ACCESS_UPLOAD_KEY,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal'
-      },
-      body: JSON.stringify({
-        student_code: profile.studentCode,
-        user_name: displayName,
-        user_email: null,
-        course_id: 'foundation-a',
-        lesson_id: LESSON.id,
-        lesson_title: LESSON.title || LESSON.id,
-        image_url: imageUrl,
-        status: 'submitted'
-      })
-    });
-    if (insertRes.ok) {
-      insertOk = true;
-    } else {
-      const errText = await insertRes.text().catch(() => '');
-      console.log('[AccessCodeUpload] database insert failed:', insertRes.status, errText);
-    }
-  } catch (insertErr) {
-    console.log('[AccessCodeUpload] database insert error:', insertErr);
-  }
-
-  if (storageOk || insertOk) {
-    if (statusEl) statusEl.textContent = '✓ Sent to your teacher!';
-    if (sendBtn) sendBtn.textContent = 'Sent ✓';
-    Analytics.track('submission_access_code_success', {
-      lesson_id: LESSON.id,
-      storage_ok: storageOk,
-      insert_ok: insertOk
-    });
-    setTimeout(() => closeUploadModal(), 2000);
-  } else {
-    console.log('[AccessCodeUpload] failed — both storage upload and database insert failed');
-    if (statusEl) statusEl.textContent = "⚠️ Couldn't send — please try again.";
-    if (sendBtn) { sendBtn.disabled = false; sendBtn.textContent = 'Send to teacher →'; }
-    Analytics.track('submission_access_code_failed', { lesson_id: LESSON.id });
-  }
-}
+// Access-code and live-class direct-to-teacher uploads now live in
+// the shared core/teacher-submission.js (renderTeacherUploadModal(),
+// onTeacherUploadFileSelected(), sendTeacherUpload()) instead of being
+// copy-pasted per lesson — see openUploadModal() above.
 
 /* ═══════════════════════════════════════════════════════════════════════════
  *  SECTION 1b · ANALYTICS
@@ -9568,31 +9378,17 @@ function renderDemo(step) {
 }
 
 function renderFinalSubmit(step) {
-  const showLiveClass = isLiveClassStudent();
-  // Build live class section — only shown to isLiveClass students
-  const liveClassHTML = `
-    <div class="live-class-submit-block" id="live-class-submit-block">
-      <div class="live-class-submit-kicker">👩‍🎨 LIVE CLASS STUDENTS</div>
-      <div class="live-class-submit-title">Submit to your teacher</div>
-      <div class="live-class-submit-desc">
-        You're in a live class with a real teacher.
-        Submit your artwork here for teacher review.
-      </div>
-      <a href="https://www.feiteamart.com/foundation-of-sketch-a-access"
-         target="_blank"
-         rel="noopener"
-         class="btn btn-gold live-class-submit-btn">
-        📋 Submit to live class →
-      </a>
-    </div>
-  `;
+  // NOTE: this used to also render a separate live-class-submit-block
+  // with a hardcoded link out to an old external site. Removed — the
+  // Upload for AI feedback button below calls submitFinal() ->
+  // openUploadModal(), which uses the shared teacher-submission
+  // component (core/teacher-submission.js) for every student type —
+  // no separate block needed.
   return `
     <div class="step-card">
       <div class="step-title">${step.title}</div>
       <div class="step-intro">${step.intro}</div>
 
-      ${showLiveClass ? liveClassHTML : ''}
-      
       <div class="self-paced-kicker">📷 SELF-PACED · AI FEEDBACK</div>
       <div class="video-frame upload-drop-zone" 
            style="aspect-ratio: 1; background: linear-gradient(135deg, #f5f3ff 0%, #ecfeff 100%); border: 2px dashed #c8a96e; cursor: pointer;"
@@ -10479,107 +10275,28 @@ function openUploadModal() {
   // student_submissions now has a student_code column, so their artwork
   // can be saved via plain REST calls with the anon key, no Supabase
   // Auth session required. Tally stays as a secondary option.
+  // Access-code students AND live-class-via-email students both get the
+  // same real teacher-submission flow now (core/teacher-submission.js) —
+  // checked as two separate branches (rather than one combined "if")
+  // only so the comments below stay attached to the right condition;
+  // both call the exact same shared renderer.
   if (isAccessCodeStudent()) {
     const content = document.getElementById('upload-modal-content');
-    if (content) {
-      content.innerHTML = `
-        <div class="modal-title">📋 Submit your artwork</div>
-        <div class="modal-sub" style="margin-bottom: 20px;">
-          Upload a photo of your artwork — it goes straight to your teacher.
-        </div>
-
-        <div class="upload-file-block">
-          <label for="upload-file-input-ac" class="upload-file-label" id="upload-file-label-ac">
-            <div class="upload-file-icon">📷</div>
-            <div class="upload-file-text">
-              <div class="upload-file-text-main">Upload your artwork</div>
-              <div class="upload-file-text-sub">JPG or PNG · From your device</div>
-            </div>
-          </label>
-          <input type="file"
-                 id="upload-file-input-ac"
-                 accept="image/*"
-                 style="display:none"
-                 onchange="onAccessCodeFileSelected(event)">
-          <div class="upload-file-preview" id="upload-file-preview-ac" style="display:none"></div>
-        </div>
-
-        <div id="access-code-upload-status" style="font-size: 12px; color: var(--ink-muted); margin: 10px 0; text-align: center;"></div>
-
-        <button class="btn btn-gold" id="access-code-send-btn"
-                style="display:none; width: 100%; align-items: center; justify-content: center;
-                       margin-bottom: 16px; font-size: 14px; padding: 16px 20px; border-radius: 30px;"
-                onclick="sendAccessCodeUpload()">
-          Send to teacher →
-        </button>
-        <div class="btn-stack" style="margin-top: 16px;">
-          <button class="btn btn-ghost" onclick="closeUploadModal()">
-            Cancel
-          </button>
-        </div>
-      `;
-    }
+    if (content) content.innerHTML = renderTeacherUploadModal();
     document.getElementById('upload-modal').classList.add('show');
     return; // ← exit early, don't show the normal tier modal
   }
 
-  // Live class students who are NOT access-code students (e.g. future
-  // Stripe-purchased live_class students, signed in via Google/email)
-  // get a completely different modal — their submission channel is the
-  // live class portal, not this upload system. Checked AFTER the
-  // access-code branch above, since some access-code students (Xida)
-  // are ALSO flagged isLiveClass but still have no Supabase Auth
-  // session — they must always get the direct upload path instead.
+  // Live class students who are NOT access-code students (e.g.
+  // Stripe-purchased live_class students, signed in via Google/email).
+  // Checked AFTER the access-code branch above, since some access-code
+  // students (Xida) are ALSO flagged isLiveClass but still have no
+  // Supabase Auth session — they must always get the direct upload
+  // path instead. This used to link out to an old external site
+  // instead of actually submitting anywhere in this app.
   if (isLiveClassStudent()) {
     const content = document.getElementById('upload-modal-content');
-    if (content) {
-      content.innerHTML = `
-        <div class="modal-title">📋 Submit your homework</div>
-        <div class="modal-sub" style="margin-bottom: 20px;">
-          You're in a live class with a real teacher.<br>
-          Submit your work through the class portal — your teacher will review it there.
-        </div>
-
-        <a href="https://www.feiteamart.com/foundation-of-sketch-a-access"
-           target="_blank"
-           rel="noopener"
-           class="btn btn-gold"
-           style="display: flex; align-items: center; justify-content: center;
-                  gap: 8px; text-decoration: none; margin-bottom: 16px;
-                  font-size: 14px; padding: 16px 20px; border-radius: 30px;">
-          📋 Submit to live class →
-        </a>
-
-        <div style="border-top: 1px solid var(--border); padding-top: 16px;
-                    text-align: center;">
-          <div style="font-size: 12px; color: var(--ink-muted); margin-bottom: 12px;">
-            Just want to save a photo for your own reference?
-          </div>
-          <div class="upload-file-block">
-            <label for="upload-file-input-lc" class="upload-file-label"
-                   style="padding: 12px 16px;">
-              <div class="upload-file-icon" style="width: 36px; height: 36px;
-                   font-size: 18px;">📷</div>
-              <div class="upload-file-text">
-                <div class="upload-file-text-main" style="font-size: 13px;">
-                  Save photo only
-                </div>
-                <div class="upload-file-text-sub">Stays on your device</div>
-              </div>
-            </label>
-            <input type="file" id="upload-file-input-lc" accept="image/*"
-                   style="display:none"
-                   onchange="onUploadFileSelected(event)">
-          </div>
-        </div>
-
-        <div class="btn-stack" style="margin-top: 16px;">
-          <button class="btn btn-ghost" onclick="closeUploadModal()">
-            Cancel
-          </button>
-        </div>
-      `;
-    }
+    if (content) content.innerHTML = renderTeacherUploadModal();
     document.getElementById('upload-modal').classList.add('show');
     return; // ← exit early, don't show the normal tier modal
   }
