@@ -98,11 +98,12 @@ const LIVE_CLASS_SCHEDULE = {
       smartClassRef: 'papercrane',
       smartClassNote: 'The homework for this class is connected to the Paper Crane lesson in Smart Class. Complete it as your reference before drawing.',
       materials: null,
-      homework: {
-        description: 'Draw the origami animal reference. Use the Paper Crane Smart Class lesson as your guide.',
-        downloadUrl: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6881b1713ac1422bb8b05b86_ChatGPT%20Image%20Jul%2023%2C%202025%20at%2009_01_43%20PM.png',
-        downloadLabel: 'Download Origami Reference Image'
-      }
+      // Old homework block (description + downloadUrl/downloadLabel
+      // reference image link) removed — it duplicated the smart-class-ref
+      // prompt box above and pointed at a legacy reference image that's
+      // no longer used. This session now shows just the prompt box +
+      // the always-present Submit Homework button below it.
+      homework: null
     },
     {
       id: 'live-05',

@@ -2490,11 +2490,15 @@
       } : null,
       smartClassRef: row.smart_class_ref,
       smartClassNote: row.smart_class_note,
-      homework: {
+      // Conditional like materials/zoom above — previously this always
+      // built a (truthy) object even with every field null/undefined,
+      // so session.homework was never falsy and the homework block
+      // always rendered, even with nothing to show.
+      homework: row.homework_description ? {
         description: row.homework_description,
         downloadUrl: row.homework_download_url,
         downloadLabel: row.homework_download_label
-      }
+      } : null
     };
   }
 
