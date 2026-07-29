@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 9 · Final Details · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-orange); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+  .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
+
+  .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .detail-card {
+    background: #fff; border-radius: 18px; padding: 16px 10px; text-align: center;
+    box-shadow: 0 4px 14px rgba(43,36,64,0.08); cursor: pointer;
+    border: 2px solid transparent; transition: border-color .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .detail-card:active { transform: scale(0.96); }
+  .detail-card.on { border-color: var(--c-teal); background: rgba(18,174,178,0.06); }
+  .detail-emoji { font-size: 28px; }
+  .detail-label { font-size: 11.5px; font-weight: 800; margin-top: 6px; }
+  .detail-check { font-size: 11px; color: var(--c-teal); font-weight: 800; margin-top: 3px; min-height: 14px; }
+
+  .next-wrap { margin-top: 22px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Final Details</p>
+  <div class="stops-pill">STEP 9 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">Extra Sparkle</div>
+    <h1>Add tiny magical touches 🌟</h1>
+    <p>tap what you'd like to try</p>
+  </div>
+
+  <div class="details-grid" id="detailsGrid"></div>
+
+  <div class="next-wrap">
+    <button class="btn btn-pop" id="nextBtn" style="display:none;" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 9;
+
+const DETAILS = [
+  { id: 'dots',     emoji: '⚪', label: 'Small Dots' },
+  { id: 'splash',   emoji: '💦', label: 'Paint Splashes' },
+  { id: 'veins',    emoji: '🍃', label: 'Tiny Leaf Veins' },
+  { id: 'paper',    emoji: '✂️', label: 'Extra Cut Paper' },
+  { id: 'gold',     emoji: '✨', label: 'Gold Pen' },
+  { id: 'white',    emoji: '🤍', label: 'White Pen' },
+];
+
+let chosen = new Set();
+
+function render() {
+  const grid = document.getElementById('detailsGrid');
+  grid.innerHTML = DETAILS.map(d => `
+    <div class="detail-card" id="d-${d.id}" onclick="toggle('${d.id}')">
+      <div class="detail-emoji">${d.emoji}</div>
+      <div class="detail-label">${d.label}</div>
+      <div class="detail-check" id="c-${d.id}"></div>
+    </div>
+  `).join('');
+}
+
+function toggle(id) {
+  const card = document.getElementById('d-' + id);
+  const check = document.getElementById('c-' + id);
+  if (chosen.has(id)) {
+    chosen.delete(id);
+    card.classList.remove('on');
+    check.textContent = '';
+  } else {
+    chosen.add(id);
+    card.classList.add('on');
+    check.textContent = '✓ added';
+  }
+  ColorState.markInProgress(STEP_N);
+  if (chosen.size >= 1) {
+    document.getElementById('nextBtn').style.display = 'block';
+    ColorState.markCompleted(STEP_N);
+  } else {
+    document.getElementById('nextBtn').style.display = 'none';
+  }
+}
+
+function goNext() {
+  window.location.href = '../step-10/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

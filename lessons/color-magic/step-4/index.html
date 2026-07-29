@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 4 · Color Families · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-green); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+  .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
+
+  .playfield { position: relative; margin-top: 18px; height: 320px; touch-action: none; }
+
+  .zone {
+    position: absolute; border-radius: 22px; border: 3px dashed rgba(43,36,64,0.22);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    background: rgba(255,255,255,0.5); font-weight: 800; color: var(--ink-muted); font-size: 12px;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .zone .zone-emoji { font-size: 24px; margin-bottom: 2px; }
+  .zone.hover { border-color: var(--c-teal); background: rgba(18,174,178,0.1); }
+
+  .chip {
+    position: absolute; width: 62px; height: 62px; border-radius: 50%;
+    box-shadow: inset 0 -6px 10px rgba(0,0,0,0.15), 0 5px 12px rgba(43,36,64,0.22);
+    cursor: grab; touch-action: none; user-select: none;
+    transition: left .4s cubic-bezier(.34,1.5,.64,1), top .4s cubic-bezier(.34,1.5,.64,1), opacity .3s ease, transform .3s ease;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.9); font-size: 9px; font-weight: 800; text-align:center; line-height:1.1;
+  }
+  .chip.dragging { cursor: grabbing; transition: none; z-index: 30; }
+  .chip.placed { opacity: 0.55; transform: scale(0.82); box-shadow: 0 3px 8px rgba(43,36,64,0.15); }
+
+  .phase-label { text-align: center; font-size: 12px; font-weight: 800; color: var(--ink-muted); margin-top: 6px; }
+  .next-wrap { margin-top: 18px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Color Families</p>
+  <div class="stops-pill">STEP 4 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker" id="kicker">Same Family</div>
+    <h1 id="headline">Drag the matching colors into the basket 🧺</h1>
+    <p id="subline">yellow, yellow-orange, orange, red-orange — they're cousins!</p>
+  </div>
+
+  <div class="playfield" id="playfield"></div>
+
+  <div class="phase-label" id="phaseLabel">0 of 4 found</div>
+
+  <div class="next-wrap">
+    <button class="btn btn-teal" id="nextBtn" style="display:none;" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 4;
+
+/* ── PHASE A: same family ── */
+const PHASE_A_CHIPS = [
+  { id: 'yellow',      label: 'Yellow',        v: '#ffc93c', family: true,  x: 6,  y: 6 },
+  { id: 'yelorange',   label: 'Yellow-Orange', v: '#f9a826', family: true,  x: 62, y: 4 },
+  { id: 'orange',      label: 'Orange',        v: '#f6871f', family: true,  x: 8,  y: 60 },
+  { id: 'redorange',   label: 'Red-Orange',    v: '#f2571c', family: true,  x: 60, y: 62 },
+  { id: 'blue',        label: 'Blue',          v: '#2a7de1', family: false, x: 32, y: 2 },
+  { id: 'purple',      label: 'Purple',        v: '#9b5de5', family: false, x: 34, y: 66 },
+];
+
+/* ── PHASE B: warm vs cool ── */
+const PHASE_B_CHIPS = [
+  { id: 'red',    label: 'Red',    v: '#ef4444', bin: 'warm', x: 4,  y: 4 },
+  { id: 'orange2',label: 'Orange', v: '#f6871f', bin: 'warm', x: 40, y: 2 },
+  { id: 'yellow2',label: 'Yellow', v: '#ffc93c', bin: 'warm', x: 76, y: 5 },
+  { id: 'blue2',  label: 'Blue',   v: '#2a7de1', bin: 'cool', x: 6,  y: 64 },
+  { id: 'green2', label: 'Green',  v: '#22b573', bin: 'cool', x: 42, y: 66 },
+  { id: 'purple2',label: 'Purple', v: '#9b5de5', bin: 'cool', x: 78, y: 63 },
+];
+
+let phase = 'A';
+let positions = {};
+let placed = new Set();
+let dragState = null;
+
+function renderPhaseA() {
+  document.getElementById('kicker').textContent = 'Same Family';
+  document.getElementById('headline').textContent = 'Drag the matching colors into the basket 🧺';
+  document.getElementById('subline').textContent = "yellow, yellow-orange, orange, red-orange — they're cousins!";
+
+  const field = document.getElementById('playfield');
+  field.innerHTML = '';
+  positions = {};
+  placed = new Set();
+
+  const basket = document.createElement('div');
+  basket.className = 'zone';
+  basket.id = 'zone-basket';
+  basket.style.left = '32%'; basket.style.top = '36%';
+  basket.style.width = '36%'; basket.style.height = '28%';
+  basket.innerHTML = '<div class="zone-emoji">🧺</div>family basket';
+  field.appendChild(basket);
+
+  PHASE_A_CHIPS.forEach(c => spawnChip(c, field));
+  updatePhaseLabel();
+}
+
+function renderPhaseB() {
+  document.getElementById('kicker').textContent = 'Warm & Cool';
+  document.getElementById('headline').textContent = 'Sort into Warm ☀️ or Cool ❄️';
+  document.getElementById('subline').textContent = 'drag each color where it belongs';
+
+  const field = document.getElementById('playfield');
+  field.innerHTML = '';
+  positions = {};
+  placed = new Set();
+
+  const warm = document.createElement('div');
+  warm.className = 'zone'; warm.id = 'zone-warm';
+  warm.style.left = '2%'; warm.style.top = '2%';
+  warm.style.width = '44%'; warm.style.height = '30%';
+  warm.innerHTML = '<div class="zone-emoji">☀️</div>Warm';
+  field.appendChild(warm);
+
+  const cool = document.createElement('div');
+  cool.className = 'zone'; cool.id = 'zone-cool';
+  cool.style.left = '54%'; cool.style.top = '2%';
+  cool.style.width = '44%'; cool.style.height = '30%';
+  cool.innerHTML = '<div class="zone-emoji">❄️</div>Cool';
+  field.appendChild(cool);
+
+  PHASE_B_CHIPS.forEach(c => spawnChip(c, field, true));
+  updatePhaseLabel();
+}
+
+function spawnChip(c, field, lowerHalf) {
+  positions[c.id] = { x: c.x, y: lowerHalf ? (c.y + 38) : c.y };
+  const el = document.createElement('div');
+  el.className = 'chip';
+  el.id = 'chip-' + c.id;
+  el.style.background = c.v;
+  el.style.left = positions[c.id].x + '%';
+  el.style.top = positions[c.id].y + '%';
+  el.textContent = c.label;
+  el.addEventListener('pointerdown', (e) => startDrag(e, c));
+  field.appendChild(el);
+}
+
+function startDrag(e, c) {
+  if (placed.has(c.id)) return;
+  const field = document.getElementById('playfield');
+  const el = document.getElementById('chip-' + c.id);
+  el.setPointerCapture(e.pointerId);
+  el.classList.add('dragging');
+  dragState = { c, fieldRect: field.getBoundingClientRect() };
+  moveDrag(e);
+  el.addEventListener('pointermove', moveDrag);
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+}
+
+function moveDrag(e) {
+  if (!dragState) return;
+  const el = document.getElementById('chip-' + dragState.c.id);
+  const rect = dragState.fieldRect;
+  let xPct = ((e.clientX - rect.left) / rect.width) * 100;
+  let yPct = ((e.clientY - rect.top) / rect.height) * 100;
+  xPct = Math.max(0, Math.min(88, xPct));
+  yPct = Math.max(0, Math.min(85, yPct));
+  el.style.left = xPct + '%';
+  el.style.top = yPct + '%';
+  positions[dragState.c.id] = { x: xPct, y: yPct };
+  highlightZones(el);
+}
+
+function highlightZones(el) {
+  document.querySelectorAll('.zone').forEach(z => {
+    z.classList.toggle('hover', rectsOverlap(el.getBoundingClientRect(), z.getBoundingClientRect()));
+  });
+}
+
+function rectsOverlap(a, b) {
+  const ac = { x: a.left + a.width/2, y: a.top + a.height/2 };
+  return ac.x > b.left && ac.x < b.right && ac.y > b.top && ac.y < b.bottom;
+}
+
+function endDrag(e) {
+  if (!dragState) return;
+  const c = dragState.c;
+  const el = document.getElementById('chip-' + c.id);
+  el.classList.remove('dragging');
+  el.removeEventListener('pointermove', moveDrag);
+  el.removeEventListener('pointerup', endDrag);
+  el.removeEventListener('pointercancel', endDrag);
+  dragState = null;
+  document.querySelectorAll('.zone').forEach(z => z.classList.remove('hover'));
+
+  if (phase === 'A') {
+    const basket = document.getElementById('zone-basket');
+    const hit = rectsOverlap(el.getBoundingClientRect(), basket.getBoundingClientRect());
+    if (hit && c.family) {
+      settleChip(c, el, basket);
+    } else if (hit && !c.family) {
+      bounceHome(c, el);
+    }
+  } else {
+    ['warm', 'cool'].forEach(binName => {
+      const zone = document.getElementById('zone-' + binName);
+      const hit = rectsOverlap(el.getBoundingClientRect(), zone.getBoundingClientRect());
+      if (hit && c.bin === binName) settleChip(c, el, zone);
+      else if (hit && c.bin !== binName) bounceHome(c, el);
+    });
+  }
+}
+
+function settleChip(c, el, zone) {
+  const field = document.getElementById('playfield');
+  const fieldRect = field.getBoundingClientRect();
+  const zoneRect = zone.getBoundingClientRect();
+  const slot = placed.size % 4;
+  const cx = ((zoneRect.left - fieldRect.left) + zoneRect.width * (0.28 + (slot % 2) * 0.44)) / fieldRect.width * 100;
+  const cy = ((zoneRect.top - fieldRect.top) + zoneRect.height * (0.35 + Math.floor(slot/2) * 0.4)) / fieldRect.height * 100;
+  el.style.left = cx + '%';
+  el.style.top = cy + '%';
+  el.classList.add('placed');
+  placed.add(c.id);
+  updatePhaseLabel();
+  checkPhaseComplete();
+}
+
+function bounceHome(c, el) {
+  const original = phase === 'A'
+    ? PHASE_A_CHIPS.find(x => x.id === c.id)
+    : PHASE_B_CHIPS.find(x => x.id === c.id);
+  const lowerHalf = phase === 'B';
+  el.style.left = original.x + '%';
+  el.style.top = (lowerHalf ? original.y + 38 : original.y) + '%';
+}
+
+function updatePhaseLabel() {
+  const total = phase === 'A' ? 4 : 6;
+  document.getElementById('phaseLabel').textContent = placed.size + ' of ' + total + (phase === 'A' ? ' found' : ' sorted');
+}
+
+function checkPhaseComplete() {
+  if (phase === 'A' && placed.size === 4) {
+    ColorState.markInProgress(STEP_N);
+    setTimeout(() => { phase = 'B'; renderPhaseB(); }, 700);
+  } else if (phase === 'B' && placed.size === 6) {
+    ColorState.markCompleted(STEP_N);
+    document.getElementById('nextBtn').style.display = 'block';
+  }
+}
+
+function goNext() {
+  window.location.href = '../step-5/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+  renderPhaseA();
+}
+
+init();
+</script>
+</body>
+</html>

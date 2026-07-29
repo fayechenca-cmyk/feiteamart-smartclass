@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 1 · Welcome · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<!-- Art GPS access control -->
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<!-- Shared step/state module -->
+<script src="../shared/color-state.js"></script>
+
+<style>
+  html, body { background: radial-gradient(circle at 50% 0%, #fff2da 0%, #ffe0e6 55%, #ffd3ef 100%); overflow-x: hidden; }
+  .topbar { background: rgba(255,255,255,0.55); }
+
+  .stage {
+    position: relative;
+    min-height: calc(100vh - 60px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px 20px 60px;
+    overflow: hidden;
+  }
+
+  .splash {
+    position: absolute; border-radius: 50%;
+    opacity: 0.55; filter: blur(0.5px);
+    animation: floaty 6s ease-in-out infinite;
+  }
+  @keyframes floaty { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-14px) scale(1.05); } }
+  .sp1 { width: 130px; height: 130px; background: var(--c-yellow); top: 6%; left: 4%; animation-delay: 0s; }
+  .sp2 { width: 90px;  height: 90px;  background: var(--c-blue);   top: 12%; right: 8%; animation-delay: 1.2s; }
+  .sp3 { width: 70px;  height: 70px;  background: var(--c-pink);   bottom: 18%; left: 10%; animation-delay: 0.6s; }
+  .sp4 { width: 110px; height: 110px; background: var(--c-green);  bottom: 8%; right: 6%; animation-delay: 1.8s; }
+  .sp5 { width: 55px;  height: 55px;  background: var(--c-orange); top: 46%; left: 2%; animation-delay: 2.4s; }
+
+  .leaf { position: absolute; font-size: 46px; animation: leafSway 3.5s ease-in-out infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+  .lf1 { top: 10%; left: 18%; animation-delay: 0s; }
+  .lf2 { top: 18%; right: 14%; animation-delay: 0.5s; font-size: 38px; }
+  .lf3 { bottom: 20%; right: 22%; animation-delay: 1s; }
+  .lf4 { bottom: 14%; left: 20%; animation-delay: 1.5s; font-size: 34px; }
+
+  .hero-title {
+    position: relative; z-index: 2;
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: clamp(38px, 9vw, 60px); line-height: 1.02;
+    margin: 0 0 6px;
+    background: linear-gradient(90deg, var(--c-red), var(--c-orange), var(--c-yellow), var(--c-green), var(--c-blue), var(--c-purple));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: rainbowShift 6s ease-in-out infinite;
+  }
+  @keyframes rainbowShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+  .hero-sub {
+    position: relative; z-index: 2;
+    font-style: italic; color: var(--ink-soft); font-size: 15px; margin: 0 0 34px;
+  }
+
+  .start-wrap { position: relative; z-index: 2; width: 100%; max-width: 260px; }
+  .start-btn {
+    width: 100%; padding: 18px 22px; border: none; border-radius: 22px;
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 17px;
+    color: #fff; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    background: linear-gradient(135deg, var(--c-pink), var(--c-purple));
+    box-shadow: 0 10px 26px rgba(155,93,229,0.4);
+    transition: transform .15s ease;
+  }
+  .start-btn:active { transform: scale(0.96); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Welcome</p>
+  <div class="stops-pill">STEP 1 OF 10</div>
+</div>
+
+<div class="stage">
+  <div class="splash sp1"></div>
+  <div class="splash sp2"></div>
+  <div class="splash sp3"></div>
+  <div class="splash sp4"></div>
+  <div class="splash sp5"></div>
+  <div class="leaf lf1">🍃</div>
+  <div class="leaf lf2">🍂</div>
+  <div class="leaf lf3">🍃</div>
+  <div class="leaf lf4">🌿</div>
+
+  <h1 class="hero-title">Color Magic</h1>
+  <p class="hero-sub">Inspired by Henri Matisse</p>
+
+  <div class="start-wrap">
+    <button class="start-btn" onclick="startJourney()">Start ✨</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 1;
+
+function startJourney() {
+  ColorState.markInProgress(STEP_N);
+  ColorState.markCompleted(STEP_N);
+  window.location.href = '../step-2/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+}
+
+init();
+</script>
+</body>
+</html>

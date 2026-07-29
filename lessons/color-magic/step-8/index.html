@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 8 · Let's Paint · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-pink); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+
+  /* Small teacher video — deliberately compact, not the main event. */
+  .video-wrap { max-width: 240px; margin: 18px auto 4px; }
+  .video-box {
+    position: relative; aspect-ratio: 16/10; border-radius: 18px; overflow: hidden;
+    background: linear-gradient(135deg, #2b2440, #4a3d6e);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(43,36,64,0.25);
+    cursor: pointer;
+  }
+  .video-box .play-btn {
+    width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.92);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; color: #2b2440;
+  }
+  .video-caption { text-align: center; font-size: 10.5px; color: var(--ink-muted); margin-top: 6px; }
+
+  .steps-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .paint-step {
+    background: #fff; border-radius: 18px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 4px 14px rgba(43,36,64,0.08);
+  }
+  .paint-step .ps-num {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 13px; color: #fff;
+  }
+  .paint-step .ps-text { font-size: 12.5px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+  .p1 .ps-num { background: var(--c-yellow); color: #4a3a06; }
+  .p2 .ps-num { background: var(--c-teal); }
+  .p3 .ps-num { background: #1c3faa; }
+  .p4 .ps-num { background: var(--c-pink); }
+
+  .reveal-card {
+    margin-top: 22px; background: #fff; border-radius: 22px; padding: 18px;
+    text-align: center; box-shadow: 0 6px 20px rgba(43,36,64,0.1);
+  }
+  .reveal-card h3 { font-size: 13px; margin: 0 0 12px; color: var(--ink-muted); font-weight: 800; }
+  .reveal-stage { position: relative; width: 160px; height: 160px; margin: 0 auto 14px; border-radius: 16px; overflow: hidden; background: #1b2a3a; }
+  .reveal-leaf { position: absolute; inset: 0; }
+  .reveal-cover {
+    position: absolute; inset: 0; background: #16324a;
+    transition: clip-path 1s ease;
+    clip-path: inset(0 0 0 0);
+  }
+  .reveal-cover.peeled { clip-path: inset(0 100% 0 0); }
+  .reveal-sparkle { position: absolute; font-size: 24px; opacity: 0; pointer-events: none; }
+
+  .next-wrap { margin-top: 18px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Let's Paint</p>
+  <div class="stops-pill">STEP 8 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">Watch &amp; Paint</div>
+    <h1>Four magic steps 🪄</h1>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-box" onclick="alert('Faye\\'s demo video goes here soon! 🎥')">
+      <div class="play-btn">▶</div>
+    </div>
+    <div class="video-caption">tiny teacher video · tap to play</div>
+  </div>
+
+  <div class="steps-list">
+    <div class="paint-step p1"><div class="ps-num">1</div><div class="ps-text">Paint a colorful watercolor background using similar colors. Let it dry.</div></div>
+    <div class="paint-step p2"><div class="ps-num">2</div><div class="ps-text">Protect the leaf shape — masking fluid, or a paper leaf stencil.</div></div>
+    <div class="paint-step p3"><div class="ps-num">3</div><div class="ps-text">Paint a dark acrylic layer over everything — deep blue-green works great.</div></div>
+    <div class="paint-step p4"><div class="ps-num">4</div><div class="ps-text">Remove the masking to reveal your colorful leaf. ✨</div></div>
+  </div>
+
+  <div class="reveal-card">
+    <h3>TRY THE MAGIC REVEAL</h3>
+    <div class="reveal-stage">
+      <svg class="reveal-leaf" viewBox="0 0 160 160" width="160" height="160">
+        <rect width="160" height="160" fill="#16324a"/>
+        <path d="M80 18 C110 30 130 58 122 92 C116 118 90 136 62 128 C34 120 22 92 32 64 C42 36 60 14 80 18 Z" fill="#ffc93c"/>
+        <path d="M80 30 C80 62 80 96 80 130" stroke="#f6871f" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="reveal-cover" id="revealCover"></div>
+      <div class="reveal-sparkle" id="revealSparkle">✨</div>
+    </div>
+    <button class="btn btn-teal" onclick="doReveal()">✨ Reveal</button>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn btn-pop" id="nextBtn" style="display:none;" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 8;
+let revealed = false;
+
+function doReveal() {
+  const cover = document.getElementById('revealCover');
+  const sparkle = document.getElementById('revealSparkle');
+  cover.classList.add('peeled');
+  sparkle.style.left = '70px'; sparkle.style.top = '20px';
+  sparkle.style.transition = 'none';
+  sparkle.style.opacity = '0';
+  requestAnimationFrame(() => {
+    sparkle.style.transition = 'opacity .4s ease, transform 1s ease';
+    sparkle.style.opacity = '1';
+    sparkle.style.transform = 'scale(1.6) rotate(20deg)';
+  });
+  setTimeout(() => { sparkle.style.opacity = '0'; }, 900);
+
+  if (!revealed) {
+    revealed = true;
+    ColorState.markInProgress(STEP_N);
+    ColorState.markCompleted(STEP_N);
+    document.getElementById('nextBtn').style.display = 'block';
+  }
+}
+
+function goNext() {
+  window.location.href = '../step-9/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+}
+
+init();
+</script>
+</body>
+</html>

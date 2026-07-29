@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 7 · Get Ready · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-teal); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+  .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
+
+  .materials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 20px;
+  }
+  .mat-card {
+    background: #fff; border-radius: 20px; padding: 16px 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    box-shadow: 0 5px 14px rgba(43,36,64,0.1);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: transform .15s ease, opacity .3s ease;
+  }
+  .mat-card:active { transform: scale(0.94); }
+  .mat-card.packed { opacity: 0.4; }
+  .mat-emoji { font-size: 30px; }
+  .mat-label { font-size: 10.5px; font-weight: 800; text-align: center; color: var(--ink); }
+  .mat-alt { font-size: 8.5px; color: var(--ink-muted); text-align: center; font-style: italic; }
+
+  .art-box-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 30px; }
+  .art-box { font-size: 52px; position: relative; animation: boxBob 2.4s ease-in-out infinite; }
+  @keyframes boxBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  .art-box-label { font-size: 11px; font-weight: 800; color: var(--ink-muted); margin-top: 4px; }
+
+  .flyer { position: fixed; font-size: 26px; pointer-events: none; z-index: 50; transition: left .6s cubic-bezier(.4,0,.2,1), top .6s cubic-bezier(.4,0,.2,1), transform .6s ease, opacity .6s ease; }
+
+  .next-wrap { margin-top: 24px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Get Ready</p>
+  <div class="stops-pill">STEP 7 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">Gather Your Tools</div>
+    <h1>Tap each thing to pack it 🧰</h1>
+  </div>
+
+  <div class="materials-grid" id="matGrid"></div>
+
+  <div class="art-box-wrap">
+    <div class="art-box" id="artBox">🧰</div>
+    <div class="art-box-label" id="boxLabel">0 of 6 packed</div>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn btn-pop" id="nextBtn" style="display:none;" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 7;
+
+const MATERIALS = [
+  { id: 'watercolor', emoji: '🎨', label: 'Watercolor' },
+  { id: 'brush',       emoji: '🖌️', label: 'Brush' },
+  { id: 'water',       emoji: '💧', label: 'Water' },
+  { id: 'paper',       emoji: '📄', label: 'Watercolor Paper' },
+  { id: 'acrylic',     emoji: '🩵', label: 'Acrylic Paint' },
+  { id: 'stencil',     emoji: '✂️', label: 'Masking Film', alt: 'no masking fluid? cut a paper leaf stencil instead!' },
+];
+
+let packed = new Set();
+
+function renderMaterials() {
+  const grid = document.getElementById('matGrid');
+  grid.innerHTML = MATERIALS.map(m => `
+    <div class="mat-card" id="mat-${m.id}" onclick="packMaterial('${m.id}')">
+      <div class="mat-emoji">${m.emoji}</div>
+      <div class="mat-label">${m.label}</div>
+      ${m.alt ? `<div class="mat-alt">${m.alt}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function packMaterial(id) {
+  if (packed.has(id)) return;
+  const card = document.getElementById('mat-' + id);
+  const box = document.getElementById('artBox');
+  const m = MATERIALS.find(x => x.id === id);
+
+  const startRect = card.getBoundingClientRect();
+  const endRect = box.getBoundingClientRect();
+
+  const flyer = document.createElement('div');
+  flyer.className = 'flyer';
+  flyer.textContent = m.emoji;
+  flyer.style.left = (startRect.left + startRect.width/2 - 13) + 'px';
+  flyer.style.top = (startRect.top + startRect.height/2 - 13) + 'px';
+  document.body.appendChild(flyer);
+
+  requestAnimationFrame(() => {
+    flyer.style.left = (endRect.left + endRect.width/2 - 13) + 'px';
+    flyer.style.top = (endRect.top + endRect.height/2 - 13) + 'px';
+    flyer.style.transform = 'scale(0.4)';
+    flyer.style.opacity = '0.3';
+  });
+
+  setTimeout(() => flyer.remove(), 620);
+
+  card.classList.add('packed');
+  packed.add(id);
+
+  box.style.transform = 'scale(1.25)';
+  setTimeout(() => { box.style.transform = 'scale(1)'; }, 220);
+
+  document.getElementById('boxLabel').textContent = packed.size + ' of ' + MATERIALS.length + ' packed';
+  ColorState.markInProgress(STEP_N);
+
+  if (packed.size === MATERIALS.length) {
+    ColorState.markCompleted(STEP_N);
+    document.getElementById('nextBtn').style.display = 'block';
+  }
+}
+
+function goNext() {
+  window.location.href = '../step-8/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+  renderMaterials();
+}
+
+init();
+</script>
+</body>
+</html>

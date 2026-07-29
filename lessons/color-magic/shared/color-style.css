@@ -1,0 +1,214 @@
+/* ============================================================
+ * FEI TeamArt · Color Magic — shared chrome
+ * Loaded by the map (index.html) and every step-N/index.html page.
+ *
+ * Deliberately its OWN bright, playful palette (not the muted Dream Art
+ * Studio linen tones) — this course is a colorful watercolor playground
+ * for ages 4-8, not a collage-craft course. Bold hues, paper-cream
+ * background, hand-torn/paint-splash motifs.
+ * ============================================================ */
+
+:root {
+  --ink: #2b2440;
+  --ink-soft: #5a5170;
+  --ink-muted: #948bab;
+  --cream: #fffaf0;
+  --border: rgba(43,36,64,0.1);
+
+  /* Bold playground palette */
+  --c-red: #ef4444;
+  --c-orange: #f6871f;
+  --c-yellow: #ffc93c;
+  --c-green: #22b573;
+  --c-blue: #2a7de1;
+  --c-purple: #9b5de5;
+  --c-pink: #ff5da2;
+  --c-teal: #12aeb2;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(rgba(43,36,64,0.05) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
+  /* NOT background-attachment: fixed — known iOS Safari GPU/memory
+     crash trigger when repainting a fixed background layer on scroll. */
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER (identical across the map + every step page) ──── */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,250,240,0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.back-link {
+  text-decoration: none; color: var(--ink); font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+  background: none; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
+}
+.topbar-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px; font-weight: 800;
+  margin: 0; flex: 1; text-align: center;
+  padding: 0 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.stops-pill {
+  flex-shrink: 0;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.3px;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+/* ── SHARED CONTENT SHELL ───────────────────────────────────── */
+.content-wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 22px 20px 90px;
+}
+@media (min-width: 768px) {
+  .content-wrap { max-width: 720px; padding: 32px 32px 100px; }
+}
+@media (min-width: 1100px) {
+  .content-wrap { max-width: 860px; padding: 40px 40px 120px; }
+}
+
+.page-hero { text-align: center; padding: 6px 4px 20px; }
+.page-hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px; font-weight: 900; margin: 0 0 8px;
+  color: var(--ink);
+}
+.page-hero p {
+  font-size: 13.5px; color: var(--ink-soft); margin: 0; line-height: 1.5;
+}
+
+.card {
+  background: #fff; border-radius: 22px; padding: 20px;
+  box-shadow: 0 6px 20px rgba(43,36,64,0.08); margin-bottom: 16px;
+}
+
+/* ── ARTCHI MICRO-FEEDBACK BUBBLE ───────────────────────────── */
+.artchi-bubble {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #fff; border-radius: 16px; padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(43,36,64,0.08); margin: 14px 0;
+  animation: bubbleIn .25s ease;
+}
+@keyframes bubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.artchi-bubble .ab-icon { font-size: 20px; flex-shrink: 0; line-height: 1; }
+.artchi-bubble .ab-text { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── BUTTONS ─────────────────────────────────────────────────── */
+.btn {
+  display: block; width: 100%; text-align: center; padding: 15px 18px;
+  border-radius: 18px; font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 14px; cursor: pointer; border: none; text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease;
+}
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-pop { background: var(--c-pink); color: #fff; }
+.btn-teal { background: var(--c-teal); color: #fff; }
+.btn-ghost { background: rgba(43,36,64,0.06); color: var(--ink); }
+.btn[disabled] { opacity: 0.4; pointer-events: none; }
+.btn:active { transform: scale(0.98); }
+
+/* ── TAP-TO-SELECT CARDS (grids of choices) ─────────────────── */
+.tap-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
+  background: #fff; border: 2px solid var(--border); border-radius: 18px;
+  padding: 16px 10px; cursor: pointer; text-align: center;
+  transition: border-color .2s ease, transform .15s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tap-card:active { transform: scale(0.96); }
+.tap-card.selected { border-color: var(--c-teal); background: rgba(18,174,178,0.1); }
+.tap-card .tc-emoji { font-size: 30px; }
+.tap-card .tc-label { font-size: 12px; font-weight: 700; }
+
+/* ── CHECKLIST TAP (checkbox-style rows / grid) ─────────────── */
+.check-card {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 2px solid var(--border); border-radius: 16px;
+  padding: 13px 14px; cursor: pointer;
+  transition: border-color .2s ease, transform .15s ease, background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-card:active { transform: scale(0.97); }
+.check-card.checked { border-color: var(--c-teal); background: rgba(18,174,178,0.08); }
+.check-box {
+  width: 22px; height: 22px; border-radius: 7px;
+  border: 2px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: #fff;
+  transition: background .2s ease, border-color .2s ease;
+}
+.check-card.checked .check-box { background: var(--c-teal); border-color: var(--c-teal); }
+.check-label { font-size: 13px; font-weight: 700; }
+
+/* ── NEXT / DONE FOOTER ─────────────────────────────────────── */
+.next-footer { margin-top: 22px; }
+.next-footer .next-label {
+  font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--ink-muted); text-align: center; margin-bottom: 8px;
+}
+
+/* ── PAINT-SPLASH DECORATION (reused across steps) ──────────── */
+.splash-blob {
+  position: absolute; border-radius: 50%; filter: blur(0.5px);
+  opacity: 0.85; pointer-events: none;
+}
+
+/* ── SHARED ANIMATIONS ───────────────────────────────────────── */
+@keyframes leafSway {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50% { transform: rotate(4deg) translateY(-4px); }
+}
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,255,255,0); transform: scale(1); }
+  50% { box-shadow: 0 0 32px 10px rgba(255,215,120,0.85); transform: scale(1.12); }
+}
+@keyframes bounceApart {
+  0% { transform: translateX(0) rotate(0); }
+  30% { transform: translateX(var(--bx, -14px)) rotate(-6deg); }
+  60% { transform: translateX(calc(var(--bx, -14px) * -0.5)) rotate(4deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+@keyframes splashPop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes gentleSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── PLACEHOLDER ("still being built") PAGE ─────────────────── */
+.soon-card {
+  background: #fff; border-radius: 20px; padding: 32px 24px; text-align: center;
+  box-shadow: 0 6px 20px rgba(43,36,64,0.08);
+}
+.soon-card .soon-icon { font-size: 40px; margin-bottom: 12px; }
+.soon-card h2 {
+  font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 800; margin: 0 0 8px;
+}
+.soon-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 20px; }

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 10 · Gallery · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+<script src="../shared/color-storage.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-red); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+  .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
+
+  .unsupported-card {
+    display: none; background: #fff; border: 2px solid var(--c-pink); border-radius: 16px;
+    padding: 14px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin: 16px 0;
+  }
+
+  .upload-slot-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 18px; }
+  .upload-slot {
+    position: relative; width: 200px; height: 200px; border-radius: 22px;
+    border: 3px solid var(--c-teal); background: rgba(18,174,178,0.06);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; -webkit-tap-highlight-color: transparent;
+  }
+  .upload-slot.saving { border-color: var(--c-purple); background: rgba(155,93,229,0.08); }
+  .upload-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .upload-slot .slot-plus { font-size: 36px; color: var(--c-teal); line-height: 1; }
+  .upload-slot .slot-label { font-size: 12px; font-weight: 800; color: var(--ink-muted); margin-top: 6px; }
+  .upload-slot .slot-replace {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(43,36,64,0.6); color: #fff;
+    font-size: 11px; font-weight: 800; text-align: center; padding: 6px 0;
+  }
+
+  .reflect-card { margin-top: 20px; }
+  .reflect-row { margin-bottom: 14px; }
+  .reflect-row:last-child { margin-bottom: 0; }
+  .reflect-label { font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+  .reflect-input {
+    width: 100%; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--border);
+    font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: var(--ink);
+    outline: none; transition: border-color .2s ease;
+  }
+  .reflect-input:focus { border-color: var(--c-teal); }
+
+  .finish-wrap { margin-top: 22px; text-align: center; }
+  .celebrate {
+    display: none; text-align: center; margin-top: 22px;
+    background: linear-gradient(135deg, var(--c-pink), var(--c-purple));
+    border-radius: 22px; padding: 26px 20px; color: #fff;
+  }
+  .celebrate .cel-emoji { font-size: 44px; margin-bottom: 8px; }
+  .celebrate h2 { margin: 0 0 6px; font-size: 19px; }
+  .celebrate p { margin: 0 0 16px; font-size: 13px; opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Gallery</p>
+  <div class="stops-pill">STEP 10 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">Show It Off</div>
+    <h1>Upload your finished leaf 🖼️</h1>
+    <p>then tell us three tiny things</p>
+  </div>
+
+  <div class="unsupported-card" id="unsupportedNotice">
+    ⚠️ Photo storage isn't available in this browser. Try a recent version of Safari or Chrome, and make sure you're not in a private/incognito window.
+  </div>
+
+  <div class="upload-slot-wrap" id="slotWrap"></div>
+
+  <div class="card reflect-card">
+    <div class="reflect-row">
+      <div class="reflect-label">My favorite colors are…</div>
+      <input class="reflect-input" id="r1" maxlength="60" placeholder="e.g. orange and purple">
+    </div>
+    <div class="reflect-row">
+      <div class="reflect-label">I discovered…</div>
+      <input class="reflect-input" id="r2" maxlength="60" placeholder="e.g. opposite colors glow!">
+    </div>
+    <div class="reflect-row">
+      <div class="reflect-label">My leaf feels…</div>
+      <input class="reflect-input" id="r3" maxlength="60" placeholder="e.g. happy and bright">
+    </div>
+  </div>
+
+  <div class="finish-wrap">
+    <button class="btn btn-pop" id="finishBtn" onclick="finish()" disabled>🎉 Finish</button>
+  </div>
+
+  <div class="celebrate" id="celebrate">
+    <div class="cel-emoji">🎉</div>
+    <h2>You're a Color Magician!</h2>
+    <p>Colors can make each other shine.</p>
+    <a class="btn btn-ghost" style="background:rgba(255,255,255,0.2); color:#fff;" href="../">← Back to Map</a>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
+<script>
+const STEP_N = 10;
+const PIECE_ID = 'piece_001';
+
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
+
+function triggerUpload() {
+  document.getElementById('fileInput').click();
+}
+
+async function onFileSelected(event) {
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    alert('Please choose an image file (JPG or PNG).');
+    return;
+  }
+  saving = true;
+  renderSlot();
+  try {
+    const record = await ColorStorage.saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = ColorStorage.blobToObjectURL(record.blob);
+    ColorState.markInProgress(STEP_N);
+  } catch (e) {
+    console.warn('[gallery] saveArtwork failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  renderSlot();
+  updateFinishState();
+}
+
+function renderSlot() {
+  const wrap = document.getElementById('slotWrap');
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="My finished leaf artwork"><div class="slot-replace">🔄 Replace</div></div>`;
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Add your photo</div></div>`;
+  }
+}
+
+function saveReflections() {
+  ColorState.setStepData(STEP_N, {
+    favoriteColors: document.getElementById('r1').value,
+    discovered: document.getElementById('r2').value,
+    leafFeels: document.getElementById('r3').value,
+  });
+}
+
+function updateFinishState() {
+  document.getElementById('finishBtn').disabled = !artworkRecord;
+}
+
+function finish() {
+  if (!artworkRecord) return;
+  saveReflections();
+  ColorState.markCompleted(STEP_N);
+  document.querySelector('.reflect-card').style.display = 'none';
+  document.getElementById('slotWrap').style.display = 'none';
+  document.querySelector('.hero-q').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('celebrate').style.display = 'block';
+}
+
+async function refreshFromStorage() {
+  if (!ColorStorage.isSupported()) {
+    document.getElementById('unsupportedNotice').style.display = 'block';
+    renderSlot();
+    return;
+  }
+  try {
+    const rows = await ColorStorage.listArtworks(PIECE_ID);
+    if (rows.length) {
+      artworkRecord = rows[0];
+      objectUrl = ColorStorage.blobToObjectURL(artworkRecord.blob);
+    }
+  } catch (e) {
+    console.warn('[gallery] listArtworks failed', e);
+  }
+  renderSlot();
+  updateFinishState();
+}
+
+function loadReflections() {
+  const data = ColorState.getStepData(STEP_N);
+  if (data.favoriteColors) document.getElementById('r1').value = data.favoriteColors;
+  if (data.discovered) document.getElementById('r2').value = data.discovered;
+  if (data.leafFeels) document.getElementById('r3').value = data.leafFeels;
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+  loadReflections();
+  await refreshFromStorage();
+  ['r1','r2','r3'].forEach(id => document.getElementById(id).addEventListener('blur', saveReflections));
+}
+
+init();
+</script>
+</body>
+</html>

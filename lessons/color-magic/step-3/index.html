@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 3 · Play With Colors · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-blue); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
+  .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
+
+  .pad {
+    position: relative; margin-top: 20px;
+    height: 300px; border-radius: 26px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5), transparent 40%),
+      #fffdf5;
+    background-image:
+      radial-gradient(rgba(43,36,64,0.05) 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+    box-shadow: inset 0 0 0 3px rgba(43,36,64,0.08), 0 8px 24px rgba(43,36,64,0.1);
+    overflow: hidden;
+    touch-action: none;
+  }
+  .blob {
+    position: absolute; width: 78px; height: 78px; border-radius: 50%;
+    box-shadow: inset 0 -8px 14px rgba(0,0,0,0.18), 0 6px 16px rgba(43,36,64,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    cursor: grab; touch-action: none; user-select: none;
+    transition: left .45s cubic-bezier(.34,1.5,.64,1), top .45s cubic-bezier(.34,1.5,.64,1);
+  }
+  .blob.dragging { cursor: grabbing; transition: none; z-index: 20; box-shadow: 0 10px 22px rgba(43,36,64,0.35); }
+
+  .mix-splash {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    transform: translate(-50%,-50%) scale(0);
+    filter: blur(0.5px);
+    animation: spreadOut 1.1s ease forwards;
+  }
+  @keyframes spreadOut {
+    0% { transform: translate(-50%,-50%) scale(0); opacity: 0.9; }
+    60% { transform: translate(-50%,-50%) scale(1.6); opacity: 0.75; }
+    100% { transform: translate(-50%,-50%) scale(2.1); opacity: 0; }
+  }
+  .mix-label {
+    position: absolute; transform: translate(-50%,-50%);
+    background: #fff; padding: 5px 12px; border-radius: 14px;
+    font-size: 12px; font-weight: 800; color: var(--ink);
+    box-shadow: 0 4px 12px rgba(43,36,64,0.2); white-space: nowrap;
+    opacity: 0; animation: labelPop 1.6s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes labelPop {
+    0% { opacity: 0; transform: translate(-50%,-30%); }
+    20% { opacity: 1; transform: translate(-50%,-70%); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%,-100%); }
+  }
+
+  .discoveries { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .disc-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: #fff; border-radius: 16px; padding: 8px 12px;
+    font-size: 11.5px; font-weight: 800; color: var(--ink-muted);
+    box-shadow: 0 3px 10px rgba(43,36,64,0.08);
+    opacity: 0.4;
+  }
+  .disc-chip.found { opacity: 1; color: var(--ink); }
+  .disc-dot { width: 16px; height: 16px; border-radius: 50%; background: #ddd; }
+  .disc-chip.found .disc-dot { background: var(--dot-color, #ddd); }
+
+  .hint { text-align: center; font-size: 12px; color: var(--ink-muted); margin-top: 14px; }
+  .next-wrap { margin-top: 18px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Play With Colors</p>
+  <div class="stops-pill">STEP 3 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">Watercolor Lab</div>
+    <h1>Drag two colors together 💧</h1>
+    <p>watch what happens when they meet</p>
+  </div>
+
+  <div class="pad" id="pad"></div>
+
+  <div class="hint">drag a color blob onto another one</div>
+
+  <div class="discoveries" id="discoveries"></div>
+
+  <div class="next-wrap">
+    <button class="btn btn-teal" id="nextBtn" style="display:none;" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 3;
+
+const BLOBS = [
+  { id: 'yellow', name: 'Yellow', v: '#ffc93c', x: 20, y: 22 },
+  { id: 'blue',   name: 'Blue',   v: '#2a7de1', x: 68, y: 22 },
+  { id: 'red',    name: 'Red',    v: '#ef4444', x: 44, y: 66 },
+];
+
+const COMBOS = [
+  { a: 'yellow', b: 'blue', name: 'Green',  v: '#22b573' },
+  { a: 'red',    b: 'yellow', name: 'Orange', v: '#f6871f' },
+  { a: 'blue',   b: 'red',  name: 'Purple', v: '#9b5de5' },
+];
+
+let found = new Set();
+let positions = {}; // id -> {x%, y%} relative to pad
+let dragState = null;
+
+function comboFor(idA, idB) {
+  return COMBOS.find(c => (c.a === idA && c.b === idB) || (c.a === idB && c.b === idA));
+}
+
+function renderBlobs() {
+  const pad = document.getElementById('pad');
+  pad.innerHTML = '';
+  BLOBS.forEach(b => {
+    if (!positions[b.id]) positions[b.id] = { x: b.x, y: b.y };
+    const el = document.createElement('div');
+    el.className = 'blob';
+    el.id = 'blob-' + b.id;
+    el.style.background = b.v;
+    el.style.left = positions[b.id].x + '%';
+    el.style.top = positions[b.id].y + '%';
+    el.textContent = b.name;
+    el.addEventListener('pointerdown', (e) => startDrag(e, b.id));
+    pad.appendChild(el);
+  });
+}
+
+function startDrag(e, id) {
+  const pad = document.getElementById('pad');
+  const el = document.getElementById('blob-' + id);
+  el.setPointerCapture(e.pointerId);
+  el.classList.add('dragging');
+  dragState = { id, padRect: pad.getBoundingClientRect() };
+  moveDrag(e);
+  el.addEventListener('pointermove', moveDrag);
+  el.addEventListener('pointerup', endDrag);
+  el.addEventListener('pointercancel', endDrag);
+}
+
+function moveDrag(e) {
+  if (!dragState) return;
+  const el = document.getElementById('blob-' + dragState.id);
+  const rect = dragState.padRect;
+  let xPct = ((e.clientX - rect.left) / rect.width) * 100;
+  let yPct = ((e.clientY - rect.top) / rect.height) * 100;
+  xPct = Math.max(2, Math.min(85, xPct));
+  yPct = Math.max(2, Math.min(80, yPct));
+  el.style.left = xPct + '%';
+  el.style.top = yPct + '%';
+  positions[dragState.id] = { x: xPct, y: yPct };
+}
+
+function endDrag(e) {
+  if (!dragState) return;
+  const id = dragState.id;
+  const el = document.getElementById('blob-' + id);
+  el.classList.remove('dragging');
+  el.removeEventListener('pointermove', moveDrag);
+  el.removeEventListener('pointerup', endDrag);
+  el.removeEventListener('pointercancel', endDrag);
+  dragState = null;
+
+  checkCollision(id);
+}
+
+function checkCollision(movedId) {
+  const pad = document.getElementById('pad');
+  const padRect = pad.getBoundingClientRect();
+  const movedEl = document.getElementById('blob-' + movedId);
+  const movedRect = movedEl.getBoundingClientRect();
+  const mCenter = { x: movedRect.left + movedRect.width / 2, y: movedRect.top + movedRect.height / 2 };
+
+  for (const b of BLOBS) {
+    if (b.id === movedId) continue;
+    const otherEl = document.getElementById('blob-' + b.id);
+    const oRect = otherEl.getBoundingClientRect();
+    const oCenter = { x: oRect.left + oRect.width / 2, y: oRect.top + oRect.height / 2 };
+    const dist = Math.hypot(mCenter.x - oCenter.x, mCenter.y - oCenter.y);
+    if (dist < 66) {
+      triggerMix(movedId, b.id, padRect, mCenter, oCenter);
+      return;
+    }
+  }
+}
+
+function triggerMix(idA, idB, padRect, centerA, centerB) {
+  const combo = comboFor(idA, idB);
+  if (!combo) return;
+
+  const midX = ((centerA.x + centerB.x) / 2) - padRect.left;
+  const midY = ((centerA.y + centerB.y) / 2) - padRect.top;
+
+  const splash = document.createElement('div');
+  splash.className = 'mix-splash';
+  splash.style.left = midX + 'px';
+  splash.style.top = midY + 'px';
+  splash.style.width = '100px';
+  splash.style.height = '100px';
+  splash.style.background = combo.v;
+  document.getElementById('pad').appendChild(splash);
+
+  const label = document.createElement('div');
+  label.className = 'mix-label';
+  label.style.left = midX + 'px';
+  label.style.top = midY + 'px';
+  label.textContent = '= ' + combo.name + '!';
+  document.getElementById('pad').appendChild(label);
+
+  setTimeout(() => { splash.remove(); label.remove(); }, 1650);
+
+  // send both blobs home so kids can try again
+  const homeA = BLOBS.find(b => b.id === idA);
+  const homeB = BLOBS.find(b => b.id === idB);
+  positions[idA] = { x: homeA.x, y: homeA.y };
+  positions[idB] = { x: homeB.x, y: homeB.y };
+  document.getElementById('blob-' + idA).style.left = homeA.x + '%';
+  document.getElementById('blob-' + idA).style.top = homeA.y + '%';
+  document.getElementById('blob-' + idB).style.left = homeB.x + '%';
+  document.getElementById('blob-' + idB).style.top = homeB.y + '%';
+
+  const key = combo.a + '-' + combo.b;
+  if (!found.has(key)) {
+    found.add(key);
+    ColorState.markInProgress(STEP_N);
+    renderDiscoveries();
+    if (found.size === COMBOS.length) {
+      ColorState.markCompleted(STEP_N);
+      document.getElementById('nextBtn').style.display = 'block';
+    }
+  }
+}
+
+function renderDiscoveries() {
+  const wrap = document.getElementById('discoveries');
+  wrap.innerHTML = COMBOS.map(c => {
+    const key = c.a + '-' + c.b;
+    const isFound = found.has(key);
+    const fromA = BLOBS.find(b => b.id === c.a).name;
+    const fromB = BLOBS.find(b => b.id === c.b).name;
+    return `<div class="disc-chip ${isFound ? 'found' : ''}" style="--dot-color:${c.v}">
+      <span class="disc-dot"></span> ${isFound ? fromA + ' + ' + fromB + ' = ' + c.name : '? + ? = ?'}
+    </div>`;
+  }).join('');
+}
+
+function goNext() {
+  window.location.href = '../step-4/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+  renderBlobs();
+  renderDiscoveries();
+}
+
+init();
+</script>
+</body>
+</html>

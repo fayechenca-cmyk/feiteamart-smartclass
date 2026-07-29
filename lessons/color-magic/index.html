@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Color Magic · FEI TeamArt</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Art GPS access control (loaded before this page's script so FEIAccess is available) -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+<!-- Shared step/state module — also loaded by every step-N/index.html page. -->
+<script src="shared/color-state.js"></script>
+
+<style>
+  /* ============================================================
+   * Color Magic — bright leaf/paint-splash landing page.
+   * ============================================================ */
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #fff6e0 0%, #ffe9d6 45%, #ffdcea 100%);
+    /* NOT background-attachment: fixed — known iOS Safari GPU/memory hog. */
+  }
+
+  .landing-header { position: relative; text-align: center; padding: 30px 20px 10px; overflow: hidden; }
+  .back-link-cm {
+    display: inline-block; margin-bottom: 14px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    color: #6b5e50; text-decoration: none;
+  }
+  .back-link-cm:hover { text-decoration: underline; }
+  .cm-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900; font-size: 32px; letter-spacing: -0.5px;
+    color: #2b2440; margin: 0 0 6px;
+  }
+  .cm-subtitle {
+    font-style: italic; color: #6b5e50; font-size: 14px; margin: 0 0 16px;
+  }
+  .progress-pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(43,36,64,0.12);
+    border-radius: 20px; padding: 7px 16px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 11px;
+    letter-spacing: 0.3px;
+    color: #2b2440;
+  }
+
+  .float-leaf { position: absolute; font-size: 30px; opacity: 0.8; animation: leafSway 3.4s ease-in-out infinite; pointer-events: none; }
+  @keyframes leafSway { 0%,100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(6deg) translateY(-6px); } }
+  .fl1 { top: 8px;  left: 6%;  animation-delay: 0s; }
+  .fl2 { top: 40px; right: 8%; animation-delay: 0.6s; }
+  .fl3 { top: 4px;  right: 26%; animation-delay: 1.1s; font-size: 22px; }
+
+  /* ── Cards grid ──────────────────────────────────────────── */
+  .cards-grid-wrap { max-width: 680px; margin: 26px auto 0; padding: 0 20px; }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: auto;
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .step-card, .step-card.tall { grid-row: span 1; min-height: 96px; max-height: 140px; }
+  }
+
+  .step-card {
+    position: relative;
+    min-height: 104px;
+    max-height: 150px;
+    overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px;
+    padding: 10px 8px;
+    cursor: pointer;
+    box-shadow: 2px 4px 10px rgba(43,36,64,0.22), 0 1px 2px rgba(43,36,64,0.15);
+    transition: transform .18s ease, box-shadow .18s ease;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+    border-radius: 26px 10px 24px 12px;
+  }
+  .step-card.wide { grid-column: span 2; }
+  .step-card:hover:not(.locked) {
+    transform: scale(1.06) rotate(0deg) !important;
+    box-shadow: 4px 8px 22px rgba(43,36,64,0.32);
+    z-index: 10;
+  }
+  .step-card.locked { opacity: 0.4; filter: grayscale(0.25); cursor: default; }
+  .step-card.locked:hover { transform: none !important; box-shadow: 2px 4px 10px rgba(43,36,64,0.22), 0 1px 2px rgba(43,36,64,0.15); }
+
+  .card-num {
+    font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+    opacity: 0.85;
+  }
+  .card-emoji { font-size: 28px; line-height: 1; }
+  .card-name { font-size: 12px; font-weight: 800; line-height: 1.25; }
+
+  .lock-badge { position: absolute; top: 6px; right: 7px; font-size: 13px; }
+  .done-badge {
+    position: absolute; top: 6px; right: 6px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,255,255,0.92); color: #17924f;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  /* Bright playground palette — one hue per step. */
+  .s1  { background: #ef4444; color: #fff0ee; }
+  .s2  { background: #f6871f; color: #fff3e6; }
+  .s3  { background: #ffc93c; color: #4a3a06; }
+  .s4  { background: #22b573; color: #e9fbf2; }
+  .s5  { background: #2a7de1; color: #e9f2ff; }
+  .s6  { background: #9b5de5; color: #f5eafd; }
+  .s7  { background: #ff5da2; color: #fff0f6; }
+  .s8  { background: #12aeb2; color: #e7fbfb; }
+  .s9  { background: #f6871f; color: #fff3e6; }
+  .s10 { background: #ef4444; color: #fff0ee; }
+
+  .r1  { transform: rotate(-2.5deg); }
+  .r2  { transform: rotate(1.8deg); }
+  .r3  { transform: rotate(-1.2deg); }
+  .r4  { transform: rotate(2.3deg); }
+  .r5  { transform: rotate(-3deg); }
+  .r6  { transform: rotate(1.1deg); }
+  .r7  { transform: rotate(-1.8deg); }
+  .r8  { transform: rotate(2.7deg); }
+  .r9  { transform: rotate(-0.8deg); }
+  .r10 { transform: rotate(1.5deg); }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .cm-footer { text-align: center; padding: 40px 20px 60px; }
+  .cm-quote {
+    font-family: Georgia, serif; font-style: italic; color: #6b5e50;
+    font-size: 13px; max-width: 380px; margin: 0 auto; line-height: 1.65;
+  }
+
+  /* ── Warm friction bubble (out-of-order jump) ── */
+  .friction-backdrop {
+    position: fixed; inset: 0; background: rgba(43,36,64,0.45);
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    z-index: 90;
+  }
+  .friction-backdrop.show { opacity: 1; pointer-events: auto; }
+  .friction-bubble {
+    position: fixed; left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    max-width: 340px; width: calc(100% - 48px);
+    background: #fffaf0; border-radius: 20px; padding: 24px 22px;
+    box-shadow: 0 20px 60px rgba(43,36,64,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 96;
+    text-align: center;
+  }
+  .friction-bubble.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .friction-artchi { font-size: 40px; margin-bottom: 10px; }
+  .friction-text { font-size: 14px; line-height: 1.55; color: #2b2440; margin-bottom: 18px; }
+  .friction-actions { display: flex; flex-direction: column; gap: 8px; }
+  .friction-btn {
+    padding: 12px; border-radius: 12px; font-weight: 800; font-size: 12.5px;
+    font-family: 'Montserrat', sans-serif; cursor: pointer; border: none;
+  }
+  .friction-btn.primary { background: #22b573; color: #fff; }
+  .friction-btn.secondary { background: rgba(43,36,64,0.08); color: #2b2440; }
+</style>
+</head>
+<body>
+
+<div class="landing-header">
+  <span class="float-leaf fl1">🍃</span>
+  <span class="float-leaf fl2">🎨</span>
+  <span class="float-leaf fl3">💧</span>
+  <a class="back-link-cm" href="../../creation/">← Studio</a>
+  <h1 class="cm-title">Color Magic</h1>
+  <p class="cm-subtitle">Inspired by Henri Matisse</p>
+  <div class="progress-pill" id="progressPill">0 of 10 stages completed</div>
+</div>
+
+<div class="cards-grid-wrap">
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<div class="cm-footer">
+  <p class="cm-quote">"Colors can make each other shine."</p>
+</div>
+
+<div class="friction-backdrop" id="frictionBackdrop"></div>
+<div class="friction-bubble" id="frictionBubble">
+  <div class="friction-artchi">🎨</div>
+  <div class="friction-text" id="frictionText"></div>
+  <div class="friction-actions">
+    <button class="friction-btn primary" id="frictionGoBtn"></button>
+    <button class="friction-btn secondary" onclick="dismissFriction(false)">Stay here</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+ * Color Magic — Landing Page (paint-splash card grid)
+ * STEPS / TOTAL_STEPS / ColorState come from shared/color-state.js.
+ * All 10 steps are real, tappable pages.
+ * ============================================================ */
+
+const FUNCTIONAL_STEPS = [1,2,3,4,5,6,7,8,9,10];
+
+function recommendedFunctionalStep() {
+  for (const n of FUNCTIONAL_STEPS) {
+    if (ColorState.getStatus(n) !== 'completed') return n;
+  }
+  return 'finished';
+}
+
+const CARD_META = {
+  1:  { wide: true },
+  2:  { wide: false },
+  3:  { wide: false },
+  4:  { wide: false },
+  5:  { wide: false },
+  6:  { wide: false },
+  7:  { wide: false },
+  8:  { wide: true },
+  9:  { wide: false },
+  10: { wide: false },
+};
+
+let pendingFrictionStep = null;
+
+function renderCards() {
+  const state = ColorState.current();
+  const grid = document.getElementById('cardsGrid');
+
+  grid.innerHTML = STEPS.map(step => {
+    const meta = CARD_META[step.n];
+    const isDone = state.steps[step.n].status === 'completed';
+    const classes = ['step-card', 's' + step.n, 'r' + step.n, meta.wide ? 'wide' : ''].filter(Boolean).join(' ');
+    const badge = isDone ? '<div class="done-badge">✓</div>' : '';
+
+    return `
+      <div class="${classes}" onclick="handleCardTap(${step.n})">
+        ${badge}
+        <div class="card-num">Step ${step.n}</div>
+        <div class="card-emoji">${step.icon}</div>
+        <div class="card-name">${step.title}</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('progressPill').textContent =
+    ColorState.completedCount() + ' of ' + TOTAL_STEPS + ' stages completed';
+}
+
+function handleCardTap(n) {
+  const recommended = recommendedFunctionalStep();
+  const recommendedIdx = recommended === 'finished' ? FUNCTIONAL_STEPS.length : FUNCTIONAL_STEPS.indexOf(recommended);
+  const tappedIdx = FUNCTIONAL_STEPS.indexOf(n);
+
+  if (recommended !== 'finished' && tappedIdx > recommendedIdx) {
+    pendingFrictionStep = n;
+    showFriction(recommended, n);
+    return;
+  }
+  openStep(n);
+}
+
+function openStep(n) {
+  window.location.href = 'step-' + n + '/';
+}
+
+function showFriction(recommendedN, tappedN) {
+  document.getElementById('frictionText').textContent =
+    `Sure, let's peek at Step ${tappedN}. But Step ${recommendedN} comes first and makes everything else more fun — want to go there instead?`;
+  const goBtn = document.getElementById('frictionGoBtn');
+  goBtn.textContent = 'Go to Step ' + recommendedN;
+  goBtn.onclick = () => dismissFriction(true);
+  document.getElementById('frictionBackdrop').classList.add('show');
+  document.getElementById('frictionBubble').classList.add('show');
+}
+function dismissFriction(goToRecommended) {
+  document.getElementById('frictionBackdrop').classList.remove('show');
+  document.getElementById('frictionBubble').classList.remove('show');
+  const tapped = pendingFrictionStep;
+  pendingFrictionStep = null;
+  if (goToRecommended) {
+    const recommended = recommendedFunctionalStep();
+    if (recommended !== 'finished') openStep(recommended);
+  } else if (tapped) {
+    openStep(tapped);
+  }
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  renderCards();
+}
+
+init();
+</script>
+</body>
+</html>

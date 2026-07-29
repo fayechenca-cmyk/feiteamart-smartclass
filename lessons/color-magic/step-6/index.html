@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Step 6 · Meet Henri Matisse · Color Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/color-style.css">
+
+<script src="../../../core/auth.js"></script>
+<script src="../../../core/access.js"></script>
+<script src="../shared/color-state.js"></script>
+
+<style>
+  .hero-q { text-align: center; padding: 8px 10px 4px; }
+  .hero-q .kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--c-purple); margin-bottom: 8px; }
+  .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.35; }
+
+  .cutout-gallery {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+    margin-top: 22px;
+  }
+  .cutout-card {
+    background: #fff; border-radius: 22px; padding: 14px;
+    box-shadow: 0 6px 18px rgba(43,36,64,0.1);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .cutout-card svg { width: 100%; height: auto; max-width: 130px; }
+  .cutout-caption { font-size: 11px; font-weight: 800; color: var(--ink-muted); }
+
+  .fact-line {
+    text-align: center; font-size: 14px; color: var(--ink-soft); line-height: 1.6;
+    margin: 22px 0 4px; font-weight: 600;
+  }
+
+  .prompt-card {
+    margin-top: 22px; text-align: center;
+    background: linear-gradient(135deg, var(--c-purple), var(--c-pink));
+    border-radius: 22px; padding: 22px; color: #fff;
+  }
+  .prompt-card p { margin: 0; font-size: 16px; font-weight: 800; }
+  .next-wrap { margin-top: 18px; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="../">← Map</a>
+  <p class="topbar-title">Meet Henri Matisse</p>
+  <div class="stops-pill">STEP 6 OF 10</div>
+</div>
+
+<div class="content-wrap">
+  <div class="hero-q">
+    <div class="kicker">A Colorful Artist</div>
+    <h1>Henri Matisse loved bold colors 🎨</h1>
+  </div>
+
+  <p class="fact-line">He also cut colorful paper into leaves and plants — like magic scissors.</p>
+
+  <div class="cutout-gallery">
+    <div class="cutout-card">
+      <svg viewBox="0 0 120 120"><path d="M60 8 C88 20 104 46 96 76 C90 98 68 112 44 106 C20 100 10 76 18 52 C26 28 42 4 60 8 Z" fill="#22b573"/><path d="M60 20 C60 50 60 80 60 104" stroke="#0f7a4c" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      <div class="cutout-caption">Bold Leaf</div>
+    </div>
+    <div class="cutout-card">
+      <svg viewBox="0 0 120 120"><path d="M20 60 C20 30 44 12 66 16 C92 20 106 46 98 68 C90 90 62 106 40 98 C18 90 10 78 20 60 Z" fill="#2a7de1"/></svg>
+      <div class="cutout-caption">Blue Bloom</div>
+    </div>
+    <div class="cutout-card">
+      <svg viewBox="0 0 120 120"><path d="M60 10 C76 10 84 26 78 40 C96 38 108 54 100 68 C112 76 108 96 92 100 C84 112 64 112 56 100 C38 106 22 92 26 76 C10 70 10 50 26 42 C24 24 44 10 60 10 Z" fill="#f6871f"/></svg>
+      <div class="cutout-caption">Sunny Coral</div>
+    </div>
+    <div class="cutout-card">
+      <svg viewBox="0 0 120 120"><path d="M60 14 C70 34 90 34 96 52 C102 70 88 84 70 82 C74 98 60 110 44 104 C28 98 24 82 34 70 C18 66 14 48 28 36 C24 20 42 8 60 14 Z" fill="#ff5da2"/></svg>
+      <div class="cutout-caption">Pink Petal</div>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <p>Let's borrow his colorful ideas. 🍃</p>
+  </div>
+
+  <div class="next-wrap">
+    <button class="btn btn-teal" onclick="goNext()">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEP_N = 6;
+
+function goNext() {
+  ColorState.markInProgress(STEP_N);
+  ColorState.markCompleted(STEP_N);
+  window.location.href = '../step-7/';
+}
+
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'color-magic');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  ColorState.markVisited(STEP_N);
+}
+
+init();
+</script>
+</body>
+</html>
