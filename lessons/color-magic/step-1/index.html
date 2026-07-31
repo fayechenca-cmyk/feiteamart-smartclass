@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Step 1 · Welcome · Color Magic</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/color-style.css">
 
 <!-- Art GPS access control -->
@@ -12,6 +12,8 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared step/state module -->
 <script src="../shared/color-state.js"></script>
+<!-- Voice-over -->
+<script src="../shared/color-voice.js"></script>
 
 <style>
   html, body { background: radial-gradient(circle at 50% 0%, #fff2da 0%, #ffe0e6 55%, #ffd3ef 100%); overflow-x: hidden; }
@@ -63,7 +65,7 @@
   .start-wrap { position: relative; z-index: 2; width: 100%; max-width: 260px; }
   .start-btn {
     width: 100%; padding: 18px 22px; border: none; border-radius: 22px;
-    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 17px;
+    font-family: 'Patrick Hand', cursive; font-weight: 700; font-size: 19px;
     color: #fff; cursor: pointer; -webkit-tap-highlight-color: transparent;
     background: linear-gradient(135deg, var(--c-pink), var(--c-purple));
     box-shadow: 0 10px 26px rgba(155,93,229,0.4);
@@ -119,6 +121,7 @@ async function init() {
     }
   }
   ColorState.markVisited(STEP_N);
+  ColorVoice.init(STEP_N, 'Welcome to Color Magic! Tap Start to begin.');
 }
 
 init();

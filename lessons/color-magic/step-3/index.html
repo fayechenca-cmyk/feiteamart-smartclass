@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Step 3 · Play With Colors · Color Magic</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/color-style.css">
 
 <script src="../../../core/auth.js"></script>
 <script src="../../../core/access.js"></script>
 <script src="../shared/color-state.js"></script>
+<script src="../shared/color-shapes.js"></script>
+<script src="../shared/color-voice.js"></script>
 
 <style>
   .hero-q { text-align: center; padding: 8px 10px 4px; }
@@ -31,30 +33,41 @@
     touch-action: none;
   }
   .blob {
-    position: absolute; width: 78px; height: 78px; border-radius: 50%;
-    box-shadow: inset 0 -8px 14px rgba(0,0,0,0.18), 0 6px 16px rgba(43,36,64,0.25);
+    position: absolute; width: 78px; height: 78px;
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
     cursor: grab; touch-action: none; user-select: none;
-    transition: left .45s cubic-bezier(.34,1.5,.64,1), top .45s cubic-bezier(.34,1.5,.64,1);
+    transition: left .45s cubic-bezier(.34,1.5,.64,1), top .45s cubic-bezier(.34,1.5,.64,1), filter .15s ease;
   }
-  .blob.dragging { cursor: grabbing; transition: none; z-index: 20; box-shadow: 0 10px 22px rgba(43,36,64,0.35); }
+  .blob.dragging { cursor: grabbing; transition: none; z-index: 20; filter: drop-shadow(0 6px 10px rgba(43,36,64,0.3)); }
+
+  /* Live, continuous blend preview shown WHILE two blobs overlap
+     during a drag — grows/darkens with how much they overlap, via
+     mix-blend-mode so it visually bleeds into both source blobs
+     instead of sitting on top like a sticker. */
+  .live-blend {
+    position: absolute; pointer-events: none;
+    mix-blend-mode: multiply;
+    transform: translate(-50%, -50%);
+    transition: opacity .12s ease;
+    z-index: 15;
+  }
 
   .mix-splash {
     position: absolute; border-radius: 50%; pointer-events: none;
+    mix-blend-mode: multiply;
     transform: translate(-50%,-50%) scale(0);
     filter: blur(0.5px);
     animation: spreadOut 1.1s ease forwards;
   }
   @keyframes spreadOut {
-    0% { transform: translate(-50%,-50%) scale(0); opacity: 0.9; }
-    60% { transform: translate(-50%,-50%) scale(1.6); opacity: 0.75; }
-    100% { transform: translate(-50%,-50%) scale(2.1); opacity: 0; }
+    0% { transform: translate(-50%,-50%) scale(0.6); opacity: 0.9; }
+    60% { transform: translate(-50%,-50%) scale(1.7); opacity: 0.7; }
+    100% { transform: translate(-50%,-50%) scale(2.2); opacity: 0; }
   }
   .mix-label {
     position: absolute; transform: translate(-50%,-50%);
     background: #fff; padding: 5px 12px; border-radius: 14px;
-    font-size: 12px; font-weight: 800; color: var(--ink);
+    font-size: 15px; font-weight: 700; font-family: 'Patrick Hand', cursive; color: var(--ink);
     box-shadow: 0 4px 12px rgba(43,36,64,0.2); white-space: nowrap;
     opacity: 0; animation: labelPop 1.6s ease forwards;
     pointer-events: none;
@@ -126,23 +139,30 @@ const COMBOS = [
 let found = new Set();
 let positions = {}; // id -> {x%, y%} relative to pad
 let dragState = null;
+let liveBlendEl = null;
+let activeOverlap = null; // { otherId, fraction }
+
+const BLOB_PX = 78;              // matches .blob width/height
+const LOCK_THRESHOLD = 0.42;     // overlap fraction needed to "count" as a real mix
 
 function comboFor(idA, idB) {
   return COMBOS.find(c => (c.a === idA && c.b === idB) || (c.a === idB && c.b === idA));
+}
+function colorFor(id) {
+  return BLOBS.find(b => b.id === id).v;
 }
 
 function renderBlobs() {
   const pad = document.getElementById('pad');
   pad.innerHTML = '';
-  BLOBS.forEach(b => {
+  BLOBS.forEach((b, i) => {
     if (!positions[b.id]) positions[b.id] = { x: b.x, y: b.y };
     const el = document.createElement('div');
     el.className = 'blob';
     el.id = 'blob-' + b.id;
-    el.style.background = b.v;
     el.style.left = positions[b.id].x + '%';
     el.style.top = positions[b.id].y + '%';
-    el.textContent = b.name;
+    el.innerHTML = ColorShapes.paintBlobSVG({ seed: i + 21, color: b.v, size: BLOB_PX, label: b.name });
     el.addEventListener('pointerdown', (e) => startDrag(e, b.id));
     pad.appendChild(el);
   });
@@ -171,6 +191,53 @@ function moveDrag(e) {
   el.style.left = xPct + '%';
   el.style.top = yPct + '%';
   positions[dragState.id] = { x: xPct, y: yPct };
+  updateLiveBlend(dragState.id);
+}
+
+// Continuous, proportional preview — recomputed on every pointer move
+// while dragging, not just on release. Overlap fraction is estimated
+// from center-to-center distance vs. the two blobs' radii (a simple
+// approximation of true circle overlap, plenty for a kids' color toy).
+function updateLiveBlend(draggedId) {
+  const pad = document.getElementById('pad');
+  const padRect = pad.getBoundingClientRect();
+  const dRect = document.getElementById('blob-' + draggedId).getBoundingClientRect();
+  const dCenter = { x: dRect.left + dRect.width / 2, y: dRect.top + dRect.height / 2 };
+  const r = BLOB_PX / 2;
+
+  let best = null;
+  BLOBS.forEach(b => {
+    if (b.id === draggedId) return;
+    const oRect = document.getElementById('blob-' + b.id).getBoundingClientRect();
+    const oCenter = { x: oRect.left + oRect.width / 2, y: oRect.top + oRect.height / 2 };
+    const dist = Math.hypot(dCenter.x - oCenter.x, dCenter.y - oCenter.y);
+    const fraction = Math.max(0, Math.min(1, 1 - dist / (r * 2)));
+    if (fraction > 0.04 && (!best || fraction > best.fraction)) {
+      best = { otherId: b.id, fraction, dCenter, oCenter };
+    }
+  });
+
+  if (!best) {
+    activeOverlap = null;
+    if (liveBlendEl) { liveBlendEl.remove(); liveBlendEl = null; }
+    return;
+  }
+
+  activeOverlap = { otherId: best.otherId, fraction: best.fraction };
+  const midX = ((best.dCenter.x + best.oCenter.x) / 2) - padRect.left;
+  const midY = ((best.dCenter.y + best.oCenter.y) / 2) - padRect.top;
+  const blendColor = ColorShapes.lerpColor(colorFor(draggedId), colorFor(best.otherId), 0.5);
+  const size = Math.round(BLOB_PX * (0.5 + best.fraction * 0.9));
+
+  if (!liveBlendEl) {
+    liveBlendEl = document.createElement('div');
+    liveBlendEl.className = 'live-blend';
+    pad.appendChild(liveBlendEl);
+  }
+  liveBlendEl.style.left = midX + 'px';
+  liveBlendEl.style.top = midY + 'px';
+  liveBlendEl.style.opacity = String(0.35 + best.fraction * 0.55);
+  liveBlendEl.innerHTML = ColorShapes.paintBlobSVG({ seed: 99, color: blendColor, size: size });
 }
 
 function endDrag(e) {
@@ -183,35 +250,27 @@ function endDrag(e) {
   el.removeEventListener('pointercancel', endDrag);
   dragState = null;
 
-  checkCollision(id);
-}
+  if (liveBlendEl) { liveBlendEl.remove(); liveBlendEl = null; }
 
-function checkCollision(movedId) {
-  const pad = document.getElementById('pad');
-  const padRect = pad.getBoundingClientRect();
-  const movedEl = document.getElementById('blob-' + movedId);
-  const movedRect = movedEl.getBoundingClientRect();
-  const mCenter = { x: movedRect.left + movedRect.width / 2, y: movedRect.top + movedRect.height / 2 };
-
-  for (const b of BLOBS) {
-    if (b.id === movedId) continue;
-    const otherEl = document.getElementById('blob-' + b.id);
-    const oRect = otherEl.getBoundingClientRect();
-    const oCenter = { x: oRect.left + oRect.width / 2, y: oRect.top + oRect.height / 2 };
-    const dist = Math.hypot(mCenter.x - oCenter.x, mCenter.y - oCenter.y);
-    if (dist < 66) {
-      triggerMix(movedId, b.id, padRect, mCenter, oCenter);
-      return;
-    }
+  if (activeOverlap && activeOverlap.fraction >= LOCK_THRESHOLD) {
+    lockInMix(id, activeOverlap.otherId);
   }
+  activeOverlap = null;
 }
 
-function triggerMix(idA, idB, padRect, centerA, centerB) {
+// Called once two blobs have been dragged deep enough into each other
+// (LOCK_THRESHOLD) to count as a real mix — plays the celebratory
+// splash + name, records the discovery, sends both blobs home.
+function lockInMix(idA, idB) {
   const combo = comboFor(idA, idB);
   if (!combo) return;
 
-  const midX = ((centerA.x + centerB.x) / 2) - padRect.left;
-  const midY = ((centerA.y + centerB.y) / 2) - padRect.top;
+  const pad = document.getElementById('pad');
+  const padRect = pad.getBoundingClientRect();
+  const rectA = document.getElementById('blob-' + idA).getBoundingClientRect();
+  const rectB = document.getElementById('blob-' + idB).getBoundingClientRect();
+  const midX = ((rectA.left + rectA.width / 2 + rectB.left + rectB.width / 2) / 2) - padRect.left;
+  const midY = ((rectA.top + rectA.height / 2 + rectB.top + rectB.height / 2) / 2) - padRect.top;
 
   const splash = document.createElement('div');
   splash.className = 'mix-splash';
@@ -220,14 +279,15 @@ function triggerMix(idA, idB, padRect, centerA, centerB) {
   splash.style.width = '100px';
   splash.style.height = '100px';
   splash.style.background = combo.v;
-  document.getElementById('pad').appendChild(splash);
+  splash.style.borderRadius = '50%';
+  pad.appendChild(splash);
 
   const label = document.createElement('div');
   label.className = 'mix-label';
   label.style.left = midX + 'px';
   label.style.top = midY + 'px';
   label.textContent = '= ' + combo.name + '!';
-  document.getElementById('pad').appendChild(label);
+  pad.appendChild(label);
 
   setTimeout(() => { splash.remove(); label.remove(); }, 1650);
 
@@ -280,9 +340,11 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
+  ColorShapes.injectDefs();
   ColorState.markVisited(STEP_N);
   renderBlobs();
   renderDiscoveries();
+  ColorVoice.init(STEP_N, 'Drag two colors together and watch them mix!');
 }
 
 init();

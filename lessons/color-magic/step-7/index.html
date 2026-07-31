@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Step 7 · Get Ready · Color Magic</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/color-style.css">
 
 <script src="../../../core/auth.js"></script>
 <script src="../../../core/access.js"></script>
 <script src="../shared/color-state.js"></script>
+<script src="../shared/color-voice.js"></script>
 
 <style>
   .hero-q { text-align: center; padding: 8px 10px 4px; }
@@ -17,27 +18,46 @@
   .hero-q h1 { font-size: 22px; font-weight: 900; margin: 0; line-height: 1.3; }
   .hero-q p { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 0; }
 
+  /* Wooden table the tools sit scattered on. */
+  .table-wrap {
+    position: relative; margin-top: 20px; padding: 26px 14px 20px;
+    border-radius: 24px; overflow: hidden;
+    background-color: #a8825a;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(90,60,30,0.12) 0px, rgba(90,60,30,0.12) 2px, transparent 2px, transparent 22px),
+      linear-gradient(180deg, #b8926a 0%, #93704a 100%);
+    box-shadow: inset 0 0 30px rgba(43,26,10,0.35), 0 8px 22px rgba(43,36,64,0.18);
+  }
+
   .materials-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-    margin-top: 20px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 10px;
   }
   .mat-card {
-    background: #fff; border-radius: 20px; padding: 16px 8px;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    box-shadow: 0 5px 14px rgba(43,36,64,0.1);
+    background: #fffaf0; border-radius: 16px; padding: 14px 6px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    box-shadow: 2px 4px 10px rgba(43,26,10,0.3);
     cursor: pointer; -webkit-tap-highlight-color: transparent;
     transition: transform .15s ease, opacity .3s ease;
+    border: 2px solid #3a2818;
   }
-  .mat-card:active { transform: scale(0.94); }
-  .mat-card.packed { opacity: 0.4; }
-  .mat-emoji { font-size: 30px; }
-  .mat-label { font-size: 10.5px; font-weight: 800; text-align: center; color: var(--ink); }
+  .mat-card:active { transform: scale(0.94) rotate(0deg) !important; }
+  .mat-card.packed { opacity: 0.35; }
+  .mat-emoji { font-size: 28px; }
+  .mat-label { font-size: 11px; font-weight: 700; text-align: center; color: var(--ink); }
   .mat-alt { font-size: 8.5px; color: var(--ink-muted); text-align: center; font-style: italic; }
 
-  .art-box-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 30px; }
+  /* Scattered tilt, like tools dropped on a table — not a rigid grid. */
+  .mat-card.mt1 { transform: rotate(-6deg) translateY(2px); }
+  .mat-card.mt2 { transform: rotate(4deg) translateY(-4px); }
+  .mat-card.mt3 { transform: rotate(-3deg) translateY(4px); }
+  .mat-card.mt4 { transform: rotate(5deg) translateY(0); }
+  .mat-card.mt5 { transform: rotate(-5deg) translateY(-2px); }
+  .mat-card.mt6 { transform: rotate(3deg) translateY(3px); }
+
+  .art-box-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 26px; }
   .art-box { font-size: 52px; position: relative; animation: boxBob 2.4s ease-in-out infinite; }
   @keyframes boxBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-  .art-box-label { font-size: 11px; font-weight: 800; color: var(--ink-muted); margin-top: 4px; }
+  .art-box-label { font-size: 13px; font-weight: 700; color: var(--ink-muted); margin-top: 4px; }
 
   .flyer { position: fixed; font-size: 26px; pointer-events: none; z-index: 50; transition: left .6s cubic-bezier(.4,0,.2,1), top .6s cubic-bezier(.4,0,.2,1), transform .6s ease, opacity .6s ease; }
 
@@ -45,6 +65,17 @@
 </style>
 </head>
 <body>
+
+<!-- Hand-drawn wobble filter for the material cards (same feTurbulence
+     technique as lessons/my-magical-city's #rough filter). -->
+<svg class="defs" style="position:absolute;width:0;height:0;">
+  <defs>
+    <filter id="roughEdge">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5"/>
+    </filter>
+  </defs>
+</svg>
 
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
@@ -58,7 +89,9 @@
     <h1>Tap each thing to pack it 🧰</h1>
   </div>
 
-  <div class="materials-grid" id="matGrid"></div>
+  <div class="table-wrap">
+    <div class="materials-grid" id="matGrid"></div>
+  </div>
 
   <div class="art-box-wrap">
     <div class="art-box" id="artBox">🧰</div>
@@ -86,8 +119,8 @@ let packed = new Set();
 
 function renderMaterials() {
   const grid = document.getElementById('matGrid');
-  grid.innerHTML = MATERIALS.map(m => `
-    <div class="mat-card" id="mat-${m.id}" onclick="packMaterial('${m.id}')">
+  grid.innerHTML = MATERIALS.map((m, i) => `
+    <div class="mat-card rough-edge mt${(i % 6) + 1}" id="mat-${m.id}" onclick="packMaterial('${m.id}')">
       <div class="mat-emoji">${m.emoji}</div>
       <div class="mat-label">${m.label}</div>
       ${m.alt ? `<div class="mat-alt">${m.alt}</div>` : ''}
@@ -151,6 +184,7 @@ async function init() {
   }
   ColorState.markVisited(STEP_N);
   renderMaterials();
+  ColorVoice.init(STEP_N, 'Tap each tool to pack it into your art box!');
 }
 
 init();

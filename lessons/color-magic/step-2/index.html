@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Step 2 · Color Detective · Color Magic</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/color-style.css">
 
 <script src="../../../core/auth.js"></script>
 <script src="../../../core/access.js"></script>
 <script src="../shared/color-state.js"></script>
+<script src="../shared/color-shapes.js"></script>
+<script src="../shared/color-voice.js"></script>
 
 <style>
   .hero-q {
@@ -28,18 +30,17 @@
     padding: 34px 10px; margin-top: 10px;
   }
   .bubble {
-    width: 68px; height: 68px; border-radius: 50%;
-    box-shadow: inset 0 -6px 10px rgba(0,0,0,0.15), 0 6px 14px rgba(43,36,64,0.2);
+    width: 68px; height: 68px;
     cursor: pointer; -webkit-tap-highlight-color: transparent;
-    transition: transform .18s ease, box-shadow .18s ease;
+    transition: transform .18s ease, filter .18s ease;
     animation: bob 3s ease-in-out infinite;
   }
   .bubble:active { transform: scale(0.92); }
-  .bubble.selected { transform: scale(1.15); box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--sel-ring, #2b2440), 0 8px 18px rgba(43,36,64,0.3); }
+  .bubble.selected { transform: scale(1.18); filter: drop-shadow(0 0 0 3px #fff) drop-shadow(0 0 6px var(--sel-ring, #2b2440)); }
   @keyframes bob { 0%,100% { margin-top: 0; } 50% { margin-top: -8px; } }
 
   .meet-stage { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
-  .flyer { position: fixed; width: 68px; height: 68px; border-radius: 50%; box-shadow: 0 6px 14px rgba(43,36,64,0.25); transition: top .55s cubic-bezier(.34,1.4,.64,1), left .55s cubic-bezier(.34,1.4,.64,1); }
+  .flyer { position: fixed; width: 68px; height: 68px; filter: drop-shadow(0 4px 8px rgba(43,36,64,0.3)); }
   .sparkle-burst {
     position: fixed; transform: translate(-50%,-50%);
     font-size: 30px; opacity: 0; pointer-events: none;
@@ -115,7 +116,8 @@ function renderBubbles() {
   const field = document.getElementById('bubbleField');
   field.innerHTML = COLORS.map((c, i) => {
     const delay = (i * 0.35).toFixed(2);
-    return `<div class="bubble" data-idx="${i}" style="background:${c.v}; animation-delay:${delay}s" onclick="tapBubble(${i})"></div>`;
+    const blob = ColorShapes.paintBlobSVG({ seed: i + 11, color: c.v, size: 68 });
+    return `<div class="bubble" data-idx="${i}" style="animation-delay:${delay}s" onclick="tapBubble(${i})">${blob}</div>`;
   }).join('');
 }
 
@@ -154,12 +156,12 @@ function playMeet(a, b) {
 
   const flyerA = document.createElement('div');
   flyerA.className = 'flyer';
-  flyerA.style.background = COLORS[a.idx].v;
+  flyerA.innerHTML = ColorShapes.paintBlobSVG({ seed: a.idx + 11, color: COLORS[a.idx].v, size: 68 });
   flyerA.style.left = rectA.left + 'px';
   flyerA.style.top = rectA.top + 'px';
   const flyerB = document.createElement('div');
   flyerB.className = 'flyer';
-  flyerB.style.background = COLORS[b.idx].v;
+  flyerB.innerHTML = ColorShapes.paintBlobSVG({ seed: b.idx + 11, color: COLORS[b.idx].v, size: 68 });
   flyerB.style.left = rectB.left + 'px';
   flyerB.style.top = rectB.top + 'px';
   stage.appendChild(flyerA);
@@ -226,8 +228,10 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
+  ColorShapes.injectDefs();
   ColorState.markVisited(STEP_N);
   renderBubbles();
+  ColorVoice.init(STEP_N, 'Tap any two color drops and see what happens!');
 }
 
 init();

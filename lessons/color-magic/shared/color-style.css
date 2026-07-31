@@ -28,7 +28,10 @@
 * { box-sizing: border-box; }
 html, body {
   margin: 0; padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  /* Body/labels/buttons/captions use the handwriting font; real
+     headers (.page-hero h1, .topbar-title, etc.) explicitly set
+     Montserrat below — this base covers everything else. */
+  font-family: 'Patrick Hand', cursive;
   background-color: var(--cream);
   background-image:
     radial-gradient(rgba(43,36,64,0.05) 1.4px, transparent 1.4px);
@@ -113,8 +116,8 @@ html, body {
 /* ── BUTTONS ─────────────────────────────────────────────────── */
 .btn {
   display: block; width: 100%; text-align: center; padding: 15px 18px;
-  border-radius: 18px; font-family: 'Montserrat', sans-serif; font-weight: 800;
-  font-size: 14px; cursor: pointer; border: none; text-decoration: none;
+  border-radius: 18px; font-family: 'Patrick Hand', cursive; font-weight: 700;
+  font-size: 16px; cursor: pointer; border: none; text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: transform .15s ease;
 }
@@ -212,3 +215,25 @@ html, body {
   font-family: 'Montserrat', sans-serif; font-size: 19px; font-weight: 800; margin: 0 0 8px;
 }
 .soon-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 20px; }
+
+/* ── VOICE-OVER CONTROLS (shared/color-voice.js builds this) ─── */
+#color-voice-controls {
+  position: fixed; right: 14px; bottom: 14px; z-index: 70;
+  display: flex; flex-direction: column; gap: 8px;
+}
+#color-voice-btn, #color-voice-mute {
+  width: 46px; height: 46px; border-radius: 50%; border: none;
+  background: #fff; box-shadow: 0 4px 14px rgba(43,36,64,0.28);
+  font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s ease;
+}
+#color-voice-btn:active, #color-voice-mute:active { transform: scale(0.9); }
+#color-voice-mute { width: 34px; height: 34px; font-size: 15px; align-self: flex-end; opacity: 0.85; }
+
+/* ── HAND-DRAWN ROUGH EDGE (same feTurbulence technique as
+   lessons/my-magical-city's #rough filter) — used by Step 7's
+   scattered material cards for a sketchy, non-vector-flat border. ── */
+.rough-edge { filter: url(#roughEdge); }
+

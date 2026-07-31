@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Step 10 · Gallery · Color Magic</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/color-style.css">
 
 <script src="../../../core/auth.js"></script>
 <script src="../../../core/access.js"></script>
 <script src="../shared/color-state.js"></script>
 <script src="../shared/color-storage.js"></script>
+<script src="../shared/color-voice.js"></script>
 
 <style>
   .hero-q { text-align: center; padding: 8px 10px 4px; }
@@ -46,7 +47,7 @@
   .reflect-label { font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
   .reflect-input {
     width: 100%; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--border);
-    font-family: 'Montserrat', sans-serif; font-size: 13.5px; color: var(--ink);
+    font-family: 'Patrick Hand', cursive; font-size: 16px; color: var(--ink);
     outline: none; transition: border-color .2s ease;
   }
   .reflect-input:focus { border-color: var(--c-teal); }
@@ -223,6 +224,7 @@ async function init() {
   loadReflections();
   await refreshFromStorage();
   ['r1','r2','r3'].forEach(id => document.getElementById(id).addEventListener('blur', saveReflections));
+  ColorVoice.init(STEP_N, 'Upload a photo of your artwork, then tell us about it!');
 }
 
 init();
