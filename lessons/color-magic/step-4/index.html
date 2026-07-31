@@ -12,6 +12,7 @@
 <script src="../shared/color-state.js"></script>
 <script src="../shared/color-shapes.js"></script>
 <script src="../shared/color-voice.js"></script>
+<script src="../../../core/tutorial-hand.js"></script>
 
 <style>
   .hero-q { text-align: center; padding: 8px 10px 4px; }
@@ -117,6 +118,7 @@ function renderPhaseA() {
 
   PHASE_A_CHIPS.forEach(c => spawnChip(c, field));
   updatePhaseLabel();
+  setupBucketHandDemo();
 }
 
 function renderPhaseB() {
@@ -147,6 +149,21 @@ function renderPhaseB() {
 
   PHASE_B_CHIPS.forEach(c => spawnChip(c, field));
   updatePhaseLabel();
+  setupBucketHandDemo();
+}
+
+// Guiding-hand demo (see core/tutorial-hand.js) — re-run for each phase
+// since phase B swaps in a whole new set of chips/buckets that the kid
+// hasn't seen yet, so it gets its own auto-play-once + replay button.
+function setupBucketHandDemo() {
+  document.querySelectorAll('.th-replay-btn').forEach(b => b.remove());
+  const fromEl = phase === 'A' ? document.getElementById('chip-yellow') : document.getElementById('chip-red');
+  const toEl = phase === 'A' ? document.getElementById('zone-basket') : document.getElementById('zone-warm');
+  if (!fromEl || !toEl) return;
+  TutorialHand.init({
+    key: phase === 'A' ? 'cm_step4_phaseA' : 'cm_step4_phaseB',
+    demo: { fromEl, toEl, hand: '👆' }
+  });
 }
 
 function spawnChip(c, field) {

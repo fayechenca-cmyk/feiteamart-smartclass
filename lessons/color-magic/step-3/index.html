@@ -12,6 +12,7 @@
 <script src="../shared/color-state.js"></script>
 <script src="../shared/color-shapes.js"></script>
 <script src="../shared/color-voice.js"></script>
+<script src="../../../core/tutorial-hand.js"></script>
 
 <style>
   .hero-q { text-align: center; padding: 8px 10px 4px; }
@@ -345,6 +346,10 @@ async function init() {
   renderBlobs();
   renderDiscoveries();
   ColorVoice.init(STEP_N, 'Drag two colors together and watch them mix!');
+  TutorialHand.init({
+    key: 'cm_step3_mix',
+    demo: { fromEl: document.getElementById('blob-yellow'), toEl: document.getElementById('blob-blue'), hand: '👆' }
+  });
 }
 
 init();

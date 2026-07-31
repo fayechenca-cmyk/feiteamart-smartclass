@@ -16,8 +16,8 @@
   "series": "Learn from Masters",
   "tags": ["Learn from Masters", "Painting", "Mixed Media", "Paul Klee", "Watercolor", "Crayon"],
   "ageRange": "6-8",
-  "materials": ["Watercolor", "Crayons", "Watercolor Paper", "Brush", "Water Cup", "Paper Towel"],
-  "stageCount": 10
+  "materials": ["Pencil", "Watercolor Paper", "Watercolor", "Brush", "Water", "Crayons (optional)"],
+  "stageCount": 13
 }
 </script>
 
@@ -109,6 +109,16 @@ svg.defs{position:absolute;width:0;height:0;}
 }
 .mapCard.done .check{transform:scale(1);}
 .mapCard.locked{opacity:.55;}
+
+/* Full-screen teacher video stages — no #rough filter on the video
+   itself (that SVG displacement filter would visibly warp a live video
+   feed every frame), just a plain border/shadow to match the rest of
+   the site's cards. */
+.videoWrap{margin:16px 0 6px;border:4px solid var(--charcoal);border-radius:14px;overflow:hidden;box-shadow:5px 6px 0 rgba(0,0,0,.18);}
+
+/* Page-level override for the shared guiding-hand replay button (see
+   core/tutorial-hand.js) so it matches this course's hand-drawn look. */
+#app .th-replay-btn{border:3px solid var(--charcoal);filter:url(#rough);}
 
 /* ---------- Generic building blocks ---------- */
 .bigPrompt{font-family:'Caveat',cursive;font-size:2.3rem;text-align:center;margin:18px 0 8px;font-weight:700;}
@@ -204,6 +214,8 @@ svg.defs{position:absolute;width:0;height:0;}
 }
 .matCard .emo{font-size:2.4rem;}
 .matCard.collected{opacity:.25;transform:scale(.85);pointer-events:none;}
+.matCard.optional{border-style:dashed;}
+.optionalLabel{text-align:center;font-family:'Caveat',cursive;font-size:1.4rem;opacity:.6;margin:14px 0 -6px;}
 #materialBox{
   margin:10px auto 0;width:280px;min-height:70px;border:3px dashed var(--charcoal);
   border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;
@@ -397,6 +409,8 @@ svg.defs{position:absolute;width:0;height:0;}
   <section class="screen" id="screen-3">
     <h2 class="bigPrompt">Ready to Create?</h2>
     <div class="matGrid" id="matGrid"></div>
+    <div class="optionalLabel">optional</div>
+    <div class="matGrid" id="matGridOptional"></div>
     <div id="materialBox"></div>
     <div id="readyMsg"></div>
     <div class="navFooter"><button class="paperBtn alt2" id="stage3next" style="display:none;" onclick="finishStage(3)">Ready!</button></div>
@@ -432,8 +446,16 @@ svg.defs{position:absolute;width:0;height:0;}
     <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(5)">✓ Done</button></div>
   </section>
 
-  <!-- ============ STAGE 6: CRAYON SECRETS ============ -->
+  <!-- ============ STAGE 6: VIDEO — DRAWING THE SHAPES ============ -->
   <section class="screen" id="screen-6">
+    <h2 class="bigPrompt">Drawing the Shapes</h2>
+    <div class="videoWrap" id="videoWrapA"></div>
+    <p class="subPrompt">Teacher draws the basic shapes that build the city.</p>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(6)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 7: CRAYON SECRETS ============ -->
+  <section class="screen" id="screen-7">
     <h2 class="bigPrompt">Hide Some Secrets</h2>
     <p class="subPrompt">Hide tiny things in your city.</p>
     <div class="secretGrid" id="secretGrid"></div>
@@ -448,11 +470,11 @@ svg.defs{position:absolute;width:0;height:0;}
         <div class="hand">strong wax line</div>
       </div>
     </div>
-    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(6)">Next ▶</button></div>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(7)">Next ▶</button></div>
   </section>
 
-  <!-- ============ STAGE 7: WATERCOLOR MAGIC ============ -->
-  <section class="screen" id="screen-7">
+  <!-- ============ STAGE 8: WATERCOLOR MAGIC ============ -->
+  <section class="screen" id="screen-8">
     <h2 class="bigPrompt">Watercolor Magic</h2>
     <p class="subPrompt">Paint over your crayons. Watch what happens!</p>
     <div class="paletteRow" id="moodRow"></div>
@@ -464,31 +486,47 @@ svg.defs{position:absolute;width:0;height:0;}
       <span class="hand">Painting with:</span><span class="activeColorDot" id="activeColorDot"></span>
       <button class="paperBtn small" onclick="clearPaint()">🧹 Clear</button>
     </div>
-    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(7)">Next ▶</button></div>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(8)">Next ▶</button></div>
   </section>
 
-  <!-- ============ STAGE 8: ADD TINY LIFE ============ -->
-  <section class="screen" id="screen-8">
+  <!-- ============ STAGE 9: VIDEO — APPLYING THE BASE ============ -->
+  <section class="screen" id="screen-9">
+    <h2 class="bigPrompt">Applying the Base</h2>
+    <div class="videoWrap" id="videoWrapB"></div>
+    <p class="subPrompt">Teacher paints a watercolor base wash, one tone throughout.</p>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(9)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 10: ADD TINY LIFE ============ -->
+  <section class="screen" id="screen-10">
     <h2 class="bigPrompt">Who Lives Here?</h2>
     <p class="subPrompt">Drag 2–5 friends into your city.</p>
     <div class="critterTray" id="critterTray"></div>
     <div id="critterCount">0 placed</div>
     <div class="rowCenter" style="margin-top:14px;"><button class="paperBtn" onclick="makeTiny()">Make them TINY!</button></div>
-    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(8)">Next ▶</button></div>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(10)">Next ▶</button></div>
   </section>
 
-  <!-- ============ STAGE 9: MAKE IT MAGICAL ============ -->
-  <section class="screen" id="screen-9">
+  <!-- ============ STAGE 11: MAKE IT MAGICAL ============ -->
+  <section class="screen" id="screen-11">
     <h2 class="bigPrompt">One Strange Thing...</h2>
     <p class="subPrompt">What makes YOUR city magical?</p>
     <div class="magicGrid" id="magicGrid"></div>
     <div class="rowCenter"><button class="paperBtn alt" onclick="ownIdea()">I HAVE MY OWN IDEA ✨</button></div>
     <div id="ownIdeaBox"><input id="ownIdeaInput" placeholder="My magic idea is..." maxlength="60"></div>
-    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(9)">Next ▶</button></div>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(11)">Next ▶</button></div>
   </section>
 
-  <!-- ============ STAGE 10: GALLERY ============ -->
-  <section class="screen" id="screen-10">
+  <!-- ============ STAGE 12: VIDEO — ADDING THE DETAILS ============ -->
+  <section class="screen" id="screen-12">
+    <h2 class="bigPrompt">Adding the Details</h2>
+    <div class="videoWrap" id="videoWrapC"></div>
+    <p class="subPrompt">Teacher adds tiny details to finish the piece.</p>
+    <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(12)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 13: GALLERY ============ -->
+  <section class="screen" id="screen-13">
     <h2 class="bigPrompt">Your Magical City</h2>
     <div class="frameWrap" id="frameWrap"><div class="placeholder">Your artwork<br>goes here 🖼</div></div>
     <div class="uploadRow">
@@ -525,6 +563,7 @@ svg.defs{position:absolute;width:0;height:0;}
 <!-- Art GPS access control (loaded before lesson script so FEIAccess is available) -->
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
+<script src="../../core/tutorial-hand.js"></script>
 
 <script>
 /* ============================================================
@@ -536,15 +575,45 @@ const STAGES = [
   {id:3, name:"Get Ready", color:"var(--teal)"},
   {id:4, name:"Build Your City", color:"var(--blue)"},
   {id:5, name:"Draw the City", color:"var(--pink)"},
-  {id:6, name:"Crayon Secrets", color:"var(--olive)"},
-  {id:7, name:"Watercolor Magic", color:"var(--terracotta)"},
-  {id:8, name:"Add Tiny Life", color:"var(--mustard)"},
-  {id:9, name:"Make It Magical", color:"var(--teal)"},
-  {id:10, name:"Gallery", color:"var(--blue)"}
+  {id:6, name:"🎥 Drawing the Shapes", color:"var(--olive)"},
+  {id:7, name:"Crayon Secrets", color:"var(--terracotta)"},
+  {id:8, name:"Watercolor Magic", color:"var(--mustard)"},
+  {id:9, name:"🎥 Applying the Base", color:"var(--teal)"},
+  {id:10, name:"Add Tiny Life", color:"var(--blue)"},
+  {id:11, name:"Make It Magical", color:"var(--pink)"},
+  {id:12, name:"🎥 Adding the Details", color:"var(--olive)"},
+  {id:13, name:"Gallery", color:"var(--terracotta)"}
 ];
 const PALETTE = ['#c0543a','#e0a63f','#3d7a72','#4a72a8','#d98aa0','#8a9a52'];
 const completed = new Set();
 let currentScreen = "map";
+
+/* Maps each stage id to its init function. Declared as a lookup (rather
+   than a chain of `if(n===N)` checks) so inserting/reordering stages
+   never requires touching a long if-chain — just this table and the
+   STAGES array above stay in sync. */
+const STAGE_INIT = {
+  1: () => initStageMeetKlee(),
+  2: () => initStageDetective(),
+  3: () => initStageGetReady(),
+  4: () => initStageBuild(),
+  5: () => initStageDraw(),
+  6: () => initStageVideoA(),
+  7: () => initStageCraySecrets(),
+  8: () => initStageWatercolor(),
+  9: () => initStageVideoB(),
+  10: () => initStageTinyLife(),
+  11: () => initStageMagical(),
+  12: () => initStageVideoC(),
+  13: () => initStageGallery()
+};
+
+/* Stages with an actual drag-to-place mechanic get a guiding-hand demo
+   (see setupHandDemo() below, core/tutorial-hand.js). */
+const HAND_DEMOS = {
+  4: { key:'mmc_build_city', from:'#shapeTray .shapeTok', to:'#cityCanvas', hand:'👆' },
+  10: { key:'mmc_tiny_life', from:'#critterTray .critterTok', to:'#paintCanvasWrap', hand:'👆' }
+};
 
 /* ============================================================
    NAVIGATION
@@ -578,30 +647,39 @@ function goStage(n){
   document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
   document.getElementById('screen-'+n).classList.add('active');
   document.getElementById('stageTitleBar').textContent = STAGES[n-1].name;
-  document.getElementById('stageCounter').textContent = 'Stage '+n+' of 10';
+  document.getElementById('stageCounter').textContent = 'Stage '+n+' of '+STAGES.length;
   window.scrollTo(0,0);
   initStage(n);
+  setupHandDemo(n);
 }
 
 function finishStage(n){
   completed.add(n);
-  if(n<10) goStage(n+1); else goMap();
+  if(n<STAGES.length) goStage(n+1); else goMap();
 }
 
 const initialized = new Set();
 function initStage(n){
   if(initialized.has(n)) return;
   initialized.add(n);
-  if(n===1) initStage1();
-  if(n===2) initStage2();
-  if(n===3) initStage3();
-  if(n===4) initStage4();
-  if(n===5) initStage5();
-  if(n===6) initStage6();
-  if(n===7) initStage7();
-  if(n===8) initStage8();
-  if(n===9) initStage9();
-  if(n===10) initStage10();
+  const fn = STAGE_INIT[n];
+  if(fn) fn();
+}
+
+/* ---------- Guiding-hand drag demo (see core/tutorial-hand.js) ----------
+   HAND_DEMOS is declared further down, next to STAGE_INIT. Re-run on
+   every goStage() (not just first visit) so the replay button always
+   exists for the active stage — stale buttons from other stages are
+   removed first since this is a single-page app and old .th-replay-btn
+   elements would otherwise linger across stage switches. */
+function setupHandDemo(n){
+  document.querySelectorAll('.th-replay-btn').forEach(b=>b.remove());
+  const cfg = HAND_DEMOS[n];
+  if(!cfg) return;
+  const fromEl = document.querySelector(cfg.from);
+  const toEl = document.querySelector(cfg.to);
+  if(!fromEl || !toEl) return;
+  TutorialHand.init({ key: cfg.key, demo: { fromEl, toEl, hand: cfg.hand } });
 }
 
 /* ============================================================
@@ -636,7 +714,7 @@ function mulberry32(a){
    STAGE 1: Meet Paul Klee
 ============================================================ */
 const KLEE_PORTRAIT_URL = "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ce9720a6-fc40-467e-b31e-48d1dc643c00/public";
-function initStage1(){
+function initStageMeetKlee(){
   document.getElementById('kleePortrait').innerHTML =
     `<img src="${KLEE_PORTRAIT_URL}" alt="Paul Klee portrait">`;
   const row = document.getElementById('thumbRow');
@@ -673,7 +751,7 @@ const detectiveSpots = [
   {tag:'door',     icon:'🚪', label:'Doors',     boxes:[[43,41,6,11],[20,49,6,11]]},
   {tag:'square',   icon:'🟨', label:'Squares',   boxes:[[1,1,98,98]]}
 ];
-function initStage2(){
+function initStageDetective(){
   const wrap = document.getElementById('klArtwork');
   let html = `<img src="${STAGE2_ART_URL}" alt="Klee-style city artwork">`;
   detectiveSpots.forEach(s=>{
@@ -722,24 +800,26 @@ function pickCityShapes(choice){
    STAGE 3: Get Ready
 ============================================================ */
 const materials = [
-  {k:'crayons', emo:'🖍', label:'Crayons'},
+  {k:'pencil', emo:'✏️', label:'Pencil'},
+  {k:'paper', emo:'📄', label:'Watercolor Paper'},
   {k:'watercolor', emo:'🎨', label:'Watercolor'},
-  {k:'paper', emo:'📄', label:'Paper'},
   {k:'brush', emo:'🖌', label:'Brush'},
-  {k:'water', emo:'💧', label:'Water'}
+  {k:'water', emo:'💧', label:'Water'},
+  {k:'crayons', emo:'🖍', label:'Crayons', optional:true}
 ];
 let collectedMats = new Set();
-function initStage3(){
+function initStageGetReady(){
   collectedMats = new Set();
   const grid = document.getElementById('matGrid');
-  grid.innerHTML='';
+  const gridOpt = document.getElementById('matGridOptional');
+  grid.innerHTML=''; gridOpt.innerHTML='';
   materials.forEach(m=>{
     const c = document.createElement('div');
-    c.className='matCard';
+    c.className='matCard'+(m.optional ? ' optional' : '');
     c.id='mat-'+m.k;
     c.innerHTML = `<div class="emo">${m.emo}</div><div>${m.label}</div>`;
     c.onclick=()=>collectMat(m);
-    grid.appendChild(c);
+    (m.optional ? gridOpt : grid).appendChild(c);
   });
   document.getElementById('materialBox').innerHTML='';
   document.getElementById('readyMsg').textContent='';
@@ -753,7 +833,9 @@ function collectMat(m){
   const span = document.createElement('span');
   span.textContent = m.emo;
   box.appendChild(span);
-  if(collectedMats.size===materials.length){
+  const requiredKeys = materials.filter(x=>!x.optional).map(x=>x.k);
+  const allRequiredCollected = requiredKeys.every(k=>collectedMats.has(k));
+  if(allRequiredCollected){
     document.getElementById('readyMsg').textContent = 'Ready!';
     document.getElementById('stage3next').style.display='inline-block';
   }
@@ -782,7 +864,7 @@ function shapeStyleFor(k){
     case 'tall': return {w:26,h:80,extra:''};
   }
 }
-function initStage4(){
+function initStageBuild(){
   const tray = document.getElementById('shapeTray');
   tray.innerHTML='';
   shapeDefs.forEach(s=>{
@@ -945,7 +1027,7 @@ function clearCity(){
 /* ============================================================
    STAGE 5: Draw the city (demo animation)
 ============================================================ */
-function initStage5(){
+function initStageDraw(){
   playDemo();
 }
 function playDemo(){
@@ -973,14 +1055,46 @@ function playDemo(){
 }
 
 /* ============================================================
-   STAGE 6: Crayon Secrets
+   STAGES 6, 9, 12: Teacher videos (full-screen, Cloudflare Stream)
+   Faye doesn't have the real embed codes yet — paste each one into
+   the matching VIDEO_*_SRC constant below and the placeholder card
+   is replaced automatically, no HTML edits needed.
+============================================================ */
+const VIDEO_A_SRC = ''; // TODO(Faye): paste "Drawing the Shapes" Cloudflare Stream iframe src here
+const VIDEO_B_SRC = ''; // TODO(Faye): paste "Applying the Base" Cloudflare Stream iframe src here
+const VIDEO_C_SRC = ''; // TODO(Faye): paste "Adding the Details" Cloudflare Stream iframe src here
+
+function renderVideoStage(wrapId, src){
+  const wrap = document.getElementById(wrapId);
+  if(src){
+    wrap.innerHTML = `<div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"></iframe>
+    </div>`;
+  } else {
+    wrap.innerHTML = `<div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,#3a2f28,#5a4632);">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--paper);text-align:center;">
+        <div style="font-size:2.6rem;">🎥</div>
+        <div class="hand" style="font-size:1.5rem;margin-top:6px;">Video coming soon!</div>
+      </div>
+    </div>`;
+  }
+}
+function initStageVideoA(){ renderVideoStage('videoWrapA', VIDEO_A_SRC); }
+function initStageVideoB(){ renderVideoStage('videoWrapB', VIDEO_B_SRC); }
+function initStageVideoC(){ renderVideoStage('videoWrapC', VIDEO_C_SRC); }
+
+/* ============================================================
+   STAGE 7: Crayon Secrets
 ============================================================ */
 const secrets = [
   {ic:'☀', l:'sun'},{ic:'🌙', l:'moon'},{ic:'✦', l:'stars'},{ic:'▦', l:'windows'},
   {ic:'🌳', l:'tree'},{ic:'🚪', l:'tiny door'},{ic:'〰', l:'lines'},{ic:'●', l:'dots'},
   {ic:'👀', l:'funny eyes'},{ic:'🐈', l:'tiny cat'}
 ];
-function initStage6(){
+function initStageCraySecrets(){
   const grid = document.getElementById('secretGrid');
   grid.innerHTML='';
   secrets.forEach((s,i)=>{
@@ -996,7 +1110,7 @@ function initStage6(){
 }
 
 /* ============================================================
-   STAGE 7: Watercolor Magic
+   STAGE 8: Watercolor Magic
 ============================================================ */
 const moods = [
   {k:'sunset', label:'🌅 SUNSET', colors:['#e0a63f','#e8895a','#f2c14e']},
@@ -1006,7 +1120,7 @@ const moods = [
 ];
 let activeColor = '#c0543a';
 let painting=false, lastX=0, lastY=0;
-function initStage7(){
+function initStageWatercolor(){
   const row = document.getElementById('moodRow');
   row.innerHTML='';
   moods.forEach(m=>{
@@ -1081,11 +1195,11 @@ function clearPaint(){
 }
 
 /* ============================================================
-   STAGE 8: Add Tiny Life
+   STAGE 10: Add Tiny Life
 ============================================================ */
 const critters = ['🚶','🐈','🐕','🐦','🌳','🚲','🌷'];
 let critterPlaced = 0;
-function initStage8(){
+function initStageTinyLife(){
   const tray = document.getElementById('critterTray');
   tray.innerHTML='';
   critters.forEach((ic,i)=>{
@@ -1154,13 +1268,13 @@ function makeTiny(){
 }
 
 /* ============================================================
-   STAGE 9: Make It Magical
+   STAGE 11: Make It Magical
 ============================================================ */
 const magicIdeas = [
   {ic:'🌙',l:'Two moons'},{ic:'🏠',l:'Upside-down house'},{ic:'🌳',l:'Blue tree'},{ic:'🚪',l:'Secret door'},
   {ic:'☀',l:'Square sun'},{ic:'🐈',l:'Giant cat'},{ic:'🌈',l:'Rainbow window'},{ic:'⭐',l:'Floating house'}
 ];
-function initStage9(){
+function initStageMagical(){
   const grid = document.getElementById('magicGrid');
   grid.innerHTML='';
   magicIdeas.forEach((m,i)=>{
@@ -1182,9 +1296,9 @@ function ownIdea(){
 }
 
 /* ============================================================
-   STAGE 10: Gallery
+   STAGE 13: Gallery
 ============================================================ */
-function initStage10(){
+function initStageGallery(){
   document.getElementById('celebrateWrap').classList.remove('show');
   document.getElementById('celebrateWrap').innerHTML='';
   document.getElementById('galleryDone').style.display='none';
