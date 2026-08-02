@@ -450,6 +450,10 @@ svg.defs{position:absolute;width:0;height:0;}
   <section class="screen" id="screen-6">
     <h2 class="bigPrompt">Drawing the Shapes</h2>
     <div class="videoWrap" id="videoWrapA"></div>
+    <p style="text-align: center; color: #6b6b6b; font-size: 0.95em; margin-top: 12px; padding: 0 16px; line-height: 1.5;">
+      这是 Dawn 老师自己的示范和想法，只是众多做法中的一种。你不需要照着一模一样地画——用你自己喜欢的方式去感受、去创作就好！<br>
+      <span style="font-style: italic;">This is just Ms. Dawn's own way of doing it — one idea among many. You don't need to copy it exactly. Follow your own feeling and make it yours!</span>
+    </p>
     <p class="subPrompt">Teacher draws the basic shapes that build the city.</p>
     <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(6)">Next ▶</button></div>
   </section>
@@ -493,6 +497,10 @@ svg.defs{position:absolute;width:0;height:0;}
   <section class="screen" id="screen-9">
     <h2 class="bigPrompt">Applying the Base</h2>
     <div class="videoWrap" id="videoWrapB"></div>
+    <p style="text-align: center; color: #6b6b6b; font-size: 0.95em; margin-top: 12px; padding: 0 16px; line-height: 1.5;">
+      这是 Dawn 老师自己的示范和想法，只是众多做法中的一种。你不需要照着一模一样地画——用你自己喜欢的方式去感受、去创作就好！<br>
+      <span style="font-style: italic;">This is just Ms. Dawn's own way of doing it — one idea among many. You don't need to copy it exactly. Follow your own feeling and make it yours!</span>
+    </p>
     <p class="subPrompt">Teacher paints a watercolor base wash, one tone throughout.</p>
     <div class="navFooter"><button class="paperBtn alt2" onclick="finishStage(9)">Next ▶</button></div>
   </section>
@@ -1060,8 +1068,8 @@ function playDemo(){
    the matching VIDEO_*_SRC constant below and the placeholder card
    is replaced automatically, no HTML edits needed.
 ============================================================ */
-const VIDEO_A_SRC = ''; // TODO(Faye): paste "Drawing the Shapes" Cloudflare Stream iframe src here
-const VIDEO_B_SRC = ''; // TODO(Faye): paste "Applying the Base" Cloudflare Stream iframe src here
+const VIDEO_A_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/f9f18d4c663ba2050d31601744da56e0/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Ff9f18d4c663ba2050d31601744da56e0%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'; // "Drawing the Shapes" / "Join the Shape"
+const VIDEO_B_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/0a6fcacaa6fa5795bf99252822db4ac4/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F0a6fcacaa6fa5795bf99252822db4ac4%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'; // "Applying the Base" / "Playing the Base"
 const VIDEO_C_SRC = ''; // TODO(Faye): paste "Adding the Details" Cloudflare Stream iframe src here
 
 function renderVideoStage(wrapId, src){
