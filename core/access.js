@@ -50,9 +50,11 @@
   }
 
   function _isLegacyAccessCode() {
-    // Returns true if there's a legacy access-code profile in localStorage AND no Supabase session.
+    // Returns true if there's a legacy access-code profile in sessionStorage AND no Supabase session.
+    // fei_user_profile lives in sessionStorage (see index.html saveProfile()) — this used to read
+    // localStorage, a leftover from before that migration, which meant it always returned false.
     try {
-      const raw = global.localStorage.getItem('fei_user_profile');
+      const raw = global.sessionStorage.getItem('fei_user_profile');
       if (!raw) return false;
       const p = JSON.parse(raw);
       return !!(p && p.studentCode && p.tier);
