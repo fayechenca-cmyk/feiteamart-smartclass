@@ -841,6 +841,14 @@
   .subtrack-arrow {
     color: var(--purple); font-size: 18px; font-weight: 700;
   }
+  .subtrack-hot-badge {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif; font-size: 9px;
+    font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;
+    background: linear-gradient(135deg, #ff7a59, #ff4d4d); color: #fff;
+    padding: 2px 7px; border-radius: 10px;
+    margin-left: 6px; vertical-align: middle;
+  }
   
   /* ═══ BACK BUTTON ═══ */
   .back-btn {
@@ -1585,14 +1593,39 @@
     <div class="subtrack-arrow">→</div>
   </a>
 
-  <a href="https://www.feiteamart.com/leathercraft-for-beginners" target="_blank" rel="noopener" class="subtrack">
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showMaterialArtsCourses();">
     <div class="subtrack-emoji">🧵</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Material Arts</div>
-      <div class="subtrack-meta">Leather Craft for Beginners</div>
+      <div class="subtrack-meta">Leather Craft &amp; more</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MATERIAL ARTS COURSES SCREEN — choose a material arts course
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="material-arts-courses-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">Material Arts</div>
+    <div class="section-sub">Choose a course to start or continue.</div>
+  </div>
+
+  <a href="https://www.feiteamart.com/leathercraft-for-beginners" target="_blank" rel="noopener" class="subtrack">
+    <div class="subtrack-emoji">🧵</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Leather Craft for Beginners <span class="subtrack-hot-badge">🔥 Best Seller</span></div>
+      <div class="subtrack-meta">Hands-on leather craft techniques</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+  <!-- Next up: Pop-up Books — add another .subtrack card here when ready -->
 
 </div>
 
@@ -1935,6 +1968,7 @@
     document.getElementById('skills-screen').style.display = 'none';
     document.getElementById('drawing-courses-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
+    document.getElementById('material-arts-courses-screen').style.display = 'none';
   }
   
   function showSignIn() {
@@ -1972,6 +2006,13 @@
     window.scrollTo(0, 0);
   }
   window.showDrawingCourses = showDrawingCourses;
+
+  function showMaterialArtsCourses() {
+    hideAllScreens();
+    document.getElementById('material-arts-courses-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showMaterialArtsCourses = showMaterialArtsCourses;
 
   function showDrawing() {
     hideAllScreens();
