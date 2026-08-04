@@ -90,20 +90,35 @@ svg.defs{position:absolute;width:0;height:0;}
    visibly warp a live video feed every frame. ---------- */
 .videoWrap{margin:16px 0 6px;border:4px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:5px 6px 0 rgba(74,33,56,.2);}
 
-/* ---------- Stage 1: intro clip (the "finished result" preview) ---------- */
+/* ---------- Stage 1: interactive jointed ballerina (the course's hook) ---------- */
 .introClipWrap{
-  width:220px;height:220px;margin:16px auto;border-radius:50%;
+  width:230px;height:320px;margin:16px auto;border-radius:24px;
   border:4px solid var(--ink);overflow:hidden;filter:url(#rough);
   box-shadow:4px 5px 0 rgba(74,33,56,.2);position:relative;
-  background:linear-gradient(135deg,var(--blush),var(--pink));
+  background:linear-gradient(160deg,var(--blush),var(--pink));
+  cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:pan-y;
 }
-.introClipWrap img,.introClipWrap video{width:100%;height:100%;object-fit:cover;display:block;}
-.introClipWrap .clip-placeholder{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;color:#fff;text-align:center;
+.introClipWrap svg{width:100%;height:100%;display:block;}
+
+/* Each limb is its own <g>, transform-origin'd at its joint (shoulder
+   for arms, hip for legs) — the same joints this course teaches kids
+   to cut in Stage 4. .db-piece gets a transition so JS-driven pose
+   changes (dance sequence) tween smoothly instead of snapping. */
+.db-piece{transition:transform .4s ease;}
+#dbBallerina{transform-origin:110px 170px;}
+#dbBallerina.turning{animation:dbTurn .65s ease;}
+@keyframes dbTurn{
+  0%{transform:scaleX(1);}
+  25%{transform:scaleX(0.15) scaleY(1.05);}
+  50%{transform:scaleX(-1);}
+  75%{transform:scaleX(0.15) scaleY(1.05);}
+  100%{transform:scaleX(1);}
 }
-.introClipWrap .clip-placeholder .ic-emoji{font-size:2.2rem;}
-.introClipWrap .clip-placeholder .ic-text{font-size:1.15rem;margin-top:4px;}
+/* Eyelids snap (no transition) — real blinks are fast, a smoothed
+   blink reads as sleepy rather than a quick blink. */
+.db-eyelid{transform:scaleY(0);}
+
+.danceBtnWrap{text-align:center;margin-top:8px;}
 
 /* subtle tulle/lace texture — a faint dot mesh, used sparingly */
 .tulle-dots{
@@ -169,7 +184,7 @@ svg.defs{position:absolute;width:0;height:0;}
 .navFooter{display:flex;justify-content:center;margin-top:26px;}
 
 @media (max-width:640px){
-  .introClipWrap{width:180px;height:180px;}
+  .introClipWrap{width:190px;height:264px;}
 }
 </style>
 </head>
@@ -198,8 +213,9 @@ svg.defs{position:absolute;width:0;height:0;}
     <p class="subPrompt">draw her, color her, then make her dance</p>
 
     <div class="introClipWrap" id="introClipWrap"></div>
+    <div class="danceBtnWrap"><button class="dbBtn gold small" onclick="danceSequence()">Dance! 🩰</button></div>
 
-    <div class="rowCenter" style="margin-top:18px;">
+    <div class="rowCenter" style="margin-top:14px;">
       <button class="dbBtn" onclick="finishStage(1)">Start <span class="sparkle">✨</span></button>
     </div>
   </section>
@@ -302,11 +318,6 @@ const Voice = FEIVoice.create({
 const VIDEO_DRAW_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/faac9e3b0462b9f06028ce72d664433a/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Ffaac9e3b0462b9f06028ce72d664433a%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600';
 const VIDEO_COLOR_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/0833e94274ea8c0325445dc210851fb7/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F0833e94274ea8c0325445dc210851fb7%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600';
 const VIDEO_ANIMATE_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/097d91702883c0ad3ce04f904d8eeeb7/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F097d91702883c0ad3ce04f904d8eeeb7%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600';
-// Stage 1's inspiration preview — a still photo, short GIF, or muted looping
-// video of the finished "moving ballerina" result. Accepts any of the three;
-// detected below by file extension.
-const INTRO_CLIP_SRC = ''; // TODO(Faye): paste a photo/GIF/video URL of the finished result here
-
 function renderVideoStage(wrapId, src, title){
   const wrap = document.getElementById(wrapId);
   if(src){
@@ -326,18 +337,158 @@ function renderVideoStage(wrapId, src, title){
   }
 }
 
-function renderIntroClip(){
+/* ============================================================
+   STAGE 1: interactive jointed ballerina — the course's visual hook.
+   Built from Faye's own finished paper-ballerina craft (photo
+   reference): deep magenta bodice with teal scalloped trim, two-tier
+   pink tutu with a teal ruffle band and tiny green hearts near the
+   hem, purple ballet flats with crisscross straps, auburn hair in a
+   bun with white ribbon bows.
+
+   Constructed as separate <g> pieces — head+torso, each arm, each
+   leg — each transform-origin'd at its joint (shoulder for arms, hip
+   for legs), the same joints this course teaches kids to cut apart
+   in Stage 4. That's what makes blinking / turning / dancing
+   possible, and it quietly previews the "jointed pieces" technique
+   before the student ever gets there.
+============================================================ */
+const BALLERINA_SVG = `
+<svg viewBox="0 0 220 310" id="dbSvg">
+  <ellipse cx="110" cy="300" rx="42" ry="6" fill="#4a2138" opacity="0.15"/>
+  <g id="dbBallerina">
+    <g class="db-piece" id="dbLegL" style="transform-origin:98px 213px;">
+      <path d="M90 213 L88 285 L106 285 L104 213 Z" fill="#fbeee6" stroke="#4a2138" stroke-width="1.6"/>
+      <path d="M84 285 Q84 277 98 277 Q112 277 111 287 Q109 296 96 296 Q83 296 84 285 Z" fill="#7a3a8a" stroke="#4a2138" stroke-width="1.6"/>
+      <path d="M86 282 L106 290 M106 282 L86 290" stroke="#fbeee6" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+    <g class="db-piece" id="dbLegR" style="transform-origin:122px 213px;">
+      <path d="M130 213 L132 285 L114 285 L116 213 Z" fill="#fbeee6" stroke="#4a2138" stroke-width="1.6"/>
+      <path d="M136 285 Q136 277 122 277 Q108 277 109 287 Q111 296 124 296 Q137 296 136 285 Z" fill="#7a3a8a" stroke="#4a2138" stroke-width="1.6"/>
+      <path d="M134 282 L114 290 M114 282 L134 290" stroke="#fbeee6" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+    <g class="db-piece" id="dbArmL" style="transform-origin:80px 93px;">
+      <path d="M80 92 Q60 96 46 118 Q38 132 36 148 Q34 152 40 152 Q46 152 47 146 Q54 128 66 112 Q76 100 86 96 Z" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.6"/>
+      <circle cx="38" cy="149" r="7" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.4"/>
+    </g>
+    <g class="db-piece" id="dbArmR" style="transform-origin:140px 93px;">
+      <path d="M140 92 Q160 96 174 118 Q182 132 184 148 Q186 152 180 152 Q174 152 173 146 Q166 128 154 112 Q144 100 134 96 Z" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.6"/>
+      <circle cx="182" cy="149" r="7" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.4"/>
+    </g>
+    <g id="dbTorso">
+      <path d="M80 90 Q110 82 140 90 L132 140 Q110 146 88 140 Z" fill="#6e1f4a" stroke="#4a2138" stroke-width="1.8"/>
+      <path d="M80 90 Q86 84 92 90 Q98 84 104 90 Q110 84 116 90 Q122 84 128 90 Q134 84 140 90" fill="none" stroke="#2f7d78" stroke-width="3" stroke-linecap="round"/>
+      <path d="M88 140 Q110 148 132 140 L145 172 Q110 182 75 172 Z" fill="#ef8fae" stroke="#4a2138" stroke-width="1.8"/>
+      <path d="M75 173 Q85 166 95 173 Q105 166 115 173 Q125 166 135 173 Q145 166 150 172" fill="none" stroke="#2f7d78" stroke-width="4" stroke-linecap="round"/>
+      <path d="M75 174 Q110 184 150 174 L165 213 Q110 228 60 213 Z" fill="#c23a6b" stroke="#4a2138" stroke-width="1.8"/>
+      <path d="M73 207 C73 205.5 74.5 204.5 76 205.5 C77.5 204.5 79 205.5 79 207 C79 209 76 211.5 76 211.5 C76 211.5 73 209 73 207 Z" fill="#5a9e4a"/>
+      <path d="M95 214 C95 212.5 96.5 211.5 98 212.5 C99.5 211.5 101 212.5 101 214 C101 216 98 218.5 98 218.5 C98 218.5 95 216 95 214 Z" fill="#5a9e4a"/>
+      <path d="M119 214 C119 212.5 120.5 211.5 122 212.5 C123.5 211.5 125 212.5 125 214 C125 216 122 218.5 122 218.5 C122 218.5 119 216 119 214 Z" fill="#5a9e4a"/>
+      <path d="M143 207 C143 205.5 144.5 204.5 146 205.5 C147.5 204.5 149 205.5 149 207 C149 209 146 211.5 146 211.5 C146 211.5 143 209 143 207 Z" fill="#5a9e4a"/>
+      <rect x="103" y="82" width="14" height="10" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.5"/>
+      <path d="M80 45 Q80 18 110 16 Q140 18 140 45 Q140 30 110 28 Q80 30 80 45 Z" fill="#7a4530" stroke="#4a2138" stroke-width="1.5"/>
+      <circle cx="110" cy="18" r="13" fill="#7a4530" stroke="#4a2138" stroke-width="1.5"/>
+      <circle cx="110" cy="55" r="30" fill="#f3d6ba" stroke="#4a2138" stroke-width="1.8"/>
+      <g fill="#ffffff" stroke="#4a2138" stroke-width="1.2">
+        <path d="M78 42 Q70 38 72 46 Q70 52 78 48 Q82 45 78 42 Z"/>
+        <circle cx="78" cy="45" r="2"/>
+        <path d="M142 42 Q150 38 148 46 Q150 52 142 48 Q138 45 142 42 Z"/>
+        <circle cx="142" cy="45" r="2"/>
+      </g>
+      <ellipse cx="93" cy="63" rx="6" ry="4" fill="#ff8fab" opacity="0.35"/>
+      <ellipse cx="127" cy="63" rx="6" ry="4" fill="#ff8fab" opacity="0.35"/>
+      <path d="M96 50 Q101 47 106 50" stroke="#5a3420" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M114 50 Q119 47 124 50" stroke="#5a3420" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="101" cy="57" rx="4" ry="5" fill="#6fa06f" stroke="#4a2138" stroke-width="1"/>
+      <ellipse cx="119" cy="57" rx="4" ry="5" fill="#6fa06f" stroke="#4a2138" stroke-width="1"/>
+      <ellipse class="db-eyelid" id="dbLidL" cx="101" cy="57" rx="4.5" ry="5.5" fill="#f3d6ba" style="transform-origin:101px 57px;"/>
+      <ellipse class="db-eyelid" id="dbLidR" cx="119" cy="57" rx="4.5" ry="5.5" fill="#f3d6ba" style="transform-origin:119px 57px;"/>
+      <path d="M110 58 L108 63" stroke="#c9a37e" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M102 68 Q110 74 118 68" stroke="#c23a56" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>`;
+
+function renderBallerina(){
   const wrap = document.getElementById('introClipWrap');
-  if (INTRO_CLIP_SRC && /\.(mp4|webm|mov)(\?.*)?$/i.test(INTRO_CLIP_SRC)) {
-    wrap.innerHTML = `<video src="${INTRO_CLIP_SRC}" autoplay loop muted playsinline></video>`;
-  } else if (INTRO_CLIP_SRC) {
-    wrap.innerHTML = `<img src="${INTRO_CLIP_SRC}" alt="A finished dancing ballerina">`;
-  } else {
-    wrap.innerHTML = `<div class="clip-placeholder">
-      <div class="ic-emoji">🩰</div>
-      <div class="ic-text">demo<br>coming soon!</div>
-    </div>`;
+  wrap.innerHTML = BALLERINA_SVG;
+  wireBallerinaInteractions();
+  scheduleBlink();
+}
+
+// Blinks every 3-5s with randomness (setTimeout re-rolled each time,
+// not a fixed CSS loop) so the two courses' worth of students staring
+// at this over time won't notice a repeating pattern.
+function scheduleBlink(){
+  const delay = 3000 + Math.random() * 2000;
+  setTimeout(() => {
+    const lidL = document.getElementById('dbLidL');
+    const lidR = document.getElementById('dbLidR');
+    if (lidL && lidR) {
+      lidL.style.transform = 'scaleY(1)';
+      lidR.style.transform = 'scaleY(1)';
+      setTimeout(() => {
+        lidL.style.transform = 'scaleY(0)';
+        lidR.style.transform = 'scaleY(0)';
+      }, 130);
+    }
+    scheduleBlink();
+  }, delay);
+}
+
+// Horizontal drag = turn around; a plain tap = dance (also reachable
+// via the "Dance!" button below, per the brief's two named triggers).
+function wireBallerinaInteractions(){
+  const svgWrap = document.getElementById('introClipWrap');
+  let dragStartX = null;
+  svgWrap.addEventListener('pointerdown', (e) => { dragStartX = e.clientX; });
+  svgWrap.addEventListener('pointerup', (e) => {
+    if (dragStartX == null) return;
+    const dx = e.clientX - dragStartX;
+    dragStartX = null;
+    if (Math.abs(dx) > 24) turnAround();
+    else danceSequence();
+  });
+}
+
+function turnAround(){
+  const el = document.getElementById('dbBallerina');
+  if (!el || el.classList.contains('turning')) return;
+  el.classList.add('turning');
+  setTimeout(() => el.classList.remove('turning'), 650);
+}
+
+const REST_POSE = { armL: 0, armR: 0, legL: 0, legR: 0 };
+const DANCE_POSES = [
+  { armL: -55, armR: 55, legL: 0, legR: 0 },
+  { armL: -55, armR: 55, legL: -22, legR: 0 },
+  { armL: 0, armR: 0, legL: 0, legR: 0, spin: true },
+  REST_POSE
+];
+
+function applyPose(p){
+  const armL = document.getElementById('dbArmL');
+  const armR = document.getElementById('dbArmR');
+  const legL = document.getElementById('dbLegL');
+  const legR = document.getElementById('dbLegR');
+  if (armL) armL.style.transform = 'rotate(' + p.armL + 'deg)';
+  if (armR) armR.style.transform = 'rotate(' + p.armR + 'deg)';
+  if (legL) legL.style.transform = 'rotate(' + p.legL + 'deg)';
+  if (legR) legR.style.transform = 'rotate(' + p.legR + 'deg)';
+  if (p.spin) turnAround();
+}
+
+let dancing = false;
+function danceSequence(){
+  if (dancing) return;
+  dancing = true;
+  let i = 0;
+  function step(){
+    if (i >= DANCE_POSES.length) { dancing = false; return; }
+    applyPose(DANCE_POSES[i]);
+    i++;
+    setTimeout(step, 550);
   }
+  step();
 }
 
 /* ============================================================
@@ -400,7 +551,7 @@ function initStage(n){
 }
 
 function initStageWelcome(){
-  renderIntroClip();
+  renderBallerina();
   Voice.init(1, VOICE_LINES[1]);
 }
 function initStageDraw(){
