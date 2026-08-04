@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Dancing Ballerina — Draw, Color &amp; Animate</title>
+<meta name="description" content="A character-drawing + stop-motion animation Creation lesson: draw a ballerina, color her in, cut her into jointed pieces, then photograph poses to make her dance.">
+<meta name="keywords" content="Creation, Character, Sketch Board, Character Design, Stop-Motion, Animation Basics, Paper Doll, Drawing, Coloring">
+
+<!-- ===== LESSON METADATA (used for site search / tag / category indexing) ===== -->
+<script type="application/json" id="lessonMeta">
+{
+  "title": "Dancing Ballerina",
+  "subtitle": "Draw, Color & Animate Your Own Ballerina",
+  "path": ["Creation", "Character · The Sketch Board", "Dancing Ballerina"],
+  "series": "Character",
+  "tags": ["Character Design", "Stop-Motion", "Animation Basics", "Paper Doll", "Drawing", "Coloring"],
+  "ageRange": "6-8",
+  "materials": ["Paper", "Pencil", "Coloring Materials", "Scissors", "Brass Fasteners", "Camera or Phone"],
+  "stageCount": 5
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fff6f8;
+  --ink:#4a2138;
+  --pink:#ff8fab;
+  --pink-deep:#e85d8a;
+  --blush:#ffd6e2;
+  --gold:#e8b64a;
+  --cream:#fff0f4;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:'Patrick Hand',cursive;
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+h1,h2,h3,.hand{font-family:'Caveat',cursive;}
+button{font-family:'Patrick Hand',cursive;}
+
+svg.defs{position:absolute;width:0;height:0;}
+
+#app{position:relative;min-height:100vh;padding-bottom:40px;}
+
+/* ---------- Top bar ---------- */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--paper) 80%, transparent);
+}
+.back-link{font-family:'Patrick Hand',cursive;font-size:1.05rem;color:var(--pink-deep);text-decoration:none;font-weight:700;}
+#stageTitleBar{font-family:'Caveat',cursive;font-size:2rem;font-weight:700;}
+#stageCounter{font-size:1.05rem;opacity:.7;}
+
+/* ---------- Screens ---------- */
+.screen{display:none;padding:10px 20px 60px;max-width:720px;margin:0 auto;animation:fadeIn .35s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.bigPrompt{font-family:'Caveat',cursive;font-size:2.3rem;text-align:center;margin:14px 0 6px;font-weight:700;}
+.subPrompt{text-align:center;font-size:1.2rem;opacity:.75;margin:0 0 16px;}
+.rowCenter{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.sparkle{color:var(--gold);}
+
+.dbBtn{
+  background:var(--pink);color:#fff;border:3px solid var(--ink);
+  padding:12px 26px;font-size:1.3rem;font-weight:700;cursor:pointer;
+  border-radius:225px 15px 225px 15px/15px 225px 15px 225px;
+  box-shadow:4px 4px 0 var(--ink);transition:transform .12s ease;
+}
+.dbBtn:hover{transform:translateY(-2px);}
+.dbBtn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink);}
+.dbBtn.gold{background:var(--gold);color:var(--ink);}
+.dbBtn.small{padding:8px 16px;font-size:1.05rem;}
+.dbBtn:disabled{opacity:.4;cursor:not-allowed;}
+
+.card{background:var(--cream);border:3px solid var(--ink);filter:url(#rough);box-shadow:3px 4px 0 rgba(74,33,56,.15);padding:16px;border-radius:18px;}
+
+/* ---------- Teacher-video stages (2, 3, 4) — full width, no #rough
+   filter on the video itself: that SVG displacement filter would
+   visibly warp a live video feed every frame. ---------- */
+.videoWrap{margin:16px 0 6px;border:4px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:5px 6px 0 rgba(74,33,56,.2);}
+
+/* ---------- Stage 1: intro clip (the "finished result" preview) ---------- */
+.introClipWrap{
+  width:220px;height:220px;margin:16px auto;border-radius:50%;
+  border:4px solid var(--ink);overflow:hidden;filter:url(#rough);
+  box-shadow:4px 5px 0 rgba(74,33,56,.2);position:relative;
+  background:linear-gradient(135deg,var(--blush),var(--pink));
+}
+.introClipWrap img,.introClipWrap video{width:100%;height:100%;object-fit:cover;display:block;}
+.introClipWrap .clip-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;color:#fff;text-align:center;
+}
+.introClipWrap .clip-placeholder .ic-emoji{font-size:2.2rem;}
+.introClipWrap .clip-placeholder .ic-text{font-size:1.15rem;margin-top:4px;}
+
+/* subtle tulle/lace texture — a faint dot mesh, used sparingly */
+.tulle-dots{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(255,255,255,.55) 1.4px, transparent 1.6px);
+  background-size:13px 13px;opacity:.5;
+}
+
+/* ---------- Stage 4: pose flipbook (optional delight) ---------- */
+.flipbook{width:150px;height:190px;margin:16px auto 4px;position:relative;}
+.flipbook svg{width:100%;height:100%;display:block;transition:opacity .12s ease;}
+.flipTapWrap{text-align:center;margin-top:6px;}
+.flipCounter{text-align:center;font-size:1rem;opacity:.65;margin-top:2px;}
+
+/* ---------- Stage 5: Gallery ---------- */
+.upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:14px;}
+.upload-slot{
+  position:relative;width:200px;height:200px;border-radius:22px;
+  border:3px solid var(--pink-deep);background:rgba(255,143,171,.08);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent;
+}
+.upload-slot.saving{border-color:var(--gold);background:rgba(232,182,74,.12);}
+.upload-slot img,.upload-slot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:36px;color:var(--pink-deep);line-height:1;}
+.upload-slot .slot-label{font-size:12px;font-weight:800;color:var(--ink);opacity:.65;margin-top:6px;}
+.upload-slot .slot-replace{
+  position:absolute;bottom:0;left:0;right:0;background:rgba(74,33,56,.62);
+  color:#fff;font-size:11px;font-weight:800;text-align:center;padding:6px 0;
+}
+
+.reflect-card{margin-top:18px;}
+.reflect-row{margin-bottom:12px;}
+.reflect-row:last-child{margin-bottom:0;}
+.reflect-label{font-family:'Caveat',cursive;font-size:1.4rem;margin-bottom:4px;}
+.reflect-input{
+  width:100%;font-family:'Patrick Hand',cursive;font-size:1.2rem;
+  padding:10px 12px;border:2px solid var(--ink);border-radius:12px;
+  outline:none;transition:border-color .2s ease;
+}
+.reflect-input:focus{border-color:var(--pink-deep);}
+
+.celebrate{
+  display:none;text-align:center;margin-top:20px;
+  background:linear-gradient(135deg,var(--pink),var(--gold));
+  border-radius:22px;padding:24px 18px;color:#fff;
+}
+.celebrate.show{display:block;}
+.celebrate .cel-emoji{font-size:42px;margin-bottom:8px;}
+.celebrate h2{margin:0 0 6px;font-size:1.8rem;}
+.celebrate p{margin:0 0 14px;font-size:1rem;opacity:.92;}
+
+/* ---------- Voice control (see core/voice.js) ---------- */
+.fv-controls{position:fixed;right:14px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:400;}
+.fv-btn{
+  width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);
+  background:#fff;box-shadow:2px 3px 6px rgba(74,33,56,.25);
+  font-size:1.2rem;cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.fv-btn:active{transform:scale(.92);}
+.fv-mute{width:34px;height:34px;font-size:1rem;align-self:flex-end;}
+
+.navFooter{display:flex;justify-content:center;margin-top:26px;}
+
+@media (max-width:640px){
+  .introClipWrap{width:180px;height:180px;}
+}
+</style>
+</head>
+<body>
+
+<svg class="defs">
+  <defs>
+    <filter id="rough">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="11" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6"/>
+    </filter>
+  </defs>
+</svg>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <div id="stageTitleBar"></div>
+    <div id="stageCounter"></div>
+  </div>
+
+  <!-- ============ STAGE 1: WELCOME ============ -->
+  <section class="screen active" id="screen-1">
+    <div class="hand" style="text-align:center;font-size:1.1rem;opacity:.6;">CREATION · CHARACTER · THE SKETCH BOARD</div>
+    <h1 class="bigPrompt">Dancing Ballerina <span class="sparkle">✨</span></h1>
+    <p class="subPrompt">draw her, color her, then make her dance</p>
+
+    <div class="introClipWrap" id="introClipWrap"></div>
+
+    <div class="rowCenter" style="margin-top:18px;">
+      <button class="dbBtn" onclick="finishStage(1)">Start <span class="sparkle">✨</span></button>
+    </div>
+  </section>
+
+  <!-- ============ STAGE 2: DRAW YOUR BALLERINA ============ -->
+  <section class="screen" id="screen-2">
+    <h2 class="bigPrompt">Draw Your Ballerina</h2>
+    <div class="videoWrap" id="videoWrapDraw"></div>
+    <p class="subPrompt">watch how to draw her, then it's your turn</p>
+    <div class="navFooter"><button class="dbBtn" onclick="finishStage(2)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 3: BRING HER TO LIFE (COLORING) ============ -->
+  <section class="screen" id="screen-3">
+    <h2 class="bigPrompt">Bring Her to Life</h2>
+    <div class="videoWrap" id="videoWrapColor"></div>
+    <p class="subPrompt">watch how to color her in</p>
+    <div class="navFooter"><button class="dbBtn" onclick="finishStage(3)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 4: CUT & ANIMATE ============ -->
+  <section class="screen" id="screen-4">
+    <h2 class="bigPrompt">Cut &amp; Animate</h2>
+    <div class="videoWrap" id="videoWrapAnimate"></div>
+    <p class="subPrompt">watch how to cut her joints and photograph her poses</p>
+
+    <div class="flipbook" id="flipbook"></div>
+    <div class="flipTapWrap">
+      <button class="dbBtn gold small" onclick="tapFlip()">🩰 Tap to see her dance!</button>
+    </div>
+    <div class="flipCounter" id="flipCounter"></div>
+
+    <div class="navFooter"><button class="dbBtn" onclick="finishStage(4)">Next ▶</button></div>
+  </section>
+
+  <!-- ============ STAGE 5: GALLERY ============ -->
+  <section class="screen" id="screen-5">
+    <h2 class="bigPrompt">Show Her Off <span class="sparkle">✨</span></h2>
+    <p class="subPrompt">upload a photo or a video of her dancing</p>
+
+    <div class="upload-slot-wrap" id="slotWrap"></div>
+
+    <div class="card reflect-card">
+      <div class="reflect-row">
+        <div class="reflect-label">My ballerina's name is…</div>
+        <input class="reflect-input" id="r1" maxlength="40" placeholder="type here">
+      </div>
+      <div class="reflect-row">
+        <div class="reflect-label">Her favorite move is…</div>
+        <input class="reflect-input" id="r2" maxlength="40" placeholder="type here">
+      </div>
+    </div>
+
+    <div class="navFooter"><button class="dbBtn" id="finishBtn" onclick="finishGallery()" disabled>🎉 Finish</button></div>
+
+    <div class="celebrate" id="celebrate">
+      <div class="cel-emoji">🎉</div>
+      <h2>She's Dancing!</h2>
+      <p>You drew her, colored her, and made her move.</p>
+      <a class="dbBtn gold small" href="../../creation/">← Back to Studio</a>
+    </div>
+  </section>
+</div>
+
+<input type="file" id="fileInput" accept="image/*,video/*" style="display:none" onchange="onFileSelected(event)">
+
+<!-- Art GPS access control (loaded before lesson script so FEIAccess is available) -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+<script src="../../core/voice.js"></script>
+
+<script>
+const STAGES = [
+  {id:1, name:'Welcome'},
+  {id:2, name:'Draw Your Ballerina'},
+  {id:3, name:'Bring Her to Life'},
+  {id:4, name:'Cut & Animate'},
+  {id:5, name:'Gallery'}
+];
+
+const VOICE_LINES = {
+  1: "Let's draw a ballerina and make her move!",
+  2: "Watch how to draw her, then try it yourself!",
+  3: "Watch how to color her in!",
+  4: "Watch how to cut her joints and make her dance!",
+  5: "Upload a photo or video of your ballerina, then tell us about her!"
+};
+
+const Voice = FEIVoice.create({
+  namespace: 'dancing_ballerina',
+  audioPath: (stepId) => 'audio/stage-' + stepId + '.mp3'
+});
+
+/* ============================================================
+   Teacher-video placeholders (Stages 2, 3, 4) — Faye doesn't have the
+   real Cloudflare Stream embed codes yet. Paste each one into its
+   VIDEO_*_SRC constant below and the placeholder card is replaced
+   automatically, no HTML edits needed.
+============================================================ */
+const VIDEO_DRAW_SRC = ''; // TODO(Faye): paste "Draw Your Ballerina" Cloudflare Stream iframe src here
+const VIDEO_COLOR_SRC = ''; // TODO(Faye): paste "Bring Her to Life" Cloudflare Stream iframe src here
+const VIDEO_ANIMATE_SRC = ''; // TODO(Faye): paste "Cut & Animate" Cloudflare Stream iframe src here
+// Stage 1's inspiration preview — a still photo, short GIF, or muted looping
+// video of the finished "moving ballerina" result. Accepts any of the three;
+// detected below by file extension.
+const INTRO_CLIP_SRC = ''; // TODO(Faye): paste a photo/GIF/video URL of the finished result here
+
+function renderVideoStage(wrapId, src){
+  const wrap = document.getElementById(wrapId);
+  if(src){
+    wrap.innerHTML = `<div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"></iframe>
+    </div>`;
+  } else {
+    wrap.innerHTML = `<div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--pink-deep),var(--gold));">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+        <div style="font-size:2.6rem;">🎥</div>
+        <div class="hand" style="font-size:1.5rem;margin-top:6px;">Video coming soon!</div>
+      </div>
+    </div>`;
+  }
+}
+
+function renderIntroClip(){
+  const wrap = document.getElementById('introClipWrap');
+  if (INTRO_CLIP_SRC && /\.(mp4|webm|mov)(\?.*)?$/i.test(INTRO_CLIP_SRC)) {
+    wrap.innerHTML = `<video src="${INTRO_CLIP_SRC}" autoplay loop muted playsinline></video>`;
+  } else if (INTRO_CLIP_SRC) {
+    wrap.innerHTML = `<img src="${INTRO_CLIP_SRC}" alt="A finished dancing ballerina">`;
+  } else {
+    wrap.innerHTML = `<div class="clip-placeholder">
+      <div class="ic-emoji">🩰</div>
+      <div class="ic-text">demo<br>coming soon!</div>
+    </div>`;
+  }
+}
+
+/* ============================================================
+   STAGE 4: pose flipbook — an optional, light delight-moment that
+   previews what "stop-motion" looks like: tapping cycles through a
+   few preset poses with a quick swap, like flipping frames.
+============================================================ */
+const POSES = [
+  `<svg viewBox="0 0 120 160"><circle cx="60" cy="28" r="15" fill="#4a2138"/><path d="M60 43 L60 96" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M36 88 L60 96 L84 88" fill="#ff8fab" stroke="#4a2138" stroke-width="3"/><path d="M60 96 L42 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 96 L78 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 48 L28 18" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 48 L92 18" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 120 160"><circle cx="60" cy="28" r="15" fill="#4a2138"/><path d="M60 43 L60 96" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M36 88 L60 96 L84 88" fill="#ff8fab" stroke="#4a2138" stroke-width="3"/><path d="M60 96 L38 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 96 L82 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 52 L14 52" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 52 L106 52" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 120 160"><circle cx="60" cy="28" r="15" fill="#4a2138"/><path d="M60 43 L60 96" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M36 88 L60 96 L84 88" fill="#ff8fab" stroke="#4a2138" stroke-width="3"/><path d="M60 96 L48 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 96 L100 108" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 50 L30 30" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 50 L96 44" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 120 160"><circle cx="60" cy="28" r="15" fill="#4a2138"/><path d="M60 43 L60 96" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M36 88 L60 96 L84 88" fill="#ff8fab" stroke="#4a2138" stroke-width="3"/><path d="M60 96 L44 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 96 L76 150" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 55 L44 75" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/><path d="M60 55 L76 75" stroke="#4a2138" stroke-width="5" stroke-linecap="round"/></svg>`
+];
+let poseIdx = 0;
+function renderPose(){
+  const el = document.getElementById('flipbook');
+  el.innerHTML = POSES[poseIdx];
+  document.getElementById('flipCounter').textContent = 'pose ' + (poseIdx + 1) + ' of ' + POSES.length;
+}
+function tapFlip(){
+  const el = document.getElementById('flipbook');
+  el.style.opacity = '0.15';
+  setTimeout(() => {
+    poseIdx = (poseIdx + 1) % POSES.length;
+    renderPose();
+    el.style.opacity = '1';
+  }, 90);
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+let currentScreen = 1;
+function goStage(n){
+  currentScreen = n;
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  document.getElementById('stageTitleBar').textContent = STAGES[n-1].name;
+  document.getElementById('stageCounter').textContent = 'Stage '+n+' of '+STAGES.length;
+  window.scrollTo(0,0);
+  initStage(n);
+}
+function finishStage(n){
+  if(n<STAGES.length) goStage(n+1);
+}
+
+const initialized = new Set();
+const STAGE_INIT = {
+  1: () => initStageWelcome(),
+  2: () => initStageDraw(),
+  3: () => initStageColor(),
+  4: () => initStageAnimate(),
+  5: () => initStageGallery()
+};
+function initStage(n){
+  if(initialized.has(n)) return;
+  initialized.add(n);
+  const fn = STAGE_INIT[n];
+  if(fn) fn();
+}
+
+function initStageWelcome(){
+  renderIntroClip();
+  Voice.init(1, VOICE_LINES[1]);
+}
+function initStageDraw(){
+  renderVideoStage('videoWrapDraw', VIDEO_DRAW_SRC);
+  Voice.init(2, VOICE_LINES[2]);
+}
+function initStageColor(){
+  renderVideoStage('videoWrapColor', VIDEO_COLOR_SRC);
+  Voice.init(3, VOICE_LINES[3]);
+}
+function initStageAnimate(){
+  renderVideoStage('videoWrapAnimate', VIDEO_ANIMATE_SRC);
+  renderPose();
+  Voice.init(4, VOICE_LINES[4]);
+}
+
+/* ============================================================
+   STAGE 5: Gallery — IndexedDB photo/video storage, scoped to this
+   course only (own DB name/store, modeled on
+   lessons/color-magic/shared/color-storage.js). Accepts video too
+   (not just photos), since this course's actual deliverable is a
+   short stop-motion clip — video blobs are stored as-is (no canvas
+   compression, that only applies to images).
+============================================================ */
+const DB_NAME = 'fei_dancing_ballerina_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const PIECE_ID = 'piece_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+
+function isStorageSupported(){ return !!window.indexedDB; }
+
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB is not available in this browser')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); }
+    catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Image compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load the selected image')); };
+    img.src = url;
+  });
+}
+
+async function saveArtwork(pieceId, fileOrBlob){
+  const isVideo = !!(fileOrBlob.type && fileOrBlob.type.startsWith('video/'));
+  const blobToStore = isVideo ? fileOrBlob : await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: blobToStore, isVideo: isVideo, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => {
+      const rows = req.result || [];
+      rows.sort((a, b) => b.savedAt - a.savedAt);
+      resolve(rows);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
+
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+    alert('Please choose a photo or video file.');
+    return;
+  }
+  saving = true;
+  renderSlot();
+  try {
+    const record = await saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+  } catch (e) {
+    console.warn('[gallery] saveArtwork failed', e);
+    alert("Couldn't save that — want to try a different file?");
+  }
+  saving = false;
+  renderSlot();
+  updateFinishState();
+}
+
+function renderSlot(){
+  const wrap = document.getElementById('slotWrap');
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    const media = artworkRecord.isVideo
+      ? `<video src="${objectUrl}" muted loop autoplay playsinline></video>`
+      : `<img src="${objectUrl}" alt="My dancing ballerina">`;
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()">${media}<div class="slot-replace">🔄 Replace</div></div>`;
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Add your photo or video</div></div>`;
+  }
+}
+
+function updateFinishState(){
+  document.getElementById('finishBtn').disabled = !artworkRecord;
+}
+
+function finishGallery(){
+  if (!artworkRecord) return;
+  document.querySelector('#screen-5 .reflect-card').style.display = 'none';
+  document.getElementById('slotWrap').style.display = 'none';
+  document.querySelector('#screen-5 .bigPrompt').style.display = 'none';
+  document.querySelector('#screen-5 .subPrompt').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'none';
+  document.getElementById('celebrate').classList.add('show');
+}
+
+async function initStageGallery(){
+  if (isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) {
+        artworkRecord = rows[0];
+        objectUrl = URL.createObjectURL(artworkRecord.blob);
+      }
+    } catch (e) { console.warn('[gallery] listArtworks failed', e); }
+  }
+  renderSlot();
+  updateFinishState();
+  Voice.init(5, VOICE_LINES[5]);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'dancing-ballerina');
+      if (!ok) return; // gateLessonPage already redirected to home
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  goStage(1);
+}
+
+init();
+</script>
+</body>
+</html>
