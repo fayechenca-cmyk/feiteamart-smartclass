@@ -1068,13 +1068,13 @@ function playDemo(){
 ============================================================ */
 const VIDEO_A_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/f9f18d4c663ba2050d31601744da56e0/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Ff9f18d4c663ba2050d31601744da56e0%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'; // "Drawing the Shapes" / "Join the Shape"
 const VIDEO_B_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/0a6fcacaa6fa5795bf99252822db4ac4/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F0a6fcacaa6fa5795bf99252822db4ac4%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'; // "Applying the Base" / "Playing the Base"
-const VIDEO_C_SRC = ''; // TODO(Faye): paste "Adding the Details" Cloudflare Stream iframe src here
+const VIDEO_C_SRC = 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/2f8f0d0f117e6a9abfe42e9a2710e9c8/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F2f8f0d0f117e6a9abfe42e9a2710e9c8%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'; // "Adding the Details"
 
-function renderVideoStage(wrapId, src){
+function renderVideoStage(wrapId, src, title){
   const wrap = document.getElementById(wrapId);
   if(src){
     wrap.innerHTML = `<div style="position:relative;padding-top:56.25%;">
-      <iframe src="${src}" loading="lazy"
+      <iframe src="${src}" loading="lazy" title="${title || ''}"
         style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
         allowfullscreen="true"></iframe>
@@ -1088,9 +1088,9 @@ function renderVideoStage(wrapId, src){
     </div>`;
   }
 }
-function initStageVideoA(){ renderVideoStage('videoWrapA', VIDEO_A_SRC); }
-function initStageVideoB(){ renderVideoStage('videoWrapB', VIDEO_B_SRC); }
-function initStageVideoC(){ renderVideoStage('videoWrapC', VIDEO_C_SRC); }
+function initStageVideoA(){ renderVideoStage('videoWrapA', VIDEO_A_SRC, 'Drawing the Shapes — teacher demo'); }
+function initStageVideoB(){ renderVideoStage('videoWrapB', VIDEO_B_SRC, 'Applying the Base — teacher demo'); }
+function initStageVideoC(){ renderVideoStage('videoWrapC', VIDEO_C_SRC, 'Adding the Details — teacher demo'); }
 
 /* ============================================================
    STAGE 7: Crayon Secrets
