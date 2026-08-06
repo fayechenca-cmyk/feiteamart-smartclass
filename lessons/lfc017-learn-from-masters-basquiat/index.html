@@ -259,6 +259,25 @@ body {
   color: var(--bsq-charcoal);
   font-style: italic;
 }
+.video-embed-wrap {
+  background: var(--bsq-cream);
+  border: 2px solid var(--bsq-black);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 4px 0 18px;
+  box-shadow: 4px 5px 0 var(--bsq-black);
+  position: relative;
+}
+.video-step-note {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 15px;
+  color: var(--bsq-charcoal);
+  text-align: center;
+  margin: 0 0 18px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
 .hero-link-bar {
   display: flex; gap: 10px; align-items: center;
   margin-bottom: 22px; flex-wrap: wrap;
@@ -1538,7 +1557,59 @@ const STEPS = [
     step: 6,
     title: 'Make the Piece',
     prompt: 'Create a symbolic composition using figure, animal, text, abstract shape, and graphic marks.',
-    artchi: { voice: 'make', text: "do not make it tidy. let some parts stay raw. your image does not need to be polished. it needs to carry a voice." },
+    artchi: { voice: 'make', text: "do not make it tidy. let some parts stay raw. your image does not need to be polished. it needs to carry a voice." }
+  },
+  {
+    id: 'step-6a-video-1',
+    step: 7,
+    title: 'Draw Your First Idea',
+    prompt: '',
+    videoSrc: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/b9f19cacdff985a2f7ab28f6ba1c06c3/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fb9f19cacdff985a2f7ab28f6ba1c06c3%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
+    videoTitle: 'Draw Your First Idea — teacher demo',
+    note: "This is one way to build it. Yours doesn't have to match."
+  },
+  {
+    id: 'step-6b-video-2',
+    step: 8,
+    title: 'Express with Color',
+    prompt: '',
+    videoSrc: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/8004fe9f20b322221a1ef5ff5e681268/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F8004fe9f20b322221a1ef5ff5e681268%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
+    videoTitle: 'Express with Color — teacher demo'
+  },
+  {
+    id: 'step-6c-video-3',
+    step: 9,
+    title: 'Step 3',
+    prompt: '',
+    videoSrc: '' // TODO(Faye): paste Cloudflare Stream iframe src here
+  },
+  {
+    id: 'step-6d-video-4',
+    step: 10,
+    title: 'Step 4',
+    prompt: '',
+    videoSrc: '' // TODO(Faye): paste Cloudflare Stream iframe src here
+  },
+  {
+    id: 'step-6e-video-5',
+    step: 11,
+    title: 'Step 5',
+    prompt: '',
+    videoSrc: '' // TODO(Faye): paste Cloudflare Stream iframe src here
+  },
+  {
+    id: 'step-6f-video-6',
+    step: 12,
+    title: 'Step 6',
+    prompt: '',
+    videoSrc: '' // TODO(Faye): paste Cloudflare Stream iframe src here
+  },
+  {
+    id: 'step-7-upload-reflect',
+    step: 13,
+    title: 'Upload Your Piece',
+    prompt: 'Photograph your finished piece and reflect on what it carries.',
+    artchi: { voice: 'make', text: "however it looks, it already carries choices only you would have made. upload it as it is." },
     completionRule: 'upload'
   }
 ];
@@ -1720,6 +1791,13 @@ function renderStepBody(step) {
     case 'step-4-decode-symbols': return renderStep4(step);
     case 'step-5-symbol-language': return renderStep5(step);
     case 'step-6-make-the-piece': return renderStep6(step);
+    case 'step-6a-video-1': return renderVideoStep(step);
+    case 'step-6b-video-2': return renderVideoStep(step);
+    case 'step-6c-video-3': return renderVideoStep(step);
+    case 'step-6d-video-4': return renderVideoStep(step);
+    case 'step-6e-video-5': return renderVideoStep(step);
+    case 'step-6f-video-6': return renderVideoStep(step);
+    case 'step-7-upload-reflect': return renderUploadStep(step);
     case 'badge-ceremony': return renderBadgeCeremony(step);
     default: return '<p>Unknown step</p>';
   }
@@ -1987,8 +2065,57 @@ function renderStep6(step) {
   html += '</div>';
   
   html += '<p class="completion-line">When your image feels full, strange, personal, and alive — stop.</p>';
-  
-  // Upload area
+
+  return html;
+}
+
+// ─── Video steps (step-6a through step-6f) ───────────────────
+// One reusable renderer, data-driven off each step's videoSrc /
+// videoTitle / optional one-time note — keeps text to a minimum,
+// no Artchi block, no prompt paragraph.
+function renderVideoStep(step) {
+  let html = '';
+  if (step.videoSrc) {
+    html += `
+      <div class="video-embed-wrap">
+        <div style="position:relative;padding-top:56.25%;">
+          <iframe
+            src="${step.videoSrc}"
+            loading="lazy"
+            title="${escapeAttr(step.videoTitle || step.title)}"
+            style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true"
+          ></iframe>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="video-embed-wrap">
+        <div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--bsq-black),var(--bsq-yellow));">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+            <div style="font-size:2.4rem;">🎥</div>
+            <div style="font-family:'Patrick Hand',cursive;font-size:16px;margin-top:6px;">Video coming soon!</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  if (step.note) {
+    html += `<p class="video-step-note">${escapeHtml(step.note)}</p>`;
+  }
+  return html;
+}
+
+// ─── Step 7: Upload & Reflect (moved out of the old Step 6) ──
+// Verbatim from the old renderStep6's upload/reflection block —
+// same lessonProgress.finalUpload / lessonProgress.reflection
+// fields, same handleFinalUpload/replaceUpload/saveReflection
+// handlers, only the surrounding step changed.
+function renderUploadStep(step) {
+  let html = renderArtchi(step);
+
   if (lessonProgress.finalUpload) {
     html += `
       <div class="upload-area has-upload">
@@ -2009,8 +2136,7 @@ function renderStep6(step) {
       </div>
     `;
   }
-  
-  // Reflection before upload
+
   html += `
     <div class="reflection-block">
       <div class="reflection-label">Reflect before upload (optional)</div>
@@ -2018,12 +2144,11 @@ function renderStep6(step) {
         onchange="saveReflection(this.value)">${escapeHtml(lessonProgress.reflection || '')}</textarea>
     </div>
   `;
-  
-  // Final response if uploaded
+
   if (lessonProgress.finalUpload) {
     html += '<div class="follow-up visible" style="background:var(--bsq-yellow);border-color:var(--bsq-black);"><div class="follow-up-text" style="color:var(--bsq-black);">Your image does not need to be tidy. It needs to carry a voice.</div></div>';
   }
-  
+
   return html;
 }
 
