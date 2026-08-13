@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Yōkai in the Great Wave</title>
+<meta name="description" content="A museum-discovery + creature-invention Creation lesson built around two real ukiyo-e artworks: Hokusai's Great Wave and Kuniyoshi's Cat Demon. Look, imagine, then draw and paint your own yōkai story.">
+<meta name="keywords" content="Creation, Books & Stories, Ukiyo-e, Hokusai, Kuniyoshi, Japanese Printmaking, Watercolor, Character Design">
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "Yōkai in the Great Wave",
+  "subtitle": "A Museum-Inspired Ukiyo-e Story",
+  "path": ["Creation", "Books & Stories · The Bookshelf", "Yōkai in the Great Wave"],
+  "series": "Books & Stories",
+  "tags": ["Ukiyo-e", "Hokusai", "Kuniyoshi", "Japanese Printmaking", "Watercolor", "Character Design"],
+  "ageRange": "8+",
+  "materials": ["Pencil", "Watercolor Paper", "Watercolor", "Brushes", "Water"],
+  "stageCount": 11
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1e3a5f;
+  --indigo-deep:#12253d;
+  --turquoise:#6f9c98;
+  --turquoise-soft:#c3d9d5;
+  --vermilion:#c0472f;
+  --cream:#f0e6d2;
+  --paper:#e9dfc4;
+  --ink:#241d17;
+  --ink-soft:rgba(36,29,23,.66);
+  --ink-faint:rgba(36,29,23,.42);
+  --line:rgba(36,29,23,.18);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Montserrat',sans-serif;background:var(--paper);color:var(--ink);
+  overflow-x:hidden;-webkit-tap-highlight-color:transparent;user-select:none;
+}
+.display{font-family:'Noto Serif SC',serif;}
+button{font-family:'Montserrat',sans-serif;}
+
+/* subtle woodblock-print / washi paper grain */
+#grain{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(36,29,23,.025) 0px, rgba(36,29,23,.025) 1px, transparent 1px, transparent 3px),
+    radial-gradient(rgba(36,29,23,.05) 1px, transparent 1.3px);
+  background-size:auto, 5px 5px;
+  opacity:.6;
+}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+/* ---------- Top bar ---------- */
+#topbar{position:sticky;top:0;z-index:500;background:linear-gradient(var(--paper) 78%, transparent);padding:12px 18px 6px;}
+.back-link{font-size:12.5px;color:var(--indigo);text-decoration:none;font-weight:700;letter-spacing:.3px;}
+
+/* phase bar (LOOK -> IMAGINE -> DRAW -> COLOR -> DETAIL) */
+.phase-bar{display:flex;justify-content:center;gap:4px;margin-top:10px;flex-wrap:wrap;}
+.phase-pip{font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 8px;border-radius:999px;color:var(--ink-faint);background:rgba(36,29,23,.06);}
+.phase-pip.active{color:#fff;background:var(--indigo);}
+.phase-pip.past{color:var(--indigo);background:var(--turquoise-soft);}
+
+.progress-dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.p-dot{width:6px;height:6px;border-radius:50%;background:var(--line);cursor:pointer;transition:transform .15s ease;}
+.p-dot.done{background:var(--indigo);}
+.p-dot.current{transform:scale(1.8);box-shadow:0 0 0 3px rgba(30,58,95,.16);}
+
+/* ---------- Screens ---------- */
+.screen{display:none;max-width:660px;margin:0 auto;padding:8px 18px 40px;}
+.screen.active{display:block;animation:ykFadeIn .4s ease;}
+@keyframes ykFadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.kicker{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--vermilion);text-align:center;font-weight:800;margin-bottom:6px;}
+.s-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.75rem;text-align:center;margin:0 0 4px;color:var(--indigo-deep);letter-spacing:.5px;}
+.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 16px;line-height:1.5;}
+
+/* wave divider */
+.wave-divider{width:60px;height:12px;margin:8px auto 16px;opacity:.55;}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.yk-btn{
+  font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:3px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:transform .12s ease, opacity .15s ease;
+  border:1.5px solid var(--ink);background:transparent;color:var(--ink);letter-spacing:.3px;
+}
+.yk-btn:active{transform:scale(.96);}
+.yk-btn.primary{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+.yk-btn.vermilion{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
+.yk-btn:disabled{opacity:.3;cursor:not-allowed;}
+.yk-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
+
+/* museum credit line */
+.credit-line{font-size:10px;color:var(--ink-faint);text-align:center;margin-top:6px;line-height:1.5;font-style:italic;padding:0 10px;}
+
+/* video embed (studio steps) */
+.video-embed-wrap{margin:14px 0 8px;border-radius:2px;overflow:hidden;box-shadow:0 10px 26px rgba(18,37,61,.25);}
+
+/* ---------- Part 1: What is Ukiyo-e ---------- */
+.uk-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px;}
+@media(min-width:520px){.uk-grid{grid-template-columns:1fr 1fr 1fr;}}
+.uk-card{perspective:900px;height:118px;cursor:pointer;}
+.uk-card-inner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;}
+.uk-card.flipped .uk-card-inner{transform:rotateY(180deg);}
+.uk-card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;border:1.5px solid var(--line);}
+.uk-card-front{background:var(--cream);}
+.uk-card-front .uk-icon{font-size:1.5rem;}
+.uk-card-front .uk-label{font-weight:800;font-size:10.5px;margin-top:5px;letter-spacing:.5px;}
+.uk-card-back{background:var(--indigo);color:#fff;transform:rotateY(180deg);font-size:11px;line-height:1.4;font-weight:500;}
+
+.print-demo{margin-top:26px;text-align:center;}
+.print-steps-row{display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:14px;}
+.print-step-icon{font-size:1.5rem;opacity:.5;transition:opacity .3s ease;}
+.print-step-icon.lit{opacity:1;}
+.print-arrow{font-size:12px;color:var(--ink-faint);}
+.press-stage{width:150px;height:150px;margin:0 auto 14px;position:relative;}
+.press-block{
+  position:absolute;left:50%;top:8px;width:100px;height:60px;transform:translateX(-50%);
+  background:var(--indigo);border-radius:2px;transition:transform .5s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;z-index:3;
+}
+.press-stage.pressed .press-block{transform:translateX(-50%) translateY(58px) scaleY(.85);}
+.press-paper{
+  position:absolute;left:50%;bottom:8px;width:120px;height:70px;transform:translateX(-50%);
+  background:var(--cream);border:1.5px solid var(--line);border-radius:2px;overflow:hidden;z-index:1;
+}
+.press-paper-reveal{position:absolute;inset:0;opacity:0;transition:opacity .4s ease .35s;background:linear-gradient(160deg,var(--turquoise),var(--indigo));}
+.press-stage.pressed .press-paper-reveal{opacity:.85;}
+.print-caption{font-size:12.5px;color:var(--ink-soft);font-style:italic;}
+
+/* ---------- Part 2 / Part 3: hero artwork investigation ---------- */
+.detective-kicker{text-align:center;font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.1rem;color:var(--vermilion);margin-bottom:2px;}
+.hero-stage{position:relative;border-radius:2px;overflow:hidden;box-shadow:0 12px 30px rgba(18,37,61,.3);border:2px solid var(--ink);}
+.hero-stage img{display:block;width:100%;height:auto;}
+.hero-hotspot{position:absolute;border-radius:8px;cursor:pointer;}
+.hero-hotspot.active{box-shadow:0 0 0 2px var(--vermilion);animation:hotspotPulse 1s ease-in-out infinite;}
+@keyframes hotspotPulse{0%,100%{box-shadow:0 0 0 2px var(--vermilion);}50%{box-shadow:0 0 0 5px rgba(192,71,47,.4);}}
+.hero-callout{margin-top:10px;background:var(--cream);border-radius:2px;padding:12px 14px;font-size:13px;line-height:1.5;min-height:20px;border:1.5px solid var(--line);}
+.hero-callout .hc-label{font-weight:800;color:var(--indigo);margin-right:6px;}
+.hero-img-missing{
+  display:none;aspect-ratio:3/2;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
+  color:#fff;text-align:center;align-items:center;justify-content:center;flex-direction:column;padding:20px;
+}
+.img-missing .hero-img-missing{display:flex;}
+.img-missing img{display:none;}
+
+.still-moving-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
+.sm-btn{border:1.5px solid var(--line);background:var(--cream);border-radius:3px;padding:10px 20px;font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;}
+.sm-btn.picked{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+.sm-reveal{text-align:center;font-size:13px;color:var(--indigo);margin-top:10px;min-height:18px;font-style:italic;}
+
+/* yokai info card */
+.yokai-info-card{margin-top:22px;background:var(--cream);border:1.5px solid var(--line);border-radius:2px;padding:16px;text-align:center;}
+.yokai-info-card h3{font-family:'Noto Serif SC',serif;font-size:1.05rem;color:var(--indigo-deep);margin:0 0 4px;}
+.yokai-info-card p{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}
+.yokai-cat-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.yokai-cat{background:var(--paper);border-radius:999px;padding:6px 12px;font-size:11.5px;font-weight:700;}
+.yokai-info-card .line{font-size:12px;color:var(--vermilion);font-weight:700;margin-top:12px;}
+
+/* ---------- Part 4: Build Your Creature ---------- */
+.type-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+.type-btn{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:10px 8px;text-align:center;cursor:pointer;width:66px;}
+.type-btn.picked{border-color:var(--indigo);background:var(--turquoise-soft);}
+.type-btn .tb-emoji{font-size:1.4rem;}
+.type-btn .tb-label{font-size:9.5px;font-weight:800;margin-top:3px;letter-spacing:.3px;}
+.strange-label{text-align:center;font-size:12px;color:var(--ink-faint);font-weight:700;letter-spacing:.5px;margin:4px 0 8px;}
+.chip-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
+.chip{background:var(--cream);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.chip.picked{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
+
+/* ---------- Part 5: Build Your Story ---------- */
+.place-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px;}
+.place-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 4px;text-align:center;cursor:pointer;}
+.place-tile.picked{border-color:var(--indigo);background:var(--turquoise-soft);}
+.place-tile .pt-icon{font-size:1.4rem;}
+.place-tile .pt-label{font-size:9.5px;font-weight:800;margin-top:4px;}
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.action-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 4px;text-align:center;cursor:pointer;}
+.action-tile.picked{border-color:var(--vermilion);background:var(--turquoise-soft);}
+.action-tile .at-icon{font-size:1.4rem;}
+.action-tile .at-label{font-size:9.5px;font-weight:800;margin-top:4px;}
+.story-done-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--indigo-deep);margin-top:20px;min-height:24px;font-style:italic;}
+
+/* ---------- Part 6: Materials ---------- */
+.materials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px;}
+@media(max-width:420px){.materials-grid{grid-template-columns:repeat(2,1fr);}}
+.mat-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;}
+.mat-tile.checked{border-color:var(--indigo);background:var(--turquoise-soft);}
+.mat-tile .m-icon{font-size:1.5rem;}
+.mat-tile .m-label{font-size:10.5px;font-weight:700;margin-top:5px;}
+.mat-check{display:none;position:absolute;top:4px;right:6px;color:var(--indigo);font-weight:900;}
+.mat-tile.checked .mat-check{display:block;}
+.ready-wrap{text-align:center;margin-top:22px;}
+
+/* ---------- Studio steps ---------- */
+.studio-kicker{text-align:center;font-size:11px;color:var(--ink-faint);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.reminder-chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
+.reminder-chip{background:var(--turquoise-soft);border-radius:999px;padding:6px 13px;font-size:11.5px;font-weight:700;color:var(--indigo-deep);}
+.palette-row{display:flex;gap:14px;justify-content:center;margin:14px 0 6px;}
+.palette-swatch-group{text-align:center;cursor:pointer;padding:8px;border-radius:3px;border:1.5px solid transparent;}
+.palette-swatch-group.picked{border-color:var(--indigo);background:var(--cream);}
+.palette-dots{display:flex;gap:4px;justify-content:center;margin-bottom:4px;}
+.palette-dot{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.15);}
+.palette-name{font-size:10.5px;font-weight:700;}
+.studio-note{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:6px;}
+.complete-wrap{text-align:center;margin-top:20px;}
+.complete-btn{background:var(--cream);border:2px dashed var(--line);border-radius:999px;padding:11px 24px;cursor:pointer;font-weight:700;font-size:13px;color:var(--ink-soft);}
+.complete-btn.done{background:var(--indigo);border-style:solid;border-color:var(--indigo);color:#fff;}
+
+/* ---------- Part 8: Your Artwork ---------- */
+.teacher-ref-frame{width:200px;margin:14px auto;padding:10px;background:var(--cream);border:2px solid var(--ink);}
+.teacher-ref-frame img{width:100%;display:block;}
+.teacher-ref-placeholder{
+  width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:10px;
+}
+.teacher-ref-placeholder .tp-emoji{font-size:1.8rem;}
+.teacher-ref-placeholder .tp-text{font-size:11px;margin-top:6px;}
+.reveal-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.3rem;color:var(--indigo-deep);margin:8px 0 18px;}
+.upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:8px;}
+.upload-slot{
+  position:relative;width:220px;height:220px;border-radius:2px;border:2px dashed var(--indigo);background:var(--cream);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
+}
+.upload-slot.saving{border-color:var(--vermilion);}
+.upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:32px;color:var(--indigo);}
+.upload-slot .slot-label{font-size:11px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
+.student-frame{width:240px;margin:18px auto 6px;padding:14px;background:var(--cream);border:2px solid var(--ink);box-shadow:6px 7px 0 rgba(36,29,23,.15);}
+.student-frame img{width:100%;display:block;}
+.reflect-label{text-align:center;font-size:11.5px;font-weight:800;letter-spacing:.5px;color:var(--ink-faint);margin:20px 0 8px;text-transform:uppercase;}
+.reflect-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
+.reflect-chip{background:var(--cream);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.reflect-chip.picked{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
+.gallery-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:22px;}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <div class="phase-bar" id="phaseBar"></div>
+    <div class="progress-dots" id="progressDots"></div>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const PHASES = ['LOOK','IMAGINE','DRAW','COLOR','DETAIL'];
+
+const STEPS = [
+  { id:'what-is-ukiyoe', step:1,  title:'What Is Ukiyo-e?',                  phase:'LOOK' },
+  { id:'wave-detective',  step:2,  title:'Wave Detective',                   phase:'LOOK' },
+  { id:'meet-yokai',      step:3,  title:'Meet the Yōkai',                   phase:'LOOK' },
+  { id:'build-creature',  step:4,  title:'Build Your Yōkai',                 phase:'IMAGINE' },
+  { id:'build-story',     step:5,  title:'Where Does Your Yōkai Go?',        phase:'IMAGINE' },
+  { id:'get-ready',       step:6,  title:'Get Ready to Create',              phase:'DRAW', nextLabel:'Start Creating →' },
+  { id:'studio-1',        step:7,  title:'Draw the Lines',                   phase:'DRAW', studioIndex:0 },
+  { id:'studio-2',        step:8,  title:'Color the Creatures & Background', phase:'COLOR', studioIndex:1 },
+  { id:'studio-3',        step:9,  title:'Paint the Waves',                  phase:'COLOR', studioIndex:2 },
+  { id:'studio-4',        step:10, title:'Add Details & Ink',                phase:'DETAIL', studioIndex:3 },
+  { id:'gallery',         step:11, title:'Your Artwork',                     phase:'DETAIL' }
+];
+
+const UKIYOE_CARDS = [
+  { id:'lines',   label:'BOLD LINES',         icon:'〰️', note:'Lines make shapes easy to see.' },
+  { id:'color',   label:'FLAT COLORS',        icon:'🎨', note:'Colors sit in clear, strong areas.' },
+  { id:'pattern', label:'PATTERNS',           icon:'✳',  note:'Look! Patterns are everywhere.' },
+  { id:'nature',  label:'NATURE',             icon:'⛰',  note:'Mountains, waves, flowers, animals, weather.' },
+  { id:'people',  label:'PEOPLE & CREATURES', icon:'🎭', note:'Actors, warriors, ordinary people, animals, ghosts, yōkai.' },
+  { id:'stories', label:'STORIES',            icon:'📖', note:'One picture can tell a whole story.' }
+];
+
+// Hotspot boxes are positioned in % over the actual Hokusai photograph.
+const WAVE_HOTSPOTS = [
+  { id:'curve', emoji:'〰',  label:'Curved Lines', left:12, top:3,  w:48, h:24, note:'Repeated curved lines make the water feel alive.' },
+  { id:'wave',  emoji:'🌊', label:'The Giant Wave', left:24, top:22, w:26, h:22, note:'This is the wave the whole print is named after.' },
+  { id:'foam',  emoji:'💦', label:'Wave Foam',     left:2,  top:30, w:15, h:15, note:'Tiny claw-like foam shapes show the wave breaking apart.' },
+  { id:'boats', emoji:'⛵', label:'The Boats',     left:1,  top:47, w:20, h:24, note:'Fishermen are caught right beneath the wave.' },
+  { id:'fuji',  emoji:'🗻', label:'Mt. Fuji',      left:55, top:58, w:16, h:20, note:"Mount Fuji is small and still — even in a giant storm." }
+];
+
+// Hotspot boxes for the Kuniyoshi Cat Demon (approximate — recheck once
+// the real file is dropped into assets/, see assets/README.md).
+const YOKAI_HOTSPOTS = [
+  { id:'eyes',       emoji:'👀', label:'Eyes',       q:'Where is it looking?',            left:30, top:8,  w:34, h:20 },
+  { id:'size',       emoji:'🐾', label:'Size',       q:'Is this an ordinary cat?',         left:10, top:14, w:80, h:40 },
+  { id:'expression', emoji:'😼', label:'Expression', q:'Friendly… or dangerous?',          left:32, top:20, w:30, h:18 },
+  { id:'shape',      emoji:'🌀', label:'Shape',      q:'Look at its strange silhouette.',  left:5,  top:5,  w:90, h:70 },
+  { id:'story',      emoji:'🎭', label:'Story',      q:'What do you think is happening?',  left:15, top:60, w:70, h:35 }
+];
+
+const YOKAI_CATEGORIES = [
+  { emoji:'🐱', label:'CAT' }, { emoji:'🦊', label:'FOX' }, { emoji:'🐟', label:'FISH' },
+  { emoji:'🐉', label:'DRAGON' }, { emoji:'🐦', label:'BIRD' }, { emoji:'👻', label:'STRANGE THING' }
+];
+
+const CREATURE_TYPES = [
+  { id:'cat',   emoji:'🐱', label:'CAT' },
+  { id:'fox',   emoji:'🦊', label:'FOX' },
+  { id:'fish',  emoji:'🐟', label:'FISH' },
+  { id:'dragon',emoji:'🐉', label:'DRAGON' },
+  { id:'bird',  emoji:'🐦', label:'BIRD' },
+  { id:'own',   emoji:'✨', label:'YOUR OWN' }
+];
+const STRANGE_CHIPS = ['BIG EYES','LONG TAIL','HORNS','FANGS','WINGS','PATTERNS','EXTRA EYES','GIANT EARS','WHATEVER YOU INVENT'];
+
+const PLACES = [
+  { id:'waves',    emoji:'🌊', label:'INTO THE WAVES' },
+  { id:'moon',     emoji:'🌙', label:'UNDER THE MOON' },
+  { id:'mountain', emoji:'⛰',  label:'NEAR A MOUNTAIN' },
+  { id:'sky',      emoji:'☁',  label:'INTO THE SKY' },
+  { id:'city',     emoji:'🏯', label:'NEAR A CITY' },
+  { id:'own',      emoji:'✨', label:'SOMEWHERE YOU INVENT' }
+];
+const STORY_ACTIONS = [
+  { id:'playing',    emoji:'🤹', label:'PLAYING' },
+  { id:'fighting',   emoji:'⚔️', label:'FIGHTING' },
+  { id:'escaping',   emoji:'💨', label:'ESCAPING' },
+  { id:'searching',  emoji:'🔍', label:'SEARCHING' },
+  { id:'meeting',    emoji:'🤝', label:'MEETING' },
+  { id:'protecting', emoji:'🛡️', label:'PROTECTING SOMETHING' }
+];
+
+const MATERIALS = [
+  { id:'pencil',     label:'Pencil',           icon:'✏️' },
+  { id:'watercolor', label:'Watercolor',       icon:'🎨' },
+  { id:'paper',      label:'Watercolor Paper', icon:'📄' },
+  { id:'brushes',    label:'Brushes',          icon:'🖌' },
+  { id:'water',      label:'Water',            icon:'💧' }
+];
+
+// Studio steps — edit this array only for content changes (video URL,
+// title, completion label). No render-logic changes needed.
+const STUDIO_STEPS = [
+  {
+    stepNumber: 1,
+    title: 'Draw the Lines',
+    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle: 'Draw the Lines — teacher demo',
+    reminders: ['Big shapes first', 'Let lines flow', 'Leave space for waves'],
+    completionLabel: '✓ Lines Drawn!'
+  },
+  {
+    stepNumber: 2,
+    title: 'Color the Creatures & Background',
+    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle: 'Color the Creatures & Background — teacher demo',
+    palette: [
+      { name:'Ocean', colors:['#1e3a5f','#6f9c98','#12253d'] },
+      { name:'Fire',  colors:['#c0472f','#d9642c','#e8b23a'] }
+    ],
+    note: 'Your colors can be different.',
+    completionLabel: '✓ Color Added!'
+  },
+  {
+    stepNumber: 3,
+    title: 'Paint the Waves',
+    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle: 'Paint the Waves — teacher demo',
+    note: 'Repeat. Curve. Flow.',
+    completionLabel: '✓ Waves Are Moving!'
+  },
+  {
+    stepNumber: 4,
+    title: 'Add Details & Ink',
+    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle: 'Add Details & Ink — teacher demo',
+    reminders: ['Patterns', 'Textures', 'Small details', 'Stronger outlines'],
+    completionLabel: '✓ Artwork Complete!'
+  }
+];
+
+const REFLECT_WORDS = ['Funny','Scary','Powerful','Mysterious','Wild','Something else'];
+
+// TODO(Faye): paste a photo URL of your own finished yōkai artwork here —
+// shown as the "final reference" at the top of the last screen.
+const TEACHER_ARTWORK_SRC = '';
+
+/* ============================================================
+   STATE (localStorage-persisted, scoped to this course only)
+============================================================ */
+const STATE_KEY = 'fei.creation.yokai_in_the_great_wave.v1';
+
+function defaultState(){
+  return {
+    currentStep: 0,
+    maxReached: 0,
+    ukiyoeSeen: [],
+    waveSeen: [],
+    smPick: null,
+    yokaiFound: [],
+    creatureType: null,
+    strangeChips: [],
+    place: null,
+    action: null,
+    materialsChecked: [],
+    studioPalettePick: null,
+    studioDone: [false, false, false, false],
+    reflectPick: null
+  };
+}
+let STATE = defaultState();
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw));
+  } catch (e) {}
+}
+function saveState(){
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {}
+}
+
+/* ============================================================
+   IndexedDB — finished-artwork photo storage, scoped to this course
+============================================================ */
+const DB_NAME = 'fei_yokai_great_wave_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const PIECE_ID = 'piece_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+
+function isStorageSupported(){ return !!window.indexedDB; }
+
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); }
+    catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image')); };
+    img.src = url;
+  });
+}
+
+async function saveArtwork(pieceId, fileOrBlob){
+  const compressed = await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => {
+      const rows = req.result || [];
+      rows.sort((a, b) => b.savedAt - a.savedAt);
+      resolve(rows);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function goNext(){
+  if (STATE.currentStep < STEPS.length - 1) {
+    STATE.currentStep++;
+    if (STATE.currentStep > STATE.maxReached) STATE.maxReached = STATE.currentStep;
+    saveState();
+    renderCurrentScreen();
+  }
+}
+function goBack(){
+  if (STATE.currentStep > 0) {
+    STATE.currentStep--;
+    saveState();
+    renderCurrentScreen();
+  }
+}
+function jumpToScreen(idx){
+  if (idx <= STATE.maxReached) {
+    STATE.currentStep = idx;
+    saveState();
+    renderCurrentScreen();
+  }
+}
+
+function renderPhaseBar(currentPhase){
+  const currentIdx = PHASES.indexOf(currentPhase);
+  return PHASES.map((p, i) => {
+    let cls = 'phase-pip';
+    if (i < currentIdx) cls += ' past';
+    if (i === currentIdx) cls += ' active';
+    return `<span class="${cls}">${p}</span>`;
+  }).join('');
+}
+function renderDots(){
+  return STEPS.map((s, i) => {
+    let cls = 'p-dot';
+    if (i <= STATE.maxReached) cls += ' done';
+    if (i === STATE.currentStep) cls += ' current';
+    return `<span class="${cls}" onclick="jumpToScreen(${i})" title="${s.title}"></span>`;
+  }).join('');
+}
+
+function renderNavFooter(step, idx){
+  const isFirst = idx === 0;
+  const isLast = idx === STEPS.length - 1;
+  return `
+    <div class="nav-footer">
+      <button class="yk-btn" onclick="goBack()" ${isFirst ? 'disabled' : ''}>← Previous</button>
+      ${isLast ? '<span></span>' : `<button class="yk-btn primary" onclick="goNext()">${step.nextLabel || 'Next →'}</button>`}
+    </div>
+  `;
+}
+
+function waveDividerSVG(){
+  return `<svg class="wave-divider" viewBox="0 0 60 12"><path d="M0 6 Q7.5 0 15 6 T30 6 T45 6 T60 6" stroke="var(--indigo)" stroke-width="1.6" fill="none"/></svg>`;
+}
+
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap">
+      <div style="position:relative;padding-top:56.25%;">
+        <iframe src="${src}" loading="lazy" title="${title}"
+          style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+          allowfullscreen="true"></iframe>
+      </div>
+    </div>`;
+  }
+  return `<div class="video-embed-wrap">
+    <div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--indigo),var(--vermilion));">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+        <div style="font-size:2.4rem;">🎥</div>
+        <div style="font-size:14px;margin-top:6px;">Video coming soon!</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   PART 1 — What Is Ukiyo-e?
+============================================================ */
+function toggleUkiyoeCard(id){
+  if (!STATE.ukiyoeSeen.includes(id)) STATE.ukiyoeSeen.push(id);
+  saveState();
+  const card = document.getElementById('uk-' + id);
+  if (card) card.classList.toggle('flipped');
+}
+let pressStep = 0;
+function pressToPrint(){
+  const stage = document.getElementById('pressStage');
+  stage.classList.add('pressed');
+  ['pd-draw','pd-carve','pd-print'].forEach((id, i) => {
+    setTimeout(() => document.getElementById(id).classList.add('lit'), i * 260);
+  });
+  setTimeout(() => stage.classList.remove('pressed'), 1600);
+}
+function renderPart1(){
+  const cards = UKIYOE_CARDS.map(c => `
+    <div class="uk-card" id="uk-${c.id}" onclick="toggleUkiyoeCard('${c.id}')">
+      <div class="uk-card-inner">
+        <div class="uk-card-face uk-card-front"><div class="uk-icon">${c.icon}</div><div class="uk-label">${c.label}</div></div>
+        <div class="uk-card-face uk-card-back">${c.note}</div>
+      </div>
+    </div>
+  `).join('');
+  return `
+    <div class="kicker">Look Closely</div>
+    <h2 class="s-title">What Is Ukiyo-e?</h2>
+    <p class="s-sub">Pictures from another time in Japan.</p>
+    ${waveDividerSVG()}
+    <div class="uk-grid">${cards}</div>
+
+    <div class="print-demo">
+      <div class="kicker" style="margin-top:6px;">How Was It Made?</div>
+      <div class="print-steps-row">
+        <span class="print-step-icon" id="pd-draw">✏️</span><span class="print-arrow">→</span>
+        <span class="print-step-icon" id="pd-carve">🪚</span><span class="print-arrow">→</span>
+        <span class="print-step-icon" id="pd-print">🖨</span>
+      </div>
+      <div class="press-stage" id="pressStage">
+        <div class="press-block">🌊</div>
+        <div class="press-paper"><div class="press-paper-reveal"></div></div>
+      </div>
+      <button class="yk-btn primary" onclick="pressToPrint()">Press to Print</button>
+      <p class="print-caption" style="margin-top:12px;">Ukiyo-e was made as prints!</p>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PART 2 — Wave Detective (real Hokusai artwork)
+============================================================ */
+function toggleWaveHotspot(id){
+  if (!STATE.waveSeen.includes(id)) STATE.waveSeen.push(id);
+  saveState();
+  document.querySelectorAll('#waveStage .hero-hotspot').forEach(el => el.classList.remove('active'));
+  document.getElementById('wh-' + id).classList.add('active');
+  const h = WAVE_HOTSPOTS.find(x => x.id === id);
+  document.getElementById('waveCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.note}`;
+}
+function pickStillMoving(v){
+  STATE.smPick = v;
+  saveState();
+  document.querySelectorAll('.sm-btn').forEach(el => el.classList.remove('picked'));
+  document.getElementById('sm-' + v).classList.add('picked');
+  document.getElementById('smReveal').textContent = 'Lines can make water MOVE!';
+}
+function renderPart2(){
+  const hotspots = WAVE_HOTSPOTS.map(h => `
+    <div class="hero-hotspot" id="wh-${h.id}" onclick="toggleWaveHotspot('${h.id}')"
+      style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+  `).join('');
+  return `
+    <div class="kicker">Wave Detectives 🔍</div>
+    <h2 class="s-title">Wave Detective</h2>
+    <p class="s-sub">Tap the artwork to find every clue.</p>
+    <div class="hero-stage" id="waveStage">
+      <img src="assets/hokusai-great-wave.jpg" alt="Katsushika Hokusai, Under the Wave off Kanagawa (The Great Wave)">
+      ${hotspots}
+    </div>
+    <p class="credit-line">Katsushika Hokusai, Under the Wave off Kanagawa (The Great Wave), ca. 1830–32. The Metropolitan Museum of Art, H. O. Havemeyer Collection, Bequest of Mrs. H. O. Havemeyer, 1929. Public Domain.</p>
+    <div class="hero-callout" id="waveCallout">Tap a glowing area above to begin.</div>
+
+    <p class="s-sub" style="margin-top:20px;">Does the wave feel still… or moving?</p>
+    <div class="still-moving-row">
+      <button class="sm-btn" id="sm-still" onclick="pickStillMoving('still')">STILL</button>
+      <button class="sm-btn" id="sm-moving" onclick="pickStillMoving('moving')">MOVING!</button>
+    </div>
+    <div class="sm-reveal" id="smReveal"></div>
+  `;
+}
+
+/* ============================================================
+   PART 3 — Meet the Yōkai (real Kuniyoshi artwork)
+============================================================ */
+function toggleYokaiHotspot(id){
+  if (!STATE.yokaiFound.includes(id)) STATE.yokaiFound.push(id);
+  saveState();
+  document.querySelectorAll('#yokaiStage .hero-hotspot').forEach(el => el.classList.remove('active'));
+  document.getElementById('yh-' + id).classList.add('active');
+  const h = YOKAI_HOTSPOTS.find(x => x.id === id);
+  document.getElementById('yokaiCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.q}`;
+}
+function renderPart3(){
+  const hotspots = YOKAI_HOTSPOTS.map(h => `
+    <div class="hero-hotspot" id="yh-${h.id}" onclick="toggleYokaiHotspot('${h.id}')"
+      style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+  `).join('');
+  const cats = YOKAI_CATEGORIES.map(c => `<span class="yokai-cat">${c.emoji} ${c.label}</span>`).join('');
+  return `
+    <div class="kicker">Look Closer</div>
+    <h2 class="s-title">Meet the Yōkai</h2>
+    <p class="s-sub">Japanese stories are full of strange creatures called yōkai.</p>
+
+    <div class="detective-kicker">Can You Spot the Cat Demon? 👀</div>
+    <div class="hero-stage" id="yokaiStage">
+      <img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon"
+        onerror="this.closest('.hero-stage').classList.add('img-missing')">
+      <div class="hero-img-missing">
+        <div style="font-size:2.2rem;">🐾</div>
+        <div style="font-weight:800;margin-top:8px;">Artwork coming soon</div>
+        <div style="font-size:11.5px;margin-top:4px;opacity:.85;">Faye is adding this piece — see assets/README.md</div>
+      </div>
+      ${hotspots}
+    </div>
+    <p class="credit-line">Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon, 1847–48. The Museum of Fine Arts, Houston. Public Domain.</p>
+    <div class="hero-callout" id="yokaiCallout">Tap a glowing area above to begin.</div>
+
+    <div class="yokai-info-card">
+      <h3>What Is a Yōkai?</h3>
+      <p>Yōkai are strange beings from Japanese stories.</p>
+      <div class="yokai-cat-row">${cats}</div>
+      <div class="line">Animals can become strange, magical, funny or scary.</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PART 4 — Build Your Creature
+============================================================ */
+function pickCreatureType(id){ STATE.creatureType = id; saveState(); renderCurrentScreen(); }
+function toggleStrangeChip(label){
+  const i = STATE.strangeChips.indexOf(label);
+  if (i === -1) STATE.strangeChips.push(label); else STATE.strangeChips.splice(i, 1);
+  saveState();
+  renderCurrentScreen();
+}
+function renderPart4(){
+  const types = CREATURE_TYPES.map(t => `
+    <div class="type-btn${STATE.creatureType === t.id ? ' picked' : ''}" onclick="pickCreatureType('${t.id}')">
+      <div class="tb-emoji">${t.emoji}</div><div class="tb-label">${t.label}</div>
+    </div>
+  `).join('');
+  const chips = STRANGE_CHIPS.map(c => `
+    <span class="chip${STATE.strangeChips.includes(c) ? ' picked' : ''}" onclick="toggleStrangeChip('${c}')">${c}</span>
+  `).join('');
+  return `
+    <div class="kicker">Imagine</div>
+    <h2 class="s-title">Build Your Yōkai</h2>
+    <p class="s-sub">Start with something you know…</p>
+    <div class="type-row">${types}</div>
+    <div class="strange-label">…then make it STRANGE</div>
+    <div class="chip-row">${chips}</div>
+  `;
+}
+
+/* ============================================================
+   PART 5 — Build Your Story
+============================================================ */
+function pickPlace(id){ STATE.place = id; saveState(); renderCurrentScreen(); }
+function pickAction(id){ STATE.action = id; saveState(); renderCurrentScreen(); }
+function renderPart5(){
+  const places = PLACES.map(p => `
+    <div class="place-tile${STATE.place === p.id ? ' picked' : ''}" onclick="pickPlace('${p.id}')">
+      <div class="pt-icon">${p.emoji}</div><div class="pt-label">${p.label}</div>
+    </div>
+  `).join('');
+  const actions = STORY_ACTIONS.map(a => `
+    <div class="action-tile${STATE.action === a.id ? ' picked' : ''}" onclick="pickAction('${a.id}')">
+      <div class="at-icon">${a.emoji}</div><div class="at-label">${a.label}</div>
+    </div>
+  `).join('');
+  const done = STATE.place && STATE.action;
+  return `
+    <div class="kicker">Invent</div>
+    <h2 class="s-title">Where Does Your Yōkai Go?</h2>
+    <div class="place-grid">${places}</div>
+    <p class="s-sub" style="margin-top:2px;">What is happening?</p>
+    <div class="action-grid">${actions}</div>
+    <div class="story-done-line">${done ? 'Now your picture has a story.' : ''}</div>
+  `;
+}
+
+/* ============================================================
+   PART 6 — Get Ready to Create
+============================================================ */
+function toggleMaterial(id){
+  const i = STATE.materialsChecked.indexOf(id);
+  if (i === -1) STATE.materialsChecked.push(id); else STATE.materialsChecked.splice(i, 1);
+  saveState();
+  renderCurrentScreen();
+}
+function renderPart6(){
+  const tiles = MATERIALS.map(m => `
+    <div class="mat-tile${STATE.materialsChecked.includes(m.id) ? ' checked' : ''}" onclick="toggleMaterial('${m.id}')">
+      <div class="mat-check">✓</div><div class="m-icon">${m.icon}</div><div class="m-label">${m.label}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="kicker">Gather Your Tools</div>
+    <h2 class="s-title">Get Ready to Create</h2>
+    <div class="materials-grid">${tiles}</div>
+    <div class="ready-wrap"><div class="kicker" style="margin-bottom:10px;">Ready?</div></div>
+  `;
+}
+
+/* ============================================================
+   STUDIO STEPS (Part 7)
+============================================================ */
+function pickPalette(name){ STATE.studioPalettePick = name; saveState(); renderCurrentScreen(); }
+function toggleStudioDone(idx){ STATE.studioDone[idx] = !STATE.studioDone[idx]; saveState(); renderCurrentScreen(); }
+function renderStudioStep(step){
+  const idx = step.studioIndex;
+  const s = STUDIO_STEPS[idx];
+  let extra = '';
+  if (s.reminders) extra += `<div class="reminder-chips">${s.reminders.map(r => `<span class="reminder-chip">${r}</span>`).join('')}</div>`;
+  if (s.palette) {
+    const groups = s.palette.map(p => `
+      <div class="palette-swatch-group${STATE.studioPalettePick === p.name ? ' picked' : ''}" onclick="pickPalette('${p.name}')">
+        <div class="palette-dots">${p.colors.map(c => `<span class="palette-dot" style="background:${c};"></span>`).join('')}</div>
+        <div class="palette-name">${p.name}</div>
+      </div>
+    `).join('');
+    extra += `<div class="palette-row">${groups}</div>`;
+  }
+  if (s.note) extra += `<p class="studio-note">${s.note}</p>`;
+  const done = STATE.studioDone[idx];
+  return `
+    <div class="studio-kicker">Create With Mrs. Dawn — Step ${s.stepNumber} of 4</div>
+    <h2 class="s-title">${s.title}</h2>
+    ${renderVideoEmbed(s.teacherVideoUrl, s.videoTitle)}
+    ${extra}
+    <div class="complete-wrap">
+      <button class="complete-btn${done ? ' done' : ''}" onclick="toggleStudioDone(${idx})">${done ? s.completionLabel : "I'm done with this step"}</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PART 8 — Your Artwork
+============================================================ */
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  saving = true;
+  renderCurrentScreen();
+  try {
+    const record = await saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+  } catch (e) {
+    console.warn('[gallery] saveArtwork failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  renderCurrentScreen();
+}
+function pickReflect(word){ STATE.reflectPick = word; saveState(); renderCurrentScreen(); }
+
+function renderPart8(){
+  let uploadHtml;
+  if (saving) {
+    uploadHtml = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    uploadHtml = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>`;
+  } else {
+    uploadHtml = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Artwork</div></div>`;
+  }
+  const reflectChips = REFLECT_WORDS.map(w => `
+    <span class="reflect-chip${STATE.reflectPick === w ? ' picked' : ''}" onclick="pickReflect('${w}')">${w}</span>
+  `).join('');
+  return `
+    <div class="kicker">Your Yōkai Has Entered the Wave!</div>
+    <h2 class="s-title">Your Artwork</h2>
+    <div class="teacher-ref-frame">${TEACHER_ARTWORK_SRC
+      ? `<img src="${TEACHER_ARTWORK_SRC}" alt="Mrs. Dawn's finished yōkai artwork">`
+      : `<div class="teacher-ref-placeholder"><div class="tp-emoji">🖼</div><div class="tp-text">Teacher's finished artwork coming soon</div></div>`}</div>
+    <p class="reveal-line">Now show us yours.</p>
+    <div class="upload-slot-wrap">${uploadHtml}</div>
+    ${artworkRecord ? `<div class="student-frame"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>` : ''}
+    <div class="reflect-label">My Creature Is…</div>
+    <div class="reflect-row">${reflectChips}</div>
+    <div class="gallery-actions">
+      <a class="yk-btn primary wide" href="../../creation/">Add to the Gallery</a>
+    </div>
+  `;
+}
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+function renderStepBody(step){
+  switch (step.id) {
+    case 'what-is-ukiyoe': return renderPart1();
+    case 'wave-detective': return renderPart2();
+    case 'meet-yokai':     return renderPart3();
+    case 'build-creature': return renderPart4();
+    case 'build-story':    return renderPart5();
+    case 'get-ready':      return renderPart6();
+    case 'studio-1':
+    case 'studio-2':
+    case 'studio-3':
+    case 'studio-4':       return renderStudioStep(step);
+    case 'gallery':        return renderPart8();
+    default: return '';
+  }
+}
+
+async function renderCurrentScreen(){
+  const idx = STATE.currentStep;
+  const step = STEPS[idx];
+  document.getElementById('phaseBar').innerHTML = renderPhaseBar(step.phase);
+  document.getElementById('progressDots').innerHTML = renderDots();
+
+  if (step.id === 'gallery' && !artworkRecord && isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) {
+        artworkRecord = rows[0];
+        objectUrl = URL.createObjectURL(artworkRecord.blob);
+      }
+    } catch (e) { console.warn('[gallery] listArtworks failed', e); }
+  }
+
+  const body = renderStepBody(step);
+  const footer = renderNavFooter(step, idx);
+  document.getElementById('screen-content').innerHTML = `<div class="screen active">${body}${footer}</div>`;
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'yokai-in-the-great-wave');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  loadState();
+  renderCurrentScreen();
+}
+
+init();
+</script>
+</body>
+</html>
