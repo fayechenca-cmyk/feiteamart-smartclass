@@ -21,39 +21,36 @@ own digitized files (object IDs s0115V1962 and s0114V1962), confirmed
 edge for web use. Used in Part 1's "The Prints Travelled" aside comparing
 Van Gogh's 1887 copies to the ukiyo-e prints that inspired them.
 
-## kuniyoshi-cat-demon.jpg — NEEDS FAYE TO DOWNLOAD MANUALLY
+## kuniyoshi-okazaki-cat-demon.jpg / kuniyoshi-inumura-daikaku-cat.jpg / kuniyoshi-okabe-cat.jpg — done
 
-The MFA Houston object page returns HTTP 403 to non-browser requests (both
-direct curl and the fetch tool), and their own download flow requires
-clicking through a Terms acceptance in a real browser first — this can't be
-done programmatically, and their dispatcher/download URL shouldn't be
-hotlinked in production per the museum's terms.
+Three real ukiyo-e cat-yōkai prints, downloaded and self-hosted, displayed
+together as a small "museum wall" in Stage 5 ("Meet the Yōkai"). Each
+print's discovery-zone and comparison-highlight coordinates in the code
+(`YOKAI_ARTWORKS`, `YOKAI_CHANGES` in index.html) were placed by actually
+viewing each downloaded file, not guessed from memory.
 
-Note this is a **triptych** — three separate printed sheets/panels (right,
-center, left) — not a single image. The museum page should have a single
-combined download; if it instead offers three separate panel files, save
-all three and see the "if you get 3 separate panel files" note in
-index.html's asset-loading comment (search for `kuniyoshi-cat-demon`).
+**kuniyoshi-okazaki-cat-demon.jpg** (534×812)
+Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon, ca. 1850.
+The Metropolitan Museum of Art, Fletcher Fund, 1929. Public Domain.
+(A diptych — two sheets — depicting a giant cat demon looming over a
+servant/courtesan figure.)
 
-**To finish this asset:**
-1. Open https://emuseum.mfah.org/objects/112457/scene-from-a-ghost-story-the-okazaki-cat-demon
-   in a browser.
-2. Use their download option, accepting the Terms click-through.
-3. Save the file as exactly: `kuniyoshi-cat-demon.jpg` in this folder
-   (`lessons/yokai-in-the-great-wave/assets/`).
+**kuniyoshi-inumura-daikaku-cat.jpg** (750×1103)
+Utagawa Kuniyoshi, Inumura Daikaku and the Giant Enchanted Cat, ca. 1835.
+The British Museum, London.
 
-Once that file exists at that exact path, Stage 3 ("Meet the Yōkai") will
-automatically display it — no code changes needed. Until then, that section
-shows a clearly-marked "artwork coming soon" placeholder (the `<img>` tag
-has an `onerror` fallback wired for this), and the triptych-panels-joining
-reveal animation simply won't trigger.
+**kuniyoshi-okabe-cat.jpg** (1024×1024)
+Utagawa Kuniyoshi, Okabe, from Fifty-three Pairings for the Tōkaidō Road,
+ca. 1843–46. Victoria and Albert Museum, London.
 
-Credit to show once added (already wired into the code, shown automatically
-once the image loads): "Utagawa Kuniyoshi, Scene from a Ghost Story: The
-Okazaki Cat Demon, 1847–48. The Museum of Fine Arts, Houston. Public
-Domain."
-
-**Hotspot coordinates for this image are estimates**, not verified against
-the real file (since it isn't downloaded yet) — recheck `YOKAI_HOTSPOTS` in
-index.html once the real image is in place, the same way the Hokusai
-hotspots were verified against the actual downloaded photo.
+⚠️ **V&A license terms (kuniyoshi-okabe-cat.jpg) — don't lose track of this.**
+Unlike the Met and British Museum images, the V&A does not grant this image
+as unconditional public domain. Their standard non-commercial image license
+caps the image at 768px on the long edge and runs for a 5-year term. The
+file actually sitting in this folder is 1024×1024 — larger than that 768px
+ceiling — so before this course goes live: (1) re-check the exact license
+terms attached to this specific download on the V&A's own object page, and
+either resize it down to comply or confirm the terms you have are broader
+than the standard non-commercial license; (2) put a reminder somewhere to
+revisit or replace this image before the 5-year term lapses. This is the
+one asset in this whole course that is not a permanent public-domain grant.

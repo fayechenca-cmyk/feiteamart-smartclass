@@ -187,25 +187,52 @@ button{font-family:'Montserrat',sans-serif;}
 .hero-callout{margin-top:10px;background:#fff;padding:12px 14px;font-size:12.5px;line-height:1.5;min-height:20px;border:1.5px solid var(--line);}
 .hero-callout .hc-label{font-weight:800;color:var(--indigo);margin-right:6px;}
 
-.hero-img-missing{
-  display:none;aspect-ratio:16/10;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
-  color:#fff;text-align:center;align-items:center;justify-content:center;flex-direction:column;padding:20px;
+/* ---------- Sheet 4: Meet the Yōkai — three real prints as a small
+   museum discovery wall (overlapping/offset sheets, not cards) ---------- */
+.yokai-wall{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 16px;margin-top:12px;padding:8px 0 6px;}
+.yokai-print{position:relative;cursor:pointer;flex:0 1 210px;max-width:230px;}
+.yokai-print:nth-child(1){transform:rotate(-3deg);}
+.yokai-print:nth-child(2){transform:rotate(2deg);margin-top:16px;}
+.yokai-print:nth-child(3){transform:rotate(-1.5deg);}
+.yokai-print-inner{position:relative;border:2px solid var(--sumi);box-shadow:5px 7px 0 rgba(28,23,18,.18);overflow:hidden;}
+.yokai-print img{display:block;width:100%;height:auto;}
+.yokai-print .mood-veil{position:absolute;inset:0;background:radial-gradient(circle at 50% 38%, transparent 32%, rgba(20,37,58,.6) 100%);opacity:0;transition:opacity .4s ease;pointer-events:none;}
+.yokai-print .mood-veil.on{opacity:1;}
+.yokai-print .change-zone{
+  position:absolute;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .3s ease;
+  box-shadow:0 0 0 2px var(--vermilion), 0 0 22px 6px rgba(192,71,47,.5);
 }
-.img-missing .hero-img-missing{display:flex;}
-.img-missing img{display:none;}
+.yokai-print .change-zone.on{opacity:1;}
+.yokai-print .spotlight{position:absolute;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .5s ease;}
+.yokai-print.found .spotlight{opacity:1;animation:spotlightPulse 1.6s ease-in-out infinite;}
+@keyframes spotlightPulse{
+  0%,100%{box-shadow:0 0 0 2px var(--vermilion), 0 0 24px 8px rgba(192,71,47,.4);}
+  50%{box-shadow:0 0 0 3px var(--vermilion), 0 0 34px 12px rgba(192,71,47,.6);}
+}
+.yokai-print.found .yokai-print-inner::after{
+  content:'✓';position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:var(--vermilion);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.yokai-print-credit{font-size:9px;color:var(--ink-faint);text-align:center;margin-top:7px;line-height:1.4;font-style:italic;}
 
-.triptych-wrap{display:flex;justify-content:center;gap:2px;}
-.triptych-panel{width:33.33%;overflow:hidden;transition:transform .9s cubic-bezier(.2,.8,.2,1);}
-.triptych-panel img{width:300%;display:block;}
-.triptych-panel.p1 img{margin-left:0%;}
-.triptych-panel.p2 img{margin-left:-100%;}
-.triptych-panel.p3 img{margin-left:-200%;}
-.triptych-wrap.gathering .triptych-panel.p1{transform:translateX(30px);}
-.triptych-wrap.gathering .triptych-panel.p3{transform:translateX(-30px);}
+.discovery-counter{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--vermilion);margin-top:16px;min-height:26px;}
 
-.spot-found-banner{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--vermilion);margin-top:14px;min-height:26px;}
-.yokai-explain{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
-.yokai-transition{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--prussian);margin-top:26px;font-style:italic;}
+.changed-intro{text-align:center;font-size:12px;color:var(--ink-soft);margin:24px 0 10px;}
+.changed-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
+.changed-chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:11px;cursor:pointer;font-weight:700;}
+.changed-chip .cc-word{opacity:.65;font-weight:500;margin-left:3px;}
+.changed-chip.active{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+.changed-chip.active .cc-word{opacity:.85;}
+
+.evolution-row{display:flex;justify-content:center;align-items:center;gap:8px;margin:28px 0 8px;flex-wrap:wrap;}
+.evolution-icon{font-size:1.6rem;opacity:.3;transition:opacity .4s ease, font-size .4s ease;}
+.evolution-icon.lit{opacity:1;}
+.evolution-icon.evolution-giant.lit{font-size:2.3rem;}
+.evolution-arrow{font-size:12px;color:var(--ink-faint);}
+.evolution-caption{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:6px;}
+.yokai-reveal-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--prussian);margin-top:16px;font-weight:700;}
+.yokai-transition{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--vermilion);margin-top:26px;font-style:italic;}
 
 /* ---------- Sheet 5: Invent Your Yokai ---------- */
 .type-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
@@ -421,18 +448,45 @@ const WAVE_HOTSPOTS = [
   { id:'signature', emoji:'✒️', label:'The Signature', left:0.5,top:15, w:6,  h:16, note:"This looser brushed text is Hokusai's own signature, separate from the title box." }
 ];
 
-// Hotspot boxes for the Kuniyoshi Cat Demon (estimates — recheck once the
-// real file is dropped into assets/, see assets/README.md).
-const YOKAI_HOTSPOTS = [
-  { id:'size',       emoji:'🐾', label:'Giant Size',  note:'Is this an ordinary cat? Look how it fills the whole scene.', left:10, top:10, w:80, h:45 },
-  { id:'eyes',       emoji:'👀', label:'Eyes',        note:'Where is it looking?',            left:30, top:8,  w:34, h:20 },
-  { id:'expression', emoji:'😼', label:'Expression',  note:'Friendly… or dangerous?',          left:32, top:20, w:30, h:18 },
-  { id:'shape',      emoji:'🌀', label:'Animal Shape',note:'Look at its strange silhouette.',  left:5,  top:5,  w:90, h:70 },
-  { id:'pattern',    emoji:'✳',  label:'Pattern',     note:'What markings make it feel eerie, not cute?', left:20, top:35, w:40, h:25 },
-  { id:'story',      emoji:'🎭', label:'Story',       note:'What do you think is happening?',  left:15, top:60, w:70, h:35 }
+// Three real ukiyo-e cat-yōkai prints, shown together as a small museum
+// wall. catZone/change zones were placed by actually viewing each
+// downloaded file (see assets/README.md), not guessed from memory.
+const YOKAI_ARTWORKS = [
+  {
+    id: 'okazaki',
+    img: 'assets/kuniyoshi-okazaki-cat-demon.jpg',
+    alt: 'Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon',
+    credit: 'Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon, ca. 1850. The Metropolitan Museum of Art, Fletcher Fund, 1929. Public Domain.',
+    catZone: { left:0, top:0, w:100, h:56 }
+  },
+  {
+    id: 'inumura',
+    img: 'assets/kuniyoshi-inumura-daikaku-cat.jpg',
+    alt: 'Utagawa Kuniyoshi, Inumura Daikaku and the Giant Enchanted Cat',
+    credit: 'Utagawa Kuniyoshi, Inumura Daikaku and the Giant Enchanted Cat, ca. 1835. The British Museum, London.',
+    catZone: { left:8, top:0, w:92, h:65 }
+  },
+  {
+    id: 'okabe',
+    img: 'assets/kuniyoshi-okabe-cat.jpg',
+    alt: 'Utagawa Kuniyoshi, Okabe, from Fifty-three Pairings for the Tōkaidō Road',
+    credit: 'Utagawa Kuniyoshi, Okabe, from Fifty-three Pairings for the Tōkaidō Road, ca. 1843–46. Victoria and Albert Museum, London.',
+    catZone: { left:0, top:22, w:58, h:40 }
+  }
 ];
 
-const YOKAI_LINE = 'YŌKAI — Strange creatures from Japanese stories.';
+// "What changed?" — each entry highlights the matching zone across all
+// three prints (zones[i] maps to YOKAI_ARTWORKS[i]); mood has no zone,
+// it dims/vignettes the whole print instead.
+const YOKAI_CHANGES = [
+  { id:'size',  icon:'👆', label:'SIZE',  word:'Giant',       zones:[{left:0,top:0,w:100,h:56},{left:8,top:0,w:92,h:65},{left:0,top:22,w:58,h:40}] },
+  { id:'eyes',  icon:'👁', label:'EYES',  word:'Strange',     zones:[{left:15,top:15,w:50,h:18},{left:0,top:68,w:24,h:20},{left:5,top:35,w:25,h:15}] },
+  { id:'face',  icon:'😼', label:'FACE',  word:'Expressive',  zones:[{left:12,top:30,w:50,h:20},{left:0,top:66,w:26,h:26},{left:0,top:38,w:35,h:20}] },
+  { id:'shape', icon:'〰', label:'SHAPE', word:'Exaggerated', zones:[{left:0,top:0,w:100,h:56},{left:8,top:0,w:92,h:65},{left:0,top:22,w:58,h:40}] },
+  { id:'mood',  icon:'🌙', label:'MOOD',  word:'Mysterious',  zones:null }
+];
+
+const YOKAI_LINE = 'YŌKAI — Strange and supernatural beings from Japanese stories and folklore.';
 const REFLECT_WORDS = ['Funny','Scary','Powerful','Mysterious','Wild','Something else'];
 
 // TODO(Faye): paste a photo URL of your own finished yōkai artwork here —
@@ -450,8 +504,7 @@ function defaultState(){
     layersOn: { black:false, blue:false, red:false, yellow:false },
     vlSeen: [],
     waveSeen: [],
-    yokaiFound: [],
-    yokaiSpotted: false,
+    yokaiCatsFound: [],
     creatureType: null,
     strangeChips: [],
     place: null,
@@ -765,49 +818,89 @@ function renderSheet3(){
 }
 
 /* ============================================================
-   SHEET 4 — Meet the Yōkai (real Kuniyoshi triptych)
+   SHEET 4 — Meet the Yōkai (three real Kuniyoshi cat-yōkai prints,
+   laid out like a small museum discovery wall)
 ============================================================ */
-let triptychJoined = false;
-function joinTriptych(){
-  if (triptychJoined) return;
-  triptychJoined = true;
-  const wrap = document.getElementById('triptychWrap');
-  wrap.classList.add('gathering');
-  setTimeout(() => wrap.classList.remove('gathering'), 900);
+let yokaiChangeActive = null;
+let yokaiEvolutionPlayed = false;
+
+function tapYokaiPrint(idx){
+  const artwork = YOKAI_ARTWORKS[idx];
+  if (!STATE.yokaiCatsFound.includes(artwork.id)) {
+    STATE.yokaiCatsFound.push(artwork.id);
+    saveState();
+  }
+  document.getElementById('yokai-print-' + idx).classList.add('found');
+  updateDiscoveryCounter();
+  playEvolutionOnce();
 }
-function toggleYokaiHotspot(id){
-  if (!STATE.yokaiFound.includes(id)) STATE.yokaiFound.push(id);
-  if (!STATE.yokaiSpotted) { STATE.yokaiSpotted = true; document.getElementById('spotBanner').textContent = 'YOU FOUND IT!'; }
-  saveState();
-  document.querySelectorAll('#yokaiStage .hero-hotspot').forEach(el => el.classList.remove('active'));
-  document.getElementById('yh-' + id).classList.add('active');
-  const h = YOKAI_HOTSPOTS.find(x => x.id === id);
-  document.getElementById('yokaiCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.note}`;
+function updateDiscoveryCounter(){
+  const n = STATE.yokaiCatsFound.length;
+  const el = document.getElementById('discoveryCounter');
+  if (!el) return;
+  if (n === 0) el.textContent = '';
+  else if (n < 3) el.textContent = 'YOU FOUND ONE! 🐱 ' + n + '/3';
+  else el.textContent = 'YOU FOUND THEM ALL!';
+}
+function tapChangedChip(id){
+  yokaiChangeActive = (yokaiChangeActive === id) ? null : id;
+  document.querySelectorAll('.changed-chip').forEach(el => el.classList.toggle('active', el.dataset.change === yokaiChangeActive));
+  const change = YOKAI_CHANGES.find(c => c.id === yokaiChangeActive);
+  YOKAI_ARTWORKS.forEach((a, i) => {
+    const veil = document.getElementById('mood-veil-' + i);
+    const zone = document.getElementById('change-zone-' + i);
+    if (veil) veil.classList.remove('on');
+    if (zone) zone.classList.remove('on');
+    if (!change) return;
+    if (change.id === 'mood') {
+      if (veil) veil.classList.add('on');
+    } else if (change.zones && zone) {
+      const z = change.zones[i];
+      zone.style.left = z.left + '%'; zone.style.top = z.top + '%'; zone.style.width = z.w + '%'; zone.style.height = z.h + '%';
+      zone.classList.add('on');
+    }
+  });
+}
+function playEvolutionOnce(){
+  if (yokaiEvolutionPlayed) return;
+  yokaiEvolutionPlayed = true;
+  ['eco-cat', 'eco-giant', 'eco-yokai'].forEach((id, i) => {
+    setTimeout(() => { const el = document.getElementById(id); if (el) el.classList.add('lit'); }, i * 500);
+  });
 }
 function renderSheet4(){
-  const hotspots = YOKAI_HOTSPOTS.map(h => `
-    <div class="hero-hotspot" id="yh-${h.id}" onclick="toggleYokaiHotspot('${h.id}')" style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+  const prints = YOKAI_ARTWORKS.map((a, i) => `
+    <div class="yokai-print" id="yokai-print-${i}" onclick="tapYokaiPrint(${i})">
+      <div class="yokai-print-inner">
+        <img src="${a.img}" alt="${a.alt}">
+        <div class="mood-veil" id="mood-veil-${i}"></div>
+        <div class="change-zone" id="change-zone-${i}"></div>
+        <div class="spotlight" style="left:${a.catZone.left}%;top:${a.catZone.top}%;width:${a.catZone.w}%;height:${a.catZone.h}%;"></div>
+      </div>
+      <p class="yokai-print-credit">${a.credit}</p>
+    </div>
+  `).join('');
+  const changeChips = YOKAI_CHANGES.map(c => `
+    <span class="changed-chip" data-change="${c.id}" onclick="tapChangedChip('${c.id}')">${c.icon} ${c.label}<span class="cc-word"> ${c.word}</span></span>
   `).join('');
   return `
     <div class="kicker">Meet the Yōkai</div>
-    <h2 class="stage-title">Something Strange Is Hiding in This Print…</h2>
-    <div class="hero-stage" id="yokaiStage" onclick="joinTriptych()">
-      <div class="triptych-wrap" id="triptychWrap">
-        <div class="triptych-panel p1"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (right panel)" onerror="this.closest('.hero-stage').classList.add('img-missing')"></div>
-        <div class="triptych-panel p2"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (center panel)"></div>
-        <div class="triptych-panel p3"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (left panel)"></div>
-      </div>
-      <div class="hero-img-missing">
-        <div style="font-size:2.1rem;">🐾</div><div style="font-weight:800;margin-top:8px;">Artwork coming soon</div>
-        <div style="font-size:11px;margin-top:4px;opacity:.85;">Faye is adding this triptych — see assets/README.md</div>
-      </div>
-      ${hotspots}
+    <h2 class="stage-title">Something Strange Is Hiding in These Prints…</h2>
+    <p class="stage-sub" style="margin-bottom:2px;">Can you find the cats? 👀</p>
+    <div class="yokai-wall" id="yokaiWall">${prints}</div>
+    <div class="discovery-counter" id="discoveryCounter"></div>
+
+    <p class="changed-intro">What changed?</p>
+    <div class="changed-row">${changeChips}</div>
+
+    <div class="evolution-row" id="evolutionRow">
+      <span class="evolution-icon" id="eco-cat">🐱</span><span class="evolution-arrow">→</span>
+      <span class="evolution-icon evolution-giant" id="eco-giant">🐈</span><span class="evolution-arrow">→</span>
+      <span class="evolution-icon" id="eco-yokai">👹</span>
     </div>
-    <p class="credit-line">Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon, 1847–48. The Museum of Fine Arts, Houston. Public Domain.</p>
-    <div class="spot-found-banner" id="spotBanner"></div>
-    <div class="hero-callout" id="yokaiCallout">Tap a glowing area above to search.</div>
-    <p class="yokai-explain">${YOKAI_LINE}</p>
-    <p class="yokai-transition">Now it's your turn to invent one.</p>
+    <p class="evolution-caption">An ordinary animal… + imagination… becomes something strange!</p>
+    <p class="yokai-reveal-line">${YOKAI_LINE}</p>
+    <p class="yokai-transition">Now it's your turn. What could your creature become?</p>
   `;
 }
 
@@ -1035,7 +1128,12 @@ function buildScrollWorld(){
   if (STATE.studioPalettePick) { const el = document.getElementById('palette-'+STATE.studioPalettePick); if (el) el.classList.add('picked'); }
   STATE.studioDone.forEach((done, i) => { if (done) { const btn = document.getElementById('completeBtn-'+i); if (btn) { btn.classList.add('done'); btn.textContent = STUDIO_STEPS[i].completionLabel; } } });
   if (STATE.reflectPick) { const el = document.getElementById('reflect-' + STATE.reflectPick.replace(/\s+/g,'')); if (el) el.classList.add('picked'); }
-  if (STATE.yokaiSpotted) { const el = document.getElementById('spotBanner'); if (el) el.textContent = 'YOU FOUND IT!'; }
+  STATE.yokaiCatsFound.forEach(id => {
+    const idx = YOKAI_ARTWORKS.findIndex(a => a.id === id);
+    if (idx > -1) { const el = document.getElementById('yokai-print-' + idx); if (el) el.classList.add('found'); }
+  });
+  updateDiscoveryCounter();
+  if (STATE.yokaiCatsFound.length > 0) playEvolutionOnce();
 
   refreshUploadUI();
   setupObserver();
