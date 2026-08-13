@@ -4,239 +4,285 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>Yōkai in the Great Wave</title>
-<meta name="description" content="A museum-discovery + creature-invention Creation lesson built around two real ukiyo-e artworks: Hokusai's Great Wave and Kuniyoshi's Cat Demon. Look, imagine, then draw and paint your own yōkai story.">
+<meta name="description" content="A continuous printmaking-journey Creation lesson built around two real ukiyo-e artworks: Hokusai's Great Wave and Kuniyoshi's Cat Demon. Look, imagine, then draw and paint your own yōkai story.">
 <meta name="keywords" content="Creation, Books & Stories, Ukiyo-e, Hokusai, Kuniyoshi, Japanese Printmaking, Watercolor, Character Design">
 
 <script type="application/json" id="lessonMeta">
 {
   "title": "Yōkai in the Great Wave",
-  "subtitle": "A Museum-Inspired Ukiyo-e Story",
+  "subtitle": "A Ukiyo-e Printmaking Journey",
   "path": ["Creation", "Books & Stories · The Bookshelf", "Yōkai in the Great Wave"],
   "series": "Books & Stories",
   "tags": ["Ukiyo-e", "Hokusai", "Kuniyoshi", "Japanese Printmaking", "Watercolor", "Character Design"],
   "ageRange": "8+",
   "materials": ["Pencil", "Watercolor Paper", "Watercolor", "Brushes", "Water"],
-  "stageCount": 11
+  "stageCount": 9
 }
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --indigo:#1e3a5f;
-  --indigo-deep:#12253d;
+  --prussian:#143d5c;
   --turquoise:#6f9c98;
   --turquoise-soft:#c3d9d5;
   --vermilion:#c0472f;
-  --cream:#f0e6d2;
-  --paper:#e9dfc4;
-  --ink:#241d17;
-  --ink-soft:rgba(36,29,23,.66);
-  --ink-faint:rgba(36,29,23,.42);
-  --line:rgba(36,29,23,.18);
+  --yellow:#d9a441;
+  --sumi:#1c1712;
+  --washi:#ece0c4;
+  --washi-deep:#ddd0ac;
+  --ink-soft:rgba(28,23,18,.68);
+  --ink-faint:rgba(28,23,18,.44);
+  --line:rgba(28,23,18,.2);
 }
 *{box-sizing:border-box;}
 html,body{height:100%;}
 body{
-  margin:0;font-family:'Montserrat',sans-serif;background:var(--paper);color:var(--ink);
-  overflow-x:hidden;-webkit-tap-highlight-color:transparent;user-select:none;
+  margin:0;font-family:'Montserrat',sans-serif;background:var(--washi);color:var(--sumi);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow:hidden;
 }
 .display{font-family:'Noto Serif SC',serif;}
 button{font-family:'Montserrat',sans-serif;}
 
-/* subtle woodblock-print / washi paper grain */
+/* woodblock / washi paper grain, whole page */
 #grain{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
+  position:fixed;inset:0;pointer-events:none;z-index:2;
   background-image:
-    repeating-linear-gradient(115deg, rgba(36,29,23,.025) 0px, rgba(36,29,23,.025) 1px, transparent 1px, transparent 3px),
-    radial-gradient(rgba(36,29,23,.05) 1px, transparent 1.3px);
+    repeating-linear-gradient(112deg, rgba(28,23,18,.028) 0px, rgba(28,23,18,.028) 1px, transparent 1px, transparent 3px),
+    radial-gradient(rgba(28,23,18,.05) 1px, transparent 1.3px);
   background-size:auto, 5px 5px;
-  opacity:.6;
+  opacity:.55;mix-blend-mode:multiply;
 }
 
-#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
-
-/* ---------- Top bar ---------- */
-#topbar{position:sticky;top:0;z-index:500;background:linear-gradient(var(--paper) 78%, transparent);padding:12px 18px 6px;}
-.back-link{font-size:12.5px;color:var(--indigo);text-decoration:none;font-weight:700;letter-spacing:.3px;}
-
-/* phase bar (LOOK -> IMAGINE -> DRAW -> COLOR -> DETAIL) */
-.phase-bar{display:flex;justify-content:center;gap:4px;margin-top:10px;flex-wrap:wrap;}
-.phase-pip{font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 8px;border-radius:999px;color:var(--ink-faint);background:rgba(36,29,23,.06);}
+/* ---------- fixed chrome ---------- */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:500;background:linear-gradient(var(--washi) 72%, transparent);padding:12px 16px 8px;pointer-events:none;}
+#topbar a, #topbar .dots-row{pointer-events:auto;}
+.back-link{font-size:12px;color:var(--indigo);text-decoration:none;font-weight:700;letter-spacing:.3px;}
+.phase-bar{display:flex;justify-content:center;gap:4px;margin-top:9px;flex-wrap:wrap;pointer-events:auto;}
+.phase-pip{font-size:8.5px;font-weight:800;letter-spacing:1px;padding:3px 7px;border-radius:2px;color:var(--ink-faint);background:rgba(28,23,18,.06);transition:background .3s ease,color .3s ease;}
 .phase-pip.active{color:#fff;background:var(--indigo);}
 .phase-pip.past{color:var(--indigo);background:var(--turquoise-soft);}
-
-.progress-dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:8px;}
-.p-dot{width:6px;height:6px;border-radius:50%;background:var(--line);cursor:pointer;transition:transform .15s ease;}
+.progress-dots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:7px;}
+.p-dot{width:6px;height:6px;border-radius:50%;background:var(--line);cursor:pointer;transition:transform .2s ease,background .3s ease;}
 .p-dot.done{background:var(--indigo);}
-.p-dot.current{transform:scale(1.8);box-shadow:0 0 0 3px rgba(30,58,95,.16);}
+.p-dot.current{transform:scale(1.9);box-shadow:0 0 0 3px rgba(30,58,95,.18);}
 
-/* ---------- Screens ---------- */
-.screen{display:none;max-width:660px;margin:0 auto;padding:8px 18px 40px;}
-.screen.active{display:block;animation:ykFadeIn .4s ease;}
-@keyframes ykFadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+/* ---------- scroll world ---------- */
+#scrollWorld{height:100vh;overflow-y:auto;overflow-x:hidden;scroll-snap-type:y proximity;position:relative;z-index:1;}
+.sheet{
+  min-height:100vh;max-width:680px;margin:0 auto;padding:78px 20px 50px;
+  scroll-snap-align:start;position:relative;
+  opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;
+}
+.sheet.in-view{opacity:1;transform:translateY(0);}
 
-.kicker{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--vermilion);text-align:center;font-weight:800;margin-bottom:6px;}
-.s-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.75rem;text-align:center;margin:0 0 4px;color:var(--indigo-deep);letter-spacing:.5px;}
-.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 16px;line-height:1.5;}
+/* torn/registration joint between sheets */
+.joint{width:100%;height:34px;margin:0 auto;max-width:680px;opacity:.6;}
+.joint svg{width:100%;height:100%;display:block;}
 
-/* wave divider */
-.wave-divider{width:60px;height:12px;margin:8px auto 16px;opacity:.55;}
+.kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--vermilion);text-align:center;font-weight:800;margin-bottom:6px;}
+.stage-title{
+  font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.9rem;text-align:center;margin:0 0 6px;color:var(--prussian);
+  letter-spacing:.4px;text-shadow:1.5px 0 0 rgba(192,71,47,.28), -1.5px 0 0 rgba(20,61,92,.22);
+}
+.stage-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.55;}
 
-.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
 .yk-btn{
-  font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:3px;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;transition:transform .12s ease, opacity .15s ease;
-  border:1.5px solid var(--ink);background:transparent;color:var(--ink);letter-spacing:.3px;
+  font-weight:700;font-size:13px;padding:11px 18px;border-radius:2px;cursor:pointer;
+  transition:transform .12s ease;border:1.5px solid var(--sumi);background:transparent;color:var(--sumi);letter-spacing:.3px;
 }
 .yk-btn:active{transform:scale(.96);}
 .yk-btn.primary{background:var(--indigo);border-color:var(--indigo);color:#fff;}
 .yk-btn.vermilion{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
-.yk-btn:disabled{opacity:.3;cursor:not-allowed;}
+.yk-btn:disabled{opacity:.28;cursor:not-allowed;}
 .yk-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
 
-/* museum credit line */
-.credit-line{font-size:10px;color:var(--ink-faint);text-align:center;margin-top:6px;line-height:1.5;font-style:italic;padding:0 10px;}
+.credit-line{font-size:9.5px;color:var(--ink-faint);text-align:center;margin-top:6px;line-height:1.5;font-style:italic;padding:0 8px;}
 
-/* video embed (studio steps) */
-.video-embed-wrap{margin:14px 0 8px;border-radius:2px;overflow:hidden;box-shadow:0 10px 26px rgba(18,37,61,.25);}
+/* ---------- Sheet 0: Enter the Print World ---------- */
+.opener-stage{height:44vh;min-height:230px;max-height:340px;position:relative;display:flex;align-items:center;justify-content:center;}
+.ripple{transform-origin:center;transform-box:fill-box;opacity:0;animation:rippleOut 2.4s ease-out infinite;}
+.ripple.r2{animation-delay:.55s;}
+.ripple.r3{animation-delay:1.1s;}
+@keyframes rippleOut{0%{transform:scale(.3);opacity:.5;}100%{transform:scale(2.7);opacity:0;}}
+.opener-mark{animation:markIn 1s ease-out forwards;opacity:0;transform:scale(.55);transform-origin:center;transform-box:fill-box;}
+@keyframes markIn{0%{opacity:0;transform:scale(.5);}60%{opacity:1;transform:scale(1.08);}100%{opacity:1;transform:scale(1);}}
+.opener-title{text-align:right;font-size:2.5rem;margin:4px 0 2px;padding-right:6%;}
+.opener-sub{text-align:right;font-size:13px;color:var(--ink-soft);max-width:380px;margin:0 0 0 auto;padding-right:6%;line-height:1.6;}
+.ukiyoe-line{text-align:center;font-size:14px;color:var(--prussian);font-weight:700;margin-top:26px;}
 
-/* ---------- Part 1: What is Ukiyo-e ---------- */
-.uk-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px;}
-@media(min-width:520px){.uk-grid{grid-template-columns:1fr 1fr 1fr;}}
-.uk-card{perspective:900px;height:118px;cursor:pointer;}
-.uk-card-inner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;}
-.uk-card.flipped .uk-card-inner{transform:rotateY(180deg);}
-.uk-card-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;border:1.5px solid var(--line);}
-.uk-card-front{background:var(--cream);}
-.uk-card-front .uk-icon{font-size:1.5rem;}
-.uk-card-front .uk-label{font-weight:800;font-size:10.5px;margin-top:5px;letter-spacing:.5px;}
-.uk-card-back{background:var(--indigo);color:#fff;transform:rotateY(180deg);font-size:11px;line-height:1.4;font-weight:500;}
+/* ---------- Sheet 1: How Prints Are Made ---------- */
+.process-row{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:18px 0;}
+.process-icon{font-size:1.4rem;opacity:.45;transition:opacity .3s ease;}
+.process-icon.lit{opacity:1;}
+.process-arrow{font-size:11px;color:var(--ink-faint);}
 
-.print-demo{margin-top:26px;text-align:center;}
-.print-steps-row{display:flex;justify-content:center;align-items:center;gap:6px;margin-bottom:14px;}
-.print-step-icon{font-size:1.5rem;opacity:.5;transition:opacity .3s ease;}
-.print-step-icon.lit{opacity:1;}
-.print-arrow{font-size:12px;color:var(--ink-faint);}
-.press-stage{width:150px;height:150px;margin:0 auto 14px;position:relative;}
+.press-stage{width:150px;height:150px;margin:10px auto 12px;position:relative;}
 .press-block{
-  position:absolute;left:50%;top:8px;width:100px;height:60px;transform:translateX(-50%);
-  background:var(--indigo);border-radius:2px;transition:transform .5s cubic-bezier(.4,0,.2,1);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;z-index:3;
+  position:absolute;left:50%;top:6px;width:100px;height:58px;transform:translateX(-50%);
+  background:var(--sumi);border-radius:1px;transition:transform .5s cubic-bezier(.4,0,.2,1);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;z-index:3;
 }
-.press-stage.pressed .press-block{transform:translateX(-50%) translateY(58px) scaleY(.85);}
+.press-stage.pressed .press-block{transform:translateX(-50%) translateY(56px) scaleY(.85);}
 .press-paper{
-  position:absolute;left:50%;bottom:8px;width:120px;height:70px;transform:translateX(-50%);
-  background:var(--cream);border:1.5px solid var(--line);border-radius:2px;overflow:hidden;z-index:1;
+  position:absolute;left:50%;bottom:6px;width:120px;height:70px;transform:translateX(-50%);
+  background:var(--washi);border:1.5px solid var(--line);overflow:hidden;z-index:1;
 }
 .press-paper-reveal{position:absolute;inset:0;opacity:0;transition:opacity .4s ease .35s;background:linear-gradient(160deg,var(--turquoise),var(--indigo));}
 .press-stage.pressed .press-paper-reveal{opacity:.85;}
-.print-caption{font-size:12.5px;color:var(--ink-soft);font-style:italic;}
+.press-caption{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:8px;}
 
-/* ---------- Part 2 / Part 3: hero artwork investigation ---------- */
-.detective-kicker{text-align:center;font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.1rem;color:var(--vermilion);margin-bottom:2px;}
-.hero-stage{position:relative;border-radius:2px;overflow:hidden;box-shadow:0 12px 30px rgba(18,37,61,.3);border:2px solid var(--ink);}
+.layer-section{margin-top:32px;text-align:center;}
+.layer-heading{font-size:12px;font-weight:800;letter-spacing:1px;color:var(--prussian);margin-bottom:12px;}
+.layer-stage{width:220px;height:150px;margin:0 auto 14px;position:relative;background:#fff;border:1.5px solid var(--line);box-shadow:3px 4px 0 rgba(28,23,18,.12);}
+.layer-stage svg{position:absolute;inset:0;width:100%;height:100%;}
+.layer-svg-layer{opacity:0;transition:opacity .35s ease;}
+.layer-svg-layer.on{opacity:1;}
+.layer-btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.layer-btn{
+  border:1.5px solid var(--line);background:var(--washi-deep);border-radius:999px;
+  padding:8px 13px;font-size:10.5px;font-weight:800;cursor:pointer;letter-spacing:.3px;
+}
+.layer-btn.on{color:#fff;}
+.layer-btn.on[data-c="black"]{background:var(--sumi);border-color:var(--sumi);}
+.layer-btn.on[data-c="blue"]{background:var(--indigo);border-color:var(--indigo);}
+.layer-btn.on[data-c="red"]{background:var(--vermilion);border-color:var(--vermilion);}
+.layer-btn.on[data-c="yellow"]{background:var(--yellow);border-color:var(--yellow);color:var(--sumi);}
+.layer-complete{font-size:12.5px;color:var(--vermilion);font-weight:800;margin-top:12px;min-height:18px;}
+
+.collab-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:30px;}
+.collab-card{text-align:center;width:76px;}
+.collab-card .cc-icon{font-size:1.5rem;}
+.collab-card .cc-role{font-size:9px;font-weight:800;letter-spacing:.3px;margin-top:4px;color:var(--prussian);}
+.collab-card .cc-action{font-size:9px;color:var(--ink-soft);margin-top:1px;}
+
+/* ---------- Sheet 2: Visual Language ---------- */
+.vislang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+@media(min-width:480px){.vislang-grid{grid-template-columns:1fr 1fr 1fr;}}
+.vl-card{position:relative;cursor:pointer;border:1.5px solid var(--sumi);overflow:hidden;aspect-ratio:1/1;}
+.vl-card img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05);}
+.vl-card .vl-icon-only{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:var(--washi-deep);}
+.vl-label{position:absolute;left:0;right:0;bottom:0;background:rgba(28,23,18,.72);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.5px;text-align:center;padding:5px 3px;}
+.vl-note{position:absolute;inset:0;background:rgba(30,58,95,.94);color:#fff;font-size:10.5px;line-height:1.4;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;opacity:0;transition:opacity .3s ease;}
+.vl-card.flipped .vl-note{opacity:1;}
+
+.vangogh-aside{margin-top:30px;text-align:center;}
+.vg-route{font-size:11.5px;font-weight:800;letter-spacing:1px;color:var(--prussian);margin-bottom:4px;}
+.vg-line{font-size:12px;color:var(--ink-soft);margin:0 0 14px;}
+.vg-pair-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.vg-pair{width:130px;}
+.vg-pair img{width:100%;display:block;border:1.5px solid var(--sumi);}
+.vg-pair-cap{font-size:9.5px;color:var(--ink-faint);margin-top:4px;text-align:center;line-height:1.4;}
+
+/* ---------- Sheets 3/4: hero artwork investigation ---------- */
+.detective-kicker{text-align:center;font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.05rem;color:var(--vermilion);margin-bottom:2px;}
+.hero-stage{position:relative;overflow:hidden;box-shadow:0 14px 32px rgba(20,37,58,.32);border:2px solid var(--sumi);}
 .hero-stage img{display:block;width:100%;height:auto;}
 .hero-hotspot{position:absolute;border-radius:8px;cursor:pointer;}
 .hero-hotspot.active{box-shadow:0 0 0 2px var(--vermilion);animation:hotspotPulse 1s ease-in-out infinite;}
 @keyframes hotspotPulse{0%,100%{box-shadow:0 0 0 2px var(--vermilion);}50%{box-shadow:0 0 0 5px rgba(192,71,47,.4);}}
-.hero-callout{margin-top:10px;background:var(--cream);border-radius:2px;padding:12px 14px;font-size:13px;line-height:1.5;min-height:20px;border:1.5px solid var(--line);}
+.hero-callout{margin-top:10px;background:#fff;padding:12px 14px;font-size:12.5px;line-height:1.5;min-height:20px;border:1.5px solid var(--line);}
 .hero-callout .hc-label{font-weight:800;color:var(--indigo);margin-right:6px;}
+
 .hero-img-missing{
-  display:none;aspect-ratio:3/2;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
+  display:none;aspect-ratio:16/10;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
   color:#fff;text-align:center;align-items:center;justify-content:center;flex-direction:column;padding:20px;
 }
 .img-missing .hero-img-missing{display:flex;}
 .img-missing img{display:none;}
 
-.still-moving-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
-.sm-btn{border:1.5px solid var(--line);background:var(--cream);border-radius:3px;padding:10px 20px;font-weight:800;font-size:12px;letter-spacing:.5px;cursor:pointer;}
-.sm-btn.picked{background:var(--indigo);border-color:var(--indigo);color:#fff;}
-.sm-reveal{text-align:center;font-size:13px;color:var(--indigo);margin-top:10px;min-height:18px;font-style:italic;}
+.triptych-wrap{display:flex;justify-content:center;gap:2px;}
+.triptych-panel{width:33.33%;overflow:hidden;transition:transform .9s cubic-bezier(.2,.8,.2,1);}
+.triptych-panel img{width:300%;display:block;}
+.triptych-panel.p1 img{margin-left:0%;}
+.triptych-panel.p2 img{margin-left:-100%;}
+.triptych-panel.p3 img{margin-left:-200%;}
+.triptych-wrap.gathering .triptych-panel.p1{transform:translateX(30px);}
+.triptych-wrap.gathering .triptych-panel.p3{transform:translateX(-30px);}
 
-/* yokai info card */
-.yokai-info-card{margin-top:22px;background:var(--cream);border:1.5px solid var(--line);border-radius:2px;padding:16px;text-align:center;}
-.yokai-info-card h3{font-family:'Noto Serif SC',serif;font-size:1.05rem;color:var(--indigo-deep);margin:0 0 4px;}
-.yokai-info-card p{font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;}
-.yokai-cat-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
-.yokai-cat{background:var(--paper);border-radius:999px;padding:6px 12px;font-size:11.5px;font-weight:700;}
-.yokai-info-card .line{font-size:12px;color:var(--vermilion);font-weight:700;margin-top:12px;}
+.spot-found-banner{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--vermilion);margin-top:14px;min-height:26px;}
+.yokai-explain{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:6px;}
+.yokai-transition{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--prussian);margin-top:26px;font-style:italic;}
 
-/* ---------- Part 4: Build Your Creature ---------- */
+/* ---------- Sheet 5: Invent Your Yokai ---------- */
 .type-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
-.type-btn{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:10px 8px;text-align:center;cursor:pointer;width:66px;}
+.type-btn{background:#fff;border:1.5px solid var(--line);border-radius:2px;padding:10px 8px;text-align:center;cursor:pointer;width:66px;}
 .type-btn.picked{border-color:var(--indigo);background:var(--turquoise-soft);}
 .type-btn .tb-emoji{font-size:1.4rem;}
-.type-btn .tb-label{font-size:9.5px;font-weight:800;margin-top:3px;letter-spacing:.3px;}
-.strange-label{text-align:center;font-size:12px;color:var(--ink-faint);font-weight:700;letter-spacing:.5px;margin:4px 0 8px;}
+.type-btn .tb-label{font-size:9px;font-weight:800;margin-top:3px;letter-spacing:.3px;}
+.strange-label{text-align:center;font-size:11.5px;color:var(--ink-faint);font-weight:700;letter-spacing:.5px;margin:4px 0 8px;}
 .chip-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
-.chip{background:var(--cream);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:11.5px;cursor:pointer;font-weight:700;}
 .chip.picked{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
 
-/* ---------- Part 5: Build Your Story ---------- */
+/* ---------- Sheet 6: Build Your Story ---------- */
 .place-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:20px;}
-.place-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 4px;text-align:center;cursor:pointer;}
+.place-tile{background:#fff;border:1.5px solid var(--line);border-radius:2px;padding:14px 4px;text-align:center;cursor:pointer;}
 .place-tile.picked{border-color:var(--indigo);background:var(--turquoise-soft);}
 .place-tile .pt-icon{font-size:1.4rem;}
-.place-tile .pt-label{font-size:9.5px;font-weight:800;margin-top:4px;}
+.place-tile .pt-label{font-size:9px;font-weight:800;margin-top:4px;}
 .action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
-.action-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 4px;text-align:center;cursor:pointer;}
+.action-tile{background:#fff;border:1.5px solid var(--line);border-radius:2px;padding:14px 4px;text-align:center;cursor:pointer;}
 .action-tile.picked{border-color:var(--vermilion);background:var(--turquoise-soft);}
 .action-tile .at-icon{font-size:1.4rem;}
-.action-tile .at-label{font-size:9.5px;font-weight:800;margin-top:4px;}
-.story-done-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.15rem;color:var(--indigo-deep);margin-top:20px;min-height:24px;font-style:italic;}
+.action-tile .at-label{font-size:9px;font-weight:800;margin-top:4px;}
+.story-done-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--prussian);margin-top:20px;min-height:24px;font-style:italic;}
 
-/* ---------- Part 6: Materials ---------- */
-.materials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:6px;}
-@media(max-width:420px){.materials-grid{grid-template-columns:repeat(2,1fr);}}
-.mat-tile{background:var(--cream);border:1.5px solid var(--line);border-radius:3px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;}
+/* ---------- Sheet 7: Create With Mrs. Dawn ---------- */
+.materials-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:6px;}
+@media(max-width:480px){.materials-grid{grid-template-columns:repeat(3,1fr);}}
+.mat-tile{background:#fff;border:1.5px solid var(--line);border-radius:2px;padding:12px 4px;text-align:center;cursor:pointer;position:relative;}
 .mat-tile.checked{border-color:var(--indigo);background:var(--turquoise-soft);}
-.mat-tile .m-icon{font-size:1.5rem;}
-.mat-tile .m-label{font-size:10.5px;font-weight:700;margin-top:5px;}
-.mat-check{display:none;position:absolute;top:4px;right:6px;color:var(--indigo);font-weight:900;}
+.mat-tile .m-icon{font-size:1.3rem;}
+.mat-tile .m-label{font-size:9.5px;font-weight:700;margin-top:4px;}
+.mat-check{display:none;position:absolute;top:3px;right:5px;color:var(--indigo);font-weight:900;font-size:11px;}
 .mat-tile.checked .mat-check{display:block;}
-.ready-wrap{text-align:center;margin-top:22px;}
+.ready-wrap{text-align:center;margin-top:20px;}
 
-/* ---------- Studio steps ---------- */
-.studio-kicker{text-align:center;font-size:11px;color:var(--ink-faint);font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.video-block{margin-top:44px;padding-top:20px;border-top:1.5px dashed var(--line);}
+.video-mini-progress{text-align:center;font-size:10.5px;font-weight:800;letter-spacing:1px;color:var(--ink-faint);margin-bottom:4px;}
+.video-block-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.35rem;text-align:center;color:var(--prussian);margin:0 0 12px;}
+.video-embed-wrap{border-radius:1px;overflow:hidden;box-shadow:0 10px 26px rgba(20,37,58,.28);}
 .reminder-chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
-.reminder-chip{background:var(--turquoise-soft);border-radius:999px;padding:6px 13px;font-size:11.5px;font-weight:700;color:var(--indigo-deep);}
+.reminder-chip{background:var(--turquoise-soft);border-radius:999px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--prussian);}
 .palette-row{display:flex;gap:14px;justify-content:center;margin:14px 0 6px;}
-.palette-swatch-group{text-align:center;cursor:pointer;padding:8px;border-radius:3px;border:1.5px solid transparent;}
-.palette-swatch-group.picked{border-color:var(--indigo);background:var(--cream);}
+.palette-swatch-group{text-align:center;cursor:pointer;padding:8px;border:1.5px solid transparent;}
+.palette-swatch-group.picked{border-color:var(--indigo);background:#fff;}
 .palette-dots{display:flex;gap:4px;justify-content:center;margin-bottom:4px;}
 .palette-dot{width:15px;height:15px;border-radius:50%;border:1px solid rgba(0,0,0,.15);}
-.palette-name{font-size:10.5px;font-weight:700;}
-.studio-note{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:6px;}
-.complete-wrap{text-align:center;margin-top:20px;}
-.complete-btn{background:var(--cream);border:2px dashed var(--line);border-radius:999px;padding:11px 24px;cursor:pointer;font-weight:700;font-size:13px;color:var(--ink-soft);}
+.palette-name{font-size:10px;font-weight:700;}
+.video-note{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin-top:6px;}
+.mini-nav{display:flex;justify-content:center;gap:8px;margin-top:16px;}
+.mini-nav-btn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;color:var(--ink-soft);}
+.mini-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.complete-wrap{text-align:center;margin-top:16px;}
+.complete-btn{background:#fff;border:2px dashed var(--line);border-radius:999px;padding:10px 22px;cursor:pointer;font-weight:700;font-size:12.5px;color:var(--ink-soft);}
 .complete-btn.done{background:var(--indigo);border-style:solid;border-color:var(--indigo);color:#fff;}
 
-/* ---------- Part 8: Your Artwork ---------- */
-.teacher-ref-frame{width:200px;margin:14px auto;padding:10px;background:var(--cream);border:2px solid var(--ink);}
+/* ---------- Sheet 8: Share Your Artwork ---------- */
+.teacher-ref-frame{width:190px;margin:14px auto;padding:9px;background:#fff;border:2px solid var(--sumi);}
 .teacher-ref-frame img{width:100%;display:block;}
-.teacher-ref-placeholder{
-  width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,var(--indigo),var(--vermilion));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:10px;
-}
-.teacher-ref-placeholder .tp-emoji{font-size:1.8rem;}
-.teacher-ref-placeholder .tp-text{font-size:11px;margin-top:6px;}
-.reveal-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.3rem;color:var(--indigo-deep);margin:8px 0 18px;}
+.teacher-ref-placeholder{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,var(--indigo),var(--vermilion));display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:10px;}
+.teacher-ref-placeholder .tp-emoji{font-size:1.6rem;}
+.teacher-ref-placeholder .tp-text{font-size:10px;margin-top:6px;}
+.reveal-line{text-align:center;font-family:'Noto Serif SC',serif;font-size:1.25rem;color:var(--prussian);margin:6px 0 18px;}
 .upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:8px;}
 .upload-slot{
-  position:relative;width:220px;height:220px;border-radius:2px;border:2px dashed var(--indigo);background:var(--cream);
+  position:relative;width:210px;height:210px;border:2px dashed var(--indigo);background:#fff;
   display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
 }
 .upload-slot.saving{border-color:var(--vermilion);}
 .upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.upload-slot .slot-plus{font-size:32px;color:var(--indigo);}
-.upload-slot .slot-label{font-size:11px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
-.student-frame{width:240px;margin:18px auto 6px;padding:14px;background:var(--cream);border:2px solid var(--ink);box-shadow:6px 7px 0 rgba(36,29,23,.15);}
+.upload-slot .slot-plus{font-size:30px;color:var(--indigo);}
+.upload-slot .slot-label{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
+.student-frame{width:230px;margin:18px auto 6px;padding:13px;background:#fff;border:2px solid var(--sumi);box-shadow:6px 7px 0 rgba(28,23,18,.15);}
 .student-frame img{width:100%;display:block;}
-.reflect-label{text-align:center;font-size:11.5px;font-weight:800;letter-spacing:.5px;color:var(--ink-faint);margin:20px 0 8px;text-transform:uppercase;}
+.reflect-label{text-align:center;font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--ink-faint);margin:20px 0 8px;text-transform:uppercase;}
 .reflect-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
-.reflect-chip{background:var(--cream);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.reflect-chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:11.5px;cursor:pointer;font-weight:700;}
 .reflect-chip.picked{background:var(--vermilion);border-color:var(--vermilion);color:#fff;}
 .gallery-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:22px;}
 </style>
@@ -245,14 +291,13 @@ button{font-family:'Montserrat',sans-serif;}
 
 <div id="grain"></div>
 
-<div id="app">
-  <div id="topbar">
-    <a class="back-link" href="../../creation/">← Studio</a>
-    <div class="phase-bar" id="phaseBar"></div>
-    <div class="progress-dots" id="progressDots"></div>
-  </div>
-  <div id="screen-content"></div>
+<div id="topbar">
+  <a class="back-link" href="../../creation/">← Studio</a>
+  <div class="phase-bar" id="phaseBar"></div>
+  <div class="progress-dots" id="progressDots"></div>
 </div>
+
+<div id="scrollWorld"></div>
 
 <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
 
@@ -261,63 +306,42 @@ button{font-family:'Montserrat',sans-serif;}
 
 <script>
 /* ============================================================
-   DATA
+   DATA — 9 stages (matches the flow list exactly). Each stage still
+   knows its render function, so content stays editable the same way
+   Basquiat's STEPS array works — but instead of a screen-swap SPA,
+   every stage is built once into one continuous scrollable document
+   ("one printed sheet leading into the next"), and interactions
+   mutate the already-built DOM directly rather than re-rendering.
 ============================================================ */
 const PHASES = ['LOOK','IMAGINE','DRAW','COLOR','DETAIL'];
 
-const STEPS = [
-  { id:'what-is-ukiyoe', step:1,  title:'What Is Ukiyo-e?',                  phase:'LOOK' },
-  { id:'wave-detective',  step:2,  title:'Wave Detective',                   phase:'LOOK' },
-  { id:'meet-yokai',      step:3,  title:'Meet the Yōkai',                   phase:'LOOK' },
-  { id:'build-creature',  step:4,  title:'Build Your Yōkai',                 phase:'IMAGINE' },
-  { id:'build-story',     step:5,  title:'Where Does Your Yōkai Go?',        phase:'IMAGINE' },
-  { id:'get-ready',       step:6,  title:'Get Ready to Create',              phase:'DRAW', nextLabel:'Start Creating →' },
-  { id:'studio-1',        step:7,  title:'Draw the Lines',                   phase:'DRAW', studioIndex:0 },
-  { id:'studio-2',        step:8,  title:'Color the Creatures & Background', phase:'COLOR', studioIndex:1 },
-  { id:'studio-3',        step:9,  title:'Paint the Waves',                  phase:'COLOR', studioIndex:2 },
-  { id:'studio-4',        step:10, title:'Add Details & Ink',                phase:'DETAIL', studioIndex:3 },
-  { id:'gallery',         step:11, title:'Your Artwork',                     phase:'DETAIL' }
+const STAGES = [
+  { id:'enter-world',    title:'Enter the Print World',        phase:'LOOK',   render:renderSheet0 },
+  { id:'how-made',       title:'How Prints Are Made',          phase:'LOOK',   render:renderSheet1 },
+  { id:'visual-language',title:'Discover the Visual Language',  phase:'LOOK',   render:renderSheet2 },
+  { id:'wave-detective', title:'Wave Detective',               phase:'LOOK',   render:renderSheet3 },
+  { id:'meet-yokai',     title:'Meet the Yōkai',               phase:'LOOK',   render:renderSheet4 },
+  { id:'invent-yokai',   title:'Invent Your Yōkai',            phase:'IMAGINE',render:renderSheet5 },
+  { id:'build-story',    title:'Build Your Story',             phase:'IMAGINE',render:renderSheet6 },
+  { id:'create-dawn',    title:'Create With Mrs. Dawn',        phase:'DRAW',   render:renderSheet7 },
+  { id:'share-artwork',  title:'Share Your Artwork',           phase:'DETAIL', render:renderSheet8 }
 ];
 
-const UKIYOE_CARDS = [
-  { id:'lines',   label:'BOLD LINES',         icon:'〰️', note:'Lines make shapes easy to see.' },
-  { id:'color',   label:'FLAT COLORS',        icon:'🎨', note:'Colors sit in clear, strong areas.' },
-  { id:'pattern', label:'PATTERNS',           icon:'✳',  note:'Look! Patterns are everywhere.' },
-  { id:'nature',  label:'NATURE',             icon:'⛰',  note:'Mountains, waves, flowers, animals, weather.' },
-  { id:'people',  label:'PEOPLE & CREATURES', icon:'🎭', note:'Actors, warriors, ordinary people, animals, ghosts, yōkai.' },
-  { id:'stories', label:'STORIES',            icon:'📖', note:'One picture can tell a whole story.' }
-];
-
-// Hotspot boxes are positioned in % over the actual Hokusai photograph.
-const WAVE_HOTSPOTS = [
-  { id:'curve', emoji:'〰',  label:'Curved Lines', left:12, top:3,  w:48, h:24, note:'Repeated curved lines make the water feel alive.' },
-  { id:'wave',  emoji:'🌊', label:'The Giant Wave', left:24, top:22, w:26, h:22, note:'This is the wave the whole print is named after.' },
-  { id:'foam',  emoji:'💦', label:'Wave Foam',     left:2,  top:30, w:15, h:15, note:'Tiny claw-like foam shapes show the wave breaking apart.' },
-  { id:'boats', emoji:'⛵', label:'The Boats',     left:1,  top:47, w:20, h:24, note:'Fishermen are caught right beneath the wave.' },
-  { id:'fuji',  emoji:'🗻', label:'Mt. Fuji',      left:55, top:58, w:16, h:20, note:"Mount Fuji is small and still — even in a giant storm." }
-];
-
-// Hotspot boxes for the Kuniyoshi Cat Demon (approximate — recheck once
-// the real file is dropped into assets/, see assets/README.md).
-const YOKAI_HOTSPOTS = [
-  { id:'eyes',       emoji:'👀', label:'Eyes',       q:'Where is it looking?',            left:30, top:8,  w:34, h:20 },
-  { id:'size',       emoji:'🐾', label:'Size',       q:'Is this an ordinary cat?',         left:10, top:14, w:80, h:40 },
-  { id:'expression', emoji:'😼', label:'Expression', q:'Friendly… or dangerous?',          left:32, top:20, w:30, h:18 },
-  { id:'shape',      emoji:'🌀', label:'Shape',      q:'Look at its strange silhouette.',  left:5,  top:5,  w:90, h:70 },
-  { id:'story',      emoji:'🎭', label:'Story',      q:'What do you think is happening?',  left:15, top:60, w:70, h:35 }
-];
-
-const YOKAI_CATEGORIES = [
-  { emoji:'🐱', label:'CAT' }, { emoji:'🦊', label:'FOX' }, { emoji:'🐟', label:'FISH' },
-  { emoji:'🐉', label:'DRAGON' }, { emoji:'🐦', label:'BIRD' }, { emoji:'👻', label:'STRANGE THING' }
+const VISUAL_LANGUAGE_CARDS = [
+  { id:'lines',   label:'BOLD LINES',  img:'assets/hokusai-crop-lines.jpg',   note:'Thick, confident outlines hold every shape together.' },
+  { id:'color',   label:'FLAT COLOR',  img:'assets/hokusai-crop-color.jpg',   note:'Color sits in clear, solid areas — no shading.' },
+  { id:'layers',  label:'COLOR LAYERS',icon:'🧱', note:'Remember the color blocks above? Every print is built that way.' },
+  { id:'pattern', label:'PATTERNS',    img:'assets/hokusai-crop-pattern.jpg', note:'Small repeated shapes turn water into texture.' },
+  { id:'crop',    label:'CROPPING',    img:'assets/hokusai-great-wave.jpg',   note:'The wave is huge. Mount Fuji is tiny. That size choice IS the story.' },
+  { id:'story',   label:'STORY',      img:'assets/hokusai-crop-story.jpg',   note:'One picture can hint at a whole story, with no words.' }
 ];
 
 const CREATURE_TYPES = [
   { id:'cat',   emoji:'🐱', label:'CAT' },
   { id:'fox',   emoji:'🦊', label:'FOX' },
   { id:'fish',  emoji:'🐟', label:'FISH' },
-  { id:'dragon',emoji:'🐉', label:'DRAGON' },
   { id:'bird',  emoji:'🐦', label:'BIRD' },
+  { id:'dragon',emoji:'🐉', label:'DRAGON' },
   { id:'own',   emoji:'✨', label:'YOUR OWN' }
 ];
 const STRANGE_CHIPS = ['BIG EYES','LONG TAIL','HORNS','FANGS','WINGS','PATTERNS','EXTRA EYES','GIANT EARS','WHATEVER YOU INVENT'];
@@ -347,40 +371,35 @@ const MATERIALS = [
   { id:'water',      label:'Water',            icon:'💧' }
 ];
 
-// Studio steps — edit this array only for content changes (video URL,
-// title, completion label). No render-logic changes needed.
+// Studio video steps — edit this array only for content changes.
 const STUDIO_STEPS = [
   {
-    stepNumber: 1,
-    title: 'Draw the Lines',
+    stepNumber: 1, title: 'Draw the Lines', phase:'DRAW',
     teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
     videoTitle: 'Draw the Lines — teacher demo',
     reminders: ['Big shapes first', 'Let lines flow', 'Leave space for waves'],
     completionLabel: '✓ Lines Drawn!'
   },
   {
-    stepNumber: 2,
-    title: 'Color the Creatures & Background',
+    stepNumber: 2, title: 'Color the Creatures & Background', phase:'COLOR',
     teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
     videoTitle: 'Color the Creatures & Background — teacher demo',
     palette: [
-      { name:'Ocean', colors:['#1e3a5f','#6f9c98','#12253d'] },
-      { name:'Fire',  colors:['#c0472f','#d9642c','#e8b23a'] }
+      { name:'Ocean', colors:['#1e3a5f','#6f9c98','#143d5c'] },
+      { name:'Fire',  colors:['#c0472f','#d9642c','#d9a441'] }
     ],
     note: 'Your colors can be different.',
     completionLabel: '✓ Color Added!'
   },
   {
-    stepNumber: 3,
-    title: 'Paint the Waves',
+    stepNumber: 3, title: 'Paint the Waves', phase:'COLOR',
     teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
     videoTitle: 'Paint the Waves — teacher demo',
     note: 'Repeat. Curve. Flow.',
     completionLabel: '✓ Waves Are Moving!'
   },
   {
-    stepNumber: 4,
-    title: 'Add Details & Ink',
+    stepNumber: 4, title: 'Add Details & Ink', phase:'DETAIL',
     teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
     videoTitle: 'Add Details & Ink — teacher demo',
     reminders: ['Patterns', 'Textures', 'Small details', 'Stronger outlines'],
@@ -388,25 +407,51 @@ const STUDIO_STEPS = [
   }
 ];
 
+// Hotspot boxes are positioned in % — placed by actually cropping and
+// inspecting the downloaded Hokusai photo (see assets/README.md), not
+// guessed from memory.
+const WAVE_HOTSPOTS = [
+  { id:'curve',   emoji:'〰',  label:'The Curve',    left:5,    top:20,   w:45, h:50, note:'Follow the wave — one sweeping line carries your eye through the whole print.' },
+  { id:'foam',    emoji:'💦', label:'The Foam',     left:14,   top:3,    w:45, h:22, note:'Claws? Fingers? Hokusai carved dozens of tiny curling foam-tips at the crest.' },
+  { id:'boats',   emoji:'⛵', label:'The Boats',    left:55,   top:50,   w:32, h:27, note:'Three tiny fishing boats are caught beneath the wave — headed straight into it.' },
+  { id:'fuji',    emoji:'🗻', label:'Mount Fuji',   left:58.75,top:59.5, w:9,  h:12, note:'Why does the giant mountain look tiny? Distance — and it makes the wave feel even bigger.' },
+  { id:'blue-dark', emoji:'🔷', label:'Deep Blue',  left:11,   top:35,   w:11, h:19, note:'This darker, gunmetal blue was printed TWICE — indigo, then Prussian blue on top.' },
+  { id:'blue-bright', emoji:'💠', label:'Bright Blue', left:21, top:19,  w:6,  h:14, note:'This brighter blue is Prussian blue printed just once — the two blues give the wave depth.' },
+  { id:'cartouche', emoji:'🔖', label:'Title Cartouche', left:4, top:5,  w:8,  h:26, note:'This boxed text names the series and this print — not the artist\'s signature.' },
+  { id:'signature', emoji:'✒️', label:'The Signature', left:0.5,top:15, w:6,  h:16, note:"This looser brushed text is Hokusai's own signature, separate from the title box." }
+];
+
+// Hotspot boxes for the Kuniyoshi Cat Demon (estimates — recheck once the
+// real file is dropped into assets/, see assets/README.md).
+const YOKAI_HOTSPOTS = [
+  { id:'size',       emoji:'🐾', label:'Giant Size',  note:'Is this an ordinary cat? Look how it fills the whole scene.', left:10, top:10, w:80, h:45 },
+  { id:'eyes',       emoji:'👀', label:'Eyes',        note:'Where is it looking?',            left:30, top:8,  w:34, h:20 },
+  { id:'expression', emoji:'😼', label:'Expression',  note:'Friendly… or dangerous?',          left:32, top:20, w:30, h:18 },
+  { id:'shape',      emoji:'🌀', label:'Animal Shape',note:'Look at its strange silhouette.',  left:5,  top:5,  w:90, h:70 },
+  { id:'pattern',    emoji:'✳',  label:'Pattern',     note:'What markings make it feel eerie, not cute?', left:20, top:35, w:40, h:25 },
+  { id:'story',      emoji:'🎭', label:'Story',       note:'What do you think is happening?',  left:15, top:60, w:70, h:35 }
+];
+
+const YOKAI_LINE = 'YŌKAI — Strange creatures from Japanese stories.';
 const REFLECT_WORDS = ['Funny','Scary','Powerful','Mysterious','Wild','Something else'];
 
 // TODO(Faye): paste a photo URL of your own finished yōkai artwork here —
-// shown as the "final reference" at the top of the last screen.
+// shown as the "final reference" on the last sheet.
 const TEACHER_ARTWORK_SRC = '';
 
 /* ============================================================
-   STATE (localStorage-persisted, scoped to this course only)
+   STATE (localStorage-persisted, scoped to this course only).
+   No "currentStep/maxReached" gating anymore — this is one
+   continuous scrollable document, everything is always reachable.
 ============================================================ */
-const STATE_KEY = 'fei.creation.yokai_in_the_great_wave.v1';
-
+const STATE_KEY = 'fei.creation.yokai_great_wave_scroll.v1';
 function defaultState(){
   return {
-    currentStep: 0,
-    maxReached: 0,
-    ukiyoeSeen: [],
+    layersOn: { black:false, blue:false, red:false, yellow:false },
+    vlSeen: [],
     waveSeen: [],
-    smPick: null,
     yokaiFound: [],
+    yokaiSpotted: false,
     creatureType: null,
     strangeChips: [],
     place: null,
@@ -418,19 +463,13 @@ function defaultState(){
   };
 }
 let STATE = defaultState();
-
 function loadState(){
-  try {
-    const raw = localStorage.getItem(STATE_KEY);
-    if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw));
-  } catch (e) {}
+  try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
 }
-function saveState(){
-  try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {}
-}
+function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
 
 /* ============================================================
-   IndexedDB — finished-artwork photo storage, scoped to this course
+   IndexedDB — finished-artwork photo storage
 ============================================================ */
 const DB_NAME = 'fei_yokai_great_wave_storage';
 const DB_VERSION = 1;
@@ -439,16 +478,13 @@ const PIECE_ID = 'piece_001';
 const MAX_EDGE = 1400;
 const JPEG_QUALITY = 0.87;
 let _dbPromise = null;
-
 function isStorageSupported(){ return !!window.indexedDB; }
-
 function openDB(){
   if (_dbPromise) return _dbPromise;
   _dbPromise = new Promise((resolve, reject) => {
     if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
     let req;
-    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); }
-    catch (e) { reject(e); return; }
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -461,7 +497,6 @@ function openDB(){
   });
   return _dbPromise;
 }
-
 function compressImage(fileOrBlob){
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(fileOrBlob);
@@ -472,8 +507,7 @@ function compressImage(fileOrBlob){
       const longestEdge = Math.max(width, height);
       if (longestEdge > MAX_EDGE) {
         const scale = MAX_EDGE / longestEdge;
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
+        width = Math.round(width * scale); height = Math.round(height * scale);
       }
       const canvas = document.createElement('canvas');
       canvas.width = width; canvas.height = height;
@@ -485,7 +519,6 @@ function compressImage(fileOrBlob){
     img.src = url;
   });
 }
-
 async function saveArtwork(pieceId, fileOrBlob){
   const compressed = await compressImage(fileOrBlob);
   const db = await openDB();
@@ -498,7 +531,6 @@ async function saveArtwork(pieceId, fileOrBlob){
     req.onerror = () => reject(req.error);
   });
 }
-
 async function listArtworks(pieceId){
   const db = await openDB();
   return new Promise((resolve, reject) => {
@@ -506,152 +538,207 @@ async function listArtworks(pieceId){
     const store = tx.objectStore(STORE_NAME);
     const index = store.index('pieceId');
     const req = index.getAll(IDBKeyRange.only(pieceId));
-    req.onsuccess = () => {
-      const rows = req.result || [];
-      rows.sort((a, b) => b.savedAt - a.savedAt);
-      resolve(rows);
-    };
+    req.onsuccess = () => { const rows = req.result || []; rows.sort((a, b) => b.savedAt - a.savedAt); resolve(rows); };
     req.onerror = () => reject(req.error);
   });
 }
-
 let artworkRecord = null;
 let objectUrl = null;
 let saving = false;
 
 /* ============================================================
-   NAVIGATION
+   SCROLL NAVIGATION
 ============================================================ */
-function goNext(){
-  if (STATE.currentStep < STEPS.length - 1) {
-    STATE.currentStep++;
-    if (STATE.currentStep > STATE.maxReached) STATE.maxReached = STATE.currentStep;
-    saveState();
-    renderCurrentScreen();
-  }
+function scrollToStage(idx){
+  const el = document.getElementById('sheet-' + idx);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-function goBack(){
-  if (STATE.currentStep > 0) {
-    STATE.currentStep--;
-    saveState();
-    renderCurrentScreen();
-  }
-}
-function jumpToScreen(idx){
-  if (idx <= STATE.maxReached) {
-    STATE.currentStep = idx;
-    saveState();
-    renderCurrentScreen();
-  }
+function scrollToVideoBlock(idx){
+  const el = document.getElementById('video-block-' + idx);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function renderPhaseBar(currentPhase){
-  const currentIdx = PHASES.indexOf(currentPhase);
-  return PHASES.map((p, i) => {
+function renderDotsAndPhase(activeStageIdx, activePhase){
+  document.getElementById('progressDots').innerHTML = STAGES.map((s, i) => {
+    let cls = 'p-dot done';
+    if (i === activeStageIdx) cls += ' current';
+    return `<span class="${cls}" onclick="scrollToStage(${i})" title="${s.title}"></span>`;
+  }).join('');
+  const activeIdx = PHASES.indexOf(activePhase);
+  document.getElementById('phaseBar').innerHTML = PHASES.map((p, i) => {
     let cls = 'phase-pip';
-    if (i < currentIdx) cls += ' past';
-    if (i === currentIdx) cls += ' active';
+    if (i < activeIdx) cls += ' past';
+    if (i === activeIdx) cls += ' active';
     return `<span class="${cls}">${p}</span>`;
   }).join('');
 }
-function renderDots(){
-  return STEPS.map((s, i) => {
-    let cls = 'p-dot';
-    if (i <= STATE.maxReached) cls += ' done';
-    if (i === STATE.currentStep) cls += ' current';
-    return `<span class="${cls}" onclick="jumpToScreen(${i})" title="${s.title}"></span>`;
-  }).join('');
+
+function jointSVG(){
+  return `<div class="joint"><svg viewBox="0 0 680 34" preserveAspectRatio="none">
+    <path d="M0 17 Q28 4 56 17 T112 17 T168 17 T224 17 T280 17 T336 17 T392 17 T448 17 T504 17 T560 17 T616 17 T680 17"
+      stroke="var(--prussian)" stroke-width="1.4" fill="none"/>
+  </svg></div>`;
 }
 
-function renderNavFooter(step, idx){
+function renderNav(idx){
   const isFirst = idx === 0;
-  const isLast = idx === STEPS.length - 1;
+  const isLast = idx === STAGES.length - 1;
   return `
-    <div class="nav-footer">
-      <button class="yk-btn" onclick="goBack()" ${isFirst ? 'disabled' : ''}>← Previous</button>
-      ${isLast ? '<span></span>' : `<button class="yk-btn primary" onclick="goNext()">${step.nextLabel || 'Next →'}</button>`}
+    <div class="nav-row">
+      <button class="yk-btn" onclick="scrollToStage(${idx - 1})" ${isFirst ? 'disabled' : ''}>← Previous</button>
+      ${isLast ? '<span></span>' : `<button class="yk-btn primary" onclick="scrollToStage(${idx + 1})">Next →</button>`}
     </div>
   `;
-}
-
-function waveDividerSVG(){
-  return `<svg class="wave-divider" viewBox="0 0 60 12"><path d="M0 6 Q7.5 0 15 6 T30 6 T45 6 T60 6" stroke="var(--indigo)" stroke-width="1.6" fill="none"/></svg>`;
 }
 
 function renderVideoEmbed(src, title){
   if (src) {
-    return `<div class="video-embed-wrap">
-      <div style="position:relative;padding-top:56.25%;">
-        <iframe src="${src}" loading="lazy" title="${title}"
-          style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen="true"></iframe>
-      </div>
-    </div>`;
+    return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
   }
-  return `<div class="video-embed-wrap">
-    <div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--indigo),var(--vermilion));">
-      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
-        <div style="font-size:2.4rem;">🎥</div>
-        <div style="font-size:14px;margin-top:6px;">Video coming soon!</div>
-      </div>
+  return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--indigo),var(--vermilion));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
     </div>
-  </div>`;
+  </div></div>`;
 }
 
 /* ============================================================
-   PART 1 — What Is Ukiyo-e?
+   SHEET 0 — Enter the Print World
 ============================================================ */
-function toggleUkiyoeCard(id){
-  if (!STATE.ukiyoeSeen.includes(id)) STATE.ukiyoeSeen.push(id);
-  saveState();
-  const card = document.getElementById('uk-' + id);
-  if (card) card.classList.toggle('flipped');
+function renderSheet0(){
+  return `
+    <div class="opener-stage">
+      <svg viewBox="0 0 200 200" width="170" height="170">
+        <circle class="ripple r3" cx="100" cy="100" r="26" fill="none" stroke="var(--indigo)" stroke-width="1.4"/>
+        <circle class="ripple r2" cx="100" cy="100" r="26" fill="none" stroke="var(--turquoise)" stroke-width="1.4"/>
+        <circle class="ripple" cx="100" cy="100" r="26" fill="none" stroke="var(--vermilion)" stroke-width="1.4"/>
+        <path class="opener-mark" d="M55 118 Q72 88 90 110 Q102 126 116 100 Q130 76 148 100" stroke="var(--prussian)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1 class="display opener-title">Yōkai in the Great Wave</h1>
+    <p class="opener-sub">Step into a world of carved wood, layered ink, and strange creatures.</p>
+    <p class="ukiyoe-line">Pictures printed from carved woodblocks in Japan.</p>
+  `;
 }
-let pressStep = 0;
+
+/* ============================================================
+   SHEET 1 — How Prints Are Made
+============================================================ */
+let pressed = false;
 function pressToPrint(){
   const stage = document.getElementById('pressStage');
   stage.classList.add('pressed');
-  ['pd-draw','pd-carve','pd-print'].forEach((id, i) => {
-    setTimeout(() => document.getElementById(id).classList.add('lit'), i * 260);
+  ['pi-draw','pi-carve','pi-color','pi-print','pi-again'].forEach((id, i) => {
+    setTimeout(() => { const el = document.getElementById(id); if (el) el.classList.add('lit'); }, i * 220);
   });
-  setTimeout(() => stage.classList.remove('pressed'), 1600);
+  setTimeout(() => stage.classList.remove('pressed'), 1500);
 }
-function renderPart1(){
-  const cards = UKIYOE_CARDS.map(c => `
-    <div class="uk-card" id="uk-${c.id}" onclick="toggleUkiyoeCard('${c.id}')">
-      <div class="uk-card-inner">
-        <div class="uk-card-face uk-card-front"><div class="uk-icon">${c.icon}</div><div class="uk-label">${c.label}</div></div>
-        <div class="uk-card-face uk-card-back">${c.note}</div>
+
+const LAYER_SVG = {
+  yellow: `<rect class="layer-svg-layer" id="layer-yellow" x="0" y="0" width="300" height="200" fill="var(--yellow)" opacity="0.6"/>`,
+  blue:   `<path class="layer-svg-layer" id="layer-blue" d="M0 140 Q60 100 120 140 Q180 180 240 140 Q270 120 300 140 L300 200 L0 200 Z" fill="var(--indigo)"/>`,
+  red:    `<circle class="layer-svg-layer" id="layer-red" cx="232" cy="52" r="30" fill="var(--vermilion)"/>`,
+  black:  `<g class="layer-svg-layer" id="layer-black" fill="none" stroke="var(--sumi)" stroke-width="4" stroke-linecap="round">
+             <path d="M0 140 Q60 100 120 140 Q180 180 240 140 Q270 120 300 140"/>
+             <circle cx="232" cy="52" r="30"/>
+             <path d="M20 30 Q35 25 50 30 M15 45 Q30 40 45 45"/>
+           </g>`
+};
+function toggleLayer(color){
+  STATE.layersOn[color] = !STATE.layersOn[color];
+  saveState();
+  document.getElementById('layer-' + color).classList.toggle('on', STATE.layersOn[color]);
+  document.getElementById('layerBtn-' + color).classList.toggle('on', STATE.layersOn[color]);
+  const all = STATE.layersOn.black && STATE.layersOn.blue && STATE.layersOn.red && STATE.layersOn.yellow;
+  document.getElementById('layerComplete').textContent = all ? '= FULL COLOR PRINT' : '';
+}
+function renderLayerStage(){
+  return `<svg viewBox="0 0 300 200">${LAYER_SVG.yellow}${LAYER_SVG.blue}${LAYER_SVG.red}${LAYER_SVG.black}</svg>`;
+}
+
+const COLLABORATORS = [
+  { icon:'✏️', role:'ARTIST', action:'designs the image' },
+  { icon:'🔪', role:'CARVER', action:'cuts the block' },
+  { icon:'🖨️', role:'PRINTER', action:'presses the paper' },
+  { icon:'📜', role:'PUBLISHER', action:'chose the theme' }
+];
+
+function renderSheet1(){
+  const collab = COLLABORATORS.map(c => `
+    <div class="collab-card"><div class="cc-icon">${c.icon}</div><div class="cc-role">${c.role}</div><div class="cc-action">${c.action}</div></div>
+  `).join('');
+  return `
+    <div class="kicker">The Process</div>
+    <h2 class="stage-title">How Prints Are Made</h2>
+    <div class="process-row">
+      <span class="process-icon" id="pi-draw">✏️</span><span class="process-arrow">→</span>
+      <span class="process-icon" id="pi-carve">🔪</span><span class="process-arrow">→</span>
+      <span class="process-icon" id="pi-color">🎨</span><span class="process-arrow">→</span>
+      <span class="process-icon" id="pi-print">🖨️</span><span class="process-arrow">→</span>
+      <span class="process-icon" id="pi-again">🖨️</span>
+    </div>
+    <div class="press-stage" id="pressStage">
+      <div class="press-block">🌊</div>
+      <div class="press-paper"><div class="press-paper-reveal"></div></div>
+    </div>
+    <div style="text-align:center;"><button class="yk-btn primary" onclick="pressToPrint()">Press to Print</button></div>
+    <p class="press-caption">Draw → Carve → Color Blocks → Print → Print Again.</p>
+
+    <div class="layer-section">
+      <div class="layer-heading">Tap each block to add its color pass</div>
+      <div class="layer-stage">${renderLayerStage()}</div>
+      <div class="layer-btn-row">
+        <button class="layer-btn" id="layerBtn-black" data-c="black" onclick="toggleLayer('black')">BLACK LINE BLOCK</button>
+        <button class="layer-btn" id="layerBtn-blue" data-c="blue" onclick="toggleLayer('blue')">+ BLUE BLOCK</button>
+        <button class="layer-btn" id="layerBtn-red" data-c="red" onclick="toggleLayer('red')">+ RED BLOCK</button>
+        <button class="layer-btn" id="layerBtn-yellow" data-c="yellow" onclick="toggleLayer('yellow')">+ YELLOW BLOCK</button>
       </div>
+      <div class="layer-complete" id="layerComplete"></div>
+      <p class="press-caption">A ukiyo-e print is not a painting — it is BUILT and PRINTED in layers.</p>
+    </div>
+
+    <div class="collab-row">${collab}</div>
+  `;
+}
+
+/* ============================================================
+   SHEET 2 — Discover the Visual Language
+============================================================ */
+function toggleVLCard(id){
+  if (!STATE.vlSeen.includes(id)) STATE.vlSeen.push(id);
+  saveState();
+  document.getElementById('vl-' + id).classList.toggle('flipped');
+}
+function renderSheet2(){
+  const cards = VISUAL_LANGUAGE_CARDS.map(c => `
+    <div class="vl-card" id="vl-${c.id}" onclick="toggleVLCard('${c.id}')">
+      ${c.img ? `<img src="${c.img}" alt="${c.label} detail from Hokusai's Great Wave">` : `<div class="vl-icon-only">${c.icon}</div>`}
+      <div class="vl-label">${c.label}</div>
+      <div class="vl-note">${c.note}</div>
     </div>
   `).join('');
   return `
     <div class="kicker">Look Closely</div>
-    <h2 class="s-title">What Is Ukiyo-e?</h2>
-    <p class="s-sub">Pictures from another time in Japan.</p>
-    ${waveDividerSVG()}
-    <div class="uk-grid">${cards}</div>
+    <h2 class="stage-title">What Does Ukiyo-e Look Like?</h2>
+    <div class="vislang-grid">${cards}</div>
 
-    <div class="print-demo">
-      <div class="kicker" style="margin-top:6px;">How Was It Made?</div>
-      <div class="print-steps-row">
-        <span class="print-step-icon" id="pd-draw">✏️</span><span class="print-arrow">→</span>
-        <span class="print-step-icon" id="pd-carve">🪚</span><span class="print-arrow">→</span>
-        <span class="print-step-icon" id="pd-print">🖨</span>
+    <div class="vangogh-aside">
+      <div class="vg-route">JAPAN → EUROPE</div>
+      <p class="vg-line">The prints travelled! Hiroshige → Van Gogh. European artists discovered them too — Van Gogh collected hundreds.</p>
+      <div class="vg-pair-row">
+        <div class="vg-pair"><img src="assets/vangogh-plum-orchard.jpg" alt="Van Gogh, Flowering Plum Orchard, after Hiroshige"><div class="vg-pair-cap">Van Gogh, "Flowering Plum Orchard" (after Hiroshige), 1887. Van Gogh Museum. Public Domain.</div></div>
+        <div class="vg-pair"><img src="assets/vangogh-bridge-rain.jpg" alt="Van Gogh, The Bridge in the Rain, after Hiroshige"><div class="vg-pair-cap">Van Gogh, "The Bridge in the Rain" (after Hiroshige), 1887. Van Gogh Museum. Public Domain.</div></div>
       </div>
-      <div class="press-stage" id="pressStage">
-        <div class="press-block">🌊</div>
-        <div class="press-paper"><div class="press-paper-reveal"></div></div>
-      </div>
-      <button class="yk-btn primary" onclick="pressToPrint()">Press to Print</button>
-      <p class="print-caption" style="margin-top:12px;">Ukiyo-e was made as prints!</p>
     </div>
   `;
 }
 
 /* ============================================================
-   PART 2 — Wave Detective (real Hokusai artwork)
+   SHEET 3 — Wave Detective (real Hokusai artwork)
 ============================================================ */
 function toggleWaveHotspot(id){
   if (!STATE.waveSeen.includes(id)) STATE.waveSeen.push(id);
@@ -661,106 +748,93 @@ function toggleWaveHotspot(id){
   const h = WAVE_HOTSPOTS.find(x => x.id === id);
   document.getElementById('waveCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.note}`;
 }
-function pickStillMoving(v){
-  STATE.smPick = v;
-  saveState();
-  document.querySelectorAll('.sm-btn').forEach(el => el.classList.remove('picked'));
-  document.getElementById('sm-' + v).classList.add('picked');
-  document.getElementById('smReveal').textContent = 'Lines can make water MOVE!';
-}
-function renderPart2(){
+function renderSheet3(){
   const hotspots = WAVE_HOTSPOTS.map(h => `
-    <div class="hero-hotspot" id="wh-${h.id}" onclick="toggleWaveHotspot('${h.id}')"
-      style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+    <div class="hero-hotspot" id="wh-${h.id}" onclick="toggleWaveHotspot('${h.id}')" style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
   `).join('');
   return `
     <div class="kicker">Wave Detectives 🔍</div>
-    <h2 class="s-title">Wave Detective</h2>
-    <p class="s-sub">Tap the artwork to find every clue.</p>
+    <h2 class="stage-title">How Did Hokusai Make the Wave Move?</h2>
     <div class="hero-stage" id="waveStage">
       <img src="assets/hokusai-great-wave.jpg" alt="Katsushika Hokusai, Under the Wave off Kanagawa (The Great Wave)">
       ${hotspots}
     </div>
     <p class="credit-line">Katsushika Hokusai, Under the Wave off Kanagawa (The Great Wave), ca. 1830–32. The Metropolitan Museum of Art, H. O. Havemeyer Collection, Bequest of Mrs. H. O. Havemeyer, 1929. Public Domain.</p>
     <div class="hero-callout" id="waveCallout">Tap a glowing area above to begin.</div>
-
-    <p class="s-sub" style="margin-top:20px;">Does the wave feel still… or moving?</p>
-    <div class="still-moving-row">
-      <button class="sm-btn" id="sm-still" onclick="pickStillMoving('still')">STILL</button>
-      <button class="sm-btn" id="sm-moving" onclick="pickStillMoving('moving')">MOVING!</button>
-    </div>
-    <div class="sm-reveal" id="smReveal"></div>
   `;
 }
 
 /* ============================================================
-   PART 3 — Meet the Yōkai (real Kuniyoshi artwork)
+   SHEET 4 — Meet the Yōkai (real Kuniyoshi triptych)
 ============================================================ */
+let triptychJoined = false;
+function joinTriptych(){
+  if (triptychJoined) return;
+  triptychJoined = true;
+  const wrap = document.getElementById('triptychWrap');
+  wrap.classList.add('gathering');
+  setTimeout(() => wrap.classList.remove('gathering'), 900);
+}
 function toggleYokaiHotspot(id){
   if (!STATE.yokaiFound.includes(id)) STATE.yokaiFound.push(id);
+  if (!STATE.yokaiSpotted) { STATE.yokaiSpotted = true; document.getElementById('spotBanner').textContent = 'YOU FOUND IT!'; }
   saveState();
   document.querySelectorAll('#yokaiStage .hero-hotspot').forEach(el => el.classList.remove('active'));
   document.getElementById('yh-' + id).classList.add('active');
   const h = YOKAI_HOTSPOTS.find(x => x.id === id);
-  document.getElementById('yokaiCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.q}`;
+  document.getElementById('yokaiCallout').innerHTML = `<span class="hc-label">${h.emoji} ${h.label}</span>${h.note}`;
 }
-function renderPart3(){
+function renderSheet4(){
   const hotspots = YOKAI_HOTSPOTS.map(h => `
-    <div class="hero-hotspot" id="yh-${h.id}" onclick="toggleYokaiHotspot('${h.id}')"
-      style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+    <div class="hero-hotspot" id="yh-${h.id}" onclick="toggleYokaiHotspot('${h.id}')" style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
   `).join('');
-  const cats = YOKAI_CATEGORIES.map(c => `<span class="yokai-cat">${c.emoji} ${c.label}</span>`).join('');
   return `
-    <div class="kicker">Look Closer</div>
-    <h2 class="s-title">Meet the Yōkai</h2>
-    <p class="s-sub">Japanese stories are full of strange creatures called yōkai.</p>
-
-    <div class="detective-kicker">Can You Spot the Cat Demon? 👀</div>
-    <div class="hero-stage" id="yokaiStage">
-      <img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon"
-        onerror="this.closest('.hero-stage').classList.add('img-missing')">
+    <div class="kicker">Meet the Yōkai</div>
+    <h2 class="stage-title">Something Strange Is Hiding in This Print…</h2>
+    <div class="hero-stage" id="yokaiStage" onclick="joinTriptych()">
+      <div class="triptych-wrap" id="triptychWrap">
+        <div class="triptych-panel p1"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (right panel)" onerror="this.closest('.hero-stage').classList.add('img-missing')"></div>
+        <div class="triptych-panel p2"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (center panel)"></div>
+        <div class="triptych-panel p3"><img src="assets/kuniyoshi-cat-demon.jpg" alt="Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon (left panel)"></div>
+      </div>
       <div class="hero-img-missing">
-        <div style="font-size:2.2rem;">🐾</div>
-        <div style="font-weight:800;margin-top:8px;">Artwork coming soon</div>
-        <div style="font-size:11.5px;margin-top:4px;opacity:.85;">Faye is adding this piece — see assets/README.md</div>
+        <div style="font-size:2.1rem;">🐾</div><div style="font-weight:800;margin-top:8px;">Artwork coming soon</div>
+        <div style="font-size:11px;margin-top:4px;opacity:.85;">Faye is adding this triptych — see assets/README.md</div>
       </div>
       ${hotspots}
     </div>
     <p class="credit-line">Utagawa Kuniyoshi, Scene from a Ghost Story: The Okazaki Cat Demon, 1847–48. The Museum of Fine Arts, Houston. Public Domain.</p>
-    <div class="hero-callout" id="yokaiCallout">Tap a glowing area above to begin.</div>
-
-    <div class="yokai-info-card">
-      <h3>What Is a Yōkai?</h3>
-      <p>Yōkai are strange beings from Japanese stories.</p>
-      <div class="yokai-cat-row">${cats}</div>
-      <div class="line">Animals can become strange, magical, funny or scary.</div>
-    </div>
+    <div class="spot-found-banner" id="spotBanner"></div>
+    <div class="hero-callout" id="yokaiCallout">Tap a glowing area above to search.</div>
+    <p class="yokai-explain">${YOKAI_LINE}</p>
+    <p class="yokai-transition">Now it's your turn to invent one.</p>
   `;
 }
 
 /* ============================================================
-   PART 4 — Build Your Creature
+   SHEET 5 — Invent Your Yōkai
 ============================================================ */
-function pickCreatureType(id){ STATE.creatureType = id; saveState(); renderCurrentScreen(); }
-function toggleStrangeChip(label){
+function pickCreatureType(id){ STATE.creatureType = id; saveState(); document.querySelectorAll('.type-btn').forEach(el=>el.classList.remove('picked')); document.getElementById('type-'+id).classList.add('picked'); }
+function toggleStrangeChip(idx){
+  const label = STRANGE_CHIPS[idx];
   const i = STATE.strangeChips.indexOf(label);
   if (i === -1) STATE.strangeChips.push(label); else STATE.strangeChips.splice(i, 1);
   saveState();
-  renderCurrentScreen();
+  document.getElementById('chip-'+idx).classList.toggle('picked');
 }
-function renderPart4(){
+function renderSheet5(){
   const types = CREATURE_TYPES.map(t => `
-    <div class="type-btn${STATE.creatureType === t.id ? ' picked' : ''}" onclick="pickCreatureType('${t.id}')">
+    <div class="type-btn${STATE.creatureType === t.id ? ' picked' : ''}" id="type-${t.id}" onclick="pickCreatureType('${t.id}')">
       <div class="tb-emoji">${t.emoji}</div><div class="tb-label">${t.label}</div>
     </div>
   `).join('');
-  const chips = STRANGE_CHIPS.map(c => `
-    <span class="chip${STATE.strangeChips.includes(c) ? ' picked' : ''}" onclick="toggleStrangeChip('${c}')">${c}</span>
+  const chips = STRANGE_CHIPS.map((c, i) => `
+    <span class="chip${STATE.strangeChips.includes(c) ? ' picked' : ''}" id="chip-${i}" onclick="toggleStrangeChip(${i})">${c}</span>
   `).join('');
   return `
     <div class="kicker">Imagine</div>
-    <h2 class="s-title">Build Your Yōkai</h2>
-    <p class="s-sub">Start with something you know…</p>
+    <h2 class="stage-title">Build Your Yōkai</h2>
+    <p class="stage-sub">Start with something you know…</p>
     <div class="type-row">${types}</div>
     <div class="strange-label">…then make it STRANGE</div>
     <div class="chip-row">${chips}</div>
@@ -768,99 +842,122 @@ function renderPart4(){
 }
 
 /* ============================================================
-   PART 5 — Build Your Story
+   SHEET 6 — Build Your Story
 ============================================================ */
-function pickPlace(id){ STATE.place = id; saveState(); renderCurrentScreen(); }
-function pickAction(id){ STATE.action = id; saveState(); renderCurrentScreen(); }
-function renderPart5(){
+function pickPlace(id){
+  STATE.place = id; saveState();
+  document.querySelectorAll('.place-tile').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('place-'+id).classList.add('picked');
+  updateStoryLine();
+}
+function pickAction(id){
+  STATE.action = id; saveState();
+  document.querySelectorAll('.action-tile').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('action-'+id).classList.add('picked');
+  updateStoryLine();
+}
+function updateStoryLine(){
+  document.getElementById('storyDoneLine').textContent = (STATE.place && STATE.action) ? 'Now your picture has a story.' : '';
+}
+function renderSheet6(){
   const places = PLACES.map(p => `
-    <div class="place-tile${STATE.place === p.id ? ' picked' : ''}" onclick="pickPlace('${p.id}')">
+    <div class="place-tile${STATE.place === p.id ? ' picked' : ''}" id="place-${p.id}" onclick="pickPlace('${p.id}')">
       <div class="pt-icon">${p.emoji}</div><div class="pt-label">${p.label}</div>
     </div>
   `).join('');
   const actions = STORY_ACTIONS.map(a => `
-    <div class="action-tile${STATE.action === a.id ? ' picked' : ''}" onclick="pickAction('${a.id}')">
+    <div class="action-tile${STATE.action === a.id ? ' picked' : ''}" id="action-${a.id}" onclick="pickAction('${a.id}')">
       <div class="at-icon">${a.emoji}</div><div class="at-label">${a.label}</div>
     </div>
   `).join('');
-  const done = STATE.place && STATE.action;
   return `
     <div class="kicker">Invent</div>
-    <h2 class="s-title">Where Does Your Yōkai Go?</h2>
+    <h2 class="stage-title">Where Does Your Yōkai Go?</h2>
     <div class="place-grid">${places}</div>
-    <p class="s-sub" style="margin-top:2px;">What is happening?</p>
+    <p class="stage-sub" style="margin-top:2px;">What is happening?</p>
     <div class="action-grid">${actions}</div>
-    <div class="story-done-line">${done ? 'Now your picture has a story.' : ''}</div>
+    <div class="story-done-line" id="storyDoneLine">${STATE.place && STATE.action ? 'Now your picture has a story.' : ''}</div>
   `;
 }
 
 /* ============================================================
-   PART 6 — Get Ready to Create
+   SHEET 7 — Create With Mrs. Dawn (materials + 4 video steps)
 ============================================================ */
 function toggleMaterial(id){
   const i = STATE.materialsChecked.indexOf(id);
   if (i === -1) STATE.materialsChecked.push(id); else STATE.materialsChecked.splice(i, 1);
   saveState();
-  renderCurrentScreen();
+  document.getElementById('mat-'+id).classList.toggle('checked');
 }
-function renderPart6(){
-  const tiles = MATERIALS.map(m => `
-    <div class="mat-tile${STATE.materialsChecked.includes(m.id) ? ' checked' : ''}" onclick="toggleMaterial('${m.id}')">
-      <div class="mat-check">✓</div><div class="m-icon">${m.icon}</div><div class="m-label">${m.label}</div>
-    </div>
-  `).join('');
-  return `
-    <div class="kicker">Gather Your Tools</div>
-    <h2 class="s-title">Get Ready to Create</h2>
-    <div class="materials-grid">${tiles}</div>
-    <div class="ready-wrap"><div class="kicker" style="margin-bottom:10px;">Ready?</div></div>
-  `;
+function pickPalette(name){
+  STATE.studioPalettePick = name; saveState();
+  document.querySelectorAll('.palette-swatch-group').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('palette-'+name).classList.add('picked');
 }
-
-/* ============================================================
-   STUDIO STEPS (Part 7)
-============================================================ */
-function pickPalette(name){ STATE.studioPalettePick = name; saveState(); renderCurrentScreen(); }
-function toggleStudioDone(idx){ STATE.studioDone[idx] = !STATE.studioDone[idx]; saveState(); renderCurrentScreen(); }
-function renderStudioStep(step){
-  const idx = step.studioIndex;
-  const s = STUDIO_STEPS[idx];
+function toggleStudioDone(idx){
+  STATE.studioDone[idx] = !STATE.studioDone[idx]; saveState();
+  const btn = document.getElementById('completeBtn-'+idx);
+  btn.classList.toggle('done', STATE.studioDone[idx]);
+  btn.textContent = STATE.studioDone[idx] ? STUDIO_STEPS[idx].completionLabel : "I'm done with this step";
+}
+function renderVideoBlock(s, idx){
   let extra = '';
   if (s.reminders) extra += `<div class="reminder-chips">${s.reminders.map(r => `<span class="reminder-chip">${r}</span>`).join('')}</div>`;
   if (s.palette) {
     const groups = s.palette.map(p => `
-      <div class="palette-swatch-group${STATE.studioPalettePick === p.name ? ' picked' : ''}" onclick="pickPalette('${p.name}')">
+      <div class="palette-swatch-group" id="palette-${p.name}" onclick="pickPalette('${p.name}')">
         <div class="palette-dots">${p.colors.map(c => `<span class="palette-dot" style="background:${c};"></span>`).join('')}</div>
         <div class="palette-name">${p.name}</div>
       </div>
     `).join('');
     extra += `<div class="palette-row">${groups}</div>`;
   }
-  if (s.note) extra += `<p class="studio-note">${s.note}</p>`;
-  const done = STATE.studioDone[idx];
+  if (s.note) extra += `<p class="video-note">${s.note}</p>`;
+  const isFirst = idx === 0, isLast = idx === STUDIO_STEPS.length - 1;
   return `
-    <div class="studio-kicker">Create With Mrs. Dawn — Step ${s.stepNumber} of 4</div>
-    <h2 class="s-title">${s.title}</h2>
-    ${renderVideoEmbed(s.teacherVideoUrl, s.videoTitle)}
-    ${extra}
-    <div class="complete-wrap">
-      <button class="complete-btn${done ? ' done' : ''}" onclick="toggleStudioDone(${idx})">${done ? s.completionLabel : "I'm done with this step"}</button>
+    <div class="video-block" id="video-block-${idx}" data-phase="${s.phase}">
+      <div class="video-mini-progress">STEP ${s.stepNumber} OF ${STUDIO_STEPS.length}</div>
+      <h3 class="video-block-title">${s.title}</h3>
+      ${renderVideoEmbed(s.teacherVideoUrl, s.videoTitle)}
+      ${extra}
+      <div class="complete-wrap">
+        <button class="complete-btn" id="completeBtn-${idx}" onclick="toggleStudioDone(${idx})">I'm done with this step</button>
+      </div>
+      <div class="mini-nav">
+        <button class="mini-nav-btn" onclick="scrollToVideoBlock(${idx - 1})" ${isFirst ? 'disabled' : ''}>← Previous</button>
+        <button class="mini-nav-btn" onclick="scrollToVideoBlock(${idx + 1})" ${isLast ? 'disabled' : ''}>Next →</button>
+      </div>
     </div>
+  `;
+}
+function renderSheet7(){
+  const tiles = MATERIALS.map(m => `
+    <div class="mat-tile" id="mat-${m.id}" onclick="toggleMaterial('${m.id}')">
+      <div class="mat-check">✓</div><div class="m-icon">${m.icon}</div><div class="m-label">${m.label}</div>
+    </div>
+  `).join('');
+  const videos = STUDIO_STEPS.map((s, i) => renderVideoBlock(s, i)).join('');
+  return `
+    <div class="kicker" data-phase="DRAW">Gather Your Tools</div>
+    <h2 class="stage-title">Get Ready to Create</h2>
+    <div class="materials-grid" data-phase="DRAW" id="materialsTray">${tiles}</div>
+    <div class="ready-wrap"><div class="kicker" style="margin-bottom:0;">Ready?</div></div>
+    ${videos}
+    <h2 class="stage-title" style="margin-top:44px;">Create With Mrs. Dawn</h2>
   `;
 }
 
 /* ============================================================
-   PART 8 — Your Artwork
+   SHEET 8 — Share Your Artwork
 ============================================================ */
 function triggerUpload(){ document.getElementById('fileInput').click(); }
-
 async function onFileSelected(event){
   const file = event.target.files && event.target.files[0];
   event.target.value = '';
   if (!file) return;
   if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
   saving = true;
-  renderCurrentScreen();
+  refreshUploadUI();
   try {
     const record = await saveArtwork(PIECE_ID, file);
     artworkRecord = record;
@@ -871,31 +968,39 @@ async function onFileSelected(event){
     alert("Couldn't save that photo — want to try a different one?");
   }
   saving = false;
-  renderCurrentScreen();
+  refreshUploadUI();
 }
-function pickReflect(word){ STATE.reflectPick = word; saveState(); renderCurrentScreen(); }
-
-function renderPart8(){
-  let uploadHtml;
+function refreshUploadUI(){
+  const wrap = document.getElementById('uploadSlotWrap');
+  const frameWrap = document.getElementById('studentFrameWrap');
+  if (!wrap) return;
   if (saving) {
-    uploadHtml = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
   } else if (artworkRecord) {
-    uploadHtml = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>`;
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>`;
+    if (frameWrap) frameWrap.innerHTML = `<div class="student-frame"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>`;
   } else {
-    uploadHtml = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Artwork</div></div>`;
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Artwork</div></div>`;
   }
+}
+function pickReflect(word){
+  STATE.reflectPick = word; saveState();
+  document.querySelectorAll('.reflect-chip').forEach(el=>el.classList.remove('picked'));
+  document.getElementById('reflect-' + word.replace(/\s+/g,'')).classList.add('picked');
+}
+function renderSheet8(){
   const reflectChips = REFLECT_WORDS.map(w => `
-    <span class="reflect-chip${STATE.reflectPick === w ? ' picked' : ''}" onclick="pickReflect('${w}')">${w}</span>
+    <span class="reflect-chip${STATE.reflectPick === w ? ' picked' : ''}" id="reflect-${w.replace(/\s+/g,'')}" onclick="pickReflect('${w}')">${w}</span>
   `).join('');
   return `
     <div class="kicker">Your Yōkai Has Entered the Wave!</div>
-    <h2 class="s-title">Your Artwork</h2>
+    <h2 class="stage-title">Share Your Artwork</h2>
     <div class="teacher-ref-frame">${TEACHER_ARTWORK_SRC
       ? `<img src="${TEACHER_ARTWORK_SRC}" alt="Mrs. Dawn's finished yōkai artwork">`
       : `<div class="teacher-ref-placeholder"><div class="tp-emoji">🖼</div><div class="tp-text">Teacher's finished artwork coming soon</div></div>`}</div>
     <p class="reveal-line">Now show us yours.</p>
-    <div class="upload-slot-wrap">${uploadHtml}</div>
-    ${artworkRecord ? `<div class="student-frame"><img src="${objectUrl}" alt="Your finished yōkai artwork"></div>` : ''}
+    <div class="upload-slot-wrap" id="uploadSlotWrap"></div>
+    <div id="studentFrameWrap"></div>
     <div class="reflect-label">My Creature Is…</div>
     <div class="reflect-row">${reflectChips}</div>
     <div class="gallery-actions">
@@ -905,45 +1010,64 @@ function renderPart8(){
 }
 
 /* ============================================================
-   DISPATCH + RENDER
+   BUILD THE SCROLL WORLD (once) + SCROLL TRACKING
 ============================================================ */
-function renderStepBody(step){
-  switch (step.id) {
-    case 'what-is-ukiyoe': return renderPart1();
-    case 'wave-detective': return renderPart2();
-    case 'meet-yokai':     return renderPart3();
-    case 'build-creature': return renderPart4();
-    case 'build-story':    return renderPart5();
-    case 'get-ready':      return renderPart6();
-    case 'studio-1':
-    case 'studio-2':
-    case 'studio-3':
-    case 'studio-4':       return renderStudioStep(step);
-    case 'gallery':        return renderPart8();
-    default: return '';
-  }
+function buildScrollWorld(){
+  const world = document.getElementById('scrollWorld');
+  let html = '';
+  STAGES.forEach((stage, i) => {
+    html += `<section class="sheet" id="sheet-${i}" data-track data-stage="${i}" data-phase="${stage.phase}">
+      ${stage.render()}
+      ${renderNav(i)}
+    </section>`;
+    if (i < STAGES.length - 1) html += jointSVG();
+  });
+  world.innerHTML = html;
+
+  // re-apply persisted state onto the freshly-built DOM
+  Object.keys(STATE.layersOn).forEach(c => { if (STATE.layersOn[c]) toggleLayerVisualOnly(c); });
+  STATE.strangeChips.forEach(label => { const idx = STRANGE_CHIPS.indexOf(label); if (idx > -1) document.getElementById('chip-'+idx).classList.add('picked'); });
+  if (STATE.creatureType) { const el = document.getElementById('type-'+STATE.creatureType); if (el) el.classList.add('picked'); }
+  if (STATE.place) { const el = document.getElementById('place-'+STATE.place); if (el) el.classList.add('picked'); }
+  if (STATE.action) { const el = document.getElementById('action-'+STATE.action); if (el) el.classList.add('picked'); }
+  updateStoryLine();
+  STATE.materialsChecked.forEach(id => { const el = document.getElementById('mat-'+id); if (el) el.classList.add('checked'); });
+  if (STATE.studioPalettePick) { const el = document.getElementById('palette-'+STATE.studioPalettePick); if (el) el.classList.add('picked'); }
+  STATE.studioDone.forEach((done, i) => { if (done) { const btn = document.getElementById('completeBtn-'+i); if (btn) { btn.classList.add('done'); btn.textContent = STUDIO_STEPS[i].completionLabel; } } });
+  if (STATE.reflectPick) { const el = document.getElementById('reflect-' + STATE.reflectPick.replace(/\s+/g,'')); if (el) el.classList.add('picked'); }
+  if (STATE.yokaiSpotted) { const el = document.getElementById('spotBanner'); if (el) el.textContent = 'YOU FOUND IT!'; }
+
+  refreshUploadUI();
+  setupObserver();
+}
+function toggleLayerVisualOnly(color){
+  const layer = document.getElementById('layer-' + color);
+  const btn = document.getElementById('layerBtn-' + color);
+  if (layer) layer.classList.add('on');
+  if (btn) btn.classList.add('on');
+  const all = STATE.layersOn.black && STATE.layersOn.blue && STATE.layersOn.red && STATE.layersOn.yellow;
+  const lc = document.getElementById('layerComplete');
+  if (lc && all) lc.textContent = '= FULL COLOR PRINT';
 }
 
-async function renderCurrentScreen(){
-  const idx = STATE.currentStep;
-  const step = STEPS[idx];
-  document.getElementById('phaseBar').innerHTML = renderPhaseBar(step.phase);
-  document.getElementById('progressDots').innerHTML = renderDots();
-
-  if (step.id === 'gallery' && !artworkRecord && isStorageSupported()) {
-    try {
-      const rows = await listArtworks(PIECE_ID);
-      if (rows.length) {
-        artworkRecord = rows[0];
-        objectUrl = URL.createObjectURL(artworkRecord.blob);
-      }
-    } catch (e) { console.warn('[gallery] listArtworks failed', e); }
-  }
-
-  const body = renderStepBody(step);
-  const footer = renderNavFooter(step, idx);
-  document.getElementById('screen-content').innerHTML = `<div class="screen active">${body}${footer}</div>`;
-  window.scrollTo(0, 0);
+let lastStage = -1, lastPhase = '';
+function setupObserver(){
+  const tracked = document.querySelectorAll('[data-track], .video-block, #materialsTray');
+  const observer = new IntersectionObserver((entries) => {
+    let best = null, bestRatio = 0;
+    entries.forEach(e => { if (e.isIntersecting && e.intersectionRatio > bestRatio) { bestRatio = e.intersectionRatio; best = e.target; } });
+    if (!best) return;
+    const stageEl = best.closest('.sheet');
+    const stageIdx = stageEl ? parseInt(stageEl.dataset.stage, 10) : lastStage;
+    const phase = best.dataset.phase || (stageEl ? stageEl.dataset.phase : lastPhase);
+    if (stageIdx !== lastStage || phase !== lastPhase) {
+      lastStage = stageIdx; lastPhase = phase;
+      renderDotsAndPhase(stageIdx, phase);
+    }
+    if (stageEl && !stageEl.classList.contains('in-view')) stageEl.classList.add('in-view');
+  }, { threshold: [0.15, 0.3, 0.5, 0.7] });
+  tracked.forEach(el => observer.observe(el));
+  document.querySelectorAll('.sheet').forEach(el => observer.observe(el));
 }
 
 /* ============================================================
@@ -960,7 +1084,17 @@ async function init() {
     }
   }
   loadState();
-  renderCurrentScreen();
+  buildScrollWorld();
+  if (isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) {
+        artworkRecord = rows[0];
+        objectUrl = URL.createObjectURL(artworkRecord.blob);
+        refreshUploadUI();
+      }
+    } catch (e) { console.warn('[gallery] listArtworks failed', e); }
+  }
 }
 
 init();
