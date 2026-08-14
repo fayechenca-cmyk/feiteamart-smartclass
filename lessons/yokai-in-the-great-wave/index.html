@@ -273,6 +273,10 @@ button{font-family:'Montserrat',sans-serif;}
 .video-mini-progress{text-align:center;font-size:10.5px;font-weight:800;letter-spacing:1px;color:var(--ink-faint);margin-bottom:4px;}
 .video-block-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.35rem;text-align:center;color:var(--prussian);margin:0 0 12px;}
 .video-embed-wrap{border-radius:1px;overflow:hidden;box-shadow:0 10px 26px rgba(20,37,58,.28);}
+.part-indicator{text-align:center;font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--vermilion);margin-bottom:6px;}
+.part-nav{display:flex;justify-content:center;gap:8px;margin-top:10px;}
+.part-nav-btn{border:1.5px solid var(--vermilion);background:#fff;border-radius:999px;padding:6px 13px;font-size:10.5px;font-weight:700;cursor:pointer;color:var(--vermilion);}
+.part-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
 .reminder-chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
 .reminder-chip{background:var(--turquoise-soft);border-radius:999px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--prussian);}
 .palette-row{display:flex;gap:14px;justify-content:center;margin:14px 0 6px;}
@@ -398,39 +402,41 @@ const MATERIALS = [
   { id:'water',      label:'Water',            icon:'💧' }
 ];
 
-// Studio video steps — edit this array only for content changes.
+// Studio video steps — edit this array only for content changes. Each
+// step's videoSrcs is an array (usually 1 video, but a step can have
+// several sequential "parts" — see step 2). Part navigation is separate
+// from step navigation: switching parts never moves the step/progress-dot.
 const STUDIO_STEPS = [
   {
-    stepNumber: 1, title: 'Draw the Lines', phase:'DRAW',
-    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
-    videoTitle: 'Draw the Lines — teacher demo',
-    reminders: ['Big shapes first', 'Let lines flow', 'Leave space for waves'],
-    completionLabel: '✓ Lines Drawn!'
+    id: 'step-1-draw-lines', step: 1, title: 'Draw the Lines', phase:'DRAW',
+    prompt: 'Big shapes first. Let lines flow. Leave space for waves.',
+    completionLabel: '✓ Step Complete',
+    videoSrcs: [''] // TODO(Faye): paste real Cloudflare Stream video for this step
   },
   {
-    stepNumber: 2, title: 'Color the Creatures & Background', phase:'COLOR',
-    teacherVideoUrl: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/909043afdf4d363fc56b6e6acef22f5b/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F909043afdf4d363fc56b6e6acef22f5b%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
-    videoTitle: 'Color the Creatures & Background — teacher demo',
-    palette: [
-      { name:'Ocean', colors:['#1e3a5f','#6f9c98','#143d5c'] },
-      { name:'Fire',  colors:['#c0472f','#d9642c','#d9a441'] }
-    ],
-    note: 'Your colors can be different.',
-    completionLabel: '✓ Color Added!'
+    id: 'step-2-color-base', step: 2, title: 'Color the Base', phase:'COLOR',
+    prompt: 'Lay down the first color — base tones for your creature and the background.',
+    completionLabel: '✓ Color Added!',
+    videoSrcs: [
+      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/909043afdf4d363fc56b6e6acef22f5b/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F909043afdf4d363fc56b6e6acef22f5b%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
+      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/bd4dd8321b604d1c65ed297e8139e27a/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fbd4dd8321b604d1c65ed297e8139e27a%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'
+    ]
   },
   {
-    stepNumber: 3, title: 'Paint the Waves', phase:'COLOR',
-    teacherVideoUrl: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/600bd743acf9a36c77ced85aae1cd2cf/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F600bd743acf9a36c77ced85aae1cd2cf%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
-    videoTitle: 'Paint the Waves — teacher demo',
-    note: 'Repeat. Curve. Flow.',
-    completionLabel: '✓ Waves Are Moving!'
+    id: 'step-3-paint-waves', step: 3, title: 'Paint the Waves', phase:'COLOR',
+    prompt: 'Repeat. Curve. Flow. Build the wave colors and movement.',
+    completionLabel: '✓ Waves Are Moving!',
+    videoSrcs: [
+      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/600bd743acf9a36c77ced85aae1cd2cf/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F600bd743acf9a36c77ced85aae1cd2cf%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'
+    ]
   },
   {
-    stepNumber: 4, title: 'Add Details & Ink', phase:'DETAIL',
-    teacherVideoUrl: '', // TODO(Faye): paste real Cloudflare Stream video for this step
-    videoTitle: 'Add Details & Ink — teacher demo',
-    reminders: ['Patterns', 'Textures', 'Small details', 'Stronger outlines'],
-    completionLabel: '✓ Artwork Complete!'
+    id: 'step-4-details-ink', step: 4, title: 'Add Details & Ink', phase:'DETAIL',
+    prompt: 'Patterns, textures, small details, and stronger outlines to finish.',
+    completionLabel: '✓ Artwork Complete!',
+    videoSrcs: [
+      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/6d3a1932196571cb3b3ffdee23416e20/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F6d3a1932196571cb3b3ffdee23416e20%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'
+    ]
   }
 ];
 
@@ -982,36 +988,49 @@ function toggleMaterial(id){
   saveState();
   document.getElementById('mat-'+id).classList.toggle('checked');
 }
-function pickPalette(name){
-  STATE.studioPalettePick = name; saveState();
-  document.querySelectorAll('.palette-swatch-group').forEach(el=>el.classList.remove('picked'));
-  document.getElementById('palette-'+name).classList.add('picked');
-}
 function toggleStudioDone(idx){
   STATE.studioDone[idx] = !STATE.studioDone[idx]; saveState();
   const btn = document.getElementById('completeBtn-'+idx);
   btn.classList.toggle('done', STATE.studioDone[idx]);
   btn.textContent = STATE.studioDone[idx] ? STUDIO_STEPS[idx].completionLabel : "I'm done with this step";
 }
+
+// Which video "part" is showing per step — in-memory only (not persisted,
+// like the other one-off UI state in this file). Switching parts never
+// touches the step/progress-dot count; only Previous/Next between steps
+// 1-4 does that.
+let studioPartIndex = STUDIO_STEPS.map(() => 0);
+function showVideoPart(idx, partIdx){
+  const s = STUDIO_STEPS[idx];
+  const clamped = Math.max(0, Math.min(s.videoSrcs.length - 1, partIdx));
+  studioPartIndex[idx] = clamped;
+  const title = s.title + (s.videoSrcs.length > 1 ? ' — Part ' + (clamped + 1) : '') + ' — teacher demo';
+  document.getElementById('videoEmbed-' + idx).innerHTML = renderVideoEmbed(s.videoSrcs[clamped], title);
+  const label = document.getElementById('partLabel-' + idx);
+  if (label) label.textContent = 'PART ' + (clamped + 1) + ' OF ' + s.videoSrcs.length;
+  const prevBtn = document.getElementById('partPrev-' + idx);
+  const nextBtn = document.getElementById('partNext-' + idx);
+  if (prevBtn) prevBtn.disabled = clamped === 0;
+  if (nextBtn) nextBtn.disabled = clamped === s.videoSrcs.length - 1;
+}
+
 function renderVideoBlock(s, idx){
-  let extra = '';
-  if (s.reminders) extra += `<div class="reminder-chips">${s.reminders.map(r => `<span class="reminder-chip">${r}</span>`).join('')}</div>`;
-  if (s.palette) {
-    const groups = s.palette.map(p => `
-      <div class="palette-swatch-group" id="palette-${p.name}" onclick="pickPalette('${p.name}')">
-        <div class="palette-dots">${p.colors.map(c => `<span class="palette-dot" style="background:${c};"></span>`).join('')}</div>
-        <div class="palette-name">${p.name}</div>
-      </div>
-    `).join('');
-    extra += `<div class="palette-row">${groups}</div>`;
-  }
-  if (s.note) extra += `<p class="video-note">${s.note}</p>`;
+  const extra = s.prompt ? `<p class="video-note">${s.prompt}</p>` : '';
   const isFirst = idx === 0, isLast = idx === STUDIO_STEPS.length - 1;
+  const multi = s.videoSrcs.length > 1;
+  const partNav = multi ? `
+    <div class="part-nav">
+      <button class="part-nav-btn" id="partPrev-${idx}" onclick="showVideoPart(${idx}, studioPartIndex[${idx}] - 1)" disabled>← Part</button>
+      <button class="part-nav-btn" id="partNext-${idx}" onclick="showVideoPart(${idx}, studioPartIndex[${idx}] + 1)">Next Part →</button>
+    </div>
+  ` : '';
   return `
     <div class="video-block" id="video-block-${idx}" data-phase="${s.phase}">
-      <div class="video-mini-progress">STEP ${s.stepNumber} OF ${STUDIO_STEPS.length}</div>
+      <div class="video-mini-progress">STEP ${s.step} OF ${STUDIO_STEPS.length}</div>
       <h3 class="video-block-title">${s.title}</h3>
-      ${renderVideoEmbed(s.teacherVideoUrl, s.videoTitle)}
+      ${multi ? `<div class="part-indicator" id="partLabel-${idx}">PART 1 OF ${s.videoSrcs.length}</div>` : ''}
+      <div id="videoEmbed-${idx}">${renderVideoEmbed(s.videoSrcs[0], s.title + ' — teacher demo')}</div>
+      ${partNav}
       ${extra}
       <div class="complete-wrap">
         <button class="complete-btn" id="completeBtn-${idx}" onclick="toggleStudioDone(${idx})">I'm done with this step</button>
