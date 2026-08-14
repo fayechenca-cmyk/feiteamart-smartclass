@@ -273,6 +273,9 @@ button{font-family:'Montserrat',sans-serif;}
 .video-mini-progress{text-align:center;font-size:10.5px;font-weight:800;letter-spacing:1px;color:var(--ink-faint);margin-bottom:4px;}
 .video-block-title{font-family:'Noto Serif SC',serif;font-weight:700;font-size:1.35rem;text-align:center;color:var(--prussian);margin:0 0 12px;}
 .video-embed-wrap{border-radius:1px;overflow:hidden;box-shadow:0 10px 26px rgba(20,37,58,.28);}
+.studio-image-wrap{border-radius:1px;overflow:hidden;box-shadow:0 10px 26px rgba(20,37,58,.28);}
+.studio-image-wrap img{display:block;width:100%;height:auto;}
+.studio-image-credit{text-align:center;font-size:10px;color:var(--ink-faint);margin-top:8px;font-style:italic;}
 .part-indicator{text-align:center;font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--vermilion);margin-bottom:6px;}
 .part-nav{display:flex;justify-content:center;gap:8px;margin-top:10px;}
 .part-nav-btn{border:1.5px solid var(--vermilion);background:#fff;border-radius:999px;padding:6px 13px;font-size:10.5px;font-weight:700;cursor:pointer;color:var(--vermilion);}
@@ -411,7 +414,9 @@ const STUDIO_STEPS = [
     id: 'step-1-draw-lines', step: 1, title: 'Draw the Lines', phase:'DRAW',
     prompt: 'Big shapes first. Let lines flow. Leave space for waves.',
     completionLabel: '✓ Step Complete',
-    videoSrcs: [''] // TODO(Faye): paste real Cloudflare Stream video for this step
+    imageSrc: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/c2813ced-7823-4a29-4bd7-3369a03af900/public',
+    imageAlt: 'Mrs. Dawn Wang\'s pencil drawing — the main composition for Yōkai in the Great Wave',
+    imageCredit: 'Drawing by Mrs. Dawn Wang'
   },
   {
     id: 'step-2-color-base', step: 2, title: 'Color the Base', phase:'COLOR',
@@ -1014,9 +1019,18 @@ function showVideoPart(idx, partIdx){
   if (nextBtn) nextBtn.disabled = clamped === s.videoSrcs.length - 1;
 }
 
-function renderVideoBlock(s, idx){
-  const extra = s.prompt ? `<p class="video-note">${s.prompt}</p>` : '';
-  const isFirst = idx === 0, isLast = idx === STUDIO_STEPS.length - 1;
+// A studio step is either image-based (imageSrc/imageAlt/imageCredit — a
+// static reference, no video/part UI) or video-based (videoSrcs[] — the
+// existing part-navigation UI). Exactly one of the two should be present.
+function renderStudioMedia(s, idx){
+  if (s.imageSrc) {
+    return `
+      <div class="studio-image-wrap">
+        <img src="${s.imageSrc}" alt="${s.imageAlt || s.title}">
+      </div>
+      <p class="studio-image-credit">${s.imageCredit || ''}</p>
+    `;
+  }
   const multi = s.videoSrcs.length > 1;
   const partNav = multi ? `
     <div class="part-nav">
@@ -1025,12 +1039,20 @@ function renderVideoBlock(s, idx){
     </div>
   ` : '';
   return `
+    ${multi ? `<div class="part-indicator" id="partLabel-${idx}">PART 1 OF ${s.videoSrcs.length}</div>` : ''}
+    <div id="videoEmbed-${idx}">${renderVideoEmbed(s.videoSrcs[0], s.title + ' — teacher demo')}</div>
+    ${partNav}
+  `;
+}
+
+function renderVideoBlock(s, idx){
+  const extra = s.prompt ? `<p class="video-note">${s.prompt}</p>` : '';
+  const isFirst = idx === 0, isLast = idx === STUDIO_STEPS.length - 1;
+  return `
     <div class="video-block" id="video-block-${idx}" data-phase="${s.phase}">
       <div class="video-mini-progress">STEP ${s.step} OF ${STUDIO_STEPS.length}</div>
       <h3 class="video-block-title">${s.title}</h3>
-      ${multi ? `<div class="part-indicator" id="partLabel-${idx}">PART 1 OF ${s.videoSrcs.length}</div>` : ''}
-      <div id="videoEmbed-${idx}">${renderVideoEmbed(s.videoSrcs[0], s.title + ' — teacher demo')}</div>
-      ${partNav}
+      ${renderStudioMedia(s, idx)}
       ${extra}
       <div class="complete-wrap">
         <button class="complete-btn" id="completeBtn-${idx}" onclick="toggleStudioDone(${idx})">I'm done with this step</button>
@@ -1050,6 +1072,7 @@ function renderSheet7(){
   `).join('');
   const videos = STUDIO_STEPS.map((s, i) => renderVideoBlock(s, i)).join('');
   return `
+    <p class="credit-line" style="margin:0 0 18px;">Yōkai in the Great Wave — an original course by Mrs. Dawn Wang, inspired by Hokusai's Great Wave and Kuniyoshi's yōkai.</p>
     <div class="kicker" data-phase="DRAW">Gather Your Tools</div>
     <h2 class="stage-title">Get Ready to Create</h2>
     <div class="materials-grid" data-phase="DRAW" id="materialsTray">${tiles}</div>
