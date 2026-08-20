@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Music into Shape</title>
+<meta name="description" content="A Kandinsky-inspired Creation lesson: listen to music, discover circles/lines/rhythm in a real painting, then paint, layer, and lift your own composition off the page.">
+<meta name="keywords" content="Creation, Learn from Masters, Kandinsky, Watercolor, Music, Abstract Art, Paper Sculpture">
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "Music into Shape",
+  "subtitle": "Inspired by Wassily Kandinsky",
+  "path": ["Creation", "Material · The Workbench", "Music into Shape"],
+  "series": "Learn from Masters",
+  "tags": ["Learn from Masters", "Kandinsky", "Watercolor", "Music", "Abstract Art", "Paper Sculpture"],
+  "ageRange": "6-10+",
+  "materials": ["Watercolor", "Pencil", "Colored Pencil or Marker", "Watercolor Paper", "Scissors", "Construction Paper", "Glue"],
+  "stageCount": 14
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#2d5fa8;
+  --blue-deep:#1f4076;
+  --violet:#7b5ea8;
+  --turquoise:#3fa8a0;
+  --yellow:#f0b93e;
+  --orange:#e8862e;
+  --coral:#e85c6e;
+  --black:#1c1a22;
+  --paper:#faf6ee;
+  --paper-warm:#f4ecd9;
+  --ink:#242130;
+  --ink-soft:rgba(36,33,48,.66);
+  --ink-faint:rgba(36,33,48,.42);
+  --line:rgba(36,33,48,.14);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow-x:hidden;
+}
+.display{font-family:'Space Grotesk',sans-serif;}
+button{font-family:'Work Sans',sans-serif;}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+/* ---------- Top bar ---------- */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--paper) 78%, transparent);
+}
+.back-link{font-size:12px;color:var(--blue-deep);text-decoration:none;font-weight:700;letter-spacing:.2px;}
+.map-btn{
+  border:2px solid var(--ink);background:var(--paper);border-radius:999px;
+  padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);
+}
+.map-btn:active{transform:scale(.95);}
+.zone-pill{font-size:9.5px;font-weight:700;letter-spacing:1.5px;color:#fff;background:var(--violet);padding:4px 9px;border-radius:999px;}
+
+/* ---------- Screens ---------- */
+.screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+.screen.active{display:block;animation:shapeIn .45s cubic-bezier(.2,.7,.3,1);}
+@keyframes shapeIn{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+.kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--coral);text-align:center;font-weight:700;margin-bottom:6px;}
+.s-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.85rem;text-align:center;margin:0 0 6px;color:var(--blue-deep);}
+.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.5;}
+.no-single-answer{text-align:center;font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:14px;}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
+.km-btn{
+  font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--ink);background:transparent;color:var(--ink);transition:transform .12s ease;
+}
+.km-btn:active{transform:scale(.96);}
+.km-btn.primary{background:var(--blue);border-color:var(--blue-deep);color:#fff;}
+.km-btn.coral{background:var(--coral);border-color:var(--coral);color:#fff;}
+.km-btn:disabled{opacity:.3;cursor:not-allowed;}
+.km-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
+
+.credit-line{font-size:10px;color:var(--ink-faint);text-align:center;margin-top:6px;line-height:1.5;font-style:italic;padding:0 8px;}
+.video-embed-wrap{margin:14px 0 8px;border-radius:8px;overflow:hidden;box-shadow:0 12px 28px rgba(36,33,48,.24);}
+
+/* Floating circle decoration — reused across the course, never purely
+   decorative: it's the painting's own motif carried into the UI. */
+.floating-circle{position:absolute;border-radius:50%;pointer-events:none;opacity:.75;animation:circleFloat 5s ease-in-out infinite;}
+@keyframes circleFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+/* Persistent music control */
+#musicControl{
+  position:fixed;right:16px;bottom:20px;z-index:600;
+  border:2px solid var(--ink);background:#fff;border-radius:999px;
+  padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink);
+  box-shadow:0 6px 16px rgba(36,33,48,.22);display:none;align-items:center;gap:6px;
+}
+#musicControl.show{display:flex;}
+#musicControl.playing{background:var(--turquoise);border-color:var(--turquoise);color:#fff;}
+
+/* ---------- COURSE MAP ---------- */
+.map-header{text-align:center;margin:6px 0 22px;position:relative;}
+.map-header h1{font-size:2.1rem;margin:4px 0 4px;}
+.map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
+.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;}
+@media(min-width:480px){.zone-grid{grid-template-columns:1fr 1fr 1fr;}}
+.zone-tile{
+  position:relative;background:#fff;border:2.5px solid var(--ink);border-radius:16px;
+  padding:20px 10px 16px;text-align:center;cursor:pointer;overflow:visible;
+  box-shadow:4px 5px 0 rgba(36,33,48,.14);transition:transform .15s ease;
+}
+.zone-tile:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(36,33,48,.14);}
+.zone-tile .zt-icon{font-size:1.9rem;}
+.zone-tile .zt-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;margin-top:6px;color:var(--blue-deep);}
+.zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
+.zone-tile:nth-child(1){background:linear-gradient(135deg,#fff,rgba(45,95,168,.08));}
+.zone-tile:nth-child(2){background:linear-gradient(135deg,#fff,rgba(63,168,160,.1));}
+.zone-tile:nth-child(3){background:linear-gradient(135deg,#fff,rgba(232,134,46,.1));}
+.zone-tile:nth-child(4){background:linear-gradient(135deg,#fff,rgba(123,94,168,.1));}
+.zone-tile:nth-child(5){background:linear-gradient(135deg,#fff,rgba(232,92,110,.1));}
+.zone-tile:nth-child(6){background:linear-gradient(135deg,#fff,rgba(240,185,62,.12));}
+.map-diagonal{position:absolute;pointer-events:none;opacity:.5;}
+
+/* ---------- Stage 1: Enter the Music ---------- */
+.enter-stage{height:42vh;min-height:230px;max-height:330px;position:relative;overflow:visible;}
+.enter-shape{position:absolute;border-radius:50%;}
+.es-1{width:110px;height:110px;background:var(--blue);opacity:.55;left:12%;top:14%;animation:pulse1 4s ease-in-out infinite;}
+.es-2{width:70px;height:70px;background:var(--coral);opacity:.6;right:16%;top:8%;animation:pulse2 3.4s ease-in-out infinite;}
+.es-3{width:90px;height:90px;background:var(--turquoise);opacity:.55;right:22%;bottom:12%;animation:pulse3 4.6s ease-in-out infinite;}
+.es-4{width:46px;height:46px;background:var(--yellow);opacity:.7;left:24%;bottom:20%;animation:pulse1 3.8s ease-in-out infinite .3s;}
+@keyframes pulse1{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+@keyframes pulse2{0%,100%{transform:scale(1) translateY(0);}50%{transform:scale(.85) translateY(14px);}}
+@keyframes pulse3{0%,100%{transform:scale(1);}50%{transform:scale(1.12) translateX(-10px);}}
+.enter-line{position:absolute;height:2px;background:var(--ink);opacity:.25;transform-origin:left center;animation:lineSweep 5s ease-in-out infinite;}
+.el-1{width:55%;top:45%;left:5%;transform:rotate(-8deg);}
+.el-2{width:38%;bottom:22%;right:8%;transform:rotate(6deg);animation-delay:.6s;}
+@keyframes lineSweep{0%,100%{opacity:.15;}50%{opacity:.4;}}
+.enter-title{text-align:center;font-size:2.3rem;margin:2px 0 4px;}
+.enter-sub{text-align:center;font-size:13.5px;color:var(--ink-soft);max-width:320px;margin:0 auto 20px;line-height:1.6;}
+.enter-cta{text-align:center;}
+
+/* ---------- Stage 2/3: hero artwork ---------- */
+.hero-stage{position:relative;overflow:hidden;border-radius:10px;box-shadow:0 16px 34px rgba(36,33,48,.3);border:2.5px solid var(--ink);}
+.hero-stage img{display:block;width:100%;height:auto;}
+.hero-hotspot{position:absolute;border-radius:50%;cursor:pointer;}
+.hero-hotspot.active{box-shadow:0 0 0 2px var(--coral);animation:hotPulse 1s ease-in-out infinite;}
+@keyframes hotPulse{0%,100%{box-shadow:0 0 0 2px var(--coral);}50%{box-shadow:0 0 0 6px rgba(232,92,110,.4);}}
+.hero-callout{margin-top:10px;background:#fff;padding:12px 14px;font-size:12.5px;line-height:1.5;min-height:20px;border:1.5px solid var(--line);border-radius:8px;}
+.hero-callout .hc-label{font-weight:700;color:var(--blue-deep);margin-right:6px;}
+
+/* ---------- Stage 2: notice picker ---------- */
+.notice-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+.notice-chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:12.5px;cursor:pointer;font-weight:700;}
+.notice-chip.picked{background:var(--blue);border-color:var(--blue-deep);color:#fff;}
+.kandinsky-reveal{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;color:var(--violet);margin-top:14px;min-height:26px;font-weight:600;}
+
+/* ---------- Stage 3: Geometry Sweep ---------- */
+.moves-strip{margin-top:16px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;}
+.moves-strip-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--ink-faint);text-transform:uppercase;margin-bottom:6px;}
+.moves-chips{display:flex;gap:6px;flex-wrap:wrap;min-height:26px;}
+.move-chip{background:var(--paper-warm);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:700;color:var(--blue-deep);}
+.save-move-wrap{text-align:center;margin-top:8px;}
+.save-move-btn{border:1.5px solid var(--violet);background:#fff;color:var(--violet);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;}
+.save-move-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ---------- Stage 4: Meet Kandinsky ---------- */
+.portrait-wrap{width:130px;height:130px;margin:10px auto;border-radius:50%;overflow:hidden;border:3px solid var(--ink);box-shadow:4px 5px 0 rgba(36,33,48,.14);}
+.portrait-wrap svg{width:100%;height:100%;}
+.idea-row{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+.idea-card{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:600;}
+.idea-card .ic-num{width:26px;height:26px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;}
+.hear-idea-wrap{text-align:center;margin-top:16px;}
+
+/* ---------- Stage 5: Listen ---------- */
+.listen-player{
+  width:200px;height:200px;margin:14px auto;border-radius:50%;position:relative;
+  background:conic-gradient(from 0deg, var(--blue), var(--violet), var(--coral), var(--turquoise), var(--blue));
+  display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(36,33,48,.28);
+}
+.listen-player.playing{animation:discSpin 8s linear infinite;}
+@keyframes discSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.listen-player-btn{
+  width:78px;height:78px;border-radius:50%;background:#fff;border:none;font-size:1.8rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 2px var(--ink);
+}
+.listen-shape-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.listen-shape-btn{width:50px;height:50px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.listen-shape-btn.picked{background:var(--paper-warm);border-color:var(--violet);transform:scale(1.1);}
+
+/* ---------- Materials ---------- */
+.materials-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:6px;}
+@media(max-width:420px){.materials-grid{grid-template-columns:repeat(3,1fr);}}
+.mat-tile{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 4px;text-align:center;cursor:pointer;position:relative;}
+.mat-tile.checked{border-color:var(--blue);background:var(--paper-warm);}
+.mat-tile .m-icon{font-size:1.5rem;}
+.mat-tile .m-label{font-size:9.5px;font-weight:700;margin-top:5px;}
+.mat-check{display:none;position:absolute;top:3px;right:5px;color:var(--blue);font-weight:900;font-size:11px;}
+.mat-tile.checked .mat-check{display:block;}
+.ready-wrap{text-align:center;margin-top:20px;}
+
+/* ---------- Teacher studio steps ---------- */
+.studio-kicker{text-align:center;font-size:11px;color:var(--ink-faint);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;}
+.tiny-prompts-row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
+.tiny-prompt-chip{background:var(--paper-warm);border-radius:999px;padding:6px 13px;font-size:11px;font-weight:700;color:var(--blue-deep);}
+.own-shapes-line{text-align:center;font-size:12.5px;color:var(--ink-soft);font-style:italic;margin-top:10px;}
+.rotating-prompt{
+  text-align:center;background:#fff;border:1.5px dashed var(--violet);border-radius:10px;
+  padding:12px;font-size:13px;font-weight:700;color:var(--violet);margin:14px 0;min-height:20px;
+}
+.palette-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0;}
+.palette-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
+.palette-dot.picked{box-shadow:0 0 0 2.5px var(--ink);transform:scale(1.12);}
+.your-own-colors-line{text-align:center;font-size:11.5px;color:var(--ink-faint);margin-top:4px;}
+.complete-wrap{text-align:center;margin-top:18px;}
+.complete-btn{background:#fff;border:2px dashed var(--line);border-radius:999px;padding:11px 24px;cursor:pointer;font-weight:700;font-size:13px;color:var(--ink-soft);}
+.complete-btn.done{background:var(--blue);border-style:solid;border-color:var(--blue-deep);color:#fff;}
+.transition-line{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1rem;color:var(--turquoise);margin-top:10px;font-weight:600;}
+
+/* ---------- Step 4: Lift It Off the Page ---------- */
+.lift-demo-stage{width:100%;height:160px;position:relative;margin:16px 0 10px;perspective:600px;}
+.lift-page{position:absolute;inset:0;background:var(--paper-warm);border:1.5px solid var(--line);border-radius:8px;}
+.lift-strip{
+  position:absolute;left:50%;bottom:50%;width:120px;height:26px;background:var(--blue);
+  transform:translateX(-50%) rotateX(0deg);transform-origin:bottom center;transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(.3,.7,.2,1.15);border-radius:4px;
+  box-shadow:0 2px 4px rgba(0,0,0,.15);
+}
+.lift-strip.lifted{transform:translateX(-50%) rotateX(-62deg) translateY(-30px);box-shadow:0 20px 20px -8px rgba(0,0,0,.32);}
+.lift-label-row{display:flex;justify-content:center;gap:26px;margin-top:6px;}
+.lift-label{font-size:10.5px;font-weight:700;color:var(--ink-faint);letter-spacing:.5px;}
+.lift-label.active{color:var(--blue);}
+.lift-btn-wrap{text-align:center;margin-top:10px;}
+
+/* ---------- Mini reflection: What Changed 2D->3D ---------- */
+.mini-reflect-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.mini-reflect-chip{border:2px solid var(--line);background:#fff;border-radius:12px;padding:12px 16px;font-size:12.5px;cursor:pointer;font-weight:700;}
+.mini-reflect-chip.picked{background:var(--coral);border-color:var(--coral);color:#fff;}
+.optional-tag{text-align:center;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;}
+
+/* ---------- Showcase ---------- */
+.showcase-label{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:1.5px;color:var(--coral);text-transform:uppercase;margin-bottom:2px;}
+.teacher-final-frame{width:220px;margin:16px auto 6px;padding:10px;background:#fff;border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(36,33,48,.14);}
+.teacher-final-frame img{width:100%;display:block;}
+.teacher-final-placeholder{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,var(--violet),var(--blue));display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:10px;}
+.teacher-final-caption{text-align:center;font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:2px;}
+.yours-line{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;color:var(--blue-deep);margin-top:16px;font-weight:600;}
+
+/* ---------- One Last Look ---------- */
+.reflect-question-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.reflect-question{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;cursor:pointer;}
+.reflect-question.checked{border-color:var(--blue);background:var(--paper-warm);}
+.reflect-question .rq-box{width:18px;height:18px;border:2px solid var(--ink);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.reflect-question.checked .rq-box{background:var(--blue);border-color:var(--blue-deep);color:#fff;}
+
+/* ---------- Share ---------- */
+.upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:8px;}
+.upload-slot{
+  position:relative;width:210px;height:210px;border-radius:14px;border:2.5px dashed var(--violet);background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
+}
+.upload-slot.saving{border-color:var(--coral);}
+.upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:30px;color:var(--violet);}
+.upload-slot .slot-label{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
+.geo-frame-wrap{position:relative;width:240px;margin:22px auto 6px;}
+.geo-frame{padding:12px;background:#fff;border:2.5px solid var(--ink);box-shadow:6px 8px 0 rgba(36,33,48,.14);transform:rotate(-2deg);animation:frameFloat 3.6s ease-in-out infinite;}
+@keyframes frameFloat{0%,100%{transform:rotate(-2deg) translateY(0);}50%{transform:rotate(-1deg) translateY(-6px);}}
+.geo-frame img{width:100%;display:block;}
+.frame-deco{position:absolute;border-radius:50%;pointer-events:none;}
+.reflect-label{text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--ink-faint);margin:22px 0 8px;text-transform:uppercase;}
+.reflect-chip-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.reflect-chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.reflect-chip.picked{background:var(--coral);border-color:var(--coral);color:#fff;}
+.share-final-line{text-align:center;font-family:'Space Grotesk',sans-serif;font-style:italic;font-size:1.1rem;color:var(--blue-deep);margin:22px 0 4px;}
+.share-credit{text-align:center;font-size:11px;color:var(--ink-faint);margin-bottom:18px;}
+.gallery-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <span class="zone-pill" id="zonePill"></span>
+    <button class="map-btn" onclick="goMap()">◐ Map</button>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<button id="musicControl" onclick="toggleMusic()">🎧 <span id="musicControlLabel">Play Music</span></button>
+<audio id="bgMusic" src="assets/grieg-mountain-king.m4a" preload="none"></audio>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const ZONES = [
+  { id:'look',   label:'LOOK' },
+  { id:'listen', label:'LISTEN' },
+  { id:'paint',  label:'PAINT' },
+  { id:'layer',  label:'LAYER' },
+  { id:'build',  label:'BUILD' },
+  { id:'share',  label:'SHARE' }
+];
+
+const STAGES = [
+  { id:'enter-music',        title:'Enter the Music',        zone:'look',   render:renderEnterMusic, music:false },
+  { id:'look-at-kandinsky',  title:'Look at Kandinsky',      zone:'look',   render:renderLookAtKandinsky, music:false },
+  { id:'geometry-sweep',     title:'Geometry Sweep',         zone:'look',   render:renderGeometrySweep, music:false },
+  { id:'meet-kandinsky',     title:'Meet Kandinsky',         zone:'look',   render:renderMeetKandinsky, music:false },
+  { id:'listen-before-draw', title:'Listen Before You Draw', zone:'listen', render:renderListen, music:true },
+  { id:'materials-ready',    title:'Get Your Materials Ready',zone:'listen',render:renderMaterials, music:false },
+  { id:'studio-step1',       title:'Draw the Rhythm',        zone:'paint',  render:() => renderStudioStep(0), music:true },
+  { id:'studio-step2',       title:'Paint the Colors',       zone:'paint',  render:() => renderStudioStep(1), music:true },
+  { id:'studio-step3',       title:'Add the Visual Beat',    zone:'layer',  render:() => renderStudioStep(2), music:true },
+  { id:'studio-step4',       title:'Lift It Off the Page',   zone:'build',  render:() => renderStudioStep(3), music:false },
+  { id:'reflect-2d-3d',      title:'What Changed?',          zone:'build',  render:renderReflect2D3D, music:false },
+  { id:'showcase',           title:'See the Finished Work',  zone:'build',  render:renderShowcase, music:false },
+  { id:'one-last-look',      title:'One Last Look',          zone:'share',  render:renderOneLastLook, music:false },
+  { id:'share',              title:'Share Your Music',       zone:'share',  render:renderShare, music:false }
+];
+
+// Geometry Sweep hotspots — placed by actually viewing the downloaded
+// painting (see assets/README.md), not guessed from memory. This
+// painting reads almost entirely as overlapping circles, so LINE / ANGLE
+// / COLOR FIELD / MOVEMENT / RHYTHM are interpretive readings of real
+// regions, not literal separate objects — noted in the README.
+const GEOMETRY_HOTSPOTS = [
+  { id:'circle', label:'CIRCLE', reveal:'A pulse.',     left:20, top:10, w:44, h:44 },
+  { id:'line',   label:'LINE',   reveal:'A direction.', left:62, top:2,  w:34, h:22 },
+  { id:'angle',  label:'ANGLE',  reveal:'Energy.',      left:34, top:52, w:26, h:22 },
+  { id:'color',  label:'COLOR',  reveal:'A feeling.',   left:2,  top:38, w:20, h:34 },
+  { id:'movement', label:'MOVEMENT', reveal:'Motion.',  left:8,  top:60, w:30, h:32 },
+  { id:'rhythm', label:'RHYTHM', reveal:'A rhythm.',    left:70, top:64, w:26, h:30 }
+];
+
+const NOTICE_OPTIONS = [
+  { id:'circles', emoji:'○', label:'Circles' },
+  { id:'lines', emoji:'／', label:'Lines' },
+  { id:'angles', emoji:'△', label:'Angles' },
+  { id:'color', emoji:'🎨', label:'Color' },
+  { id:'movement', emoji:'〰', label:'Movement' },
+  { id:'rhythm', emoji:'♫', label:'Rhythm' }
+];
+
+const KANDINSKY_IDEAS = [
+  'Painting can feel like music.',
+  'Color can carry feeling.',
+  'Shapes do not have to become objects.'
+];
+
+const LISTEN_SHAPES = [
+  { id:'circle', emoji:'○' }, { id:'triangle', emoji:'△' }, { id:'wave', emoji:'〰' },
+  { id:'line', emoji:'／' }, { id:'dot', emoji:'●' }
+];
+
+const MATERIALS = [
+  { id:'watercolor', label:'Watercolor', icon:'🎨' },
+  { id:'pencil', label:'Pencil', icon:'✏️' },
+  { id:'coloredpencil', label:'Colored Pencil', icon:'🖍' },
+  { id:'paper', label:'Watercolor Paper', icon:'📄' },
+  { id:'scissors', label:'Scissors', icon:'✂️' },
+  { id:'construction', label:'Construction Paper', icon:'🟦' },
+  { id:'glue', label:'Glue', icon:'🧴' }
+];
+
+const STEP_PALETTE = ['#2d5fa8','#7b5ea8','#3fa8a0','#f0b93e','#e8862e','#e85c6e'];
+
+// Studio steps — edit this array only for content changes. All video
+// fields are placeholders until Faye sends real Cloudflare Stream URLs.
+const STUDIO_STEPS = [
+  {
+    id:'step-1-draw-rhythm', step:1, title:'Draw the Rhythm',
+    tinyPrompts:['Start big.', 'Follow the rhythm.', 'Let shapes move.'],
+    ownShapesLine:'Your shapes can be completely different.',
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Draw the Rhythm — teacher demo',
+    completionLabel:'✓ Rhythm started!'
+  },
+  {
+    id:'step-2-paint-colors', step:2, title:'Paint the Colors',
+    prompt:'What color does the music need?',
+    palette:true,
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Paint the Colors — teacher demo',
+    completionLabel:'✓ Color added!',
+    transitionLine:'Now let’s add texture.'
+  },
+  {
+    id:'step-3-visual-beat', step:3, title:'Add the Visual Beat',
+    rotatingPrompts:['Add a fast line.', 'Repeat a shape.', 'Try a new texture.', 'Leave some space.', 'Follow one sound.'],
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Add the Visual Beat — teacher demo',
+    completionLabel:'✓ Your painting has rhythm!'
+  },
+  {
+    id:'step-4-lift-page', step:4, title:'Lift It Off the Page',
+    liftDemo:true,
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Lift It Off the Page — teacher demo',
+    completionLabel:'✓ It jumped off the page!'
+  }
+];
+
+const SHOWCASE_VIDEO_SRC = ''; // TODO(Faye): paste real Cloudflare Stream final-showcase video
+const SHOWCASE_VIDEO_TITLE = 'See the Finished Work — Mrs. Dawn’s showcase';
+// TODO(Faye): paste a photo URL of your own finished piece here — shown
+// beside the showcase video as "Mrs. Dawn's version," not a template.
+const TEACHER_FINAL_ARTWORK_SRC = '';
+
+const REFLECT_2D3D_OPTIONS = ['SHADOW','HEIGHT','MOVEMENT','SPACE'];
+
+const ONE_LAST_LOOK_QUESTIONS = [
+  'Where is your rhythm?',
+  'Where is your strongest color?',
+  'What part comes off the page?'
+];
+
+const SHARE_REFLECT_CHIPS = [
+  { id:'rhythm', emoji:'♫', label:'RHYTHM' },
+  { id:'shape', emoji:'○', label:'SHAPE' },
+  { id:'color', emoji:'🎨', label:'COLOR' },
+  { id:'movement', emoji:'〰', label:'MOVEMENT' },
+  { id:'3dpaper', emoji:'✂️', label:'3D PAPER' },
+  { id:'surprise', emoji:'✨', label:'SURPRISE' }
+];
+
+/* ============================================================
+   STATE (localStorage-persisted, scoped to this course only)
+============================================================ */
+const STATE_KEY = 'fei.creation.kandinsky_music_into_shape.v1';
+function defaultState(){
+  return {
+    noticePicks: [],
+    visualMoves: [],
+    geometrySeen: [],
+    listenShapePicks: [],
+    materialsChecked: [],
+    studioPalettePick: null,
+    studioDone: [false, false, false, false],
+    liftLifted: false,
+    reflect2d3d: null,
+    oneLastLookChecked: [],
+    reflectShareChips: []
+  };
+}
+let STATE = defaultState();
+function loadState(){
+  try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
+}
+function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
+
+/* ============================================================
+   MUSIC — never autoplay; a single persistent control shown only on
+   stages that opt in (STAGES[i].music === true). Paused automatically
+   when navigating to a stage without the control, so nothing plays
+   "unexpectedly" outside its intended context.
+============================================================ */
+const bgMusic = document.getElementById('bgMusic');
+let musicPlaying = false;
+function toggleMusic(){
+  if (musicPlaying) { bgMusic.pause(); }
+  else { bgMusic.play().catch(() => {}); }
+}
+bgMusic.addEventListener('play', () => {
+  musicPlaying = true;
+  document.getElementById('musicControl').classList.add('playing');
+  document.getElementById('musicControlLabel').textContent = 'Pause Music';
+  const disc = document.getElementById('listenPlayerDisc');
+  if (disc) disc.classList.add('playing');
+});
+bgMusic.addEventListener('pause', () => {
+  musicPlaying = false;
+  document.getElementById('musicControl').classList.remove('playing');
+  document.getElementById('musicControlLabel').textContent = 'Play Music';
+  const disc = document.getElementById('listenPlayerDisc');
+  if (disc) disc.classList.remove('playing');
+});
+function updateMusicControlVisibility(stage){
+  const ctrl = document.getElementById('musicControl');
+  if (stage.music) ctrl.classList.add('show');
+  else { ctrl.classList.remove('show'); if (musicPlaying) bgMusic.pause(); }
+}
+
+/* ============================================================
+   IndexedDB — finished-artwork photo storage
+============================================================ */
+const DB_NAME = 'fei_kandinsky_music_into_shape_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const PIECE_ID = 'piece_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+function isStorageSupported(){ return !!window.indexedDB; }
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale); height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image')); };
+    img.src = url;
+  });
+}
+async function saveArtwork(pieceId, fileOrBlob){
+  const compressed = await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => { const rows = req.result || []; rows.sort((a, b) => b.savedAt - a.savedAt); resolve(rows); };
+    req.onerror = () => reject(req.error);
+  });
+}
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+let currentStageId = 'enter-music';
+function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
+function goStage(id){ currentStageId = id; renderCurrentStage(); }
+function goNext(){ const i = stageIndex(currentStageId); if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id); }
+function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
+function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
+function goZoneFirst(zoneId){ const first = STAGES.find(s => s.zone === zoneId); if (first) goStage(first.id); }
+
+function renderNav(stage){
+  const idx = stageIndex(stage.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STAGES.length - 1;
+  return `
+    <div class="nav-footer">
+      <button class="km-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
+      ${isLast ? '<span></span>' : `<button class="km-btn primary" onclick="goNext()">Next →</button>`}
+    </div>
+  `;
+}
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--violet),var(--blue));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   COURSE MAP
+============================================================ */
+const ZONE_ICONS = { look:'◐', listen:'♫', paint:'🎨', layer:'△', build:'✂️', share:'🖼' };
+function renderMap(){
+  const tiles = ZONES.map(z => {
+    const count = STAGES.filter(s => s.zone === z.id).length;
+    return `
+      <div class="zone-tile" onclick="goZoneFirst('${z.id}')">
+        <div class="zt-icon">${ZONE_ICONS[z.id]}</div>
+        <div class="zt-label">${z.label}</div>
+        <div class="zt-count">${count} stop${count > 1 ? 's' : ''}</div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="map-header">
+      <span class="floating-circle" style="width:26px;height:26px;background:var(--yellow);left:8%;top:-4px;"></span>
+      <span class="floating-circle" style="width:16px;height:16px;background:var(--coral);right:14%;top:12px;animation-delay:.5s;"></span>
+      <h1 class="display">Music into Shape</h1>
+      <p>Tap anywhere. Listen, look, then make your mark.</p>
+    </div>
+    <div class="zone-grid">${tiles}</div>
+  `;
+}
+
+/* ============================================================
+   STAGE 1 — Enter the Music
+============================================================ */
+function renderEnterMusic(){
+  return `
+    <div class="enter-stage">
+      <span class="enter-shape es-1"></span>
+      <span class="enter-shape es-2"></span>
+      <span class="enter-shape es-3"></span>
+      <span class="enter-shape es-4"></span>
+      <span class="enter-line el-1"></span>
+      <span class="enter-line el-2"></span>
+    </div>
+    <h1 class="enter-title display">Music into Shape</h1>
+    <p class="enter-sub">Can you draw what music feels like?</p>
+    <div class="enter-cta"><button class="km-btn primary" onclick="goNext()">Listen →</button></div>
+  `;
+}
+
+/* ============================================================
+   STAGE 2 — Look at Kandinsky
+============================================================ */
+function toggleNotice(id){
+  const i = STATE.noticePicks.indexOf(id);
+  if (i > -1) STATE.noticePicks.splice(i, 1);
+  else { if (STATE.noticePicks.length >= 3) STATE.noticePicks.shift(); STATE.noticePicks.push(id); }
+  saveState();
+  renderCurrentStage();
+}
+function renderLookAtKandinsky(){
+  const chips = NOTICE_OPTIONS.map(o => `
+    <span class="notice-chip${STATE.noticePicks.includes(o.id) ? ' picked' : ''}" onclick="toggleNotice('${o.id}')">${o.emoji} ${o.label}</span>
+  `).join('');
+  return `
+    <div class="kicker">A Real Painting</div>
+    <h2 class="s-title">What Do You Notice?</h2>
+    <div class="hero-stage">
+      <img src="assets/kandinsky-several-circles.jpg" alt="Wassily Kandinsky, Several Circles">
+    </div>
+    <p class="credit-line">Wassily Kandinsky, Several Circles, 1926. Solomon R. Guggenheim Museum, New York. Public Domain.</p>
+    <div class="notice-row">${chips}</div>
+    <div class="kandinsky-reveal">${STATE.noticePicks.length >= 2 ? 'Kandinsky made paintings feel almost like music.' : ''}</div>
+  `;
+}
+
+/* ============================================================
+   STAGE 3 — Geometry Sweep
+============================================================ */
+function toggleGeometryHotspot(id){
+  if (!STATE.geometrySeen.includes(id)) { STATE.geometrySeen.push(id); saveState(); }
+  document.querySelectorAll('#geoStage .hero-hotspot').forEach(el => el.classList.remove('active'));
+  document.getElementById('gh-' + id).classList.add('active');
+  const h = GEOMETRY_HOTSPOTS.find(x => x.id === id);
+  document.getElementById('geoCallout').innerHTML = `<span class="hc-label">${h.label}</span>${h.reveal}`;
+  document.getElementById('saveMoveBtn').disabled = false;
+  document.getElementById('saveMoveBtn').dataset.pending = h.label + ' — ' + h.reveal;
+}
+function saveVisualMove(){
+  const btn = document.getElementById('saveMoveBtn');
+  const move = btn.dataset.pending;
+  if (!move) return;
+  if (!STATE.visualMoves.includes(move)) {
+    if (STATE.visualMoves.length >= 2) STATE.visualMoves.shift();
+    STATE.visualMoves.push(move);
+    saveState();
+  }
+  renderCurrentStage();
+}
+function renderGeometrySweep(){
+  const hotspots = GEOMETRY_HOTSPOTS.map(h => `
+    <div class="hero-hotspot" id="gh-${h.id}" onclick="toggleGeometryHotspot('${h.id}')" style="left:${h.left}%;top:${h.top}%;width:${h.w}%;height:${h.h}%;"></div>
+  `).join('');
+  const moveChips = STATE.visualMoves.map(m => `<span class="move-chip">${m}</span>`).join('') || '<span class="move-chip" style="opacity:.5;">tap the painting to find one</span>';
+  return `
+    <div class="kicker">How It Moves</div>
+    <h2 class="s-title">Tap the Painting</h2>
+    <div class="hero-stage" id="geoStage">
+      <img src="assets/kandinsky-several-circles.jpg" alt="Wassily Kandinsky, Several Circles">
+      ${hotspots}
+    </div>
+    <div class="hero-callout" id="geoCallout">Tap a glowing area above.</div>
+    <div class="save-move-wrap"><button class="save-move-btn" id="saveMoveBtn" onclick="saveVisualMove()" disabled>+ Save This Move</button></div>
+    <div class="moves-strip">
+      <div class="moves-strip-label">My Visual Moves</div>
+      <div class="moves-chips">${moveChips}</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   STAGE 4 — Meet Kandinsky
+============================================================ */
+function hearIdea(){
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(KANDINSKY_IDEAS.join('. '));
+    u.rate = 0.92;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+function renderMeetKandinsky(){
+  const cards = KANDINSKY_IDEAS.map((line, i) => `
+    <div class="idea-card"><span class="ic-num">${i + 1}</span>${line}</div>
+  `).join('');
+  return `
+    <div class="kicker">One Artist</div>
+    <h2 class="s-title">Meet Kandinsky</h2>
+    <div class="portrait-wrap">
+      <svg viewBox="0 0 130 130"><circle cx="65" cy="65" r="65" fill="#2d5fa8"/><circle cx="50" cy="55" r="30" fill="#f0b93e"/><circle cx="78" cy="50" r="18" fill="#e85c6e" opacity=".85"/><circle cx="60" cy="85" r="22" fill="#3fa8a0" opacity=".85"/></svg>
+    </div>
+    <div class="idea-row">${cards}</div>
+    <div class="hear-idea-wrap"><button class="km-btn" onclick="hearIdea()">🔊 Hear the Idea</button></div>
+  `;
+}
+
+/* ============================================================
+   STAGE 5 — Listen Before You Draw
+============================================================ */
+function pickListenShape(id){
+  const i = STATE.listenShapePicks.indexOf(id);
+  if (i > -1) STATE.listenShapePicks.splice(i, 1); else STATE.listenShapePicks.push(id);
+  saveState();
+  const btn = document.getElementById('ls-' + id);
+  if (btn) btn.classList.toggle('picked');
+}
+function renderListen(){
+  const shapes = LISTEN_SHAPES.map(s => `
+    <button class="listen-shape-btn${STATE.listenShapePicks.includes(s.id) ? ' picked' : ''}" id="ls-${s.id}" onclick="pickListenShape('${s.id}')">${s.emoji}</button>
+  `).join('');
+  return `
+    <div class="kicker">Turn On the Sound</div>
+    <h2 class="s-title">Listen Before You Draw</h2>
+    <div class="listen-player">
+      <div class="listen-player" id="listenPlayerDisc" style="position:absolute;margin:0;box-shadow:none;">
+        <button class="listen-player-btn" onclick="toggleMusic()">${musicPlaying ? '⏸' : '▶'}</button>
+      </div>
+    </div>
+    <p class="s-sub">What does the music look like?</p>
+    <div class="listen-shape-row">${shapes}</div>
+    <p class="no-single-answer">There is no right answer.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — Materials
+============================================================ */
+function toggleMaterial(id){
+  const i = STATE.materialsChecked.indexOf(id);
+  if (i === -1) STATE.materialsChecked.push(id); else STATE.materialsChecked.splice(i, 1);
+  saveState();
+  document.getElementById('mat-' + id).classList.toggle('checked');
+}
+function renderMaterials(){
+  const tiles = MATERIALS.map(m => `
+    <div class="mat-tile" id="mat-${m.id}" onclick="toggleMaterial('${m.id}')">
+      <div class="mat-check">✓</div><div class="m-icon">${m.icon}</div><div class="m-label">${m.label}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="kicker">Get Ready</div>
+    <h2 class="s-title">Get Your Materials Ready</h2>
+    <div class="materials-grid">${tiles}</div>
+    <div class="ready-wrap"><button class="km-btn primary" onclick="goNext()">Start Creating →</button></div>
+  `;
+}
+
+/* ============================================================
+   STUDIO STEPS (1-4)
+============================================================ */
+let rotatingPromptTimer = null;
+function startRotatingPrompt(prompts){
+  let i = 0;
+  const el = document.getElementById('rotatingPrompt');
+  if (!el) return;
+  el.textContent = prompts[0];
+  clearInterval(rotatingPromptTimer);
+  rotatingPromptTimer = setInterval(() => {
+    i = (i + 1) % prompts.length;
+    const target = document.getElementById('rotatingPrompt');
+    if (!target) { clearInterval(rotatingPromptTimer); return; }
+    target.style.opacity = '0';
+    setTimeout(() => { target.textContent = prompts[i]; target.style.opacity = '1'; }, 220);
+  }, 4200);
+}
+function pickStudioPalette(color){
+  STATE.studioPalettePick = color; saveState();
+  document.querySelectorAll('.palette-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
+}
+function toggleStudioDone(idx){
+  STATE.studioDone[idx] = !STATE.studioDone[idx]; saveState();
+  const btn = document.getElementById('studioCompleteBtn-' + idx);
+  btn.classList.toggle('done', STATE.studioDone[idx]);
+  btn.textContent = STATE.studioDone[idx] ? STUDIO_STEPS[idx].completionLabel : "I'm done with this step";
+}
+function toggleLift(){
+  STATE.liftLifted = !STATE.liftLifted; saveState();
+  const strip = document.getElementById('liftStrip');
+  strip.classList.toggle('lifted', STATE.liftLifted);
+  document.getElementById('liftLabelFlat').classList.toggle('active', !STATE.liftLifted);
+  document.getElementById('liftLabelLift').classList.toggle('active', STATE.liftLifted);
+  document.getElementById('liftLabelCurve').classList.toggle('active', STATE.liftLifted);
+}
+function renderStudioStep(idx){
+  const s = STUDIO_STEPS[idx];
+  let extra = '';
+  if (s.tinyPrompts) {
+    extra += `<div class="tiny-prompts-row">${s.tinyPrompts.map(p => `<span class="tiny-prompt-chip">${p}</span>`).join('')}</div>`;
+    extra += `<p class="own-shapes-line">${s.ownShapesLine}</p>`;
+  }
+  if (s.prompt) extra += `<p class="s-sub" style="margin-top:12px;">${s.prompt}</p>`;
+  if (s.palette) {
+    const dots = STEP_PALETTE.map(c => `<span class="palette-dot${STATE.studioPalettePick === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickStudioPalette('${c}')"></span>`).join('');
+    extra += `<div class="palette-row">${dots}</div><p class="your-own-colors-line">Or choose your own colors — either way works.</p>`;
+  }
+  if (s.rotatingPrompts) {
+    extra += `<div class="rotating-prompt" id="rotatingPrompt" style="transition:opacity .2s ease;"></div>`;
+    if (STATE.visualMoves.length) {
+      extra += `<div class="moves-strip"><div class="moves-strip-label">Remember these?</div><div class="moves-chips">${STATE.visualMoves.map(m => `<span class="move-chip">${m}</span>`).join('')}</div></div>`;
+    }
+  }
+  if (s.liftDemo) {
+    extra += `
+      <p class="s-sub" style="margin-top:10px;">Can a line leave the paper?</p>
+      <div class="lift-demo-stage">
+        <div class="lift-page"></div>
+        <div class="lift-strip" id="liftStrip"></div>
+      </div>
+      <div class="lift-label-row">
+        <span class="lift-label" id="liftLabelFlat">FLAT</span>
+        <span class="lift-label" id="liftLabelLift">LIFT</span>
+        <span class="lift-label" id="liftLabelCurve">CURVE</span>
+      </div>
+      <div class="lift-btn-wrap"><button class="km-btn" onclick="toggleLift()">${STATE.liftLifted ? 'Lay It Flat' : 'Lift the Paper'}</button></div>
+    `;
+  }
+  const done = STATE.studioDone[idx];
+  return `
+    <div class="studio-kicker">Studio · Step ${s.step} of 4</div>
+    <h2 class="s-title">${s.title}</h2>
+    ${renderVideoEmbed(s.videoSrc, s.videoTitle)}
+    ${extra}
+    <div class="complete-wrap">
+      <button class="complete-btn${done ? ' done' : ''}" id="studioCompleteBtn-${idx}" onclick="toggleStudioDone(${idx})">${done ? s.completionLabel : "I'm done with this step"}</button>
+    </div>
+    ${s.transitionLine ? `<p class="transition-line">${s.transitionLine}</p>` : ''}
+  `;
+}
+
+/* ============================================================
+   STAGE — Mini reflection: What Changed? 2D -> 3D
+============================================================ */
+function pickReflect2D3D(id){
+  STATE.reflect2d3d = id; saveState();
+  document.querySelectorAll('.mini-reflect-chip').forEach(el => el.classList.toggle('picked', el.dataset.id === id));
+}
+function renderReflect2D3D(){
+  const chips = REFLECT_2D3D_OPTIONS.map(o => `
+    <span class="mini-reflect-chip${STATE.reflect2d3d === o ? ' picked' : ''}" data-id="${o}" onclick="pickReflect2D3D('${o}')">${o}</span>
+  `).join('');
+  return `
+    <div class="optional-tag">Optional</div>
+    <h2 class="s-title">What Changed?</h2>
+    <p class="s-sub">2D → 3D</p>
+    <div class="mini-reflect-row">${chips}</div>
+  `;
+}
+
+/* ============================================================
+   STAGE — Final Showcase (explicitly not "Step 5")
+============================================================ */
+function renderShowcase(){
+  return `
+    <div class="showcase-label">Mrs. Dawn's Finished Piece</div>
+    <h2 class="s-title">See the Finished Work</h2>
+    <p class="s-sub">Look how color, rhythm and paper work together.</p>
+    ${renderVideoEmbed(SHOWCASE_VIDEO_SRC, SHOWCASE_VIDEO_TITLE)}
+    <div class="teacher-final-frame">${TEACHER_FINAL_ARTWORK_SRC
+      ? `<img src="${TEACHER_FINAL_ARTWORK_SRC}" alt="Mrs. Dawn's finished Music into Shape piece">`
+      : `<div class="teacher-final-placeholder"><div style="font-size:1.8rem;">🖼</div><div style="font-size:11px;margin-top:6px;">Finished piece photo coming soon</div></div>`}</div>
+    <p class="teacher-final-caption">Mrs. Dawn's version</p>
+    <p class="yours-line">Yours should look like YOU.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — One Last Look
+============================================================ */
+function toggleOneLastLook(idx){
+  const i = STATE.oneLastLookChecked.indexOf(idx);
+  if (i > -1) STATE.oneLastLookChecked.splice(i, 1); else STATE.oneLastLookChecked.push(idx);
+  saveState();
+  const el = document.getElementById('oll-' + idx);
+  el.classList.toggle('checked');
+  el.querySelector('.rq-box').textContent = STATE.oneLastLookChecked.includes(idx) ? '✓' : '';
+}
+function renderOneLastLook(){
+  const rows = ONE_LAST_LOOK_QUESTIONS.map((q, i) => `
+    <div class="reflect-question${STATE.oneLastLookChecked.includes(i) ? ' checked' : ''}" id="oll-${i}" onclick="toggleOneLastLook(${i})">
+      <span class="rq-box">${STATE.oneLastLookChecked.includes(i) ? '✓' : ''}</span> ${q}
+    </div>
+  `).join('');
+  return `
+    <div class="optional-tag">Optional — think, don't type</div>
+    <h2 class="s-title">One Last Look</h2>
+    <div class="reflect-question-list">${rows}</div>
+  `;
+}
+
+/* ============================================================
+   STAGE — Share
+============================================================ */
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  saving = true;
+  refreshUploadUI();
+  try {
+    const record = await saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+  } catch (e) {
+    console.warn('[share] saveArtwork failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  refreshUploadUI();
+}
+function refreshUploadUI(){
+  const wrap = document.getElementById('uploadSlotWrap');
+  const frameWrap = document.getElementById('geoFrameWrap');
+  if (!wrap) return;
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your Music into Shape artwork"></div>`;
+    if (frameWrap) frameWrap.innerHTML = `
+      <div class="geo-frame-wrap">
+        <span class="frame-deco" style="width:20px;height:20px;background:var(--yellow);left:-10px;top:-10px;"></span>
+        <span class="frame-deco" style="width:14px;height:14px;background:var(--coral);right:-6px;bottom:10px;"></span>
+        <div class="geo-frame"><img src="${objectUrl}" alt="Your Music into Shape artwork"></div>
+      </div>`;
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Artwork</div></div>`;
+  }
+}
+function toggleShareChip(id){
+  const i = STATE.reflectShareChips.indexOf(id);
+  if (i > -1) STATE.reflectShareChips.splice(i, 1); else STATE.reflectShareChips.push(id);
+  saveState();
+  document.getElementById('sc-' + id).classList.toggle('picked');
+}
+function renderShare(){
+  const chips = SHARE_REFLECT_CHIPS.map(c => `
+    <span class="reflect-chip${STATE.reflectShareChips.includes(c.id) ? ' picked' : ''}" id="sc-${c.id}" onclick="toggleShareChip('${c.id}')">${c.emoji} ${c.label}</span>
+  `).join('');
+  return `
+    <div class="kicker">You Made It</div>
+    <h2 class="s-title">Your Music Became Art!</h2>
+    <div class="upload-slot-wrap" id="uploadSlotWrap"></div>
+    <div id="geoFrameWrap"></div>
+    <div class="reflect-label">What's In Your Piece?</div>
+    <div class="reflect-chip-row">${chips}</div>
+    <div class="gallery-actions">
+      <a class="km-btn primary wide" href="../../creation/">Add to Gallery</a>
+    </div>
+    <p class="share-final-line">No two pieces of music look the same.</p>
+    <p class="share-credit">FEI TeamArt · Creation · Learn from Masters — Led by Mrs. Dawn Wang.</p>
+  `;
+}
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+async function renderCurrentStage(){
+  clearInterval(rotatingPromptTimer);
+  const contentEl = document.getElementById('screen-content');
+  const zonePill = document.getElementById('zonePill');
+
+  if (currentStageId === 'screen-map') {
+    zonePill.textContent = '';
+    document.getElementById('musicControl').classList.remove('show');
+    contentEl.innerHTML = `<div class="screen active">${renderMap()}</div>`;
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  const stage = STAGES.find(s => s.id === currentStageId);
+  if (!stage) { goMap(); return; }
+  zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
+  updateMusicControlVisibility(stage);
+
+  if (stage.id === 'share' && !artworkRecord && isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) { artworkRecord = rows[0]; objectUrl = URL.createObjectURL(artworkRecord.blob); }
+    } catch (e) { console.warn('[share] listArtworks failed', e); }
+  }
+
+  contentEl.innerHTML = `<div class="screen active">${stage.render()}${renderNav(stage)}</div>`;
+  window.scrollTo(0, 0);
+  if (stage.id === 'share') refreshUploadUI();
+
+  const studioStepMatch = stage.id.match(/^studio-step(\d)$/);
+  if (studioStepMatch) {
+    const idx = Number(studioStepMatch[1]) - 1;
+    if (STUDIO_STEPS[idx].rotatingPrompts) startRotatingPrompt(STUDIO_STEPS[idx].rotatingPrompts);
+  }
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'kandinsky-music-into-shape');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  loadState();
+  renderCurrentStage();
+}
+
+init();
+</script>
+</body>
+</html>
