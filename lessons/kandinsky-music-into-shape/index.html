@@ -188,9 +188,19 @@ button{font-family:'Work Sans',sans-serif;}
   width:78px;height:78px;border-radius:50%;background:#fff;border:none;font-size:1.8rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 2px var(--ink);
 }
-.listen-shape-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
-.listen-shape-btn{width:50px;height:50px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.listen-shape-btn.picked{background:var(--paper-warm);border-color:var(--violet);transform:scale(1.1);}
+.sketch-tool-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.sketch-tool-btn{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.sketch-tool-btn.picked{background:var(--paper-warm);border-color:var(--violet);transform:scale(1.1);}
+.sketch-canvas-wrap{
+  width:100%;max-width:260px;aspect-ratio:1/1;margin:14px auto 0;border-radius:14px;overflow:hidden;
+  border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(36,33,48,.14);touch-action:none;
+}
+.sketch-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
+.sketch-color-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+.sketch-color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
+.sketch-color-dot.picked{box-shadow:0 0 0 2.5px var(--ink);transform:scale(1.14);}
+.sketch-clear-wrap{text-align:center;margin-top:10px;}
+.sketch-clear-btn{border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;}
 
 /* ---------- Materials ---------- */
 .materials-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:6px;}
@@ -359,10 +369,16 @@ const KANDINSKY_IDEAS = [
   'Shapes do not have to become objects.'
 ];
 
-const LISTEN_SHAPES = [
-  { id:'circle', emoji:'○' }, { id:'triangle', emoji:'△' }, { id:'wave', emoji:'〰' },
-  { id:'line', emoji:'／' }, { id:'dot', emoji:'●' }
+// Sketchpad on Stage 5 — a quick, disposable response to the music, never
+// saved/graded/uploaded. Each tool differs only in line width + opacity
+// (kept deliberately simple: no layers, no undo history).
+const SKETCH_TOOLS = [
+  { id:'brush',  icon:'🖌',  label:'Brush',  width:16, alpha:0.5,  cap:'round'  },
+  { id:'pencil', icon:'✏️', label:'Pencil', width:2,  alpha:1,    cap:'round'  },
+  { id:'pen',    icon:'🖋',  label:'Pen',    width:5,  alpha:1,    cap:'round'  },
+  { id:'marker', icon:'🖍',  label:'Marker', width:22, alpha:0.38, cap:'square' }
 ];
+const SKETCH_COLORS = ['#2d5fa8','#7b5ea8','#3fa8a0','#f0b93e','#e8862e','#e85c6e','#1c1a22'];
 
 const MATERIALS = [
   { id:'watercolor', label:'Watercolor', icon:'🎨' },
@@ -444,7 +460,6 @@ function defaultState(){
     noticePicks: [],
     visualMoves: [],
     geometrySeen: [],
-    listenShapePicks: [],
     materialsChecked: [],
     studioPalettePick: null,
     studioDone: [false, false, false, false],
@@ -751,17 +766,88 @@ function renderMeetKandinsky(){
 
 /* ============================================================
    STAGE 5 — Listen Before You Draw
+   The sketchpad here is a quick, disposable response to the music — not
+   saved, not graded, never touches IndexedDB or the final gallery
+   upload. Its state (tool/color/strokes) is intentionally NOT part of
+   STATE/localStorage, the same way it isn't part of the artwork record.
 ============================================================ */
-function pickListenShape(id){
-  const i = STATE.listenShapePicks.indexOf(id);
-  if (i > -1) STATE.listenShapePicks.splice(i, 1); else STATE.listenShapePicks.push(id);
-  saveState();
-  const btn = document.getElementById('ls-' + id);
-  if (btn) btn.classList.toggle('picked');
+let sketchTool = SKETCH_TOOLS[0].id;
+let sketchColor = SKETCH_COLORS[0];
+let sketchDrawing = false;
+let sketchLast = null;
+
+function pickSketchTool(id){
+  sketchTool = id;
+  document.querySelectorAll('.sketch-tool-btn').forEach(el => el.classList.toggle('picked', el.dataset.tool === id));
+}
+function pickSketchColor(color){
+  sketchColor = color;
+  document.querySelectorAll('.sketch-color-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
+}
+function paintSketchBackground(ctx, w, h){
+  // A soft color field, not a plain white square — the canvas itself
+  // carries the course's visual language even before a student draws.
+  // Reset alpha first: a prior stroke may have left globalAlpha at a
+  // translucent tool value (brush/marker), which would otherwise make
+  // this repaint translucent too and fail to fully cover old strokes.
+  ctx.globalAlpha = 1;
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, 'rgba(45,95,168,0.07)');
+  grad.addColorStop(0.5, '#faf6ee');
+  grad.addColorStop(1, 'rgba(232,92,110,0.07)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, w, h);
+}
+function clearSketch(){
+  const canvas = document.getElementById('sketchCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  paintSketchBackground(ctx, canvas.width, canvas.height);
+}
+function sketchPos(canvas, e){
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+}
+function initSketchCanvas(){
+  const canvas = document.getElementById('sketchCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const size = canvas.clientWidth || 260;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  const ctx = canvas.getContext('2d');
+  paintSketchBackground(ctx, canvas.width, canvas.height);
+
+  canvas.onpointerdown = (e) => {
+    sketchDrawing = true;
+    canvas.setPointerCapture(e.pointerId);
+    sketchLast = sketchPos(canvas, e);
+  };
+  canvas.onpointermove = (e) => {
+    if (!sketchDrawing) return;
+    const p = sketchPos(canvas, e);
+    const tool = SKETCH_TOOLS.find(t => t.id === sketchTool);
+    ctx.globalAlpha = tool.alpha;
+    ctx.strokeStyle = sketchColor;
+    ctx.lineWidth = tool.width * dpr;
+    ctx.lineCap = tool.cap;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(sketchLast.x, sketchLast.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    sketchLast = p;
+  };
+  canvas.onpointerup = () => { sketchDrawing = false; };
+  canvas.onpointercancel = () => { sketchDrawing = false; };
 }
 function renderListen(){
-  const shapes = LISTEN_SHAPES.map(s => `
-    <button class="listen-shape-btn${STATE.listenShapePicks.includes(s.id) ? ' picked' : ''}" id="ls-${s.id}" onclick="pickListenShape('${s.id}')">${s.emoji}</button>
+  const tools = SKETCH_TOOLS.map(t => `
+    <button class="sketch-tool-btn${sketchTool === t.id ? ' picked' : ''}" data-tool="${t.id}" onclick="pickSketchTool('${t.id}')">${t.icon}</button>
+  `).join('');
+  const colors = SKETCH_COLORS.map(c => `
+    <span class="sketch-color-dot${sketchColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickSketchColor('${c}')"></span>
   `).join('');
   return `
     <div class="kicker">Turn On the Sound</div>
@@ -772,7 +858,10 @@ function renderListen(){
       </div>
     </div>
     <p class="s-sub">What does the music look like?</p>
-    <div class="listen-shape-row">${shapes}</div>
+    <div class="sketch-tool-row">${tools}</div>
+    <div class="sketch-canvas-wrap"><canvas id="sketchCanvas"></canvas></div>
+    <div class="sketch-color-row">${colors}</div>
+    <div class="sketch-clear-wrap"><button class="sketch-clear-btn" onclick="clearSketch()">Clear</button></div>
     <p class="no-single-answer">There is no right answer.</p>
   `;
 }
@@ -1039,6 +1128,7 @@ async function renderCurrentStage(){
   contentEl.innerHTML = `<div class="screen active">${stage.render()}${renderNav(stage)}</div>`;
   window.scrollTo(0, 0);
   if (stage.id === 'share') refreshUploadUI();
+  if (stage.id === 'listen-before-draw') initSketchCanvas();
 
   const studioStepMatch = stage.id.match(/^studio-step(\d)$/);
   if (studioStepMatch) {
