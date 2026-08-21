@@ -66,6 +66,8 @@ button{font-family:'Work Sans',sans-serif;}
 
 /* ---------- Screens ---------- */
 .screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+@media(min-width:700px){.screen{max-width:820px;}}
+@media(min-width:1000px){.screen{max-width:960px;}}
 .screen.active{display:block;animation:shapeIn .45s cubic-bezier(.2,.7,.3,1);}
 @keyframes shapeIn{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
 
@@ -192,9 +194,10 @@ button{font-family:'Work Sans',sans-serif;}
 .sketch-tool-btn{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .sketch-tool-btn.picked{background:var(--paper-warm);border-color:var(--violet);transform:scale(1.1);}
 .sketch-canvas-wrap{
-  width:100%;max-width:260px;aspect-ratio:1/1;margin:14px auto 0;border-radius:14px;overflow:hidden;
+  width:100%;max-width:420px;aspect-ratio:1/1;margin:14px auto 0;border-radius:14px;overflow:hidden;
   border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(36,33,48,.14);touch-action:none;
 }
+@media(min-width:700px){.sketch-canvas-wrap{max-width:480px;}}
 .sketch-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
 .sketch-color-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
 .sketch-color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
@@ -252,14 +255,6 @@ button{font-family:'Work Sans',sans-serif;}
 .mini-reflect-chip.picked{background:var(--coral);border-color:var(--coral);color:#fff;}
 .optional-tag{text-align:center;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;}
 
-/* ---------- Showcase ---------- */
-.showcase-label{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:1.5px;color:var(--coral);text-transform:uppercase;margin-bottom:2px;}
-.teacher-final-frame{width:220px;margin:16px auto 6px;padding:10px;background:#fff;border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(36,33,48,.14);}
-.teacher-final-frame img{width:100%;display:block;}
-.teacher-final-placeholder{width:100%;aspect-ratio:1/1;background:linear-gradient(135deg,var(--violet),var(--blue));display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:10px;}
-.teacher-final-caption{text-align:center;font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:2px;}
-.yours-line{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;color:var(--blue-deep);margin-top:16px;font-weight:600;}
-
 /* ---------- One Last Look ---------- */
 .reflect-question-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
 .reflect-question{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12.5px;cursor:pointer;}
@@ -270,14 +265,16 @@ button{font-family:'Work Sans',sans-serif;}
 /* ---------- Share ---------- */
 .upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:8px;}
 .upload-slot{
-  position:relative;width:210px;height:210px;border-radius:14px;border:2.5px dashed var(--violet);background:#fff;
+  position:relative;width:100%;max-width:320px;aspect-ratio:1/1;border-radius:14px;border:2.5px dashed var(--violet);background:#fff;
   display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
 }
+@media(min-width:700px){.upload-slot{max-width:360px;}}
 .upload-slot.saving{border-color:var(--coral);}
 .upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .upload-slot .slot-plus{font-size:30px;color:var(--violet);}
 .upload-slot .slot-label{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
-.geo-frame-wrap{position:relative;width:240px;margin:22px auto 6px;}
+.geo-frame-wrap{position:relative;width:100%;max-width:340px;margin:22px auto 6px;}
+@media(min-width:700px){.geo-frame-wrap{max-width:380px;}}
 .geo-frame{padding:12px;background:#fff;border:2.5px solid var(--ink);box-shadow:6px 8px 0 rgba(36,33,48,.14);transform:rotate(-2deg);animation:frameFloat 3.6s ease-in-out infinite;}
 @keyframes frameFloat{0%,100%{transform:rotate(-2deg) translateY(0);}50%{transform:rotate(-1deg) translateY(-6px);}}
 .geo-frame img{width:100%;display:block;}
@@ -335,7 +332,6 @@ const STAGES = [
   { id:'studio-step3',       title:'Add the Visual Beat',    zone:'layer',  render:() => renderStudioStep(2), music:true },
   { id:'studio-step4',       title:'Lift It Off the Page',   zone:'build',  render:() => renderStudioStep(3), music:false },
   { id:'reflect-2d-3d',      title:'What Changed?',          zone:'build',  render:renderReflect2D3D, music:false },
-  { id:'showcase',           title:'See the Finished Work',  zone:'build',  render:renderShowcase, music:false },
   { id:'one-last-look',      title:'One Last Look',          zone:'share',  render:renderOneLastLook, music:false },
   { id:'share',              title:'Share Your Music',       zone:'share',  render:renderShare, music:false }
 ];
@@ -427,12 +423,6 @@ const STUDIO_STEPS = [
     completionLabel:'✓ It jumped off the page!'
   }
 ];
-
-const SHOWCASE_VIDEO_SRC = ''; // TODO(Faye): paste real Cloudflare Stream final-showcase video
-const SHOWCASE_VIDEO_TITLE = 'See the Finished Work — Mrs. Dawn’s showcase';
-// TODO(Faye): paste a photo URL of your own finished piece here — shown
-// beside the showcase video as "Mrs. Dawn's version," not a template.
-const TEACHER_FINAL_ARTWORK_SRC = '';
 
 const REFLECT_2D3D_OPTIONS = ['SHADOW','HEIGHT','MOVEMENT','SPACE'];
 
@@ -987,23 +977,6 @@ function renderReflect2D3D(){
     <h2 class="s-title">What Changed?</h2>
     <p class="s-sub">2D → 3D</p>
     <div class="mini-reflect-row">${chips}</div>
-  `;
-}
-
-/* ============================================================
-   STAGE — Final Showcase (explicitly not "Step 5")
-============================================================ */
-function renderShowcase(){
-  return `
-    <div class="showcase-label">Mrs. Dawn's Finished Piece</div>
-    <h2 class="s-title">See the Finished Work</h2>
-    <p class="s-sub">Look how color, rhythm and paper work together.</p>
-    ${renderVideoEmbed(SHOWCASE_VIDEO_SRC, SHOWCASE_VIDEO_TITLE)}
-    <div class="teacher-final-frame">${TEACHER_FINAL_ARTWORK_SRC
-      ? `<img src="${TEACHER_FINAL_ARTWORK_SRC}" alt="Mrs. Dawn's finished Music into Shape piece">`
-      : `<div class="teacher-final-placeholder"><div style="font-size:1.8rem;">🖼</div><div style="font-size:11px;margin-top:6px;">Finished piece photo coming soon</div></div>`}</div>
-    <p class="teacher-final-caption">Mrs. Dawn's version</p>
-    <p class="yours-line">Yours should look like YOU.</p>
   `;
 }
 
