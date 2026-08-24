@@ -12,9 +12,10 @@
    Creation track · Learn From Collection family
 
    PEDAGOGY:
-   7 steps. Image-led, transformation-driven.
-   Step 6 (Mrs. Dawn's Pop Art) — reference-only teacher video step
-   (3 example videos, any order, no completion gate).
+   9 steps. Image-led, transformation-driven.
+   Steps 6-8 (Sketch Your Portrait / Build the Bold Contrast / Make the
+   Color Pop) — three separate reference-only teacher video steps, one
+   video each, normal Back/Next, no completion gate.
    Step 3 (See the Pop Shift) — auto before/after transform demo.
    Step 5 (Transform It) — the SIGNATURE interaction: a real
    in-browser Canvas image transformer. Student uploads an ordinary
@@ -281,20 +282,16 @@ body {
   color: var(--ink-faint); font-style: italic; margin: -8px 0 18px;
 }
 
-/* ═══ STEP 5b — Mrs. Dawn's Pop Art (reference videos) ═══
+/* ═══ STEPS 6-8 — Mrs. Dawn's Pop Art (reference videos) ═══
    Same fluid full-width video pattern used site-wide: the outer wrap
    has no fixed pixel width, so it fills whatever column .lesson gives
    it at any breakpoint — nothing to cap separately here. */
-.mrs-dawn-video-set { display: flex; flex-direction: column; gap: 26px; margin-top: 4px; }
 .mrs-dawn-video-embed {
   position: relative; padding-top: 56.25%; border-radius: var(--radius-md);
   overflow: hidden; box-shadow: var(--shadow-lg); border: 2px solid var(--pop-black);
+  margin-top: 4px;
 }
 .mrs-dawn-video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-.mrs-dawn-video-label {
-  text-align: center; font-family: 'Open Sans', sans-serif; font-size: 11px; font-weight: 700;
-  letter-spacing: 0.6px; text-transform: uppercase; color: var(--ink-faint); margin-top: 8px;
-}
 
 /* ═══ STEP 1 — pop culture field (SVG collage) ═══ */
 .pop-field {
@@ -1572,18 +1569,28 @@ const STEPS = [
     aiMode: 'making_companion', completionRule: 'transformed'
   },
   {
-    id: 'step-5b-meet-mrs-dawn', step: 6, title: "Mrs. Dawn's Pop Art",
-    prompt: 'A reference, not a template — make your own color and design choices.',
-    artchi: { voice: 'look', text: "these are portraits mrs. dawn made, inspired by warhol. look at what she did with color and repetition — then make completely different choices of your own." },
-    videos: [
-      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/dcc9d266bf70cff6d7f1ceb75851bf47/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fdcc9d266bf70cff6d7f1ceb75851bf47%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
-      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/e3584e97c56d358c8e0c9c66f138c5b1/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fe3584e97c56d358c8e0c9c66f138c5b1%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
-      'https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b16e6a2888b2e8075a4464732cec68c/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F7b16e6a2888b2e8075a4464732cec68c%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600'
-    ],
+    id: 'step-6-sketch-portrait', step: 6, title: 'Sketch Your Portrait',
+    prompt: 'A reference, not a template — make your own choices.',
+    artchi: { voice: 'look', text: "watch how mrs. dawn starts her portrait. she's making decisions about shape and structure — yours don't have to look like this." },
+    videoSrc: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/dcc9d266bf70cff6d7f1ceb75851bf47/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fdcc9d266bf70cff6d7f1ceb75851bf47%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
     completionRule: 'watched'
   },
   {
-    id: 'step-6-finish', step: 7, title: 'Finish and Show It',
+    id: 'step-7-bold-contrast', step: 7, title: 'Build the Bold Contrast',
+    prompt: 'A reference, not a template — make your own choices.',
+    artchi: { voice: 'look', text: "see how she pushes the contrast — light against dark, sharp against flat. that's the pop art move. push it your own way." },
+    videoSrc: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/e3584e97c56d358c8e0c9c66f138c5b1/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2Fe3584e97c56d358c8e0c9c66f138c5b1%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
+    completionRule: 'watched'
+  },
+  {
+    id: 'step-8-color-pop', step: 8, title: 'Make the Color Pop',
+    prompt: 'A reference, not a template — choose your own colors.',
+    artchi: { voice: 'look', text: "this is where color takes over. mrs. dawn picked colors that feel loud and unexpected. your palette can be completely different from hers." },
+    videoSrc: 'https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b16e6a2888b2e8075a4464732cec68c/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F7b16e6a2888b2e8075a4464732cec68c%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600',
+    completionRule: 'watched'
+  },
+  {
+    id: 'step-6-finish', step: 9, title: 'Finish and Show It',
     prompt: 'Does your image feel more iconic, more dramatic, or more surprising than before?',
     artchi: { voice: 'reflect', text: "pop art asks us to look again at what we thought was ordinary. look at what you made. did the meaning change, not just the look?" },
     aiMode: 'final_reflection_helper', completionRule: 'finish'
@@ -1740,7 +1747,9 @@ function renderStepBody(step) {
     case 'step-3-pop-shift': return renderStep3(step);
     case 'step-4-capture-source': return renderStep4(step);
     case 'step-5-transform': return renderStep5(step);
-    case 'step-5b-meet-mrs-dawn': return renderStep5b(step);
+    case 'step-6-sketch-portrait': return renderMrsDawnVideoStep(step);
+    case 'step-7-bold-contrast': return renderMrsDawnVideoStep(step);
+    case 'step-8-color-pop': return renderMrsDawnVideoStep(step);
     case 'step-6-finish': return renderStep6(step);
     case 'badge-ceremony': return renderBadge();
     default: return '<p>?</p>';
@@ -1990,17 +1999,14 @@ function renderStep5(step) {
   return h;
 }
 
-function renderStep5b(step) {
+// Shared renderer for the three sequential Mrs. Dawn reference-video
+// steps (Sketch Your Portrait / Build the Bold Contrast / Make the Color
+// Pop) — each its own screen, one video, normal Back/Next. Not three
+// videos stacked on one page.
+function renderMrsDawnVideoStep(step) {
   let h = renderArtchi(step);
-  h += '<div class="mrs-dawn-video-set">';
-  step.videos.forEach((src, i) => {
-    h += `<div>
-      <div class="mrs-dawn-video-embed"><iframe src="${escapeAttr(src)}" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen title="Mrs. Dawn's Pop Art — Example ${i + 1}"></iframe></div>
-      <div class="mrs-dawn-video-label">Example ${i + 1}</div>
-    </div>`;
-  });
-  h += '</div>';
-  h += '<p class="hint-line" style="text-align:center; margin-top:18px;">Not a template to copy — choose your own colors and design.</p>';
+  h += `<div class="mrs-dawn-video-embed"><iframe src="${escapeAttr(step.videoSrc)}" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen title="${escapeAttr(step.title)} — Mrs. Dawn's Pop Art"></iframe></div>`;
+  h += '<p class="hint-line" style="text-align:center; margin-top:18px;">Not a template to copy — make your own choices.</p>';
   return h;
 }
 
