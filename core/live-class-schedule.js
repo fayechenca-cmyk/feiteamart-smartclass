@@ -134,15 +134,12 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'cylinder',
-      smartClassNote: null,
-      materials: {
-        label: 'Class Materials (PPT)',
-        url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68aa9ed0bd88eb56bed54f46_sketch1(1).pptx'
-      },
+      smartClassNote: 'Watch the Cylinder lesson in Smart Class before next class.',
+      materials: null,
       homework: {
-        description: 'Choose ONE sketch for a Master Study and ONE photo for an Observation Drawing.',
-        downloadUrl: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68aa9df0b3c65107753bc0a4_FEI_four_images.pdf',
-        downloadLabel: 'Download Homework Reference (4 images)'
+        description: 'Watch the Cylinder lesson in Smart Class — that\'s your homework for this week.',
+        downloadUrl: null,
+        downloadLabel: null
       }
     },
     {
