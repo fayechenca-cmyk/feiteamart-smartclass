@@ -170,6 +170,14 @@ button{font-family:'Mulish',sans-serif;}
 .mind-chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:12px 0 4px;}
 .mind-chip{font-weight:800;font-size:11.5px;letter-spacing:.2px;padding:8px 14px;border-radius:999px;border:2px solid var(--black);background:#fff;color:var(--black);cursor:pointer;}
 .mind-chip.active{background:var(--red);border-color:var(--red);color:#fff;}
+
+/* ---------- Materials + Studio Steps ---------- */
+.materials-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0;}
+@media(min-width:480px){.materials-grid{grid-template-columns:repeat(3,1fr);}}
+.mat-tile{background:#fff;border:2px solid var(--black);border-radius:12px;padding:16px 8px;text-align:center;box-shadow:3px 4px 0 rgba(33,29,22,.14);}
+.mt-icon{font-size:1.8rem;}
+.mt-label{font-size:11px;font-weight:800;margin-top:6px;line-height:1.3;}
+.mat-tile-pending{opacity:.55;border-style:dashed;}
 </style>
 </head>
 <body>
@@ -887,9 +895,52 @@ function renderWhatDidYouFind(){
   `;
 }
 
-function renderNowWatchMrsDawn(){ return screenHeader('MAKE', 'Now Watch Mrs. Dawn') + '<p class="stub-note">Screen 08 — build lands in Commit 4.</p>'; }
-function renderMaterials(){ return screenHeader('MAKE', 'Get Your Materials Ready') + '<p class="stub-note">Materials — build lands in Commit 4.</p>'; }
-function renderStudioStep(idx){ return screenHeader('MAKE', STUDIO_STEPS[idx].title) + `<p class="stub-note">Step ${STUDIO_STEPS[idx].step} — build lands in Commit 4.</p>`; }
+/* ============================================================
+   SCREEN 08 — Now Watch Mrs. Dawn (transition into the physical Make stage)
+============================================================ */
+function renderNowWatchMrsDawn(){
+  return `
+    ${screenHeader('MAKE', 'Now Watch Mrs. Dawn')}
+    <p class="s-sub">MRS. DAWN TRIED IT TOO.</p>
+    <p class="tiny-line">THIS IS HER VERSION. YOURS DOESN'T NEED TO MATCH.</p>
+  `;
+}
+
+/* ============================================================
+   MATERIALS
+============================================================ */
+function renderMaterials(){
+  const tiles = MATERIALS.map(m => `<div class="mat-tile"><div class="mt-icon">${m.icon}</div><div class="mt-label">${m.label}</div></div>`).join('');
+  return `
+    ${screenHeader('MAKE', 'Get Your Materials Ready')}
+    <div class="materials-grid">
+      ${tiles}
+      <div class="mat-tile mat-tile-pending"><div class="mt-icon">?</div><div class="mt-label">Coming soon</div></div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   STUDIO STEPS 1-3 (Step 3 is an explicit, flagged placeholder —
+   status: 'pending-content' — no invented title/materials/copy)
+============================================================ */
+function renderStudioStep(idx){
+  const step = STUDIO_STEPS[idx];
+  if (step.status === 'pending-content') {
+    return `
+      ${screenHeader('MAKE', 'Coming Next')}
+      ${renderVideoEmbed(step.videoSrc, step.videoTitle)}
+      <p class="stub-note">STEP 3 — COMING NEXT</p>
+    `;
+  }
+  return `
+    ${screenHeader('MAKE', step.title)}
+    ${renderVideoEmbed(step.videoSrc, step.videoTitle)}
+    <p class="s-sub">${step.content}</p>
+    ${step.prompt ? `<p class="s-sub">${step.prompt}</p>` : ''}
+    <p class="tiny-line">${step.note}</p>
+  `;
+}
 function renderYourTurn(){ return screenHeader('MAKE', 'Now Make Your Version.') + '<p class="stub-note">Screen 09 — build lands in Commit 5.</p>'; }
 function renderShare(){ return screenHeader('REFLECT', 'What Did Your Imagination Find?') + '<p class="stub-note">Screen 10 — build lands in Commit 5.</p>'; }
 
