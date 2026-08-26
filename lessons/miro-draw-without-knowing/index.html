@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Draw Without Knowing</title>
+<meta name="description" content="A Miró-inspired Creation lesson: draw without planning, discover what your hand already found, then turn one shape into something new.">
+<meta name="keywords" content="Creation, Learn from Masters, Miró, Automatism, Watercolor, Drawing, Surrealism">
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "Draw Without Knowing",
+  "subtitle": "Let your hand start. Let your imagination finish.",
+  "path": ["Creation", "Material · The Workbench", "Draw Without Knowing"],
+  "series": "Learn from Masters",
+  "tags": ["Learn from Masters", "Miró", "Automatism", "Watercolor", "Drawing", "Surrealism"],
+  "ageRange": "6-10+",
+  "materials": ["Watercolor Paper", "Watercolors", "Medium Flat Brush", "Marker or Drawing Tools"],
+  "stageCount": 14
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7ecd8;
+  --paper-deep:#efe0c2;
+  --black:#211d16;
+  --red:#d9432c;
+  --yellow:#f2c14e;
+  --blue:#3f6fb0;
+  --green:#4f8a52;
+  --ink-soft:rgba(33,29,22,.66);
+  --ink-faint:rgba(33,29,22,.42);
+  --line:rgba(33,29,22,.16);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Mulish',sans-serif;background:var(--paper);color:var(--black);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow-x:hidden;
+}
+.display{font-family:'Kalam',cursive;}
+button{font-family:'Mulish',sans-serif;}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+/* ---------- Top bar ---------- */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--paper) 78%, transparent);
+}
+.back-link{font-size:12px;color:var(--blue);text-decoration:none;font-weight:800;letter-spacing:.2px;}
+.map-btn{
+  border:2px solid var(--black);background:var(--paper);border-radius:999px;
+  padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;color:var(--black);
+}
+.map-btn:active{transform:scale(.95);}
+.zone-pill{font-size:9.5px;font-weight:800;letter-spacing:1.5px;color:#fff;background:var(--red);padding:4px 9px;border-radius:999px;}
+
+/* ---------- Screens ---------- */
+.screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+@media(min-width:700px){.screen{max-width:820px;}}
+@media(min-width:1000px){.screen{max-width:960px;}}
+.screen.active{display:block;animation:markIn .4s ease;}
+@keyframes markIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);text-align:center;font-weight:800;margin-bottom:6px;}
+.s-title{font-family:'Kalam',cursive;font-weight:700;font-size:2rem;text-align:center;margin:0 0 6px;color:var(--black);}
+.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.5;}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
+.dw-btn{
+  font-weight:800;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--black);background:transparent;color:var(--black);transition:transform .12s ease;
+}
+.dw-btn:active{transform:scale(.96);}
+.dw-btn.primary{background:var(--red);border-color:var(--red);color:#fff;}
+.dw-btn.blue{background:var(--blue);border-color:var(--blue);color:#fff;}
+.dw-btn:disabled{opacity:.3;cursor:not-allowed;}
+.dw-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
+.gate-counter{text-align:center;font-size:11.5px;color:var(--ink-faint);font-weight:700;margin-top:8px;}
+
+.video-embed-wrap{margin:14px 0 8px;border-radius:8px;overflow:hidden;box-shadow:0 12px 28px rgba(33,29,22,.24);}
+
+/* ---------- Course map ---------- */
+.map-header{text-align:center;margin:6px 0 22px;}
+.map-header h1{font-size:2.1rem;margin:4px 0 4px;}
+.map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
+.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(min-width:480px){.zone-grid{grid-template-columns:repeat(4,1fr);}}
+.zone-tile{
+  background:#fff;border:2.5px solid var(--black);border-radius:14px;
+  padding:20px 10px 16px;text-align:center;cursor:pointer;box-shadow:4px 5px 0 rgba(33,29,22,.14);
+  transition:transform .15s ease;
+}
+.zone-tile:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(33,29,22,.14);}
+.zone-tile .zt-icon{font-size:1.8rem;}
+.zone-tile .zt-label{font-family:'Kalam',cursive;font-weight:700;font-size:1.05rem;margin-top:6px;color:var(--black);}
+.zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
+
+/* placeholder used by every stub screen until its real commit lands */
+.stub-note{text-align:center;font-size:12px;color:var(--ink-faint);font-style:italic;margin-top:20px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <span class="zone-pill" id="zonePill"></span>
+    <button class="map-btn" onclick="goMap()">✎ Map</button>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<!-- The upload <input> for Screen 10 (Share) is added in Commit 5,
+     alongside its onFileSelected handler — kept out of this skeleton
+     commit since it's real UI, not data/registration. -->
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
+<script>
+/* ============================================================
+   DATA — screen copy is verbatim from MIRO_AUTOMATISM_LESSON_SPEC.md.
+   Do not paraphrase or pad it when editing.
+============================================================ */
+const ZONES = [
+  { id:'look',    label:'LOOK' },
+  { id:'think',   label:'THINK' },
+  { id:'make',    label:'MAKE' },
+  { id:'reflect', label:'REFLECT' }
+];
+
+// Stroke-count gate for screen 04 — defined once, referenced wherever
+// checked (see Commit 3). Not a magic number sprinkled through the code.
+const AUTOMATISM_MIN_STROKES = 5;
+
+const STAGES = [
+  { id:'dont-think-yet',       title:"Don't Think Yet",              zone:'look',    render:renderDontThinkYet },
+  { id:'look-first',           title:'Look First',                   zone:'look',    render:renderLookFirst },
+  { id:'meet-miro',            title:'Meet Joan Miró',                zone:'look',    render:renderMeetMiro },
+  { id:'try-automatism',       title:"Don't Think. Just Move.",      zone:'think',   render:renderTryAutomatism, gated:true },
+  { id:'stop-and-look',        title:'Stop & Look',                  zone:'think',   render:renderStopAndLook },
+  { id:'make-it-become',       title:'Now Let Your Imagination In.', zone:'think',   render:renderMakeItBecome },
+  { id:'what-did-you-find',    title:'What Did Your Mind Find?',      zone:'think',   render:renderWhatDidYouFind },
+  { id:'now-watch-mrs-dawn',   title:'Now Watch Mrs. Dawn',           zone:'make',    render:renderNowWatchMrsDawn },
+  { id:'materials-ready',      title:'Get Your Materials Ready',      zone:'make',    render:renderMaterials },
+  { id:'step-1-colors-flow',   title:'Let the Colors Flow',           zone:'make',    render:() => renderStudioStep(0) },
+  { id:'step-2-shapes-appear', title:'Let Shapes Appear',             zone:'make',    render:() => renderStudioStep(1) },
+  { id:'step-3-coming-next',   title:'Coming Next',                   zone:'make',    render:() => renderStudioStep(2) },
+  { id:'your-turn',            title:'Now Make Your Version.',        zone:'make',    render:renderYourTurn },
+  { id:'share',                title:'What Did Your Imagination Find?', zone:'reflect', render:renderShare }
+];
+
+// Discovery hotspot chips on Mrs. Dawn's artwork (screen 02). Positions
+// are placeholders in % until the real photo (see assets/README.md)
+// tells us where shapes actually sit — kept generic/spread for now.
+// Responses are deliberately ambiguous for several of these by design,
+// not a gap to fill in later.
+const LOOK_FIRST_CHIPS = [
+  { id:'eye',      emoji:'👁',  label:'EYE',              left:18, top:22, reveal:'MAYBE.' },
+  { id:'star',     emoji:'⭐', label:'STAR',              left:70, top:14, reveal:'MAYBE.' },
+  { id:'line',     emoji:'〰', label:'LINE',              left:40, top:55, reveal:'WHAT DO YOU THINK?' },
+  { id:'dot',      emoji:'●',  label:'DOT',               left:60, top:68, reveal:'MAYBE.' },
+  { id:'creature', emoji:'🐾', label:'CREATURE?',         left:25, top:72, reveal:'WHAT DO YOU THINK?' },
+  { id:'moon',     emoji:'🌙', label:'MOON?',              left:80, top:40, reveal:'MAYBE.' },
+  { id:'strange',  emoji:'🌀', label:'SOMETHING STRANGE?', left:50, top:30, reveal:'WHAT DO YOU THINK?' }
+];
+
+const MIRO_IDEAS = ['DREAMS', 'THE UNCONSCIOUS', 'AUTOMATIC DRAWING'];
+
+// 5 materials for the digital canvas (screens 04-07) — see Commit 3 for
+// the actual per-material rendering technique.
+const AUTOMATISM_MATERIALS = [
+  { id:'watercolor', label:'WATERCOLOR' },
+  { id:'marker',      label:'MARKER' },
+  { id:'pencil',      label:'PENCIL' },
+  { id:'ink',         label:'INK' },
+  { id:'acrylic',     label:'ACRYLIC-LIKE BRUSH' }
+];
+
+const AUTOMATISM_FLOATING_PROMPTS = [
+  'KEEP MOVING.', "DON'T ERASE IT.", 'TRY A CURVE.', 'TRY A DOT.', 'CHANGE DIRECTION.', 'LET IT BE WEIRD.'
+];
+
+const SUGGESTION_CHIPS = [
+  { id:'eyes',      emoji:'👁',  label:'ADD EYES' },
+  { id:'legs',      emoji:'🦵', label:'ADD LEGS' },
+  { id:'wings',     emoji:'🪽', label:'ADD WINGS' },
+  { id:'face',      emoji:'👄', label:'ADD A FACE' },
+  { id:'grow',      emoji:'🌱', label:'MAKE IT GROW' },
+  { id:'something', emoji:'✨', label:'SOMETHING ELSE' }
+];
+
+const MIND_FOUND_CHIPS = ['CREATURE', 'FACE', 'ANIMAL', 'PLANT', 'PLACE', 'DREAM', "I DON'T KNOW"];
+
+const MATERIALS = [
+  { id:'paper',      label:'Watercolor Paper', icon:'📄' },
+  { id:'watercolor', label:'Watercolors',      icon:'🎨' },
+  { id:'brush',      label:'Medium Flat Brush', icon:'🖌' },
+  { id:'marker',     label:'Marker/Drawing Tools', icon:'✏️' }
+];
+
+// Studio steps (Step 1/2 real content per spec, Step 3 an explicit
+// flagged placeholder — see Commit 4). All video fields are placeholders
+// until Faye supplies the real Cloudflare Stream URLs.
+const STUDIO_STEPS = [
+  {
+    step:1, title:'Let the Colors Flow',
+    content:'Mrs. Dawn uses watercolor and a medium flat brush, moving blue-green → blue → purple, letting colors bleed across a wet background.',
+    note:'YOUR COLORS CAN BE DIFFERENT.',
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Let the Colors Flow — Mrs. Dawn demo'
+  },
+  {
+    step:2, title:'Let Shapes Appear',
+    content:'A second watercolor layer, yellow/red, organic solid shapes of varying size (some circular, some not).',
+    prompt:'WHAT SHAPE WANTS TO APPEAR?',
+    note:'DON’T PLAN TOO MUCH.',
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoTitle:'Let Shapes Appear — Mrs. Dawn demo'
+  },
+  {
+    step:3, title:'Coming Next',
+    status:'pending-content',
+    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step — title/materials/copy intentionally undefined until reviewed
+    videoTitle:'Step 3 — Mrs. Dawn demo (pending)'
+  }
+];
+
+const YOUR_TURN_TOOLS = ['WATERCOLOR', 'MARKER', 'PENCIL', 'MIXED MEDIA'];
+const SHARE_QUESTION_OPTIONS = ['YES', 'NO', 'KIND OF'];
+
+/* ============================================================
+   STATE (localStorage-persisted, scoped to this course only)
+============================================================ */
+const STATE_KEY = 'fei.creation.miro_draw_without_knowing.v1';
+function defaultState(){
+  return {
+    lookFirstFound: [],
+    materialsChecked: [],
+    studioDone: [false, false, false],
+    yourTurnTool: null,
+    shareAnswer: null
+  };
+}
+let STATE = defaultState();
+function loadState(){
+  try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
+}
+function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
+
+/* ============================================================
+   AUTOMATISM_STATE — the digital canvas's own in-memory state
+   (screens 04-07). Deliberately NOT persisted to localStorage: it's a
+   warm-up exercise, not the deliverable (see Commit 3). Declared here
+   so the stub renderers below can reference it safely before the real
+   canvas is built.
+============================================================ */
+const AUTOMATISM_STATE = {
+  strokes: [],       // [{ tool, color, points:[{x,y}] }]
+  tool: AUTOMATISM_MATERIALS[0].id,
+  snapshotDataUrl: null,
+  mindFound: null
+};
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+let currentStageId = 'dont-think-yet';
+function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
+function goStage(id){ currentStageId = id; renderCurrentStage(); }
+function goNext(){
+  const i = stageIndex(currentStageId);
+  if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id);
+}
+function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
+function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
+function goZoneFirst(zoneId){ const first = STAGES.find(s => s.zone === zoneId); if (first) goStage(first.id); }
+
+// Only screen 04 (Try Automatism) gates forward progress, per the spec's
+// stroke-count rule. Every other screen's Next is always enabled.
+function canAdvance(stage){
+  if (stage.id === 'try-automatism') return AUTOMATISM_STATE.strokes.length >= AUTOMATISM_MIN_STROKES;
+  return true;
+}
+
+function renderNav(stage){
+  const idx = stageIndex(stage.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STAGES.length - 1;
+  const can = canAdvance(stage);
+  let html = `<div class="nav-footer">
+    <button class="dw-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
+    ${isLast ? '<span></span>' : `<button class="dw-btn primary" id="nextBtn" onclick="goNext()" ${!can ? 'disabled' : ''}>Next →</button>`}
+  </div>`;
+  if (stage.gated) {
+    html += `<div class="gate-counter" id="gateCounter">${AUTOMATISM_STATE.strokes.length} of ${AUTOMATISM_MIN_STROKES} marks</div>`;
+  }
+  return html;
+}
+
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--red),var(--blue));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   COURSE MAP
+============================================================ */
+const ZONE_ICONS = { look:'👁', think:'✎', make:'🎨', reflect:'🖼' };
+function renderMap(){
+  const tiles = ZONES.map(z => {
+    const count = STAGES.filter(s => s.zone === z.id).length;
+    return `<div class="zone-tile" onclick="goZoneFirst('${z.id}')">
+      <div class="zt-icon">${ZONE_ICONS[z.id]}</div>
+      <div class="zt-label">${z.label}</div>
+      <div class="zt-count">${count} stop${count > 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
+  return `
+    <div class="map-header">
+      <h1 class="display">Draw Without Knowing</h1>
+      <p>Let your hand start. Let your imagination finish.</p>
+    </div>
+    <div class="zone-grid">${tiles}</div>
+  `;
+}
+
+/* ============================================================
+   STUB RENDERERS — replaced screen-by-screen in later commits.
+   Each still shows its real title (from STAGES) so the page is a real,
+   loadable, gated lesson even before the designed UI lands.
+============================================================ */
+function renderDontThinkYet(){ return '<p class="stub-note">Screen 01 — build lands in the next commit.</p>'; }
+function renderLookFirst(){ return '<p class="stub-note">Screen 02 — build lands in the next commit.</p>'; }
+function renderMeetMiro(){ return '<p class="stub-note">Screen 03 — build lands in the next commit.</p>'; }
+function renderTryAutomatism(){ return '<p class="stub-note">Screen 04 (Digital Automatism Canvas) — build lands in Commit 3.</p>'; }
+function renderStopAndLook(){ return '<p class="stub-note">Screen 05 — build lands in Commit 3.</p>'; }
+function renderMakeItBecome(){ return '<p class="stub-note">Screen 06 — build lands in Commit 3.</p>'; }
+function renderWhatDidYouFind(){ return '<p class="stub-note">Screen 07 — build lands in Commit 3.</p>'; }
+function renderNowWatchMrsDawn(){ return '<p class="stub-note">Screen 08 — build lands in Commit 4.</p>'; }
+function renderMaterials(){ return '<p class="stub-note">Materials — build lands in Commit 4.</p>'; }
+function renderStudioStep(idx){ return `<p class="stub-note">Step ${STUDIO_STEPS[idx].step} — build lands in Commit 4.</p>`; }
+function renderYourTurn(){ return '<p class="stub-note">Screen 09 — build lands in Commit 5.</p>'; }
+function renderShare(){ return '<p class="stub-note">Screen 10 — build lands in Commit 5.</p>'; }
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+function renderCurrentStage(){
+  const contentEl = document.getElementById('screen-content');
+  const zonePill = document.getElementById('zonePill');
+
+  if (currentStageId === 'screen-map') {
+    zonePill.textContent = '';
+    contentEl.innerHTML = `<div class="screen active">${renderMap()}</div>`;
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  const stage = STAGES.find(s => s.id === currentStageId);
+  if (!stage) { goMap(); return; }
+  zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
+
+  contentEl.innerHTML = `<div class="screen active">
+    <div class="kicker">${zonePill.textContent}</div>
+    <h2 class="s-title">${stage.title}</h2>
+    ${stage.render()}
+    ${renderNav(stage)}
+  </div>`;
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'miro-draw-without-knowing');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  loadState();
+  renderCurrentStage();
+}
+
+init();
+</script>
+</body>
+</html>
