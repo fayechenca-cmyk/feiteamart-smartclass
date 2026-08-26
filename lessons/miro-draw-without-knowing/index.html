@@ -140,6 +140,36 @@ button{font-family:'Mulish',sans-serif;}
 .formula-arrow{color:var(--red);font-weight:900;font-size:15px;border:none !important;background:none !important;padding:0 !important;}
 .tiny-line{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin:0 0 18px;}
 .ref-mentions{text-align:center;font-size:10.5px;color:var(--ink-faint);margin-top:14px;line-height:1.6;}
+
+/* ---------- Screens 04-07 — Digital Automatism Canvas ---------- */
+.mat-picker{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0;}
+.mat-btn{font-weight:800;font-size:10.5px;letter-spacing:.3px;padding:8px 12px;border-radius:999px;border:2px solid var(--black);background:#fff;color:var(--black);cursor:pointer;}
+.mat-btn.active{background:var(--black);color:var(--paper);}
+.automatism-canvas-wrap{position:relative;width:100%;aspect-ratio:1/1;max-width:480px;margin:10px auto;background:#fffdf7;border:3px solid var(--black);border-radius:16px;overflow:hidden;touch-action:none;box-shadow:5px 6px 0 rgba(33,29,22,.14);}
+#automatismCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;}
+.floating-prompt{position:absolute;transform:translate(-50%,-100%);background:#fff;border:2px solid var(--black);border-radius:8px;padding:5px 10px;font-size:11.5px;font-weight:800;letter-spacing:.2px;pointer-events:none;opacity:0;white-space:nowrap;z-index:4;}
+.floating-prompt.show{animation:dwFloatFade 1.8s ease forwards;}
+@keyframes dwFloatFade{
+  0%{opacity:0;transform:translate(-50%,-100%) scale(.8);}
+  15%{opacity:1;transform:translate(-50%,-118%) scale(1);}
+  78%{opacity:1;}
+  100%{opacity:0;transform:translate(-50%,-136%) scale(1);}
+}
+.canvas-tools-row{display:flex;justify-content:center;margin-top:8px;}
+.sugg-chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:12px 0 4px;}
+.sugg-chip{font-weight:800;font-size:11px;letter-spacing:.2px;padding:8px 12px;border-radius:999px;border:2px solid var(--black);background:var(--yellow);color:var(--black);cursor:pointer;}
+.worked-examples-row{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin:8px 0 16px;}
+.worked-ex{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px;text-align:center;}
+.worked-ex-pair{display:flex;align-items:center;gap:3px;}
+.worked-ex-pair svg{width:38px;height:38px;}
+.worked-ex-arrow{font-weight:900;color:var(--red);font-size:13px;}
+.worked-ex-label{font-size:9px;font-weight:800;letter-spacing:.2px;line-height:1.3;}
+.snapshot-frame{max-width:380px;margin:10px auto;border:3px solid var(--black);border-radius:14px;overflow:hidden;background:#fffdf7;}
+.automatism-snapshot{width:100%;display:block;}
+.automatism-snapshot-empty{height:200px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:24px;}
+.mind-chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:12px 0 4px;}
+.mind-chip{font-weight:800;font-size:11.5px;letter-spacing:.2px;padding:8px 14px;border-radius:999px;border:2px solid var(--black);background:#fff;color:var(--black);cursor:pointer;}
+.mind-chip.active{background:var(--red);border-color:var(--red);color:#fff;}
 </style>
 </head>
 <body>
@@ -189,9 +219,9 @@ const STAGES = [
   { id:'dont-think-yet',       title:"Don't Think Yet",              zone:'look',    render:renderDontThinkYet },
   { id:'look-first',           title:'Look First',                   zone:'look',    render:renderLookFirst },
   { id:'meet-miro',            title:'Meet Joan Miró',                zone:'look',    render:renderMeetMiro },
-  { id:'try-automatism',       title:"Don't Think. Just Move.",      zone:'think',   render:renderTryAutomatism, gated:true },
-  { id:'stop-and-look',        title:'Stop & Look',                  zone:'think',   render:renderStopAndLook },
-  { id:'make-it-become',       title:'Now Let Your Imagination In.', zone:'think',   render:renderMakeItBecome },
+  { id:'try-automatism',       title:"Don't Think. Just Move.",      zone:'think',   render:renderTryAutomatism, gated:true, afterRender:() => mountAutomatismCanvas('automatismCanvas', { drawable:true }) },
+  { id:'stop-and-look',        title:'Stop & Look',                  zone:'think',   render:renderStopAndLook, afterRender:() => mountAutomatismCanvas('automatismCanvas', { drawable:false }) },
+  { id:'make-it-become',       title:'Now Let Your Imagination In.', zone:'think',   render:renderMakeItBecome, afterRender:() => mountAutomatismCanvas('automatismCanvas', { drawable:true }) },
   { id:'what-did-you-find',    title:'What Did Your Mind Find?',      zone:'think',   render:renderWhatDidYouFind },
   { id:'now-watch-mrs-dawn',   title:'Now Watch Mrs. Dawn',           zone:'make',    render:renderNowWatchMrsDawn },
   { id:'materials-ready',      title:'Get Your Materials Ready',      zone:'make',    render:renderMaterials },
@@ -243,6 +273,39 @@ const SUGGESTION_CHIPS = [
 ];
 
 const MIND_FOUND_CHIPS = ['CREATURE', 'FACE', 'ANIMAL', 'PLANT', 'PLACE', 'DREAM', "I DON'T KNOW"];
+
+// Screen 06's three worked examples: original hand-authored before/after
+// marks (deliberately NOT biomorphic Miró-style blobs — plain geometric
+// shapes + simple added features) illustrating AUTOMATIC MARK →
+// RECOGNITION → IMAGINATION → CHARACTER, never photos of student work.
+const WORKED_EXAMPLES = [
+  {
+    label: 'STRANGE CREATURE',
+    before: '<path d="M15,35 C10,20 30,12 40,22 C50,32 45,50 30,50 C18,50 18,45 15,35 Z" fill="none" stroke="var(--black)" stroke-width="3"/>',
+    after: '<path d="M15,35 C10,20 30,12 40,22 C50,32 45,50 30,50 C18,50 18,45 15,35 Z" fill="none" stroke="var(--black)" stroke-width="3"/><circle cx="24" cy="28" r="2.4" fill="var(--black)"/><circle cx="34" cy="26" r="2.4" fill="var(--black)"/><line x1="22" y1="50" x2="20" y2="58" stroke="var(--black)" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="50" x2="34" y2="58" stroke="var(--black)" stroke-width="2.5" stroke-linecap="round"/>'
+  },
+  {
+    label: 'DREAM BIRD',
+    before: '<path d="M8,45 C20,15 40,55 52,20" fill="none" stroke="var(--black)" stroke-width="3" stroke-linecap="round"/>',
+    after: '<path d="M8,45 C20,15 40,55 52,20" fill="none" stroke="var(--black)" stroke-width="3" stroke-linecap="round"/><path d="M26,32 C18,22 10,26 14,34 C18,40 26,38 26,32 Z" fill="var(--yellow)"/><path d="M34,28 C42,18 50,24 46,32 C42,38 34,36 34,28 Z" fill="var(--yellow)"/>'
+  },
+  {
+    label: 'WHO IS THIS?',
+    before: '<circle cx="30" cy="32" r="18" fill="none" stroke="var(--black)" stroke-width="3"/>',
+    after: '<circle cx="30" cy="32" r="18" fill="none" stroke="var(--black)" stroke-width="3"/><circle cx="24" cy="28" r="2" fill="var(--black)"/><circle cx="36" cy="28" r="2" fill="var(--black)"/><path d="M22,38 Q30,44 38,38" fill="none" stroke="var(--black)" stroke-width="2.2" stroke-linecap="round"/>'
+  }
+];
+
+// Base color per material — a secondary distinguishing touch, not the
+// core differentiator (each material's real distinctness is in its
+// stroke technique below, per the spec's "not just a color/width swap").
+const AUTOMATISM_COLORS = {
+  watercolor: '#3f6fb0',
+  marker: '#211d16',
+  pencil: '#211d16',
+  ink: '#14110d',
+  acrylic: '#d9432c'
+};
 
 const MATERIALS = [
   { id:'paper',      label:'Watercolor Paper', icon:'📄' },
@@ -322,7 +385,24 @@ function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
 function goStage(id){ currentStageId = id; renderCurrentStage(); }
 function goNext(){
   const i = stageIndex(currentStageId);
-  if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id);
+  if (i < 0 || i >= STAGES.length - 1) return;
+  const leavingId = currentStageId;
+  const nextId = STAGES[i + 1].id;
+  // The canvas snapshot is taken once, right as the student leaves the
+  // last drawing screen — by screen 07 the canvas element itself is gone
+  // (each screen swap replaces the DOM), so this is the only moment the
+  // pixels are still on-screen to capture.
+  if (leavingId === 'make-it-become' && nextId === 'what-did-you-find') {
+    captureAutomatismSnapshot();
+  }
+  // The digital doodle is a warm-up, not the deliverable — discard it the
+  // moment the student moves on into the physical Make stage (screen 08).
+  if (leavingId === 'what-did-you-find' && nextId === 'now-watch-mrs-dawn') {
+    AUTOMATISM_STATE.strokes = [];
+    AUTOMATISM_STATE.snapshotDataUrl = null;
+    AUTOMATISM_STATE.mindFound = null;
+  }
+  goStage(nextId);
 }
 function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
 function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
@@ -364,6 +444,248 @@ function renderVideoEmbed(src, title){
       <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
     </div>
   </div></div>`;
+}
+
+/* ============================================================
+   DIGITAL AUTOMATISM CANVAS ENGINE (screens 04-06 mount it; screen 07
+   only displays the snapshot taken on the way out of screen 06).
+
+   Model: AUTOMATISM_STATE.strokes holds the full stroke history
+   ({tool, points:[{x,y,pressure}]}). Every (re)mount — which happens on
+   every screen swap, since renderCurrentStage() replaces the DOM and
+   therefore the <canvas> element itself — replays the entire stack from
+   scratch via redrawAutomatismCanvasFull(). This is what lets the same
+   in-memory drawing survive screens 04→05→06 even though each screen is
+   a brand-new canvas element, and it's what makes undo-last-stroke a
+   simple pop-and-redraw rather than needing per-pixel undo history.
+============================================================ */
+let automatismCanvasEl = null;
+let automatismCtx = null;
+let automatismCurrentStroke = null;
+let automatismLastTapPoint = null;
+
+function mountAutomatismCanvas(canvasId, opts){
+  opts = opts || {};
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  automatismCanvasEl = canvas;
+  automatismCurrentStroke = null;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = rect.width || canvas.clientWidth || 320;
+  const cssH = rect.height || canvas.clientHeight || 320;
+  canvas.width = Math.max(1, Math.round(cssW * dpr));
+  canvas.height = Math.max(1, Math.round(cssH * dpr));
+  automatismCtx = canvas.getContext('2d');
+  automatismCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  redrawAutomatismCanvasFull();
+
+  if (opts.drawable !== false) {
+    canvas.addEventListener('pointerdown', onAutomatismPointerDown);
+    canvas.addEventListener('pointermove', onAutomatismPointerMove);
+    canvas.addEventListener('pointerup', onAutomatismPointerUp);
+    canvas.addEventListener('pointercancel', onAutomatismPointerUp);
+  } else {
+    // Screen 05 (Stop & Look): the canvas is inspect-only — tapping
+    // records a point for suggestion-chip placement but never draws.
+    canvas.addEventListener('pointerdown', onAutomatismInspectTap);
+  }
+}
+
+function automatismPos(e){
+  const rect = automatismCanvasEl.getBoundingClientRect();
+  const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top, pressure };
+}
+
+function onAutomatismInspectTap(e){
+  automatismLastTapPoint = automatismPos(e);
+}
+
+function onAutomatismPointerDown(e){
+  e.preventDefault();
+  if (automatismCanvasEl.setPointerCapture) {
+    try { automatismCanvasEl.setPointerCapture(e.pointerId); } catch (err) {}
+  }
+  automatismCurrentStroke = { tool: AUTOMATISM_STATE.tool, points: [automatismPos(e)] };
+}
+function onAutomatismPointerMove(e){
+  if (!automatismCurrentStroke) return;
+  const pts = automatismCurrentStroke.points;
+  pts.push(automatismPos(e));
+  if (pts.length > 1) drawLiveSegment(automatismCtx, pts[pts.length - 2], pts[pts.length - 1], automatismCurrentStroke.tool);
+}
+function onAutomatismPointerUp(){
+  const stroke = automatismCurrentStroke;
+  automatismCurrentStroke = null;
+  if (!stroke || stroke.points.length < 2) return; // a plain tap isn't a mark
+  AUTOMATISM_STATE.strokes.push(stroke);
+  redrawAutomatismCanvasFull();
+  onAutomatismStrokesChanged();
+  // Sparse floating prompts — occasional, never on every stroke.
+  if (Math.random() < 0.5) {
+    const text = AUTOMATISM_FLOATING_PROMPTS[Math.floor(Math.random() * AUTOMATISM_FLOATING_PROMPTS.length)];
+    showFloatingPromptAt(text, stroke.points[stroke.points.length - 1]);
+  }
+}
+
+function onAutomatismStrokesChanged(){
+  const counter = document.getElementById('gateCounter');
+  if (counter) counter.textContent = `${AUTOMATISM_STATE.strokes.length} of ${AUTOMATISM_MIN_STROKES} marks`;
+  const nextBtn = document.getElementById('nextBtn');
+  if (nextBtn) {
+    const stage = STAGES.find(s => s.id === currentStageId);
+    if (stage) nextBtn.disabled = !canAdvance(stage);
+  }
+}
+
+function undoLastStroke(){
+  AUTOMATISM_STATE.strokes.pop();
+  redrawAutomatismCanvasFull();
+  onAutomatismStrokesChanged();
+}
+
+function selectAutomatismTool(id){
+  AUTOMATISM_STATE.tool = id;
+  renderCurrentStage();
+}
+
+function showFloatingPromptAt(text, pt){
+  const label = document.getElementById('floatingPrompt');
+  if (!label || !pt) return;
+  label.textContent = text;
+  label.style.left = pt.x + 'px';
+  label.style.top = pt.y + 'px';
+  label.classList.remove('show');
+  void label.offsetWidth; // restart the CSS animation
+  label.classList.add('show');
+}
+
+// Suggestion chips (screen 05) and the "what did you find" chips never
+// touch canvas pixels — they only ever position this floating label.
+function showAutomatismSuggestion(id){
+  const chip = SUGGESTION_CHIPS.find(c => c.id === id);
+  if (!chip) return;
+  const fallback = { x: (automatismCanvasEl ? automatismCanvasEl.clientWidth : 320) / 2, y: (automatismCanvasEl ? automatismCanvasEl.clientHeight : 320) / 2 };
+  showFloatingPromptAt(`${chip.emoji} ${chip.label}`, automatismLastTapPoint || fallback);
+}
+
+function captureAutomatismSnapshot(){
+  if (!automatismCanvasEl) { AUTOMATISM_STATE.snapshotDataUrl = null; return; }
+  try { AUTOMATISM_STATE.snapshotDataUrl = automatismCanvasEl.toDataURL('image/png'); }
+  catch (e) { AUTOMATISM_STATE.snapshotDataUrl = null; }
+}
+
+function selectMindFound(label){
+  AUTOMATISM_STATE.mindFound = label;
+  renderCurrentStage();
+}
+
+/* ---- Per-material stroke rendering — five genuinely different
+   techniques, not color/width variants of one line (see plan). ---- */
+function drawLiveSegment(ctx, p0, p1, tool){
+  const live = {
+    watercolor: { a:.35, w:15 }, marker: { a:1, w:10 }, pencil: { a:.5, w:2 },
+    ink: { a:1, w:5 }, acrylic: { a:.9, w:13 }
+  }[tool] || { a:1, w:6 };
+  ctx.save();
+  ctx.globalAlpha = live.a;
+  ctx.strokeStyle = AUTOMATISM_COLORS[tool] || '#211d16';
+  ctx.lineWidth = live.w;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.stroke();
+  ctx.restore();
+}
+
+function strokePath(ctx, pts){
+  ctx.beginPath();
+  pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+  ctx.stroke();
+}
+
+function drawStrokeWatercolor(ctx, pts){
+  ctx.save();
+  ctx.strokeStyle = AUTOMATISM_COLORS.watercolor;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.globalAlpha = 0.32; ctx.lineWidth = 16; strokePath(ctx, pts);
+  ctx.globalAlpha = 0.14; ctx.lineWidth = 27; strokePath(ctx, pts);
+  ctx.restore();
+}
+function drawStrokeMarker(ctx, pts){
+  ctx.save();
+  ctx.strokeStyle = AUTOMATISM_COLORS.marker;
+  ctx.globalAlpha = 1; ctx.lineWidth = 10;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  strokePath(ctx, pts);
+  ctx.restore();
+}
+function drawStrokePencil(ctx, pts){
+  ctx.save();
+  ctx.strokeStyle = AUTOMATISM_COLORS.pencil;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const avgPressure = pts.reduce((s, p) => s + (p.pressure || 0.5), 0) / pts.length;
+  for (let pass = 0; pass < 3; pass++) {
+    ctx.globalAlpha = 0.16;
+    ctx.lineWidth = (1.3 + avgPressure * 1.2) + Math.random() * 0.6;
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+      const jx = p.x + (Math.random() - 0.5) * 0.7;
+      const jy = p.y + (Math.random() - 0.5) * 0.7;
+      i === 0 ? ctx.moveTo(jx, jy) : ctx.lineTo(jx, jy);
+    });
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawStrokeInk(ctx, pts){
+  ctx.save();
+  ctx.strokeStyle = AUTOMATISM_COLORS.ink;
+  ctx.globalAlpha = 1;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const n = pts.length;
+  const taper = Math.max(1, Math.floor(n * 0.15));
+  for (let i = 1; i < n; i++) {
+    let width = 5.5;
+    if (i < taper) width = 5.5 * (i / taper);
+    else if (i > n - taper) width = 5.5 * ((n - i) / taper);
+    ctx.lineWidth = Math.max(1, width);
+    ctx.beginPath();
+    ctx.moveTo(pts[i - 1].x, pts[i - 1].y);
+    ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawStrokeAcrylic(ctx, pts){
+  ctx.save();
+  ctx.strokeStyle = AUTOMATISM_COLORS.acrylic;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.globalAlpha = 0.92; ctx.lineWidth = 13; strokePath(ctx, pts);
+  ctx.globalAlpha = 0.22; ctx.lineWidth = 2;
+  [-4, 0, 4].forEach(off => {
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+      const ox = p.x + off, oy = p.y + off * 0.4;
+      i === 0 ? ctx.moveTo(ox, oy) : ctx.lineTo(ox, oy);
+    });
+    ctx.stroke();
+  });
+  ctx.restore();
+}
+const AUTOMATISM_DRAW_FNS = {
+  watercolor: drawStrokeWatercolor, marker: drawStrokeMarker, pencil: drawStrokePencil,
+  ink: drawStrokeInk, acrylic: drawStrokeAcrylic
+};
+
+function redrawAutomatismCanvasFull(){
+  if (!automatismCtx || !automatismCanvasEl) return;
+  const cssW = automatismCanvasEl.clientWidth || automatismCanvasEl.getBoundingClientRect().width || 320;
+  const cssH = automatismCanvasEl.clientHeight || automatismCanvasEl.getBoundingClientRect().height || 320;
+  automatismCtx.clearRect(0, 0, cssW, cssH);
+  AUTOMATISM_STATE.strokes.forEach(s => {
+    const fn = AUTOMATISM_DRAW_FNS[s.tool] || drawStrokeMarker;
+    fn(automatismCtx, s.points);
+  });
 }
 
 /* ============================================================
@@ -481,10 +803,90 @@ function renderMeetMiro(){
    longer injects a shared one, so the page stays a real, loadable,
    gated lesson even before the designed UI lands.
 ============================================================ */
-function renderTryAutomatism(){ return screenHeader('THINK', "Don't Think. Just Move.") + '<p class="stub-note">Screen 04 (Digital Automatism Canvas) — build lands in Commit 3.</p>'; }
-function renderStopAndLook(){ return screenHeader('THINK', 'Stop & Look') + '<p class="stub-note">Screen 05 — build lands in Commit 3.</p>'; }
-function renderMakeItBecome(){ return screenHeader('THINK', 'Now Let Your Imagination In.') + '<p class="stub-note">Screen 06 — build lands in Commit 3.</p>'; }
-function renderWhatDidYouFind(){ return screenHeader('THINK', 'What Did Your Mind Find?') + '<p class="stub-note">Screen 07 — build lands in Commit 3.</p>'; }
+/* ============================================================
+   SCREEN 04 — Try Automatism (signature interaction)
+============================================================ */
+function renderTryAutomatism(){
+  const materialButtons = AUTOMATISM_MATERIALS.map(m =>
+    `<button class="mat-btn ${m.id === AUTOMATISM_STATE.tool ? 'active' : ''}" onclick="selectAutomatismTool('${m.id}')">${m.label}</button>`
+  ).join('');
+  return `
+    ${screenHeader('THINK', "Don't Think. Just Move.", 'DRAW 5 STRANGE SHAPES.')}
+    <div class="mat-picker">${materialButtons}</div>
+    <div class="automatism-canvas-wrap">
+      <canvas id="automatismCanvas"></canvas>
+      <div class="floating-prompt" id="floatingPrompt"></div>
+    </div>
+    <div class="canvas-tools-row"><button class="dw-btn" onclick="undoLastStroke()">↺ Undo</button></div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 05 — Stop & Look
+============================================================ */
+function renderStopAndLook(){
+  const chips = SUGGESTION_CHIPS.map(c =>
+    `<button class="sugg-chip" onclick="showAutomatismSuggestion('${c.id}')">${c.emoji} ${c.label}</button>`
+  ).join('');
+  return `
+    ${screenHeader('THINK', 'Stop & Look', 'WHAT DO YOU SEE?')}
+    <div class="automatism-canvas-wrap">
+      <canvas id="automatismCanvas"></canvas>
+      <div class="floating-prompt" id="floatingPrompt"></div>
+    </div>
+    <div class="sugg-chip-row">${chips}</div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 06 — Make It Become Something
+============================================================ */
+function renderMakeItBecome(){
+  const examples = WORKED_EXAMPLES.map(ex => `
+    <div class="worked-ex">
+      <div class="worked-ex-pair">
+        <svg viewBox="0 0 60 60">${ex.before}</svg>
+        <span class="worked-ex-arrow">→</span>
+        <svg viewBox="0 0 60 60">${ex.after}</svg>
+      </div>
+      <div class="worked-ex-label">${ex.label}</div>
+    </div>
+  `).join('');
+  const materialButtons = AUTOMATISM_MATERIALS.map(m =>
+    `<button class="mat-btn ${m.id === AUTOMATISM_STATE.tool ? 'active' : ''}" onclick="selectAutomatismTool('${m.id}')">${m.label}</button>`
+  ).join('');
+  return `
+    ${screenHeader('THINK', 'Now Let Your Imagination In.')}
+    <div class="worked-examples-row">${examples}</div>
+    <p class="s-sub">TURN ONE SHAPE INTO SOMETHING.</p>
+    <div class="mat-picker">${materialButtons}</div>
+    <div class="automatism-canvas-wrap">
+      <canvas id="automatismCanvas"></canvas>
+      <div class="floating-prompt" id="floatingPrompt"></div>
+    </div>
+    <div class="canvas-tools-row"><button class="dw-btn" onclick="undoLastStroke()">↺ Undo</button></div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 07 — What Did Your Mind Find?
+============================================================ */
+function renderWhatDidYouFind(){
+  const chips = MIND_FOUND_CHIPS.map(label => {
+    const active = AUTOMATISM_STATE.mindFound === label;
+    return `<button class="mind-chip ${active ? 'active' : ''}" onclick="selectMindFound('${label.replace(/'/g, "\\'")}')">${label}</button>`;
+  }).join('');
+  const snap = AUTOMATISM_STATE.snapshotDataUrl
+    ? `<img class="automatism-snapshot" src="${AUTOMATISM_STATE.snapshotDataUrl}" alt="Your automatism drawing">`
+    : `<div class="automatism-snapshot-empty">—</div>`;
+  return `
+    ${screenHeader('THINK', 'What Did Your Mind Find?')}
+    <div class="snapshot-frame">${snap}</div>
+    <p class="s-sub">WHAT APPEARED?</p>
+    <div class="mind-chip-row">${chips}</div>
+  `;
+}
+
 function renderNowWatchMrsDawn(){ return screenHeader('MAKE', 'Now Watch Mrs. Dawn') + '<p class="stub-note">Screen 08 — build lands in Commit 4.</p>'; }
 function renderMaterials(){ return screenHeader('MAKE', 'Get Your Materials Ready') + '<p class="stub-note">Materials — build lands in Commit 4.</p>'; }
 function renderStudioStep(idx){ return screenHeader('MAKE', STUDIO_STEPS[idx].title) + `<p class="stub-note">Step ${STUDIO_STEPS[idx].step} — build lands in Commit 4.</p>`; }
@@ -517,6 +919,7 @@ function renderCurrentStage(){
     ${stage.render()}
     ${renderNav(stage)}
   </div>`;
+  if (stage.afterRender) stage.afterRender();
   window.scrollTo(0, 0);
 }
 
