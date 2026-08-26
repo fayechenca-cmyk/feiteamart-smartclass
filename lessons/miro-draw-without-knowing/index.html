@@ -103,9 +103,55 @@ button{font-family:'Mulish',sans-serif;}
 
 /* placeholder used by every stub screen until its real commit lands */
 .stub-note{text-align:center;font-size:12px;color:var(--ink-faint);font-style:italic;margin-top:20px;}
+
+/* ---------- Screen 01 — Don't Think Yet ---------- */
+.hero-01{text-align:center;padding-top:4px;}
+.hero-anim{width:100%;max-width:320px;margin:0 auto 6px;}
+.hero-anim svg{width:100%;height:auto;display:block;}
+.hero-line{fill:none;stroke:var(--black);stroke-width:3;stroke-linecap:round;stroke-dasharray:260;stroke-dashoffset:260;animation:dwDrawLine 2.2s ease forwards;}
+.hero-dot{fill:var(--red);opacity:0;transform-origin:center;animation:dwPopIn .5s ease forwards .9s;}
+.hero-blob{fill:var(--yellow);opacity:0;transform-origin:center;animation:dwGrowBlob 1.1s cubic-bezier(.2,.9,.3,1.3) forwards 1.3s;}
+@keyframes dwDrawLine{to{stroke-dashoffset:0;}}
+@keyframes dwPopIn{from{opacity:0;transform:scale(0);}to{opacity:1;transform:scale(1);}}
+@keyframes dwGrowBlob{from{opacity:0;transform:scale(0);}to{opacity:1;transform:scale(1);}}
+.hero-title{font-family:'Kalam',cursive;font-weight:700;font-size:2.4rem;line-height:1.08;margin:6px 0 2px;}
+.hero-artist{font-style:italic;color:var(--red);font-weight:700;font-size:14px;margin:0 0 26px;}
+.hero-question{font-weight:800;font-size:1.15rem;line-height:1.6;letter-spacing:.3px;margin:0 0 8px;}
+
+/* ---------- Screen 02 — Look First ---------- */
+.artwork-frame{position:relative;max-width:480px;margin:8px auto 10px;aspect-ratio:4/3;background:var(--paper-deep);border-radius:14px;overflow:hidden;}
+.wobble-frame-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
+.artwork-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.img-missing-note{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:13px;color:var(--ink-faint);font-weight:700;text-align:center;padding:20px;}
+.artwork-frame.img-missing .img-missing-note{display:flex;}
+.hotspot{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:2px solid var(--black);background:rgba(247,236,216,.92);font-size:15px;line-height:1;cursor:pointer;z-index:3;display:flex;align-items:center;justify-content:center;box-shadow:2px 3px 0 rgba(33,29,22,.18);padding:0;}
+.hotspot:active{transform:translate(-50%,-50%) scale(.9);}
+.artwork-caption{text-align:center;font-weight:800;font-size:11.5px;letter-spacing:.6px;color:var(--red);margin:0 0 4px;text-transform:uppercase;}
+.reveal-box{margin:12px auto 0;max-width:420px;background:#fff;border:2px solid var(--black);border-radius:10px;padding:10px 14px;text-align:center;font-size:13.5px;box-shadow:3px 4px 0 rgba(33,29,22,.14);}
+.reveal-emoji{font-size:16px;margin-right:4px;}
+
+/* ---------- Screen 03 — Meet Joan Miró ---------- */
+.idea-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:10px 0 12px;}
+.idea-chip{background:var(--black);color:var(--paper);font-weight:800;font-size:11.5px;letter-spacing:.8px;padding:7px 14px;border-radius:999px;}
+.artist-mark{width:110px;margin:6px auto 14px;}
+.artist-mark svg{width:100%;height:auto;}
+.formula-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:14px 0 6px;font-weight:800;font-size:12px;letter-spacing:.3px;}
+.formula-row span:not(.formula-arrow){background:#fff;border:2px solid var(--black);border-radius:8px;padding:6px 10px;}
+.formula-arrow{color:var(--red);font-weight:900;font-size:15px;border:none !important;background:none !important;padding:0 !important;}
+.tiny-line{text-align:center;font-size:12px;color:var(--ink-soft);font-style:italic;margin:0 0 18px;}
+.ref-mentions{text-align:center;font-size:10.5px;color:var(--ink-faint);margin-top:14px;line-height:1.6;}
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="rough" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="7"/>
+    </filter>
+  </defs>
+</svg>
 
 <div id="app">
   <div id="topbar">
@@ -294,9 +340,10 @@ function renderNav(stage){
   const isFirst = idx === 0;
   const isLast = idx === STAGES.length - 1;
   const can = canAdvance(stage);
+  const nextLabel = stage.id === 'dont-think-yet' ? "LET'S TRY →" : 'Next →';
   let html = `<div class="nav-footer">
     <button class="dw-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
-    ${isLast ? '<span></span>' : `<button class="dw-btn primary" id="nextBtn" onclick="goNext()" ${!can ? 'disabled' : ''}>Next →</button>`}
+    ${isLast ? '<span></span>' : `<button class="dw-btn primary" id="nextBtn" onclick="goNext()" ${!can ? 'disabled' : ''}>${nextLabel}</button>`}
   </div>`;
   if (stage.gated) {
     html += `<div class="gate-counter" id="gateCounter">${AUTOMATISM_STATE.strokes.length} of ${AUTOMATISM_MIN_STROKES} marks</div>`;
@@ -342,22 +389,107 @@ function renderMap(){
 }
 
 /* ============================================================
-   STUB RENDERERS — replaced screen-by-screen in later commits.
-   Each still shows its real title (from STAGES) so the page is a real,
-   loadable, gated lesson even before the designed UI lands.
+   SHARED HEADER — used by every screen except Screen 01, which owns a
+   fully custom hero (no generic kicker/title treatment, per spec).
 ============================================================ */
-function renderDontThinkYet(){ return '<p class="stub-note">Screen 01 — build lands in the next commit.</p>'; }
-function renderLookFirst(){ return '<p class="stub-note">Screen 02 — build lands in the next commit.</p>'; }
-function renderMeetMiro(){ return '<p class="stub-note">Screen 03 — build lands in the next commit.</p>'; }
-function renderTryAutomatism(){ return '<p class="stub-note">Screen 04 (Digital Automatism Canvas) — build lands in Commit 3.</p>'; }
-function renderStopAndLook(){ return '<p class="stub-note">Screen 05 — build lands in Commit 3.</p>'; }
-function renderMakeItBecome(){ return '<p class="stub-note">Screen 06 — build lands in Commit 3.</p>'; }
-function renderWhatDidYouFind(){ return '<p class="stub-note">Screen 07 — build lands in Commit 3.</p>'; }
-function renderNowWatchMrsDawn(){ return '<p class="stub-note">Screen 08 — build lands in Commit 4.</p>'; }
-function renderMaterials(){ return '<p class="stub-note">Materials — build lands in Commit 4.</p>'; }
-function renderStudioStep(idx){ return `<p class="stub-note">Step ${STUDIO_STEPS[idx].step} — build lands in Commit 4.</p>`; }
-function renderYourTurn(){ return '<p class="stub-note">Screen 09 — build lands in Commit 5.</p>'; }
-function renderShare(){ return '<p class="stub-note">Screen 10 — build lands in Commit 5.</p>'; }
+function screenHeader(zoneLabel, title, sub){
+  return `<div class="kicker">${zoneLabel}</div><h2 class="s-title">${title}</h2>${sub ? `<p class="s-sub">${sub}</p>` : ''}`;
+}
+
+/* ============================================================
+   SCREEN 01 — Don't Think Yet (Welcome)
+============================================================ */
+function renderDontThinkYet(){
+  return `
+    <div class="hero-01">
+      <div class="hero-anim">
+        <svg viewBox="0 0 300 140">
+          <path class="hero-line" d="M20,90 C60,20 100,120 150,60 S230,10 280,70"/>
+          <circle class="hero-dot" cx="150" cy="60" r="6"/>
+          <path class="hero-blob" d="M235,70 C250,55 275,60 278,78 C281,98 258,108 240,100 C226,94 222,82 235,70 Z"/>
+        </svg>
+      </div>
+      <h1 class="hero-title display">DRAW WITHOUT KNOWING</h1>
+      <p class="hero-artist">Inspired by Joan Miró</p>
+      <p class="hero-question">WHAT HAPPENS<br>IF YOUR HAND STARTS<br>BEFORE YOUR BRAIN DECIDES?</p>
+    </div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 02 — Look First
+============================================================ */
+function renderLookFirst(){
+  const hotspots = LOOK_FIRST_CHIPS.map(c =>
+    `<button class="hotspot" style="left:${c.left}%;top:${c.top}%" onclick="revealLookFirst('${c.id}')" aria-label="${c.label}">${c.emoji}</button>`
+  ).join('');
+  return `
+    ${screenHeader('LOOK', 'Look First')}
+    <div class="artwork-frame" id="lookFirstFrame">
+      <svg class="wobble-frame-svg" viewBox="0 0 400 300" preserveAspectRatio="none">
+        <rect x="6" y="6" width="388" height="288" rx="14" fill="none" stroke="var(--black)" stroke-width="5" filter="url(#rough)"/>
+      </svg>
+      <img class="artwork-img" src="assets/mrs-dawn-artwork.jpg" alt="Mrs. Dawn's watercolor piece, inspired by Joan Miró"
+        onerror="this.style.display='none'; this.closest('.artwork-frame').classList.add('img-missing')">
+      <div class="img-missing-note">Mrs. Dawn's artwork photo<br>coming soon</div>
+      ${hotspots}
+    </div>
+    <p class="artwork-caption">Mrs. Dawn's Version — Inspired by Joan Miró</p>
+    <p class="s-sub">WHAT DO YOU SEE?</p>
+    <div class="reveal-box" id="lookFirstReveal" style="display:none"></div>
+  `;
+}
+function revealLookFirst(id){
+  const chip = LOOK_FIRST_CHIPS.find(c => c.id === id);
+  if (!chip) return;
+  if (!STATE.lookFirstFound.includes(id)) { STATE.lookFirstFound.push(id); saveState(); }
+  const box = document.getElementById('lookFirstReveal');
+  if (box) {
+    box.style.display = 'block';
+    box.innerHTML = `<span class="reveal-emoji">${chip.emoji}</span><strong>${chip.label}</strong> — ${chip.reveal}`;
+  }
+}
+
+/* ============================================================
+   SCREEN 03 — Meet Joan Miró
+============================================================ */
+function renderMeetMiro(){
+  const ideas = MIRO_IDEAS.map(i => `<span class="idea-chip">${i}</span>`).join('');
+  return `
+    ${screenHeader('LOOK', 'Meet Joan Miró')}
+    <div class="idea-row">${ideas}</div>
+    <p class="s-sub">Miró explored ideas connected to dreams, the unconscious and Automatism.</p>
+    <div class="artist-mark">
+      <svg viewBox="0 0 100 100">
+        <path d="M12,70 C25,30 45,85 60,45 S85,15 92,40" fill="none" stroke="var(--black)" stroke-width="3.5" stroke-linecap="round" filter="url(#rough)"/>
+        <circle cx="78" cy="22" r="4" fill="var(--red)"/>
+        <path d="M18,85 l4,-8 l4,8 l-4,-3 z" fill="var(--yellow)"/>
+      </svg>
+    </div>
+    <div class="formula-row">
+      <span>DON'T PLAN</span><span class="formula-arrow">→</span><span>LET YOUR HAND MOVE</span><span class="formula-arrow">→</span><span>SEE WHAT APPEARS</span>
+    </div>
+    <p class="tiny-line">Start before you know the answer.</p>
+    <a class="dw-btn blue wide" href="https://www.metmuseum.org/essays/joan-miro-1893-1983" target="_blank" rel="noopener">VIEW AT THE MUSEUM →</a>
+    <p class="ref-mentions">Animated Landscape (1927) · Photo: This Is the Color of My Dreams (1925) · Constellation: Toward the Rainbow (1941)</p>
+  `;
+}
+
+/* ============================================================
+   STUB RENDERERS — replaced screen-by-screen in later commits.
+   Each owns its own header (kicker + title) now that the dispatcher no
+   longer injects a shared one, so the page stays a real, loadable,
+   gated lesson even before the designed UI lands.
+============================================================ */
+function renderTryAutomatism(){ return screenHeader('THINK', "Don't Think. Just Move.") + '<p class="stub-note">Screen 04 (Digital Automatism Canvas) — build lands in Commit 3.</p>'; }
+function renderStopAndLook(){ return screenHeader('THINK', 'Stop & Look') + '<p class="stub-note">Screen 05 — build lands in Commit 3.</p>'; }
+function renderMakeItBecome(){ return screenHeader('THINK', 'Now Let Your Imagination In.') + '<p class="stub-note">Screen 06 — build lands in Commit 3.</p>'; }
+function renderWhatDidYouFind(){ return screenHeader('THINK', 'What Did Your Mind Find?') + '<p class="stub-note">Screen 07 — build lands in Commit 3.</p>'; }
+function renderNowWatchMrsDawn(){ return screenHeader('MAKE', 'Now Watch Mrs. Dawn') + '<p class="stub-note">Screen 08 — build lands in Commit 4.</p>'; }
+function renderMaterials(){ return screenHeader('MAKE', 'Get Your Materials Ready') + '<p class="stub-note">Materials — build lands in Commit 4.</p>'; }
+function renderStudioStep(idx){ return screenHeader('MAKE', STUDIO_STEPS[idx].title) + `<p class="stub-note">Step ${STUDIO_STEPS[idx].step} — build lands in Commit 4.</p>`; }
+function renderYourTurn(){ return screenHeader('MAKE', 'Now Make Your Version.') + '<p class="stub-note">Screen 09 — build lands in Commit 5.</p>'; }
+function renderShare(){ return screenHeader('REFLECT', 'What Did Your Imagination Find?') + '<p class="stub-note">Screen 10 — build lands in Commit 5.</p>'; }
 
 /* ============================================================
    DISPATCH + RENDER
@@ -377,9 +509,11 @@ function renderCurrentStage(){
   if (!stage) { goMap(); return; }
   zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
 
+  // Each stage's render() owns its full header markup (kicker/title or a
+  // bespoke hero, e.g. Screen 01) — matching the pattern already used by
+  // Kandinsky/Yōkai, rather than forcing one generic header shape on
+  // every screen.
   contentEl.innerHTML = `<div class="screen active">
-    <div class="kicker">${zonePill.textContent}</div>
-    <h2 class="s-title">${stage.title}</h2>
     ${stage.render()}
     ${renderNav(stage)}
   </div>`;
