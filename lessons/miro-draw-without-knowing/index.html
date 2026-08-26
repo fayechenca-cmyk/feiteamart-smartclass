@@ -178,6 +178,28 @@ button{font-family:'Mulish',sans-serif;}
 .mt-icon{font-size:1.8rem;}
 .mt-label{font-size:11px;font-weight:800;margin-top:6px;line-height:1.3;}
 .mat-tile-pending{opacity:.55;border-style:dashed;}
+
+/* ---------- Screen 09 — Your Turn ---------- */
+.your-turn-tools{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0 10px;}
+.tool-chip{font-weight:800;font-size:11.5px;letter-spacing:.3px;padding:9px 16px;border-radius:999px;border:2px solid var(--black);background:#fff;color:var(--black);cursor:pointer;}
+.tool-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* ---------- Screen 10 — Share ---------- */
+.upload-slot-wrap{display:flex;justify-content:center;margin:14px 0 4px;}
+.upload-slot{width:220px;height:220px;border:3px dashed var(--black);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:#fffdf7;}
+.upload-slot.saving{border-color:var(--blue);border-style:solid;}
+.upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:30px;color:var(--red);}
+.upload-slot .slot-label{font-size:10.5px;font-weight:800;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
+.share-frame-wrap{position:relative;max-width:300px;margin:16px auto 6px;}
+.share-frame-svg{position:absolute;inset:-10px;width:calc(100% + 20px);height:calc(100% + 20px);pointer-events:none;}
+.share-frame{position:relative;border-radius:10px;overflow:hidden;}
+.share-frame img{width:100%;display:block;}
+.answer-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:12px 0 6px;}
+.answer-chip{font-weight:800;font-size:12.5px;padding:9px 20px;border-radius:999px;border:2px solid var(--black);background:#fff;color:var(--black);cursor:pointer;}
+.answer-chip.active{background:var(--yellow);border-color:var(--black);}
+.share-final-line{text-align:center;font-family:'Kalam',cursive;font-weight:700;font-size:1.2rem;margin:24px 0 6px;}
+.share-credit{text-align:center;font-size:10px;color:var(--ink-faint);margin:2px 0 0;}
 </style>
 </head>
 <body>
@@ -200,9 +222,7 @@ button{font-family:'Mulish',sans-serif;}
   <div id="screen-content"></div>
 </div>
 
-<!-- The upload <input> for Screen 10 (Share) is added in Commit 5,
-     alongside its onFileSelected handler — kept out of this skeleton
-     commit since it's real UI, not data/registration. -->
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
 
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
@@ -384,6 +404,92 @@ const AUTOMATISM_STATE = {
   snapshotDataUrl: null,
   mindFound: null
 };
+
+/* ============================================================
+   IndexedDB — physical-artwork photo storage (Screen 10).
+
+   The spec's own copy assumes "the platform's existing Supabase upload
+   flow/component" and "existing gallery mechanism" — neither exists
+   anywhere in this codebase (confirmed by search before this build
+   started). Every shipped course (Kandinsky, Yōkai, Surrealism) instead
+   uses this same per-course IndexedDB pattern, with "Add to Gallery"
+   simply linking back to the Studio. This lesson follows that real,
+   established pattern rather than the spec's assumed one.
+============================================================ */
+const DB_NAME = 'fei_miro_draw_without_knowing_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const PIECE_ID = 'piece_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+function isStorageSupported(){ return !!window.indexedDB; }
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale); height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image')); };
+    img.src = url;
+  });
+}
+async function saveArtwork(pieceId, fileOrBlob){
+  const compressed = await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => { const rows = req.result || []; rows.sort((a, b) => b.savedAt - a.savedAt); resolve(rows); };
+    req.onerror = () => reject(req.error);
+  });
+}
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
 
 /* ============================================================
    NAVIGATION
@@ -941,13 +1047,96 @@ function renderStudioStep(idx){
     <p class="tiny-line">${step.note}</p>
   `;
 }
-function renderYourTurn(){ return screenHeader('MAKE', 'Now Make Your Version.') + '<p class="stub-note">Screen 09 — build lands in Commit 5.</p>'; }
-function renderShare(){ return screenHeader('REFLECT', 'What Did Your Imagination Find?') + '<p class="stub-note">Screen 10 — build lands in Commit 5.</p>'; }
+/* ============================================================
+   SCREEN 09 — Your Turn (physical-artwork tool intent, separate from
+   Screen 04's digital brush picker)
+============================================================ */
+function selectYourTurnTool(tool){
+  STATE.yourTurnTool = tool;
+  saveState();
+  renderCurrentStage();
+}
+function renderYourTurn(){
+  const tools = YOUR_TURN_TOOLS.map(t =>
+    `<button class="tool-chip ${STATE.yourTurnTool === t ? 'active' : ''}" onclick="selectYourTurnTool('${t}')">${t}</button>`
+  ).join('');
+  return `
+    ${screenHeader('MAKE', 'Now Make Your Version.')}
+    <div class="your-turn-tools">${tools}</div>
+    <p class="tiny-line">MRS. DAWN MADE ONE POSSIBILITY. YOU ARE MAKING ANOTHER.</p>
+  `;
+}
+
+/* ============================================================
+   SCREEN 10 — Share (Reflect)
+============================================================ */
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  saving = true;
+  refreshUploadUI();
+  try {
+    const record = await saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+  } catch (e) {
+    console.warn('[share] saveArtwork failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  refreshUploadUI();
+}
+function shareFrameMarkup(src){
+  return `<div class="share-frame-wrap">
+    <svg class="share-frame-svg" viewBox="0 0 300 300" preserveAspectRatio="none">
+      <rect x="8" y="8" width="284" height="284" rx="18" fill="none" stroke="var(--black)" stroke-width="5" filter="url(#rough)"/>
+    </svg>
+    <div class="share-frame"><img src="${src}" alt="Your finished watercolor artwork"></div>
+  </div>`;
+}
+function refreshUploadUI(){
+  const wrap = document.getElementById('uploadSlotWrap');
+  const frameWrap = document.getElementById('shareFrameWrap');
+  if (!wrap) return;
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your finished watercolor artwork"></div>`;
+    if (frameWrap) frameWrap.innerHTML = shareFrameMarkup(objectUrl);
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Artwork</div></div>`;
+    if (frameWrap) frameWrap.innerHTML = '';
+  }
+}
+function selectShareAnswer(ans){
+  STATE.shareAnswer = ans;
+  saveState();
+  renderCurrentStage();
+}
+function renderShare(){
+  const answers = SHARE_QUESTION_OPTIONS.map(a =>
+    `<button class="answer-chip ${STATE.shareAnswer === a ? 'active' : ''}" onclick="selectShareAnswer('${a}')">${a}</button>`
+  ).join('');
+  return `
+    ${screenHeader('REFLECT', 'What Did Your Imagination Find?')}
+    <div class="upload-slot-wrap" id="uploadSlotWrap"></div>
+    <div id="shareFrameWrap"></div>
+    <p class="s-sub">DID YOU KNOW WHAT YOU WERE DRAWING WHEN YOU STARTED?</p>
+    <div class="answer-row">${answers}</div>
+    <a class="dw-btn blue wide" href="../../creation/">Add to Gallery</a>
+    <p class="share-final-line display">YOU DIDN'T NEED THE ANSWER BEFORE YOU STARTED.</p>
+    <p class="share-credit">FEI TeamArt · Creation · Learn from Masters — Led by Mrs. Dawn Wang</p>
+  `;
+}
 
 /* ============================================================
    DISPATCH + RENDER
 ============================================================ */
-function renderCurrentStage(){
+async function renderCurrentStage(){
   const contentEl = document.getElementById('screen-content');
   const zonePill = document.getElementById('zonePill');
 
@@ -962,6 +1151,15 @@ function renderCurrentStage(){
   if (!stage) { goMap(); return; }
   zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
 
+  // Screen 10 (Share): check for a previously-saved artwork before
+  // painting, so a returning student sees their photo already in place.
+  if (stage.id === 'share' && !artworkRecord && isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) { artworkRecord = rows[0]; objectUrl = URL.createObjectURL(artworkRecord.blob); }
+    } catch (e) { console.warn('[share] listArtworks failed', e); }
+  }
+
   // Each stage's render() owns its full header markup (kicker/title or a
   // bespoke hero, e.g. Screen 01) — matching the pattern already used by
   // Kandinsky/Yōkai, rather than forcing one generic header shape on
@@ -971,6 +1169,7 @@ function renderCurrentStage(){
     ${renderNav(stage)}
   </div>`;
   if (stage.afterRender) stage.afterRender();
+  if (stage.id === 'share') refreshUploadUI();
   window.scrollTo(0, 0);
 }
 
@@ -988,7 +1187,7 @@ async function init() {
     }
   }
   loadState();
-  renderCurrentStage();
+  await renderCurrentStage();
 }
 
 init();
