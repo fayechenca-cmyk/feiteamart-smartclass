@@ -16,7 +16,7 @@
   "tags": ["Learn from Masters", "Miró", "Automatism", "Watercolor", "Drawing", "Surrealism"],
   "ageRange": "6-10+",
   "materials": ["Watercolor Paper", "Watercolors", "Medium Flat Brush", "Marker or Drawing Tools"],
-  "stageCount": 14
+  "stageCount": 15
 }
 </script>
 
@@ -251,11 +251,12 @@ const STAGES = [
   { id:'stop-and-look',        title:'Stop & Look',                  zone:'think',   render:renderStopAndLook, afterRender:() => mountAutomatismCanvas('automatismCanvas', { drawable:false }) },
   { id:'make-it-become',       title:'Now Let Your Imagination In.', zone:'think',   render:renderMakeItBecome, afterRender:() => mountAutomatismCanvas('automatismCanvas', { drawable:true }) },
   { id:'what-did-you-find',    title:'What Did Your Mind Find?',      zone:'think',   render:renderWhatDidYouFind },
-  { id:'now-watch-mrs-dawn',   title:'Now Watch Mrs. Dawn',           zone:'make',    render:renderNowWatchMrsDawn },
+  { id:'now-watch-mrs-dawn',   title:"Let's Draw Together",           zone:'make',    render:renderNowWatchMrsDawn },
   { id:'materials-ready',      title:'Get Your Materials Ready',      zone:'make',    render:renderMaterials },
   { id:'step-1-colors-flow',   title:'Let the Colors Flow',           zone:'make',    render:() => renderStudioStep(0) },
   { id:'step-2-shapes-appear', title:'Let Shapes Appear',             zone:'make',    render:() => renderStudioStep(1) },
   { id:'step-3-coming-next',   title:'Coming Next',                   zone:'make',    render:() => renderStudioStep(2) },
+  { id:'step-4-coming-next',   title:'Coming Next',                   zone:'make',    render:() => renderStudioStep(3) },
   { id:'your-turn',            title:'Now Make Your Version.',        zone:'make',    render:renderYourTurn },
   { id:'share',                title:'What Did Your Imagination Find?', zone:'reflect', render:renderShare }
 ];
@@ -342,15 +343,36 @@ const MATERIALS = [
   { id:'marker',     label:'Marker/Drawing Tools', icon:'✏️' }
 ];
 
-// Studio steps (Step 1/2 real content per spec, Step 3 an explicit
-// flagged placeholder — see Commit 4). All video fields are placeholders
-// until Faye supplies the real Cloudflare Stream URLs.
+// Cloudflare Stream customer subdomain — same account used platform-wide
+// (confirmed against every other lesson's videoSrc values).
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(videoId){
+  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${videoId}/iframe?poster=${poster}`;
+}
+
+// Video-ID → step mapping supplied by Faye (2026-08-28 addendum), in the
+// order the three IDs were pasted. This ordering is an ASSUMPTION, not
+// yet confirmed by Faye — kept as the single place to fix if she
+// corrects it, rather than scattered across STUDIO_STEPS below.
+const STUDIO_STEP_VIDEO_IDS = {
+  step1: '78de99c3a9ee0f1818494b7dfceb7b14', // assumed: Video A -> Step 1 (Let the Colors Flow)
+  step2: '45d90495035988ab8ef434766573a34b', // assumed: Video B -> Step 2 (Let Shapes Appear)
+  step3: '9b6b1c8dc78063d66c81c9f8b48b337c'  // assumed: Video C -> Step 3
+};
+
+// Studio steps. Step 1/2 have real content + real video per spec. Step 3
+// now has a real video too, but its title/materials/copy stay undefined
+// (status: 'pending-content') until Faye describes what Video C shows —
+// do not invent that copy. Step 4 is a brand-new step (2026-08-28
+// addendum): no video yet, fully pending, takes over the
+// "COMING NEXT" placeholder treatment Step 3 used to carry alone.
 const STUDIO_STEPS = [
   {
     step:1, title:'Let the Colors Flow',
     content:'Mrs. Dawn uses watercolor and a medium flat brush, moving blue-green → blue → purple, letting colors bleed across a wet background.',
     note:'YOUR COLORS CAN BE DIFFERENT.',
-    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step1),
     videoTitle:'Let the Colors Flow — Mrs. Dawn demo'
   },
   {
@@ -358,14 +380,20 @@ const STUDIO_STEPS = [
     content:'A second watercolor layer, yellow/red, organic solid shapes of varying size (some circular, some not).',
     prompt:'WHAT SHAPE WANTS TO APPEAR?',
     note:'DON’T PLAN TOO MUCH.',
-    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step
+    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step2),
     videoTitle:'Let Shapes Appear — Mrs. Dawn demo'
   },
   {
     step:3, title:'Coming Next',
     status:'pending-content',
-    videoSrc:'', // TODO(Faye): paste real Cloudflare Stream video for this step — title/materials/copy intentionally undefined until reviewed
-    videoTitle:'Step 3 — Mrs. Dawn demo (pending)'
+    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step3), // real video supplied — title/materials/copy still pending Faye's description of what it shows
+    videoTitle:'Step 3 — Mrs. Dawn demo (title pending)'
+  },
+  {
+    step:4, title:'Coming Next',
+    status:'pending-content',
+    videoSrc:'', // TODO(Faye): paste Video 4 once it's ready
+    videoTitle:'Step 4 — Mrs. Dawn demo (pending)'
   }
 ];
 
@@ -1002,13 +1030,18 @@ function renderWhatDidYouFind(){
 }
 
 /* ============================================================
-   SCREEN 08 — Now Watch Mrs. Dawn (transition into the physical Make stage)
+   SCREEN 08 — Let's Draw Together (transition into the physical Make
+   stage). Copy per Faye's 2026-08-28 addendum, which sets a new
+   platform-wide convention: every teacher-demo-video intro screen (not
+   just this lesson) should use this "Let's Draw Together" framing —
+   the demo is the teacher's own interpretation, not a standard answer.
+   Exactly these three lines, nothing added.
 ============================================================ */
 function renderNowWatchMrsDawn(){
   return `
-    ${screenHeader('MAKE', 'Now Watch Mrs. Dawn')}
-    <p class="s-sub">MRS. DAWN TRIED IT TOO.</p>
-    <p class="tiny-line">THIS IS HER VERSION. YOURS DOESN'T NEED TO MATCH.</p>
+    ${screenHeader('MAKE', "Let's Draw Together")}
+    <p class="s-sub">This is Mrs. Dawn's own way of seeing Miró — not the answer.</p>
+    <p class="tiny-line">Follow her lead, or go your own way.</p>
   `;
 }
 
@@ -1027,8 +1060,9 @@ function renderMaterials(){
 }
 
 /* ============================================================
-   STUDIO STEPS 1-3 (Step 3 is an explicit, flagged placeholder —
-   status: 'pending-content' — no invented title/materials/copy)
+   STUDIO STEPS 1-4 (Steps 3 and 4 are explicit, flagged placeholders —
+   status: 'pending-content' — no invented title/materials/copy. Step 3
+   has a real video now but pending copy; Step 4 has neither yet.)
 ============================================================ */
 function renderStudioStep(idx){
   const step = STUDIO_STEPS[idx];
@@ -1036,7 +1070,7 @@ function renderStudioStep(idx){
     return `
       ${screenHeader('MAKE', 'Coming Next')}
       ${renderVideoEmbed(step.videoSrc, step.videoTitle)}
-      <p class="stub-note">STEP 3 — COMING NEXT</p>
+      <p class="stub-note">STEP ${step.step} — COMING NEXT</p>
     `;
   }
   return `
