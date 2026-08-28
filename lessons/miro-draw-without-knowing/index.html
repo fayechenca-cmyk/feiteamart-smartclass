@@ -101,9 +101,6 @@ button{font-family:'Mulish',sans-serif;}
 .zone-tile .zt-label{font-family:'Kalam',cursive;font-weight:700;font-size:1.05rem;margin-top:6px;color:var(--black);}
 .zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
 
-/* placeholder used by every stub screen until its real commit lands */
-.stub-note{text-align:center;font-size:12px;color:var(--ink-faint);font-style:italic;margin-top:20px;}
-
 /* ---------- Screen 01 — Don't Think Yet ---------- */
 .hero-01{text-align:center;padding-top:4px;}
 .hero-anim{width:100%;max-width:320px;margin:0 auto 6px;}
@@ -255,8 +252,8 @@ const STAGES = [
   { id:'materials-ready',      title:'Get Your Materials Ready',      zone:'make',    render:renderMaterials },
   { id:'step-1-colors-flow',   title:'Let the Colors Flow',           zone:'make',    render:() => renderStudioStep(0) },
   { id:'step-2-shapes-appear', title:'Let Shapes Appear',             zone:'make',    render:() => renderStudioStep(1) },
-  { id:'step-3-coming-next',   title:'Coming Next',                   zone:'make',    render:() => renderStudioStep(2) },
-  { id:'step-4-coming-next',   title:'Coming Next',                   zone:'make',    render:() => renderStudioStep(3) },
+  { id:'step-3-lines-wander',  title:'Let Your Lines Wander',         zone:'make',    render:() => renderStudioStep(2) },
+  { id:'step-4-color-sparks',  title:'Add Color Sparks',              zone:'make',    render:() => renderStudioStep(3) },
   { id:'your-turn',            title:'Now Make Your Version.',        zone:'make',    render:renderYourTurn },
   { id:'share',                title:'What Did Your Imagination Find?', zone:'reflect', render:renderShare }
 ];
@@ -351,22 +348,24 @@ function cfStreamSrc(videoId){
   return `https://${CF_STREAM_CUSTOMER}/${videoId}/iframe?poster=${poster}`;
 }
 
-// Video-ID → step mapping supplied by Faye (2026-08-28 addendum), in the
-// order the three IDs were pasted. This ordering is an ASSUMPTION, not
-// yet confirmed by Faye — kept as the single place to fix if she
-// corrects it, rather than scattered across STUDIO_STEPS below.
+// Video-ID → step mapping — CONFIRMED by Faye (Addendum 2, 2026-08-28):
+// she titled "the third one" and "the fourth one" in this order, so
+// Video C -> Step 3 and Video D -> Step 4 are settled, not assumed.
 const STUDIO_STEP_VIDEO_IDS = {
-  step1: '78de99c3a9ee0f1818494b7dfceb7b14', // assumed: Video A -> Step 1 (Let the Colors Flow)
-  step2: '45d90495035988ab8ef434766573a34b', // assumed: Video B -> Step 2 (Let Shapes Appear)
-  step3: '9b6b1c8dc78063d66c81c9f8b48b337c'  // assumed: Video C -> Step 3
+  step1: '78de99c3a9ee0f1818494b7dfceb7b14',
+  step2: '45d90495035988ab8ef434766573a34b',
+  step3: '9b6b1c8dc78063d66c81c9f8b48b337c',
+  step4: 'abb7ea6b13529f79bcaa072337040701'
 };
 
-// Studio steps. Step 1/2 have real content + real video per spec. Step 3
-// now has a real video too, but its title/materials/copy stay undefined
-// (status: 'pending-content') until Faye describes what Video C shows —
-// do not invent that copy. Step 4 is a brand-new step (2026-08-28
-// addendum): no video yet, fully pending, takes over the
-// "COMING NEXT" placeholder treatment Step 3 used to carry alone.
+// Studio steps — all 4 now ship with real video + real titles (Addendum
+// 2, 2026-08-28 retires the "coming next" placeholder state entirely).
+// Steps 1-2's copy came from a description Faye gave of the actual video
+// content. Steps 3-4's copy did NOT — Faye supplied only their titles,
+// so the prompt/tiny-note lines below are drafted from title intent
+// (automatism-consistent framing) rather than a described video. Faye
+// still needs to sanity-check these two against what's actually in the
+// videos before treating them as final the way Steps 1-2's copy is.
 const STUDIO_STEPS = [
   {
     step:1, title:'Let the Colors Flow',
@@ -384,16 +383,24 @@ const STUDIO_STEPS = [
     videoTitle:'Let Shapes Appear — Mrs. Dawn demo'
   },
   {
-    step:3, title:'Coming Next',
-    status:'pending-content',
-    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step3), // real video supplied — title/materials/copy still pending Faye's description of what it shows
-    videoTitle:'Step 3 — Mrs. Dawn demo (title pending)'
+    // copyUnverified: drafted from the title alone, not a described
+    // video — see the block comment above.
+    step:3, title:'Let Your Lines Wander',
+    prompt:'WHERE DO THE LINES WANT TO GO?',
+    note:"FOLLOW THE LINE. DON'T STEER IT.",
+    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step3),
+    videoTitle:'Let Your Lines Wander — Mrs. Dawn demo',
+    copyUnverified: true
   },
   {
-    step:4, title:'Coming Next',
-    status:'pending-content',
-    videoSrc:'', // TODO(Faye): paste Video 4 once it's ready
-    videoTitle:'Step 4 — Mrs. Dawn demo (pending)'
+    // copyUnverified: drafted from the title alone, not a described
+    // video — see the block comment above.
+    step:4, title:'Add Color Sparks',
+    prompt:'WHERE DOES A SPARK OF COLOR WANT TO LAND?',
+    note:'A LITTLE GOES A LONG WAY.',
+    videoSrc: cfStreamSrc(STUDIO_STEP_VIDEO_IDS.step4),
+    videoTitle:'Add Color Sparks — Mrs. Dawn demo',
+    copyUnverified: true
   }
 ];
 
@@ -1060,23 +1067,17 @@ function renderMaterials(){
 }
 
 /* ============================================================
-   STUDIO STEPS 1-4 (Steps 3 and 4 are explicit, flagged placeholders —
-   status: 'pending-content' — no invented title/materials/copy. Step 3
-   has a real video now but pending copy; Step 4 has neither yet.)
+   STUDIO STEPS 1-4 — all 4 now ship real content; the "coming next"
+   placeholder state is retired (Addendum 2, 2026-08-28). Steps 3-4 have
+   no `content` paragraph (Faye never supplied a video description for
+   them, only a title), so that line is omitted rather than invented.
 ============================================================ */
 function renderStudioStep(idx){
   const step = STUDIO_STEPS[idx];
-  if (step.status === 'pending-content') {
-    return `
-      ${screenHeader('MAKE', 'Coming Next')}
-      ${renderVideoEmbed(step.videoSrc, step.videoTitle)}
-      <p class="stub-note">STEP ${step.step} — COMING NEXT</p>
-    `;
-  }
   return `
     ${screenHeader('MAKE', step.title)}
     ${renderVideoEmbed(step.videoSrc, step.videoTitle)}
-    <p class="s-sub">${step.content}</p>
+    ${step.content ? `<p class="s-sub">${step.content}</p>` : ''}
     ${step.prompt ? `<p class="s-sub">${step.prompt}</p>` : ''}
     <p class="tiny-line">${step.note}</p>
   `;
