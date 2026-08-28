@@ -259,18 +259,26 @@ const STAGES = [
 ];
 
 // Discovery hotspot chips on Mrs. Dawn's artwork (screen 02). Positions
-// are placeholders in % until the real photo (see assets/README.md)
-// tells us where shapes actually sit — kept generic/spread for now.
+// are re-checked against the real photo (Addendum 3, 2026-08-28) — each
+// left/top was read directly off the actual artwork (see assets/README.md
+// for the source image) rather than left as generic/spread placeholders.
 // Responses are deliberately ambiguous for several of these by design,
 // not a gap to fill in later.
+// Mrs. Dawn's finished Miró-inspired watercolor piece (Addendum 3,
+// 2026-08-28) — hosted on Faye's own Cloudflare Images delivery URL,
+// referenced directly the same way STUDIO_STEPS' videoSrc values
+// reference Cloudflare Stream directly rather than being downloaded
+// into assets/.
+const MRS_DAWN_ARTWORK_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ab48768d-112b-4b15-e726-7e6f83548300/public';
+
 const LOOK_FIRST_CHIPS = [
-  { id:'eye',      emoji:'👁',  label:'EYE',              left:18, top:22, reveal:'MAYBE.' },
-  { id:'star',     emoji:'⭐', label:'STAR',              left:70, top:14, reveal:'MAYBE.' },
-  { id:'line',     emoji:'〰', label:'LINE',              left:40, top:55, reveal:'WHAT DO YOU THINK?' },
-  { id:'dot',      emoji:'●',  label:'DOT',               left:60, top:68, reveal:'MAYBE.' },
-  { id:'creature', emoji:'🐾', label:'CREATURE?',         left:25, top:72, reveal:'WHAT DO YOU THINK?' },
-  { id:'moon',     emoji:'🌙', label:'MOON?',              left:80, top:40, reveal:'MAYBE.' },
-  { id:'strange',  emoji:'🌀', label:'SOMETHING STRANGE?', left:50, top:30, reveal:'WHAT DO YOU THINK?' }
+  { id:'eye',      emoji:'👁',  label:'EYE',              left:50, top:54, reveal:'MAYBE.' },
+  { id:'star',     emoji:'⭐', label:'STAR',              left:15, top:17, reveal:'MAYBE.' },
+  { id:'line',     emoji:'〰', label:'LINE',              left:44, top:13, reveal:'WHAT DO YOU THINK?' },
+  { id:'dot',      emoji:'●',  label:'DOT',               left:80, top:48, reveal:'MAYBE.' },
+  { id:'creature', emoji:'🐾', label:'CREATURE?',         left:30, top:30, reveal:'WHAT DO YOU THINK?' },
+  { id:'moon',     emoji:'🌙', label:'MOON?',              left:77, top:27, reveal:'MAYBE.' },
+  { id:'strange',  emoji:'🌀', label:'SOMETHING STRANGE?', left:42, top:34, reveal:'WHAT DO YOU THINK?' }
 ];
 
 const MIRO_IDEAS = ['DREAMS', 'THE UNCONSCIOUS', 'AUTOMATIC DRAWING'];
@@ -900,7 +908,7 @@ function renderLookFirst(){
       <svg class="wobble-frame-svg" viewBox="0 0 400 300" preserveAspectRatio="none">
         <rect x="6" y="6" width="388" height="288" rx="14" fill="none" stroke="var(--black)" stroke-width="5" filter="url(#rough)"/>
       </svg>
-      <img class="artwork-img" src="assets/mrs-dawn-artwork.jpg" alt="Mrs. Dawn's watercolor piece, inspired by Joan Miró"
+      <img class="artwork-img" src="${MRS_DAWN_ARTWORK_SRC}" alt="Mrs. Dawn's watercolor piece, inspired by Joan Miró"
         onerror="this.style.display='none'; this.closest('.artwork-frame').classList.add('img-missing')">
       <div class="img-missing-note">Mrs. Dawn's artwork photo<br>coming soon</div>
       ${hotspots}

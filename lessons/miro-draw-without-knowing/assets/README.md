@@ -2,22 +2,26 @@
 
 This lesson has no downloadable public-domain artwork to fetch (per the
 compliance rule: no Miró artworks are embedded or reproduced anywhere —
-museum links only). Two items (1 and 3 below) are still fully pending
-from Faye; item 2's four teacher-demo videos are now wired in and titled,
-but carries two open confirmation flags of its own.
+museum links only). Item 1 is now resolved; item 3 is still fully pending
+from Faye; item 2's four teacher-demo videos are wired in and titled but
+carries two open confirmation flags of its own.
 
-## 1. Mrs. Dawn's finished watercolor piece (Screen 02 — "Look First")
+## 1. Mrs. Dawn's finished watercolor piece (Screen 02 — "Look First") — resolved 2026-08-28 (Addendum 3)
 
-Needs a photo/scan of Mrs. Dawn's own Miró-inspired watercolor piece.
-Once supplied:
-- Save it as `mrs-dawn-artwork.jpg` in this folder.
-- It must always be labeled **"MRS. DAWN'S VERSION — Inspired by Joan
-  Miró"** on screen — never presented as an original Miró piece.
-- The discovery-chip hotspot coordinates in `index.html`
-  (`LOOK_FIRST_CHIPS`) are currently generic/spread placeholders — once
-  the real photo is in place, recheck each hotspot's `left`/`top`/`reveal`
-  against what's actually visible in the photo, the same way hotspots were
-  verified against real artwork in the Yōkai and Kandinsky lessons.
+Faye supplied the real photo via a Cloudflare Images delivery URL, now
+wired in as `MRS_DAWN_ARTWORK_SRC` in `index.html` (referenced directly,
+same pattern as `STUDIO_STEPS`' Cloudflare Stream `videoSrc` values — not
+downloaded into this folder). It's always labeled **"MRS. DAWN'S
+VERSION — Inspired by Joan Miró"** on screen, never presented as an
+original Miró piece.
+
+All 7 discovery-chip hotspots in `LOOK_FIRST_CHIPS` were re-positioned
+against the real artwork (previously generic/spread placeholders): each
+`left`/`top` was verified by cropping the actual image at the proposed
+coordinates and visually confirming the shape underneath (eye → the
+circle-with-dot glyph, star → the asterisk mark, line → the zigzag,
+dot → the isolated round dot, creature → the yellow/pink tentacled
+figure, moon → the large yellow circle, strange → the spiral coil).
 
 ## 2. Teacher demo videos (Steps 1-4) — finalized 2026-08-28 (Addendum 2)
 
