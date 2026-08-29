@@ -210,6 +210,48 @@ button{font-family:'Quicksand',sans-serif;}
 .detective-feedback.correct{color:var(--green);}
 .detective-feedback.retry{color:var(--red);}
 
+/* ---------- Screen 9 — Transition to Collage ---------- */
+.slide-in-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:18px 0;}
+.slide-in-piece{width:46px;height:46px;border:2px solid var(--ink);opacity:0;animation:slideIn .5s ease forwards;}
+@keyframes slideIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.transition-reveal{text-align:center;margin-top:22px;min-height:70px;}
+.transition-reveal-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.6rem;opacity:0;}
+.transition-reveal-title.show{opacity:1;animation:paperIn .4s ease;}
+.transition-reveal-sub{font-size:13px;color:var(--ink-soft);font-weight:600;margin-top:4px;opacity:0;}
+.transition-reveal-sub.show{opacity:1;}
+
+/* ---------- Screen 10 — Mission 2 Video ---------- */
+.mission2-chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:14px 0 4px;}
+
+/* ---------- Screen 11 — Choose ---------- */
+.silhouette-wrap{width:180px;height:180px;margin:16px auto;position:relative;}
+.silhouette-clip{width:100%;height:100%;clip-path:path('M90,10 C130,10 165,45 165,85 C165,110 150,125 155,145 C158,155 148,160 138,152 C125,142 118,150 100,150 C75,150 40,145 25,115 C12,90 15,55 40,30 C55,15 72,10 90,10 Z');}
+.silhouette-caption{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;margin-top:6px;}
+.choose-cycle-btn{display:block;margin:10px auto 0;}
+.pair-question{text-align:center;margin:14px 0 0;}
+.pair-question-label{font-size:11px;color:var(--ink-faint);font-weight:600;margin-bottom:6px;}
+.pair-btn-row{display:flex;justify-content:center;gap:8px;}
+.choose-feedback{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;color:var(--green);min-height:1.4em;margin-top:14px;}
+
+/* ---------- Screen 12 — Cut ---------- */
+.cut-part-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0;}
+@media(min-width:480px){.cut-part-grid{grid-template-columns:repeat(4,1fr);}}
+.cut-part{background:#fff;border:2.5px solid var(--ink);padding:16px 8px;text-align:center;cursor:pointer;box-shadow:3px 4px 0 rgba(36,31,26,.16);transition:transform .3s ease;}
+.cut-part.done{background:var(--paper-deep);transform:rotate(-2deg) scale(.97);}
+.cut-part .cp-icon{font-size:1.6rem;}
+.cut-part .cp-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:11px;margin-top:6px;}
+.cut-part .cp-status{font-size:9px;color:var(--green);font-weight:700;margin-top:3px;min-height:11px;}
+.cut-note{text-align:center;font-size:12px;color:var(--ink-faint);margin-top:12px;font-style:italic;}
+
+/* ---------- Screen 13 — Arrange ---------- */
+.dont-glue{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.5rem;color:var(--red);margin:4px 0 2px;}
+.arrange-directions{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:13px;letter-spacing:.3px;margin:0 0 14px;}
+.arrange-canvas{position:relative;max-width:420px;height:260px;margin:0 auto 12px;background:var(--paper-deep);border:2px dashed var(--line);touch-action:none;overflow:hidden;}
+.arrange-piece{position:absolute;width:56px;height:56px;cursor:grab;touch-action:none;box-shadow:2px 3px 0 rgba(36,31,26,.18);}
+.arrange-piece:active{cursor:grabbing;}
+.arrange-tools-row{display:flex;justify-content:center;gap:10px;margin-top:4px;}
+.glue-btn{margin-top:14px;}
+
 /* ---------- Video embed — same responsive-iframe contract as every
    other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
 .video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
@@ -289,11 +331,11 @@ const STAGES = [
   { id:'mission-1-video',        title:'Mission 1 — Make Your Texture Papers', zone:'make-material', render:renderMission1Video },
   { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection, afterRender:runTextureCollectionReveal },
   { id:'texture-detective',      title:'Texture Detective',            zone:'make-material', render:renderTextureDetective },
-  { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage },
+  { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage, afterRender:runTransitionReveal },
   { id:'mission-2-video',        title:'Mission 2 — Build Your Chameleon', zone:'build',     render:renderMission2Video },
   { id:'choose',                 title:'Which Paper Would You Choose?', zone:'build',        render:renderChoose },
   { id:'cut',                    title:'Draw the Shape. Cut It Out.',  zone:'build',        render:renderCut },
-  { id:'arrange',                title:"Don't Glue Yet!",              zone:'build',        render:renderArrange },
+  { id:'arrange',                title:"Don't Glue Yet!",              zone:'build',        render:renderArrange, afterRender:mountArrangeCanvas },
   { id:'details',                title:'Make It Yours',                zone:'build',        render:renderDetails },
   { id:'scrap-challenge',        title:"Don't Throw It Away!",         zone:'build',        render:renderScrapChallenge },
   { id:'completion-reveal',      title:'Your Chameleon Has Come to Life!', zone:'share',     render:renderCompletionReveal },
@@ -404,6 +446,42 @@ const DETECTIVE_ROUNDS = [
 function detectiveOptionMatches(textureId, optionLabel){
   return (textureId === 'bubble' && optionLabel === 'BUBBLE WRAP') || (textureId !== 'bubble' && optionLabel === textureId.toUpperCase());
 }
+
+// Mission 2's video covers a lot of ground (background choice, cutting,
+// building the head, eye, beetle, title, scraps...) — the spec gives a
+// long descriptive paragraph, not fixed screen copy, so this is a short
+// action-chip summary rather than reproducing the paragraph as a wall
+// of text (per the UX rules).
+const MISSION2_CHIPS = ['CHOOSE BACKGROUND', 'CUT PAPERS', 'BUILD THE HEAD', 'ADD THE EYE', 'ADD A BEETLE', 'WRITE A TITLE'];
+
+// Screen 11's optional paired questions — always affirming, never a
+// right/wrong answer (per spec: "never implying one aesthetic choice is
+// objectively correct").
+const CHOOSE_PAIR_QUESTIONS = [
+  { id:'brightdark', label:'BRIGHT OR DARK?', options:['BRIGHT','DARK'] },
+  { id:'warmcool',    label:'WARM OR COOL?',   options:['WARM','COOL'] },
+  { id:'smoothbusy',  label:'SMOOTH OR BUSY?', options:['SMOOTH','BUSY'] }
+];
+
+// Screen 12's four simple parts. No printable template — spec is
+// explicit the teacher's artwork is an example, not an answer key.
+const CUT_PARTS = [
+  { id:'head', icon:'🦎', label:'HEAD' },
+  { id:'body', icon:'〰️', label:'BODY' },
+  { id:'tail', icon:'➰', label:'TAIL' },
+  { id:'eye',  icon:'👁',  label:'EYE' }
+];
+
+// Screen 13's draggable pieces — simple CSS shapes, not photos, drawn
+// from the course's own palette. Starting positions spread across the
+// canvas so "MOVE IT. TURN IT. SWAP IT." has room to mean something.
+const ARRANGE_PIECES = [
+  { id:'head',   label:'Head',   color:'var(--green)',  shape:'50%',      left:30,  top:30 },
+  { id:'body',   label:'Body',   color:'var(--blue)',   shape:'18px',     left:150, top:110 },
+  { id:'tail',   label:'Tail',   color:'var(--yellow)', shape:'50% 0',    left:280, top:60 },
+  { id:'eye',    label:'Eye',    color:'var(--ink)',    shape:'50%',      left:90,  top:170 },
+  { id:'beetle', label:'Beetle', color:'var(--purple)', shape:'50% 20%',  left:250, top:180 }
+];
 
 /* ============================================================
    STATE (localStorage-persisted, scoped to this course only)
@@ -752,11 +830,178 @@ function answerDetective(optionLabel){
     if (feedback) { feedback.textContent = 'TRY ANOTHER TOOL 👀'; feedback.className = 'detective-feedback retry'; }
   }
 }
-function renderTransitionToCollage(){ return screenHeader('BUILD', 'Your Papers Are Ready...') + '<p class="stub-note">Screen 9 — build lands in Commit 4.</p>'; }
-function renderMission2Video(){ return screenHeader('BUILD', 'Mission 2 — Build Your Chameleon') + '<p class="stub-note">Screen 10 — build lands in Commit 4.</p>'; }
-function renderChoose(){ return screenHeader('BUILD', 'Which Paper Would You Choose?') + '<p class="stub-note">Screen 11 — build lands in Commit 4.</p>'; }
-function renderCut(){ return screenHeader('BUILD', 'Draw the Shape. Cut It Out.') + '<p class="stub-note">Screen 12 — build lands in Commit 4.</p>'; }
-function renderArrange(){ return screenHeader('BUILD', "Don't Glue Yet!") + '<p class="stub-note">Screen 13 — build lands in Commit 4.</p>'; }
+/* ============================================================
+   SCREEN 9 — Transition to Collage
+============================================================ */
+function renderTransitionToCollage(){
+  const pieces = TEXTURE_SWATCHES.map((t, i) =>
+    `<div class="slide-in-piece torn" style="animation-delay:${i * 0.1}s;"><div class="tex-swatch ${t.cls}"></div></div>`
+  ).join('');
+  return `
+    ${screenHeader('BUILD', 'Your Papers Are Ready...', 'NOW WHAT CAN THEY BECOME?')}
+    <div class="slide-in-row">${pieces}</div>
+    <div class="transition-reveal">
+      <div class="transition-reveal-title display" id="transitionTitle">BUILD YOUR CHAMELEON!</div>
+      <div class="transition-reveal-sub" id="transitionSub">Choose. Cut. Arrange. Glue.</div>
+    </div>
+  `;
+}
+function runTransitionReveal(){
+  setTimeout(() => {
+    const t = document.getElementById('transitionTitle');
+    const s = document.getElementById('transitionSub');
+    if (t) t.classList.add('show');
+    if (s) s.classList.add('show');
+  }, TEXTURE_SWATCHES.length * 100 + 300);
+}
+
+/* ============================================================
+   SCREEN 10 — Mission 2 Video
+============================================================ */
+function renderMission2Video(){
+  const chips = MISSION2_CHIPS.map(c => `<span class="paper-chip torn">${c}</span>`).join('');
+  return `
+    ${screenHeader('BUILD', 'Mission 2 — Build Your Chameleon', 'Teacher: Mrs. Dawn Wang')}
+    ${renderVideoEmbed(cfStreamSrc(CHAMELEON_VIDEO_IDS.mission2), 'Mission 2: Build Your Chameleon — Mrs. Dawn demo')}
+    <p class="stage-sub" style="margin-top:14px;">WHAT YOU'LL SEE:</p>
+    <div class="mission2-chip-row">${chips}</div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 11 — Choose
+============================================================ */
+function renderChoose(){
+  const swatch = TEXTURE_SWATCHES[STATE.choosePreviewIndex % TEXTURE_SWATCHES.length];
+  const pairs = CHOOSE_PAIR_QUESTIONS.map(q => `
+    <div class="pair-question">
+      <div class="pair-question-label">${q.label}</div>
+      <div class="pair-btn-row">
+        ${q.options.map(o => `<button class="paper-chip torn" onclick="answerChoosePair('${o}')">${o}</button>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  return `
+    ${screenHeader('BUILD', 'Which Paper Would You Choose?')}
+    <div class="silhouette-wrap">
+      <div class="silhouette-clip torn" id="silhouetteClip"><div class="tex-swatch ${swatch.cls}" id="silhouetteSwatch"></div></div>
+    </div>
+    <p class="silhouette-caption" id="silhouetteCaption">${swatch.label}</p>
+    <button class="paper-btn torn choose-cycle-btn" onclick="cycleChooseTexture()">🔄 Try Another Paper</button>
+    ${pairs}
+    <p class="choose-feedback" id="chooseFeedback"></p>
+  `;
+}
+function cycleChooseTexture(){
+  STATE.choosePreviewIndex = (STATE.choosePreviewIndex + 1) % TEXTURE_SWATCHES.length;
+  saveState();
+  const swatch = TEXTURE_SWATCHES[STATE.choosePreviewIndex];
+  const el = document.getElementById('silhouetteSwatch');
+  if (el) el.className = `tex-swatch ${swatch.cls}`;
+  const cap = document.getElementById('silhouetteCaption');
+  if (cap) cap.textContent = swatch.label;
+}
+function answerChoosePair(){
+  const feedback = document.getElementById('chooseFeedback');
+  if (!feedback) return;
+  const msgs = ['NICE CHOICE!', 'GOOD EYE!', 'LOVE IT!'];
+  feedback.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+}
+
+/* ============================================================
+   SCREEN 12 — Cut
+============================================================ */
+function renderCut(){
+  const parts = CUT_PARTS.map(p => {
+    const done = STATE.cutPartsDone.includes(p.id);
+    return `<div class="cut-part torn ${done ? 'done' : ''}" onclick="tapCutPart('${p.id}')">
+      <div class="cp-icon">${p.icon}</div><div class="cp-label">${p.label}</div>
+      <div class="cp-status">${done ? '✂ cut!' : ''}</div>
+    </div>`;
+  }).join('');
+  return `
+    ${screenHeader('BUILD', 'Draw the Shape. Cut It Out.')}
+    <div class="cut-part-grid">${parts}</div>
+    <p class="cut-note">There's no template to trace — draw each shape your own way.</p>
+  `;
+}
+function tapCutPart(id){
+  if (!STATE.cutPartsDone.includes(id)) { STATE.cutPartsDone.push(id); saveState(); }
+  renderCurrentStage();
+}
+
+/* ============================================================
+   SCREEN 13 — Arrange Before Gluing
+============================================================ */
+function renderArrange(){
+  const pieces = ARRANGE_PIECES.map(p =>
+    `<div class="arrange-piece" id="piece-${p.id}" data-id="${p.id}"
+       style="left:${p.left}px;top:${p.top}px;background:${p.color};border-radius:${p.shape};"
+       title="${p.label}"></div>`
+  ).join('');
+  return `
+    <div class="stage-tag-row"><span class="stage-tag torn">BUILD</span></div>
+    <div class="dont-glue display">DON'T GLUE YET!</div>
+    <div class="arrange-directions">MOVE IT. TURN IT. SWAP IT. LOOK AGAIN.</div>
+    <div class="arrange-canvas" id="arrangeCanvas">${pieces}</div>
+    <div class="arrange-tools-row">
+      <button class="paper-btn torn" onclick="swapArrangePieces()">🔄 Swap Positions</button>
+    </div>
+    <button class="paper-btn primary torn wide glue-btn" onclick="glueArrangement()">LIKE IT? NOW GLUE IT!</button>
+  `;
+}
+let arrangeDragState = null;
+function mountArrangeCanvas(){
+  const canvas = document.getElementById('arrangeCanvas');
+  if (!canvas) return;
+  canvas.querySelectorAll('.arrange-piece').forEach(el => {
+    el.addEventListener('pointerdown', onArrangePointerDown);
+  });
+}
+function onArrangePointerDown(e){
+  const canvas = document.getElementById('arrangeCanvas');
+  const el = e.currentTarget;
+  el.setPointerCapture && el.setPointerCapture(e.pointerId);
+  const canvasRect = canvas.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+  arrangeDragState = {
+    el,
+    offsetX: e.clientX - elRect.left,
+    offsetY: e.clientY - elRect.top,
+    canvasRect
+  };
+  el.addEventListener('pointermove', onArrangePointerMove);
+  el.addEventListener('pointerup', onArrangePointerUp);
+  el.addEventListener('pointercancel', onArrangePointerUp);
+}
+function onArrangePointerMove(e){
+  if (!arrangeDragState || arrangeDragState.el !== e.currentTarget) return;
+  const { el, offsetX, offsetY, canvasRect } = arrangeDragState;
+  let x = e.clientX - canvasRect.left - offsetX;
+  let y = e.clientY - canvasRect.top - offsetY;
+  x = Math.max(0, Math.min(canvasRect.width - el.offsetWidth, x));
+  y = Math.max(0, Math.min(canvasRect.height - el.offsetHeight, y));
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+}
+function onArrangePointerUp(e){
+  const el = e.currentTarget;
+  el.removeEventListener('pointermove', onArrangePointerMove);
+  el.removeEventListener('pointerup', onArrangePointerUp);
+  el.removeEventListener('pointercancel', onArrangePointerUp);
+  arrangeDragState = null;
+}
+// Tap alternative to dragging (mobile UX rule: don't require precise
+// drag-and-drop) — swaps two pieces' positions with one tap.
+function swapArrangePieces(){
+  const a = document.getElementById('piece-head');
+  const b = document.getElementById('piece-tail');
+  if (!a || !b) return;
+  const aLeft = a.style.left, aTop = a.style.top;
+  a.style.left = b.style.left; a.style.top = b.style.top;
+  b.style.left = aLeft; b.style.top = aTop;
+}
+function glueArrangement(){ goNext(); }
 function renderDetails(){ return screenHeader('BUILD', 'Make It Yours') + '<p class="stub-note">Screen 14 — build lands in Commit 5.</p>'; }
 function renderScrapChallenge(){ return screenHeader('BUILD', "Don't Throw It Away!") + '<p class="stub-note">Screen 15 — build lands in Commit 5.</p>'; }
 function renderCompletionReveal(){ return screenHeader('SHARE', 'Your Chameleon Has Come to Life!') + '<p class="stub-note">Screen 16 — build lands in Commit 5.</p>'; }
