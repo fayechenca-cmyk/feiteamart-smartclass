@@ -456,17 +456,21 @@ function heroArtworkFrame(idSuffix, extraInner){
   </div>`;
 }
 
-// Discovery hotspots (screen 2) on Mrs. Dawn's artwork. Positions are
-// re-verified against the real photo in a later commit of this
-// correction pass (see Commit 4 in the plan) — kept as-is here since
-// this commit only lands the token system, not screen-by-screen fixes.
+// Discovery hotspots (screen 2) on Mrs. Dawn's artwork. Positions
+// verified against the real photo the same way Miró's LOOK_FIRST_CHIPS
+// were: cropped a tile at each proposed coordinate and visually
+// confirmed the actual texture underneath before accepting it — bubbly
+// -> body paint-spatter, brushy -> head brush stripes, scratchy -> the
+// beetle's scratched paper, watery -> the blended teal/blue leg area,
+// spotty -> the gold dot cluster on the body, rough -> the wood-grain
+// branch.
 const FIND_TEXTURES_CHIPS = [
-  { id:'bubbly',  label:'BUBBLY!',  left:22, top:20 },
-  { id:'brushy',  label:'BRUSHY!',  left:72, top:16 },
-  { id:'scratchy',label:'SCRATCHY!',left:40, top:46 },
-  { id:'watery',  label:'WATERY!',  left:65, top:55 },
-  { id:'spotty',  label:'SPOTTY!',  left:20, top:68 },
-  { id:'rough',   label:'ROUGH!',   left:80, top:72 }
+  { id:'bubbly',  label:'BUBBLY!',  left:30, top:44 },
+  { id:'brushy',  label:'BRUSHY!',  left:63, top:37 },
+  { id:'scratchy',label:'SCRATCHY!',left:77, top:9 },
+  { id:'watery',  label:'WATERY!',  left:20, top:58 },
+  { id:'spotty',  label:'SPOTTY!',  left:44, top:51 },
+  { id:'rough',   label:'ROUGH!',   left:22, top:82 }
 ];
 
 const HOWMADE_OPTIONS = [
