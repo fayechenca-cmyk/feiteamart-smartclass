@@ -207,12 +207,13 @@ button{font-family:'Quicksand',sans-serif;}
 .tech-preview-item{display:flex;flex-direction:column;align-items:center;width:60px;}
 
 /* ---------- Screen 7 — My Texture Collection ---------- */
-.swatch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0;}
-.swatch-slot{aspect-ratio:1/1;border:2.5px dashed var(--line);position:relative;}
-.swatch-slot.revealed{border:2.5px solid var(--ink);box-shadow:3px 4px 0 rgba(36,31,26,.16);animation:swatchPop .5s ease;}
-@keyframes swatchPop{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
-.swatch-slot-label{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:9px;font-weight:700;font-family:'Baloo 2',sans-serif;}
-.collection-ready-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.1rem;margin:28px 0 6px;min-height:1.4em;}
+.swatch-cluster{position:relative;max-width:340px;height:230px;margin:22px auto 8px;}
+.swatch-dot{position:absolute;border-radius:50%;border:2.5px dashed var(--line);cursor:default;transform:rotate(var(--dot-rot,0deg));}
+.swatch-dot.revealed{border:2.5px solid var(--ink);box-shadow:3px 4px 0 rgba(28,23,18,.16);animation:swatchPop .5s ease;cursor:pointer;overflow:hidden;}
+.swatch-dot.revealed .tex-swatch{border-radius:50%;}
+@keyframes swatchPop{from{transform:rotate(var(--dot-rot,0deg)) scale(.5);opacity:0;}to{transform:rotate(var(--dot-rot,0deg)) scale(1);opacity:1;}}
+.swatch-tap-caption{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12.5px;color:var(--ink-soft);min-height:1.3em;margin:4px 0 0;}
+.collection-ready-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.1rem;margin:10px 0 6px;min-height:1.4em;}
 .drawer-toggle{display:block;margin:6px auto 0;}
 .drawer-list{max-width:360px;margin:12px auto 0;text-align:center;font-size:12.5px;color:var(--ink-soft);line-height:1.8;display:none;}
 .drawer-list.open{display:block;}
@@ -987,22 +988,49 @@ function renderMission1Video(){
 
 /* ============================================================
    SCREEN 7 — My Texture Collection (signature interaction)
+
+   Built as a scattered, overlapping circular cluster — the exact visual
+   in the bottom-right corner of the real final-artwork photo (loose
+   circular paper-scrap dots of varying size) — not a uniform grid of
+   chips, per the course-correction spec ("build that UI as this
+   cluster... not as a uniform grid chips").
 ============================================================ */
+// Scattered cluster layout (% of container width/height, px diameter,
+// deg rotation) — loosely mirrors the real photo's dot arrangement:
+// overlapping circles of varying size, not a tidy grid.
+const SWATCH_CLUSTER_LAYOUT = [
+  { left:6,  top:8,  size:82, rot:-6 },
+  { left:40, top:0,  size:68, rot:9 },
+  { left:64, top:16, size:94, rot:-4 },
+  { left:16, top:46, size:88, rot:6 },
+  { left:50, top:50, size:72, rot:-9 },
+  { left:76, top:42, size:64, rot:11 }
+];
 function renderTextureCollection(){
-  const slots = TEXTURE_SWATCHES.map(t => `
-    <div class="swatch-slot ${STATE.textureCollectionRevealed ? 'revealed' : ''}" id="slot-${t.id}">
-      ${STATE.textureCollectionRevealed ? `<div class="tex-swatch ${t.cls}"></div>` : ''}
-      <div class="swatch-slot-label">${t.label}</div>
-    </div>
-  `).join('');
+  const dots = TEXTURE_SWATCHES.map((t, i) => {
+    const pos = SWATCH_CLUSTER_LAYOUT[i];
+    const revealed = STATE.textureCollectionRevealed;
+    return `<div class="swatch-dot${revealed ? ' revealed' : ''}" id="slot-${t.id}"
+      style="left:${pos.left}%;top:${pos.top}%;width:${pos.size}px;height:${pos.size}px;--dot-rot:${pos.rot}deg;"
+      onclick="tapSwatchDot('${t.id}')">
+      ${revealed ? `<div class="tex-swatch ${t.cls}"></div>` : ''}
+    </div>`;
+  }).join('');
   const drawerItems = TEXTURE_SWATCHES.map(t => `<div>${t.label}</div>`).join('');
   return `
     ${screenHeader('MAKE MATERIAL', 'My Texture Collection')}
-    <div class="swatch-grid" id="swatchGrid">${slots}</div>
+    <div class="swatch-cluster" id="swatchCluster">${dots}</div>
+    <p class="swatch-tap-caption" id="swatchTapCaption"></p>
     <p class="collection-ready-line" id="collectionReadyLine">${STATE.textureCollectionRevealed ? 'YOUR PAPER COLLECTION IS READY!' : ''}</p>
     <button class="paper-btn torn drawer-toggle" onclick="toggleDrawer()">🗄 Open the Drawer</button>
     <div class="drawer-list" id="drawerList">${drawerItems}</div>
   `;
+}
+function tapSwatchDot(id){
+  if (!STATE.textureCollectionRevealed) return;
+  const t = TEXTURE_SWATCHES.find(x => x.id === id);
+  const caption = document.getElementById('swatchTapCaption');
+  if (t && caption) caption.textContent = t.label;
 }
 function toggleDrawer(){
   const list = document.getElementById('drawerList');
@@ -1021,7 +1049,7 @@ function runTextureCollectionReveal(){
       const slot = document.getElementById('slot-' + t.id);
       if (!slot) return;
       slot.classList.add('revealed');
-      slot.innerHTML = `<div class="tex-swatch ${t.cls}"></div><div class="swatch-slot-label">${t.label}</div>`;
+      slot.innerHTML = `<div class="tex-swatch ${t.cls}"></div>`;
     }, i * 260);
   });
   setTimeout(() => {
