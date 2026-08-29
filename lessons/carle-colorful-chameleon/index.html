@@ -151,6 +151,65 @@ button{font-family:'Quicksand',sans-serif;}
 .process-chip{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;background:#fff;border:2px solid var(--ink);padding:9px 14px;}
 .process-arrow{color:var(--red);font-weight:900;font-size:16px;}
 
+/* ---------- Texture-swatch system (CSS/SVG only, no photos) — reused
+   across Screens 5-8 and again later wherever "texture" needs to be
+   shown. Six genuinely distinct looks, not color variants of one
+   pattern. ---------- */
+.tex-swatch{width:100%;height:100%;position:relative;overflow:hidden;}
+.tex-watercolor{background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 55%,var(--green) 100%);}
+.tex-bubble{background-color:var(--blue);background-image:
+  radial-gradient(circle at 20% 20%, rgba(255,255,255,.55) 0 6px, transparent 7px),
+  radial-gradient(circle at 55% 15%, rgba(255,255,255,.5) 0 5px, transparent 6px),
+  radial-gradient(circle at 80% 30%, rgba(255,255,255,.5) 0 6px, transparent 7px),
+  radial-gradient(circle at 30% 55%, rgba(255,255,255,.5) 0 5px, transparent 6px),
+  radial-gradient(circle at 65% 60%, rgba(255,255,255,.55) 0 6px, transparent 7px),
+  radial-gradient(circle at 15% 85%, rgba(255,255,255,.5) 0 5px, transparent 6px),
+  radial-gradient(circle at 85% 80%, rgba(255,255,255,.5) 0 6px, transparent 7px),
+  radial-gradient(circle at 50% 92%, rgba(255,255,255,.5) 0 5px, transparent 6px);}
+.tex-press{background:var(--red);background-image:
+  radial-gradient(ellipse at 30% 30%, rgba(0,0,0,.16) 0 14px, transparent 16px),
+  radial-gradient(ellipse at 70% 60%, rgba(255,255,255,.22) 0 12px, transparent 15px),
+  radial-gradient(ellipse at 45% 82%, rgba(0,0,0,.13) 0 10px, transparent 13px);}
+.tex-scratch{background:var(--brown);background-image:repeating-linear-gradient(78deg, rgba(255,255,255,.35) 0 2px, transparent 2px 9px);}
+.tex-brush{background:var(--green);background-image:repeating-linear-gradient(4deg, rgba(255,255,255,.18) 0 5px, rgba(0,0,0,.08) 5px 9px, transparent 9px 16px);}
+.tex-layer{background:var(--yellow);}
+.tex-layer::after{content:'';position:absolute;inset:0;background-image:
+  radial-gradient(circle at 25% 30%, rgba(255,255,255,.4) 0 5px, transparent 6px),
+  radial-gradient(circle at 60% 65%, rgba(255,255,255,.4) 0 5px, transparent 6px),
+  radial-gradient(circle at 80% 25%, rgba(255,255,255,.4) 0 5px, transparent 6px);opacity:.85;}
+
+/* ---------- Screen 5 — Texture Lab ---------- */
+.lab-object-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+@media(min-width:480px){.lab-object-grid{grid-template-columns:repeat(4,1fr);}}
+.lab-object{background:#fff;border:2px solid var(--ink);padding:14px 6px;text-align:center;cursor:pointer;box-shadow:2px 3px 0 rgba(36,31,26,.14);}
+.lab-object .lo-icon{font-size:1.6rem;}
+.lab-object .lo-label{font-size:9.5px;font-weight:700;margin-top:5px;font-family:'Baloo 2',sans-serif;}
+.lab-tap-note{text-align:center;font-size:11.5px;color:var(--ink-faint);min-height:18px;margin-top:6px;font-weight:600;}
+
+/* ---------- Screen 6 — Mission 1 Video ---------- */
+.tech-preview-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0 6px;}
+.tech-preview{width:52px;height:52px;border:2px solid var(--ink);position:relative;}
+.tech-preview-label{font-size:8.5px;font-weight:700;text-align:center;margin-top:4px;font-family:'Baloo 2',sans-serif;}
+.tech-preview-item{display:flex;flex-direction:column;align-items:center;width:60px;}
+
+/* ---------- Screen 7 — My Texture Collection ---------- */
+.swatch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0;}
+.swatch-slot{aspect-ratio:1/1;border:2.5px dashed var(--line);position:relative;}
+.swatch-slot.revealed{border:2.5px solid var(--ink);box-shadow:3px 4px 0 rgba(36,31,26,.16);animation:swatchPop .5s ease;}
+@keyframes swatchPop{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+.swatch-slot-label{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:9px;font-weight:700;font-family:'Baloo 2',sans-serif;}
+.collection-ready-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.1rem;margin:28px 0 6px;min-height:1.4em;}
+.drawer-toggle{display:block;margin:6px auto 0;}
+.drawer-list{max-width:360px;margin:12px auto 0;text-align:center;font-size:12.5px;color:var(--ink-soft);line-height:1.8;display:none;}
+.drawer-list.open{display:block;}
+
+/* ---------- Screen 8 — Texture Detective ---------- */
+.detective-sample{width:150px;height:150px;margin:14px auto;border:3px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
+.detective-round-note{text-align:center;font-size:11px;color:var(--ink-faint);font-weight:600;margin:0 0 6px;}
+.detective-feedback{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;min-height:1.4em;margin:12px 0 0;}
+.detective-feedback.correct{color:var(--green);}
+.detective-feedback.retry{color:var(--red);}
+
 /* ---------- Video embed — same responsive-iframe contract as every
    other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
 .video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
@@ -228,7 +287,7 @@ const STAGES = [
   { id:'meet-eric-carle',        title:'Meet Eric Carle',              zone:'discover',     render:renderMeetEricCarle },
   { id:'texture-lab',            title:'Welcome to the Texture Lab!',   zone:'make-material', render:renderTextureLab },
   { id:'mission-1-video',        title:'Mission 1 — Make Your Texture Papers', zone:'make-material', render:renderMission1Video },
-  { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection },
+  { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection, afterRender:runTextureCollectionReveal },
   { id:'texture-detective',      title:'Texture Detective',            zone:'make-material', render:renderTextureDetective },
   { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage },
   { id:'mission-2-video',        title:'Mission 2 — Build Your Chameleon', zone:'build',     render:renderMission2Video },
@@ -291,6 +350,60 @@ const DISASSEMBLY_PIECES = [
 ];
 
 const PROCESS_STEPS = ['PAINT', 'TEXTURE', 'CUT', 'COLLAGE'];
+
+// Cloudflare Stream customer subdomain — same account used platform-wide
+// (matches every other lesson's videoSrc values, incl. Miró's).
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(videoId){
+  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${videoId}/iframe?poster=${poster}`;
+}
+// Order confirmed in Step 0 by content, not just paste order: "Mission 1"
+// is explicitly the texture-making video, "Mission 2" explicitly the
+// collage-making video — matches the spec's own screen order.
+const CHAMELEON_VIDEO_IDS = {
+  mission1: '2240e6205585169d0677d6ecbff40cfd', // Mission 1: Make Your Texture Papers
+  mission2: '01b5c269aeb98c479e209f70d4bb46a1'  // Mission 2: Build Your Chameleon
+};
+
+// The 6 texture-making techniques from Mission 1 (spec's 7th, "color
+// variety," isn't its own swatch — it's a property applied across these
+// six, called out as flavor text instead). Reused by Screens 6, 7, 8 —
+// one canonical list, not copy-pasted per screen.
+const TEXTURE_SWATCHES = [
+  { id:'watercolor', label:'WATERCOLOR',   cls:'tex-watercolor' },
+  { id:'bubble',      label:'BUBBLE PRINT', cls:'tex-bubble' },
+  { id:'press',       label:'PRESS',        cls:'tex-press' },
+  { id:'scratch',     label:'SCRATCH',      cls:'tex-scratch' },
+  { id:'brush',       label:'BRUSH',        cls:'tex-brush' },
+  { id:'layer',       label:'LAYER',        cls:'tex-layer' }
+];
+
+// Worktable objects (screen 5) — exploratory, not a checklist. No
+// completion state, tapping just surfaces the name.
+const LAB_OBJECTS = [
+  { id:'watercolor',  icon:'💧', label:'Watercolor' },
+  { id:'brush',        icon:'🖌', label:'Brush' },
+  { id:'bubblewrap',   icon:'🫧', label:'Bubble Wrap' },
+  { id:'papertowel',   icon:'🧻', label:'Paper Towel' },
+  { id:'claytool',     icon:'🪵', label:'Clay Tool' },
+  { id:'blackpaper',   icon:'⬛', label:'Black Paper' },
+  { id:'whitepaper',   icon:'⬜', label:'White Paper' },
+  { id:'gouache',      icon:'🎨', label:'Gouache' },
+  { id:'scraps',       icon:'🧩', label:'Painted Scraps' }
+];
+
+// Texture Detective rounds (screen 8) — 3 rounds, matches spec's 4 fixed
+// options (BUBBLE WRAP / BRUSH / SCRATCH / WATERCOLOR) and "under 2
+// minutes total." Fixed order, not randomized, so the game stays testable.
+const DETECTIVE_ROUNDS = [
+  { textureId:'scratch',    options:['BUBBLE WRAP','BRUSH','SCRATCH','WATERCOLOR'] },
+  { textureId:'watercolor', options:['BUBBLE WRAP','BRUSH','SCRATCH','WATERCOLOR'] },
+  { textureId:'bubble',     options:['BUBBLE WRAP','BRUSH','SCRATCH','WATERCOLOR'] }
+];
+function detectiveOptionMatches(textureId, optionLabel){
+  return (textureId === 'bubble' && optionLabel === 'BUBBLE WRAP') || (textureId !== 'bubble' && optionLabel === textureId.toUpperCase());
+}
 
 /* ============================================================
    STATE (localStorage-persisted, scoped to this course only)
@@ -515,10 +628,130 @@ function renderMeetEricCarle(){
     <div class="process-row">${process}</div>
   `;
 }
-function renderTextureLab(){ return screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!') + '<p class="stub-note">Screen 5 — build lands in Commit 3.</p>'; }
-function renderMission1Video(){ return screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers') + '<p class="stub-note">Screen 6 — build lands in Commit 3.</p>'; }
-function renderTextureCollection(){ return screenHeader('MAKE MATERIAL', 'My Texture Collection') + '<p class="stub-note">Screen 7 — build lands in Commit 3.</p>'; }
-function renderTextureDetective(){ return screenHeader('MAKE MATERIAL', 'Texture Detective') + '<p class="stub-note">Screen 8 — build lands in Commit 3.</p>'; }
+/* ============================================================
+   SCREEN 5 — Texture Lab
+============================================================ */
+function renderTextureLab(){
+  const objects = LAB_OBJECTS.map(o =>
+    `<div class="lab-object torn" onclick="tapLabObject('${o.label.replace(/'/g, "\\'")}')"><div class="lo-icon">${o.icon}</div><div class="lo-label">${o.label}</div></div>`
+  ).join('');
+  return `
+    ${screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!', 'HOW MANY KINDS OF PAPER CAN WE MAKE?')}
+    <div class="lab-object-grid">${objects}</div>
+    <p class="lab-tap-note" id="labTapNote"></p>
+  `;
+}
+function tapLabObject(label){
+  const note = document.getElementById('labTapNote');
+  if (note) note.textContent = label + ' ✨';
+}
+
+/* ============================================================
+   SCREEN 6 — Mission 1 Video
+============================================================ */
+function renderMission1Video(){
+  const previews = TEXTURE_SWATCHES.map(t => `
+    <div class="tech-preview-item">
+      <div class="tech-preview torn"><div class="tex-swatch ${t.cls}"></div></div>
+      <div class="tech-preview-label">${t.label}</div>
+    </div>
+  `).join('');
+  return `
+    ${screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers', 'Teacher: Mrs. Dawn Wang')}
+    ${renderVideoEmbed(cfStreamSrc(CHAMELEON_VIDEO_IDS.mission1), 'Mission 1: Make Your Texture Papers — Mrs. Dawn demo')}
+    <p class="stage-sub" style="margin-top:14px;">WATCH FOR THESE TECHNIQUES:</p>
+    <div class="tech-preview-row">${previews}</div>
+    <p class="stage-sub" style="margin-top:10px;font-style:italic;">Plus lots of colors — warm, earthy, dark, bright.</p>
+  `;
+}
+
+/* ============================================================
+   SCREEN 7 — My Texture Collection (signature interaction)
+============================================================ */
+function renderTextureCollection(){
+  const slots = TEXTURE_SWATCHES.map(t => `
+    <div class="swatch-slot ${STATE.textureCollectionRevealed ? 'revealed' : ''}" id="slot-${t.id}">
+      ${STATE.textureCollectionRevealed ? `<div class="tex-swatch ${t.cls}"></div>` : ''}
+      <div class="swatch-slot-label">${t.label}</div>
+    </div>
+  `).join('');
+  const drawerItems = TEXTURE_SWATCHES.map(t => `<div>${t.label}</div>`).join('');
+  return `
+    ${screenHeader('MAKE MATERIAL', 'My Texture Collection')}
+    <div class="swatch-grid" id="swatchGrid">${slots}</div>
+    <p class="collection-ready-line" id="collectionReadyLine">${STATE.textureCollectionRevealed ? 'YOUR PAPER COLLECTION IS READY!' : ''}</p>
+    <button class="paper-btn torn drawer-toggle" onclick="toggleDrawer()">🗄 Open the Drawer</button>
+    <div class="drawer-list" id="drawerList">${drawerItems}</div>
+  `;
+}
+function toggleDrawer(){
+  const list = document.getElementById('drawerList');
+  if (list) list.classList.toggle('open');
+}
+// Reveal is a staggered animation the first time this screen is
+// reached; on later visits it just shows everything already filled
+// (STATE.textureCollectionRevealed persists). Not tied to real video
+// watch-progress — Cloudflare Stream doesn't give us per-technique
+// playback tracking, so this is an honest "you finished Mission 1,
+// here's your collection" moment rather than a fake progress meter.
+function runTextureCollectionReveal(){
+  if (STATE.textureCollectionRevealed) return;
+  TEXTURE_SWATCHES.forEach((t, i) => {
+    setTimeout(() => {
+      const slot = document.getElementById('slot-' + t.id);
+      if (!slot) return;
+      slot.classList.add('revealed');
+      slot.innerHTML = `<div class="tex-swatch ${t.cls}"></div><div class="swatch-slot-label">${t.label}</div>`;
+    }, i * 260);
+  });
+  setTimeout(() => {
+    STATE.textureCollectionRevealed = true;
+    saveState();
+    const line = document.getElementById('collectionReadyLine');
+    if (line) line.textContent = 'YOUR PAPER COLLECTION IS READY!';
+  }, TEXTURE_SWATCHES.length * 260 + 200);
+}
+
+/* ============================================================
+   SCREEN 8 — Texture Detective
+============================================================ */
+function renderTextureDetective(){
+  const round = DETECTIVE_ROUNDS[STATE.detectiveRound];
+  if (!round) {
+    return `
+      ${screenHeader('MAKE MATERIAL', 'Texture Detective 🔍')}
+      <p class="detective-feedback correct">CASE CLOSED — GREAT EYE! 🕵️</p>
+    `;
+  }
+  const swatch = TEXTURE_SWATCHES.find(t => t.id === round.textureId);
+  const options = round.options.map(opt =>
+    `<button class="paper-chip torn" onclick="answerDetective('${opt.replace(/'/g, "\\'")}')">${opt}</button>`
+  ).join('');
+  return `
+    ${screenHeader('MAKE MATERIAL', 'Texture Detective 🔍', 'HOW WAS THIS MADE?')}
+    <p class="detective-round-note">Round ${STATE.detectiveRound + 1} of ${DETECTIVE_ROUNDS.length}</p>
+    <div class="detective-sample torn"><div class="tex-swatch ${swatch.cls}"></div></div>
+    <div class="chip-row">${options}</div>
+    <p class="detective-feedback" id="detectiveFeedback"></p>
+  `;
+}
+function answerDetective(optionLabel){
+  const round = DETECTIVE_ROUNDS[STATE.detectiveRound];
+  if (!round) return;
+  const feedback = document.getElementById('detectiveFeedback');
+  const isCorrect = detectiveOptionMatches(round.textureId, optionLabel);
+  if (isCorrect) {
+    STATE.detectiveCorrect++;
+    if (feedback) { feedback.textContent = 'YOU FOUND IT!'; feedback.className = 'detective-feedback correct'; }
+    setTimeout(() => {
+      STATE.detectiveRound++;
+      saveState();
+      renderCurrentStage();
+    }, 900);
+  } else {
+    if (feedback) { feedback.textContent = 'TRY ANOTHER TOOL 👀'; feedback.className = 'detective-feedback retry'; }
+  }
+}
 function renderTransitionToCollage(){ return screenHeader('BUILD', 'Your Papers Are Ready...') + '<p class="stub-note">Screen 9 — build lands in Commit 4.</p>'; }
 function renderMission2Video(){ return screenHeader('BUILD', 'Mission 2 — Build Your Chameleon') + '<p class="stub-note">Screen 10 — build lands in Commit 4.</p>'; }
 function renderChoose(){ return screenHeader('BUILD', 'Which Paper Would You Choose?') + '<p class="stub-note">Screen 11 — build lands in Commit 4.</p>'; }
