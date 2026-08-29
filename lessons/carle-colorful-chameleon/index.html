@@ -448,9 +448,10 @@ const HOWMADE_OPTIONS = [
 ];
 
 // Generic torn-paper silhouette pieces for the disassembly transition —
-// NOT segmented from the real photo (there isn't one yet, and never was
-// going to be pixel-perfect anyway). Colors drawn from the course's own
-// palette.
+// NOT segmented from the real photo (no image-segmentation tooling
+// available to produce a clean cutout — see assets/README.md). Colors
+// reference the course's CSS vars, which as of the course-correction
+// pass are the real sampled palette, not invented ones.
 const DISASSEMBLY_PIECES = [
   { color:'var(--green)',  left:'10%', top:'15%', rot:'-8deg' },
   { color:'var(--yellow)', left:'55%', top:'10%', rot:'6deg' },
@@ -542,14 +543,18 @@ const CUT_PARTS = [
 ];
 
 // Screen 13's draggable pieces — simple CSS shapes, not photos, drawn
-// from the course's own palette. Starting positions spread across the
-// canvas so "MOVE IT. TURN IT. SWAP IT." has room to mean something.
+// from the real sampled palette. shapeType is restricted to the course's
+// actual shape vocabulary (circle / triangle / torn-rectangle — see
+// .arrange-piece rendering below) — no organic blob radii, per the
+// course-correction rule against generic soft-blob shapes. Starting
+// positions spread across the canvas so "MOVE IT. TURN IT. SWAP IT." has
+// room to mean something.
 const ARRANGE_PIECES = [
-  { id:'head',   label:'Head',   color:'var(--green)',  shape:'50%',      left:30,  top:30 },
-  { id:'body',   label:'Body',   color:'var(--blue)',   shape:'18px',     left:150, top:110 },
-  { id:'tail',   label:'Tail',   color:'var(--yellow)', shape:'50% 0',    left:280, top:60 },
-  { id:'eye',    label:'Eye',    color:'var(--ink)',    shape:'50%',      left:90,  top:170 },
-  { id:'beetle', label:'Beetle', color:'var(--purple)', shape:'50% 20%',  left:250, top:180 }
+  { id:'head',   label:'Head',   color:'var(--green)', shapeType:'circle',   left:30,  top:30 },
+  { id:'body',   label:'Body',   color:'var(--blue)',  shapeType:'torn',     left:150, top:110 },
+  { id:'tail',   label:'Tail',   color:'var(--gold)',  shapeType:'triangle', left:280, top:60 },
+  { id:'eye',    label:'Eye',    color:'var(--ink)',   shapeType:'circle',   left:90,  top:170 },
+  { id:'beetle', label:'Beetle', color:'var(--red)',   shapeType:'circle',   left:250, top:180 }
 ];
 
 // Screen 14's finishing-touches sequence.
@@ -561,12 +566,14 @@ const DETAIL_ITEMS = [
   { id:'scraps', icon:'🔵', label:'SCRAPS' }
 ];
 
-// Screen 15's leftover-scrap shapes (generic torn silhouettes, not
-// segmented from anything real) and idea chips.
+// Screen 15's leftover-scrap shapes — true circles, matching the real
+// circular paper-scrap dots in the final artwork's bottom-right cluster
+// (not the organic asymmetric blobs this screen used before the
+// course-correction pass).
 const SCRAP_SHAPES = [
-  { color:'var(--purple)', shape:'40% 60% 55% 45%' },
-  { color:'var(--brown)',  shape:'60% 40% 45% 55%' },
-  { color:'var(--red)',    shape:'50% 50% 30% 70%' }
+  { color:'var(--purple)' },
+  { color:'var(--red)' },
+  { color:'var(--gold)' }
 ];
 const SCRAP_IDEAS = ['BUG', 'LEAF', 'FLOWER', 'SUN', 'EYE', 'SOMETHING STRANGE'];
 
@@ -1129,11 +1136,15 @@ function tapCutPart(id){
    SCREEN 13 — Arrange Before Gluing
 ============================================================ */
 function renderArrange(){
-  const pieces = ARRANGE_PIECES.map(p =>
-    `<div class="arrange-piece" id="piece-${p.id}" data-id="${p.id}"
-       style="left:${p.left}px;top:${p.top}px;background:${p.color};border-radius:${p.shape};"
-       title="${p.label}"></div>`
-  ).join('');
+  const pieces = ARRANGE_PIECES.map(p => {
+    const shapeClass = p.shapeType === 'torn' ? ' torn' : '';
+    const shapeStyle = p.shapeType === 'circle' ? 'border-radius:50%;'
+      : p.shapeType === 'triangle' ? 'clip-path:polygon(50% 0%,0% 100%,100% 100%);'
+      : '';
+    return `<div class="arrange-piece${shapeClass}" id="piece-${p.id}" data-id="${p.id}"
+       style="left:${p.left}px;top:${p.top}px;background:${p.color};${shapeStyle}"
+       title="${p.label}"></div>`;
+  }).join('');
   return `
     <div class="stage-tag-row"><span class="stage-tag torn">BUILD</span></div>
     <div class="dont-glue display">DON'T GLUE YET!</div>
@@ -1229,7 +1240,7 @@ function tapDetailItem(id){
 ============================================================ */
 function renderScrapChallenge(){
   const scraps = SCRAP_SHAPES.map(s =>
-    `<div class="scrap-shape torn" style="background:${s.color};border-radius:${s.shape};"></div>`
+    `<div class="scrap-shape" style="background:${s.color};border-radius:50%;"></div>`
   ).join('');
   const ideas = SCRAP_IDEAS.map(idea =>
     `<button class="paper-chip torn ${STATE.scrapIdea === idea ? 'active' : ''}" onclick="pickScrapIdea('${idea.replace(/'/g, "\\'")}')">${idea}</button>`
