@@ -272,6 +272,42 @@ button{font-family:'Quicksand',sans-serif;}
 .hero-frame-big{max-width:600px;}
 .completion-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.3px;margin:14px 0 4px;color:var(--ink-soft);}
 
+/* ---------- Screen 17 — Upload ---------- */
+.upload-slot-wrap{display:flex;justify-content:center;margin:16px 0 4px;}
+.upload-slot{width:220px;height:220px;border:3px dashed var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:#fffdf7;}
+.upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:30px;color:var(--red);}
+.upload-slot .slot-label{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;font-family:'Baloo 2',sans-serif;}
+.title-input{display:block;width:100%;max-width:340px;margin:14px auto 0;padding:11px 14px;border:2px solid var(--ink);font-family:'Quicksand',sans-serif;font-size:14px;background:#fff;}
+.upload-status-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.1rem;margin:16px 0 2px;}
+.upload-status-line.error{color:var(--red);font-size:13px;}
+.upload-substatus{text-align:center;font-size:12.5px;color:var(--ink-soft);font-weight:600;margin:0;}
+
+/* ---------- Screen 18 — Teacher Feedback ---------- */
+.note-card{max-width:420px;margin:16px auto;background:#fffdf0;border:2px solid var(--ink);padding:16px 18px;box-shadow:5px 6px 0 rgba(36,31,26,.16);}
+.note-from{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:11px;color:var(--green);margin-bottom:6px;}
+.note-text{font-size:14px;line-height:1.6;margin:0;}
+.note-audio{width:100%;margin-top:10px;}
+.note-waiting{text-align:center;font-size:13px;color:var(--ink-soft);font-weight:600;margin:0;}
+.feedback-empty-note{text-align:center;font-size:13px;color:var(--ink-faint);margin-top:14px;}
+
+/* ---------- Screen 19 — Gallery Parade ---------- */
+.parade-scroll{display:flex;gap:14px;overflow-x:auto;padding:12px 6px 22px;-webkit-overflow-scrolling:touch;}
+.parade-item{flex:0 0 auto;}
+.parade-img{width:120px;height:120px;object-fit:cover;border:2.5px solid var(--ink);display:block;box-shadow:3px 4px 0 rgba(36,31,26,.16);}
+.parade-empty-note{text-align:center;font-size:13px;color:var(--ink-faint);margin-top:16px;}
+.parade-close-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;margin-top:8px;}
+
+/* ---------- Screen 20 — Badge ---------- */
+.badge-medal{width:120px;height:120px;margin:22px auto 6px;position:relative;}
+.bl{position:absolute;display:block;}
+.bl1{inset:8px;background:var(--yellow);transform:rotate(-8deg);}
+.bl2{inset:16px;background:var(--red);transform:rotate(7deg);}
+.bl3{inset:24px;background:var(--blue);transform:rotate(-4deg);}
+.badge-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.1rem;z-index:2;}
+.badge-name{text-align:center;font-weight:800;font-size:1.3rem;margin:10px 0 6px;}
+.badge-completion-line{text-align:center;font-size:13px;color:var(--ink-soft);font-weight:600;max-width:320px;margin:0 auto;}
+
 /* ---------- Video embed — same responsive-iframe contract as every
    other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
 .video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
@@ -362,7 +398,7 @@ const STAGES = [
   { id:'upload',                 title:'Show Us Your Chameleon!',      zone:'share',        render:renderUpload },
   { id:'teacher-feedback',       title:'A Little Note From Your Teacher', zone:'share',      render:renderTeacherFeedback },
   { id:'gallery-parade',         title:'Chameleon Parade!',            zone:'share',        render:renderGalleryParade },
-  { id:'badge',                  title:'Collage Creator',              zone:'share',        render:renderBadge }
+  { id:'badge',                  title:'Collage Creator',              zone:'share',        render:renderBadge, afterRender:awardCollageCreatorBadge }
 ];
 
 // Mrs. Dawn's finished chameleon collage (Screens 1, 3, 14, 16) — no URL
@@ -546,6 +582,114 @@ function loadState(){
   try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
 }
 function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
+
+/* ============================================================
+   REAL SUPABASE BACKEND (Screens 17-19) — this is the first Creation
+   course wired into the same student_submissions/teacher_feedback
+   backend the 10 Foundation-A lessons already use (confirmed reusable
+   in Step 0: teacher-admin queries with zero course_id filtering, no
+   admin-side change needed). Every other Creation course uses local
+   IndexedDB instead — this is a deliberate, Faye-confirmed choice, not
+   the default pattern for this codebase.
+============================================================ */
+const CHAMELEON_LESSON_ID = 'carle-colorful-chameleon';
+let uploadPreviewFile = null;
+let uploadPreviewUrl = null;
+let uploadTitleText = '';
+let uploadSaving = false;
+let teacherFeedbackRows = [];
+let galleryRows = [];
+
+function escapeHtmlLocal(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  if (uploadPreviewUrl) URL.revokeObjectURL(uploadPreviewUrl);
+  uploadPreviewFile = file;
+  uploadPreviewUrl = URL.createObjectURL(file);
+  renderCurrentStage();
+}
+function onTitleInput(e){ uploadTitleText = e.target.value; }
+async function submitChameleonUpload(){
+  if (!uploadPreviewFile || uploadSaving) return;
+  uploadSaving = true;
+  const btn = document.getElementById('submitUploadBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  const statusArea = document.getElementById('uploadStatusArea');
+  if (statusArea) statusArea.innerHTML = '<p class="upload-status-line">Uploading…</p>';
+  try {
+    if (!window.FEISubmissions) throw new Error('Upload not available right now.');
+    const result = await window.FEISubmissions.submit({
+      imageFile: uploadPreviewFile,
+      lessonId: CHAMELEON_LESSON_ID,
+      lessonTitle: 'The Colorful Chameleon' + (uploadTitleText ? ' — ' + uploadTitleText : ''),
+      courseId: 'creation',
+      reflectionText: uploadTitleText || ''
+    });
+    if (!result.ok) throw new Error(result.error || 'Upload failed');
+    STATE.submissionId = result.submission.id;
+    STATE.submissionImageUrl = result.submission.image_url;
+    saveState();
+    uploadSaving = false;
+    renderCurrentStage();
+  } catch (e) {
+    uploadSaving = false;
+    console.warn('[upload] failed', e);
+    if (statusArea) statusArea.innerHTML = `<p class="upload-status-line error">${escapeHtmlLocal((e && e.message) || "Couldn't send — please try again.")}</p>`;
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
+  }
+}
+
+async function fetchTeacherFeedback(){
+  if (!STATE.submissionId || !window.FEISubmissions) return [];
+  try {
+    const client = window.FEISubmissions._getClient();
+    if (!client) return [];
+    const { data, error } = await client.from('teacher_feedback').select('*').eq('submission_id', STATE.submissionId).order('created_at', { ascending: false });
+    if (error) { console.warn('[feedback] fetch error', error); return []; }
+    return data || [];
+  } catch (e) { console.warn('[feedback] fetch threw', e); return []; }
+}
+
+async function fetchGalleryRows(){
+  try {
+    if (!window.FEISubmissions) return [];
+    const client = window.FEISubmissions._getClient();
+    if (!client) return [];
+    const { data, error } = await client.from('student_submissions').select('*').eq('lesson_id', CHAMELEON_LESSON_ID).order('created_at', { ascending: false }).limit(30);
+    if (error) { console.warn('[gallery] fetch error', error); return []; }
+    return data || [];
+  } catch (e) { console.warn('[gallery] fetch threw', e); return []; }
+}
+
+// Real account-wide badge (Faye-confirmed). Pushes into
+// fei_user_profile.completedLessons via sessionStorage — the correct
+// storage for this key (see the course-badge-registry.js fix bundled
+// into this same commit).
+function awardCollageCreatorBadge(){
+  if (STATE.badgeAwarded) return;
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    if (profile) {
+      profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+      if (!profile.completedLessons.includes(CHAMELEON_LESSON_ID)) {
+        profile.completedLessons.push(CHAMELEON_LESSON_ID);
+        sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+      }
+    }
+  } catch (e) { console.warn('[badge] could not update fei_user_profile', e); }
+  STATE.badgeAwarded = true;
+  saveState();
+}
 
 /* ============================================================
    NAVIGATION
@@ -1101,10 +1245,97 @@ function renderCompletionReveal(){
     <p class="completion-line">PAINTED. TEXTURED. CUT. LAYERED. COLLAGED.</p>
   `;
 }
-function renderUpload(){ return screenHeader('SHARE', 'Show Us Your Chameleon!') + '<p class="stub-note">Screen 17 — build lands in Commit 6.</p>'; }
-function renderTeacherFeedback(){ return screenHeader('SHARE', 'A Little Note From Your Teacher') + '<p class="stub-note">Screen 18 — build lands in Commit 6.</p>'; }
-function renderGalleryParade(){ return screenHeader('SHARE', 'Chameleon Parade!') + '<p class="stub-note">Screen 19 — build lands in Commit 6.</p>'; }
-function renderBadge(){ return screenHeader('SHARE', 'Collage Creator') + '<p class="stub-note">Screen 20 — build lands in Commit 6.</p>'; }
+/* ============================================================
+   SCREEN 17 — Upload (real Supabase backend — see block above)
+============================================================ */
+function renderUpload(){
+  if (STATE.submissionId) {
+    return `
+      ${screenHeader('SHARE', 'Show Us Your Chameleon!')}
+      <div class="upload-slot-wrap"><div class="upload-slot"><img src="${STATE.submissionImageUrl || ''}" alt="Your chameleon artwork"></div></div>
+      <p class="upload-status-line">YOUR CHAMELEON IS IN!</p>
+      <p class="upload-substatus">MRS. DAWN WILL TAKE A LOOK AT YOUR ARTWORK 👀</p>
+    `;
+  }
+  const slotInner = uploadPreviewFile
+    ? `<div class="upload-slot" onclick="triggerUpload()"><img src="${uploadPreviewUrl}" alt="Preview of your artwork"></div>`
+    : `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Add Your Photo</div></div>`;
+  return `
+    ${screenHeader('SHARE', 'Show Us Your Chameleon!')}
+    <div class="upload-slot-wrap" id="uploadSlotWrap">${slotInner}</div>
+    ${uploadPreviewFile ? `
+      <input type="text" class="title-input" id="artworkTitleInput" placeholder="Give it a title (optional)" value="${escapeHtmlLocal(uploadTitleText)}" oninput="onTitleInput(event)">
+      <button class="paper-btn primary torn wide" id="submitUploadBtn" onclick="submitChameleonUpload()" style="margin-top:14px;">Submit</button>
+    ` : ''}
+    <div id="uploadStatusArea"></div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 18 — Teacher Feedback (real teacher_feedback table)
+============================================================ */
+function renderTeacherFeedback(){
+  if (!STATE.submissionId) {
+    return `
+      ${screenHeader('SHARE', 'A Little Note From Your Teacher')}
+      <p class="feedback-empty-note">Upload your chameleon first — then Mrs. Dawn can leave you a note here.</p>
+    `;
+  }
+  if (!teacherFeedbackRows.length) {
+    return `
+      ${screenHeader('SHARE', 'A Little Note From Your Teacher')}
+      <div class="note-card torn"><p class="note-waiting">Mrs. Dawn hasn't left a note yet — check back soon! 👀</p></div>
+    `;
+  }
+  const notes = teacherFeedbackRows.map(row => `
+    <div class="note-card torn">
+      <div class="note-from">From ${escapeHtmlLocal(row.updated_by || 'Mrs. Dawn')}</div>
+      ${row.text_comment ? `<p class="note-text">${escapeHtmlLocal(row.text_comment)}</p>` : ''}
+      ${row.voice_url ? `<audio controls src="${row.voice_url}" class="note-audio"></audio>` : ''}
+    </div>
+  `).join('');
+  return `${screenHeader('SHARE', 'A Little Note From Your Teacher')}${notes}`;
+}
+
+/* ============================================================
+   SCREEN 19 — Chameleon Parade (real cross-student gallery — the
+   first one anywhere in Creation, built on student_submissions now
+   that this course is wired into the real backend)
+============================================================ */
+function renderGalleryParade(){
+  if (!galleryRows.length) {
+    return `
+      ${screenHeader('SHARE', 'Chameleon Parade!')}
+      <p class="parade-empty-note">No chameleons in the parade yet — be the first! 🦎</p>
+    `;
+  }
+  const items = galleryRows.map((row, i) => `
+    <div class="parade-item torn" style="margin-top:${i % 2 === 0 ? '0' : '26px'};">
+      <img src="${row.image_url}" alt="A student's chameleon artwork" class="parade-img">
+    </div>
+  `).join('');
+  return `
+    ${screenHeader('SHARE', 'Chameleon Parade!')}
+    <div class="parade-scroll">${items}</div>
+    <p class="parade-close-line">SAME PROCESS. DIFFERENT CHAMELEONS.</p>
+  `;
+}
+
+/* ============================================================
+   SCREEN 20 — Badge (real account-wide badge — see
+   awardCollageCreatorBadge() above and core/course-badge-registry.js)
+============================================================ */
+function renderBadge(){
+  return `
+    ${screenHeader('SHARE', 'Collage Creator')}
+    <div class="badge-medal">
+      <span class="bl bl1 torn"></span><span class="bl bl2 torn"></span><span class="bl bl3 torn"></span>
+      <div class="badge-icon">🦎</div>
+    </div>
+    <p class="badge-name display">COLLAGE CREATOR</p>
+    <p class="badge-completion-line">YOU TURNED PAINTED PAPER INTO A PICTURE!</p>
+  `;
+}
 
 /* ============================================================
    DISPATCH + RENDER
@@ -1123,6 +1354,17 @@ async function renderCurrentStage(){
   const stage = STAGES.find(s => s.id === currentStageId);
   if (!stage) { goMap(); return; }
   zoneTag.textContent = ZONES.find(z => z.id === stage.zone).label;
+
+  // Screens 18/19 need a real fetch before painting (feedback for this
+  // student's own submission; the gallery's recent rows) — same
+  // pre-fetch-before-render pattern Kandinsky/Miró use for their share
+  // screen, extended here to a real backend query instead of IndexedDB.
+  if (stage.id === 'teacher-feedback') {
+    teacherFeedbackRows = await fetchTeacherFeedback();
+  }
+  if (stage.id === 'gallery-parade') {
+    galleryRows = await fetchGalleryRows();
+  }
 
   contentEl.innerHTML = `<div class="screen active">
     ${stage.render()}

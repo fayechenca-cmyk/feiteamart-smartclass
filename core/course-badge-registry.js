@@ -12,6 +12,13 @@ window.COURSE_BADGE_REGISTRY = {
       { length: 36 },
       (_, i) => `art-history-western-${i + 1}`
     )
+  },
+
+  // "The Colorful Chameleon" (Eric Carle) — Creation's first course
+  // wired into this registry. Single-lesson badge: finishing the course
+  // is the whole requirement.
+  collage_creator: {
+    requiredIds: ['carle-colorful-chameleon']
   }
 
 };
@@ -19,7 +26,12 @@ window.COURSE_BADGE_REGISTRY = {
 window.getCourseBadgeProgress = function () {
   const result = {};
   try {
-    const raw = localStorage.getItem('fei_user_profile');
+    // fei_user_profile lives in sessionStorage (core/access.js,
+    // core/ink-animal-access.js, index.html's login flow all agree on
+    // this) — this used to read localStorage, a leftover from before
+    // that migration, which meant this function silently found nothing
+    // and every badge here (not just this one) never auto-unlocked.
+    const raw = sessionStorage.getItem('fei_user_profile');
     const profile = raw ? JSON.parse(raw) : null;
     const completed = (profile && profile.completedLessons) || [];
 
