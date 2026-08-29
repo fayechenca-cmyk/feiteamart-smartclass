@@ -167,33 +167,24 @@ button{font-family:'Quicksand',sans-serif;}
 .process-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:18px 0 6px;}
 .process-chip{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;background:#fff;border:2px solid var(--ink);padding:9px 14px;}
 .process-arrow{color:var(--red);font-weight:900;font-size:16px;}
+.carle-sample-chip{width:50px;height:50px;margin:18px auto 0;background-image:url('assets/texture-decorative-watercolor-magenta.jpg');background-size:cover;background-position:center;transform:rotate(-6deg);box-shadow:2px 3px 0 rgba(28,23,18,.14);}
 
-/* ---------- Texture-swatch system (CSS/SVG only, no photos) — reused
-   across Screens 5-8 and again later wherever "texture" needs to be
-   shown. Six genuinely distinct looks, not color variants of one
-   pattern. ---------- */
-.tex-swatch{width:100%;height:100%;position:relative;overflow:hidden;}
-.tex-watercolor{background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 55%,var(--green) 100%);}
-.tex-bubble{background-color:var(--blue);background-image:
-  radial-gradient(circle at 20% 20%, rgba(255,255,255,.55) 0 6px, transparent 7px),
-  radial-gradient(circle at 55% 15%, rgba(255,255,255,.5) 0 5px, transparent 6px),
-  radial-gradient(circle at 80% 30%, rgba(255,255,255,.5) 0 6px, transparent 7px),
-  radial-gradient(circle at 30% 55%, rgba(255,255,255,.5) 0 5px, transparent 6px),
-  radial-gradient(circle at 65% 60%, rgba(255,255,255,.55) 0 6px, transparent 7px),
-  radial-gradient(circle at 15% 85%, rgba(255,255,255,.5) 0 5px, transparent 6px),
-  radial-gradient(circle at 85% 80%, rgba(255,255,255,.5) 0 6px, transparent 7px),
-  radial-gradient(circle at 50% 92%, rgba(255,255,255,.5) 0 5px, transparent 6px);}
-.tex-press{background:var(--red);background-image:
-  radial-gradient(ellipse at 30% 30%, rgba(0,0,0,.16) 0 14px, transparent 16px),
-  radial-gradient(ellipse at 70% 60%, rgba(255,255,255,.22) 0 12px, transparent 15px),
-  radial-gradient(ellipse at 45% 82%, rgba(0,0,0,.13) 0 10px, transparent 13px);}
-.tex-scratch{background:var(--brown);background-image:repeating-linear-gradient(78deg, rgba(255,255,255,.35) 0 2px, transparent 2px 9px);}
-.tex-brush{background:var(--green);background-image:repeating-linear-gradient(4deg, rgba(255,255,255,.18) 0 5px, rgba(0,0,0,.08) 5px 9px, transparent 9px 16px);}
-.tex-layer{background:var(--yellow);}
-.tex-layer::after{content:'';position:absolute;inset:0;background-image:
-  radial-gradient(circle at 25% 30%, rgba(255,255,255,.4) 0 5px, transparent 6px),
-  radial-gradient(circle at 60% 65%, rgba(255,255,255,.4) 0 5px, transparent 6px),
-  radial-gradient(circle at 80% 25%, rgba(255,255,255,.4) 0 5px, transparent 6px);opacity:.85;}
+/* ---------- Texture-swatch system — real photographed paint, cropped
+   directly from Faye's texture-papers-reference.jpg (see assets/README.md
+   for exact crop coordinates). Replaces the CSS-gradient stand-ins built
+   before the course-correction pass — per the corrected spec, texture
+   must be real photographed paint, not flat vector fills. ---------- */
+.tex-swatch{width:100%;height:100%;position:relative;overflow:hidden;background-size:cover;background-position:center;}
+.tex-watercolor{background-image:url('assets/texture-watercolor-lavender.jpg');}
+.tex-bubble{background-image:url('assets/texture-bubble-blue-white.jpg');}
+.tex-press{background-image:url('assets/texture-press-coral.jpg');}
+.tex-scratch{background-image:url('assets/texture-scratch-red-yellow.jpg');}
+.tex-brush{background-image:url('assets/texture-brush-sage.jpg');}
+.tex-layer{background-image:url('assets/texture-layer-green-gold.jpg');}
+/* The 2 remaining real crops, used decoratively (not one of the 6 named
+   collection categories) — see the Texture Lab backdrop below. */
+.tex-decorative-bubble{background-image:url('assets/texture-decorative-bubble-blue-yellow.jpg');background-size:cover;background-position:center;}
+.tex-decorative-watercolor{background-image:url('assets/texture-decorative-watercolor-magenta.jpg');background-size:cover;background-position:center;}
 
 /* ---------- Screen 5 — Texture Lab ---------- */
 .lab-object-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
@@ -202,6 +193,12 @@ button{font-family:'Quicksand',sans-serif;}
 .lab-object .lo-icon{font-size:1.6rem;}
 .lab-object .lo-label{font-size:9.5px;font-weight:700;margin-top:5px;font-family:'Baloo 2',sans-serif;}
 .lab-tap-note{text-align:center;font-size:11.5px;color:var(--ink-faint);min-height:18px;margin-top:6px;font-weight:600;}
+.texture-lab-wrap{position:relative;padding:10px;overflow:hidden;}
+.texture-lab-backdrop{position:absolute;inset:0;opacity:.14;background-image:url('assets/texture-decorative-bubble-blue-yellow.jpg');background-size:cover;background-position:center;z-index:0;}
+.lab-object-grid{position:relative;z-index:1;}
+.texture-reference-callout{margin-top:22px;text-align:center;}
+.texture-reference-img{width:100%;max-width:420px;border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(28,23,18,.16);}
+.texture-reference-caption{font-size:11px;color:var(--ink-faint);margin-top:6px;font-weight:600;max-width:380px;margin-left:auto;margin-right:auto;}
 
 /* ---------- Screen 6 — Mission 1 Video ---------- */
 .tech-preview-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0 6px;}
@@ -941,6 +938,7 @@ function renderMeetEricCarle(){
       <p>He made pictures with painted paper.</p>
     </div>
     <div class="process-row">${process}</div>
+    <div class="carle-sample-chip torn" aria-hidden="true"></div>
   `;
 }
 /* ============================================================
@@ -952,8 +950,15 @@ function renderTextureLab(){
   ).join('');
   return `
     ${screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!', 'HOW MANY KINDS OF PAPER CAN WE MAKE?')}
-    <div class="lab-object-grid">${objects}</div>
+    <div class="texture-lab-wrap">
+      <div class="texture-lab-backdrop" aria-hidden="true"></div>
+      <div class="lab-object-grid">${objects}</div>
+    </div>
     <p class="lab-tap-note" id="labTapNote"></p>
+    <div class="texture-reference-callout">
+      <img src="${TEXTURE_REFERENCE_SRC}" alt="Mrs. Dawn's texture papers reference sheet" class="texture-reference-img">
+      <p class="texture-reference-caption">CHECK YOUR PAPERS AGAINST THESE — not a template to copy, just an idea of what's possible.</p>
+    </div>
   `;
 }
 function tapLabObject(label){
