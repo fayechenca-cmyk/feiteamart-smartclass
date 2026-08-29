@@ -152,6 +152,15 @@ button{font-family:'Quicksand',sans-serif;}
 .disassembly-piece{position:absolute;width:30px;height:30px;opacity:0;animation:pieceScatter 1s ease forwards;}
 @keyframes pieceScatter{from{opacity:0;transform:translate(50%,50%) scale(.4) rotate(0deg);}to{opacity:1;transform:translate(0,0) scale(1) rotate(var(--rot,10deg));}}
 .reveal-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.05rem;line-height:1.5;margin:16px 0 4px;}
+.reveal-before-frame{transition:opacity .6s ease, transform .6s ease;}
+.reveal-before-frame.shrinking{opacity:.15;transform:scale(.85);}
+
+/* ---------- Recurring peeking-eye motif — the literal eye from the real
+   artwork, redrawn small (a photo crop would be too low-res/inconsistent
+   at this size), appears docked in a corner on a handful of screens. ---------- */
+.peek-eye{position:fixed;width:48px;height:48px;right:6px;top:58px;pointer-events:none;z-index:400;opacity:.94;filter:drop-shadow(2px 3px 0 rgba(28,23,18,.14));}
+.peek-eye-blink{transform-origin:38px 28px;animation:peekBlink 6.5s ease-in-out infinite;}
+@keyframes peekBlink{0%,88%,100%{transform:scaleY(1);}92%{transform:scaleY(.08);}}
 
 /* ---------- Screen 4 — Meet Eric Carle ---------- */
 .carle-lines p{text-align:center;font-size:14px;margin:2px 0;font-weight:600;}
@@ -390,18 +399,18 @@ const STAGES = [
   { id:'opening',                title:'Explore the Chameleon',        zone:'discover',     render:renderOpening },
   { id:'find-textures',          title:'How Many Textures Can You Find?', zone:'discover',  render:renderFindTextures },
   { id:'reveal-how-made',        title:'How Was It Made?',             zone:'discover',     render:renderRevealHowMade },
-  { id:'meet-eric-carle',        title:'Meet Eric Carle',              zone:'discover',     render:renderMeetEricCarle },
-  { id:'texture-lab',            title:'Welcome to the Texture Lab!',   zone:'make-material', render:renderTextureLab },
+  { id:'meet-eric-carle',        title:'Meet Eric Carle',              zone:'discover',     render:renderMeetEricCarle, peekEye:true },
+  { id:'texture-lab',            title:'Welcome to the Texture Lab!',   zone:'make-material', render:renderTextureLab, peekEye:true },
   { id:'mission-1-video',        title:'Mission 1 — Make Your Texture Papers', zone:'make-material', render:renderMission1Video },
-  { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection, afterRender:runTextureCollectionReveal },
-  { id:'texture-detective',      title:'Texture Detective',            zone:'make-material', render:renderTextureDetective },
-  { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage, afterRender:runTransitionReveal },
+  { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection, afterRender:runTextureCollectionReveal, peekEye:true },
+  { id:'texture-detective',      title:'Texture Detective',            zone:'make-material', render:renderTextureDetective, peekEye:true },
+  { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage, afterRender:runTransitionReveal, peekEye:true },
   { id:'mission-2-video',        title:'Mission 2 — Build Your Chameleon', zone:'build',     render:renderMission2Video },
-  { id:'choose',                 title:'Which Paper Would You Choose?', zone:'build',        render:renderChoose },
-  { id:'cut',                    title:'Draw the Shape. Cut It Out.',  zone:'build',        render:renderCut },
+  { id:'choose',                 title:'Which Paper Would You Choose?', zone:'build',        render:renderChoose, peekEye:true },
+  { id:'cut',                    title:'Draw the Shape. Cut It Out.',  zone:'build',        render:renderCut, peekEye:true },
   { id:'arrange',                title:"Don't Glue Yet!",              zone:'build',        render:renderArrange, afterRender:mountArrangeCanvas },
   { id:'details',                title:'Make It Yours',                zone:'build',        render:renderDetails },
-  { id:'scrap-challenge',        title:"Don't Throw It Away!",         zone:'build',        render:renderScrapChallenge },
+  { id:'scrap-challenge',        title:"Don't Throw It Away!",         zone:'build',        render:renderScrapChallenge, peekEye:true },
   { id:'completion-reveal',      title:'Your Chameleon Has Come to Life!', zone:'share',     render:renderCompletionReveal },
   { id:'upload',                 title:'Show Us Your Chameleon!',      zone:'share',        render:renderUpload },
   { id:'teacher-feedback',       title:'A Little Note From Your Teacher', zone:'share',      render:renderTeacherFeedback },
@@ -419,6 +428,25 @@ const FINAL_ARTWORK_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cf31
 // papers against this" callout in the Texture Lab / Mission 1 area, never
 // as a template to copy.
 const TEXTURE_REFERENCE_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/b42da379-6a69-4b1d-d838-00ffc9486900/public';
+// The recurring "peeking eye" — the chameleon's actual eye from the real
+// artwork (lavender head sliver + gold ring + black pupil, all real
+// sampled colors), redrawn as a small original SVG rather than a photo
+// crop (a raster crop would be too low-res/inconsistent at icon size).
+// Blinks on idle via the .peek-eye-blink CSS animation. Appears on a
+// handful of screens (see STAGES' peekEye flag) — not a new generic
+// mascot, the one recurring character already in the photo.
+function peekingEye(){
+  return `<div class="peek-eye" aria-hidden="true">
+    <svg viewBox="0 0 60 60">
+      <path d="M2,48 C0,22 20,4 44,10 C58,14 60,32 54,46 C48,59 18,60 2,48 Z" fill="var(--purple)" opacity="0.92"/>
+      <g class="peek-eye-blink">
+        <circle cx="38" cy="28" r="13" fill="var(--yellow)"/>
+        <circle cx="40" cy="28" r="6.5" fill="var(--ink)"/>
+      </g>
+    </svg>
+  </div>`;
+}
+
 function heroArtworkFrame(idSuffix, extraInner){
   return `<div class="hero-frame torn" id="heroFrame${idSuffix}">
     <img class="hero-frame-img" src="${FINAL_ARTWORK_SRC}" alt="Mrs. Dawn's finished chameleon collage artwork"
@@ -869,6 +897,7 @@ function renderRevealHowMade(){
   const showReveal = !!STATE.howMadeAnswer;
   return `
     ${screenHeader('DISCOVER', 'Wait... Is This Chameleon Painted?')}
+    <div class="reveal-before-frame${showReveal ? ' shrinking' : ''}" id="revealBeforeFrame">${heroArtworkFrame('RevealBefore')}</div>
     <div class="howmade-row">${choices}</div>
     <div id="disassemblyArea">${showReveal ? renderDisassembly() : ''}</div>
   `;
@@ -876,6 +905,8 @@ function renderRevealHowMade(){
 function chooseHowMade(id){
   STATE.howMadeAnswer = 'both'; // BOTH is always the revealed answer, regardless of tap — pure discovery, not a graded test
   saveState();
+  const frame = document.getElementById('revealBeforeFrame');
+  if (frame) frame.classList.add('shrinking');
   const area = document.getElementById('disassemblyArea');
   if (area) area.innerHTML = renderDisassembly();
   document.querySelectorAll('.howmade-chip').forEach(el => {
@@ -1393,7 +1424,8 @@ async function renderCurrentStage(){
   contentEl.innerHTML = `<div class="screen active">
     ${stage.render()}
     ${renderNav(stage)}
-  </div>`;
+  </div>
+  ${stage.peekEye ? peekingEye() : ''}`;
   if (stage.afterRender) stage.afterRender();
   window.scrollTo(0, 0);
 }
