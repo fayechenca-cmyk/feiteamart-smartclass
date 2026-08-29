@@ -252,6 +252,26 @@ button{font-family:'Quicksand',sans-serif;}
 .arrange-tools-row{display:flex;justify-content:center;gap:10px;margin-top:4px;}
 .glue-btn{margin-top:14px;}
 
+/* ---------- Screen 14 — Details ---------- */
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+@media(min-width:480px){.detail-grid{grid-template-columns:repeat(5,1fr);}}
+.detail-item{background:#fff;border:2px solid var(--ink);padding:14px 4px;text-align:center;cursor:pointer;box-shadow:2px 3px 0 rgba(36,31,26,.14);}
+.detail-item.done{background:var(--yellow);}
+.detail-item .di-icon{font-size:1.4rem;}
+.detail-item .di-label{font-size:9px;font-weight:700;margin-top:4px;font-family:'Baloo 2',sans-serif;}
+.make-it-yours-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.2rem;margin:20px 0 14px;min-height:1.4em;}
+.mrs-dawn-reference{margin-top:18px;}
+
+/* ---------- Screen 15 — Scrap Challenge ---------- */
+.scraps-row{display:flex;justify-content:center;gap:14px;margin:16px 0;}
+.scrap-shape{width:56px;height:56px;}
+.scrap-prompt{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;margin:10px 0 4px;}
+.scrap-close-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:1.15rem;color:var(--green);margin:20px 0 4px;min-height:1.4em;}
+
+/* ---------- Screen 16 — Completion Reveal ---------- */
+.hero-frame-big{max-width:600px;}
+.completion-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.3px;margin:14px 0 4px;color:var(--ink-soft);}
+
 /* ---------- Video embed — same responsive-iframe contract as every
    other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
 .video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
@@ -482,6 +502,24 @@ const ARRANGE_PIECES = [
   { id:'eye',    label:'Eye',    color:'var(--ink)',    shape:'50%',      left:90,  top:170 },
   { id:'beetle', label:'Beetle', color:'var(--purple)', shape:'50% 20%',  left:250, top:180 }
 ];
+
+// Screen 14's finishing-touches sequence.
+const DETAIL_ITEMS = [
+  { id:'eye',    icon:'👀', label:'EYE' },
+  { id:'beetle', icon:'🪲', label:'BEETLE' },
+  { id:'lines',  icon:'✏️', label:'LINES' },
+  { id:'title',  icon:'🔤', label:'TITLE' },
+  { id:'scraps', icon:'🔵', label:'SCRAPS' }
+];
+
+// Screen 15's leftover-scrap shapes (generic torn silhouettes, not
+// segmented from anything real) and idea chips.
+const SCRAP_SHAPES = [
+  { color:'var(--purple)', shape:'40% 60% 55% 45%' },
+  { color:'var(--brown)',  shape:'60% 40% 45% 55%' },
+  { color:'var(--red)',    shape:'50% 50% 30% 70%' }
+];
+const SCRAP_IDEAS = ['BUG', 'LEAF', 'FLOWER', 'SUN', 'EYE', 'SOMETHING STRANGE'];
 
 /* ============================================================
    STATE (localStorage-persisted, scoped to this course only)
@@ -1002,9 +1040,67 @@ function swapArrangePieces(){
   b.style.left = aLeft; b.style.top = aTop;
 }
 function glueArrangement(){ goNext(); }
-function renderDetails(){ return screenHeader('BUILD', 'Make It Yours') + '<p class="stub-note">Screen 14 — build lands in Commit 5.</p>'; }
-function renderScrapChallenge(){ return screenHeader('BUILD', "Don't Throw It Away!") + '<p class="stub-note">Screen 15 — build lands in Commit 5.</p>'; }
-function renderCompletionReveal(){ return screenHeader('SHARE', 'Your Chameleon Has Come to Life!') + '<p class="stub-note">Screen 16 — build lands in Commit 5.</p>'; }
+/* ============================================================
+   SCREEN 14 — Details
+============================================================ */
+function renderDetails(){
+  const items = DETAIL_ITEMS.map(d => {
+    const done = STATE.detailsChosen.includes(d.id);
+    return `<div class="detail-item torn ${done ? 'done' : ''}" onclick="tapDetailItem('${d.id}')">
+      <div class="di-icon">${d.icon}</div><div class="di-label">${d.label}</div>
+    </div>`;
+  }).join('');
+  return `
+    ${screenHeader('BUILD', 'Make It Yours')}
+    <div class="detail-grid">${items}</div>
+    <p class="make-it-yours-line display" id="makeItYoursLine">${STATE.detailsChosen.length ? 'MAKE IT YOURS.' : ''}</p>
+    <div class="mrs-dawn-reference">
+      ${heroArtworkFrame('Details')}
+      <p class="hero-frame-caption">Mrs. Dawn's Version</p>
+    </div>
+  `;
+}
+function tapDetailItem(id){
+  if (!STATE.detailsChosen.includes(id)) { STATE.detailsChosen.push(id); }
+  else { STATE.detailsChosen = STATE.detailsChosen.filter(x => x !== id); }
+  saveState();
+  renderCurrentStage();
+}
+
+/* ============================================================
+   SCREEN 15 — Leftover Scrap Challenge
+============================================================ */
+function renderScrapChallenge(){
+  const scraps = SCRAP_SHAPES.map(s =>
+    `<div class="scrap-shape torn" style="background:${s.color};border-radius:${s.shape};"></div>`
+  ).join('');
+  const ideas = SCRAP_IDEAS.map(idea =>
+    `<button class="paper-chip torn ${STATE.scrapIdea === idea ? 'active' : ''}" onclick="pickScrapIdea('${idea.replace(/'/g, "\\'")}')">${idea}</button>`
+  ).join('');
+  return `
+    ${screenHeader('BUILD', "Don't Throw It Away!")}
+    <div class="scraps-row">${scraps}</div>
+    <p class="scrap-prompt">WHAT CAN THIS BECOME?</p>
+    <div class="chip-row">${ideas}</div>
+    <p class="scrap-close-line" id="scrapCloseLine">${STATE.scrapIdea ? 'USE YOUR LEFTOVERS!' : ''}</p>
+  `;
+}
+function pickScrapIdea(idea){
+  STATE.scrapIdea = idea;
+  saveState();
+  renderCurrentStage();
+}
+
+/* ============================================================
+   SCREEN 16 — Completion Reveal
+============================================================ */
+function renderCompletionReveal(){
+  return `
+    ${screenHeader('SHARE', 'Your Chameleon Has Come to Life!')}
+    <div class="hero-frame-big" style="margin:0 auto;">${heroArtworkFrame('Completion')}</div>
+    <p class="completion-line">PAINTED. TEXTURED. CUT. LAYERED. COLLAGED.</p>
+  `;
+}
 function renderUpload(){ return screenHeader('SHARE', 'Show Us Your Chameleon!') + '<p class="stub-note">Screen 17 — build lands in Commit 6.</p>'; }
 function renderTeacherFeedback(){ return screenHeader('SHARE', 'A Little Note From Your Teacher') + '<p class="stub-note">Screen 18 — build lands in Commit 6.</p>'; }
 function renderGalleryParade(){ return screenHeader('SHARE', 'Chameleon Parade!') + '<p class="stub-note">Screen 19 — build lands in Commit 6.</p>'; }
