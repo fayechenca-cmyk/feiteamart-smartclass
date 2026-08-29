@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>The Colorful Chameleon</title>
+<meta name="description" content="A Eric Carle-inspired Creation lesson: paint your own textured papers, then cut, arrange, and glue them into a chameleon only you could make.">
+<meta name="keywords" content="Creation, Learn from Masters, Eric Carle, Collage, Texture, Painting, Cutting">
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "The Colorful Chameleon",
+  "subtitle": "First, we make the paper. Then, we make the picture.",
+  "path": ["Creation", "Material · The Workbench", "The Colorful Chameleon"],
+  "series": "Learn from Masters",
+  "tags": ["Learn from Masters", "Eric Carle", "Collage", "Texture", "Painting", "Cutting"],
+  "ageRange": "4-8",
+  "materials": ["Painted Paper", "Scissors", "Glue Stick", "White or Black Background Paper"],
+  "stageCount": 20
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* "Painted paper" raw-material palette — not one fixed theme, screens
+     lean into different subsets/intensities of this range on purpose. */
+  --paper:#f6f1e2;
+  --paper-deep:#ece0c4;
+  --ink:#241f1a;
+  --yellow:#f4b942;
+  --red:#e2492f;
+  --blue:#2f6fa8;
+  --green:#2f8f5b;
+  --purple:#7b5ea8;
+  --brown:#8a5a34;
+  --ink-soft:rgba(36,31,26,.66);
+  --ink-faint:rgba(36,31,26,.42);
+  --line:rgba(36,31,26,.14);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Quicksand',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow-x:hidden;
+}
+.display{font-family:'Baloo 2',sans-serif;}
+button{font-family:'Quicksand',sans-serif;}
+
+/* Reusable torn-paper silhouette — applied to buttons/tags/cards
+   throughout instead of clean rounded corners. Cheap (pure clip-path,
+   no per-element SVG filter cost). */
+.torn{
+  clip-path: polygon(0% 4%, 3% 0%, 9% 3%, 15% 0%, 22% 2%, 30% 0%, 38% 3%, 46% 0%, 55% 2%, 64% 0%, 73% 3%, 82% 0%, 90% 2%, 97% 0%, 100% 5%, 98% 12%, 100% 20%, 97% 28%, 100% 36%, 98% 45%, 100% 54%, 97% 63%, 100% 72%, 98% 81%, 100% 90%, 97% 96%, 100% 100%, 90% 98%, 82% 100%, 73% 97%, 64% 100%, 55% 98%, 46% 100%, 38% 97%, 30% 100%, 22% 98%, 15% 100%, 9% 97%, 3% 100%, 0% 96%, 2% 88%, 0% 80%, 3% 72%, 0% 64%, 2% 56%, 0% 48%, 3% 40%, 0% 32%, 2% 24%, 0% 16%, 3% 8%);
+}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+/* ---------- Top bar ---------- */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--paper) 78%, transparent);
+}
+.back-link{font-size:12px;color:var(--blue);text-decoration:none;font-weight:700;letter-spacing:.2px;}
+.map-btn{
+  border:2px solid var(--ink);background:var(--yellow);border-radius:0;
+  padding:7px 15px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);
+}
+.map-btn.torn{}
+.map-btn:active{transform:scale(.95);}
+.zone-tag{
+  font-family:'Baloo 2',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;
+  color:#fff;background:var(--green);padding:5px 11px;
+}
+
+/* ---------- Screens ---------- */
+.screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+@media(min-width:700px){.screen{max-width:820px;}}
+@media(min-width:1000px){.screen{max-width:960px;}}
+.screen.active{display:block;animation:paperIn .42s ease;}
+@keyframes paperIn{from{opacity:0;transform:translateY(14px) rotate(-.4deg);}to{opacity:1;transform:translateY(0) rotate(0);}}
+
+.stage-tag{
+  display:inline-block;font-family:'Baloo 2',sans-serif;font-size:10.5px;letter-spacing:1.5px;
+  text-transform:uppercase;color:#fff;background:var(--brown);padding:4px 12px;margin:0 auto 10px;
+}
+.stage-tag-row{text-align:center;}
+.stage-title{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:2rem;text-align:center;margin:0 0 6px;color:var(--ink);}
+.stage-sub{text-align:center;font-size:13.5px;color:var(--ink-soft);margin:0 0 18px;line-height:1.5;font-weight:500;}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
+.paper-btn{
+  font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;padding:12px 22px;cursor:pointer;
+  border:2.5px solid var(--ink);background:var(--paper);color:var(--ink);transition:transform .12s ease;
+}
+.paper-btn:active{transform:scale(.96) rotate(-.6deg);}
+.paper-btn.primary{background:var(--red);border-color:var(--red);color:#fff;}
+.paper-btn.blue{background:var(--blue);border-color:var(--blue);color:#fff;}
+.paper-btn.green{background:var(--green);border-color:var(--green);color:#fff;}
+.paper-btn:disabled{opacity:.32;cursor:not-allowed;}
+.paper-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
+
+/* ---------- Chips (reused across many screens: hotspots, idea chips,
+   tool chips, answer chips) ---------- */
+.paper-chip{
+  font-family:'Baloo 2',sans-serif;font-weight:600;font-size:12px;letter-spacing:.2px;
+  padding:9px 15px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;
+}
+.paper-chip.active{background:var(--yellow);}
+.chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0;}
+
+/* ---------- Video embed — same responsive-iframe contract as every
+   other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
+.video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
+.video-embed-wrap::before{
+  content:'';position:absolute;top:-10px;left:28px;width:70px;height:22px;
+  background:rgba(244,185,66,.75);transform:rotate(-3deg);
+}
+.video-embed-inner{position:relative;padding-top:56.25%;}
+
+/* placeholder used by stub screens until their real commit lands */
+.stub-note{text-align:center;font-size:12px;color:var(--ink-faint);font-style:italic;margin-top:20px;}
+
+/* ---------- Worktable-trail map screen (not a tile grid) ---------- */
+.map-header{text-align:center;margin:6px 0 20px;}
+.map-header h1{font-size:2rem;margin:4px 0 4px;}
+.map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
+.trail{position:relative;padding:6px 6px 10px;}
+.trail-path{position:absolute;left:50%;top:0;bottom:0;width:2px;border-left:3px dashed var(--line);transform:translateX(-50%);z-index:0;}
+.trail-stop{
+  position:relative;z-index:1;display:flex;align-items:center;gap:12px;margin:0 0 20px;cursor:pointer;
+}
+.trail-stop.right{flex-direction:row-reverse;text-align:right;}
+.trail-stop .ts-badge{
+  flex:0 0 auto;width:54px;height:54px;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;background:#fff;border:2.5px solid var(--ink);box-shadow:3px 4px 0 rgba(36,31,26,.16);
+}
+.trail-stop .ts-info{flex:1;background:#fff;border:2px solid var(--ink);padding:9px 13px;}
+.trail-stop .ts-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1rem;color:var(--ink);}
+.trail-stop .ts-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:600;}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="tornWobble" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="9"/>
+    </filter>
+  </defs>
+</svg>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <span class="zone-tag" id="zoneTag"></span>
+    <button class="map-btn torn" onclick="goMap()">✂ Map</button>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+<script src="../../core/submissions.js"></script>
+
+<script>
+/* ============================================================
+   DATA — screen copy follows the IMPLEMENTATION PROMPT for
+   "The Colorful Chameleon" verbatim where the prompt gives exact text.
+   Do not paraphrase or pad it when editing.
+============================================================ */
+const ZONES = [
+  { id:'discover',      label:'DISCOVER' },
+  { id:'make-material',  label:'MAKE MATERIAL' },
+  { id:'build',          label:'BUILD' },
+  { id:'share',          label:'SHARE' }
+];
+
+const STAGES = [
+  { id:'opening',                title:'Explore the Chameleon',        zone:'discover',     render:renderOpening },
+  { id:'find-textures',          title:'How Many Textures Can You Find?', zone:'discover',  render:renderFindTextures },
+  { id:'reveal-how-made',        title:'How Was It Made?',             zone:'discover',     render:renderRevealHowMade },
+  { id:'meet-eric-carle',        title:'Meet Eric Carle',              zone:'discover',     render:renderMeetEricCarle },
+  { id:'texture-lab',            title:'Welcome to the Texture Lab!',   zone:'make-material', render:renderTextureLab },
+  { id:'mission-1-video',        title:'Mission 1 — Make Your Texture Papers', zone:'make-material', render:renderMission1Video },
+  { id:'texture-collection',     title:'My Texture Collection',        zone:'make-material', render:renderTextureCollection },
+  { id:'texture-detective',      title:'Texture Detective',            zone:'make-material', render:renderTextureDetective },
+  { id:'transition-to-collage',  title:'Your Papers Are Ready...',     zone:'build',        render:renderTransitionToCollage },
+  { id:'mission-2-video',        title:'Mission 2 — Build Your Chameleon', zone:'build',     render:renderMission2Video },
+  { id:'choose',                 title:'Which Paper Would You Choose?', zone:'build',        render:renderChoose },
+  { id:'cut',                    title:'Draw the Shape. Cut It Out.',  zone:'build',        render:renderCut },
+  { id:'arrange',                title:"Don't Glue Yet!",              zone:'build',        render:renderArrange },
+  { id:'details',                title:'Make It Yours',                zone:'build',        render:renderDetails },
+  { id:'scrap-challenge',        title:"Don't Throw It Away!",         zone:'build',        render:renderScrapChallenge },
+  { id:'completion-reveal',      title:'Your Chameleon Has Come to Life!', zone:'share',     render:renderCompletionReveal },
+  { id:'upload',                 title:'Show Us Your Chameleon!',      zone:'share',        render:renderUpload },
+  { id:'teacher-feedback',       title:'A Little Note From Your Teacher', zone:'share',      render:renderTeacherFeedback },
+  { id:'gallery-parade',         title:'Chameleon Parade!',            zone:'share',        render:renderGalleryParade },
+  { id:'badge',                  title:'Collage Creator',              zone:'share',        render:renderBadge }
+];
+
+/* ============================================================
+   STATE (localStorage-persisted, scoped to this course only)
+============================================================ */
+const STATE_KEY = 'fei.creation.carle_colorful_chameleon.v1';
+function defaultState(){
+  return {
+    foundTextures: [],          // screen 2 hotspot ids tapped
+    howMadeAnswer: null,        // screen 3: 'painted' | 'cut' | 'both'
+    textureCollectionRevealed: false, // screen 7: swatches revealed once
+    detectiveRound: 0,          // screen 8
+    detectiveCorrect: 0,
+    choosePreviewIndex: 0,      // screen 11
+    cutPartsDone: [],           // screen 12
+    detailsChosen: [],          // screen 14
+    scrapIdea: null,            // screen 15
+    submissionId: null,         // screen 17 (real Supabase submission id)
+    submissionImageUrl: null,
+    badgeAwarded: false         // screen 20
+  };
+}
+let STATE = defaultState();
+function loadState(){
+  try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
+}
+function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+let currentStageId = 'opening';
+function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
+function goStage(id){ currentStageId = id; renderCurrentStage(); }
+function goNext(){
+  const i = stageIndex(currentStageId);
+  if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id);
+}
+function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
+function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
+function goZoneFirst(zoneId){ const first = STAGES.find(s => s.zone === zoneId); if (first) goStage(first.id); }
+
+// Every screen's Next is always enabled in this course — no stroke/score
+// gate like Miró's automatism canvas. Kept as its own function anyway so
+// a future screen can add a real gate without touching renderNav.
+function canAdvance(stage){ return true; }
+
+function renderNav(stage){
+  const idx = stageIndex(stage.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STAGES.length - 1;
+  const can = canAdvance(stage);
+  const nextLabel = stage.id === 'opening' ? 'EXPLORE THE CHAMELEON →' : 'Next →';
+  return `<div class="nav-footer">
+    <button class="paper-btn torn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
+    ${isLast ? '<span></span>' : `<button class="paper-btn primary torn" id="nextBtn" onclick="goNext()" ${!can ? 'disabled' : ''}>${nextLabel}</button>`}
+  </div>`;
+}
+
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div class="video-embed-inner">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div class="video-embed-inner" style="background:linear-gradient(135deg,var(--green),var(--blue));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;font-weight:600;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   SHARED HEADER — every screen owns its own via this helper (or a
+   fully custom hero, e.g. Screen 1), matching the pattern proven across
+   this session's courses. Uses "stage-tag" (torn brown tag) rather than
+   any prior course's kicker-pill treatment.
+============================================================ */
+function screenHeader(zoneLabel, title, sub){
+  return `<div class="stage-tag-row"><span class="stage-tag torn">${zoneLabel}</span></div><h2 class="stage-title">${title}</h2>${sub ? `<p class="stage-sub">${sub}</p>` : ''}`;
+}
+
+/* ============================================================
+   WORKTABLE-TRAIL MAP — 18 named stops (per the spec's own COURSE MAP
+   section) grouping the 20 real STAGES. "Explore the Chameleon" folds
+   in Find-the-Textures; "Mission 2" folds in the Transition screen —
+   both still exist as their own full STAGES entries, this only affects
+   how the map screen groups/labels them.
+============================================================ */
+const MAP_STOPS = [
+  { icon:'🦎', label:'Explore the Chameleon', goto:'opening' },
+  { icon:'❓', label:'How Was It Made?',       goto:'reveal-how-made' },
+  { icon:'🖼', label:'Meet Eric Carle',        goto:'meet-eric-carle' },
+  { icon:'🧪', label:'Texture Lab',            goto:'texture-lab' },
+  { icon:'🎥', label:'Mission 1 (Video)',      goto:'mission-1-video' },
+  { icon:'🎨', label:'My Texture Collection',  goto:'texture-collection' },
+  { icon:'🔍', label:'Texture Detective',      goto:'texture-detective' },
+  { icon:'🎥', label:'Mission 2 (Video)',      goto:'mission-2-video' },
+  { icon:'🤔', label:'Choose',                 goto:'choose' },
+  { icon:'✂',  label:'Cut',                    goto:'cut' },
+  { icon:'🖐', label:'Arrange',                goto:'arrange' },
+  { icon:'✨', label:'Details',                goto:'details' },
+  { icon:'♻️', label:'Scrap Challenge',        goto:'scrap-challenge' },
+  { icon:'🎉', label:'Finish',                 goto:'completion-reveal' },
+  { icon:'📤', label:'Upload',                 goto:'upload' },
+  { icon:'💌', label:'Teacher Feedback',       goto:'teacher-feedback' },
+  { icon:'🚶', label:'Chameleon Parade',       goto:'gallery-parade' },
+  { icon:'🏅', label:'Badge',                  goto:'badge' }
+];
+function renderMap(){
+  const stops = MAP_STOPS.map((s, i) => `
+    <div class="trail-stop ${i % 2 ? 'right' : ''}" onclick="goStage('${s.goto}')">
+      <div class="ts-badge torn">${s.icon}</div>
+      <div class="ts-info torn"><div class="ts-label">${s.label}</div></div>
+    </div>
+  `).join('');
+  return `
+    <div class="map-header">
+      <h1 class="display">The Colorful Chameleon</h1>
+      <p>First, we make the paper. Then, we make the picture.</p>
+    </div>
+    <div class="trail"><div class="trail-path"></div>${stops}</div>
+  `;
+}
+
+/* ============================================================
+   STUB RENDERERS — replaced screen-by-screen in later commits. Each
+   owns its own header so the page is a real, loadable, gated lesson
+   even before the designed UI lands.
+============================================================ */
+function renderOpening(){ return screenHeader('DISCOVER', 'Explore the Chameleon') + '<p class="stub-note">Screen 1 — build lands in Commit 2.</p>'; }
+function renderFindTextures(){ return screenHeader('DISCOVER', 'How Many Textures Can You Find?') + '<p class="stub-note">Screen 2 — build lands in Commit 2.</p>'; }
+function renderRevealHowMade(){ return screenHeader('DISCOVER', 'How Was It Made?') + '<p class="stub-note">Screen 3 — build lands in Commit 2.</p>'; }
+function renderMeetEricCarle(){ return screenHeader('DISCOVER', 'Meet Eric Carle') + '<p class="stub-note">Screen 4 — build lands in Commit 2.</p>'; }
+function renderTextureLab(){ return screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!') + '<p class="stub-note">Screen 5 — build lands in Commit 3.</p>'; }
+function renderMission1Video(){ return screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers') + '<p class="stub-note">Screen 6 — build lands in Commit 3.</p>'; }
+function renderTextureCollection(){ return screenHeader('MAKE MATERIAL', 'My Texture Collection') + '<p class="stub-note">Screen 7 — build lands in Commit 3.</p>'; }
+function renderTextureDetective(){ return screenHeader('MAKE MATERIAL', 'Texture Detective') + '<p class="stub-note">Screen 8 — build lands in Commit 3.</p>'; }
+function renderTransitionToCollage(){ return screenHeader('BUILD', 'Your Papers Are Ready...') + '<p class="stub-note">Screen 9 — build lands in Commit 4.</p>'; }
+function renderMission2Video(){ return screenHeader('BUILD', 'Mission 2 — Build Your Chameleon') + '<p class="stub-note">Screen 10 — build lands in Commit 4.</p>'; }
+function renderChoose(){ return screenHeader('BUILD', 'Which Paper Would You Choose?') + '<p class="stub-note">Screen 11 — build lands in Commit 4.</p>'; }
+function renderCut(){ return screenHeader('BUILD', 'Draw the Shape. Cut It Out.') + '<p class="stub-note">Screen 12 — build lands in Commit 4.</p>'; }
+function renderArrange(){ return screenHeader('BUILD', "Don't Glue Yet!") + '<p class="stub-note">Screen 13 — build lands in Commit 4.</p>'; }
+function renderDetails(){ return screenHeader('BUILD', 'Make It Yours') + '<p class="stub-note">Screen 14 — build lands in Commit 5.</p>'; }
+function renderScrapChallenge(){ return screenHeader('BUILD', "Don't Throw It Away!") + '<p class="stub-note">Screen 15 — build lands in Commit 5.</p>'; }
+function renderCompletionReveal(){ return screenHeader('SHARE', 'Your Chameleon Has Come to Life!') + '<p class="stub-note">Screen 16 — build lands in Commit 5.</p>'; }
+function renderUpload(){ return screenHeader('SHARE', 'Show Us Your Chameleon!') + '<p class="stub-note">Screen 17 — build lands in Commit 6.</p>'; }
+function renderTeacherFeedback(){ return screenHeader('SHARE', 'A Little Note From Your Teacher') + '<p class="stub-note">Screen 18 — build lands in Commit 6.</p>'; }
+function renderGalleryParade(){ return screenHeader('SHARE', 'Chameleon Parade!') + '<p class="stub-note">Screen 19 — build lands in Commit 6.</p>'; }
+function renderBadge(){ return screenHeader('SHARE', 'Collage Creator') + '<p class="stub-note">Screen 20 — build lands in Commit 6.</p>'; }
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+async function renderCurrentStage(){
+  const contentEl = document.getElementById('screen-content');
+  const zoneTag = document.getElementById('zoneTag');
+
+  if (currentStageId === 'screen-map') {
+    zoneTag.textContent = '';
+    contentEl.innerHTML = `<div class="screen active">${renderMap()}</div>`;
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  const stage = STAGES.find(s => s.id === currentStageId);
+  if (!stage) { goMap(); return; }
+  zoneTag.textContent = ZONES.find(z => z.id === stage.zone).label;
+
+  contentEl.innerHTML = `<div class="screen active">
+    ${stage.render()}
+    ${renderNav(stage)}
+  </div>`;
+  if (stage.afterRender) stage.afterRender();
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'carle-colorful-chameleon');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  loadState();
+  await renderCurrentStage();
+}
+
+init();
+</script>
+</body>
+</html>
