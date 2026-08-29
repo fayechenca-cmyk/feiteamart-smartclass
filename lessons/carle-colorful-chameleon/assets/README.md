@@ -1,40 +1,64 @@
 # Assets for "The Colorful Chameleon"
 
-This lesson has no downloadable Eric Carle artwork to fetch (per the
-compliance rule: no scraping/imitating copyrighted Eric Carle
-illustrations — Screen 4 uses typography + a simple process diagram
-only). One real asset is still pending from Faye.
+Updated 2026-08-28 (course-correction pass): Faye supplied the two real
+source photos this course is now built from. Nothing here is invented —
+every color/shape/texture in the lesson traces back to one of these two
+photos or a crop derived from them.
 
-## 1. Mrs. Dawn's finished chameleon collage artwork (Screens 1, 3, 14, 16)
+## Source photos (referenced directly by URL, not downloaded)
 
-Needs a photo of Mrs. Dawn's own finished paper-collage chameleon piece.
-Used as the hero image on the Opening screen, in the "how was it made"
-disassembly moment, as the labeled "MRS. DAWN'S VERSION" reference on
-Details, and as the big reveal on the Completion screen. Once supplied:
+- **Final chameleon artwork** — Mrs. Dawn's finished paper-collage piece.
+  `FINAL_ARTWORK_SRC` in `index.html`:
+  `https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cf313ccd-d1e3-4f62-dc9e-2150b3a22500/public`
+  Used as: the Opening hero, the "Find the Textures" hotspot image, the
+  "before" state in the Screen 3 disassembly, and the Completion Reveal —
+  always labeled **"MRS. DAWN'S VERSION"**, never "Correct Example" or
+  "Final Answer."
+- **Texture papers reference sheet** — 8 real painted-paper swatches on a
+  cutting mat. `TEXTURE_REFERENCE_SRC` in `index.html`:
+  `https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/b42da379-6a69-4b1d-d838-00ffc9486900/public`
+  Used as a "check your own papers against this" reference in the Texture
+  Lab / Mission 1 area — a reference, not a template to copy.
 
-- Save it as `mrs-dawn-chameleon-artwork.jpg` in this folder.
-- Wire it into `index.html`'s `MRS_DAWN_ARTWORK_SRC` constant (added in
-  Commit 2) the same way Miró's `MRS_DAWN_ARTWORK_SRC` and the Chameleon
-  video IDs are referenced directly rather than downloaded — or download
-  it locally if Faye's source is a personal photo rather than a stable
-  CDN URL.
-- It must always be labeled **"MRS. DAWN'S VERSION"** — never "Correct
-  Example," "Final Answer," or anything implying it's the target to copy
-  (per the spec's own repeated rule: "your colors, your textures, your
-  shapes, your chameleon").
-- Until supplied, every screen that shows it uses the same
-  `onerror`-driven missing-image fallback UI already established for
-  Miró's Screen 02 and Kandinsky's hero images.
-- The "pieces separate" disassembly transition on Screen 3 does **not**
-  attempt to crop real pieces out of this photo — it uses generic
-  torn-paper silhouette shapes in the course's own palette instead (see
-  the approved plan for why). That part of Screen 3 works the same
-  whether or not this photo has been supplied yet.
+## Derived crops (new files in this folder, cropped from the reference sheet above)
 
-## 2. Everything else is generated, not photographed
+Each was cropped with a percentage bounding box against the reference
+sheet's real pixel dimensions (1024×768), then visually verified (cropped,
+viewed, confirmed clean before accepting) rather than guessed blind:
 
-Texture swatches, worktable objects, the Texture Detective samples, and
-the leftover-scrap shapes are all built with CSS/SVG (gradients, dot
-patterns, scratch-line SVG, layered brush strokes) rather than
-photographed or downloaded images — a deliberate choice (see the
-approved plan), not a placeholder gap. Nothing to supply here.
+| file | source region (crop box, % of 1024×768) | technique |
+|---|---|---|
+| `texture-watercolor-lavender.jpg` | x 12–28%, y 10–26% | horizontal dry-brush watercolor |
+| `texture-press-coral.jpg` | x 41–52%, y 9–24% | mottled wash, press/dab character |
+| `texture-scratch-red-yellow.jpg` | x 63–87%, y 4–19% | densely scratched/combed — this is the beetle's paper in the final artwork |
+| `texture-layer-green-gold.jpg` | x 11–29%, y 35.5–39.5% | dabbed mossy layered texture — a thin strip in the source photo (partially covered by the lavender sheet above it), cropped honestly as visible, not padded out |
+| `texture-brush-sage.jpg` | x 59–69%, y 35–63% | visible horizontal brushstroke passes |
+| `texture-bubble-blue-white.jpg` | x 77–95%, y 30–63% | heavy bubble-wrap print, the clearest example on the sheet |
+| `texture-decorative-bubble-blue-yellow.jpg` | x 41–53%, y 35–58% | bubble-wrap print over color — used decoratively (Texture Lab backdrop), not one of the 6 named collection categories |
+| `texture-decorative-watercolor-magenta.jpg` | x 7–31%, y 57–83% | vertical watercolor drips — used decoratively, same reason as above |
+
+## Derived crop (from the final-artwork photo)
+
+| file | source region (pixel box, 1028×768) | use |
+|---|---|---|
+| `wood-grain-tile.jpg` | (205,660)–(270,725) | a clean patch of the branch's wood grain, tiled as the course-map progress rail texture |
+
+## What's intentionally NOT a real cutout
+
+The Screen 3 "pieces separate" transition (finished chameleon → head/
+body/eye/tail spread across a worktable) does **not** attempt a real
+alpha-matte cutout of the chameleon from the final-artwork photo — that
+needs image-segmentation/matting tooling this environment doesn't have,
+and a naive rectangular crop would look broken, not like a separated
+paper piece. It shows the real photo as the "before" state, then
+transitions to generic torn-rectangle/circle/triangle shapes rendered in
+the real sampled palette (documented in `index.html`'s `:root` CSS
+variables, each with a comment naming which photo region it was sampled
+from) as the "after" visual. Flagging this plainly rather than shipping a
+bad fake cutout.
+
+## No Eric Carle artwork
+
+Screen 4 ("Meet Eric Carle") uses typography + a simple process diagram
+only — no scraped or imitated Eric Carle illustration anywhere in this
+lesson.

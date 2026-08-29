@@ -24,20 +24,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* "Painted paper" raw-material palette — not one fixed theme, screens
-     lean into different subsets/intensities of this range on purpose. */
-  --paper:#f6f1e2;
-  --paper-deep:#ece0c4;
-  --ink:#241f1a;
-  --yellow:#f4b942;
-  --red:#e2492f;
-  --blue:#2f6fa8;
-  --green:#2f8f5b;
-  --purple:#7b5ea8;
-  --brown:#8a5a34;
-  --ink-soft:rgba(36,31,26,.66);
-  --ink-faint:rgba(36,31,26,.42);
-  --line:rgba(36,31,26,.14);
+  /* Palette sampled directly from Mrs. Dawn's two reference photos
+     (course-correction pass, 2026-08-28) — every value below was picked
+     against a verified crop of the actual photo, not guessed. See
+     assets/README.md for exact crop coordinates. Screens lean into
+     different subsets/intensities of this range on purpose (quiet
+     paper-toned screens vs. the Texture Collection's color explosion) —
+     not one flat theme applied everywhere. */
+  --paper:#f5f0dd;      /* cream background paper, direct sample */
+  --paper-deep:#ece2c4; /* deeper paper tone, same family */
+  --ink:#1c1712;        /* near-black — pupil / outline / dashed path */
+  --yellow:#f0c94a;     /* the chameleon's eye — warm golden yellow */
+  --red:#dd5233;        /* the beetle's paper + red-yellow scratched swatch */
+  --blue:#2c4a72;       /* the chameleon body's deep indigo/navy base */
+  --green:#5a9673;      /* blend of the sage-brush + dark green/gold mossy swatches */
+  --purple:#9678ab;     /* the chameleon head + lavender watercolor swatch */
+  --brown:#885b3d;      /* the wood-grain branch, direct sample */
+  --gold:#e8973a;       /* the mustard-to-orange triangle ridge spikes */
+  --navy:#1f3a5c;       /* deeper navy for large surface washes */
+  --teal:#3dbfa5;       /* the hand-painted "Chameleon" title lettering */
+  --ink-soft:rgba(28,23,18,.66);
+  --ink-faint:rgba(28,23,18,.42);
+  --line:rgba(28,23,18,.16);
 }
 *{box-sizing:border-box;}
 html,body{height:100%;}
@@ -401,14 +409,19 @@ const STAGES = [
   { id:'badge',                  title:'Collage Creator',              zone:'share',        render:renderBadge, afterRender:awardCollageCreatorBadge }
 ];
 
-// Mrs. Dawn's finished chameleon collage (Screens 1, 3, 14, 16) — no URL
-// supplied yet (see assets/README.md). Points at the documented expected
-// filename so dropping the real photo in place works with zero further
-// code changes, same pattern used before Miró's Screen 02 photo arrived.
-const MRS_DAWN_ARTWORK_SRC = 'assets/mrs-dawn-chameleon-artwork.jpg';
+// Mrs. Dawn's finished chameleon collage — the real photo (course-
+// correction pass, 2026-08-28), referenced directly by URL the same way
+// Miró's Screen 02 photo and the Chameleon's own video IDs are — not
+// downloaded locally. Used on Screens 1, 2 (hotspots), 3 (before state),
+// 14 (reference), and 16 (completion reveal).
+const FINAL_ARTWORK_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cf313ccd-d1e3-4f62-dc9e-2150b3a22500/public';
+// The 8-swatch texture-papers reference sheet — used as a "check your own
+// papers against this" callout in the Texture Lab / Mission 1 area, never
+// as a template to copy.
+const TEXTURE_REFERENCE_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/b42da379-6a69-4b1d-d838-00ffc9486900/public';
 function heroArtworkFrame(idSuffix, extraInner){
   return `<div class="hero-frame torn" id="heroFrame${idSuffix}">
-    <img class="hero-frame-img" src="${MRS_DAWN_ARTWORK_SRC}" alt="Mrs. Dawn's finished chameleon collage artwork"
+    <img class="hero-frame-img" src="${FINAL_ARTWORK_SRC}" alt="Mrs. Dawn's finished chameleon collage artwork"
       onerror="this.style.display='none'; this.closest('.hero-frame').classList.add('img-missing')">
     <div class="hero-frame-missing-note">Mrs. Dawn's chameleon photo<br>coming soon</div>
     ${extraInner || ''}
@@ -416,9 +429,9 @@ function heroArtworkFrame(idSuffix, extraInner){
 }
 
 // Discovery hotspots (screen 2) on Mrs. Dawn's artwork. Positions are
-// placeholders in % until the real photo (see assets/README.md) tells us
-// where textures actually sit — kept generic/spread for now, same
-// caveat Miró's LOOK_FIRST_CHIPS carried before its real photo arrived.
+// re-verified against the real photo in a later commit of this
+// correction pass (see Commit 4 in the plan) — kept as-is here since
+// this commit only lands the token system, not screen-by-screen fixes.
 const FIND_TEXTURES_CHIPS = [
   { id:'bubbly',  label:'BUBBLY!',  left:22, top:20 },
   { id:'brushy',  label:'BRUSHY!',  left:72, top:16 },
