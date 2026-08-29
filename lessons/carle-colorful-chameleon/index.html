@@ -111,6 +111,46 @@ button{font-family:'Quicksand',sans-serif;}
 .paper-chip.active{background:var(--yellow);}
 .chip-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0;}
 
+/* ---------- Shared hero-artwork frame (Screens 1, 3, 14, 16) ---------- */
+.hero-frame{position:relative;max-width:520px;margin:10px auto;aspect-ratio:4/3;background:var(--paper-deep);border:3px solid var(--ink);overflow:hidden;box-shadow:6px 7px 0 rgba(36,31,26,.16);}
+.hero-frame-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hero-frame-missing-note{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:13px;color:var(--ink-faint);font-weight:600;text-align:center;padding:20px;}
+.hero-frame.img-missing .hero-frame-missing-note{display:flex;}
+.hero-frame-caption{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:11px;letter-spacing:.6px;color:var(--green);margin:6px 0 0;text-transform:uppercase;}
+
+/* ---------- Screen 1 — Opening ---------- */
+.hero-blink-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:rgba(36,31,26,.55);left:61%;top:29%;animation:blink 5.5s ease-in-out infinite;pointer-events:none;}
+@keyframes blink{0%,90%,100%{transform:scaleY(1);}94%{transform:scaleY(.1);}}
+.opening-title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:2.1rem;line-height:1.05;text-align:center;margin:16px 0 4px;}
+.opening-artist{text-align:center;font-weight:600;color:var(--green);margin:0 0 14px;font-size:14px;}
+.opening-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:.3px;margin:0 0 6px;}
+
+/* ---------- Screen 2 — Find the Textures ---------- */
+.texture-hotspot{
+  position:absolute;transform:translate(-50%,-50%);padding:6px 11px;font-family:'Baloo 2',sans-serif;
+  font-size:10.5px;font-weight:700;letter-spacing:.3px;border:2px solid var(--ink);background:rgba(246,241,226,.94);
+  cursor:pointer;box-shadow:2px 3px 0 rgba(36,31,26,.18);
+}
+.texture-hotspot:active{transform:translate(-50%,-50%) scale(.92);}
+.found-counter{text-align:center;font-size:11.5px;color:var(--ink-faint);font-weight:600;margin:10px 0 0;}
+.found-tag-list{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0 0;min-height:30px;}
+.found-tag{font-family:'Baloo 2',sans-serif;font-size:10.5px;font-weight:700;background:var(--yellow);padding:5px 10px;}
+
+/* ---------- Screen 3 — Reveal ---------- */
+.howmade-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:14px 0;}
+.howmade-chip{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;padding:12px 18px;border:2.5px solid var(--ink);background:#fff;cursor:pointer;}
+.howmade-chip.correct{background:var(--green);color:#fff;border-color:var(--green);}
+.disassembly-wrap{position:relative;max-width:460px;height:180px;margin:16px auto;background:var(--paper-deep);border:2px dashed var(--line);overflow:hidden;}
+.disassembly-piece{position:absolute;width:30px;height:30px;opacity:0;animation:pieceScatter 1s ease forwards;}
+@keyframes pieceScatter{from{opacity:0;transform:translate(50%,50%) scale(.4) rotate(0deg);}to{opacity:1;transform:translate(0,0) scale(1) rotate(var(--rot,10deg));}}
+.reveal-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.05rem;line-height:1.5;margin:16px 0 4px;}
+
+/* ---------- Screen 4 — Meet Eric Carle ---------- */
+.carle-lines p{text-align:center;font-size:14px;margin:2px 0;font-weight:600;}
+.process-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:18px 0 6px;}
+.process-chip{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;background:#fff;border:2px solid var(--ink);padding:9px 14px;}
+.process-arrow{color:var(--red);font-weight:900;font-size:16px;}
+
 /* ---------- Video embed — same responsive-iframe contract as every
    other course, wrapped in a distinct "taped-on photo" presentation. ---------- */
 .video-embed-wrap{position:relative;margin:16px 0 8px;padding:14px 14px 10px;background:#fff;border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(36,31,26,.16);}
@@ -203,6 +243,54 @@ const STAGES = [
   { id:'gallery-parade',         title:'Chameleon Parade!',            zone:'share',        render:renderGalleryParade },
   { id:'badge',                  title:'Collage Creator',              zone:'share',        render:renderBadge }
 ];
+
+// Mrs. Dawn's finished chameleon collage (Screens 1, 3, 14, 16) — no URL
+// supplied yet (see assets/README.md). Points at the documented expected
+// filename so dropping the real photo in place works with zero further
+// code changes, same pattern used before Miró's Screen 02 photo arrived.
+const MRS_DAWN_ARTWORK_SRC = 'assets/mrs-dawn-chameleon-artwork.jpg';
+function heroArtworkFrame(idSuffix, extraInner){
+  return `<div class="hero-frame torn" id="heroFrame${idSuffix}">
+    <img class="hero-frame-img" src="${MRS_DAWN_ARTWORK_SRC}" alt="Mrs. Dawn's finished chameleon collage artwork"
+      onerror="this.style.display='none'; this.closest('.hero-frame').classList.add('img-missing')">
+    <div class="hero-frame-missing-note">Mrs. Dawn's chameleon photo<br>coming soon</div>
+    ${extraInner || ''}
+  </div>`;
+}
+
+// Discovery hotspots (screen 2) on Mrs. Dawn's artwork. Positions are
+// placeholders in % until the real photo (see assets/README.md) tells us
+// where textures actually sit — kept generic/spread for now, same
+// caveat Miró's LOOK_FIRST_CHIPS carried before its real photo arrived.
+const FIND_TEXTURES_CHIPS = [
+  { id:'bubbly',  label:'BUBBLY!',  left:22, top:20 },
+  { id:'brushy',  label:'BRUSHY!',  left:72, top:16 },
+  { id:'scratchy',label:'SCRATCHY!',left:40, top:46 },
+  { id:'watery',  label:'WATERY!',  left:65, top:55 },
+  { id:'spotty',  label:'SPOTTY!',  left:20, top:68 },
+  { id:'rough',   label:'ROUGH!',   left:80, top:72 }
+];
+
+const HOWMADE_OPTIONS = [
+  { id:'painted',  emoji:'🎨', label:'PAINTED' },
+  { id:'cut',       emoji:'✂',  label:'CUT PAPER' },
+  { id:'both',      emoji:'👀', label:'BOTH?' }
+];
+
+// Generic torn-paper silhouette pieces for the disassembly transition —
+// NOT segmented from the real photo (there isn't one yet, and never was
+// going to be pixel-perfect anyway). Colors drawn from the course's own
+// palette.
+const DISASSEMBLY_PIECES = [
+  { color:'var(--green)',  left:'10%', top:'15%', rot:'-8deg' },
+  { color:'var(--yellow)', left:'55%', top:'10%', rot:'6deg' },
+  { color:'var(--red)',    left:'78%', top:'40%', rot:'-4deg' },
+  { color:'var(--blue)',   left:'30%', top:'55%', rot:'10deg' },
+  { color:'var(--purple)', left:'62%', top:'62%', rot:'-6deg' },
+  { color:'var(--brown)',  left:'8%',  top:'62%', rot:'5deg' }
+];
+
+const PROCESS_STEPS = ['PAINT', 'TEXTURE', 'CUT', 'COLLAGE'];
 
 /* ============================================================
    STATE (localStorage-persisted, scoped to this course only)
@@ -334,10 +422,99 @@ function renderMap(){
    owns its own header so the page is a real, loadable, gated lesson
    even before the designed UI lands.
 ============================================================ */
-function renderOpening(){ return screenHeader('DISCOVER', 'Explore the Chameleon') + '<p class="stub-note">Screen 1 — build lands in Commit 2.</p>'; }
-function renderFindTextures(){ return screenHeader('DISCOVER', 'How Many Textures Can You Find?') + '<p class="stub-note">Screen 2 — build lands in Commit 2.</p>'; }
-function renderRevealHowMade(){ return screenHeader('DISCOVER', 'How Was It Made?') + '<p class="stub-note">Screen 3 — build lands in Commit 2.</p>'; }
-function renderMeetEricCarle(){ return screenHeader('DISCOVER', 'Meet Eric Carle') + '<p class="stub-note">Screen 4 — build lands in Commit 2.</p>'; }
+/* ============================================================
+   SCREEN 1 — Opening
+============================================================ */
+function renderOpening(){
+  return `
+    <div class="hero-01">
+      ${heroArtworkFrame('Opening', '<div class="hero-blink-dot" aria-hidden="true"></div>')}
+      <h1 class="opening-title display">THE COLORFUL CHAMELEON</h1>
+      <p class="opening-artist">Inspired by Eric Carle</p>
+      <p class="opening-line">Paint it. Print it. Cut it. Build it.</p>
+    </div>
+  `;
+}
+
+/* ============================================================
+   SCREEN 2 — Find the Textures
+============================================================ */
+function renderFindTextures(){
+  const hotspots = FIND_TEXTURES_CHIPS.map(c =>
+    `<button class="texture-hotspot torn" style="left:${c.left}%;top:${c.top}%" onclick="tapTextureHotspot('${c.id}')">${c.label}</button>`
+  ).join('');
+  const foundTags = STATE.foundTextures.map(id => {
+    const chip = FIND_TEXTURES_CHIPS.find(c => c.id === id);
+    return chip ? `<span class="found-tag">${chip.label}</span>` : '';
+  }).join('');
+  return `
+    ${screenHeader('DISCOVER', 'How Many Textures Can You Find?')}
+    ${heroArtworkFrame('FindTextures', hotspots)}
+    <p class="found-counter" id="foundCounter">${STATE.foundTextures.length} of ${FIND_TEXTURES_CHIPS.length} textures found</p>
+    <div class="found-tag-list" id="foundTagList">${foundTags}</div>
+    <p class="stage-sub" style="margin-top:14px;">ONE PICTURE + MANY DIFFERENT PAPERS.</p>
+  `;
+}
+function tapTextureHotspot(id){
+  if (!STATE.foundTextures.includes(id)) { STATE.foundTextures.push(id); saveState(); }
+  const counter = document.getElementById('foundCounter');
+  if (counter) counter.textContent = `${STATE.foundTextures.length} of ${FIND_TEXTURES_CHIPS.length} textures found`;
+  const list = document.getElementById('foundTagList');
+  if (list) {
+    const chip = FIND_TEXTURES_CHIPS.find(c => c.id === id);
+    if (chip && !list.innerHTML.includes(chip.label)) list.innerHTML += `<span class="found-tag">${chip.label}</span>`;
+  }
+}
+
+/* ============================================================
+   SCREEN 3 — Reveal: How Was It Made?
+============================================================ */
+function renderRevealHowMade(){
+  const choices = HOWMADE_OPTIONS.map(o =>
+    `<button class="howmade-chip torn ${STATE.howMadeAnswer === o.id ? 'correct' : ''}" onclick="chooseHowMade('${o.id}')">${o.emoji} ${o.label}</button>`
+  ).join('');
+  const showReveal = !!STATE.howMadeAnswer;
+  return `
+    ${screenHeader('DISCOVER', 'Wait... Is This Chameleon Painted?')}
+    <div class="howmade-row">${choices}</div>
+    <div id="disassemblyArea">${showReveal ? renderDisassembly() : ''}</div>
+  `;
+}
+function chooseHowMade(id){
+  STATE.howMadeAnswer = 'both'; // BOTH is always the revealed answer, regardless of tap — pure discovery, not a graded test
+  saveState();
+  const area = document.getElementById('disassemblyArea');
+  if (area) area.innerHTML = renderDisassembly();
+  document.querySelectorAll('.howmade-chip').forEach(el => {
+    el.classList.toggle('correct', el.textContent.includes('BOTH'));
+  });
+}
+function renderDisassembly(){
+  const pieces = DISASSEMBLY_PIECES.map((p, i) =>
+    `<div class="disassembly-piece torn" style="left:${p.left};top:${p.top};background:${p.color};--rot:${p.rot};animation-delay:${i * 0.08}s;"></div>`
+  ).join('');
+  return `
+    <div class="disassembly-wrap">${pieces}</div>
+    <p class="reveal-line display">FIRST, WE MAKE THE PAPER.<br>THEN, WE MAKE THE PICTURE.</p>
+  `;
+}
+
+/* ============================================================
+   SCREEN 4 — Meet Eric Carle
+============================================================ */
+function renderMeetEricCarle(){
+  const process = PROCESS_STEPS.map((s, i) =>
+    `<span class="process-chip torn">${s}</span>${i < PROCESS_STEPS.length - 1 ? '<span class="process-arrow">→</span>' : ''}`
+  ).join('');
+  return `
+    ${screenHeader('DISCOVER', 'Meet Eric Carle')}
+    <div class="carle-lines">
+      <p>ERIC CARLE — PICTURE BOOK ARTIST.</p>
+      <p>He made pictures with painted paper.</p>
+    </div>
+    <div class="process-row">${process}</div>
+  `;
+}
 function renderTextureLab(){ return screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!') + '<p class="stub-note">Screen 5 — build lands in Commit 3.</p>'; }
 function renderMission1Video(){ return screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers') + '<p class="stub-note">Screen 6 — build lands in Commit 3.</p>'; }
 function renderTextureCollection(){ return screenHeader('MAKE MATERIAL', 'My Texture Collection') + '<p class="stub-note">Screen 7 — build lands in Commit 3.</p>'; }
