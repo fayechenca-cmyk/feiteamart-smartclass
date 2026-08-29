@@ -340,7 +340,8 @@ button{font-family:'Quicksand',sans-serif;}
 .map-header h1{font-size:2rem;margin:4px 0 4px;}
 .map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
 .trail{position:relative;padding:6px 6px 10px;}
-.trail-path{position:absolute;left:50%;top:0;bottom:0;width:2px;border-left:3px dashed var(--line);transform:translateX(-50%);z-index:0;}
+.trail-wood-rail{position:absolute;left:50%;top:0;bottom:0;width:14px;transform:translateX(-50%);background-image:url('assets/wood-grain-tile.jpg');background-repeat:repeat-y;background-size:14px 56px;border-radius:7px;box-shadow:2px 3px 0 rgba(28,23,18,.14);z-index:0;}
+.trail-path{position:absolute;left:50%;top:0;bottom:0;width:2px;border-left:3px dashed var(--paper);transform:translateX(-50%);z-index:0;opacity:.85;}
 .trail-stop{
   position:relative;z-index:1;display:flex;align-items:center;gap:12px;margin:0 0 20px;cursor:pointer;
 }
@@ -433,6 +434,26 @@ const TEXTURE_REFERENCE_SRC = 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/
 // Blinks on idle via the .peek-eye-blink CSS animation. Appears on a
 // handful of screens (see STAGES' peekEye flag) — not a new generic
 // mascot, the one recurring character already in the photo.
+// Hand-lettered multi-color title treatment — matches the real artwork's
+// "Chameleon" title lettering (each letter a different hand-painted
+// color, uneven strokes). Reserved for the biggest headline moments only
+// (course title, Mission 1/2 headers, badge name) — body text and UI
+// labels stay in plain Quicksand for readability, per spec. Per-letter
+// rotation/baseline jitter is derived deterministically from the letter's
+// index (not Math.random()) so it doesn't reshuffle on every re-render.
+const HAND_LETTER_COLORS = ['var(--teal)', 'var(--blue)', 'var(--green)', 'var(--purple)', 'var(--gold)', 'var(--red)'];
+function handLetteredTitle(text){
+  let colorIdx = 0;
+  return text.split('').map((ch, i) => {
+    if (ch === ' ') return ' ';
+    const color = HAND_LETTER_COLORS[colorIdx % HAND_LETTER_COLORS.length];
+    colorIdx++;
+    const rot = ((i * 37) % 13) - 6;   // deterministic -6..6 deg
+    const dy = ((i * 19) % 7) - 3;     // deterministic -3..3 px
+    return `<span style="color:${color};display:inline-block;transform:rotate(${rot}deg) translateY(${dy}px);">${ch}</span>`;
+  }).join('');
+}
+
 function peekingEye(){
   return `<div class="peek-eye" aria-hidden="true">
     <svg viewBox="0 0 60 60">
@@ -793,8 +814,9 @@ function renderVideoEmbed(src, title){
    this session's courses. Uses "stage-tag" (torn brown tag) rather than
    any prior course's kicker-pill treatment.
 ============================================================ */
-function screenHeader(zoneLabel, title, sub){
-  return `<div class="stage-tag-row"><span class="stage-tag torn">${zoneLabel}</span></div><h2 class="stage-title">${title}</h2>${sub ? `<p class="stage-sub">${sub}</p>` : ''}`;
+function screenHeader(zoneLabel, title, sub, handLettered){
+  const titleHtml = handLettered ? handLetteredTitle(title) : title;
+  return `<div class="stage-tag-row"><span class="stage-tag torn">${zoneLabel}</span></div><h2 class="stage-title">${titleHtml}</h2>${sub ? `<p class="stage-sub">${sub}</p>` : ''}`;
 }
 
 /* ============================================================
@@ -833,10 +855,10 @@ function renderMap(){
   `).join('');
   return `
     <div class="map-header">
-      <h1 class="display">The Colorful Chameleon</h1>
+      <h1 class="display">${handLetteredTitle('The Colorful Chameleon')}</h1>
       <p>First, we make the paper. Then, we make the picture.</p>
     </div>
-    <div class="trail"><div class="trail-path"></div>${stops}</div>
+    <div class="trail"><div class="trail-wood-rail"></div><div class="trail-path"></div>${stops}</div>
   `;
 }
 
@@ -852,7 +874,7 @@ function renderOpening(){
   return `
     <div class="hero-01">
       ${heroArtworkFrame('Opening', '<div class="hero-blink-dot" aria-hidden="true"></div>')}
-      <h1 class="opening-title display">THE COLORFUL CHAMELEON</h1>
+      <h1 class="opening-title display">${handLetteredTitle('THE COLORFUL CHAMELEON')}</h1>
       <p class="opening-artist">Inspired by Eric Carle</p>
       <p class="opening-line">Paint it. Print it. Cut it. Build it.</p>
     </div>
@@ -978,7 +1000,7 @@ function renderMission1Video(){
     </div>
   `).join('');
   return `
-    ${screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers', 'Teacher: Mrs. Dawn Wang')}
+    ${screenHeader('MAKE MATERIAL', 'Mission 1 — Make Your Texture Papers', 'Teacher: Mrs. Dawn Wang', true)}
     ${renderVideoEmbed(cfStreamSrc(CHAMELEON_VIDEO_IDS.mission1), 'Mission 1: Make Your Texture Papers — Mrs. Dawn demo')}
     <p class="stage-sub" style="margin-top:14px;">WATCH FOR THESE TECHNIQUES:</p>
     <div class="tech-preview-row">${previews}</div>
@@ -1131,7 +1153,7 @@ function runTransitionReveal(){
 function renderMission2Video(){
   const chips = MISSION2_CHIPS.map(c => `<span class="paper-chip torn">${c}</span>`).join('');
   return `
-    ${screenHeader('BUILD', 'Mission 2 — Build Your Chameleon', 'Teacher: Mrs. Dawn Wang')}
+    ${screenHeader('BUILD', 'Mission 2 — Build Your Chameleon', 'Teacher: Mrs. Dawn Wang', true)}
     ${renderVideoEmbed(cfStreamSrc(CHAMELEON_VIDEO_IDS.mission2), 'Mission 2: Build Your Chameleon — Mrs. Dawn demo')}
     <p class="stage-sub" style="margin-top:14px;">WHAT YOU'LL SEE:</p>
     <div class="mission2-chip-row">${chips}</div>
@@ -1424,7 +1446,7 @@ function renderBadge(){
       <span class="bl bl1 torn"></span><span class="bl bl2 torn"></span><span class="bl bl3 torn"></span>
       <div class="badge-icon">🦎</div>
     </div>
-    <p class="badge-name display">COLLAGE CREATOR</p>
+    <p class="badge-name display">${handLetteredTitle('COLLAGE CREATOR')}</p>
     <p class="badge-completion-line">YOU TURNED PAINTED PAPER INTO A PICTURE!</p>
   `;
 }
