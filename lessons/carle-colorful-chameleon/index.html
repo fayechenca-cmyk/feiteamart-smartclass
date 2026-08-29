@@ -154,6 +154,7 @@ button{font-family:'Quicksand',sans-serif;}
 .reveal-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:1.05rem;line-height:1.5;margin:16px 0 4px;}
 .reveal-before-frame{transition:opacity .6s ease, transform .6s ease;}
 .reveal-before-frame.shrinking{opacity:.15;transform:scale(.85);}
+.author-pivot-line{text-align:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:.95rem;line-height:1.55;margin:16px auto 4px;max-width:340px;color:var(--ink);}
 
 /* ---------- Recurring peeking-eye motif — the literal eye from the real
    artwork, redrawn small (a photo crop would be too low-res/inconsistent
@@ -163,11 +164,15 @@ button{font-family:'Quicksand',sans-serif;}
 @keyframes peekBlink{0%,88%,100%{transform:scaleY(1);}92%{transform:scaleY(.08);}}
 
 /* ---------- Screen 4 — Meet Eric Carle ---------- */
+.carle-portrait-frame{width:130px;height:130px;margin:6px auto 12px;background:var(--paper-deep);display:flex;align-items:center;justify-content:center;box-shadow:4px 5px 0 rgba(28,23,18,.16);}
+.carle-portrait{width:104px;height:104px;}
 .carle-lines p{text-align:center;font-size:14px;margin:2px 0;font-weight:600;}
+.carle-book-titles{text-align:center;font-size:11.5px;font-style:italic;color:var(--ink-soft);margin:8px 0 0;}
 .process-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:18px 0 6px;}
 .process-chip{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;background:#fff;border:2px solid var(--ink);padding:9px 14px;}
 .process-arrow{color:var(--red);font-weight:900;font-size:16px;}
 .carle-sample-chip{width:50px;height:50px;margin:18px auto 0;background-image:url('assets/texture-decorative-watercolor-magenta.jpg');background-size:cover;background-position:center;transform:rotate(-6deg);box-shadow:2px 3px 0 rgba(28,23,18,.14);}
+.carle-links-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0 4px;}
 
 /* ---------- Texture-swatch system — real photographed paint, cropped
    directly from Faye's texture-papers-reference.jpg (see assets/README.md
@@ -944,24 +949,52 @@ function renderDisassembly(){
   return `
     <div class="disassembly-wrap">${pieces}</div>
     <p class="reveal-line display">FIRST, WE MAKE THE PAPER.<br>THEN, WE MAKE THE PICTURE.</p>
+    <p class="author-pivot-line">THIS ONE IS MRS. DAWN'S. SHE MADE IT WITH PAINTED PAPER — INSPIRED BY AN ARTIST NAMED ERIC CARLE. LET'S MEET HIM.</p>
   `;
 }
 
 /* ============================================================
    SCREEN 4 — Meet Eric Carle
 ============================================================ */
+// Original friendly portrait avatar — a simple hand-cut-paper-style
+// illustration (round shapes, no fine detail), not based on or copied
+// from any specific photo/portrait of Eric Carle. Built entirely from
+// the course's own real-sampled palette.
+function carlePortrait(){
+  return `<svg class="carle-portrait" viewBox="0 0 120 120" role="img" aria-label="A friendly illustrated portrait of Eric Carle, in the course's own hand-cut-paper style">
+    <path d="M18,120 L18,96 C18,80 38,71 60,71 C82,71 102,80 102,96 L102,120 Z" fill="var(--blue)"/>
+    <rect x="50" y="76" width="20" height="16" fill="#e8c39e"/>
+    <circle cx="60" cy="54" r="34" fill="#e8c39e"/>
+    <circle cx="27" cy="55" r="6" fill="#e8c39e"/>
+    <circle cx="93" cy="55" r="6" fill="#e8c39e"/>
+    <path d="M27,41 C27,16 93,16 93,41 C93,28 78,24 60,24 C42,24 27,28 27,41 Z" fill="var(--brown)"/>
+    <path d="M31,57 C31,80 45,90 60,90 C75,90 89,80 89,57 C89,72 75,80 60,80 C45,80 31,72 31,57 Z" fill="var(--brown)" opacity="0.85"/>
+    <circle cx="47" cy="51" r="10" fill="none" stroke="var(--ink)" stroke-width="3"/>
+    <circle cx="73" cy="51" r="10" fill="none" stroke="var(--ink)" stroke-width="3"/>
+    <line x1="57" y1="51" x2="63" y2="51" stroke="var(--ink)" stroke-width="3"/>
+    <circle cx="47" cy="51" r="2.5" fill="var(--ink)"/>
+    <circle cx="73" cy="51" r="2.5" fill="var(--ink)"/>
+    <path d="M50,65 Q60,71 70,65" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>`;
+}
 function renderMeetEricCarle(){
   const process = PROCESS_STEPS.map((s, i) =>
     `<span class="process-chip torn">${s}</span>${i < PROCESS_STEPS.length - 1 ? '<span class="process-arrow">→</span>' : ''}`
   ).join('');
   return `
     ${screenHeader('DISCOVER', 'Meet Eric Carle')}
+    <div class="carle-portrait-frame torn">${carlePortrait()}</div>
     <div class="carle-lines">
-      <p>ERIC CARLE — PICTURE BOOK ARTIST.</p>
-      <p>He made pictures with painted paper.</p>
+      <p>ERIC CARLE — PICTURE BOOK ARTIST (1929–2021).</p>
+      <p>He made pictures with painted paper, cut into shapes.</p>
     </div>
+    <p class="carle-book-titles">The Very Hungry Caterpillar · Brown Bear, Brown Bear, What Do You See?</p>
     <div class="process-row">${process}</div>
     <div class="carle-sample-chip torn" aria-hidden="true"></div>
+    <div class="carle-links-row">
+      <a class="paper-btn torn" href="https://carlemuseum.org/about/about-eric-carle" target="_blank" rel="noopener">The Eric Carle Museum →</a>
+      <a class="paper-btn torn" href="https://eric-carle.com/about-eric-carle/" target="_blank" rel="noopener">eric-carle.com →</a>
+    </div>
   `;
 }
 /* ============================================================
@@ -972,7 +1005,9 @@ function renderTextureLab(){
     `<div class="lab-object torn" onclick="tapLabObject('${o.label.replace(/'/g, "\\'")}')"><div class="lo-icon">${o.icon}</div><div class="lo-label">${o.label}</div></div>`
   ).join('');
   return `
-    ${screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!', 'HOW MANY KINDS OF PAPER CAN WE MAKE?')}
+    ${screenHeader('MAKE MATERIAL', 'Welcome to the Texture Lab!')}
+    <p class="stage-sub">THIS IS HOW OUR TEACHER MAKES HER PAPERS.</p>
+    <p class="stage-sub">HOW MANY KINDS OF PAPER CAN WE MAKE?</p>
     <div class="texture-lab-wrap">
       <div class="texture-lab-backdrop" aria-hidden="true"></div>
       <div class="lab-object-grid">${objects}</div>
