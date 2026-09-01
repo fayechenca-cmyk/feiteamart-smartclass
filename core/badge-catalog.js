@@ -28,5 +28,6 @@ window.BADGE_CATALOG = [
   { id:'community_builder', title:'Community Builder', artist:'Des. by Team', imgUrl:'', emoji:'🏙️', color:'#f59e0b' },
   { id:'focus_sprinter', title:'Focus Sprinter', artist:'Des. by Cam', imgUrl:'', emoji:'⏱️', color:'#64748b' },
   { id:'portfolio_builder', title:'Portfolio Builder', artist:'Des. by Regina', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69ced4efc423b6f032f27496_7ce471ab56c32f732fa052a1ef003958.JPG', emoji:'📂', color:'#1e3a8a' },
-  { id:'collage_creator', title:'Collage Creator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🦎', color:'#2f8f5b' }
+  { id:'collage_creator', title:'Collage Creator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🦎', color:'#2f8f5b' },
+  { id:'fridge_curator', title:'Fridge Curator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🧁', color:'#4f8f7c' }
 ];

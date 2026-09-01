@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>My Sweet Fridge</title>
+<meta name="description" content="A Wayne Thiebaud-inspired Creation lesson: design your own sweet treat, watch Mrs. Dawn draw and build hers, then cut, glue, and fill your own fridge full of desserts.">
+<meta name="keywords" content="Creation, Learn from Masters, Wayne Thiebaud, Watercolor, Collage, Cutting, Painting, Markers">
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "My Sweet Fridge",
+  "subtitle": "Inspired by Wayne Thiebaud",
+  "path": ["Creation", "Material · The Workbench", "My Sweet Fridge"],
+  "series": "Learn from Masters",
+  "tags": ["Learn from Masters", "Wayne Thiebaud", "Watercolor", "Collage", "Cutting", "Painting"],
+  "ageRange": "5-9",
+  "materials": ["Colored Pencils", "Watercolor", "Markers", "Scissors", "Glue"],
+  "stageCount": 11
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Palette matches Mrs. Dawn's own finished reference piece (mint fridge,
+     lavender interior, mustard shelf, blue drop-shadow under every
+     treat) — warmer and more saturated on purpose than the platform's
+     usual muted Learn-from-Masters look. See assets/README.md. */
+  --mint:#a7d9cb;
+  --mint-deep:#4f8f7c;
+  --lavender:#cdbfe6;
+  --lavender-deep:#8a76b8;
+  --cream:#fbf3e3;
+  --cream-deep:#f2e6cc;
+  --mustard:#e2a83f;
+  --cherry:#d8432c;
+  --blush:#f2a3bb;
+  --shadow-blue:#3d8fd1; /* the required "cut paper on the shelf" drop-shadow */
+  --ink:#2b2438;
+  --ink-soft:rgba(43,36,56,.66);
+  --ink-faint:rgba(43,36,56,.42);
+  --line:rgba(43,36,56,.14);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow-x:hidden;
+}
+.display{font-family:'Fredoka',sans-serif;}
+button{font-family:'Nunito',sans-serif;}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+/* ---------- Top bar ---------- */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--cream) 78%, transparent);
+}
+.back-link{font-size:12px;color:var(--mint-deep);text-decoration:none;font-weight:800;letter-spacing:.2px;}
+.map-btn{
+  border:2px solid var(--ink);background:var(--cream);border-radius:999px;
+  padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;color:var(--ink);
+}
+.map-btn:active{transform:scale(.95);}
+.zone-pill{font-family:'Fredoka',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:1.5px;color:#fff;background:var(--lavender-deep);padding:4px 9px;border-radius:999px;}
+
+/* ---------- Screens ---------- */
+.screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+@media(min-width:700px){.screen{max-width:820px;}}
+@media(min-width:1000px){.screen{max-width:960px;}}
+.screen.active{display:block;animation:fridgeIn .45s cubic-bezier(.2,.7,.3,1);}
+@keyframes fridgeIn{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+.kicker{font-family:'Fredoka',sans-serif;font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cherry);text-align:center;font-weight:700;margin-bottom:6px;}
+.s-title{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.75rem;text-align:center;margin:0 0 6px;color:var(--mint-deep);line-height:1.25;}
+.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.55;}
+.no-single-answer{text-align:center;font-size:11px;color:var(--ink-faint);font-style:italic;margin-top:14px;}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
+.fr-btn{
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--ink);background:transparent;color:var(--ink);transition:transform .12s ease;
+}
+.fr-btn:active{transform:scale(.96);}
+.fr-btn.primary{background:var(--mint-deep);border-color:var(--mint-deep);color:#fff;}
+.fr-btn.cherry{background:var(--cherry);border-color:var(--cherry);color:#fff;}
+.fr-btn:disabled{opacity:.3;cursor:not-allowed;}
+.fr-btn.wide{width:100%;text-align:center;display:block;text-decoration:none;}
+
+.credit-line{font-size:10px;color:var(--ink-faint);text-align:center;margin-top:6px;line-height:1.5;font-style:italic;padding:0 8px;}
+.video-embed-wrap{margin:14px 0 8px;border-radius:8px;overflow:hidden;box-shadow:0 12px 28px rgba(43,36,56,.24);}
+
+/* ---------- Materials chips (called out locally, per stage) ---------- */
+.mat-chip-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px;}
+.mat-chip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--ink-soft);}
+.mc-icon{font-size:14px;}
+
+/* ---------- Reward: fridge-magnet tray (persistent, fixed) ---------- */
+.magnet-tray{
+  position:fixed;left:12px;bottom:16px;z-index:600;display:flex;gap:4px;align-items:center;
+  background:rgba(255,255,255,.88);border:2px solid var(--mint-deep);border-radius:999px;
+  padding:6px 10px;box-shadow:0 6px 16px rgba(43,36,56,.18);
+}
+.magnet-tray:empty{display:none;}
+.magnet-icon{width:22px;height:22px;display:block;}
+.magnet-icon.new{animation:magnetPop .5s cubic-bezier(.3,1.6,.4,1);}
+@keyframes magnetPop{0%{transform:scale(0) rotate(-20deg);}70%{transform:scale(1.25) rotate(6deg);}100%{transform:scale(1) rotate(0);}}
+
+/* ---------- Treat icons (shared across picker / fridge game / magnets / badge) ---------- */
+.treat-icon{display:block;}
+
+/* ---------- COURSE MAP ---------- */
+.map-header{text-align:center;margin:6px 0 22px;}
+.map-header h1{font-size:2rem;margin:4px 0 4px;}
+.map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
+.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(min-width:480px){.zone-grid{grid-template-columns:repeat(4,1fr);}}
+.zone-tile{
+  position:relative;background:#fff;border:2.5px solid var(--ink);border-radius:16px;
+  padding:20px 10px 16px;text-align:center;cursor:pointer;
+  box-shadow:4px 5px 0 var(--shadow-blue);transition:transform .15s ease;
+}
+.zone-tile:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow-blue);}
+.zone-tile .zt-icon{font-size:1.9rem;}
+.zone-tile .zt-label{font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.02rem;margin-top:6px;color:var(--mint-deep);}
+.zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
+
+/* ---------- Stage: Welcome ---------- */
+.welcome-stage{height:34vh;min-height:180px;max-height:250px;position:relative;overflow:visible;}
+.welcome-float{position:absolute;animation:welcomeFloat 4.5s ease-in-out infinite;}
+.wf-1{left:6%;top:8%;}
+.wf-2{right:8%;top:2%;animation-delay:.4s;}
+.wf-3{left:18%;bottom:2%;animation-delay:.8s;}
+.wf-4{right:16%;bottom:10%;animation-delay:1.2s;}
+@keyframes welcomeFloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-12px) rotate(4deg);}}
+.welcome-title{text-align:center;font-size:2.25rem;margin:2px 0 4px;color:var(--mint-deep);}
+.welcome-sub{text-align:center;font-size:13.5px;color:var(--ink-soft);max-width:300px;margin:0 auto 20px;line-height:1.6;}
+.welcome-cta{text-align:center;}
+
+/* ---------- Stage: Pick Your Treat ---------- */
+.treat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
+@media(max-width:480px){.treat-grid{grid-template-columns:repeat(2,1fr);}}
+.treat-card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 6px 8px;text-align:center;cursor:pointer;transition:transform .15s ease,border-color .15s ease;}
+.treat-card:active{transform:scale(.96);}
+.treat-card.picked{border-color:var(--shadow-blue);background:linear-gradient(135deg,#fff,rgba(61,143,209,.1));}
+.treat-card .treat-icon{width:64px;height:64px;margin:0 auto;}
+.treat-card .tc-label{font-size:10.5px;font-weight:700;margin-top:4px;color:var(--ink-soft);}
+.cake-message-row{margin-top:16px;text-align:center;}
+.cake-message-input{border:2px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13px;font-family:'Nunito',sans-serif;text-align:center;width:220px;max-width:80%;}
+.cake-message-preview{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.3rem;text-align:center;margin-top:10px;min-height:1.6rem;}
+
+/* ---------- "Let's Draw Together" screens ---------- */
+.complete-wrap{text-align:center;margin-top:18px;}
+.complete-btn{background:#fff;border:2px dashed var(--line);border-radius:999px;padding:11px 24px;cursor:pointer;font-weight:700;font-size:13px;color:var(--ink-soft);font-family:'Nunito',sans-serif;}
+.complete-btn.done{background:var(--mint-deep);border-style:solid;border-color:var(--mint-deep);color:#fff;}
+
+/* ---------- Fridge (shared shell, used by mini-game + welcome deco) ---------- */
+.fridge-game-wrap{max-width:320px;margin:16px auto 0;}
+.fridge-shell{position:relative;width:100%;aspect-ratio:3/4;border-radius:28px;background:var(--mint);border:4px solid var(--mint-deep);box-shadow:6px 10px 0 rgba(43,36,56,.14);overflow:hidden;}
+.fridge-handle{position:absolute;right:14px;top:14%;width:12px;height:64px;background:var(--blush);border-radius:8px;border:2px solid var(--mint-deep);z-index:6;}
+.fridge-door{
+  position:absolute;inset:6px;border-radius:22px;background:var(--mint);border:3px solid var(--mint-deep);z-index:5;
+  transition:transform .55s cubic-bezier(.3,.8,.3,1),opacity .5s ease;transform-origin:left center;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.fridge-door.open{transform:translateX(-8%) scaleX(.06);opacity:0;pointer-events:none;}
+.fridge-door-hint{font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;color:var(--mint-deep);text-align:center;padding:0 20px;}
+.fridge-interior{position:absolute;inset:6px;border-radius:22px;background:var(--lavender);z-index:1;overflow:hidden;}
+.fridge-shelf{position:absolute;left:0;right:0;top:calc(50% - 9px);height:18px;background:var(--mustard);border-top:2px solid rgba(0,0,0,.12);border-bottom:2px solid rgba(0,0,0,.12);z-index:2;}
+.fridge-slot{position:absolute;width:56px;height:56px;z-index:3;transform:translate(-50%,-50%);pointer-events:none;}
+.fridge-slot .treat-icon{width:56px;height:56px;}
+.fridge-tray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.fridge-tray-item{width:52px;height:52px;cursor:grab;touch-action:none;}
+.fridge-tray-item .treat-icon{width:52px;height:52px;}
+.fridge-tray-item.placed{opacity:.22;pointer-events:none;}
+.fridge-tray-item.dragging{cursor:grabbing;}
+
+/* ---------- Upload ---------- */
+.upload-slot-wrap{display:flex;flex-direction:column;align-items:center;margin-top:8px;}
+.upload-slot{
+  position:relative;width:100%;max-width:320px;aspect-ratio:1/1;border-radius:14px;border:2.5px dashed var(--lavender-deep);background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;
+}
+@media(min-width:700px){.upload-slot{max-width:360px;}}
+.upload-slot.saving{border-color:var(--cherry);}
+.upload-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.upload-slot .slot-plus{font-size:30px;color:var(--lavender-deep);}
+.upload-slot .slot-label{font-size:10.5px;font-weight:700;color:var(--ink-soft);margin-top:6px;padding:0 16px;text-align:center;}
+
+/* ---------- Meet the Artist ---------- */
+.painter-portrait{text-align:center;margin:8px 0;}
+.artist-rhyme-line{background:#fff;border:1.5px dashed var(--shadow-blue);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--ink-soft);margin:14px 0;text-align:center;line-height:1.55;}
+.artist-link-row{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.artist-link-card{display:block;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;font-size:12.5px;font-weight:700;color:var(--mint-deep);text-decoration:none;text-align:center;}
+.artist-link-card:active{transform:scale(.98);}
+
+/* ---------- Reflect & Share ---------- */
+.geo-frame-wrap{position:relative;width:100%;max-width:320px;margin:8px auto 6px;}
+@media(min-width:700px){.geo-frame-wrap{max-width:360px;}}
+.geo-frame{padding:12px;background:#fff;border:2.5px solid var(--ink);box-shadow:6px 8px 0 var(--shadow-blue);border-radius:6px;transform:rotate(-2deg);animation:frameFloat 3.6s ease-in-out infinite;}
+@keyframes frameFloat{0%,100%{transform:rotate(-2deg) translateY(0);}50%{transform:rotate(-1deg) translateY(-6px);}}
+.geo-frame img{width:100%;display:block;border-radius:2px;}
+.geo-frame-empty{text-align:center;font-size:12px;color:var(--ink-faint);padding:30px 10px;}
+.reflect-label{text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--ink-faint);margin:22px 0 8px;text-transform:uppercase;}
+.reflect-chip-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.reflect-chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:700;}
+.reflect-chip.picked{background:var(--cherry);border-color:var(--cherry);color:#fff;}
+.share-final-line{text-align:center;font-family:'Fredoka',sans-serif;font-style:italic;font-size:1.05rem;color:var(--mint-deep);margin:22px 0 4px;}
+.share-credit{text-align:center;font-size:11px;color:var(--ink-faint);margin-bottom:18px;}
+
+/* ---------- Badge ---------- */
+.badge-medal{width:130px;height:130px;border-radius:50%;background:var(--mint);border:4px solid var(--mint-deep);box-shadow:8px 10px 0 var(--shadow-blue);margin:22px auto 12px;display:flex;align-items:center;justify-content:center;}
+.badge-name{text-align:center;font-weight:600;font-size:1.5rem;margin:6px 0 6px;}
+.badge-completion-line{text-align:center;font-size:13px;color:var(--ink-soft);font-weight:700;max-width:300px;margin:0 auto;}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SHARED SVG DEFS — the required "cut paper + solid blue drop
+     shadow" device (see assets/README.md) is implemented once here:
+     every treat/magnet symbol is drawn twice via <use> — a duplicate
+     tinted solid blue by #treatShadowTint and offset behind, then the
+     real colored copy on top. Reused by the treat picker, the fridge
+     game, the magnet tray, and the badge — never redrawn per-screen.
+============================================================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <filter id="treatShadowTint" x="-30%" y="-30%" width="160%" height="160%">
+    <feFlood flood-color="#3d8fd1" flood-opacity="1"/>
+    <feComposite in2="SourceGraphic" operator="in"/>
+  </filter>
+
+  <symbol id="treat-icecream" viewBox="0 0 120 140">
+    <path d="M40,78 L80,78 L62,132 Q60,136 58,132 Z" fill="#e2a83f" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M46,86 L74,104" stroke="#c98f2e" stroke-width="2"/>
+    <path d="M44,96 L70,114" stroke="#c98f2e" stroke-width="2"/>
+    <path d="M48,106 L66,122" stroke="#c98f2e" stroke-width="2"/>
+    <path d="M74,86 L46,104" stroke="#c98f2e" stroke-width="2"/>
+    <path d="M70,96 L44,114" stroke="#c98f2e" stroke-width="2"/>
+    <path d="M32,78 Q30,40 60,34 Q90,40 88,78 Q60,92 32,78 Z" fill="#f2a3bb" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M40,50 Q60,38 80,50" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+    <circle cx="50" cy="66" r="3" fill="#2b2438"/>
+    <circle cx="68" cy="66" r="3" fill="#2b2438"/>
+    <path d="M52,74 Q59,80 66,74" fill="none" stroke="#2b2438" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="45" cy="72" rx="4" ry="2.6" fill="#d8432c" opacity=".35"/>
+    <ellipse cx="72" cy="72" rx="4" ry="2.6" fill="#d8432c" opacity=".35"/>
+    <ellipse cx="60" cy="89" rx="6" ry="4" fill="#f2a3bb" opacity=".85"/>
+  </symbol>
+
+  <symbol id="treat-cakeslice" viewBox="0 0 120 140">
+    <path d="M14,116 L106,116 L92,84 L28,84 Z" fill="#d8432c" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M28,84 L92,84 L78,54 L42,54 Z" fill="#a7d9cb" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M42,54 L78,54 L64,26 L56,26 Z" fill="#f2a3bb" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="60" cy="24" rx="15" ry="8" fill="#fbf3e3" stroke="#2b2438" stroke-width="2"/>
+    <circle cx="60" cy="16" r="5" fill="#d8432c" stroke="#2b2438" stroke-width="1.5"/>
+  </symbol>
+
+  <symbol id="treat-cake" viewBox="0 0 120 140">
+    <ellipse cx="60" cy="96" rx="52" ry="26" fill="#fbf3e3" stroke="#2b2438" stroke-width="2.5"/>
+    <path d="M8,80 L8,96 Q8,120 60,124 Q112,120 112,96 L112,80 Q112,104 60,108 Q8,104 8,80 Z" fill="#f2e6cc" stroke="#2b2438" stroke-width="2"/>
+    <ellipse cx="60" cy="70" rx="52" ry="24" fill="#f2a3bb" stroke="#2b2438" stroke-width="2.5"/>
+    <circle cx="18" cy="70" r="4" fill="#e2a83f"/><circle cx="38" cy="58" r="4" fill="#e2a83f"/><circle cx="60" cy="52" r="4" fill="#e2a83f"/><circle cx="82" cy="58" r="4" fill="#e2a83f"/><circle cx="102" cy="70" r="4" fill="#e2a83f"/>
+  </symbol>
+
+  <symbol id="treat-milkshake" viewBox="0 0 120 140">
+    <path d="M38,60 L82,60 L92,128 L28,128 Z" fill="#cdbfe6" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M32,96 L88,96 L92,128 L28,128 Z" fill="#fbf3e3" stroke="#2b2438" stroke-width="2" stroke-linejoin="round"/>
+    <ellipse cx="60" cy="58" rx="24" ry="10" fill="#fbf3e3" stroke="#2b2438" stroke-width="2"/>
+    <ellipse cx="48" cy="46" rx="14" ry="10" fill="#fff" stroke="#2b2438" stroke-width="2"/>
+    <ellipse cx="64" cy="40" rx="12" ry="9" fill="#fff" stroke="#2b2438" stroke-width="2"/>
+    <ellipse cx="60" cy="52" rx="16" ry="10" fill="#fff" stroke="#2b2438" stroke-width="2"/>
+    <circle cx="66" cy="34" r="6" fill="#d8432c" stroke="#2b2438" stroke-width="1.5"/>
+    <path d="M70,30 L90,10" stroke="#d8432c" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="treat-candyjar" viewBox="0 0 120 140">
+    <path d="M28,50 Q22,50 22,58 L22,118 Q22,128 34,128 L86,128 Q98,128 98,118 L98,58 Q98,50 92,50 Z" fill="#fbf3e3" stroke="#2b2438" stroke-width="2.5"/>
+    <rect x="30" y="34" width="60" height="18" rx="6" fill="#e2a83f" stroke="#2b2438" stroke-width="2.5"/>
+    <circle cx="42" cy="72" r="6" fill="#d8432c"/><circle cx="62" cy="66" r="6" fill="#a7d9cb"/><circle cx="80" cy="76" r="6" fill="#f2a3bb"/>
+    <circle cx="50" cy="92" r="6" fill="#e2a83f"/><circle cx="70" cy="96" r="6" fill="#d8432c"/><circle cx="38" cy="104" r="6" fill="#a7d9cb"/>
+    <circle cx="82" cy="106" r="6" fill="#f2a3bb"/><circle cx="60" cy="112" r="6" fill="#e2a83f"/>
+  </symbol>
+
+  <symbol id="treat-milkcarton" viewBox="0 0 120 140">
+    <rect x="26" y="56" width="68" height="74" fill="#fbf3e3" stroke="#2b2438" stroke-width="2.5"/>
+    <path d="M26,56 L44,24 L76,24 L94,56 Z" fill="#a7d9cb" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M44,24 L60,10 L76,24 Z" fill="#a7d9cb" stroke="#2b2438" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="60" cy="92" r="10" fill="#e2a83f" stroke="#2b2438" stroke-width="2"/>
+    <path d="M60,84 L60,100 M52,92 L68,92" stroke="#fbf3e3" stroke-width="2.4"/>
+  </symbol>
+
+  <symbol id="treat-donut" viewBox="0 0 120 140">
+    <circle cx="60" cy="76" r="44" fill="#e2a83f" stroke="#2b2438" stroke-width="2.5"/>
+    <circle cx="60" cy="76" r="16" fill="#fbf3e3" stroke="#2b2438" stroke-width="2.5"/>
+    <path d="M22,64 Q40,42 60,44 Q84,46 98,66 Q80,60 60,60 Q40,60 22,64 Z" fill="#f2a3bb" stroke="#2b2438" stroke-width="2"/>
+    <circle cx="34" cy="58" r="3" fill="#d8432c"/><circle cx="48" cy="50" r="3" fill="#a7d9cb"/><circle cx="66" cy="48" r="3" fill="#cdbfe6"/><circle cx="82" cy="54" r="3" fill="#d8432c"/><circle cx="58" cy="56" r="3" fill="#e2a83f"/>
+  </symbol>
+
+  <symbol id="treat-lollipop" viewBox="0 0 120 140">
+    <line x1="60" y1="86" x2="60" y2="132" stroke="#fbf3e3" stroke-width="6" stroke-linecap="round"/>
+    <line x1="60" y1="86" x2="60" y2="132" stroke="#2b2438" stroke-width="1" stroke-linecap="round"/>
+    <circle cx="60" cy="56" r="40" fill="#f2a3bb" stroke="#2b2438" stroke-width="2.5"/>
+    <circle cx="60" cy="56" r="31" fill="#a7d9cb" stroke="#2b2438" stroke-width="1.6"/>
+    <circle cx="60" cy="56" r="22" fill="#f2a3bb" stroke="#2b2438" stroke-width="1.6"/>
+    <circle cx="60" cy="56" r="13" fill="#a7d9cb" stroke="#2b2438" stroke-width="1.6"/>
+    <circle cx="60" cy="56" r="4" fill="#d8432c"/>
+  </symbol>
+
+  <symbol id="magnet-star" viewBox="0 0 40 40">
+    <path d="M20,3 L24,15 L37,15 L26,23 L30,36 L20,28 L10,36 L14,23 L3,15 L16,15 Z" fill="currentColor" stroke="#2b2438" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+</defs>
+</svg>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../creation/">← Studio</a>
+    <span class="zone-pill" id="zonePill"></span>
+    <button class="map-btn" onclick="goMap()">◐ Map</button>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<div class="magnet-tray" id="magnetTray"></div>
+
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+
+<script>
+/* ============================================================
+   DATA
+============================================================ */
+const ZONES = [
+  { id:'welcome', label:'WELCOME' },
+  { id:'make',    label:'MAKE' },
+  { id:'look',    label:'LOOK' },
+  { id:'reflect', label:'REFLECT' }
+];
+const ZONE_ICONS = { welcome:'👋', make:'🧁', look:'👀', reflect:'🖼' };
+
+const STAGES = [
+  { id:'welcome',         title:'My Sweet Fridge',            zone:'welcome', render:renderWelcome },
+  { id:'ideate',          title:'Pick Your Treat',            zone:'make',    render:renderIdeate },
+  { id:'draw-sketch',     title:'Draw Your Treat — Pencil',   zone:'make',    render:renderDrawSketch },
+  { id:'draw-color',      title:'Color Your Treat',           zone:'make',    render:renderDrawColor },
+  { id:'fridge-game',     title:'Fill the Fridge (Warm-Up)',  zone:'make',    render:renderFridgeGame },
+  { id:'fridge-draw',     title:'Draw the Fridge',            zone:'make',    render:renderFridgeDraw },
+  { id:'fridge-assemble', title:'Cut & Glue Your Scene',      zone:'make',    render:renderFridgeAssemble },
+  { id:'upload',          title:'Show Us Your Sweet Fridge!', zone:'make',    render:renderUpload },
+  { id:'meet-artist',     title:'Meet Wayne Thiebaud',        zone:'look',    render:renderMeetArtist },
+  { id:'reflect-share',   title:'Your Sweet Fridge!',         zone:'reflect', render:renderReflectShare },
+  { id:'badge',           title:'Fridge Curator',             zone:'reflect', render:renderBadge, afterRender:awardFridgeBadge }
+];
+
+// The 8 illustrated treats — painterly/illustrated per spec §4, not flat
+// stickers. Each is drawn as an SVG <symbol> above and rendered through
+// treatIcon(), which always carries the required blue drop-shadow.
+const TREATS = [
+  { id:'icecream',   label:'Ice Cream Cone' },
+  { id:'cakeslice',  label:'Cake Slice' },
+  { id:'cake',       label:'Round Cake' },
+  { id:'milkshake',  label:'Milkshake' },
+  { id:'candyjar',   label:'Candy Jar' },
+  { id:'milkcarton', label:'Milk Carton' },
+  { id:'donut',      label:'Donut' },
+  { id:'lollipop',   label:'Lollipop' }
+];
+function treatLabel(id){ const t = TREATS.find(x => x.id === id); return t ? t.label.toLowerCase() : 'treat'; }
+
+// Materials — called out locally at the stage where they're used (spec
+// §2), never as one long list up front.
+const MATERIAL_ICONS = {
+  coloredpencils: { icon:'✏️', label:'Colored Pencils' },
+  watercolor:     { icon:'💧', label:'Watercolor' },
+  markers:        { icon:'🖊️', label:'Markers' },
+  scissors:       { icon:'✂️', label:'Scissors' },
+  glue:           { icon:'🧴', label:'Glue' }
+};
+function renderMatChips(ids){
+  return `<div class="mat-chip-row">${ids.map(id => {
+    const m = MATERIAL_ICONS[id];
+    return `<span class="mat-chip"><span class="mc-icon">${m.icon}</span>${m.label}</span>`;
+  }).join('')}</div>`;
+}
+
+// Cloudflare Stream — same customer account platform-wide.
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(videoId){
+  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${videoId}/iframe?poster=${poster}`;
+}
+const VIDEO_IDS = {
+  sketch:   '582869d7a184afb724e906ec0472756b', // teacher sketches a treat in pencil
+  color:    '8a81cb08742cac6e718b70dcd6c2a226', // teacher colors it with markers
+  fridge:   '0cb90fe78b10dc324fa7d980503ff590', // teacher draws the fridge
+  assemble: '8160ecafcd7d7bda965fe80ce00fabbb'  // teacher cuts + glues the scene
+};
+
+// Fridge mini-game shelf slots — 3 over, 3 under the shelf strip.
+const FRIDGE_SLOT_POS = [
+  { x:20, y:26 }, { x:50, y:26 }, { x:80, y:26 },
+  { x:20, y:74 }, { x:50, y:74 }, { x:80, y:74 }
+];
+
+// Meet the Artist — link-out only, per platform's "no reproduced
+// [artist] artworks" rule (Thiebaud's paintings are still in
+// copyright; reproduction is administered by the Artists Rights
+// Society). Museum/foundation pages only, verified against §5's list.
+const ARTIST_LINKS = [
+  { label:'Wayne Thiebaud Foundation',      href:'https://waynethiebaudfoundation.org/' },
+  { label:'National Gallery of Art',        href:'https://www.nga.gov/artists/3185-wayne-thiebaud' },
+  { label:'Crocker Art Museum — Cake Window', href:'https://www.crockerart.org/art/detail/cake-window-from-delights-series-wayne-thiebaud-1995-9-1-13' },
+  { label:'Whitney Museum of American Art', href:'https://whitney.org/artists/132510' }
+];
+
+const REFLECT_CHIPS = [
+  { id:'icecream',  emoji:'🍦', label:'ICE CREAM' },
+  { id:'cake',      emoji:'🎂', label:'CAKE' },
+  { id:'candy',     emoji:'🍬', label:'CANDY' },
+  { id:'milkshake', emoji:'🥤', label:'MILKSHAKE' },
+  { id:'donut',     emoji:'🍩', label:'DONUT' },
+  { id:'surprise',  emoji:'✨', label:'SOMETHING NEW' }
+];
+
+const SWEET_LETTER_COLORS = ['var(--cherry)','var(--mustard)','var(--mint-deep)','var(--lavender-deep)','var(--blush)'];
+function sweetLettering(text){
+  let idx = 0;
+  return text.split('').map((ch, i) => {
+    if (ch === ' ') return ' ';
+    const color = SWEET_LETTER_COLORS[idx % SWEET_LETTER_COLORS.length];
+    idx++;
+    const rot = ((i * 31) % 11) - 5;
+    const dy = ((i * 17) % 6) - 3;
+    return `<span style="color:${color};display:inline-block;transform:rotate(${rot}deg) translateY(${dy}px);">${ch}</span>`;
+  }).join('');
+}
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// Treat icon — every instance (picker, fridge game, magnets via their
+// own star symbol) draws the reference's signature move: a solid blue
+// silhouette copy offset behind the real colored artwork.
+function treatIcon(id, size){
+  size = size || 64;
+  return `<svg class="treat-icon" viewBox="-6 -6 132 154" width="${size}" height="${size}" aria-hidden="true">
+    <use href="#treat-${id}" x="6" y="8" filter="url(#treatShadowTint)"></use>
+    <use href="#treat-${id}"></use>
+  </svg>`;
+}
+
+/* ============================================================
+   STATE (localStorage-persisted, scoped to this course only — matches
+   every other Creation lesson's own STATE object. The account-wide
+   fei_user_profile / completedLessons record below is the one that
+   lives in sessionStorage.)
+============================================================ */
+const STATE_KEY = 'fei.creation.thiebaud_my_sweet_fridge.v1';
+function defaultState(){
+  return {
+    chosenTreat: null,
+    cakeMessage: '',
+    sketchDone: false,
+    colorDone: false,
+    fridgeSlots: [null, null, null, null, null, null],
+    fridgeDoorOpen: false,
+    fridgeGameStarted: false,
+    fridgeDrawDone: false,
+    fridgeAssembleDone: false,
+    reflectChips: [],
+    magnets: [],
+    uploaded: false,
+    badgeAwarded: false
+  };
+}
+let STATE = defaultState();
+function loadState(){
+  try { const raw = localStorage.getItem(STATE_KEY); if (raw) STATE = Object.assign(defaultState(), JSON.parse(raw)); } catch (e) {}
+}
+function saveState(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(STATE)); } catch (e) {} }
+
+/* ============================================================
+   REWARD — "fridge magnets" (pilot for this lesson only, per Faye).
+   Each completed stage drops a magnet into the persistent tray, using
+   the same blue-shadow pop already established for treats. Purely
+   lesson-local (STATE.magnets) — no new persistent data model.
+============================================================ */
+const MAGNET_COLORS = ['var(--cherry)','var(--mustard)','var(--mint-deep)','var(--lavender-deep)','var(--blush)'];
+function addMagnet(tag){
+  if (STATE.magnets.includes(tag)) return;
+  STATE.magnets.push(tag);
+  saveState();
+  renderMagnetTray(true);
+}
+function renderMagnetTray(pop){
+  const tray = document.getElementById('magnetTray');
+  if (!tray) return;
+  tray.innerHTML = STATE.magnets.map((tag, i) => {
+    const isNew = pop && i === STATE.magnets.length - 1;
+    return `<svg class="magnet-icon${isNew ? ' new' : ''}" viewBox="-4 -4 48 48" style="color:${MAGNET_COLORS[i % MAGNET_COLORS.length]}" aria-hidden="true">
+      <use href="#magnet-star" x="3" y="4" filter="url(#treatShadowTint)"></use><use href="#magnet-star"></use>
+    </svg>`;
+  }).join('');
+}
+
+/* ============================================================
+   IndexedDB — finished-artwork photo storage (same helpers as every
+   other Creation lesson: openDB/compressImage/saveArtwork/listArtworks)
+============================================================ */
+const DB_NAME = 'fei_thiebaud_my_sweet_fridge_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const PIECE_ID = 'piece_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+function isStorageSupported(){ return !!window.indexedDB; }
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale); height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image')); };
+    img.src = url;
+  });
+}
+async function saveArtwork(pieceId, fileOrBlob){
+  const compressed = await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => { const rows = req.result || []; rows.sort((a, b) => b.savedAt - a.savedAt); resolve(rows); };
+    req.onerror = () => reject(req.error);
+  });
+}
+let artworkRecord = null;
+let objectUrl = null;
+let saving = false;
+
+/* ============================================================
+   BADGE — real account-wide badge. Pushes into
+   fei_user_profile.completedLessons via sessionStorage (the correct
+   storage for that key — core/course-badge-registry.js). Second
+   Creation course wired into the badge system after
+   carle-colorful-chameleon.
+============================================================ */
+const LESSON_ID = 'thiebaud-my-sweet-fridge';
+function awardFridgeBadge(){
+  if (STATE.badgeAwarded) return;
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    if (profile) {
+      profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+      if (!profile.completedLessons.includes(LESSON_ID)) {
+        profile.completedLessons.push(LESSON_ID);
+        sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+      }
+    }
+  } catch (e) { console.warn('[badge] could not update fei_user_profile', e); }
+  STATE.badgeAwarded = true;
+  saveState();
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+let currentStageId = 'welcome';
+function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
+function goStage(id){ currentStageId = id; renderCurrentStage(); }
+function goNext(){ const i = stageIndex(currentStageId); if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id); }
+function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
+function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
+function goZoneFirst(zoneId){ const first = STAGES.find(s => s.zone === zoneId); if (first) goStage(first.id); }
+
+function renderNav(stage){
+  const idx = stageIndex(stage.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STAGES.length - 1;
+  return `
+    <div class="nav-footer">
+      <button class="fr-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
+      ${isLast ? '<span></span>' : `<button class="fr-btn primary" onclick="goNext()">Next →</button>`}
+    </div>
+  `;
+}
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--lavender-deep),var(--mint-deep));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   COURSE MAP
+============================================================ */
+function renderMap(){
+  const tiles = ZONES.map(z => {
+    const count = STAGES.filter(s => s.zone === z.id).length;
+    return `
+      <div class="zone-tile" onclick="goZoneFirst('${z.id}')">
+        <div class="zt-icon">${ZONE_ICONS[z.id]}</div>
+        <div class="zt-label">${z.label}</div>
+        <div class="zt-count">${count} stop${count > 1 ? 's' : ''}</div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="map-header">
+      <h1 class="display">My Sweet Fridge</h1>
+      <p>Design a treat, make it real, then fill the fridge.</p>
+    </div>
+    <div class="zone-grid">${tiles}</div>
+  `;
+}
+
+/* ============================================================
+   STAGE — Welcome
+============================================================ */
+function renderWelcome(){
+  const floaters = [
+    { id:'icecream', cls:'wf-1' }, { id:'cakeslice', cls:'wf-2' },
+    { id:'donut', cls:'wf-3' },    { id:'lollipop', cls:'wf-4' }
+  ].map(f => `<span class="welcome-float ${f.cls}">${treatIcon(f.id, 46)}</span>`).join('');
+  return `
+    <div class="welcome-stage">${floaters}</div>
+    <h1 class="welcome-title display">My Sweet Fridge</h1>
+    <p class="welcome-sub">What's inside YOUR fridge of sweets?</p>
+    <div class="welcome-cta"><button class="fr-btn primary" onclick="goNext()">Open the Fridge →</button></div>
+  `;
+}
+
+/* ============================================================
+   STAGE — Pick Your Treat
+============================================================ */
+function pickTreat(id){
+  STATE.chosenTreat = id;
+  saveState();
+  addMagnet('ideate');
+  renderCurrentStage();
+}
+function onCakeMessageInput(val){
+  STATE.cakeMessage = val.slice(0, 10);
+  saveState();
+  const preview = document.getElementById('cakeMessagePreview');
+  if (preview) preview.innerHTML = STATE.cakeMessage ? sweetLettering(STATE.cakeMessage) : '';
+}
+function renderIdeate(){
+  const cards = TREATS.map(t => `
+    <div class="treat-card${STATE.chosenTreat === t.id ? ' picked' : ''}" onclick="pickTreat('${t.id}')">
+      ${treatIcon(t.id, 64)}
+      <div class="tc-label">${t.label}</div>
+    </div>
+  `).join('');
+  const cakeMessageBlock = STATE.chosenTreat === 'cake' ? `
+    <div class="cake-message-row">
+      <input type="text" class="cake-message-input" id="cakeMessageInput" maxlength="10"
+        placeholder="Add a word! (optional)" value="${escapeHtml(STATE.cakeMessage || '')}" oninput="onCakeMessageInput(this.value)">
+      <div class="cake-message-preview" id="cakeMessagePreview">${STATE.cakeMessage ? sweetLettering(STATE.cakeMessage) : ''}</div>
+    </div>
+  ` : '';
+  return `
+    <div class="kicker">Design Something Sweet</div>
+    <h2 class="s-title">If you could design your own sweet treat, what would it be?</h2>
+    <div class="treat-grid">${cards}</div>
+    ${cakeMessageBlock}
+    <p class="no-single-answer">Pick one to spark an idea — then draw your own version.</p>
+  `;
+}
+
+/* ============================================================
+   "Let's Draw Together" screens — every teacher-demo-video screen
+   platform-wide uses this framing (2026-08-28 convention, set in
+   miro-draw-without-knowing): the demo is Mrs. Dawn's own take, not
+   the one right answer.
+============================================================ */
+function renderLetsDrawScreen(cfg){
+  const done = STATE[cfg.doneKey];
+  return `
+    <div class="kicker">${cfg.kicker}</div>
+    <h2 class="s-title">Let's Draw Together</h2>
+    <p class="s-sub">${cfg.sub}</p>
+    ${renderMatChips(cfg.materials)}
+    ${renderVideoEmbed(cfg.videoSrc, cfg.videoTitle)}
+    <p class="s-sub" style="margin-top:12px;">${cfg.prompt}</p>
+    <div class="complete-wrap">
+      <button class="complete-btn${done ? ' done' : ''}" onclick="toggleLetsDrawDone('${cfg.doneKey}','${cfg.magnetTag}')">${done ? cfg.doneLabel : "I'm done with this step!"}</button>
+    </div>
+  `;
+}
+function toggleLetsDrawDone(key, magnetTag){
+  STATE[key] = !STATE[key];
+  saveState();
+  if (STATE[key]) addMagnet(magnetTag);
+  renderCurrentStage();
+}
+function renderDrawSketch(){
+  return renderLetsDrawScreen({
+    kicker: 'With Mrs. Dawn',
+    sub: "Mrs. Dawn sketches her treat in pencil — this is her own take, not the one right answer.",
+    materials: ['coloredpencils'],
+    videoSrc: cfStreamSrc(VIDEO_IDS.sketch),
+    videoTitle: 'Draw Your Treat — teacher demo',
+    prompt: `Now sketch your own ${STATE.chosenTreat ? treatLabel(STATE.chosenTreat) : 'treat'} in pencil.`,
+    doneKey: 'sketchDone', magnetTag: 'sketch', doneLabel: '✓ Sketch started!'
+  });
+}
+function renderDrawColor(){
+  return renderLetsDrawScreen({
+    kicker: 'With Mrs. Dawn',
+    sub: "Mrs. Dawn brings her treat to life with markers — try it your way too.",
+    materials: ['watercolor', 'markers'],
+    videoSrc: cfStreamSrc(VIDEO_IDS.color),
+    videoTitle: 'Color Your Treat — teacher demo',
+    prompt: 'Now add color to your own treat.',
+    doneKey: 'colorDone', magnetTag: 'color', doneLabel: '✓ Color added!'
+  });
+}
+function renderFridgeDraw(){
+  return renderLetsDrawScreen({
+    kicker: 'With Mrs. Dawn',
+    sub: "Mrs. Dawn draws her own fridge — any shape, any color works.",
+    materials: ['coloredpencils', 'markers'],
+    videoSrc: cfStreamSrc(VIDEO_IDS.fridge),
+    videoTitle: 'Draw the Fridge — teacher demo',
+    prompt: 'Now draw your own fridge — it can look nothing like hers.',
+    doneKey: 'fridgeDrawDone', magnetTag: 'fridge-draw', doneLabel: '✓ Fridge drawn!'
+  });
+}
+function renderFridgeAssemble(){
+  return renderLetsDrawScreen({
+    kicker: 'With Mrs. Dawn',
+    sub: "Mrs. Dawn cuts out her treats and glues them onto the shelves.",
+    materials: ['scissors', 'glue'],
+    videoSrc: cfStreamSrc(VIDEO_IDS.assemble),
+    videoTitle: 'Cut & Glue Your Scene — teacher demo',
+    prompt: 'Now cut out your own treats and glue them into your fridge.',
+    doneKey: 'fridgeAssembleDone', magnetTag: 'fridge-assemble', doneLabel: '✓ Glued in!'
+  });
+}
+
+/* ============================================================
+   STAGE — Fridge Game (drag & drop warm-up, before the real
+   assembly). Pointer-drag pattern matches carle-colorful-chameleon's
+   mountArrangeCanvas — proven touch-reliable on iPad.
+============================================================ */
+let fridgeDrag = null;
+function toggleFridgeDoor(){
+  if (STATE.fridgeDoorOpen) return;
+  STATE.fridgeDoorOpen = true;
+  saveState();
+  renderCurrentStage();
+}
+function fridgeTrayPointerDown(e, treatId){
+  const el = e.currentTarget;
+  if (el.classList.contains('placed')) return;
+  el.setPointerCapture && el.setPointerCapture(e.pointerId);
+  const rect = el.getBoundingClientRect();
+  fridgeDrag = { el, treatId, offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top };
+  el.style.position = 'fixed';
+  el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
+  el.style.width = rect.width + 'px'; el.style.height = rect.height + 'px';
+  el.style.zIndex = 999;
+  el.classList.add('dragging');
+  el.addEventListener('pointermove', fridgeTrayPointerMove);
+  el.addEventListener('pointerup', fridgeTrayPointerUp);
+  el.addEventListener('pointercancel', fridgeTrayPointerUp);
+}
+function fridgeTrayPointerMove(e){
+  if (!fridgeDrag) return;
+  fridgeDrag.el.style.left = (e.clientX - fridgeDrag.offsetX) + 'px';
+  fridgeDrag.el.style.top = (e.clientY - fridgeDrag.offsetY) + 'px';
+}
+function rectContainsPoint(rect, x, y){ return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom; }
+function fridgeTrayPointerUp(e){
+  if (!fridgeDrag) return;
+  const { el, treatId } = fridgeDrag;
+  el.removeEventListener('pointermove', fridgeTrayPointerMove);
+  el.removeEventListener('pointerup', fridgeTrayPointerUp);
+  el.removeEventListener('pointercancel', fridgeTrayPointerUp);
+  const interior = document.getElementById('fridgeInterior');
+  const dropped = interior && rectContainsPoint(interior.getBoundingClientRect(), e.clientX, e.clientY);
+  el.classList.remove('dragging');
+  el.style.position = ''; el.style.left = ''; el.style.top = ''; el.style.width = ''; el.style.height = ''; el.style.zIndex = '';
+  if (dropped) {
+    const openIdx = STATE.fridgeSlots.findIndex(s => !s);
+    if (openIdx > -1) {
+      STATE.fridgeSlots[openIdx] = treatId;
+      if (!STATE.fridgeGameStarted) { STATE.fridgeGameStarted = true; addMagnet('fridge-game'); }
+      saveState();
+    }
+  }
+  fridgeDrag = null;
+  renderCurrentStage();
+}
+function renderFridgeGame(){
+  const slotsHtml = FRIDGE_SLOT_POS.map((pos, i) => {
+    const treatId = STATE.fridgeSlots[i];
+    return `<div class="fridge-slot" style="left:${pos.x}%;top:${pos.y}%;">${treatId ? treatIcon(treatId, 56) : ''}</div>`;
+  }).join('');
+  const trayHtml = TREATS.map(t => {
+    const placed = STATE.fridgeSlots.includes(t.id);
+    return `<div class="fridge-tray-item${placed ? ' placed' : ''}" onpointerdown="fridgeTrayPointerDown(event,'${t.id}')">${treatIcon(t.id, 52)}</div>`;
+  }).join('');
+  const allFull = STATE.fridgeSlots.every(s => !!s);
+  return `
+    <div class="kicker">Warm-Up</div>
+    <h2 class="s-title">Fill the Fridge!</h2>
+    <p class="s-sub">${!STATE.fridgeDoorOpen ? 'Tap the fridge to open the door.' : allFull ? 'The shelves are full!' : 'Drag a treat onto a shelf.'}</p>
+    <div class="fridge-game-wrap">
+      <div class="fridge-shell">
+        <div class="fridge-handle"></div>
+        <div class="fridge-interior" id="fridgeInterior">
+          <div class="fridge-shelf"></div>
+          ${slotsHtml}
+        </div>
+        <div class="fridge-door${STATE.fridgeDoorOpen ? ' open' : ''}" onclick="toggleFridgeDoor()">
+          <div class="fridge-door-hint">tap to open ❄️</div>
+        </div>
+      </div>
+    </div>
+    ${STATE.fridgeDoorOpen ? `<div class="fridge-tray">${trayHtml}</div>` : ''}
+    <p class="no-single-answer">Just for fun — the real fridge comes later.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — Upload
+============================================================ */
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  saving = true;
+  refreshUploadUI();
+  try {
+    const record = await saveArtwork(PIECE_ID, file);
+    artworkRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+    if (!STATE.uploaded) { STATE.uploaded = true; saveState(); addMagnet('upload'); }
+  } catch (e) {
+    console.warn('[upload] saveArtwork failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  refreshUploadUI();
+}
+function refreshUploadUI(){
+  const wrap = document.getElementById('uploadSlotWrap');
+  if (!wrap) return;
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+  } else if (artworkRecord) {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your My Sweet Fridge artwork"></div>`;
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">+</div><div class="slot-label">Upload My Fridge Photo</div></div>`;
+  }
+}
+function renderUpload(){
+  return `
+    <div class="kicker">You Made It!</div>
+    <h2 class="s-title">Show Us Your Sweet Fridge!</h2>
+    <div class="upload-slot-wrap" id="uploadSlotWrap"></div>
+    <p class="no-single-answer">A photo of your finished cut-and-paste fridge scene.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — Meet Wayne Thiebaud (placed after making, not before —
+   see spec §1: reveal the real artist last, so he reads as a peer
+   who "did what you just did," not homework up front).
+============================================================ */
+function painterAvatarSvg(){
+  return `<svg viewBox="0 0 130 130" width="120" height="120" aria-hidden="true">
+    <circle cx="65" cy="65" r="62" fill="var(--lavender)"/>
+    <ellipse cx="65" cy="88" rx="34" ry="30" fill="var(--mint)" stroke="#2b2438" stroke-width="2.5"/>
+    <circle cx="65" cy="52" r="26" fill="#f0cba6" stroke="#2b2438" stroke-width="2.5"/>
+    <path d="M40,44 Q65,20 90,44 Q90,34 65,30 Q40,34 40,44 Z" fill="#5a4636" stroke="#2b2438" stroke-width="2"/>
+    <path d="M38,40 Q65,26 92,40 Q92,44 65,42 Q38,44 38,40 Z" fill="var(--cherry)" stroke="#2b2438" stroke-width="2"/>
+    <circle cx="56" cy="54" r="2.6" fill="#2b2438"/><circle cx="74" cy="54" r="2.6" fill="#2b2438"/>
+    <path d="M56,64 Q65,68 74,64" fill="none" stroke="#2b2438" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="40" cy="100" rx="14" ry="8" fill="var(--mustard)" stroke="#2b2438" stroke-width="2"/>
+    <circle cx="34" cy="98" r="2.4" fill="var(--cherry)"/><circle cx="40" cy="96" r="2.4" fill="var(--mint-deep)"/><circle cx="46" cy="99" r="2.4" fill="var(--blush)"/>
+  </svg>`;
+}
+function renderMeetArtist(){
+  const linkCards = ARTIST_LINKS.map(l => `<a class="artist-link-card" href="${l.href}" target="_blank" rel="noopener">${l.label} ↗</a>`).join('');
+  return `
+    <div class="kicker">One Real Painter</div>
+    <h2 class="s-title">Meet Wayne Thiebaud</h2>
+    <div class="painter-portrait">${painterAvatarSvg()}</div>
+    <p class="s-sub">Wayne Thiebaud (1920–2021) was an American painter from Sacramento, California. He spent much of his career painting pies, cakes, ice cream cones, and candy counters — thick, frosting-like brushstrokes and bright outlines around every treat. He worked in diners and bakeries as a young man, and painted from memory of those display cases.</p>
+    <p class="artist-rhyme-line">Look at your own treats — see that blue shadow behind each one? Thiebaud painted glowing outlines around his desserts too. Mrs. Dawn's demo was inspired by his paintings!</p>
+    <div class="artist-link-row">${linkCards}</div>
+    <p class="credit-line">Thiebaud's paintings are still under copyright — see his real work on these museum pages.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — Reflect & Share
+============================================================ */
+function toggleReflectChip(id){
+  const i = STATE.reflectChips.indexOf(id);
+  if (i > -1) STATE.reflectChips.splice(i, 1); else STATE.reflectChips.push(id);
+  saveState();
+  renderCurrentStage();
+}
+function refreshReflectFrame(){
+  const wrap = document.getElementById('reflectFrameWrap');
+  if (!wrap) return;
+  if (artworkRecord && objectUrl) {
+    wrap.innerHTML = `<div class="geo-frame-wrap"><div class="geo-frame"><img src="${objectUrl}" alt="Your My Sweet Fridge artwork"></div></div>`;
+  } else {
+    wrap.innerHTML = `<div class="geo-frame-wrap"><div class="geo-frame"><div class="geo-frame-empty">No photo uploaded yet — go back to "Show Us Your Sweet Fridge!" to add one.</div></div></div>`;
+  }
+}
+function renderReflectShare(){
+  const chips = REFLECT_CHIPS.map(c => `
+    <span class="reflect-chip${STATE.reflectChips.includes(c.id) ? ' picked' : ''}" onclick="toggleReflectChip('${c.id}')">${c.emoji} ${c.label}</span>
+  `).join('');
+  return `
+    <div class="kicker">One Last Look</div>
+    <h2 class="s-title">Your Sweet Fridge!</h2>
+    <div id="reflectFrameWrap"></div>
+    <div class="reflect-label">What's In Your Fridge?</div>
+    <div class="reflect-chip-row">${chips}</div>
+    <p class="share-final-line">No two fridges look the same.</p>
+    <p class="share-credit">FEI TeamArt · Creation · Learn from Masters — Led by Mrs. Dawn Wang.</p>
+  `;
+}
+
+/* ============================================================
+   STAGE — Badge (Fridge Curator)
+============================================================ */
+function renderBadge(){
+  return `
+    <div class="kicker">Reflect</div>
+    <div class="badge-medal">
+      <svg viewBox="-6 -6 52 52" width="70" height="70" style="color:var(--cherry)" aria-hidden="true">
+        <use href="#magnet-star" x="3" y="4" filter="url(#treatShadowTint)"></use><use href="#magnet-star"></use>
+      </svg>
+    </div>
+    <p class="badge-name display">${sweetLettering('FRIDGE CURATOR')}</p>
+    <p class="badge-completion-line">YOU FILLED A WHOLE FRIDGE WITH SWEETS!</p>
+  `;
+}
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+async function renderCurrentStage(){
+  const contentEl = document.getElementById('screen-content');
+  const zonePill = document.getElementById('zonePill');
+
+  if (currentStageId === 'screen-map') {
+    zonePill.textContent = '';
+    contentEl.innerHTML = `<div class="screen active">${renderMap()}</div>`;
+    window.scrollTo(0, 0);
+    renderMagnetTray(false);
+    return;
+  }
+
+  const stage = STAGES.find(s => s.id === currentStageId);
+  if (!stage) { goMap(); return; }
+  zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
+
+  if (stage.id === 'reflect-share' && !artworkRecord && isStorageSupported()) {
+    try {
+      const rows = await listArtworks(PIECE_ID);
+      if (rows.length) { artworkRecord = rows[0]; objectUrl = URL.createObjectURL(artworkRecord.blob); }
+    } catch (e) { console.warn('[reflect-share] listArtworks failed', e); }
+  }
+
+  contentEl.innerHTML = `<div class="screen active">${stage.render()}${renderNav(stage)}</div>`;
+  window.scrollTo(0, 0);
+  if (stage.id === 'upload') refreshUploadUI();
+  if (stage.id === 'reflect-share') refreshReflectFrame();
+  if (stage.afterRender) stage.afterRender();
+  renderMagnetTray(false);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      const ok = await window.FEIAccess.gateLessonPage('creation', 'thiebaud-my-sweet-fridge');
+      if (!ok) return;
+    } catch (e) {
+      console.warn('[init] gateLessonPage failed, continuing', e);
+    }
+  }
+  loadState();
+  await renderCurrentStage();
+}
+
+init();
+</script>
+</body>
+</html>
