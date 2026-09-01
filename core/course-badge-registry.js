@@ -19,6 +19,12 @@ window.COURSE_BADGE_REGISTRY = {
   // is the whole requirement.
   collage_creator: {
     requiredIds: ['carle-colorful-chameleon']
+  },
+
+  // "My Sweet Fridge" (Wayne Thiebaud) — same single-lesson pattern as
+  // collage_creator above.
+  fridge_curator: {
+    requiredIds: ['thiebaud-my-sweet-fridge']
   }
 
 };
