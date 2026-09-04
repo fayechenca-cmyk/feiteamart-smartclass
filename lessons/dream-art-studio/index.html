@@ -154,7 +154,6 @@
   .p7  { background: #0b7285; color: #e0f3f5; }
   .p8  { background: #c2255c; color: #fce6ef; }
   .p9  { background: #5c940d; color: #eef6dc; }
-  .p10 { background: #e8590c; color: #fdece0; }
 
   /* Torn-paper edges — six shapes, cycled across the 12 cards. */
   .t1 { border-radius: 4px 28px 8px 24px; }
@@ -175,7 +174,6 @@
   .r7  { transform: rotate(-1.8deg); }
   .r8  { transform: rotate(2.7deg); }
   .r9  { transform: rotate(-0.8deg); }
-  .r10 { transform: rotate(1.5deg); }
 
   /* ── Footer ──────────────────────────────────────────────── */
   .collage-footer { text-align: center; padding: 40px 20px 60px; }
@@ -222,7 +220,7 @@
   <a class="back-link-collage" href="../../creation/">← Studio</a>
   <h1 class="collage-title">Dream Art Studio</h1>
   <p class="collage-subtitle">Inspired by Henri Matisse</p>
-  <div class="progress-pill" id="progressPill">0 of 10 stages completed</div>
+  <div class="progress-pill" id="progressPill">0 of 9 stages completed</div>
 </div>
 
 <div class="cards-grid-wrap">
@@ -248,16 +246,18 @@
  * Dream Art Studio — Landing Page (paper-collage card grid)
  *
  * STEPS / TOTAL_STEPS / DreamState come from shared/studio-state.js.
- * All 10 steps are real, tappable pages as of 2026-09-04 — Steps 8-10
- * (Add Yourself, Final Details, Gallery) now have real content and are
- * unlocked here. The locked-cutout styling (dimmed, grayscale, 🔒,
- * no hover, not clickable) stays in place as machinery for whenever a
- * future step ships ahead of being built.
+ * All 9 steps are real, tappable pages as of 2026-09-06 — "Draw
+ * Together" (the old Step 5) was removed as redundant now that Step 4
+ * (Design Each Object) has its own per-object drawing canvas, and
+ * every step after it renumbered down by one. The locked-cutout
+ * styling (dimmed, grayscale, 🔒, no hover, not clickable) stays in
+ * place as machinery for whenever a future step ships ahead of being
+ * built.
  * ============================================================ */
 
 // Which steps are real, tappable pages. Order matters: it's also the
 // sequence "recommended next" and the friction nudge walk.
-const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function recommendedFunctionalStep() {
   for (const n of FUNCTIONAL_STEPS) {
@@ -270,16 +270,15 @@ function recommendedFunctionalStep() {
 // Color/rotation classes both just use the step number directly (p1..p12,
 // r1..r12) since every step already has its own unique hue.
 const CARD_META = {
-  1:  { torn: 1, wide: true,  tall: false, tapes: 2 },
-  2:  { torn: 2, wide: false, tall: false, tapes: 1 },
-  3:  { torn: 3, wide: false, tall: false, tapes: 1 },
-  4:  { torn: 4, wide: false, tall: true,  tapes: 1 },
-  5:  { torn: 5, wide: false, tall: false, tapes: 1 },
-  6:  { torn: 6, wide: false, tall: false, tapes: 1 },
-  7:  { torn: 1, wide: false, tall: false, tapes: 1 },
-  8:  { torn: 2, wide: true,  tall: false, tapes: 2 },
-  9:  { torn: 3, wide: false, tall: false, tapes: 1 },
-  10: { torn: 4, wide: false, tall: false, tapes: 1 },
+  1: { torn: 1, wide: true,  tall: false, tapes: 2 },
+  2: { torn: 2, wide: false, tall: false, tapes: 1 },
+  3: { torn: 3, wide: false, tall: false, tapes: 1 },
+  4: { torn: 4, wide: false, tall: true,  tapes: 1 },
+  5: { torn: 5, wide: false, tall: false, tapes: 1 },
+  6: { torn: 6, wide: false, tall: false, tapes: 1 },
+  7: { torn: 1, wide: false, tall: false, tapes: 1 },
+  8: { torn: 2, wide: true,  tall: false, tapes: 2 },
+  9: { torn: 3, wide: false, tall: false, tapes: 1 },
 };
 
 let pendingFrictionStep = null;
