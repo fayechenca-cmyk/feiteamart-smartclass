@@ -110,6 +110,8 @@
 
 </div>
 
+<div class="step-nav-bar" id="stepNavBar"></div>
+
 <script>
 const STEP_N = 2;
 const UNLOCK_THRESHOLD = 8;
@@ -212,6 +214,7 @@ async function init() {
     }
   }
   DreamState.markVisited(STEP_N);
+  renderStepNavBar('stepNavBar', STEP_N, goNext);
   renderObjects();
 }
 

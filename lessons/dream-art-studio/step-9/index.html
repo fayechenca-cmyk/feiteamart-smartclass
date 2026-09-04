@@ -98,6 +98,8 @@
 
 </div>
 
+<div class="step-nav-bar" id="stepNavBar"></div>
+
 <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
 
 <script>
@@ -257,6 +259,14 @@ function renderReflections(){
   renderChipGroup('matisseOptions', 'matisseThought', MATISSE_OPTIONS);
 }
 
+// Last step — "Finish!" on the persistent nav bar has nowhere further
+// to go, so it marks the course complete and returns to this course's
+// own map (which will now show every card done).
+function finishCourse() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../';
+}
+
 async function init() {
   if (window.FEIAccess) {
     try {
@@ -268,6 +278,7 @@ async function init() {
     }
   }
   DreamState.markVisited(STEP_N);
+  renderStepNavBar('stepNavBar', STEP_N, finishCourse);
 
   if (isStorageSupported()) {
     try {

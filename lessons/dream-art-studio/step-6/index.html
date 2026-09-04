@@ -56,6 +56,8 @@
 
 </div>
 
+<div class="step-nav-bar" id="stepNavBar"></div>
+
 <script>
 const STEP_N = 6;
 
@@ -84,6 +86,7 @@ async function init() {
     }
   }
   DreamState.markVisited(STEP_N);
+  renderStepNavBar('stepNavBar', STEP_N, goNext);
   if (DreamState.getStatus(STEP_N) === 'completed') {
     const btn = document.getElementById('completeBtn');
     btn.textContent = '✓ Studio assembled!';
