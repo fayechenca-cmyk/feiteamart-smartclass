@@ -129,6 +129,26 @@
     }
   };
 
+  // Persistent bottom nav bar (2026-09-07) — every step page calls this
+  // once (from its own init()), passing its own step number and its
+  // own goNext/startJourney function for Continue. Back always just
+  // navigates (map for Step 1, previous step otherwise); Continue is
+  // never gated here even if that step's own in-content Continue
+  // button is — this bar is the "never stuck" safety net.
+  global.renderStepNavBar = function (containerId, stepN, onContinue) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const isFirst = stepN <= 1;
+    const isLast = stepN >= TOTAL_STEPS;
+    const prevHref = isFirst ? '../' : '../step-' + (stepN - 1) + '/';
+    el.innerHTML =
+      '<a class="step-nav-btn" href="' + prevHref + '">← Back</a>' +
+      '<span class="step-nav-indicator">Step ' + stepN + ' of ' + TOTAL_STEPS + '</span>' +
+      '<button class="step-nav-btn continue" id="stepNavContinueBtn">' + (isLast ? 'Finish!' : 'Continue →') + '</button>';
+    const btn = document.getElementById('stepNavContinueBtn');
+    if (btn) btn.onclick = function () { if (typeof onContinue === 'function') onContinue(); };
+  };
+
   global.STEPS = STEPS;
   global.TOTAL_STEPS = TOTAL_STEPS;
   global.DreamState = DreamState;
