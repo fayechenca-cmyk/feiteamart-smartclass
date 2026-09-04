@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Step 6 · Build Your Background · Dream Art Studio</title>
+<title>Step 6 · Assemble Your Studio · Dream Art Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/studio-style.css">
 
@@ -14,8 +14,8 @@
 <script src="../shared/studio-state.js"></script>
 
 <style>
-  /* Background is the shared Matisse Pink Studio default (2026-09-03
-     redesign) — no page-scoped override here any more. */
+  /* Background is the shared Matisse Pink Studio default — no
+     page-scoped override needed. */
   .complete-wrap { text-align: center; margin-top: 20px; }
 </style>
 </head>
@@ -23,35 +23,31 @@
 
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
-  <p class="topbar-title">Build Your Background</p>
-  <div class="stops-pill">STEP 6 OF 10</div>
+  <p class="topbar-title">Assemble Your Studio</p>
+  <div class="stops-pill">STEP 6 OF 9</div>
 </div>
 
 <div class="content-wrap">
 
   <div class="page-hero">
-    <h1>Build Your Background</h1>
-    <p>Two steps: watercolour base, then marker details.</p>
+    <h1>Assemble Your Studio</h1>
+    <p>Cut out your objects, set up your box, and bring your studio to life.</p>
   </div>
 
-  <p class="video-label">Step 1: Watercolour Foundation</p>
-  <div class="video-frame">
-    <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/6eb6587390e185a7ffa1d68bfedb4079/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F6eb6587390e185a7ffa1d68bfedb4079%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-      loading="lazy" title="Step 1: Watercolour Foundation — teacher demo"
-      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-      allowfullscreen="true"></iframe>
-  </div>
-
-  <p class="video-label">Step 2: Marker Details (windows, frames, patterns)</p>
+  <!-- NOTE for Faye: this video ID is the same one used for Step 6's
+       "Marker Details" video (8cb2e44a95f0efcaf5f033995946f8b5) — the
+       prompt that specified this step flagged it might not be the
+       right assembly video. Left as given; swap VIDEO_ID below once
+       you send the correct one. -->
   <div class="video-frame">
     <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/8cb2e44a95f0efcaf5f033995946f8b5/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F8cb2e44a95f0efcaf5f033995946f8b5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-      loading="lazy" title="Step 2: Marker Details — teacher demo"
+      loading="lazy" title="Assemble Your Studio — teacher demo"
       allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
       allowfullscreen="true"></iframe>
   </div>
 
   <div class="complete-wrap">
-    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I finished my background</button>
+    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I assembled my studio!</button>
   </div>
 
   <div class="next-footer">
@@ -67,7 +63,7 @@ function toggleComplete() {
   DreamState.markInProgress(STEP_N);
   DreamState.markCompleted(STEP_N);
   const btn = document.getElementById('completeBtn');
-  btn.textContent = '✓ Background finished!';
+  btn.textContent = '✓ Studio assembled!';
   btn.classList.add('btn-primary');
   btn.classList.remove('btn-gold');
 }
@@ -90,7 +86,7 @@ async function init() {
   DreamState.markVisited(STEP_N);
   if (DreamState.getStatus(STEP_N) === 'completed') {
     const btn = document.getElementById('completeBtn');
-    btn.textContent = '✓ Background finished!';
+    btn.textContent = '✓ Studio assembled!';
     btn.classList.add('btn-primary');
     btn.classList.remove('btn-gold');
   }

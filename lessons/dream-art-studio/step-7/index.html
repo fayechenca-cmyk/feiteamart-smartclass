@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Step 7 · Assemble Your Studio · Dream Art Studio</title>
+<title>Step 7 · Add Yourself · Dream Art Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/studio-style.css">
 
@@ -16,6 +16,68 @@
 <style>
   /* Background is the shared Matisse Pink Studio default — no
      page-scoped override needed. */
+
+  /* ── Interactive image map (same pattern as Step 3) ─────────── */
+  .image-map-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(44,30,16,0.18);
+    margin-bottom: 14px;
+    line-height: 0;
+    background: #fff;
+  }
+  .characters-image { display: block; width: 100%; height: auto; }
+
+  .hotspot-layer { position: absolute; inset: 0; }
+  .hotspot {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
+  }
+  .hotspot:hover {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.15);
+  }
+  .hotspot.active {
+    border-color: var(--gold);
+    background: rgba(43,76,214,0.14);
+    box-shadow: 0 0 15px var(--gold);
+    transform: scale(1.02);
+    animation: hotspotPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes hotspotPulse {
+    0%, 100% { box-shadow: 0 0 15px var(--gold); }
+    50% { box-shadow: 0 0 24px var(--gold); }
+  }
+
+  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-soft); margin-bottom: 18px; }
+
+  /* ── Video section — same pattern as Step 3: one continuous video,
+     jumps to a timestamp per tapped character. ───────────────────── */
+  .video-section { margin: 0 0 20px; animation: videoSectionIn .22s ease; }
+  @keyframes videoSectionIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .video-section-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .video-section-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); }
+  .video-section-close {
+    background: none; border: none; font-size: 12.5px; font-weight: 800;
+    color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .video-section-soon {
+    background: #fff; border-radius: 16px; padding: 20px; text-align: center;
+    box-shadow: 0 6px 20px rgba(44,30,16,0.1);
+  }
+  .video-section-soon-icon { font-size: 32px; margin-bottom: 6px; }
+  .video-section-soon-text { font-size: 12.5px; color: var(--ink-soft); }
+
   .complete-wrap { text-align: center; margin-top: 20px; }
 </style>
 </head>
@@ -23,31 +85,27 @@
 
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
-  <p class="topbar-title">Assemble Your Studio</p>
-  <div class="stops-pill">STEP 7 OF 10</div>
+  <p class="topbar-title">Add Yourself</p>
+  <div class="stops-pill">STEP 7 OF 9</div>
 </div>
 
 <div class="content-wrap">
 
   <div class="page-hero">
-    <h1>Assemble Your Studio</h1>
-    <p>Cut out your objects, set up your box, and bring your studio to life.</p>
+    <h1>Add Yourself to Your Studio</h1>
+    <p>Every artist belongs in their studio.</p>
   </div>
 
-  <!-- NOTE for Faye: this video ID is the same one used for Step 6's
-       "Marker Details" video (8cb2e44a95f0efcaf5f033995946f8b5) — the
-       prompt that specified this step flagged it might not be the
-       right assembly video. Left as given; swap VIDEO_ID below once
-       you send the correct one. -->
-  <div class="video-frame">
-    <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/8cb2e44a95f0efcaf5f033995946f8b5/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F8cb2e44a95f0efcaf5f033995946f8b5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-      loading="lazy" title="Assemble Your Studio — teacher demo"
-      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-      allowfullscreen="true"></iframe>
+  <div class="image-map-wrap" id="imageMapWrap">
+    <img class="characters-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/27db6182-600d-4636-03c2-75cc5d3e4800/public" alt="Six hand-drawn characters to choose from — four people in different poses and outfits, a black cat, and a spotted dog">
+    <div class="hotspot-layer" id="hotspotLayer"></div>
   </div>
+  <div class="image-map-caption">Tap a character to see how to draw them.</div>
+
+  <div id="videoSectionSlot"></div>
 
   <div class="complete-wrap">
-    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I assembled my studio!</button>
+    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I drew myself!</button>
   </div>
 
   <div class="next-footer">
@@ -59,11 +117,97 @@
 <script>
 const STEP_N = 7;
 
+// Rough estimates from the reference image — left/top/width/height are
+// all % of the image's own box (same convention as Step 3's HOTSPOTS).
+const HOTSPOTS = [
+  { name: 'Boy (Striped Shirt)', left: 1,  top: 18, width: 19, height: 72 },
+  { name: 'Girl (Green Skirt)',  left: 16, top: 15, width: 20, height: 75 },
+  { name: 'Boy (Reading)',       left: 33, top: 15, width: 20, height: 78 },
+  { name: 'Girl (Yellow Top)',   left: 49, top: 10, width: 22, height: 82 },
+  { name: 'Cat',                 left: 67, top: 28, width: 15, height: 50 },
+  { name: 'Dog',                 left: 79, top: 22, width: 19, height: 58 },
+];
+
+// Same continuous teacher video as Step 3 — the two boys share the
+// "Male Character" timestamp and the two girls share "Female
+// Character" (Faye recorded one demo per gender, not one per pose).
+// Cat/Dog have no timestamp yet — tapping them shows a "coming soon"
+// card instead of a broken jump.
+const HOWTO_VIDEO_ID = '8e767f54579d2082a0325825b8deb002';
+const CHARACTER_VIDEO_KEY = {
+  'Boy (Striped Shirt)': 'Male Character',
+  'Boy (Reading)': 'Male Character',
+  'Girl (Green Skirt)': 'Female Character',
+  'Girl (Yellow Top)': 'Female Character',
+  'Cat': null,
+  'Dog': null,
+};
+const TIMESTAMP_MAP = { 'Male Character': 961, 'Female Character': 1116 };
+function cfStreamTimestampSrc(videoId, startSeconds) {
+  const poster = encodeURIComponent(`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/iframe?poster=${poster}&startTime=${startSeconds}`;
+}
+
+let activeCharacter = null;
+
+function renderHotspots() {
+  const layer = document.getElementById('hotspotLayer');
+  layer.innerHTML = HOTSPOTS.map(h => `
+    <div class="hotspot ${activeCharacter === h.name ? 'active' : ''}"
+         data-name="${h.name}"
+         title="${h.name}"
+         style="left:${h.left}%; top:${h.top}%; width:${h.width}%; height:${h.height}%;"
+         onclick="tapCharacter('${h.name}')">
+    </div>
+  `).join('');
+}
+
+function tapCharacter(name) {
+  activeCharacter = name;
+  DreamState.markInProgress(STEP_N);
+  renderHotspots();
+  renderVideoSection();
+}
+
+function renderVideoSection() {
+  const slot = document.getElementById('videoSectionSlot');
+  if (!activeCharacter) {
+    slot.innerHTML = '';
+    return;
+  }
+  const videoKey = CHARACTER_VIDEO_KEY[activeCharacter];
+  const seconds = videoKey ? TIMESTAMP_MAP[videoKey] : null;
+  const body = seconds != null
+    ? `<div class="video-frame">
+        <iframe src="${cfStreamTimestampSrc(HOWTO_VIDEO_ID, seconds)}" loading="lazy" title="How to draw: ${activeCharacter}"
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true"></iframe>
+      </div>
+      <p class="video-note">Your objects don't need to look exactly like Faye's — make them your own!</p>`
+    : `<div class="video-section-soon">
+        <div class="video-section-soon-icon">🎬</div>
+        <div class="video-section-soon-text">Faye's ${activeCharacter.toLowerCase()} tutorial is coming soon!</div>
+      </div>`;
+  slot.innerHTML = `
+    <div class="video-section">
+      <div class="video-section-head">
+        <span class="video-section-title">🎬 How to draw: ${activeCharacter}</span>
+        <button class="video-section-close" onclick="closeVideoSection()">✕ close</button>
+      </div>
+      ${body}
+    </div>
+  `;
+}
+
+function closeVideoSection() {
+  activeCharacter = null;
+  renderVideoSection();
+}
+
 function toggleComplete() {
   DreamState.markInProgress(STEP_N);
   DreamState.markCompleted(STEP_N);
   const btn = document.getElementById('completeBtn');
-  btn.textContent = '✓ Studio assembled!';
+  btn.textContent = '✓ Added myself!';
   btn.classList.add('btn-primary');
   btn.classList.remove('btn-gold');
 }
@@ -86,10 +230,11 @@ async function init() {
   DreamState.markVisited(STEP_N);
   if (DreamState.getStatus(STEP_N) === 'completed') {
     const btn = document.getElementById('completeBtn');
-    btn.textContent = '✓ Studio assembled!';
+    btn.textContent = '✓ Added myself!';
     btn.classList.add('btn-primary');
     btn.classList.remove('btn-gold');
   }
+  renderHotspots();
 }
 
 init();
