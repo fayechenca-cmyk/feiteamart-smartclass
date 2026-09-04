@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Step 7 · Build Your Background · Dream Art Studio</title>
+<title>Step 7 · Assemble Your Studio · Dream Art Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/studio-style.css">
 
@@ -14,105 +14,44 @@
 <script src="../shared/studio-state.js"></script>
 
 <style>
-  /* Canvas-collage background for this step only — matches Step 4 and
-     the landing page's Matisse paper-collage aesthetic (page-scoped
-     override; every shared class from studio-style.css is untouched). */
-  html, body {
-    background-color: #d4c9a8;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
-      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
-    /* NOT background-attachment: fixed — known iOS Safari GPU/memory
-       crash trigger when repainting a fixed repeating-gradient on scroll. */
-  }
-  .topbar { background: rgba(212,201,168,0.75); border-bottom: 1px solid rgba(44,30,16,0.15); }
-  .back-link, .topbar-title { color: #2c1e10; }
-  .stops-pill { background: rgba(255,255,255,0.55); border-color: rgba(44,30,16,0.15); color: #2c1e10; }
-  .page-hero h1 { color: #2c1e10; }
-  .page-hero p { color: #6d5440; }
-
-  /* ── Interactive image map (same pattern as Step 3) ─────────── */
-  .image-map-wrap {
-    position: relative;
-    width: 100%;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(26,29,43,0.15);
-    margin-bottom: 14px;
-    line-height: 0;
-    background: #fff;
-  }
-  .bg-image { display: block; width: 100%; height: auto; }
-
-  .hotspot-layer { position: absolute; inset: 0; }
-  .hotspot {
-    position: absolute;
-    cursor: pointer;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    -webkit-tap-highlight-color: transparent;
-    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
-  }
-  .hotspot:hover {
-    border-color: rgba(255,255,255,0.35);
-    background: rgba(255,255,255,0.1);
-  }
-  .hotspot.selected {
-    border-color: var(--gold);
-    background: rgba(200,169,110,0.14);
-    box-shadow: 0 0 15px var(--gold);
-    transform: scale(1.02);
-    animation: hotspotPulse 1.4s ease-in-out infinite;
-  }
-  @keyframes hotspotPulse {
-    0%, 100% { box-shadow: 0 0 15px var(--gold); }
-    50% { box-shadow: 0 0 24px var(--gold); }
-  }
-
-  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 18px; }
-
-  .selected-summary-label {
-    text-align: center; font-size: 12.5px; font-weight: 800; color: var(--ink-soft);
-    margin-bottom: 8px;
-  }
-  .selected-list {
-    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-    margin-bottom: 22px; min-height: 20px;
-  }
-  .selected-list-empty { font-size: 12px; color: var(--ink-muted); }
-  .selected-chip {
-    background: rgba(200,169,110,0.14); border: 1.5px solid var(--gold);
-    color: var(--ink); font-size: 12px; font-weight: 700;
-    border-radius: 16px; padding: 6px 12px;
-  }
+  /* Background is the shared Matisse Pink Studio default — no
+     page-scoped override needed. */
+  .complete-wrap { text-align: center; margin-top: 20px; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
-  <p class="topbar-title">Build Your Background</p>
-  <div class="stops-pill">STEP 7 OF 12</div>
+  <p class="topbar-title">Assemble Your Studio</p>
+  <div class="stops-pill">STEP 7 OF 10</div>
 </div>
 
 <div class="content-wrap">
 
   <div class="page-hero">
-    <h1>Build Your Background</h1>
-    <p>Tap the parts that inspire you.</p>
+    <h1>Assemble Your Studio</h1>
+    <p>Cut out your objects, set up your box, and bring your studio to life.</p>
   </div>
 
-  <div class="image-map-wrap" id="imageMapWrap">
-    <img class="bg-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ec44cba6-708b-458e-60b2-9d513e9f0600/public" alt="Two hand-drawn studio background scenes — a pink wallpapered room and a purple floral wallpapered room, each with a window, floor, and door or plant">
-    <div class="hotspot-layer" id="hotspotLayer"></div>
+  <!-- NOTE for Faye: this video ID is the same one used for Step 6's
+       "Marker Details" video (8cb2e44a95f0efcaf5f033995946f8b5) — the
+       prompt that specified this step flagged it might not be the
+       right assembly video. Left as given; swap VIDEO_ID below once
+       you send the correct one. -->
+  <div class="video-frame">
+    <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/8cb2e44a95f0efcaf5f033995946f8b5/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F8cb2e44a95f0efcaf5f033995946f8b5%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+      loading="lazy" title="Assemble Your Studio — teacher demo"
+      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+      allowfullscreen="true"></iframe>
   </div>
-  <div class="image-map-caption">Tap the wallpaper, windows, floors, and more to pick what you like.</div>
 
-  <div class="selected-summary-label" id="selectedSummaryLabel"></div>
-  <div class="selected-list" id="selectedList"></div>
+  <div class="complete-wrap">
+    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I assembled my studio!</button>
+  </div>
 
   <div class="next-footer">
-    <button class="btn btn-gold" onclick="goNext()">Continue →</button>
+    <button class="btn btn-ghost" onclick="goNext()">Continue →</button>
   </div>
 
 </div>
@@ -120,55 +59,13 @@
 <script>
 const STEP_N = 7;
 
-// Rough estimates from the reference image — left/top/width/height are
-// all % of the image's own box, so they scale automatically with it at
-// any size (same convention as Step 3's HOTSPOTS).
-const HOTSPOTS = [
-  { name: 'Pink Wallpaper',    left: 2,  top: 13, width: 38, height: 31 },
-  { name: 'Pink Room Window',  left: 39, top: 14, width: 25, height: 29 },
-  { name: 'Potted Plant',      left: 67, top: 22, width: 21, height: 29 },
-  { name: 'Pink Room Floor',   left: 2,  top: 43, width: 87, height: 9  },
-  { name: 'Purple Wallpaper',  left: 15, top: 52, width: 36, height: 28 },
-  { name: 'Purple Room Window',left: 51, top: 55, width: 20, height: 22 },
-  { name: 'Purple Door',       left: 75, top: 51, width: 25, height: 39 },
-  { name: 'Purple Room Floor', left: 15, top: 80, width: 84, height: 19 },
-];
-
-function renderHotspots() {
-  const data = DreamState.getStepData(STEP_N);
-  const selected = data.selected || [];
-
-  const layer = document.getElementById('hotspotLayer');
-  layer.innerHTML = HOTSPOTS.map(h => `
-    <div class="hotspot ${selected.includes(h.name) ? 'selected' : ''}"
-         data-name="${h.name}"
-         title="${h.name}"
-         style="left:${h.left}%; top:${h.top}%; width:${h.width}%; height:${h.height}%;"
-         onclick="toggleHotspot('${h.name}')">
-    </div>
-  `).join('');
-
-  const listEl = document.getElementById('selectedList');
-  const labelEl = document.getElementById('selectedSummaryLabel');
-  if (selected.length === 0) {
-    labelEl.textContent = '';
-    listEl.innerHTML = '<div class="selected-list-empty">Nothing selected yet.</div>';
-  } else {
-    labelEl.textContent = selected.length + ' part' + (selected.length === 1 ? '' : 's') + ' selected';
-    listEl.innerHTML = selected.map(name => `<span class="selected-chip">${name}</span>`).join('');
-  }
-}
-
-function toggleHotspot(name) {
-  const data = DreamState.getStepData(STEP_N);
-  const selected = data.selected || [];
-  const idx = selected.indexOf(name);
-  if (idx === -1) selected.push(name);
-  else selected.splice(idx, 1);
-
-  DreamState.setStepData(STEP_N, { selected: selected });
+function toggleComplete() {
   DreamState.markInProgress(STEP_N);
-  renderHotspots();
+  DreamState.markCompleted(STEP_N);
+  const btn = document.getElementById('completeBtn');
+  btn.textContent = '✓ Studio assembled!';
+  btn.classList.add('btn-primary');
+  btn.classList.remove('btn-gold');
 }
 
 function goNext() {
@@ -187,7 +84,12 @@ async function init() {
     }
   }
   DreamState.markVisited(STEP_N);
-  renderHotspots();
+  if (DreamState.getStatus(STEP_N) === 'completed') {
+    const btn = document.getElementById('completeBtn');
+    btn.textContent = '✓ Studio assembled!';
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-gold');
+  }
 }
 
 init();

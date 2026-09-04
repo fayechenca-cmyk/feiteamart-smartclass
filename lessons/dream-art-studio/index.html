@@ -20,7 +20,13 @@
   /* ============================================================
    * Dream Art Studio — Matisse paper-collage landing page.
    * Replaces the old Illustration-Book-style winding path.
-   * ============================================================ */
+   * MATISSE PINK STUDIO REDESIGN (2026-09-03) — replaces the old
+  * canvas-linen texture with Faye's own painted shoebox-diorama look:
+  * pink watercolor-stripe walls + a wood-plank floor band across the
+  * bottom 30% of the page. Same technique as shared/studio-style.css
+  * (this page still doesn't load that file — see note above — so the
+  * background is redeclared here to match it exactly).
+  * ============================================================ */
 
   * { box-sizing: border-box; }
   html, body {
@@ -28,15 +34,21 @@
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
     min-height: 100vh;
-    background-color: #d4c9a8;
+    background-color: #e88ca0;
     background-image:
-      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
-      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
+      repeating-linear-gradient(0deg, rgba(90,55,20,0.16) 0px, rgba(90,55,20,0.16) 1px, transparent 1px, transparent 14px),
+      linear-gradient(#d4a040, #d4a040),
+      repeating-linear-gradient(90deg, rgba(180,60,90,0.08) 0px, rgba(180,60,90,0.08) 2px, transparent 2px, transparent 12px);
+    background-size: 100% 30%, 100% 30%, auto;
+    background-position: bottom, bottom, top;
+    background-repeat: no-repeat, no-repeat, repeat;
     /* NOT background-attachment: fixed — repainting a repeating-gradient
        background as a fixed compositor layer on every scroll frame is a
        known iOS Safari GPU/memory hog and a real cause of tab crashes on
        iPad. Default (scroll) attachment is just as visually correct here
-       since the pattern tiles seamlessly either way. */
+       since the pattern tiles seamlessly either way, and the floor band
+       is sized off the body's own height so it still sits at the true
+       bottom of the page. */
   }
 
   /* ── Header ──────────────────────────────────────────────── */
@@ -151,8 +163,6 @@
   .p8  { background: #c2255c; color: #fce6ef; }
   .p9  { background: #5c940d; color: #eef6dc; }
   .p10 { background: #e8590c; color: #fdece0; }
-  .p11 { background: #364fc7; color: #e6eafc; }
-  .p12 { background: #bf8c2a; color: #f7ecd6; }
 
   /* Torn-paper edges — six shapes, cycled across the 12 cards. */
   .t1 { border-radius: 4px 28px 8px 24px; }
@@ -174,8 +184,6 @@
   .r8  { transform: rotate(2.7deg); }
   .r9  { transform: rotate(-0.8deg); }
   .r10 { transform: rotate(1.5deg); }
-  .r11 { transform: rotate(-2.2deg); }
-  .r12 { transform: rotate(2deg); }
 
   /* ── Footer ──────────────────────────────────────────────── */
   .collage-footer { text-align: center; padding: 40px 20px 60px; }
@@ -222,7 +230,7 @@
   <a class="back-link-collage" href="../../creation/">← Studio</a>
   <h1 class="collage-title">Dream Art Studio</h1>
   <p class="collage-subtitle">Inspired by Henri Matisse</p>
-  <div class="progress-pill" id="progressPill">0 of 12 stages completed</div>
+  <div class="progress-pill" id="progressPill">0 of 10 stages completed</div>
 </div>
 
 <div class="cards-grid-wrap">
@@ -248,16 +256,21 @@
  * Dream Art Studio — Landing Page (paper-collage card grid)
  *
  * STEPS / TOTAL_STEPS / DreamState come from shared/studio-state.js.
- * Steps 1-5 are real, tappable pages. Steps 6-12 render as locked
+ * Steps 1-7 are real, tappable pages. Steps 8-10 render as locked
  * cutouts (dimmed, grayscale, 🔒, no hover, not clickable) — this
  * replaces the old "tap for a coming-soon sheet" behavior, since a
  * locked card in this design reads as inert by itself.
+ *
+ * NOTE (2026-09-03): Step 8 "Add Yourself" already has a real, built
+ * page behind it (carried over from the old Step 10) — it's locked
+ * here per Faye's "lock 8-10" instruction, not because the page itself
+ * is unbuilt. Direct-linking to step-8/ still works; it just isn't
+ * offered from this grid yet.
  * ============================================================ */
 
-// Which steps are real, tappable pages — no longer a simple "n <= limit"
-// range now that Steps 7 and 10 are live ahead of 6, 8, 9. Order matters:
-// it's also the sequence "recommended next" and the friction nudge walk.
-const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 7, 10];
+// Which steps are real, tappable pages. Order matters: it's also the
+// sequence "recommended next" and the friction nudge walk.
+const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 6, 7];
 
 function recommendedFunctionalStep() {
   for (const n of FUNCTIONAL_STEPS) {
@@ -280,8 +293,6 @@ const CARD_META = {
   8:  { torn: 2, wide: true,  tall: false, tapes: 2 },
   9:  { torn: 3, wide: false, tall: false, tapes: 1 },
   10: { torn: 4, wide: false, tall: false, tapes: 1 },
-  11: { torn: 5, wide: false, tall: false, tapes: 1 },
-  12: { torn: 6, wide: true,  tall: false, tapes: 2 },
 };
 
 let pendingFrictionStep = null;
