@@ -12,6 +12,13 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared step/state module -->
 <script src="../shared/studio-state.js"></script>
+
+<style>
+  /* Background is the shared Matisse Pink Studio default — no
+     page-scoped override needed. */
+  .details-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
+  .complete-wrap { text-align: center; margin-top: 20px; }
+</style>
 </head>
 <body>
 
@@ -22,15 +29,93 @@
 </div>
 
 <div class="content-wrap">
-  <div class="soon-card">
-    <div class="soon-icon">💎</div>
-    <h2>Final Details</h2>
-    <p>This stage is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
-    <a class="btn btn-gold" href="../">← Back to map</a>
+
+  <div class="page-hero">
+    <h1>Add the Finishing Touches</h1>
+    <p>Small details make a big difference.</p>
   </div>
+
+  <div class="details-list" id="detailsList"></div>
+
+  <div id="feedbackSlot"></div>
+
+  <div class="complete-wrap">
+    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ My studio is finished!</button>
+  </div>
+
+  <div class="next-footer">
+    <button class="btn btn-ghost" onclick="goNext()">Continue →</button>
+  </div>
+
 </div>
 
 <script>
+const STEP_N = 9;
+
+const DETAILS = [
+  { key: 'patterns', label: 'Add patterns to your objects' },
+  { key: 'tinydetails', label: 'Add tiny details (buttons, textures, dots)' },
+  { key: 'surprise', label: 'Add a pet or small surprise' },
+  { key: 'frame', label: 'Add a frame to a painting' },
+  { key: 'signature', label: 'Sign your name somewhere hidden' },
+];
+
+const FEEDBACK_LINES = ['Nice touch!', "That's so Matisse!", 'Artists love hidden signatures.'];
+let feedbackIdx = 0;
+
+function getChecked() {
+  return DreamState.getStepData(STEP_N).checked || [];
+}
+
+function renderDetails() {
+  const checked = getChecked();
+  const listEl = document.getElementById('detailsList');
+  listEl.innerHTML = DETAILS.map(d => `
+    <div class="check-card ${checked.includes(d.key) ? 'checked' : ''}" onclick="toggleDetail('${d.key}')">
+      <div class="check-box">${checked.includes(d.key) ? '✓' : ''}</div>
+      <div class="check-label">${d.label}</div>
+    </div>
+  `).join('');
+}
+
+function toggleDetail(key) {
+  const checked = getChecked();
+  const idx = checked.indexOf(key);
+  const nowChecked = idx === -1;
+  if (nowChecked) checked.push(key); else checked.splice(idx, 1);
+  DreamState.setStepData(STEP_N, { checked: checked });
+  DreamState.markInProgress(STEP_N);
+
+  if (nowChecked) {
+    showFeedback(FEEDBACK_LINES[feedbackIdx % FEEDBACK_LINES.length]);
+    feedbackIdx++;
+  }
+  renderDetails();
+}
+
+function showFeedback(text) {
+  document.getElementById('feedbackSlot').innerHTML = `
+    <div class="artchi-bubble">
+      <div class="ab-icon">✨</div>
+      <div class="ab-text">${text}</div>
+    </div>
+  `;
+}
+
+function toggleComplete() {
+  DreamState.markInProgress(STEP_N);
+  DreamState.markCompleted(STEP_N);
+  const btn = document.getElementById('completeBtn');
+  btn.textContent = '✓ Studio finished!';
+  btn.classList.add('btn-primary');
+  btn.classList.remove('btn-gold');
+}
+
+function goNext() {
+  DreamState.markCompleted(STEP_N);
+  window.location.href = '../step-10/';
+}
+
 async function init() {
   if (window.FEIAccess) {
     try {
@@ -41,8 +126,16 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
-  DreamState.markVisited(9);
+  DreamState.markVisited(STEP_N);
+  if (DreamState.getStatus(STEP_N) === 'completed') {
+    const btn = document.getElementById('completeBtn');
+    btn.textContent = '✓ Studio finished!';
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-gold');
+  }
+  renderDetails();
 }
+
 init();
 </script>
 </body>

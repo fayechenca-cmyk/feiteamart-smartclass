@@ -15,8 +15,9 @@
 
 :root {
   --ink: #2c1e10;
-  --ink-soft: #6d5440;
-  --ink-muted: #a68f78;
+  --ink-soft: #4a2c1a;   /* was #6d5440 — too low-contrast directly on the
+                            pink background (2026-09-03 readability fix) */
+  --ink-muted: #6b4a32;  /* was #a68f78 — same reason */
   --gold: #2b4cd6;   /* now Matisse blue — kept the var NAME so every existing
                          .btn-gold / .selected / .checked reference across every
                          step re-themes for free without touching their markup */
@@ -35,22 +36,13 @@ html, body {
   margin: 0; padding: 0;
   font-family: 'Montserrat', sans-serif;
   background-color: var(--pink);
+  /* Wood-floor band removed (2026-09-03 — read as a tacky yellow bar,
+     not a natural floor). Pink watercolor-stripe walls run the full
+     page now, no bottom band. */
   background-image:
-    /* wood-plank lines, confined to the bottom 30% via background-size below */
-    repeating-linear-gradient(0deg, rgba(90,55,20,0.16) 0px, rgba(90,55,20,0.16) 1px, transparent 1px, transparent 14px),
-    /* solid wood-floor band, same bottom 30% */
-    linear-gradient(#d4a040, #d4a040),
-    /* pink watercolor-stripe walls, full page */
     repeating-linear-gradient(90deg, rgba(180,60,90,0.08) 0px, rgba(180,60,90,0.08) 2px, transparent 2px, transparent 12px);
-  background-size: 100% 30%, 100% 30%, auto;
-  background-position: bottom, bottom, top;
-  background-repeat: no-repeat, no-repeat, repeat;
   /* NOT background-attachment: fixed — known iOS Safari GPU/memory
-     crash trigger when repainting a fixed background layer on scroll.
-     Default (scroll) attachment is correct here too: the floor band is
-     sized off the body's own (document) height via background-size, so
-     it already sits at the true bottom of the page without needing to
-     be pinned to the viewport. */
+     crash trigger when repainting a fixed background layer on scroll. */
   color: var(--ink);
   min-height: 100vh;
 }

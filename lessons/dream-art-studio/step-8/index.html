@@ -23,7 +23,7 @@
     width: 100%;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(26,29,43,0.15);
+    box-shadow: 0 10px 30px rgba(44,30,16,0.18);
     margin-bottom: 14px;
     line-height: 0;
     background: #fff;
@@ -40,8 +40,8 @@
     transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background-color .2s ease;
   }
   .hotspot:hover {
-    border-color: rgba(255,255,255,0.35);
-    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.15);
   }
   .hotspot.active {
     border-color: var(--gold);
@@ -55,30 +55,30 @@
     50% { box-shadow: 0 0 24px var(--gold); }
   }
 
-  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin-bottom: 18px; }
+  .image-map-caption { text-align: center; font-size: 11.5px; color: var(--ink-soft); margin-bottom: 18px; }
 
-  /* ── Video panel (placeholder — no real video yet) ──────────── */
-  .video-panel {
-    position: relative;
-    height: 200px;
-    background: #f6efdc;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(26,29,43,0.12);
-    margin: 0 0 20px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center;
-    padding: 16px;
-    animation: videoPanelIn .22s ease;
+  /* ── Video section — same pattern as Step 3: one continuous video,
+     jumps to a timestamp per tapped character. ───────────────────── */
+  .video-section { margin: 0 0 20px; animation: videoSectionIn .22s ease; }
+  @keyframes videoSectionIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .video-section-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 6px;
   }
-  @keyframes videoPanelIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  .video-panel-close {
-    position: absolute; top: 10px; right: 12px;
-    background: none; border: none; font-size: 13px; font-weight: 800;
+  .video-section-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); }
+  .video-section-close {
+    background: none; border: none; font-size: 12.5px; font-weight: 800;
     color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
   }
-  .video-panel-play { font-size: 38px; margin-bottom: 8px; line-height: 1; }
-  .video-panel-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
-  .video-panel-sub { font-size: 12px; color: var(--ink-muted); }
+  .video-section-soon {
+    background: #fff; border-radius: 16px; padding: 20px; text-align: center;
+    box-shadow: 0 6px 20px rgba(44,30,16,0.1);
+  }
+  .video-section-soon-icon { font-size: 32px; margin-bottom: 6px; }
+  .video-section-soon-text { font-size: 12.5px; color: var(--ink-soft); }
+
+  .complete-wrap { text-align: center; margin-top: 20px; }
 </style>
 </head>
 <body>
@@ -93,7 +93,7 @@
 
   <div class="page-hero">
     <h1>Add Yourself to Your Studio</h1>
-    <p>Tap a character to learn how to draw them.</p>
+    <p>Every artist belongs in their studio.</p>
   </div>
 
   <div class="image-map-wrap" id="imageMapWrap">
@@ -102,10 +102,14 @@
   </div>
   <div class="image-map-caption">Tap a character to see how to draw them.</div>
 
-  <div id="videoPanelSlot"></div>
+  <div id="videoSectionSlot"></div>
+
+  <div class="complete-wrap">
+    <button class="btn btn-gold" id="completeBtn" onclick="toggleComplete()">✓ I drew myself!</button>
+  </div>
 
   <div class="next-footer">
-    <button class="btn btn-gold" onclick="goNext()">Continue →</button>
+    <button class="btn btn-ghost" onclick="goNext()">Continue →</button>
   </div>
 
 </div>
@@ -115,15 +119,34 @@ const STEP_N = 8;
 
 // Rough estimates from the reference image — left/top/width/height are
 // all % of the image's own box (same convention as Step 3's HOTSPOTS).
-// Faye will rename these once the real characters are finalized.
 const HOTSPOTS = [
-  { name: 'Character 1', left: 1,  top: 18, width: 19, height: 72 },
-  { name: 'Character 2', left: 16, top: 15, width: 20, height: 75 },
-  { name: 'Character 3', left: 33, top: 15, width: 20, height: 78 },
-  { name: 'Character 4', left: 49, top: 10, width: 22, height: 82 },
-  { name: 'Character 5', left: 67, top: 28, width: 15, height: 50 },
-  { name: 'Character 6', left: 79, top: 22, width: 19, height: 58 },
+  { name: 'Boy (Striped Shirt)', left: 1,  top: 18, width: 19, height: 72 },
+  { name: 'Girl (Green Skirt)',  left: 16, top: 15, width: 20, height: 75 },
+  { name: 'Boy (Reading)',       left: 33, top: 15, width: 20, height: 78 },
+  { name: 'Girl (Yellow Top)',   left: 49, top: 10, width: 22, height: 82 },
+  { name: 'Cat',                 left: 67, top: 28, width: 15, height: 50 },
+  { name: 'Dog',                 left: 79, top: 22, width: 19, height: 58 },
 ];
+
+// Same continuous teacher video as Step 3 — the two boys share the
+// "Male Character" timestamp and the two girls share "Female
+// Character" (Faye recorded one demo per gender, not one per pose).
+// Cat/Dog have no timestamp yet — tapping them shows a "coming soon"
+// card instead of a broken jump.
+const HOWTO_VIDEO_ID = '8e767f54579d2082a0325825b8deb002';
+const CHARACTER_VIDEO_KEY = {
+  'Boy (Striped Shirt)': 'Male Character',
+  'Boy (Reading)': 'Male Character',
+  'Girl (Green Skirt)': 'Female Character',
+  'Girl (Yellow Top)': 'Female Character',
+  'Cat': null,
+  'Dog': null,
+};
+const TIMESTAMP_MAP = { 'Male Character': 961, 'Female Character': 1116 };
+function cfStreamTimestampSrc(videoId, startSeconds) {
+  const poster = encodeURIComponent(`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/iframe?poster=${poster}&startTime=${startSeconds}`;
+}
 
 let activeCharacter = null;
 
@@ -143,29 +166,50 @@ function tapCharacter(name) {
   activeCharacter = name;
   DreamState.markInProgress(STEP_N);
   renderHotspots();
-  renderVideoPanel();
+  renderVideoSection();
 }
 
-function renderVideoPanel() {
-  const slot = document.getElementById('videoPanelSlot');
+function renderVideoSection() {
+  const slot = document.getElementById('videoSectionSlot');
   if (!activeCharacter) {
     slot.innerHTML = '';
     return;
   }
+  const videoKey = CHARACTER_VIDEO_KEY[activeCharacter];
+  const seconds = videoKey ? TIMESTAMP_MAP[videoKey] : null;
+  const body = seconds != null
+    ? `<div class="video-frame">
+        <iframe src="${cfStreamTimestampSrc(HOWTO_VIDEO_ID, seconds)}" loading="lazy" title="How to draw: ${activeCharacter}"
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true"></iframe>
+      </div>
+      <p class="video-note">Your objects don't need to look exactly like Faye's — make them your own!</p>`
+    : `<div class="video-section-soon">
+        <div class="video-section-soon-icon">🎬</div>
+        <div class="video-section-soon-text">Faye's ${activeCharacter.toLowerCase()} tutorial is coming soon!</div>
+      </div>`;
   slot.innerHTML = `
-    <div class="video-panel">
-      <button class="video-panel-close" onclick="closeVideoPanel()">✕ close</button>
-      <div class="video-panel-play">▶️</div>
-      <div class="video-panel-title">How to draw: ${activeCharacter}</div>
-      <div class="video-panel-sub">🎬 How to draw this character — Faye's tutorial coming soon</div>
+    <div class="video-section">
+      <div class="video-section-head">
+        <span class="video-section-title">🎬 How to draw: ${activeCharacter}</span>
+        <button class="video-section-close" onclick="closeVideoSection()">✕ close</button>
+      </div>
+      ${body}
     </div>
   `;
 }
 
-function closeVideoPanel() {
+function closeVideoSection() {
   activeCharacter = null;
-  renderHotspots();
-  renderVideoPanel();
+  renderVideoSection();
+}
+
+function toggleComplete() {
+  DreamState.markInProgress(STEP_N);
+  DreamState.markCompleted(STEP_N);
+  const btn = document.getElementById('completeBtn');
+  btn.textContent = '✓ Added myself!';
+  btn.classList.add('btn-primary');
+  btn.classList.remove('btn-gold');
 }
 
 function goNext() {
@@ -184,6 +228,12 @@ async function init() {
     }
   }
   DreamState.markVisited(STEP_N);
+  if (DreamState.getStatus(STEP_N) === 'completed') {
+    const btn = document.getElementById('completeBtn');
+    btn.textContent = '✓ Added myself!';
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-gold');
+  }
   renderHotspots();
 }
 

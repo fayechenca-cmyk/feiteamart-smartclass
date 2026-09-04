@@ -13,20 +13,19 @@
      Only STEPS / TOTAL_STEPS / DreamState are used here; the old shared
      studio-style.css (winding-path map chrome) is intentionally NOT
      loaded on this page anymore — none of its classes apply to the new
-     canvas-collage design below. -->
+     paper-craft-diorama design below. -->
 <script src="shared/studio-state.js"></script>
 
 <style>
   /* ============================================================
-   * Dream Art Studio — Matisse paper-collage landing page.
+   * Dream Art Studio — Matisse-inspired paper-craft-diorama landing page.
    * Replaces the old Illustration-Book-style winding path.
-   * MATISSE PINK STUDIO REDESIGN (2026-09-03) — replaces the old
-  * canvas-linen texture with Faye's own painted shoebox-diorama look:
-  * pink watercolor-stripe walls + a wood-plank floor band across the
-  * bottom 30% of the page. Same technique as shared/studio-style.css
-  * (this page still doesn't load that file — see note above — so the
-  * background is redeclared here to match it exactly).
-  * ============================================================ */
+   * MATISSE PINK STUDIO REDESIGN (2026-09-03, refined 2026-09-04) —
+   * pink watercolor-stripe walls, no wood-floor band any more (read as
+   * a tacky yellow bar — removed per Faye). Same technique as
+   * shared/studio-style.css (this page still doesn't load that file —
+   * see note above — so the background is redeclared here to match).
+   * ============================================================ */
 
   * { box-sizing: border-box; }
   html, body {
@@ -36,19 +35,12 @@
     min-height: 100vh;
     background-color: #e88ca0;
     background-image:
-      repeating-linear-gradient(0deg, rgba(90,55,20,0.16) 0px, rgba(90,55,20,0.16) 1px, transparent 1px, transparent 14px),
-      linear-gradient(#d4a040, #d4a040),
       repeating-linear-gradient(90deg, rgba(180,60,90,0.08) 0px, rgba(180,60,90,0.08) 2px, transparent 2px, transparent 12px);
-    background-size: 100% 30%, 100% 30%, auto;
-    background-position: bottom, bottom, top;
-    background-repeat: no-repeat, no-repeat, repeat;
     /* NOT background-attachment: fixed — repainting a repeating-gradient
        background as a fixed compositor layer on every scroll frame is a
        known iOS Safari GPU/memory hog and a real cause of tab crashes on
        iPad. Default (scroll) attachment is just as visually correct here
-       since the pattern tiles seamlessly either way, and the floor band
-       is sized off the body's own height so it still sits at the true
-       bottom of the page. */
+       since the pattern tiles seamlessly either way. */
   }
 
   /* ── Header ──────────────────────────────────────────────── */
@@ -56,7 +48,7 @@
   .back-link-collage {
     display: inline-block; margin-bottom: 16px;
     font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
-    color: #6d5440; text-decoration: none;
+    color: #4a2c1a; text-decoration: none;
   }
   .back-link-collage:hover { text-decoration: underline; }
   .collage-title {
@@ -66,7 +58,7 @@
     color: #2c1e10; margin: 0 0 8px;
   }
   .collage-subtitle {
-    font-style: italic; color: #6d5440; font-size: 14px; margin: 0 0 16px;
+    font-style: italic; color: #4a2c1a; font-size: 14px; margin: 0 0 16px;
   }
   .progress-pill {
     display: inline-block;
@@ -188,7 +180,7 @@
   /* ── Footer ──────────────────────────────────────────────── */
   .collage-footer { text-align: center; padding: 40px 20px 60px; }
   .matisse-quote {
-    font-family: Georgia, serif; font-style: italic; color: #6d5440;
+    font-family: Georgia, serif; font-style: italic; color: #4a2c1a;
     font-size: 13px; max-width: 380px; margin: 0 auto; line-height: 1.65;
   }
 
@@ -256,21 +248,16 @@
  * Dream Art Studio — Landing Page (paper-collage card grid)
  *
  * STEPS / TOTAL_STEPS / DreamState come from shared/studio-state.js.
- * Steps 1-7 are real, tappable pages. Steps 8-10 render as locked
- * cutouts (dimmed, grayscale, 🔒, no hover, not clickable) — this
- * replaces the old "tap for a coming-soon sheet" behavior, since a
- * locked card in this design reads as inert by itself.
- *
- * NOTE (2026-09-03): Step 8 "Add Yourself" already has a real, built
- * page behind it (carried over from the old Step 10) — it's locked
- * here per Faye's "lock 8-10" instruction, not because the page itself
- * is unbuilt. Direct-linking to step-8/ still works; it just isn't
- * offered from this grid yet.
+ * All 10 steps are real, tappable pages as of 2026-09-04 — Steps 8-10
+ * (Add Yourself, Final Details, Gallery) now have real content and are
+ * unlocked here. The locked-cutout styling (dimmed, grayscale, 🔒,
+ * no hover, not clickable) stays in place as machinery for whenever a
+ * future step ships ahead of being built.
  * ============================================================ */
 
 // Which steps are real, tappable pages. Order matters: it's also the
 // sequence "recommended next" and the friction nudge walk.
-const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 6, 7];
+const FUNCTIONAL_STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function recommendedFunctionalStep() {
   for (const n of FUNCTIONAL_STEPS) {
