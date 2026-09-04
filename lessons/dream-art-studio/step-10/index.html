@@ -12,6 +12,53 @@
 <script src="../../../core/access.js"></script>
 <!-- Shared step/state module -->
 <script src="../shared/studio-state.js"></script>
+
+<style>
+  /* Background is the shared Matisse Pink Studio default — no
+     page-scoped override needed. */
+
+  .upload-slot-wrap { display: flex; flex-direction: column; align-items: center; margin: 4px 0 8px; }
+  .upload-slot {
+    position: relative; width: 100%; max-width: 320px; aspect-ratio: 1/1;
+    border-radius: 16px; border: 2.5px dashed var(--ink-muted); background: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden;
+  }
+  .upload-slot.saving { border-color: var(--red); }
+  .upload-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .upload-slot .slot-plus { font-size: 30px; color: var(--ink-muted); }
+  .upload-slot .slot-label { font-size: 11px; font-weight: 700; color: var(--ink-soft); margin-top: 6px; padding: 0 16px; text-align: center; }
+
+  /* "Gold frame" — the actual yellow (--yellow), not the --gold var
+     (which is Matisse Blue in this palette). */
+  .gold-frame-wrap { max-width: 320px; margin: 4px auto 8px; }
+  .gold-frame {
+    padding: 10px; background: #fff; border: 5px solid var(--yellow);
+    border-radius: 8px; box-shadow: 0 10px 26px rgba(44,30,16,0.22);
+  }
+  .gold-frame img { width: 100%; display: block; border-radius: 3px; }
+
+  .reflect-block { margin: 24px 0 4px; }
+  .reflect-prompt { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 10px; text-align: center; }
+  .reflect-options { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 6px; }
+  .reflect-chip {
+    background: #fff; border: 2px solid var(--border); border-radius: 999px;
+    padding: 9px 15px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .reflect-chip:active { transform: scale(0.96); }
+  .reflect-chip.picked { border-color: var(--gold); background: rgba(43,76,214,0.12); color: var(--ink); }
+  .reflect-empty { text-align: center; font-size: 12px; color: var(--ink-muted); }
+
+  .gallery-final-line {
+    text-align: center; font-family: 'Montserrat', sans-serif; font-style: italic;
+    font-size: 14.5px; color: var(--ink); margin: 26px 0 4px;
+  }
+  .gallery-credit {
+    text-align: center; font-size: 11px; color: var(--ink-muted); margin-bottom: 18px;
+  }
+</style>
 </head>
 <body>
 
@@ -22,15 +69,194 @@
 </div>
 
 <div class="content-wrap">
-  <div class="soon-card">
-    <div class="soon-icon">🖼️</div>
-    <h2>Gallery</h2>
-    <p>This stage is still being built — check back soon. In the meantime, the rest of your journey is waiting on the map.</p>
-    <a class="btn btn-gold" href="../">← Back to map</a>
+
+  <div class="page-hero">
+    <h1>Your Dream Art Studio</h1>
+    <p>Share your masterpiece.</p>
   </div>
+
+  <div class="upload-slot-wrap" id="uploadSlotWrap"></div>
+  <div class="gold-frame-wrap" id="goldFrameWrap"></div>
+
+  <div class="reflect-block">
+    <div class="reflect-prompt">My favorite part of my studio is...</div>
+    <div class="reflect-options" id="favoriteOptions"></div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-prompt">The most interesting object I made is...</div>
+    <div class="reflect-options" id="objectOptions"></div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-prompt">If Matisse visited my studio, I think he would...</div>
+    <div class="reflect-options" id="matisseOptions"></div>
+  </div>
+
+  <p class="gallery-final-line">No two dream studios look the same.</p>
+  <p class="gallery-credit">FEI TeamArt · Creation · Learn from Masters — Led by Mrs. Dawn Wang.</p>
+
 </div>
 
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelected(event)">
+
 <script>
+const STEP_N = 10;
+
+const FAVORITE_OPTIONS = ['The colors', 'A specific object', 'The background', 'How everything fits together', 'A hidden detail'];
+const MATISSE_OPTIONS = ['Love the colors', 'Rearrange everything', 'Add more plants', 'Sit in the chair and paint', 'Bring his cat'];
+
+/* ============================================================
+   IndexedDB — same compress-via-canvas pattern as
+   first-illustration-book/shared/book-storage.js, self-contained here
+   like every other Creation lesson's own storage helpers.
+============================================================ */
+const DB_NAME = 'fei.creation.dream_art_studio.gallery';
+const DB_VERSION = 1;
+const STORE_NAME = 'photos';
+const PIECE_ID = 'studio_001';
+const MAX_EDGE = 1400;
+const JPEG_QUALITY = 0.87;
+let _dbPromise = null;
+function isStorageSupported(){ return !!window.indexedDB; }
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+function compressImage(fileOrBlob){
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(fileOrBlob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.naturalWidth, height = img.naturalHeight;
+      const longestEdge = Math.max(width, height);
+      if (longestEdge > MAX_EDGE) {
+        const scale = MAX_EDGE / longestEdge;
+        width = Math.round(width * scale); height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image')); };
+    img.src = url;
+  });
+}
+async function savePhoto(pieceId, fileOrBlob){
+  const compressed = await compressImage(fileOrBlob);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId + '::' + Date.now(), pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listPhotos(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => { const rows = req.result || []; rows.sort((a, b) => b.savedAt - a.savedAt); resolve(rows); };
+    req.onerror = () => reject(req.error);
+  });
+}
+let photoRecord = null;
+let objectUrl = null;
+let saving = false;
+
+function triggerUpload(){ document.getElementById('fileInput').click(); }
+async function onFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please choose an image file (JPG or PNG).'); return; }
+  saving = true;
+  refreshUploadUI();
+  try {
+    const record = await savePhoto(PIECE_ID, file);
+    photoRecord = record;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(record.blob);
+    DreamState.markInProgress(STEP_N);
+    DreamState.markCompleted(STEP_N);
+  } catch (e) {
+    console.warn('[gallery] savePhoto failed', e);
+    alert("Couldn't save that photo — want to try a different one?");
+  }
+  saving = false;
+  refreshUploadUI();
+}
+function refreshUploadUI(){
+  const wrap = document.getElementById('uploadSlotWrap');
+  const frameWrap = document.getElementById('goldFrameWrap');
+  if (!wrap) return;
+  if (saving) {
+    wrap.innerHTML = `<div class="upload-slot saving"><div class="slot-plus">⏳</div><div class="slot-label">Saving…</div></div>`;
+    frameWrap.innerHTML = '';
+  } else if (photoRecord) {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><img src="${objectUrl}" alt="Your Dream Art Studio photo"></div>`;
+    frameWrap.innerHTML = `<div class="gold-frame"><img src="${objectUrl}" alt="Your Dream Art Studio photo, framed"></div>`;
+  } else {
+    wrap.innerHTML = `<div class="upload-slot" onclick="triggerUpload()"><div class="slot-plus">📸</div><div class="slot-label">Upload a photo of your finished studio</div></div>`;
+    frameWrap.innerHTML = '';
+  }
+}
+
+/* ============================================================
+   Reflections — tap-to-select (not blank text fields), auto-saved.
+============================================================ */
+function getReflections(){
+  return DreamState.getStepData(STEP_N).reflections || {};
+}
+function pickReflection(field, value){
+  const reflections = getReflections();
+  reflections[field] = value;
+  DreamState.setStepData(STEP_N, { reflections: reflections });
+  DreamState.markInProgress(STEP_N);
+  renderReflections();
+}
+function renderChipGroup(elId, field, options){
+  const reflections = getReflections();
+  const el = document.getElementById(elId);
+  if (options.length === 0) {
+    el.innerHTML = '<div class="reflect-empty">Nothing to show yet.</div>';
+    return;
+  }
+  el.innerHTML = options.map(opt => `
+    <span class="reflect-chip ${reflections[field] === opt ? 'picked' : ''}" onclick="pickReflection('${field}', '${opt.replace(/'/g, "\\'")}')">${opt}</span>
+  `).join('');
+}
+function renderReflections(){
+  renderChipGroup('favoriteOptions', 'favoritePart', FAVORITE_OPTIONS);
+  // Pulled straight from Step 3's own selection — the objects this
+  // particular student actually picked, not a fixed list.
+  const studioObjects = DreamState.getStepData(3).selected || [];
+  renderChipGroup('objectOptions', 'interestingObject', studioObjects);
+  renderChipGroup('matisseOptions', 'matisseThought', MATISSE_OPTIONS);
+}
+
 async function init() {
   if (window.FEIAccess) {
     try {
@@ -41,8 +267,18 @@ async function init() {
       console.warn('[init] gateLessonPage failed, continuing', e);
     }
   }
-  DreamState.markVisited(10);
+  DreamState.markVisited(STEP_N);
+
+  if (isStorageSupported()) {
+    try {
+      const rows = await listPhotos(PIECE_ID);
+      if (rows.length) { photoRecord = rows[0]; objectUrl = URL.createObjectURL(photoRecord.blob); }
+    } catch (e) { console.warn('[gallery] listPhotos failed', e); }
+  }
+  refreshUploadUI();
+  renderReflections();
 }
+
 init();
 </script>
 </body>

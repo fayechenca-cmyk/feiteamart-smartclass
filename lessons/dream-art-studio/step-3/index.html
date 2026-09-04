@@ -79,28 +79,24 @@
     border-radius: 16px; padding: 6px 12px;
   }
 
-  /* ── Video panel (placeholder — no real video yet) ──────────── */
-  .video-panel {
-    position: relative;
-    height: 200px;
-    background: #f6efdc;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(26,29,43,0.12);
+  /* ── Video section — ONE continuous teacher video that jumps to a
+     timestamp per tapped object, not a separate video per object
+     (2026-09-04 rework). Hidden until the first tap. ─────────────── */
+  .video-section {
     margin: 0 0 20px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center;
-    padding: 16px;
     animation: videoPanelIn .22s ease;
   }
   @keyframes videoPanelIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  .video-panel-close {
-    position: absolute; top: 10px; right: 12px;
-    background: none; border: none; font-size: 13px; font-weight: 800;
-    color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  .video-section-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    margin-bottom: 6px;
   }
-  .video-panel-play { font-size: 38px; margin-bottom: 8px; line-height: 1; }
-  .video-panel-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
-  .video-panel-sub { font-size: 12px; color: var(--ink-muted); }
+  .video-section-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink); }
+  .video-section-close {
+    background: none; border: none; font-size: 12.5px; font-weight: 800;
+    color: var(--ink-muted); cursor: pointer; -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -127,7 +123,7 @@
   </div>
   <div class="image-map-caption">Tap objects directly on the picture to select them.</div>
 
-  <div id="videoPanelSlot"></div>
+  <div id="videoSectionSlot"></div>
 
   <div class="selected-list" id="selectedList"></div>
 
@@ -142,28 +138,45 @@ const STEP_N = 3;
 const MIN_SUGGESTED = 5;
 let activeVideoObject = null;
 
-// Positions read directly off the new reference image (2026-09-03 —
-// see assets note below), a 4-column grid of 13 individually painted
-// objects, not the old organic room scene these percentages used to
-// target. Visually estimated against the actual image (not guessed
-// blind) but still rough — per Faye's own convention on this file,
-// nudge left/top/width/height here if any hotspot reads off in
-// devtools.
+// Positions read directly off the reference image, a 4-column grid of
+// 13 individually painted objects. Visually estimated against the
+// actual image (not guessed blind) but still rough — nudge
+// left/top/width/height here if any hotspot reads off in devtools.
+// Names (2026-09-04) now match TIMESTAMP_MAP's keys exactly, since a
+// tap both toggles selection AND looks up a video timestamp.
 const HOTSPOTS = [
-  { name: 'Pink Rug',        left: 2,  top: 3,  width: 22, height: 22 },
-  { name: 'Yellow Lamp',     left: 30, top: 2,  width: 11, height: 26 },
-  { name: 'Green Armchair',  left: 48, top: 3,  width: 22, height: 32 },
-  { name: 'Cat',             left: 75, top: 7,  width: 18, height: 12 },
-  { name: 'Potted Flower',   left: 6,  top: 33, width: 16, height: 35 },
-  { name: 'Easel & Painting',left: 28, top: 28, width: 17, height: 36 },
-  { name: 'Vase of Flowers', left: 50, top: 34, width: 16, height: 34 },
-  { name: 'Pink Dresser',    left: 71, top: 37, width: 24, height: 31 },
-  { name: 'Yellow Stool',    left: 6,  top: 71, width: 15, height: 22 },
-  { name: 'Bust Sculpture',  left: 27, top: 70, width: 15, height: 24 },
-  { name: 'Paintbrush Cup',  left: 43, top: 73, width: 12, height: 20 },
-  { name: 'Round Table',     left: 56, top: 73, width: 21, height: 20 },
-  { name: 'Framed Painting', left: 81, top: 73, width: 15, height: 20 },
+  { name: 'Rug',       left: 2,  top: 3,  width: 22, height: 22 },
+  { name: 'Lamp',      left: 30, top: 2,  width: 11, height: 26 },
+  { name: 'Sofa',      left: 48, top: 3,  width: 22, height: 32 },
+  { name: 'Cat',       left: 75, top: 7,  width: 18, height: 12 },
+  { name: 'Plants',    left: 6,  top: 33, width: 16, height: 35 },
+  { name: 'Easel',     left: 28, top: 28, width: 17, height: 36 },
+  { name: 'Vase',      left: 50, top: 34, width: 16, height: 34 },
+  { name: 'Cabinet',   left: 71, top: 37, width: 24, height: 31 },
+  { name: 'Stool',     left: 6,  top: 71, width: 15, height: 22 },
+  { name: 'Sculpture', left: 27, top: 70, width: 15, height: 24 },
+  { name: 'Pen Cup',   left: 43, top: 73, width: 12, height: 20 },
+  { name: 'Table',     left: 56, top: 73, width: 21, height: 20 },
+  { name: 'Painting',  left: 81, top: 73, width: 15, height: 20 },
 ];
+
+// One continuous teacher video (Faye draws every object in sequence) —
+// tapping an object jumps this same video to its timestamp instead of
+// opening a separate clip per object. "Bookshelf" has a timestamp but
+// no matching object in the reference image above (flagged for Faye,
+// not silently dropped) — kept here in case a hotspot for it gets
+// added later, but it's unreachable from this page's HOTSPOTS today.
+const HOWTO_VIDEO_ID = '8e767f54579d2082a0325825b8deb002';
+const TIMESTAMP_MAP = {
+  'Rug': 3, 'Plants': 62, 'Lamp': 124, 'Easel': 176, 'Sofa': 251,
+  'Vase': 383, 'Cat': 443, 'Cabinet': 526, 'Stool': 600, 'Sculpture': 642,
+  'Pen Cup': 711, 'Table': 722, 'Painting': 796, 'Bookshelf': 823,
+  'Male Character': 961, 'Female Character': 1116
+};
+function cfStreamTimestampSrc(videoId, startSeconds) {
+  const poster = encodeURIComponent(`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://customer-a78os4oj56dr67ab.cloudflarestream.com/${videoId}/iframe?poster=${poster}&startTime=${startSeconds}`;
+}
 
 function renderHotspots() {
   const data = DreamState.getStepData(STEP_N);
@@ -213,28 +226,34 @@ function toggleHotspot(name) {
   DreamState.markInProgress(STEP_N);
   activeVideoObject = name;
   renderHotspots();
-  renderVideoPanel();
+  renderVideoSection();
 }
 
-function renderVideoPanel() {
-  const slot = document.getElementById('videoPanelSlot');
+function renderVideoSection() {
+  const slot = document.getElementById('videoSectionSlot');
   if (!activeVideoObject) {
     slot.innerHTML = '';
     return;
   }
+  const seconds = TIMESTAMP_MAP[activeVideoObject];
   slot.innerHTML = `
-    <div class="video-panel">
-      <button class="video-panel-close" onclick="closeVideoPanel()">✕ close</button>
-      <div class="video-panel-play">▶️</div>
-      <div class="video-panel-title">How to draw: ${activeVideoObject}</div>
-      <div class="video-panel-sub">🎬 Faye's drawing tutorial coming soon</div>
+    <div class="video-section">
+      <div class="video-section-head">
+        <span class="video-section-title">🎬 How to draw: ${activeVideoObject}</span>
+        <button class="video-section-close" onclick="closeVideoSection()">✕ close</button>
+      </div>
+      <div class="video-frame">
+        <iframe src="${cfStreamTimestampSrc(HOWTO_VIDEO_ID, seconds)}" loading="lazy" title="How to draw: ${activeVideoObject}"
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true"></iframe>
+      </div>
+      <p class="video-note">Your objects don't need to look exactly like Faye's — make them your own!</p>
     </div>
   `;
 }
 
-function closeVideoPanel() {
+function closeVideoSection() {
   activeVideoObject = null;
-  renderVideoPanel();
+  renderVideoSection();
 }
 
 function goNext() {

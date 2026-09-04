@@ -39,16 +39,23 @@
     100% { opacity: 0; transform: scale(1.04); }
   }
 
-  .attribution-line {
-    text-align: center; font-size: 12px; font-style: italic;
-    color: var(--ink-muted); margin: 0 0 14px;
+  /* Original-painting link — a real button now, not tiny italic text
+     (2026-09-04, per Faye: it was too easy to miss). */
+  .original-link-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--cream); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 14px;
+    padding: 13px 16px; margin: 0 0 16px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 13px;
+    text-decoration: none; text-align: center;
+    box-shadow: 0 3px 10px rgba(44,30,16,0.15);
+    transition: transform .15s ease;
   }
-  .attribution-line a { color: var(--ink-soft); font-weight: 700; font-style: normal; text-decoration: none; }
-  .attribution-line a:hover { text-decoration: underline; }
+  .original-link-btn:active { transform: scale(0.98); }
 
   .artwork-caption {
     text-align: center; font-size: 12.5px; font-style: italic;
-    color: var(--ink-muted); margin-bottom: 22px; line-height: 1.55;
+    color: var(--ink-soft); margin-bottom: 22px; line-height: 1.55;
   }
 
   .objects-progress {
@@ -84,7 +91,7 @@
     <img src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ee229d4d-10e7-4dc8-f174-7ebc98d7fa00/public" alt="Faye's painted shoebox-diorama studio, inspired by Henri Matisse's The Red Studio — pink watercolor-stripe walls, a wood-plank floor, an easel, an armchair with a cat, a pink dresser, and a bookshelf">
   </div>
 
-  <div class="attribution-line">Inspired by Henri Matisse's <a href="https://www.moma.org/collection/works/78389" target="_blank" rel="noopener">The Red Studio (1911)</a></div>
+  <a class="original-link-btn" href="https://www.moma.org/collection/works/78389" target="_blank" rel="noopener">🖼 See the original: The Red Studio (1911) — MoMA →</a>
 
   <div class="artwork-caption">Look at the picture carefully. Then come back here and tap every object you can find.</div>
 
