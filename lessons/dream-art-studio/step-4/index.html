@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Step 4 · Customize Every Object · Dream Art Studio</title>
+<title>Step 4 · Design Each Object · Dream Art Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/studio-style.css">
 
@@ -14,24 +14,9 @@
 <script src="../shared/studio-state.js"></script>
 
 <style>
-  /* Canvas-collage background for this step only — matches the new
-     landing page's Matisse paper-collage aesthetic (page-scoped
-     override, same technique as Step 1's dark museum-wall background).
-     Every shared class from studio-style.css (.card, .btn, etc.) and
-     every interactive component below is untouched. */
-  html, body {
-    background-color: #d4c9a8;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px),
-      repeating-linear-gradient(90deg, rgba(139,119,80,0.06) 0px, rgba(139,119,80,0.06) 1px, transparent 1px, transparent 4px);
-    /* NOT background-attachment: fixed — known iOS Safari GPU/memory
-       crash trigger when repainting a fixed repeating-gradient on scroll. */
-  }
-  .topbar { background: rgba(212,201,168,0.75); border-bottom: 1px solid rgba(44,30,16,0.15); }
-  .back-link, .topbar-title { color: #2c1e10; }
-  .stops-pill { background: rgba(255,255,255,0.55); border-color: rgba(44,30,16,0.15); color: #2c1e10; }
-  .page-hero h1 { color: #2c1e10; }
-  .page-hero p { color: #6d5440; }
+  /* Background is the shared Matisse Pink Studio default from
+     studio-style.css now — no page-scoped override needed here any
+     more (2026-09-03 redesign). */
 
   .inspo-image-wrap {
     margin: 0 0 22px;
@@ -103,7 +88,7 @@
   }
   .choice-pill:active { transform: scale(0.96); }
   .choice-pill.selected {
-    background: rgba(200,169,110,0.16); border-color: var(--gold); color: var(--ink);
+    background: rgba(43,76,214,0.16); border-color: var(--gold); color: var(--ink);
   }
   .choice-pill .cp-icon { font-size: 13px; line-height: 1; flex-shrink: 0; }
 
@@ -120,7 +105,7 @@
   .color-chip.selected { box-shadow: 0 0 0 2.5px var(--gold); }
 
   .summary-box {
-    background: rgba(200,169,110,0.1); border-radius: 14px; padding: 14px 16px;
+    background: rgba(43,76,214,0.1); border-radius: 14px; padding: 14px 16px;
     margin: 6px 0 16px;
   }
   .summary-box .sb-label {
@@ -144,8 +129,8 @@
 
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
-  <p class="topbar-title">Customize Every Object</p>
-  <div class="stops-pill">STEP 4 OF 12</div>
+  <p class="topbar-title">Design Each Object</p>
+  <div class="stops-pill">STEP 4 OF 10</div>
 </div>
 
 <div class="content-wrap">
@@ -157,6 +142,14 @@
 
   <div class="inspo-image-wrap">
     <img class="inspo-image" src="https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/18808e46-dd25-486c-8c38-3af9048e7000/public" alt="A sheet of hand-drawn studio objects for inspiration — easel, armchair, vase, bookshelf, lamp, cabinet, and more">
+  </div>
+
+  <p class="video-note">Watch how Faye makes her objects — yours don't need to look the same!</p>
+  <div class="video-frame">
+    <iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/8e767f54579d2082a0325825b8deb002/iframe?poster=https%3A%2F%2Fcustomer-a78os4oj56dr67ab.cloudflarestream.com%2F8e767f54579d2082a0325825b8deb002%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+      loading="lazy" title="How Faye makes her studio objects"
+      allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+      allowfullscreen="true"></iframe>
   </div>
 
   <div class="objects-progress" id="objectsProgress"></div>

@@ -16,25 +16,33 @@
 (function (global) {
   'use strict';
 
+  // 12 -> 10 steps (2026-09-03 restructure): "Cut Collection" and
+  // "Glue Everything" were folded into the new Assemble Your Studio
+  // video and dropped as their own stops. Everything after them
+  // renumbered down to fill the gap.
   const STEPS = [
     { n: 1, icon: '🖼️', title: 'Welcome', desc: "Meet Matisse's two studios and start your own journey." },
-    { n: 2, icon: '🔎', title: 'Look Like an Artist', desc: "Find the objects hiding in Matisse's studio." },
+    { n: 2, icon: '🔎', title: 'Explore the Studio', desc: "Find the objects hiding in the studio." },
     { n: 3, icon: '💭', title: 'Imagine Your Dream Studio', desc: "Pick what YOU want inside your studio." },
-    { n: 4, icon: '🌳', title: 'Customize Every Object', desc: "Design each object your own way." },
+    { n: 4, icon: '🌳', title: 'Design Each Object', desc: "Design each object your own way." },
     { n: 5, icon: '✏️', title: 'Draw Together', desc: "Draw alongside Artchi, one shape at a time." },
-    { n: 6, icon: '✂️', title: 'Cut Collection', desc: "Cut out everything you've made." },
-    { n: 7, icon: '🎨', title: 'Build Your Background', desc: "Set the scene for your studio." },
-    { n: 8, icon: '🏠', title: 'Build Your Studio', desc: "Arrange the room around you." },
-    { n: 9, icon: '✨', title: 'Glue Everything', desc: "Bring every piece together." },
-    { n: 10, icon: '🧑‍🎨', title: 'Add Yourself', desc: "Put yourself inside the studio." },
-    { n: 11, icon: '💎', title: 'Final Details', desc: "The small touches that finish it." },
-    { n: 12, icon: '🖼️', title: 'Gallery', desc: "See your finished Dream Art Studio." },
+    { n: 6, icon: '🎨', title: 'Build Your Background', desc: "Watercolour base, then marker details." },
+    { n: 7, icon: '✂️', title: 'Assemble Your Studio', desc: "Cut, build the box, and glue it all together." },
+    { n: 8, icon: '🧑‍🎨', title: 'Add Yourself', desc: "Put yourself inside the studio." },
+    { n: 9, icon: '💎', title: 'Final Details', desc: "The small touches that finish it." },
+    { n: 10, icon: '🖼️', title: 'Gallery', desc: "See your finished Dream Art Studio." },
   ];
   const TOTAL_STEPS = STEPS.length;
   const STATUS_ORDER = ['not_started', 'visited', 'in_progress', 'completed'];
 
   const DreamState = {
-    KEY: 'fei.creation.dream_art_studio.v1',
+    // v1 -> v2 (2026-09-03): step numbers 6-12 now mean different
+    // content post-restructure (Cut Collection/Glue Everything removed,
+    // everything after shifted down). A v1 blob's steps[6]/[7]/[8]/etc.
+    // would otherwise silently mark the WRONG new step as already
+    // complete for a returning student, so this bumps to a clean slate
+    // instead of attempting a remap.
+    KEY: 'fei.creation.dream_art_studio.v2',
 
     _default() {
       const steps = {};

@@ -14,26 +14,21 @@
 <script src="../shared/studio-state.js"></script>
 
 <style>
-  /* Museum-wall feel for this step only — dark background makes the
-     "paintings" pop, like a real gallery wall. Every other step keeps
-     the shared warm gradient from studio-style.css. */
-  /* NOT background-attachment: fixed — known iOS Safari GPU/memory crash
-     trigger when repainting a fixed background layer on scroll. */
-  html, body { background: linear-gradient(180deg, #21213a 0%, #16162a 100%); }
-  .topbar { background: rgba(22,22,42,0.75); border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .back-link, .topbar-title { color: #fff; }
-  .stops-pill { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+  /* Background is the shared Matisse Pink Studio default (2026-09-03
+     redesign) — this step's previous dark "museum wall" treatment is
+     gone per "applies to ALL pages." Flagged for Faye in the build
+     summary in case the dark contrast here was meant to stay. */
 
   .welcome-hero { text-align: center; padding: 30px 10px 6px; }
   .welcome-hero .kicker {
     font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 10px;
+    color: var(--ink-soft); margin-bottom: 10px;
   }
   .welcome-hero h1 {
     font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 34px;
-    color: #fff; margin: 0 0 8px;
+    color: var(--ink); margin: 0 0 8px;
   }
-  .welcome-hero p { font-size: 14px; color: rgba(255,255,255,0.65); margin: 0; }
+  .welcome-hero p { font-size: 14px; color: var(--ink-soft); margin: 0; }
 
   .inspired-caption {
     text-align: center;
@@ -41,7 +36,7 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
+    color: var(--ink-muted);
     margin: 30px 0 14px;
   }
 
@@ -68,10 +63,10 @@
     margin-bottom: 5px;
     transition: color .15s ease;
   }
-  .original-links a:hover { color: rgba(255,255,255,0.85); text-decoration: underline; }
+  .original-links a:hover { color: var(--ink); text-decoration: underline; }
 
   .welcome-caption {
-    text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.55);
+    text-align: center; font-size: 12.5px; color: var(--ink-soft);
     margin: 18px 0 32px; line-height: 1.55;
   }
 
@@ -83,7 +78,7 @@
 <div class="topbar">
   <a class="back-link" href="../">← Map</a>
   <p class="topbar-title">Welcome</p>
-  <div class="stops-pill">STEP 1 OF 12</div>
+  <div class="stops-pill">STEP 1 OF 10</div>
 </div>
 
 <div class="content-wrap">

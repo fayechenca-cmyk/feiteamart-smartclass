@@ -2,34 +2,55 @@
  * FEI TeamArt · Dream Art Studio — shared chrome
  * Loaded by the map (index.html) and every step-N/index.html page.
  * Brand vars, page background, header bar, and common content
- * building blocks — deliberately the same warm Art GPS palette as
- * lessons/first-illustration-book/shared/book-style.css (peach /
- * butter / rose / sage / gold), since this course lives in the same
- * Creation · Learn from Collections track.
+ * building blocks.
+ *
+ * MATISSE PINK STUDIO REDESIGN (2026-09-03) — replaces the old warm
+ * Art GPS gradient (peach/butter/rose/sage) and the per-step
+ * "canvas-linen" override some pages had grown. Palette + background
+ * are modeled directly on Faye's own painted shoebox-diorama
+ * reference (pink watercolor-stripe walls, wood-plank floor). This IS
+ * now the one background for every Dream Art Studio page — no step
+ * should need its own page-scoped override any more.
  * ============================================================ */
 
 :root {
-  --ink: #1a1d2b;
-  --ink-soft: #4b4b5a;
-  --ink-muted: #8a8a9a;
-  --gold: #c8a96e;
-  --green: #1d9e75;
+  --ink: #2c1e10;
+  --ink-soft: #6d5440;
+  --ink-muted: #a68f78;
+  --gold: #2b4cd6;   /* now Matisse blue — kept the var NAME so every existing
+                         .btn-gold / .selected / .checked reference across every
+                         step re-themes for free without touching their markup */
+  --green: #2b8a3e;
   --purple: #a78bfa;
-  --border: rgba(26,29,43,0.1);
-  --peach: #ffd8b8;
-  --butter: #f7dfa0;
-  --sage: #b7c9a3;
-  --rose: #e6b8bf;
+  --border: rgba(44,30,16,0.12);
+  --pink: #e88ca0;
+  --blue: #2b4cd6;
+  --yellow: #e8c030;
+  --red: #c92a2a;
+  --brown: #8B5E3C;
+  --cream: #fdf6e3;
 }
 * { box-sizing: border-box; }
 html, body {
   margin: 0; padding: 0;
   font-family: 'Montserrat', sans-serif;
-  background: linear-gradient(180deg, var(--butter) 0%, var(--peach) 35%, var(--rose) 70%, var(--sage) 100%);
+  background-color: var(--pink);
+  background-image:
+    /* wood-plank lines, confined to the bottom 30% via background-size below */
+    repeating-linear-gradient(0deg, rgba(90,55,20,0.16) 0px, rgba(90,55,20,0.16) 1px, transparent 1px, transparent 14px),
+    /* solid wood-floor band, same bottom 30% */
+    linear-gradient(#d4a040, #d4a040),
+    /* pink watercolor-stripe walls, full page */
+    repeating-linear-gradient(90deg, rgba(180,60,90,0.08) 0px, rgba(180,60,90,0.08) 2px, transparent 2px, transparent 12px);
+  background-size: 100% 30%, 100% 30%, auto;
+  background-position: bottom, bottom, top;
+  background-repeat: no-repeat, no-repeat, repeat;
   /* NOT background-attachment: fixed — known iOS Safari GPU/memory
      crash trigger when repainting a fixed background layer on scroll.
-     This is the default background for every step that doesn't set
-     its own page-scoped override (2, 3, 6, 8, 9, 11, 12). */
+     Default (scroll) attachment is correct here too: the floor band is
+     sized off the body's own (document) height via background-size, so
+     it already sits at the true bottom of the page without needing to
+     be pinned to the viewport. */
   color: var(--ink);
   min-height: 100vh;
 }
@@ -115,7 +136,7 @@ html, body {
 }
 .btn-primary { background: var(--ink); color: #fff; }
 .btn-gold { background: var(--gold); color: #fff; }
-.btn-ghost { background: rgba(26,29,43,0.06); color: var(--ink); }
+.btn-ghost { background: rgba(44,30,16,0.06); color: var(--ink); }
 .btn[disabled] { opacity: 0.4; pointer-events: none; }
 .btn:active { transform: scale(0.98); }
 
@@ -129,7 +150,7 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 .tap-card:active { transform: scale(0.96); }
-.tap-card.selected { border-color: var(--gold); background: rgba(200,169,110,0.1); }
+.tap-card.selected { border-color: var(--gold); background: rgba(43,76,214,0.1); }
 .tap-card .tc-emoji { font-size: 30px; }
 .tap-card .tc-label { font-size: 12px; font-weight: 700; }
 
@@ -142,7 +163,7 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 .check-card:active { transform: scale(0.97); }
-.check-card.checked { border-color: var(--gold); background: rgba(200,169,110,0.08); }
+.check-card.checked { border-color: var(--gold); background: rgba(43,76,214,0.08); }
 .check-box {
   width: 22px; height: 22px; border-radius: 7px;
   border: 2px solid var(--border); flex-shrink: 0;
@@ -159,6 +180,34 @@ html, body {
   font-size: 10.5px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
   color: var(--ink-muted); text-align: center; margin-bottom: 8px;
 }
+
+/* ── VIDEO EMBED (Cloudflare Stream teacher-demo videos) ───────
+   Same shared class/shape as Rousseau's .video-frame, so every step
+   that embeds a demo video (4, 6, 7) uses one definition. ─────── */
+.video-frame {
+  position: relative;
+  padding-top: 56.25%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(44,30,16,0.2);
+  margin: 16px 0;
+  background: #2c1e10;
+}
+.video-frame iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+.video-note {
+  text-align: center; font-size: 12.5px; font-style: italic;
+  color: var(--ink-soft); margin: 4px 0 0;
+}
+.video-label {
+  font-size: 12.5px; font-weight: 800; color: var(--ink);
+  margin: 18px 0 2px;
+}
+.video-label:first-of-type { margin-top: 4px; }
 
 /* ── PLACEHOLDER ("still being built") PAGE ─────────────────── */
 .soon-card {
