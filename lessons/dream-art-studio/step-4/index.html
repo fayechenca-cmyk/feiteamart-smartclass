@@ -66,11 +66,10 @@
   .obj-card-header .oc-chevron { flex-shrink: 0; font-size: 13px; color: var(--ink-muted); transition: transform .2s ease; }
   .obj-card.expanded .oc-chevron { transform: rotate(180deg); }
 
-  .obj-card-body {
-    display: none;
-    padding: 0 18px 20px;
-  }
-  .obj-card.expanded .obj-card-body { display: block; }
+  /* Body HTML is only rendered at all for the expanded card now (see
+     renderList()) — no CSS display:none toggle needed for 10-15 objects'
+     worth of pills+preview+canvas to sit inert in the DOM. */
+  .obj-card-body { padding: 0 18px 20px; }
 
   .category-block { margin-bottom: 16px; }
   .category-label {
@@ -123,6 +122,83 @@
   .done-btn:active { transform: scale(0.98); }
 
   .skip-wrap { text-align: center; margin-top: 10px; }
+
+  /* ── Sections 2+3: live preview + mini drawing canvas ──────────
+     Sit together in their own cream sub-card, inside the object's
+     white .obj-card-body, below the Section-1 pills. Stacked by
+     default; side-by-side once there's room. */
+  .design-sections {
+    background: var(--cream); border-radius: 16px; padding: 16px;
+    margin-top: 4px; box-shadow: 0 2px 10px rgba(44,30,16,0.08);
+  }
+  @media (min-width: 700px) {
+    .design-sections { display: flex; gap: 18px; align-items: flex-start; }
+    .preview-wrap, .canvas-card { flex: 1 1 0; min-width: 0; }
+  }
+
+  /* ── Section 2: auto-preview ─────────────────────────────────── */
+  .preview-wrap { margin-bottom: 18px; }
+  @media (min-width: 700px) { .preview-wrap { margin-bottom: 0; } }
+  .preview-stage {
+    width: 100%; max-width: 300px; height: 250px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .preview-shape {
+    position: relative; overflow: hidden;
+    width: 150px; height: 150px;
+    transition: width .25s ease, height .25s ease, border-radius .25s ease, transform .25s ease, opacity .25s ease;
+  }
+  .preview-pattern-layer, .preview-material-layer, .preview-sparkle {
+    position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  }
+  .preview-sparkle {
+    background-image: radial-gradient(circle, rgba(255,255,255,.95) 1.5px, transparent 2px);
+    background-size: 22px 22px;
+    animation: sparkleTwinkle 1.6s ease-in-out infinite;
+  }
+  @keyframes sparkleTwinkle { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }
+  .preview-shadow {
+    width: 70px; height: 14px; margin-top: 10px;
+    background: rgba(44,30,16,.22); border-radius: 50%; filter: blur(3px);
+  }
+  .preview-live-summary {
+    text-align: center; font-size: 12.5px; color: var(--ink-soft);
+    font-style: italic; margin: 10px 0 0; line-height: 1.5; min-height: 18px;
+  }
+
+  /* ── Section 3: mini drawing canvas ──────────────────────────── */
+  .canvas-label { font-size: 13px; font-weight: 800; color: var(--ink); text-align: center; margin: 0 0 10px; }
+  .canvas-controls { margin-bottom: 10px; }
+  .canvas-color-row, .canvas-tool-row {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .canvas-color-dot {
+    width: 26px; height: 26px; border-radius: 50%; cursor: pointer; flex-shrink: 0;
+    border: 2px solid #fff; box-shadow: 0 0 0 1.5px rgba(44,30,16,.18);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .canvas-color-dot.picked { box-shadow: 0 0 0 2.5px var(--gold); transform: scale(1.12); }
+  .brush-size-row { display: flex; align-items: center; gap: 8px; }
+  .brush-size-dot {
+    background: var(--ink); border-radius: 50%; cursor: pointer; flex-shrink: 0;
+    border: 2px solid #fff; box-shadow: 0 0 0 1.5px rgba(44,30,16,.18);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .brush-size-dot.picked { box-shadow: 0 0 0 2.5px var(--gold); }
+  .eraser-btn, .clear-btn {
+    border: 2px solid var(--border); background: #fff; border-radius: 999px;
+    padding: 6px 12px; font-size: 11.5px; font-weight: 700; color: var(--ink-soft);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .eraser-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .mini-canvas-wrap {
+    width: 100%; max-width: 300px; aspect-ratio: 1/1; margin: 0 auto;
+    border-radius: 12px; overflow: hidden; border: 2.5px solid var(--ink);
+    box-shadow: 0 4px 14px rgba(44,30,16,.14); touch-action: none;
+  }
+  .mini-canvas-wrap canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+  .canvas-hint { text-align: center; font-size: 11.5px; color: var(--ink-muted); margin: 8px 0 0; }
 </style>
 </head>
 <body>
@@ -212,12 +288,75 @@ const OPTION_ICONS = {
   'Glows in dark': '🌟', 'Plays music': '🎵', 'Talks': '💬', 'Invisible sometimes': '👻',
 };
 
+// Matches the site's actual Matisse Pink Studio palette now (2026-09-05
+// fix — these used to be leftover pre-redesign colors that didn't match
+// anything else on the page). Same map drives Section 1's swatches,
+// Section 2's live preview fill, and Section 3's brush-color picker.
 const COLOR_SWATCHES = {
-  Blue: '#1864ab', Pink: '#e6b8bf', Yellow: '#f2c14e', Green: '#2b8a3e',
+  Blue: '#2b4cd6', Pink: '#e88ca0', Yellow: '#e8c030', Green: '#2b8a3e',
   Red: '#c92a2a', Gold: '#c8a96e',
-  Rainbow: 'linear-gradient(135deg,#c92a2a,#f2c14e,#2b8a3e,#1864ab,#a78bfa)',
-  Monochrome: 'linear-gradient(135deg,#1a1d2b,#8a8a9a,#fff)',
+  Rainbow: 'linear-gradient(45deg,red,orange,yellow,green,blue,purple)',
+  Monochrome: '#555',
 };
+// A single solid color to draw with when the chosen "color" is really a
+// multi-color concept (a canvas brush can't stroke in a gradient without
+// real complexity the spec explicitly said to skip).
+const COLOR_SOLID_FOR_BRUSH = Object.assign({}, COLOR_SWATCHES, {
+  Rainbow: '#c92a2a', Monochrome: '#555'
+});
+
+/* ============================================================
+   SECTION 2 — auto-preview. Every effect below is plain CSS
+   (border-radius/transform/background/filter), not literal SVG — the
+   spec's own effect vocabulary (border-radius, skewX, translateY,
+   scale) is CSS transform language, so a styled div element renders every
+   listed effect directly instead of hand-rolling equivalent SVG path
+   math for things SVG <rect> can't even do (per-corner radius).
+============================================================ */
+const SHAPE_PREVIEW_STYLE = {
+  Round:    'border-radius:50%;',
+  Tall:     'width:90px;height:210px;border-radius:16px;',
+  Floating: 'border-radius:20px;transform:translateY(-10px);',
+  Funny:    'border-radius:35% 15% 40% 20%;transform:skewX(5deg);',
+  Curved:   'border-radius:40% 60% 30% 70%;',
+  Tiny:     'border-radius:20px;transform:scale(0.6);',
+  Giant:    'border-radius:20px;transform:scale(1.3);',
+};
+const DEFAULT_SHAPE_STYLE = 'border-radius:20px;';
+const DEFAULT_FILL = '#ddd';
+
+const PATTERN_LAYER_STYLE = {
+  Stars: 'background-image:linear-gradient(45deg,rgba(255,255,255,.55) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.55) 75%),linear-gradient(-45deg,rgba(255,255,255,.55) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.55) 75%);background-size:14px 14px;',
+  Egyptian: 'background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.4) 0 4px,transparent 4px 8px,rgba(255,255,255,.4) 8px 12px,transparent 12px 16px);',
+  Floral: 'background-image:radial-gradient(ellipse 8px 5px,rgba(255,255,255,.6) 55%,transparent 60%);background-size:22px 20px;',
+  Checkerboard: 'background-image:linear-gradient(45deg,rgba(255,255,255,.4) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.4) 75%),linear-gradient(45deg,rgba(255,255,255,.4) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.4) 75%);background-size:16px 16px;background-position:0 0,8px 8px;',
+  Dots: 'background-image:radial-gradient(rgba(255,255,255,.6) 2px,transparent 2.5px);background-size:12px 12px;',
+  Stripes: 'background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.45) 0 4px,transparent 4px 10px);',
+  Leaves: 'background-image:radial-gradient(ellipse 7px 4px,rgba(255,255,255,.55) 60%,transparent 65%);background-size:20px 26px;',
+  Plain: '',
+};
+
+// Wood/Fabric/Stone/Metal/Paper add a texture overlay; Cloud/Glass
+// instead change the shape element's own filter/opacity directly
+// (nothing to overlay); Magic gets its own sparkle layer, handled
+// separately since it needs an extra element, not just a style string.
+const MATERIAL_LAYER_STYLE = {
+  Wood: 'background-image:repeating-linear-gradient(0deg,rgba(90,55,20,.18) 0 2px,transparent 2px 8px);',
+  Fabric: 'background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 2px,transparent 2px 6px),repeating-linear-gradient(-45deg,rgba(255,255,255,.35) 0 2px,transparent 2px 6px);',
+  Stone: 'background-image:radial-gradient(circle at 20% 30%,rgba(0,0,0,.15) 2px,transparent 3px),radial-gradient(circle at 65% 20%,rgba(0,0,0,.12) 1.5px,transparent 2.5px),radial-gradient(circle at 40% 70%,rgba(0,0,0,.15) 2px,transparent 3px),radial-gradient(circle at 80% 65%,rgba(0,0,0,.12) 1.5px,transparent 2.5px),radial-gradient(circle at 15% 80%,rgba(0,0,0,.1) 1.5px,transparent 2.5px);',
+  Metal: 'background-image:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.55) 48%,rgba(255,255,255,.15) 55%,transparent 70%);',
+  Paper: 'background-image:repeating-linear-gradient(80deg,rgba(0,0,0,.05) 0 3px,transparent 3px 20px),repeating-linear-gradient(-10deg,rgba(0,0,0,.04) 0 2px,transparent 2px 18px);',
+};
+const MATERIAL_ELEMENT_STYLE = {
+  Cloud: 'filter:blur(2px);opacity:.92;',
+  Glass: 'opacity:.6;',
+};
+
+const BRUSH_SIZES = [
+  { key: 'thin', width: 2, dotPx: 10 },
+  { key: 'medium', width: 5, dotPx: 16 },
+  { key: 'thick', width: 10, dotPx: 22 },
+];
 
 // Small grammar helpers so the auto-generated sentence reads naturally —
 // most options already work as plain lowercase adjectives, these three
@@ -246,6 +385,199 @@ function buildSummary(objectLabel, c) {
   const magic = MAGIC_VERB[c.magic] || c.magic.toLowerCase();
   return `A ${c.shape.toLowerCase()} ${c.color.toLowerCase()} ${material} ${objectLabel.toLowerCase()} `
     + `with ${pattern} patterns that can ${magic}.`;
+}
+
+// Section 2's own short live sentence — updates as soon as ANY category
+// is picked, unlike buildSummary() above (which stays null, and gates
+// the Done button + Step 5's display, until all 5 are chosen). Reuses
+// the same word-form helpers so the phrasing matches once both are
+// showing at once.
+function buildLivePreviewSummary(c) {
+  const parts = [];
+  if (c.shape) parts.push(c.shape.toLowerCase());
+  if (c.color) parts.push(c.color.toLowerCase());
+  if (c.material) parts.push((MATERIAL_ADJ[c.material] || c.material).toLowerCase());
+  let sentence = parts.length ? 'A ' + parts.join(' ') : 'Pick some options above';
+  if (c.pattern && c.pattern !== 'Plain') {
+    const patternWord = PATTERN_NOUN[c.pattern] || c.pattern;
+    sentence += ' with ' + (patternWord === 'Egyptian' ? patternWord : patternWord.toLowerCase()) + ' patterns';
+  }
+  return sentence + (parts.length ? '...' : ' to see your object come together!');
+}
+
+function renderPreview(c) {
+  const shapeStyle = (c.shape && SHAPE_PREVIEW_STYLE[c.shape]) || DEFAULT_SHAPE_STYLE;
+  const fill = c.color ? COLOR_SWATCHES[c.color] : DEFAULT_FILL;
+  const fillCss = (fill || '').startsWith('linear-gradient') ? `background-image:${fill};` : `background-color:${fill};`;
+  const materialElementStyle = (c.material && MATERIAL_ELEMENT_STYLE[c.material]) || '';
+  const patternLayerStyle = (c.pattern && PATTERN_LAYER_STYLE[c.pattern]) || '';
+  const materialLayerStyle = (c.material && MATERIAL_LAYER_STYLE[c.material]) || '';
+  const isMagic = c.material === 'Magic';
+  const isFloating = c.shape === 'Floating';
+
+  return `
+    <div class="preview-stage">
+      <div class="preview-shape" style="${shapeStyle}${fillCss}${materialElementStyle}">
+        ${patternLayerStyle ? `<div class="preview-pattern-layer" style="${patternLayerStyle}"></div>` : ''}
+        ${materialLayerStyle ? `<div class="preview-material-layer" style="${materialLayerStyle}"></div>` : ''}
+        ${isMagic ? '<div class="preview-sparkle"></div>' : ''}
+      </div>
+      ${isFloating ? '<div class="preview-shadow"></div>' : ''}
+    </div>
+    <p class="preview-live-summary">${buildLivePreviewSummary(c)}</p>
+  `;
+}
+
+/* ============================================================
+   SECTION 3 — mini drawing canvas. Lazy: markup only exists for the
+   currently-expanded object (see renderList()'s isExpanded gate), and
+   initCanvasForExpanded() (re)wires + restores it every render — no
+   more than one <canvas> is ever in the DOM at once.
+============================================================ */
+function renderCanvasCard(key, c) {
+  const colorDots = Object.keys(COLOR_SOLID_FOR_BRUSH).map(name => `
+    <div class="canvas-color-dot" data-color="${COLOR_SOLID_FOR_BRUSH[name]}" style="background:${COLOR_SWATCHES[name]};" title="${name}" onclick="event.stopPropagation(); pickBrushColor('${key}','${COLOR_SOLID_FOR_BRUSH[name]}',this)"></div>
+  `).join('');
+  const sizeDots = BRUSH_SIZES.map(s => `
+    <div class="brush-size-dot" data-width="${s.width}" style="width:${s.dotPx}px;height:${s.dotPx}px;" title="${s.key}" onclick="event.stopPropagation(); pickBrushSize('${key}',${s.width},this)"></div>
+  `).join('');
+  return `
+    <div class="canvas-card">
+      <p class="canvas-label">✏️ Now draw it your way!</p>
+      <div class="canvas-controls">
+        <div class="canvas-color-row">${colorDots}</div>
+        <div class="canvas-tool-row">
+          <div class="brush-size-row">${sizeDots}</div>
+          <button class="eraser-btn" id="eraserBtn-${key}" onclick="event.stopPropagation(); toggleEraser('${key}')">🧹 Eraser</button>
+          <button class="clear-btn" onclick="event.stopPropagation(); clearMiniCanvas('${key}')">🗑 Clear</button>
+        </div>
+      </div>
+      <div class="mini-canvas-wrap" onclick="event.stopPropagation();">
+        <canvas id="canvas-${key}"></canvas>
+      </div>
+      <p class="canvas-hint">Use the colors you chose above — or pick any color you like</p>
+    </div>
+  `;
+}
+
+let drawState = { color: '#2c1e10', width: 5, eraser: false, drawing: false, last: null };
+
+function paintCanvasBackground(ctx, w, h) {
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = 'rgba(44,30,16,0.1)';
+  const spacing = Math.max(16, Math.round(w / 16));
+  for (let y = spacing; y < h; y += spacing) {
+    for (let x = spacing; x < w; x += spacing) {
+      ctx.beginPath();
+      ctx.arc(x, y, Math.max(1, w / 220), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+function canvasPos(canvas, e) {
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+}
+
+// Only ever one canvas in the DOM (the expanded object's) — called
+// after every renderList(), a no-op when there's nothing to wire up.
+function initCanvasForExpanded() {
+  if (!expandedKey) return;
+  const canvas = document.getElementById('canvas-' + expandedKey);
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const size = canvas.clientWidth || 300;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  const ctx = canvas.getContext('2d');
+  paintCanvasBackground(ctx, canvas.width, canvas.height);
+
+  const customizations = getCustomizations();
+  const c = customizations[expandedKey] || {};
+  const saved = c.drawingDataUrl;
+  if (saved) {
+    const img = new Image();
+    img.onload = () => { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); };
+    img.src = saved;
+  }
+
+  // Brush pre-seeded from Section 1's chosen color, same as any other
+  // fresh open of this object — doesn't retroactively follow later
+  // color-pill edits mid-drawing.
+  const seedColor = c.color ? (COLOR_SOLID_FOR_BRUSH[c.color] || '#2c1e10') : '#2c1e10';
+  drawState = { color: seedColor, width: 5, eraser: false, drawing: false, last: null };
+  syncCanvasControlHighlights(expandedKey);
+
+  canvas.onpointerdown = (e) => {
+    drawState.drawing = true;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    drawState.last = canvasPos(canvas, e);
+  };
+  canvas.onpointermove = (e) => {
+    if (!drawState.drawing) return;
+    const p = canvasPos(canvas, e);
+    ctx.strokeStyle = drawState.eraser ? '#ffffff' : drawState.color;
+    ctx.lineWidth = drawState.width * dpr;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(drawState.last.x, drawState.last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    drawState.last = p;
+  };
+  canvas.onpointerup = () => { drawState.drawing = false; saveCanvasDrawing(expandedKey); };
+  canvas.onpointercancel = () => { drawState.drawing = false; };
+}
+
+function syncCanvasControlHighlights(key) {
+  document.querySelectorAll('.canvas-color-dot').forEach(el => {
+    el.classList.toggle('picked', el.dataset.color === drawState.color && !drawState.eraser);
+  });
+  document.querySelectorAll('.brush-size-dot').forEach(el => {
+    el.classList.toggle('picked', Number(el.dataset.width) === drawState.width);
+  });
+  const eraserBtn = document.getElementById('eraserBtn-' + key);
+  if (eraserBtn) eraserBtn.classList.toggle('active', drawState.eraser);
+}
+
+function pickBrushColor(key, hex, el) {
+  drawState.color = hex;
+  drawState.eraser = false;
+  syncCanvasControlHighlights(key);
+}
+function pickBrushSize(key, width, el) {
+  drawState.width = width;
+  syncCanvasControlHighlights(key);
+}
+function toggleEraser(key) {
+  drawState.eraser = !drawState.eraser;
+  syncCanvasControlHighlights(key);
+}
+function clearMiniCanvas(key) {
+  if (!confirm('Clear your drawing? This cannot be undone.')) return;
+  const canvas = document.getElementById('canvas-' + key);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  paintCanvasBackground(ctx, canvas.width, canvas.height);
+  saveCanvasDrawing(key);
+}
+function saveCanvasDrawing(key) {
+  const canvas = document.getElementById('canvas-' + key);
+  if (!canvas) return;
+  try {
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+    const customizations = getCustomizations();
+    const current = customizations[key] || {};
+    current.drawingDataUrl = dataUrl;
+    customizations[key] = current;
+    DreamState.setStepData(STEP_N, { customizations: customizations });
+  } catch (e) {
+    console.warn('[canvas] save failed', e);
+  }
 }
 
 function getCustomizations() {
@@ -289,6 +621,7 @@ function renderList() {
           </div>
           ${isDone ? '<div class="oc-check">✓</div>' : '<div class="oc-chevron">▾</div>'}
         </div>
+        ${isExpanded ? `
         <div class="obj-card-body">
           ${CATEGORIES.map(cat => `
             <div class="category-block">
@@ -306,12 +639,19 @@ function renderList() {
               </div>
             </div>
           `).join('')}
+
+          <div class="design-sections">
+            <div class="preview-wrap" id="previewWrap-${key}">${renderPreview(c)}</div>
+            ${renderCanvasCard(key, c)}
+          </div>
+
           <div class="summary-box">
             <div class="sb-label">✨ You designed</div>
             <div class="sb-text ${summary ? '' : 'sb-empty'}">${summary ? '"' + summary + '"' : 'Pick one option in every category to see your object come together.'}</div>
           </div>
           <button class="done-btn" onclick="event.stopPropagation(); markDone('${key}')" ${summary ? '' : 'disabled style="opacity:0.5;"'}>✓ Done with this object</button>
         </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -324,9 +664,16 @@ function renderList() {
   } else {
     footer.style.display = 'none';
   }
+
+  // The expanded card's canvas (if any) is a fresh DOM node every render
+  // — reinitialize + restore it every time.
+  initCanvasForExpanded();
 }
 
 function toggleExpanded(key) {
+  // Flush any in-progress drawing before the canvas element it lives on
+  // gets torn down by the re-render below.
+  if (expandedKey) saveCanvasDrawing(expandedKey);
   expandedKey = (expandedKey === key) ? null : key;
   renderList();
   if (expandedKey) {
@@ -346,6 +693,7 @@ function selectOption(key, categoryKey, option) {
 }
 
 function markDone(key) {
+  saveCanvasDrawing(key);
   const customizations = getCustomizations();
   const current = customizations[key] || {};
   current.done = true;
