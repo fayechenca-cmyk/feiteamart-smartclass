@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Extreme Wide Shot</title>
+<meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 01: Extreme Wide Shot.">
+
+<!--
+  SCAFFOLD ONLY (2026-09-05) — STAGES dispatcher wired up, stage bodies
+  are placeholders pending real content.
+
+  BLOCKED ON MISSING SPEC: the build prompt for this lesson referenced
+  "Lesson01-ExtremeWideShot-Spec-v1.0.md ... attached alongside this
+  prompt," but no such file exists anywhere in this repo or was present
+  in the conversation. The 13 stage IDs and their zone grouping below
+  come directly from the build prompt text itself (which does specify
+  those), but the actual per-stage copy, story content ("story_a" /
+  "story_b" — who "Jojo" is, what the two options are), the term
+  definition for meet_term, and the three real-example / demo assets
+  all need that spec. Do not fill these in from guesswork — this
+  lesson is meant to set the content pattern for Lessons 02-05 of this
+  unit, so a wrong guess here is expensive to unwind later.
+
+  ACCESS CONTROL: deliberately not wired. Faye has not yet confirmed a
+  free/paid rule for this new course — see the TODO near init() below.
+-->
+
+<script type="application/json" id="lessonMeta">
+{
+  "title": "Extreme Wide Shot",
+  "subtitle": "Scene Drawing Foundation · Unit 01: Shot Size",
+  "path": ["Scene Drawing Foundation", "Unit 01 · Shot Size", "Extreme Wide Shot"],
+  "series": "Scene Drawing Foundation",
+  "stageCount": 13
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1a22;
+  --ink-soft:rgba(28,26,34,.66);
+  --ink-faint:rgba(28,26,34,.42);
+  --accent:#2d5fa8;
+  --accent-deep:#1f4076;
+  --line:rgba(28,26,34,.14);
+  --paper:#faf8f5;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow-x:hidden;
+}
+.display{font-family:'Space Grotesk',sans-serif;}
+
+#app{position:relative;min-height:100vh;padding-bottom:44px;z-index:1;}
+
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:12px 16px;position:sticky;top:0;z-index:500;
+  background:linear-gradient(var(--paper) 78%, transparent);
+}
+.back-link{font-size:12px;color:var(--accent-deep);text-decoration:none;font-weight:700;letter-spacing:.2px;}
+.map-btn{
+  border:2px solid var(--ink);background:var(--paper);border-radius:999px;
+  padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);
+}
+.map-btn:active{transform:scale(.95);}
+.zone-pill{font-size:9.5px;font-weight:700;letter-spacing:1.5px;color:#fff;background:var(--accent);padding:4px 9px;border-radius:999px;}
+
+.screen{display:none;max-width:640px;margin:0 auto;padding:6px 20px 40px;position:relative;}
+@media(min-width:700px){.screen{max-width:820px;}}
+.screen.active{display:block;animation:stageIn .4s ease;}
+@keyframes stageIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:6px;}
+.s-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.7rem;text-align:center;margin:0 0 8px;color:var(--accent-deep);}
+.s-sub{text-align:center;font-size:13px;color:var(--ink-soft);margin:0 0 18px;line-height:1.5;}
+
+.placeholder-card{
+  background:#fff;border:1.5px dashed var(--line);border-radius:14px;
+  padding:26px 18px;text-align:center;color:var(--ink-faint);font-size:12.5px;line-height:1.6;
+}
+
+.nav-footer{display:flex;justify-content:space-between;align-items:center;margin-top:30px;gap:12px;}
+.sd-btn{
+  font-weight:700;font-size:13.5px;padding:11px 20px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--ink);background:transparent;color:var(--ink);transition:transform .12s ease;
+}
+.sd-btn:active{transform:scale(.96);}
+.sd-btn.primary{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
+.sd-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+.map-header{text-align:center;margin:6px 0 22px;}
+.map-header h1{font-size:1.9rem;margin:4px 0 4px;}
+.map-header p{font-size:13px;color:var(--ink-soft);margin:0;}
+.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(min-width:480px){.zone-grid{grid-template-columns:1fr 1fr 1fr;}}
+.zone-tile{
+  background:#fff;border:2.5px solid var(--ink);border-radius:16px;
+  padding:20px 10px 16px;text-align:center;cursor:pointer;
+  box-shadow:4px 5px 0 rgba(28,26,34,.14);transition:transform .15s ease;
+}
+.zone-tile:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(28,26,34,.14);}
+.zone-tile .zt-icon{font-size:1.9rem;}
+.zone-tile .zt-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.02rem;margin-top:6px;color:var(--accent-deep);}
+.zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="topbar">
+    <a class="back-link" href="../../../../creation/">← Studio</a>
+    <span class="zone-pill" id="zonePill"></span>
+    <button class="map-btn" onclick="goMap()">◐ Map</button>
+  </div>
+  <div id="screen-content"></div>
+</div>
+
+<script src="../../../../core/auth.js"></script>
+<script src="../../../../core/access.js"></script>
+<script src="../lesson-data.js"></script>
+
+<script>
+/* ============================================================
+   DATA — stage list + zone grouping per the build prompt. Zone
+   grouping below is a reasonable provisional split (not specified in
+   the build prompt itself), flagged for confirmation once the real
+   spec is available — it only affects the course-map grouping, not
+   any stage's actual content.
+============================================================ */
+const ZONES = [
+  { id:'welcome', label:'WELCOME' },
+  { id:'look',    label:'LOOK' },
+  { id:'think',   label:'THINK' },
+  { id:'make',    label:'MAKE' },
+  { id:'reflect', label:'REFLECT' }
+];
+const ZONE_ICONS = { welcome:'👋', look:'👀', think:'💭', make:'🎨', reflect:'🖼' };
+
+const STAGES = [
+  { id:'welcome',             title:'Welcome',                zone:'welcome', render:() => renderPlaceholder('welcome') },
+  { id:'video_intro',         title:'Video Intro',            zone:'look',    render:() => renderPlaceholder('video_intro') },
+  { id:'connect_you',         title:'Connect: You',           zone:'look',    render:() => renderPlaceholder('connect_you') },
+  { id:'transition_question', title:'Transition Question',    zone:'look',    render:() => renderPlaceholder('transition_question') },
+  { id:'story_a',             title:'Story A',                zone:'think',   render:() => renderPlaceholder('story_a') },
+  { id:'story_b',             title:'Story B',                zone:'think',   render:() => renderPlaceholder('story_b') },
+  { id:'big_idea',            title:'Big Idea',               zone:'think',   render:() => renderPlaceholder('big_idea') },
+  { id:'meet_term',           title:'Meet the Term',          zone:'think',   render:() => renderPlaceholder('meet_term') },
+  { id:'real_examples',       title:'Real Examples',          zone:'think',   render:() => renderPlaceholder('real_examples') },
+  { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:() => renderPlaceholder('demo_video') },
+  { id:'draw_task',           title:'Draw It',                zone:'make',    render:() => renderPlaceholder('draw_task') },
+  { id:'see_ideas',           title:"See Everyone's Ideas",   zone:'make',    render:() => renderPlaceholder('see_ideas') },
+  { id:'reflect',             title:'Reflect',                zone:'reflect', render:() => renderPlaceholder('reflect') }
+];
+
+function renderPlaceholder(stageId){
+  return `
+    <div class="kicker">Scaffold</div>
+    <h2 class="s-title">${STAGES.find(s => s.id === stageId).title}</h2>
+    <div class="placeholder-card">
+      Stage "<strong>${stageId}</strong>" — content not wired yet.<br>
+      Blocked on Lesson01-ExtremeWideShot-Spec-v1.0.md.
+    </div>
+  `;
+}
+
+/* ============================================================
+   NAVIGATION (same shape as kandinsky-music-into-shape/index.html)
+============================================================ */
+let currentStageId = 'welcome';
+function stageIndex(id){ return STAGES.findIndex(s => s.id === id); }
+function goStage(id){ currentStageId = id; renderCurrentStage(); }
+function goNext(){ const i = stageIndex(currentStageId); if (i > -1 && i < STAGES.length - 1) goStage(STAGES[i + 1].id); }
+function goPrev(){ const i = stageIndex(currentStageId); if (i > 0) goStage(STAGES[i - 1].id); }
+function goMap(){ currentStageId = 'screen-map'; renderCurrentStage(); }
+function goZoneFirst(zoneId){ const first = STAGES.find(s => s.zone === zoneId); if (first) goStage(first.id); }
+
+function renderNav(stage){
+  const idx = stageIndex(stage.id);
+  const isFirst = idx === 0;
+  const isLast = idx === STAGES.length - 1;
+  return `
+    <div class="nav-footer">
+      <button class="sd-btn" onclick="goPrev()" ${isFirst ? 'disabled' : ''}>← Back</button>
+      ${isLast ? '<span></span>' : `<button class="sd-btn primary" onclick="goNext()">Next →</button>`}
+    </div>
+  `;
+}
+
+/* ============================================================
+   COURSE MAP
+============================================================ */
+function renderMap(){
+  const tiles = ZONES.map(z => {
+    const count = STAGES.filter(s => s.zone === z.id).length;
+    return `
+      <div class="zone-tile" onclick="goZoneFirst('${z.id}')">
+        <div class="zt-icon">${ZONE_ICONS[z.id]}</div>
+        <div class="zt-label">${z.label}</div>
+        <div class="zt-count">${count} stop${count > 1 ? 's' : ''}</div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="map-header">
+      <h1 class="display">Extreme Wide Shot</h1>
+      <p>Scene Drawing Foundation · Unit 01: Shot Size</p>
+    </div>
+    <div class="zone-grid">${tiles}</div>
+  `;
+}
+
+/* ============================================================
+   DISPATCH + RENDER
+============================================================ */
+function renderCurrentStage(){
+  const contentEl = document.getElementById('screen-content');
+  const zonePill = document.getElementById('zonePill');
+
+  if (currentStageId === 'screen-map') {
+    zonePill.textContent = '';
+    contentEl.innerHTML = `<div class="screen active">${renderMap()}</div>`;
+    window.scrollTo(0, 0);
+    return;
+  }
+
+  const stage = STAGES.find(s => s.id === currentStageId);
+  if (!stage) { goMap(); return; }
+  zonePill.textContent = ZONES.find(z => z.id === stage.zone).label;
+
+  contentEl.innerHTML = `<div class="screen active">${stage.render()}${renderNav(stage)}</div>`;
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      // TODO(Faye): confirm the free/paid access rule for Scene Drawing
+      // Foundation before wiring FEIAccess.gateLessonPage('creation',
+      // 'scene-drawing-foundation-extreme-wide-shot') here. Deliberately
+      // left ungated per the build prompt's explicit "out of scope."
+    } catch (e) {
+      console.warn('[init] FEIAccess.init failed, continuing', e);
+    }
+  }
+  renderCurrentStage();
+}
+
+init();
+</script>
+</body>
+</html>
