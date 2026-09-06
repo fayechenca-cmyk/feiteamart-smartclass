@@ -229,6 +229,48 @@ body{
 .lightbox-overlay.show{opacity:1;pointer-events:auto;}
 .lightbox-overlay img{max-width:100%;max-height:80vh;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);}
 .lightbox-close{position:absolute;top:18px;right:20px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;font-weight:800;cursor:pointer;}
+
+/* ---------- Stage 10: Let's Draw Together ---------- */
+.disclaimer-line{text-align:center;font-size:11.5px;font-style:italic;color:var(--ink-faint);margin-top:12px;line-height:1.5;}
+
+/* ---------- Stage 11: Draw It ---------- */
+.progress-dots{display:flex;justify-content:center;gap:8px;margin-bottom:14px;}
+.progress-dot{width:9px;height:9px;border-radius:50%;background:var(--line);}
+.progress-dot.done{background:var(--accent);}
+.progress-dot.current{background:var(--accent);transform:scale(1.4);}
+.task-label{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-deep);margin-bottom:10px;line-height:1.35;}
+.sketch-tool-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.sketch-color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
+.sketch-color-dot.picked{box-shadow:0 0 0 2.5px var(--accent);transform:scale(1.1);}
+.sketch-canvas-wrap{
+  width:100%;max-width:360px;aspect-ratio:4/3;margin:0 auto 10px;border-radius:14px;overflow:hidden;
+  border:2.5px solid var(--ink);box-shadow:5px 6px 0 rgba(28,26,34,.14);touch-action:none;
+}
+.sketch-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
+.sketch-clear-wrap{text-align:center;margin-bottom:14px;}
+.sketch-clear-btn{border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;}
+.done-scene-btn{display:block;width:100%;max-width:360px;margin:0 auto;padding:13px;border:none;border-radius:999px;background:var(--accent);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+.done-scene-btn:active{transform:scale(.98);}
+.celebrate-toast{
+  position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.7);
+  background:#fff;border:2.5px solid var(--accent);border-radius:16px;padding:18px 26px;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--accent-deep);
+  box-shadow:0 14px 34px rgba(28,26,34,.25);opacity:0;pointer-events:none;z-index:600;
+  transition:opacity .25s ease,transform .25s cubic-bezier(.3,1.6,.4,1);
+}
+.celebrate-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+
+/* ---------- Stage 12: See Other Ideas ---------- */
+.tab-row{display:flex;gap:8px;justify-content:center;margin-bottom:12px;}
+.tab-btn{border:2px solid var(--ink);background:#fff;border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink-soft);}
+.tab-btn.active{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
+.tab-viewport{overflow:hidden;border-radius:14px;}
+.tab-panel{width:100%;transition:transform .2s ease,opacity .2s ease;}
+.tab-panel img{display:block;width:100%;border-radius:12px;}
+.tab-panel-label{text-align:center;font-weight:700;margin-top:8px;color:var(--ink-soft);font-size:13px;}
+
+/* ---------- Stage 13: Reflect ---------- */
+#reflectHost{margin-top:8px;}
 </style>
 </head>
 <body>
@@ -242,6 +284,8 @@ body{
   <div id="screen-content"></div>
 </div>
 
+<div class="celebrate-toast" id="celebrateToast"></div>
+
 <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="event.stopPropagation(); closeLightbox()">✕</button>
   <img id="lightboxImg" src="" alt="">
@@ -249,9 +293,14 @@ body{
 
 <script src="../../../../core/auth.js"></script>
 <script src="../../../../core/access.js"></script>
+<!-- JournalStorage — used by ReflectionJournal (Stage 13). Reused as-is,
+     not duplicated; see reflection-journal.js's own top-of-file note
+     on why this is a bare-identifier global, not window.JournalStorage. -->
+<script src="../../../../core/scene-drawing-platform-bridge.js"></script>
 <script src="lesson-data.js"></script>
 <script src="../../_shared/ab-choice-card.js"></script>
 <script src="../../_shared/camera-zoom-slider.js"></script>
+<script src="../../_shared/reflection-journal.js"></script>
 
 <script>
 /* ============================================================
@@ -276,16 +325,18 @@ const STAGES = [
   { id:'big_idea',            title:'The Big Idea',           zone:'think',   render:renderBigIdea, afterRender:afterRenderBigIdea },
   { id:'meet_term',           title:'Meet the Term',          zone:'think',   render:renderMeetTerm, afterRender:afterRenderMeetTerm },
   { id:'real_examples',       title:'Real Examples',          zone:'think',   render:renderRealExamples },
-  { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:() => renderPlaceholder('demo_video') },
-  { id:'draw_task',           title:'Draw It',                zone:'make',    render:() => renderPlaceholder('draw_task') },
-  { id:'see_ideas',           title:"See Everyone's Ideas",   zone:'make',    render:() => renderPlaceholder('see_ideas') },
-  { id:'reflect',             title:'Reflect',                zone:'reflect', render:() => renderPlaceholder('reflect') }
+  { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:renderDemoVideo },
+  { id:'draw_task',           title:'Draw It',                zone:'make',    render:renderDrawTask, afterRender:afterRenderDrawTask },
+  { id:'see_ideas',           title:"See Other Ideas",        zone:'make',    render:renderSeeIdeas, afterRender:afterRenderSeeIdeas },
+  { id:'reflect',             title:'Reflect',                zone:'reflect', render:renderReflect, afterRender:afterRenderReflect }
 ];
 
 let STATE = {
   connectChoice: null,
   transitionChoice: null,
-  cameraPosition: 0.5
+  cameraPosition: 0.5,
+  drawTaskIndex: 0,
+  drawTaskDone: [false, false, false]
 };
 
 /* ============================================================
@@ -556,14 +607,322 @@ function closeLightbox(){
   document.getElementById('lightboxOverlay').classList.remove('show');
 }
 
-function renderPlaceholder(stageId){
+/* ============================================================
+   STAGE 10 — Let's Draw Together
+============================================================ */
+function renderDemoVideo(){
+  const d = LESSON_DATA.demo_video;
   return `
-    <div class="kicker">Scaffold</div>
-    <h2 class="s-title">${STAGES.find(s => s.id === stageId).title}</h2>
-    <div class="placeholder-card">
-      Stage "<strong>${stageId}</strong>" — content not wired yet.
-    </div>
+    <div class="kicker">Make</div>
+    <h2 class="s-title">${d.title}</h2>
+    <p class="s-sub">${d.subtitle}</p>
+    ${renderVideoEmbed(d.videoStreamId ? cfStreamSrc(d.videoStreamId) : null, d.videoTitle)}
+    <p class="disclaimer-line">${d.disclaimer}</p>
   `;
+}
+
+/* ============================================================
+   IndexedDB — finished-drawing storage, same shape as Lessons 01/02's
+   own copy. A distinct DB_NAME so this lesson's 3 drawings never
+   collide with the other lessons'.
+============================================================ */
+const DB_NAME = 'fei_scene_drawing_medium_shot_storage';
+const DB_VERSION = 1;
+const STORE_NAME = 'artworks';
+const MAX_EDGE = 1200;
+const JPEG_QUALITY = 0.85;
+let _dbPromise = null;
+function isStorageSupported(){ return !!window.indexedDB; }
+function openDB(){
+  if (_dbPromise) return _dbPromise;
+  _dbPromise = new Promise((resolve, reject) => {
+    if (!isStorageSupported()) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(DB_NAME, DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        store.createIndex('pieceId', 'pieceId', { unique: false });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _dbPromise;
+}
+function compressCanvas(canvas){
+  return new Promise((resolve, reject) => {
+    let width = canvas.width, height = canvas.height;
+    const longestEdge = Math.max(width, height);
+    let source = canvas;
+    if (longestEdge > MAX_EDGE) {
+      const scale = MAX_EDGE / longestEdge;
+      const small = document.createElement('canvas');
+      small.width = Math.round(width * scale);
+      small.height = Math.round(height * scale);
+      small.getContext('2d').drawImage(canvas, 0, 0, small.width, small.height);
+      source = small;
+    }
+    source.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', JPEG_QUALITY);
+  });
+}
+async function saveArtwork(pieceId, canvas){
+  const compressed = await compressCanvas(canvas);
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const record = { id: pieceId, pieceId: pieceId, blob: compressed, savedAt: Date.now() };
+    const req = store.put(record); // one record per task — overwrite on re-save
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listArtworks(pieceId){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('pieceId');
+    const req = index.getAll(IDBKeyRange.only(pieceId));
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function listAllArtworks(){
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* ============================================================
+   PROFILE — totalXP / completedLessons, via sessionStorage (the real,
+   verified fei_user_profile convention — same as Lessons 01/02's copy).
+============================================================ */
+function bumpXP(amount){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return; // no platform profile yet — this lesson's own progress still works standalone
+    const profile = JSON.parse(raw);
+    profile.totalXP = (profile.totalXP || 0) + amount;
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[bumpXP] failed', e); }
+}
+function markLessonComplete(){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+    if (!profile.completedLessons.includes(LESSON_DATA.courseId)) {
+      profile.completedLessons.push(LESSON_DATA.courseId);
+    }
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[markLessonComplete] failed', e); }
+}
+function showCelebration(text){
+  const el = document.getElementById('celebrateToast');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('show');
+  void el.offsetWidth; // restart animation
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1400);
+}
+
+/* ============================================================
+   STAGE 11 — Draw It (in-browser sketch canvas per task, same
+   pointer-events + devicePixelRatio pattern as Lessons 01/02's copy)
+============================================================ */
+const SKETCH_COLORS = ['#1c1a22', '#2d5fa8', '#e85c6e', '#f0b93e', '#3fa8a0', '#7b5ea8'];
+let sketchColor = SKETCH_COLORS[0];
+let sketchDrawing = false;
+let sketchLast = null;
+
+function renderDrawTask(){
+  const d = LESSON_DATA.draw_task;
+  const idx = STATE.drawTaskIndex;
+  const task = d.tasks[idx];
+  const dots = d.tasks.map((t, i) => `<span class="progress-dot${STATE.drawTaskDone[i] ? ' done' : ''}${i === idx ? ' current' : ''}"></span>`).join('');
+  const colors = SKETCH_COLORS.map(c => `<span class="sketch-color-dot${sketchColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickSketchColor('${c}')"></span>`).join('');
+  return `
+    <div class="kicker">Make</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div class="progress-dots">${dots}</div>
+    <div class="task-label">${idx + 1}/${d.tasks.length} — ${task.label}</div>
+    <div class="sketch-tool-row">${colors}</div>
+    <div class="sketch-canvas-wrap"><canvas id="sketchCanvas"></canvas></div>
+    <div class="sketch-clear-wrap"><button class="sketch-clear-btn" onclick="clearSketch()">Clear</button></div>
+    <button class="done-scene-btn" id="doneSceneBtn" onclick="finishDrawTask()">✓ Done — Save This Scene</button>
+  `;
+}
+function paintSketchBackground(ctx, w, h){
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+}
+function sketchPos(canvas, e){
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+}
+function pickSketchColor(color){
+  sketchColor = color;
+  document.querySelectorAll('.sketch-color-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
+}
+function clearSketch(){
+  const canvas = document.getElementById('sketchCanvas');
+  if (!canvas) return;
+  paintSketchBackground(canvas.getContext('2d'), canvas.width, canvas.height);
+}
+function initSketchCanvas(){
+  const canvas = document.getElementById('sketchCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const size = canvas.clientWidth || 300;
+  const ratio = canvas.clientHeight && canvas.clientWidth ? canvas.clientHeight / canvas.clientWidth : 0.75;
+  canvas.width = size * dpr;
+  canvas.height = size * ratio * dpr;
+  const ctx = canvas.getContext('2d');
+  paintSketchBackground(ctx, canvas.width, canvas.height);
+
+  canvas.onpointerdown = (e) => {
+    sketchDrawing = true;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    sketchLast = sketchPos(canvas, e);
+  };
+  canvas.onpointermove = (e) => {
+    if (!sketchDrawing) return;
+    const p = sketchPos(canvas, e);
+    ctx.strokeStyle = sketchColor;
+    ctx.lineWidth = 4 * dpr;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(sketchLast.x, sketchLast.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    sketchLast = p;
+  };
+  canvas.onpointerup = () => { sketchDrawing = false; };
+  canvas.onpointercancel = () => { sketchDrawing = false; };
+}
+function afterRenderDrawTask(){
+  sketchColor = SKETCH_COLORS[0];
+  initSketchCanvas();
+}
+async function finishDrawTask(){
+  const d = LESSON_DATA.draw_task;
+  const idx = STATE.drawTaskIndex;
+  const task = d.tasks[idx];
+  const canvas = document.getElementById('sketchCanvas');
+  const btn = document.getElementById('doneSceneBtn');
+  if (!canvas) return;
+  btn.disabled = true;
+  try {
+    await saveArtwork(task.key, canvas);
+    STATE.drawTaskDone[idx] = true;
+    bumpXP(d.xpPerScene);
+    showCelebration('⭐ +' + d.xpPerScene + ' XP — Scene saved!');
+  } catch (e) {
+    console.warn('[draw_task] saveArtwork failed', e);
+    alert("Couldn't save that drawing — want to try again?");
+    btn.disabled = false;
+    return;
+  }
+  if (idx < d.tasks.length - 1) {
+    STATE.drawTaskIndex = idx + 1;
+    setTimeout(() => renderCurrentStage(), 700);
+  } else {
+    setTimeout(() => goNext(), 900);
+  }
+}
+
+/* ============================================================
+   STAGE 12 — See Other Ideas (tab slide transition, same as Lessons
+   01/02)
+============================================================ */
+let seeIdeasTab = null;
+function tabPanelHtml(key){
+  const t = LESSON_DATA.see_ideas.tabs.find(x => x.key === key);
+  return `<img src="${t.image}" alt="${t.label}"><div class="tab-panel-label">${t.label}</div>`;
+}
+function renderSeeIdeas(){
+  const d = LESSON_DATA.see_ideas;
+  if (!seeIdeasTab) seeIdeasTab = d.tabs[0].key;
+  const tabs = d.tabs.map(t => `<button class="tab-btn${seeIdeasTab === t.key ? ' active' : ''}" data-key="${t.key}" onclick="switchSeeIdeasTab('${t.key}')">${t.label}</button>`).join('');
+  return `
+    <div class="kicker">Make</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div class="tab-row">${tabs}</div>
+    <div class="tab-viewport"><div class="tab-panel" id="tabPanel"></div></div>
+  `;
+}
+function afterRenderSeeIdeas(){
+  document.getElementById('tabPanel').innerHTML = tabPanelHtml(seeIdeasTab);
+}
+function switchSeeIdeasTab(key){
+  if (seeIdeasTab === key) return;
+  const tabs = LESSON_DATA.see_ideas.tabs;
+  const dir = tabs.findIndex(t => t.key === key) > tabs.findIndex(t => t.key === seeIdeasTab) ? 1 : -1;
+  seeIdeasTab = key;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.key === key));
+  const panel = document.getElementById('tabPanel');
+  panel.style.transform = `translateX(${dir * 24}px)`;
+  panel.style.opacity = '0';
+  setTimeout(() => {
+    panel.innerHTML = tabPanelHtml(key);
+    panel.style.transition = 'none';
+    panel.style.transform = `translateX(${-dir * 24}px)`;
+    requestAnimationFrame(() => {
+      panel.style.transition = 'transform .2s ease, opacity .2s ease';
+      panel.style.transform = 'translateX(0)';
+      panel.style.opacity = '1';
+    });
+  }, 200);
+}
+
+/* ============================================================
+   STAGE 13 — Reflect (ReflectionJournal, reusing Lesson 02's
+   sentenceTemplate + freeText upstream options as-is)
+============================================================ */
+function renderReflect(){
+  const d = LESSON_DATA.reflect;
+  return `
+    <div class="kicker">Reflect</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div id="reflectHost"></div>
+  `;
+}
+function taskReflectLabelFor(key){
+  const task = LESSON_DATA.draw_task.tasks.find(t => t.key === key);
+  return task ? task.reflectLabel : key;
+}
+async function afterRenderReflect(){
+  const d = LESSON_DATA.reflect;
+  let artworks = [];
+  if (isStorageSupported()) {
+    try {
+      const rows = await listAllArtworks();
+      artworks = rows.map(r => ({ id: r.pieceId, url: URL.createObjectURL(r.blob), label: taskReflectLabelFor(r.pieceId) }));
+    } catch (e) { console.warn('[reflect] listAllArtworks failed', e); }
+  }
+  ReflectionJournal.mount('reflectHost', {
+    courseId: LESSON_DATA.courseId,
+    lessonId: LESSON_DATA.courseId,
+    sentenceTemplate: d.sentenceTemplate,
+    artworks: artworks,
+    viewOptions: d.viewOptions,
+    reasonOptions: d.reasonOptions
+  }, {
+    onSaved(){ markLessonComplete(); }
+  });
 }
 
 /* ============================================================

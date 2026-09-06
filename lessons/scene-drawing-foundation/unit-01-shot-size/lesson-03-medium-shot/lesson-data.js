@@ -131,10 +131,58 @@
         { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '🧑‍🍳🔥', 400, 300) },
         { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '🧙‍♂️✨', 400, 300) }
       ]
-    }
+    },
 
-    // TODO: remaining stages (demo_video, draw_task, see_ideas,
-    // reflect) fill in next commit.
+    // Stage 10 — disclaimer reused VERBATIM from Lessons 01/02's
+    // confirmed version, per the spec's explicit instruction.
+    demo_video: {
+      title: "Let's Draw Together",
+      // Claude Code's own line — not spec'd verbatim, same flag as the
+      // equivalent subtitle lines in Lessons 01/02.
+      subtitle: 'How I capture the action',
+      disclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.",
+      videoStreamId: null,
+      videoTitle: "Let's Draw Together — thinking sketch"
+    },
+
+    // Stage 11 — 3 new tasks. `label` is the full on-screen prompt
+    // sentence; `reflectLabel` is the separate short form the spec
+    // gives for Stage 13's reflect chips.
+    draw_task: {
+      title: 'Your Turn: Draw 3 Scenes',
+      tasks: [
+        { key: 'baker_bread', label: 'The baker pulled a fresh loaf out of the oven.', reflectLabel: 'Fresh Bread' },
+        { key: 'scientist_mix', label: 'The scientist mixed two glowing liquids together.', reflectLabel: 'Glowing Mix' },
+        { key: 'drummer_beat', label: 'The drummer hit the final beat of the song.', reflectLabel: 'Final Beat' }
+      ],
+      xpPerScene: 20
+    },
+
+    // Stage 12 — same tab names as Lessons 01/02 (don't rename), new
+    // placeholder images for this lesson's 3 tasks.
+    see_ideas: {
+      title: 'See Other Ideas',
+      tabs: [
+        { key: 'teacher', label: "Teacher's Idea", image: svgPlaceholder('#2d5fa8', '🍞🔥', 400, 300) },
+        { key: 'jojo', label: "Jojo's Idea", image: svgPlaceholder('#e8862e', '🧪✨', 400, 300) }
+      ]
+    },
+
+    // Stage 13 — ReflectionJournal config, reusing both of Lesson 02's
+    // upstream options as-is: the corrected sentenceTemplate and a
+    // freeText "something else" reasonOptions entry. No component
+    // changes needed.
+    reflect: {
+      title: 'My Choice',
+      sentenceTemplate: 'I chose my {a} drawing because I wanted to show {b}.',
+      viewOptions: ['Fresh Bread', 'Glowing Mix', 'Final Beat'],
+      reasonOptions: [
+        'the action clearly',
+        "my character's gesture",
+        'the exact moment it happened',
+        { label: 'something else', freeText: true }
+      ]
+    }
   };
 
   global.LESSON_DATA = LESSON_DATA;
