@@ -1,7 +1,6 @@
 /* ============================================================
  * Scene Drawing Foundation · Unit 01 · Lesson 01 — Extreme Wide Shot
- * Lesson content data (Stages 1-9 — "look/think" half).
- * Stages 10-13 ("make/reflect" half) added in a follow-up commit.
+ * Lesson content data — all 13 stages.
  *
  * ASSET NOTE: the spec (Lesson01-ExtremeWideShot-Spec-v1.0.md)
  * repeatedly says to keep various existing illustrations (Stage 1's
@@ -108,9 +107,57 @@
         { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '🏙️', 400, 300) },
         { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '🏰', 400, 300) }
       ]
-    }
+    },
 
-    // demo_video, draw_task, see_ideas, reflect — added in the next commit.
+    // Stage 10 — renamed to the platform's "Let's Draw Together"
+    // convention per the spec. Disclaimer reworded in this lesson's
+    // own voice (spec: "style matches the platform convention, not a
+    // verbatim copy") — this course has no named teacher persona the
+    // way the Creation track's "Mrs. Dawn Wang" does (checked: no
+    // teacher name anywhere in the existing scene-drawing/ or
+    // core/scene-drawing-*.js files), so it stays unnamed rather than
+    // importing a name from an unrelated course.
+    demo_video: {
+      title: "Let's Draw Together",
+      subtitle: 'How I start thinking about this scene',
+      disclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.",
+      videoStreamId: null,
+      videoTitle: "Let's Draw Together — thinking sketch"
+    },
+
+    // Stage 11 — task copy kept verbatim from the spec.
+    draw_task: {
+      title: 'Your Turn: Draw 3 Scenes',
+      tasks: [
+        { key: 'another_planet', label: 'Another Planet' },
+        { key: 'lost_in_forest', label: 'Lost in the Forest' },
+        { key: 'finally_saw_city', label: 'Finally Saw the City' }
+      ],
+      xpPerScene: 20
+    },
+
+    // Stage 12 — "Jojo" is a real recurring name on this platform (a
+    // legacy-access-code student, core/student-access-codes.js), used
+    // elsewhere as a peer-example name — kept as-is rather than
+    // inventing a different character. No real comparison art exists
+    // yet, placeholder per the file-level note.
+    see_ideas: {
+      title: 'See Other Ideas',
+      tabs: [
+        { key: 'teacher', label: "Teacher's Idea", image: svgPlaceholder('#2d5fa8', '🖼️', 400, 300) },
+        { key: 'jojo', label: "Jojo's Idea", image: svgPlaceholder('#e8862e', '🖼️', 400, 300) }
+      ]
+    },
+
+    // Stage 13 — ReflectionJournal config. "View" options are this
+    // lesson's 3 task names (there's no shot-size menu taught yet to
+    // choose between, unlike Unit 01's later lessons) so the sentence
+    // reads naturally against whichever of their 3 drawings they pick.
+    reflect: {
+      title: 'My Choice',
+      viewOptions: ['Another Planet', 'Lost in the Forest', 'Finally Saw the City'],
+      reasonOptions: ['it shows the whole world', 'it has the most detail', 'it feels the most dramatic', "I'm proudest of it"]
+    }
   };
 
   global.LESSON_DATA = LESSON_DATA;
