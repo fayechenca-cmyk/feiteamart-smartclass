@@ -16,7 +16,7 @@ window.BADGE_CATALOG = [
   { id:'student_led', title:'Student-Led', artist:'Des. by Judy', imgUrl:'', emoji:'🚀', color:'#8b5cf6' },
   { id:'storyteller', title:'Storyteller', artist:'Des. by Adrian', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693081850b75764ec5a2d2dc_Screenshot%202025-12-03%20at%2010.28.28%E2%80%AFAM.png', emoji:'📖', color:'#f97316' },
   { id:'art_painting', title:'Art Painting', artist:'Des. by Regina', imgUrl:'', emoji:'🎨', color:'#3b82f6' },
-  { id:'scene_designer', title:'Scene Designer', artist:'Des. by Tom', imgUrl:'', emoji:'🎬', color:'#6366f1' },
+  { id:'scene_designer', title:'Scene Designer', artist:'Des. by Tom', imgUrl:'', emoji:'🎬', color:'#6366f1', earnedMessage:'you completed your first scene drawing set.' },
   { id:'character_designer', title:'Character Designer', artist:'Des. by Judy', imgUrl:'', emoji:'🦸', color:'#8b5cf6' },
   { id:'digital_creator', title:'Digital Creator', artist:'Des. by Temp', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693082569d6d79a6f03770b1_Screenshot%202025-12-03%20at%2010.32.38%E2%80%AFAM.png', emoji:'💻', color:'#0ea5e9' },
   { id:'animation_beginner', title:'Animator Creator', artist:'Des. by Rainie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/692b479b135604dcbecfd915_Screenshot%202025-11-29%20at%2011.20.54%E2%80%AFAM.png', emoji:'🎞️', color:'#8b5cf6' },
@@ -29,5 +29,13 @@ window.BADGE_CATALOG = [
   { id:'focus_sprinter', title:'Focus Sprinter', artist:'Des. by Cam', imgUrl:'', emoji:'⏱️', color:'#64748b' },
   { id:'portfolio_builder', title:'Portfolio Builder', artist:'Des. by Regina', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69ced4efc423b6f032f27496_7ce471ab56c32f732fa052a1ef003958.JPG', emoji:'📂', color:'#1e3a8a' },
   { id:'collage_creator', title:'Collage Creator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🦎', color:'#2f8f5b' },
-  { id:'fridge_curator', title:'Fridge Curator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🧁', color:'#4f8f7c' }
+  { id:'fridge_curator', title:'Fridge Curator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🧁', color:'#4f8f7c' },
+
+  // Scene Drawing Foundation (the newer course, distinct from the
+  // renamed Perspective Drawing Foundation above) — badged per Unit
+  // rather than per whole course, since the course is built and released
+  // one Unit at a time. Unit 02+ get their own entries here the same way
+  // once they're built, per Faye's explicit "don't restructure this one"
+  // instruction.
+  { id:'scene_drawing_unit_01', title:'Unit 01 · Shot Size', artist:'', imgUrl:'', emoji:'🎥', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' }
 ];

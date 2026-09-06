@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Scene Drawing Foundation</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../core/scene-drawing-style.css">
+
+<!--
+  Course listing page for the NEW "Scene Drawing Foundation" course
+  (Unit 01 · Shot Size, and Units 02-06 later) — distinct from the
+  OLD, now-renamed "Perspective Drawing Foundation" course that still
+  lives at scene-drawing/index.html.
+
+  This is a SEPARATE, purpose-built page rather than a reuse of
+  scene-drawing-app.js's renderCourseOverview(), per Faye's explicit
+  decision after diagnosis: that engine's lesson cards assume a
+  lesson.steps[] array rendered by a shared step-by-step SPA at
+  scene-drawing/lesson/?id=..., with progress tracked in
+  fei_scene_drawing_progress (localStorage). This course's 5 lessons
+  are the opposite — fully self-contained pages under
+  unit-01-shot-size/, each with its own dispatcher, own IndexedDB, and
+  completion tracked via the real fei_user_profile.completedLessons
+  (sessionStorage), the same way every other lesson on the platform
+  works. Reusing renderCourseOverview would have meant either
+  fabricating a fake steps[] array or extending that engine's routing
+  assumptions — Faye chose a separate lightweight page instead, so the
+  old course's engine (scene-drawing-app.js, course-data.js) stays
+  completely untouched.
+
+  Visual consistency: reuses the exact same CSS classes as the old
+  course's page (course-hero, lesson-card, course-badge-card,
+  material-chip, etc. — see ../../core/scene-drawing-style.css) and
+  the same Artchi mascot include, so this reads as the same platform,
+  not a bolted-on page.
+
+  materials-strip is deliberately omitted: `materials` is an optional
+  field in the old course's data shape (renderCourseOverview does
+  `(course.materials || [])`), and this course's actual supply list
+  (digital canvas, no physical materials) is still an open decision
+  per Faye — see the build prompt's explicit "don't invent one, ask"
+  instruction. Left off rather than guessed.
+
+  Badge: uses the SAME renderCourseBadgeCard() as the old course
+  (core/scene-drawing-app.js), now parameterized to take a badge id —
+  see that file's own commit history for why. This page passes
+  'scene_drawing_unit_01' (core/course-badge-registry.js +
+  core/badge-catalog.js), scoped to only these 5 lessons per Faye's
+  "Unit 01 badge now, Unit 02+ badges added the same way later, don't
+  restructure this one" instruction.
+-->
+
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-text">FEI TeamArt</div>
+    </div>
+    <a class="ctrl" href="../../" title="Back to home">←</a>
+  </div>
+
+  <div class="content" id="course-overview-root"></div>
+</div>
+
+<!-- Artchi mascot — same character used across the rest of the platform -->
+<div id="artchi-mount"></div>
+
+<script src="../../core/course-badge-registry.js"></script>
+<script src="../../core/badge-catalog.js"></script>
+<script src="../../core/scene-drawing-archi.js"></script>
+<script src="../../core/scene-drawing-app.js"></script>
+
+<script>
+/* ============================================================
+   COURSE DATA — this course's own display metadata. Not
+   scene-drawing/course-data.js's COURSE object; that one belongs to
+   the old, now-renamed Perspective Drawing Foundation course.
+============================================================ */
+const SCENE_DRAWING_FOUNDATION_COURSE = {
+  title: 'Scene Drawing Foundation',
+  eyebrow: 'VISUAL STORYTELLING & SPATIAL DRAWING',
+  description: 'Learn to turn a story into a visual scene — how far to draw, where to look from, what matters most, and how to organize the space around it.',
+  // href is relative to this file's own directory (lessons/scene-
+  // drawing-foundation/) — these are real standalone pages, not
+  // routed through any shared engine. `courseId` matches each
+  // lesson's own LESSON_DATA.courseId, i.e. what actually lands in
+  // fei_user_profile.completedLessons — used below for card status.
+  // `title` is just the shot-size name; the "Lesson N" numbering is
+  // its own small kicker line in the card, not baked into the title
+  // string (unlike the old course's lesson.title, which bakes
+  // "Lesson 1: " into the name and ends up showing the number twice).
+  // `subtitle` is each lesson's own Big Idea line, copied verbatim
+  // from its lesson-data.js — not new copy.
+  lessons: [
+    { title: 'Extreme Wide Shot', subtitle: 'Sometimes, the story is bigger than the character.', href: 'unit-01-shot-size/lesson-01-extreme-wide-shot/', courseId: 'extreme-wide-shot', stageCount: 13 },
+    { title: 'Wide / Full Shot', subtitle: 'We see the whole character — and enough of the world to know where they are.', href: 'unit-01-shot-size/lesson-02-wide-full-shot/', courseId: 'wide-full-shot', stageCount: 13 },
+    { title: 'Medium Shot', subtitle: "A medium shot gets close enough to see the action — without losing where it's happening.", href: 'unit-01-shot-size/lesson-03-medium-shot/', courseId: 'medium-shot', stageCount: 13 },
+    { title: 'Close-Up', subtitle: "A close-up gets so close we can read the character's feelings on their face.", href: 'unit-01-shot-size/lesson-04-close-up/', courseId: 'close-up', stageCount: 13 },
+    { title: 'Extreme Close-Up', subtitle: 'An extreme close-up gets so close, one small detail fills the whole frame — and that makes it feel important.', href: 'unit-01-shot-size/lesson-05-extreme-close-up/', courseId: 'extreme-close-up', stageCount: 13 }
+  ]
+};
+
+// Reads the real, shared fei_user_profile (sessionStorage — the
+// verified convention every Unit 01 lesson itself writes through) to
+// know which of these 5 lessons the student has actually finished.
+// No gating/locking derived from this — status display only, per
+// Faye's explicit "no forced order, no lock icons" decision.
+function scdrLoadCompletedLessons() {
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    return (profile && profile.completedLessons) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+/* ============================================================
+   RENDER — bespoke, not renderCourseOverview(). See file-level note
+   above for why.
+============================================================ */
+function renderSceneDrawingFoundationOverview(course) {
+  const badgeHtml = renderCourseBadgeCard('scene_drawing_unit_01');
+  const completed = scdrLoadCompletedLessons();
+  const lessonCardsHtml = course.lessons.map((lesson, idx) => {
+    const isComplete = completed.includes(lesson.courseId);
+    const statusLabel = isComplete ? '✓ Complete' : 'Not started';
+    const statusClass = isComplete ? 'done' : '';
+    return `
+      <a class="lesson-card" href="${lesson.href}">
+        <div class="lesson-card-top">
+          <div class="lesson-card-number">Lesson ${idx + 1}</div>
+          <div class="lesson-card-status ${statusClass}">${statusLabel}</div>
+        </div>
+        <div class="lesson-card-title">${lesson.title}</div>
+        <div class="lesson-card-desc">${lesson.subtitle}</div>
+        <div class="lesson-card-meta">
+          <span class="lesson-card-meta-item">📋 ${lesson.stageCount} stages</span>
+        </div>
+      </a>
+    `;
+  }).join('');
+  return `
+    <div class="course-hero">
+      <div class="course-kicker">${course.eyebrow}</div>
+      <div class="course-title">${course.title}</div>
+      <div class="course-desc">${course.description}</div>
+    </div>
+    <div class="lesson-grid">
+      ${badgeHtml}
+      ${lessonCardsHtml}
+    </div>
+  `;
+}
+
+document.getElementById('course-overview-root').innerHTML = renderSceneDrawingFoundationOverview(SCENE_DRAWING_FOUNDATION_COURSE);
+document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+initArtchiDrag();
+showArtchi();
+</script>
+</body>
+</html>
