@@ -51,11 +51,6 @@
   restructure this one" instruction.
 -->
 
-<style>
-/* Placeholder lesson-card content, scaffold only — replaced with the
-   real 5 lesson cards (links + big-idea subtitles) in the next commit. */
-.lesson-card-placeholder-note{font-size:11.5px;color:var(--ink-muted);font-style:italic;}
-</style>
 </head>
 <body>
 <div class="app">
@@ -87,9 +82,41 @@
 const SCENE_DRAWING_FOUNDATION_COURSE = {
   title: 'Scene Drawing Foundation',
   eyebrow: 'VISUAL STORYTELLING & SPATIAL DRAWING',
-  description: 'Learn to turn a story into a visual scene — how far to draw, where to look from, what matters most, and how to organize the space around it.'
-  // Lessons filled in next commit.
+  description: 'Learn to turn a story into a visual scene — how far to draw, where to look from, what matters most, and how to organize the space around it.',
+  // href is relative to this file's own directory (lessons/scene-
+  // drawing-foundation/) — these are real standalone pages, not
+  // routed through any shared engine. `courseId` matches each
+  // lesson's own LESSON_DATA.courseId, i.e. what actually lands in
+  // fei_user_profile.completedLessons — used below for card status.
+  // `title` is just the shot-size name; the "Lesson N" numbering is
+  // its own small kicker line in the card, not baked into the title
+  // string (unlike the old course's lesson.title, which bakes
+  // "Lesson 1: " into the name and ends up showing the number twice).
+  // `subtitle` is each lesson's own Big Idea line, copied verbatim
+  // from its lesson-data.js — not new copy.
+  lessons: [
+    { title: 'Extreme Wide Shot', subtitle: 'Sometimes, the story is bigger than the character.', href: 'unit-01-shot-size/lesson-01-extreme-wide-shot/', courseId: 'extreme-wide-shot', stageCount: 13 },
+    { title: 'Wide / Full Shot', subtitle: 'We see the whole character — and enough of the world to know where they are.', href: 'unit-01-shot-size/lesson-02-wide-full-shot/', courseId: 'wide-full-shot', stageCount: 13 },
+    { title: 'Medium Shot', subtitle: "A medium shot gets close enough to see the action — without losing where it's happening.", href: 'unit-01-shot-size/lesson-03-medium-shot/', courseId: 'medium-shot', stageCount: 13 },
+    { title: 'Close-Up', subtitle: "A close-up gets so close we can read the character's feelings on their face.", href: 'unit-01-shot-size/lesson-04-close-up/', courseId: 'close-up', stageCount: 13 },
+    { title: 'Extreme Close-Up', subtitle: 'An extreme close-up gets so close, one small detail fills the whole frame — and that makes it feel important.', href: 'unit-01-shot-size/lesson-05-extreme-close-up/', courseId: 'extreme-close-up', stageCount: 13 }
+  ]
 };
+
+// Reads the real, shared fei_user_profile (sessionStorage — the
+// verified convention every Unit 01 lesson itself writes through) to
+// know which of these 5 lessons the student has actually finished.
+// No gating/locking derived from this — status display only, per
+// Faye's explicit "no forced order, no lock icons" decision.
+function scdrLoadCompletedLessons() {
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    const profile = raw ? JSON.parse(raw) : null;
+    return (profile && profile.completedLessons) || [];
+  } catch (e) {
+    return [];
+  }
+}
 
 /* ============================================================
    RENDER — bespoke, not renderCourseOverview(). See file-level note
@@ -97,12 +124,25 @@ const SCENE_DRAWING_FOUNDATION_COURSE = {
 ============================================================ */
 function renderSceneDrawingFoundationOverview(course) {
   const badgeHtml = renderCourseBadgeCard('scene_drawing_unit_01');
-  const lessonCardsHtml = `
-    <div class="lesson-card" style="cursor:default;">
-      <div class="lesson-card-title">Unit 01 · Shot Size</div>
-      <div class="lesson-card-placeholder-note">5 lessons — wired in the next commit.</div>
-    </div>
-  `;
+  const completed = scdrLoadCompletedLessons();
+  const lessonCardsHtml = course.lessons.map((lesson, idx) => {
+    const isComplete = completed.includes(lesson.courseId);
+    const statusLabel = isComplete ? '✓ Complete' : 'Not started';
+    const statusClass = isComplete ? 'done' : '';
+    return `
+      <a class="lesson-card" href="${lesson.href}">
+        <div class="lesson-card-top">
+          <div class="lesson-card-number">Lesson ${idx + 1}</div>
+          <div class="lesson-card-status ${statusClass}">${statusLabel}</div>
+        </div>
+        <div class="lesson-card-title">${lesson.title}</div>
+        <div class="lesson-card-desc">${lesson.subtitle}</div>
+        <div class="lesson-card-meta">
+          <span class="lesson-card-meta-item">📋 ${lesson.stageCount} stages</span>
+        </div>
+      </a>
+    `;
+  }).join('');
   return `
     <div class="course-hero">
       <div class="course-kicker">${course.eyebrow}</div>
