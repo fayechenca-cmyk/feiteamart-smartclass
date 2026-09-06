@@ -16,7 +16,25 @@
   const LESSON_DATA = {
     id: 'medium-shot',
     unit: 'unit-01-shot-size',
-    courseId: 'medium-shot'
+    courseId: 'medium-shot',
+
+    // Stages 7+8 — Medium Shot = 0.5 on the shared Unit 01 slider
+    // position table, which is exactly the slider's own neutral
+    // default — nothing to auto-animate from/to, unlike Lessons 01/02.
+    // Spec's own touch instead: a brief scale pulse on the handle when
+    // this stage is entered (page-level CSS/JS in index.html — no
+    // shared-component change, see afterRenderBigIdea), paired with a
+    // caption line inviting the student to drag and feel the midpoint.
+    big_idea: {
+      title: "A medium shot gets close enough to see the action — without losing where it's happening.",
+      settlePosition: 0.5,
+      pulseCaption: 'This is the middle ground — close enough to see, wide enough to place.'
+    },
+    meet_term: {
+      term: 'MEDIUM SHOT',
+      subtitle: 'Show the Action',
+      labels: ['ACTION', 'GESTURE', 'MOMENT']
+    }
 
     // TODO: remaining stages fill in over the next two commits.
   };

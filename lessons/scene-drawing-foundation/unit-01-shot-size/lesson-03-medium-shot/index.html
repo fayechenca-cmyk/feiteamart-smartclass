@@ -107,6 +107,43 @@ body{
 .zone-tile .zt-icon{font-size:1.9rem;}
 .zone-tile .zt-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.02rem;margin-top:6px;color:var(--accent-deep);}
 .zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
+
+/* ---------- Stage 7/8: CameraZoomSlider + term reveal ---------- */
+.typewriter-text{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;
+  color:var(--accent-deep);min-height:2.6em;margin:6px 0 16px;line-height:1.4;
+}
+.slider-caption{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:14px;line-height:1.5;}
+/* Stage 7's small "pulse" touch (page-level only — no shared-component
+   change, see afterRenderBigIdea): Medium Shot's 0.5 target is exactly
+   the slider's own neutral default, so instead of an intro
+   from->to animation, the handle briefly pulses on entry. The
+   component's own .czs-handle rule (in camera-zoom-slider.js) already
+   sets transform:translate(-50%,-50%); this keyframe temporarily rides
+   on top of it, then hands control back when the class is removed. */
+@keyframes czsPulseOnce{
+  0%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.08);}
+  100%{transform:translate(-50%,-50%) scale(1);}
+}
+.czs-handle.czs-pulse-once{animation:czsPulseOnce .4s ease;}
+.term-labels{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0 6px;}
+.term-label{
+  font-size:11px;font-weight:800;letter-spacing:1.5px;color:#fff;background:var(--accent);
+  padding:5px 12px;border-radius:999px;opacity:0;transform:translateY(6px);
+  transition:opacity .3s ease,transform .3s ease;
+}
+.term-label.show{opacity:1;transform:translateY(0);}
+.term-reveal{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.6rem;
+  color:var(--accent-deep);margin-top:14px;opacity:0;transition:opacity .5s ease;
+}
+.term-reveal.show{opacity:1;}
+.term-subtitle{
+  text-align:center;font-size:13px;color:var(--ink-soft);margin-top:4px;
+  opacity:0;transition:opacity .5s ease;
+}
+.term-subtitle.show{opacity:1;}
 </style>
 </head>
 <body>
@@ -146,8 +183,8 @@ const STAGES = [
   { id:'transition_question', title:'Transition Question',    zone:'look',    render:() => renderPlaceholder('transition_question') },
   { id:'story_a',             title:'Story A',                zone:'think',   render:() => renderPlaceholder('story_a') },
   { id:'story_b',             title:'Story B',                zone:'think',   render:() => renderPlaceholder('story_b') },
-  { id:'big_idea',            title:'The Big Idea',           zone:'think',   render:() => renderPlaceholder('big_idea') },
-  { id:'meet_term',           title:'Meet the Term',          zone:'think',   render:() => renderPlaceholder('meet_term') },
+  { id:'big_idea',            title:'The Big Idea',           zone:'think',   render:renderBigIdea, afterRender:afterRenderBigIdea },
+  { id:'meet_term',           title:'Meet the Term',          zone:'think',   render:renderMeetTerm, afterRender:afterRenderMeetTerm },
   { id:'real_examples',       title:'Real Examples',          zone:'think',   render:() => renderPlaceholder('real_examples') },
   { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:() => renderPlaceholder('demo_video') },
   { id:'draw_task',           title:'Draw It',                zone:'make',    render:() => renderPlaceholder('draw_task') },
@@ -158,6 +195,94 @@ const STAGES = [
 let STATE = {
   cameraPosition: 0.5
 };
+
+/* ============================================================
+   SHARED HELPER — typewriter reveal (same as Lessons 01/02)
+============================================================ */
+let typewriterTimer = null;
+function typewriterInto(elId, text, totalDurationMs){
+  clearInterval(typewriterTimer);
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent = '';
+  const perCharMs = Math.max(20, Math.floor((totalDurationMs || 1800) / text.length));
+  let i = 0;
+  typewriterTimer = setInterval(() => {
+    i++;
+    el.textContent = text.slice(0, i);
+    if (i >= text.length) clearInterval(typewriterTimer);
+  }, perCharMs);
+}
+
+/* ============================================================
+   STAGE 7 — The Big Idea. Medium Shot's 0.5 target IS the slider's
+   own neutral default, so there's no from->to animation this time —
+   instead the handle gets a brief pulse on entry (page-level CSS/JS
+   only, see the .czs-pulse-once note near its CSS) plus a caption
+   inviting the student to drag it themselves.
+============================================================ */
+function renderBigIdea(){
+  const d = LESSON_DATA.big_idea;
+  return `
+    <div class="kicker">Think</div>
+    <p class="typewriter-text" id="typewriterText"></p>
+    <div id="czsMount"></div>
+    <p class="slider-caption" id="sliderCaption">${d.pulseCaption}</p>
+  `;
+}
+function afterRenderBigIdea(){
+  const d = LESSON_DATA.big_idea;
+  typewriterInto('typewriterText', d.title, 1800);
+  CameraZoomSlider.mount('czsMount', {
+    defaultPosition: d.settlePosition
+  }, {
+    onSettle(pos){ STATE.cameraPosition = pos; }
+  });
+  // Pulse the handle once on entry — its id is deterministic
+  // (containerId + '-handle', documented in camera-zoom-slider.js), so
+  // this reaches into the rendered DOM rather than needing a new
+  // component option for a purely decorative, one-lesson touch.
+  const handle = document.getElementById('czsMount-handle');
+  if (handle) {
+    requestAnimationFrame(() => {
+      handle.classList.add('czs-pulse-once');
+      setTimeout(() => handle.classList.remove('czs-pulse-once'), 450);
+    });
+  }
+}
+
+/* ============================================================
+   STAGE 8 — Meet the Term (same visual, settled — term reveal)
+============================================================ */
+function renderMeetTerm(){
+  const d = LESSON_DATA.meet_term;
+  const labels = d.labels.map((l, i) => `<span class="term-label" id="termLabel${i}">${l}</span>`).join('');
+  return `
+    <div class="kicker">Think</div>
+    <div id="czsMountTerm"></div>
+    <div class="term-labels">${labels}</div>
+    <h2 class="term-reveal" id="termReveal">${d.term}</h2>
+    <p class="term-subtitle" id="termSubtitle">${d.subtitle}</p>
+  `;
+}
+function afterRenderMeetTerm(){
+  const d = LESSON_DATA.meet_term;
+  CameraZoomSlider.mount('czsMountTerm', { defaultPosition: STATE.cameraPosition || LESSON_DATA.big_idea.settlePosition }, {
+    onSettle(pos){ STATE.cameraPosition = pos; }
+  });
+  d.labels.forEach((label, i) => {
+    setTimeout(() => {
+      const el = document.getElementById('termLabel' + i);
+      if (el) el.classList.add('show');
+    }, i * 300);
+  });
+  setTimeout(() => {
+    const revealEl = document.getElementById('termReveal');
+    const subtitleEl = document.getElementById('termSubtitle');
+    if (revealEl) revealEl.classList.add('show');
+    if (subtitleEl) subtitleEl.classList.add('show');
+  }, d.labels.length * 300 + 200);
+}
 
 function renderPlaceholder(stageId){
   return `
