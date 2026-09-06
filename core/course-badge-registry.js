@@ -25,6 +25,17 @@ window.COURSE_BADGE_REGISTRY = {
   // collage_creator above.
   fridge_curator: {
     requiredIds: ['thiebaud-my-sweet-fridge']
+  },
+
+  // Scene Drawing Foundation, Unit 01 · Shot Size — the 5
+  // lessons/scene-drawing-foundation/unit-01-shot-size/ lesson pages,
+  // each writing its own LESSON_DATA.courseId into completedLessons the
+  // same way every other lesson here does. Scoped to Unit 01 only, not
+  // the eventual full course, per Faye's explicit "badge per Unit, not
+  // per whole course" instruction — Unit 02+ get their own badge entries
+  // here later, this one doesn't get restructured when they're added.
+  scene_drawing_unit_01: {
+    requiredIds: ['extreme-wide-shot', 'wide-full-shot', 'medium-shot', 'close-up', 'extreme-close-up']
   }
 
 };

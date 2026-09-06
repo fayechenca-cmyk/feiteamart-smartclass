@@ -365,23 +365,41 @@ function reflectionAllAnswered(lesson, progress) {
   });
 }
 
-function renderCourseBadgeCard() {
-  // Course-level badge only — per Faye's standing rule, individual lessons
-  // award progress, not badges. This card shows where the student stands
-  // toward the WHOLE Scene Drawing Foundation course (currently 2 lessons,
-  // more planned), never claims completion early.
-  if (typeof sceneDrawingCourseBadgeProgress !== 'function') return ''; // bridge not loaded — degrade gracefully
-  const progress = sceneDrawingCourseBadgeProgress();
+// badgeId (optional) — which entry in window.BADGE_CATALOG /
+// window.COURSE_BADGE_REGISTRY to render. Defaults to 'scene_designer' so
+// every existing call site (this file's own renderFinalWrapUp, and
+// scene-drawing/index.html via renderCourseOverview) keeps rendering
+// exactly the badge it always has, with no change in output. Added so a
+// second course (e.g. the newer Scene Drawing Foundation / Unit 01 · Shot
+// Size badge) can reuse this same card markup instead of a near-duplicate
+// render function — see lessons/scene-drawing-foundation/index.html.
+function renderCourseBadgeCard(badgeId) {
+  badgeId = badgeId || 'scene_designer';
+  // getCourseBadgeProgress (core/course-badge-registry.js) is already
+  // fully generic per-badge-id — read it directly rather than through
+  // sceneDrawingCourseBadgeProgress(), which only ever looks at
+  // 'scene_designer' and lives in the platform-bridge file this function
+  // doesn't otherwise need.
+  if (typeof getCourseBadgeProgress !== 'function') return ''; // registry not loaded — degrade gracefully
+  const progress = getCourseBadgeProgress()[badgeId] || { doneCount: 0, totalCount: 0, isComplete: false, pct: 0 };
+  const catalogEntry = (window.BADGE_CATALOG || []).find(b => b.id === badgeId) || {};
+  const emoji = catalogEntry.emoji || '🏅';
+  const title = catalogEntry.title || badgeId;
+  // earnedMessage lets each badge have its own "you did it" line;
+  // scene_designer's catalog entry carries the exact original hardcoded
+  // text so its output is unchanged. Falls back to a generic line for any
+  // badge that doesn't set one.
+  const earnedMessage = catalogEntry.earnedMessage || 'you completed this badge.';
   const unlockedClass = progress.isComplete ? 'unlocked' : '';
   const metaText = progress.isComplete
-    ? 'Earned — you completed your first scene drawing set.'
+    ? `Earned — ${earnedMessage}`
     : `${progress.doneCount} / ${progress.totalCount} lessons toward this badge`;
   return `
     <div class="course-badge-card">
       <div class="course-badge-row">
-        <div class="course-badge-emoji ${unlockedClass}">🎬</div>
+        <div class="course-badge-emoji ${unlockedClass}">${emoji}</div>
         <div class="course-badge-info">
-          <div class="course-badge-name">Scene Designer ${progress.isComplete ? '· Earned' : '· Locked'}</div>
+          <div class="course-badge-name">${title} ${progress.isComplete ? '· Earned' : '· Locked'}</div>
           <div class="course-badge-meta">${metaText}</div>
         </div>
       </div>
