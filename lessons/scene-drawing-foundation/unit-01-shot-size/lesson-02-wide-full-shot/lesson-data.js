@@ -24,7 +24,26 @@
     id: 'wide-full-shot',
     unit: 'unit-01-shot-size',
     courseId: 'wide-full-shot',
-    // TODO: fill in from Lesson02-WideFullShot-Spec-v1.0.md once available.
+
+    // Stages 7+8 — values given directly in the build prompt (not
+    // guessed): settle at 0.75 on the shared Unit 01 0-1 scale (per
+    // the spec's own position table, 0=Extreme Close-Up..1=Extreme
+    // Wide), auto-animating from the slider's neutral midpoint.
+    // typewriter title is Claude Code's own line (not spec'd
+    // verbatim) — flagged, not passed off as the real original.
+    big_idea: {
+      title: "Now let's find the balance between the character and their world.",
+      autoAnimateFrom: 0.5,
+      autoAnimateTo: 0.75,
+      autoAnimateDurationMs: 1800
+    },
+    meet_term: {
+      term: 'WIDE / FULL SHOT',
+      subtitle: 'Character + World',
+      labels: ['CHARACTER', 'WORLD', 'BALANCE']
+    }
+
+    // TODO: remaining stages fill in from Lesson02-WideFullShot-Spec-v1.0.md.
   };
 
   global.LESSON_DATA = LESSON_DATA;
