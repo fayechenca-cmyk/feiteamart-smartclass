@@ -1,22 +1,108 @@
 /* ============================================================
  * Scene Drawing Foundation · Unit 01 · Lesson 03 — Medium Shot
- * Lesson content data.
+ * Lesson content data — all 13 stages, per the real "Scene Drawing
+ * Foundation · Unit 01 · Lesson 03 / Medium Shot: Show the Action —
+ * Spec v1.0" pasted in full in the build prompt itself (no missing-
+ * content gap this time, unlike Lessons 01/02).
  *
- * SCAFFOLD ONLY (2026-09-05) — deliberately empty. This build's spec
- * ("Scene Drawing Foundation · Unit 01 · Lesson 03 / Medium Shot: Show
- * the Action — Spec v1.0") was pasted in full in the build prompt
- * itself, unlike Lessons 01/02 where it arrived in a separate message
- * — so there is no missing-content gap this time. Real per-stage copy
- * gets filled in over the next two commits (look/think, then
- * make/reflect).
+ * ASSET NOTE: every image is still an inline placeholder SVG (via
+ * svgPlaceholder()), not real art — same as Lessons 01/02.
+ *
+ * connect_you is copied VERBATIM from Lesson 01's lesson-data.js per
+ * the spec's explicit "reuse as-is, don't rewrite" instruction.
+ * demo_video's disclaimer (added next commit) is the same reuse.
  * ============================================================ */
 (function (global) {
   'use strict';
+
+  // Same inline SVG placeholder helper as Lessons 01/02's lesson-data.js.
+  function svgPlaceholder(bg, emoji, w, h) {
+    w = w || 300; h = h || 220;
+    const fontSize = Math.round(Math.min(w, h) * 0.36);
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
+      + '<rect width="' + w + '" height="' + h + '" rx="18" fill="' + bg + '"/>'
+      + '<text x="50%" y="54%" font-size="' + fontSize + '" text-anchor="middle" dominant-baseline="middle">' + emoji + '</text>'
+      + '</svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
 
   const LESSON_DATA = {
     id: 'medium-shot',
     unit: 'unit-01-shot-size',
     courseId: 'medium-shot',
+
+    welcome: {
+      title: 'Medium Shot',
+      subtitle: 'Show the Action',
+      heroImage: svgPlaceholder('#dbe4ee', '🧍‍♂️✋', 500, 300),
+      startLabel: 'Start →'
+    },
+
+    video_intro: {
+      title: 'What is a Medium Shot?',
+      keySentence: "A medium shot shows enough of the character to see what they're doing — their action, gesture, and a bit of what's around them.",
+      videoStreamId: null,
+      videoTitle: 'What is a Medium Shot? — concept intro'
+    },
+
+    // Reused VERBATIM from Lesson 01's lesson-data.js, per the spec's
+    // explicit "same 3 options, don't rewrite" instruction.
+    connect_you: {
+      title: "It's About You!",
+      options: [
+        { key: 'people', icon: '🧑', label: 'I usually draw people', response: "Great! Today we'll practice showing the world around your characters too." },
+        { key: 'places', icon: '🏞️', label: 'I usually draw places', response: "Nice! You already think about scenes — let's give them names and rules." },
+        { key: 'both', icon: '✨', label: 'I draw both', response: "Perfect mix! You'll love learning how far the camera can pull back." }
+      ]
+    },
+
+    transition_question: {
+      title: 'What Should We Show?',
+      options: [
+        { key: 'whole_scene', label: 'The Whole Scene?' },
+        { key: 'just_action', label: 'Just the Action?' }
+      ],
+      transitionLine: "Let's zoom in close enough to see clearly..."
+    },
+
+    // Stage 5 — first ABChoiceCard instance. Wide/Full framing (A)
+    // shows the whole kitchen with the flip hard to make out; Medium
+    // framing (B) shows the flip itself clearly.
+    story_a: {
+      kicker: 'Story',
+      prompt: 'The chef flipped the pancake just in time.',
+      question: 'Which one lets you see exactly what’s happening?',
+      optionA: {
+        image: svgPlaceholder('#7b5ea8', '🏠🍳'),
+        label: 'The Whole Kitchen',
+        description: 'Shows the whole kitchen, but the flip is hard to see.',
+        feedback: 'A shows the whole kitchen, but we can barely see what the chef is doing. Let’s get closer.'
+      },
+      optionB: {
+        image: svgPlaceholder('#2d5fa8', '🍳✋'),
+        label: 'The Flip',
+        description: 'Shows the action clearly.',
+        feedback: 'B gets us close enough to see the flip in action!'
+      }
+    },
+    // Stage 6 — second ABChoiceCard instance, different story.
+    story_b: {
+      kicker: 'Story',
+      prompt: 'The goalkeeper dove to block the ball.',
+      question: 'Which one makes the action feel exciting?',
+      optionA: {
+        image: svgPlaceholder('#3fa8a0', '🏟️⚽'),
+        label: 'The Whole Field',
+        description: 'Shows the whole field.',
+        feedback: 'A shows a lot of the field, but the save itself gets lost. Let’s zoom in.'
+      },
+      optionB: {
+        image: svgPlaceholder('#e8862e', '🧤⚽'),
+        label: 'The Save',
+        description: 'Shows the dive and the ball together.',
+        feedback: 'B puts us right in the moment of the save!'
+      }
+    },
 
     // Stages 7+8 — Medium Shot = 0.5 on the shared Unit 01 slider
     // position table, which is exactly the slider's own neutral
@@ -34,9 +120,21 @@
       term: 'MEDIUM SHOT',
       subtitle: 'Show the Action',
       labels: ['ACTION', 'GESTURE', 'MOMENT']
+    },
+
+    // Stage 9 — same 3 category names as Lessons 01/02 (don't rename).
+    // New placeholder art depicting an action mid-moment, per the spec.
+    real_examples: {
+      title: 'Real Examples',
+      examples: [
+        { key: 'nature', label: 'Nature', image: svgPlaceholder('#3fa8a0', '🥾🪨', 400, 300) },
+        { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '🧑‍🍳🔥', 400, 300) },
+        { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '🧙‍♂️✨', 400, 300) }
+      ]
     }
 
-    // TODO: remaining stages fill in over the next two commits.
+    // TODO: remaining stages (demo_video, draw_task, see_ideas,
+    // reflect) fill in next commit.
   };
 
   global.LESSON_DATA = LESSON_DATA;
