@@ -8,12 +8,17 @@
  *
  * USAGE
  *   ABChoiceCard.render('containerId', {
- *     optionA: { image: 'a.jpg', label: 'Option A', feedback: 'Nice pick!' },
+ *     optionA: { image: 'a.jpg', label: 'Option A', feedback: 'Nice pick!',
+ *                description: 'optional short line under the label' },
  *     optionB: { image: 'b.jpg', label: 'Option B', feedback: 'Good eye!' },
  *     feedbackDelayMs: 800   // optional, defaults to 800
  *   }, function onComplete(pickedKey) {
  *     // pickedKey is 'A' or 'B' — advance the lesson here
  *   });
+ *
+ * `description` (Lesson 02 addition) is optional and additive — an
+ * option without one renders exactly as before (Lesson 01's four
+ * story options all omit it).
  *
  * BEHAVIOR
  *   - Tap a card: it scales to 1.05 and gets a highlighted border; the
@@ -48,6 +53,7 @@
       .abc-card:active{transform:scale(.97);}
       .abc-card img{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:8px;}
       .abc-card .abc-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;color:#1c1a22;}
+      .abc-card .abc-description{font-size:11.5px;color:rgba(28,26,34,.55);margin-top:4px;line-height:1.35;}
       .abc-card.abc-selected{
         transform:scale(1.05);border-color:#2d5fa8;
         box-shadow:0 10px 24px rgba(45,95,168,.22);
@@ -77,10 +83,12 @@
         <div class="abc-card" data-key="A">
           <img src="${config.optionA.image}" alt="${config.optionA.label}">
           <div class="abc-label">${config.optionA.label}</div>
+          ${config.optionA.description ? `<div class="abc-description">${config.optionA.description}</div>` : ''}
         </div>
         <div class="abc-card" data-key="B">
           <img src="${config.optionB.image}" alt="${config.optionB.label}">
           <div class="abc-label">${config.optionB.label}</div>
+          ${config.optionB.description ? `<div class="abc-description">${config.optionB.description}</div>` : ''}
         </div>
       </div>
       <div class="abc-feedback" id="${containerId}-feedback"></div>
