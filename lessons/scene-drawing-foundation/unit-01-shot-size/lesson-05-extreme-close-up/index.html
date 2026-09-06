@@ -7,7 +7,7 @@
 <meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 05: Extreme Close-Up.">
 
 <!--
-  Content wiring in progress (2026-09-05), per the real "Scene Drawing
+  All 13 stages wired (2026-09-05), per the real "Scene Drawing
   Foundation · Unit 01 · Lesson 05 / Extreme Close-Up: Show the Detail
   — Spec v1.0" pasted in full in the build prompt itself (no
   missing-spec gap).
@@ -15,9 +15,15 @@
   This is the last lesson in Unit 01. This is a content-swap build, not
   component work: reuses Lesson 04's exact dispatcher shell and all
   three shared components from ../../_shared/ with zero forking — no
-  new shared-component capabilities expected. Reference implementation:
+  new shared-component capabilities needed. Reference implementation:
   lessons/scene-drawing-foundation/unit-01-shot-size/lesson-04-close-
   up/index.html.
+
+  ASSET NOTE: every image is still an inline placeholder SVG, same as
+  Lessons 01-04 — see lesson-data.js's own note.
+
+  Catalog/course-listing wiring for all of Unit 01 is a separate future
+  task per the build prompt — not started here.
 
   ACCESS CONTROL: deliberately not wired. Faye has not yet confirmed a
   free/paid rule for this course — see the TODO near init() below.
@@ -106,6 +112,72 @@ body{
 .zone-tile .zt-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.02rem;margin-top:6px;color:var(--accent-deep);}
 .zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
 
+/* ---------- Stage 1: Welcome ---------- */
+.welcome-hero{position:relative;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 10px 26px rgba(28,26,34,.16);}
+.welcome-hero img{display:block;width:100%;height:auto;}
+.welcome-cloud{
+  position:absolute;background:rgba(255,255,255,.75);border-radius:50%;
+  filter:blur(1px);pointer-events:none;
+}
+.welcome-cloud::before, .welcome-cloud::after{
+  content:'';position:absolute;background:inherit;border-radius:50%;
+}
+.wc-1{width:70px;height:24px;top:14%;left:-15%;animation:cloudDrift1 26s linear infinite;}
+.wc-1::before{width:36px;height:36px;top:-16px;left:8px;}
+.wc-1::after{width:26px;height:26px;top:-10px;left:38px;}
+.wc-2{width:50px;height:18px;top:28%;left:-12%;animation:cloudDrift1 34s linear infinite;animation-delay:-10s;}
+.wc-2::before{width:26px;height:26px;top:-11px;left:6px;}
+@keyframes cloudDrift1{from{transform:translateX(0);}to{transform:translateX(480px);}}
+.welcome-character{
+  position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
+  font-size:1.6rem;animation:breathe 2.6s ease-in-out infinite;transform-origin:bottom center;
+}
+@keyframes breathe{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.06);}}
+.start-btn-wrap{text-align:center;}
+.start-btn-wrap .sd-btn.primary{animation:btnBreathe 2s ease-in-out infinite;}
+@keyframes btnBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
+
+/* ---------- Stage 2: Video intro ---------- */
+.video-embed-wrap{margin:14px 0 8px;border-radius:10px;overflow:hidden;box-shadow:0 12px 28px rgba(28,26,34,.22);}
+
+/* ---------- Stage 3: Connect: You ---------- */
+.connect-options{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+.connect-option{
+  flex:1 1 0;min-width:100px;max-width:160px;background:#fff;border:2px solid var(--line);
+  border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;
+  transition:border-color .15s ease,transform .15s ease;-webkit-tap-highlight-color:transparent;
+}
+.connect-option:active{transform:scale(.96);}
+.connect-option.picked{border-color:var(--accent);background:rgba(45,95,168,.06);}
+.connect-option .co-icon{font-size:1.7rem;}
+.connect-option .co-label{font-size:11.5px;font-weight:700;margin-top:6px;color:var(--ink-soft);}
+.connect-bubble{
+  text-align:center;font-size:13.5px;font-weight:600;color:var(--accent-deep);
+  background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:16px;
+  opacity:0;transform:scale(.8);height:0;padding-top:0;padding-bottom:0;margin-top:0;overflow:hidden;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.connect-bubble.show{
+  opacity:1;transform:scale(1);height:auto;padding-top:12px;padding-bottom:12px;margin-top:16px;overflow:visible;
+}
+
+/* ---------- Stage 4: Transition question ---------- */
+.transition-options{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.transition-btn{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:16px 22px;
+  border-radius:14px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;
+}
+.transition-btn:active{transform:scale(.96);}
+.transition-btn.picked{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
+.transition-line{
+  text-align:center;font-size:13.5px;font-weight:600;color:var(--accent-deep);margin-top:16px;
+  opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;
+}
+.transition-line.show{opacity:1;transform:translateY(0);}
+
+/* ---------- Stage 5/6: ABChoiceCard host ---------- */
+.abc-host{margin-top:14px;}
+
 /* ---------- Stage 7/8: CameraZoomSlider + term reveal ---------- */
 .typewriter-text{
   text-align:center;font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;
@@ -128,6 +200,22 @@ body{
   opacity:0;transition:opacity .5s ease;
 }
 .term-subtitle.show{opacity:1;}
+
+/* ---------- Stage 9: Real examples ---------- */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:480px){.examples-grid{grid-template-columns:1fr;}}
+.example-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(28,26,34,.1);cursor:zoom-in;}
+.example-card img{display:block;width:100%;height:auto;}
+.example-card .example-label{text-align:center;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding:8px;}
+
+.lightbox-overlay{
+  position:fixed;inset:0;background:rgba(28,26,34,.82);z-index:700;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+}
+.lightbox-overlay.show{opacity:1;pointer-events:auto;}
+.lightbox-overlay img{max-width:100%;max-height:80vh;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.lightbox-close{position:absolute;top:18px;right:20px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;font-weight:800;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -139,6 +227,11 @@ body{
     <button class="map-btn" onclick="goMap()">◐ Map</button>
   </div>
   <div id="screen-content"></div>
+</div>
+
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="event.stopPropagation(); closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 
 <script src="../../../../core/auth.js"></script>
@@ -161,15 +254,15 @@ const ZONES = [
 const ZONE_ICONS = { welcome:'👋', look:'👀', think:'💭', make:'🎨', reflect:'🖼' };
 
 const STAGES = [
-  { id:'welcome',             title:'Welcome',                zone:'welcome', render:() => renderPlaceholder('welcome') },
-  { id:'video_intro',         title:'Video Intro',            zone:'look',    render:() => renderPlaceholder('video_intro') },
-  { id:'connect_you',         title:'Connect: You',           zone:'look',    render:() => renderPlaceholder('connect_you') },
-  { id:'transition_question', title:'Transition Question',    zone:'look',    render:() => renderPlaceholder('transition_question') },
-  { id:'story_a',             title:'Story A',                zone:'think',   render:() => renderPlaceholder('story_a') },
-  { id:'story_b',             title:'Story B',                zone:'think',   render:() => renderPlaceholder('story_b') },
+  { id:'welcome',             title:'Welcome',                zone:'welcome', render:renderWelcome },
+  { id:'video_intro',         title:'What is an Extreme Close-Up?', zone:'look', render:renderVideoIntro },
+  { id:'connect_you',         title:"It's About You!",        zone:'look',    render:renderConnectYou, afterRender:afterRenderConnectYou },
+  { id:'transition_question', title:'What Should We Show?',   zone:'look',    render:renderTransitionQuestion },
+  { id:'story_a',             title:'Story A',                zone:'think',   render:renderStoryA, afterRender:afterRenderStoryA },
+  { id:'story_b',             title:'Story B',                zone:'think',   render:renderStoryB, afterRender:afterRenderStoryB },
   { id:'big_idea',            title:'The Big Idea',           zone:'think',   render:renderBigIdea, afterRender:afterRenderBigIdea },
   { id:'meet_term',           title:'Meet the Term',          zone:'think',   render:renderMeetTerm, afterRender:afterRenderMeetTerm },
-  { id:'real_examples',       title:'Real Examples',          zone:'think',   render:() => renderPlaceholder('real_examples') },
+  { id:'real_examples',       title:'Real Examples',          zone:'think',   render:renderRealExamples },
   { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:() => renderPlaceholder('demo_video') },
   { id:'draw_task',           title:'Draw It',                zone:'make',    render:() => renderPlaceholder('draw_task') },
   { id:'see_ideas',           title:"See Everyone's Ideas",   zone:'make',    render:() => renderPlaceholder('see_ideas') },
@@ -177,6 +270,8 @@ const STAGES = [
 ];
 
 let STATE = {
+  connectChoice: null,
+  transitionChoice: null,
   cameraPosition: 0.5
 };
 
@@ -196,6 +291,157 @@ function typewriterInto(elId, text, totalDurationMs){
     el.textContent = text.slice(0, i);
     if (i >= text.length) clearInterval(typewriterTimer);
   }, perCharMs);
+}
+
+/* ============================================================
+   SHARED HELPER — video embed (Cloudflare Stream, with the
+   established "coming soon" fallback). Same helper as Lessons 01-04.
+============================================================ */
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(streamId){
+  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}`;
+}
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;">
+      <iframe src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div style="position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+
+/* ============================================================
+   STAGE 1 — Welcome
+============================================================ */
+function renderWelcome(){
+  const d = LESSON_DATA.welcome;
+  return `
+    <div class="welcome-hero">
+      <img src="${d.heroImage}" alt="A single small detail filling the entire frame">
+      <span class="welcome-cloud wc-1" aria-hidden="true"></span>
+      <span class="welcome-cloud wc-2" aria-hidden="true"></span>
+      <span class="welcome-character" aria-hidden="true">🧍</span>
+    </div>
+    <h1 class="s-title display">${d.title}</h1>
+    <p class="s-sub">${d.subtitle}</p>
+    <div class="start-btn-wrap">
+      <button class="sd-btn primary" onclick="goNext()">${d.startLabel}</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   STAGE 2 — What is an Extreme Close-Up? (video)
+============================================================ */
+function renderVideoIntro(){
+  const d = LESSON_DATA.video_intro;
+  return `
+    <div class="kicker">Look</div>
+    <h2 class="s-title">${d.title}</h2>
+    ${renderVideoEmbed(d.videoStreamId ? cfStreamSrc(d.videoStreamId) : null, d.videoTitle)}
+    <p class="s-sub" style="margin-top:14px;">${d.keySentence}</p>
+  `;
+}
+
+/* ============================================================
+   STAGE 3 — Connect: You (bubble copy reused verbatim from Lesson 01)
+============================================================ */
+function renderConnectYou(){
+  const d = LESSON_DATA.connect_you;
+  const options = d.options.map(o => `
+    <div class="connect-option${STATE.connectChoice === o.key ? ' picked' : ''}" onclick="pickConnect('${o.key}')">
+      <div class="co-icon">${o.icon}</div>
+      <div class="co-label">${o.label}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="kicker">Look</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div class="connect-options">${options}</div>
+    <div class="connect-bubble" id="connectBubble"></div>
+  `;
+}
+function afterRenderConnectYou(){
+  if (!STATE.connectChoice) return;
+  const picked = LESSON_DATA.connect_you.options.find(o => o.key === STATE.connectChoice);
+  const bubble = document.getElementById('connectBubble');
+  bubble.textContent = picked.response;
+  requestAnimationFrame(() => bubble.classList.add('show'));
+}
+function pickConnect(key){
+  STATE.connectChoice = key;
+  const d = LESSON_DATA.connect_you;
+  document.querySelectorAll('.connect-option').forEach((el, i) => el.classList.toggle('picked', d.options[i].key === key));
+  const picked = d.options.find(o => o.key === key);
+  const bubble = document.getElementById('connectBubble');
+  bubble.classList.remove('show');
+  bubble.textContent = picked.response;
+  requestAnimationFrame(() => bubble.classList.add('show'));
+}
+
+/* ============================================================
+   STAGE 4 — What Should We Show? (whole face vs. one tiny detail).
+   Same "show a transition line, then auto-advance" behavior as
+   Lessons 02/03/04.
+============================================================ */
+function renderTransitionQuestion(){
+  const d = LESSON_DATA.transition_question;
+  const options = d.options.map(o => `
+    <button class="transition-btn${STATE.transitionChoice === o.key ? ' picked' : ''}" onclick="pickTransition('${o.key}')">${o.label}</button>
+  `).join('');
+  return `
+    <div class="kicker">Look</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div class="transition-options">${options}</div>
+    <p class="transition-line" id="transitionLine">${d.transitionLine}</p>
+  `;
+}
+function pickTransition(key){
+  if (STATE.transitionChoice) return; // no double-advance on a fast second tap
+  STATE.transitionChoice = key;
+  document.querySelectorAll('.transition-btn').forEach(btn => btn.classList.toggle('picked', btn.textContent === LESSON_DATA.transition_question.options.find(o => o.key === key).label));
+  const line = document.getElementById('transitionLine');
+  if (line) line.classList.add('show');
+  setTimeout(() => goNext(), 1100);
+}
+
+/* ============================================================
+   STAGE 5 / 6 — story_a / story_b (ABChoiceCard, reusing its existing
+   optional `description` field and a question prompt above the cards
+   — no component changes)
+============================================================ */
+function renderStoryA(){
+  const d = LESSON_DATA.story_a;
+  return `
+    <div class="kicker">${d.kicker}</div>
+    <h2 class="s-title">${d.prompt}</h2>
+    <p class="s-sub">${d.question}</p>
+    <div class="abc-host" id="abcStoryA"></div>
+  `;
+}
+function afterRenderStoryA(){
+  const d = LESSON_DATA.story_a;
+  ABChoiceCard.render('abcStoryA', { optionA: d.optionA, optionB: d.optionB, feedbackDelayMs: 900 }, () => goNext());
+}
+function renderStoryB(){
+  const d = LESSON_DATA.story_b;
+  return `
+    <div class="kicker">${d.kicker}</div>
+    <h2 class="s-title">${d.prompt}</h2>
+    <p class="s-sub">${d.question}</p>
+    <div class="abc-host" id="abcStoryB"></div>
+  `;
+}
+function afterRenderStoryB(){
+  const d = LESSON_DATA.story_b;
+  ABChoiceCard.render('abcStoryB', { optionA: d.optionA, optionB: d.optionB, feedbackDelayMs: 900 }, () => goNext());
 }
 
 /* ============================================================
@@ -256,6 +502,34 @@ function afterRenderMeetTerm(){
     if (revealEl) revealEl.classList.add('show');
     if (subtitleEl) subtitleEl.classList.add('show');
   }, d.labels.length * 300 + 200);
+}
+
+/* ============================================================
+   STAGE 9 — Real Examples
+============================================================ */
+function renderRealExamples(){
+  const d = LESSON_DATA.real_examples;
+  const cards = d.examples.map(ex => `
+    <div class="example-card" onclick="openLightbox('${ex.image}', '${ex.label}')">
+      <img src="${ex.image}" alt="${ex.label}">
+      <div class="example-label">${ex.label}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="kicker">Think</div>
+    <h2 class="s-title">${d.title}</h2>
+    <div class="examples-grid">${cards}</div>
+  `;
+}
+function openLightbox(src, alt){
+  const overlay = document.getElementById('lightboxOverlay');
+  const img = document.getElementById('lightboxImg');
+  img.src = src;
+  img.alt = alt;
+  overlay.classList.add('show');
+}
+function closeLightbox(){
+  document.getElementById('lightboxOverlay').classList.remove('show');
 }
 
 function renderPlaceholder(stageId){
