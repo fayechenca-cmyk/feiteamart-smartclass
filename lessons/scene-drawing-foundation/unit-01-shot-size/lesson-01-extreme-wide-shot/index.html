@@ -109,8 +109,32 @@ body{
 .zone-tile .zt-count{font-size:10px;color:var(--ink-faint);margin-top:2px;font-weight:700;}
 
 /* ---------- Stage 1: Welcome ---------- */
-.welcome-hero{border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 10px 26px rgba(28,26,34,.16);}
+.welcome-hero{position:relative;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 10px 26px rgba(28,26,34,.16);}
 .welcome-hero img{display:block;width:100%;height:auto;}
+/* Ambient loop (polish pass) — pure CSS, no extra assets: two soft
+   cloud shapes drift slowly, a tiny character silhouette breathes.
+   Kept subtle per spec ("极轻" — very light). */
+.welcome-cloud{
+  position:absolute;background:rgba(255,255,255,.75);border-radius:50%;
+  filter:blur(1px);pointer-events:none;
+}
+.welcome-cloud::before, .welcome-cloud::after{
+  content:'';position:absolute;background:inherit;border-radius:50%;
+}
+.wc-1{width:70px;height:24px;top:14%;left:-15%;animation:cloudDrift1 26s linear infinite;}
+.wc-1::before{width:36px;height:36px;top:-16px;left:8px;}
+.wc-1::after{width:26px;height:26px;top:-10px;left:38px;}
+.wc-2{width:50px;height:18px;top:28%;left:-12%;animation:cloudDrift1 34s linear infinite;animation-delay:-10s;}
+.wc-2::before{width:26px;height:26px;top:-11px;left:6px;}
+@keyframes cloudDrift1{from{transform:translateX(0);}to{transform:translateX(480px);}}
+.welcome-character{
+  position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
+  font-size:1.6rem;animation:breathe 2.6s ease-in-out infinite;transform-origin:bottom center;
+}
+@keyframes breathe{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.06);}}
+.start-btn-wrap{text-align:center;}
+.start-btn-wrap .sd-btn.primary{animation:btnBreathe 2s ease-in-out infinite;}
+@keyframes btnBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
 
 /* ---------- Stage 2: Video intro ---------- */
 .video-embed-wrap{margin:14px 0 8px;border-radius:10px;overflow:hidden;box-shadow:0 12px 28px rgba(28,26,34,.22);}
@@ -127,10 +151,17 @@ body{
 .connect-option .co-icon{font-size:1.7rem;}
 .connect-option .co-label{font-size:11.5px;font-weight:700;margin-top:6px;color:var(--ink-soft);}
 .connect-bubble{
-  display:none;text-align:center;font-size:13.5px;font-weight:600;color:var(--accent-deep);
+  /* Pop-in (polish pass): scale .8->1 + fade, 200ms, per spec. Kept in
+     layout (not display:none) so the transition has something to
+     animate — visually invisible via scale+opacity until picked. */
+  text-align:center;font-size:13.5px;font-weight:600;color:var(--accent-deep);
   background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:16px;
+  opacity:0;transform:scale(.8);height:0;padding-top:0;padding-bottom:0;margin-top:0;overflow:hidden;
+  transition:opacity .2s ease,transform .2s ease;
 }
-.connect-bubble.show{display:block;}
+.connect-bubble.show{
+  opacity:1;transform:scale(1);height:auto;padding-top:12px;padding-bottom:12px;margin-top:16px;overflow:visible;
+}
 
 /* ---------- Stage 4: Transition question ---------- */
 .transition-options{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
@@ -164,9 +195,19 @@ body{
 /* ---------- Stage 9: Real examples ---------- */
 .examples-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
 @media(max-width:480px){.examples-grid{grid-template-columns:1fr;}}
-.example-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(28,26,34,.1);}
+.example-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(28,26,34,.1);cursor:zoom-in;}
 .example-card img{display:block;width:100%;height:auto;}
 .example-card .example-label{text-align:center;font-size:11.5px;font-weight:700;color:var(--ink-soft);padding:8px;}
+
+/* Tap-to-enlarge lightbox (polish pass) — lightweight, no carousel. */
+.lightbox-overlay{
+  position:fixed;inset:0;background:rgba(28,26,34,.82);z-index:700;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+}
+.lightbox-overlay.show{opacity:1;pointer-events:auto;}
+.lightbox-overlay img{max-width:100%;max-height:80vh;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+.lightbox-close{position:absolute;top:18px;right:20px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:16px;font-weight:800;cursor:pointer;}
 
 /* ---------- Stage 10: Let's Draw Together ---------- */
 .disclaimer-line{text-align:center;font-size:11.5px;font-style:italic;color:var(--ink-faint);margin-top:12px;line-height:1.5;}
@@ -224,6 +265,11 @@ body{
 
 <div class="celebrate-toast" id="celebrateToast"></div>
 
+<div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="event.stopPropagation(); closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 <script src="../../../../core/auth.js"></script>
 <script src="../../../../core/access.js"></script>
 <!-- JournalStorage — used by ReflectionJournal (Stage 13). Reused as-is,
@@ -253,7 +299,7 @@ const ZONE_ICONS = { welcome:'👋', look:'👀', think:'💭', make:'🎨', ref
 const STAGES = [
   { id:'welcome',             title:'Welcome',                zone:'welcome', render:renderWelcome },
   { id:'video_intro',         title:'What is a Scene?',       zone:'look',    render:renderVideoIntro },
-  { id:'connect_you',         title:"It's About You!",        zone:'look',    render:renderConnectYou },
+  { id:'connect_you',         title:"It's About You!",        zone:'look',    render:renderConnectYou, afterRender:afterRenderConnectYou },
   { id:'transition_question', title:'What Should We Show?',   zone:'look',    render:renderTransitionQuestion },
   { id:'story_a',             title:'Story A',                zone:'think',   render:renderStoryA, afterRender:afterRenderStoryA },
   { id:'story_b',             title:'Story B',                zone:'think',   render:renderStoryB, afterRender:afterRenderStoryB },
@@ -334,10 +380,15 @@ function typewriterInto(elId, text, totalDurationMs){
 function renderWelcome(){
   const d = LESSON_DATA.welcome;
   return `
-    <div class="welcome-hero"><img src="${d.heroImage}" alt="A wide mountain scene"></div>
+    <div class="welcome-hero">
+      <img src="${d.heroImage}" alt="A wide mountain scene">
+      <span class="welcome-cloud wc-1" aria-hidden="true"></span>
+      <span class="welcome-cloud wc-2" aria-hidden="true"></span>
+      <span class="welcome-character" aria-hidden="true">🧍</span>
+    </div>
     <h1 class="s-title display">${d.title}</h1>
     <p class="s-sub">${d.subtitle}</p>
-    <div style="text-align:center;">
+    <div class="start-btn-wrap">
       <button class="sd-btn primary" onclick="goNext()">${d.startLabel}</button>
     </div>
   `;
@@ -367,17 +418,36 @@ function renderConnectYou(){
       <div class="co-label">${o.label}</div>
     </div>
   `).join('');
-  const picked = d.options.find(o => o.key === STATE.connectChoice);
+  // Bubble always renders in its hidden (pre-pop) state here, even on
+  // a repeat visit where a choice was already made — pickConnect()
+  // below does the targeted class-toggle that actually plays the
+  // pop-in transition; a fresh render can't animate into an
+  // already-"shown" element, there's no prior state to transition from.
   return `
     <div class="kicker">Look</div>
     <h2 class="s-title">${d.title}</h2>
     <div class="connect-options">${options}</div>
-    <div class="connect-bubble${picked ? ' show' : ''}" id="connectBubble">${picked ? picked.response : ''}</div>
+    <div class="connect-bubble" id="connectBubble"></div>
   `;
 }
+function afterRenderConnectYou(){
+  if (!STATE.connectChoice) return;
+  const picked = LESSON_DATA.connect_you.options.find(o => o.key === STATE.connectChoice);
+  const bubble = document.getElementById('connectBubble');
+  bubble.textContent = picked.response;
+  requestAnimationFrame(() => bubble.classList.add('show'));
+}
+// Targeted update (not a full renderCurrentStage()) so the bubble's
+// pop-in CSS transition actually has a "before" state to animate from.
 function pickConnect(key){
   STATE.connectChoice = key;
-  renderCurrentStage();
+  const d = LESSON_DATA.connect_you;
+  document.querySelectorAll('.connect-option').forEach((el, i) => el.classList.toggle('picked', d.options[i].key === key));
+  const picked = d.options.find(o => o.key === key);
+  const bubble = document.getElementById('connectBubble');
+  bubble.classList.remove('show');
+  bubble.textContent = picked.response;
+  requestAnimationFrame(() => bubble.classList.add('show'));
 }
 
 /* ============================================================
@@ -493,7 +563,7 @@ function afterRenderMeetTerm(){
 function renderRealExamples(){
   const d = LESSON_DATA.real_examples;
   const cards = d.examples.map(ex => `
-    <div class="example-card">
+    <div class="example-card" onclick="openLightbox('${ex.image}', '${ex.label}')">
       <img src="${ex.image}" alt="${ex.label}">
       <div class="example-label">${ex.label}</div>
     </div>
@@ -503,6 +573,18 @@ function renderRealExamples(){
     <h2 class="s-title">${d.title}</h2>
     <div class="examples-grid">${cards}</div>
   `;
+}
+// Tap-to-enlarge lightbox (polish pass) — one overlay, reused by any
+// stage that wants it (only Stage 9 does today).
+function openLightbox(src, alt){
+  const overlay = document.getElementById('lightboxOverlay');
+  const img = document.getElementById('lightboxImg');
+  img.src = src;
+  img.alt = alt;
+  overlay.classList.add('show');
+}
+function closeLightbox(){
+  document.getElementById('lightboxOverlay').classList.remove('show');
 }
 
 /* ============================================================
