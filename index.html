@@ -2397,13 +2397,22 @@
   // lesson opens directly and can never be intercepted by the Foundation A
   // paywall/order gate (unlike attachSkillsLessonGuard, which only guards
   // clicks inside #path-nodes and never sees these links at all).
-  function renderLiveClassSmartRef(session, icon) {
-    if (!session.smartClassRef) return '';
-    const lesson = smartClassLessonInfo(session.smartClassRef);
-    const note = session.smartClassNote || 'Watch the related lesson in Smart Class first.';
-    const link = lesson
+  // Builds just the "→ Go to X Lesson" link for a smartClassRef — pulled
+  // out of renderLiveClassSmartRef() below so renderLiveClassNextCard()'s
+  // v1.1 homework-merge logic can reuse the exact same link markup
+  // without duplicating the lookup/href logic. renderLiveClassSmartRef()
+  // itself is otherwise unchanged (same output for every existing caller).
+  function renderLiveClassSmartRefLink(refId) {
+    const lesson = smartClassLessonInfo(refId);
+    return lesson
       ? `<a href="${lesson.href}" onclick="goToSmartClassLesson(event, '${lesson.href}')">→ Go to ${liveClassEscapeHtml(lesson.title)} Lesson</a>`
       : '';
+  }
+
+  function renderLiveClassSmartRef(session, icon) {
+    if (!session.smartClassRef) return '';
+    const note = session.smartClassNote || 'Watch the related lesson in Smart Class first.';
+    const link = renderLiveClassSmartRefLink(session.smartClassRef);
     return `<div class="live-class-smart-ref">${icon} ${liveClassEscapeHtml(note)} ${link}</div>`;
   }
 
@@ -2435,9 +2444,26 @@
     // "next" session from that list to avoid showing it twice — so
     // whichever class is currently "next" had no path to show
     // Homework/Submit at all until now.
+    //
+    // v1.1: when a session's homework IS "go watch this Smart Class
+    // lesson" (both `homework` and `smartClassRef` set — the exact shape
+    // Class 6's own data already uses), the smartClassRef link moves
+    // inside the homework block instead of also showing as a separate
+    // "💡 ... for reference" tip line above it — the old tip line and the
+    // real homework were two views of the same instruction, which is
+    // what actually confused parents on Class 7. This is a general rule
+    // on existing fields (no new field added — nothing here depends on
+    // anything beyond what's already fetched from Supabase today), not a
+    // Class-7-only special case, so it needs no schema/admin-UI change to
+    // take effect live. It only changes this next-card function;
+    // renderLiveClassSessionRow() (Class 6's actual current rendering,
+    // since Class 6 is in the past list) is untouched either way.
+    const mergeSmartRefIntoHomework = !!(next.homework && next.smartClassRef);
+    const smartRefLine = mergeSmartRefIntoHomework ? '' : renderLiveClassSmartRef(next, '💡');
     const homework = next.homework
       ? `
         <div class="live-class-homework-note">📝 ${liveClassEscapeHtml(next.homework.description)}</div>
+        ${mergeSmartRefIntoHomework ? renderLiveClassSmartRefLink(next.smartClassRef) : ''}
         ${next.homework.downloadUrl ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(next.homework.downloadUrl)}" target="_blank" rel="noopener">⬇️ ${liveClassEscapeHtml(next.homework.downloadLabel || 'Download')}</a>` : ''}
       `
       : '';
@@ -2449,7 +2475,7 @@
         <a class="live-class-zoom-btn" href="${liveClassEscapeHtml(zoom.joinUrl)}" target="_blank" rel="noopener">🔗 Join Zoom →</a>
         ${materialsBtn}
       </div>
-      ${renderLiveClassSmartRef(next, '💡')}
+      ${smartRefLine}
       ${homework}
       <a class="live-class-submit-btn" href="https://tally.so/r/3NN4VW" target="_blank" rel="noopener">📋 Submit Homework →</a>
     `;
