@@ -631,11 +631,14 @@
      .live-class-smart-ref a / .live-class-zoom-btn elsewhere on this
      card, not a new color. The combined-class selector keeps this from
      affecting any .live-class-homework-note that doesn't also carry
-     -link (e.g. Class 6's, in renderLiveClassSessionRow, untouched). */
+     -link (e.g. Class 6's, in renderLiveClassSessionRow, untouched).
+     v1.4: underline is always-on now (was hover-only) so the line reads
+     as clickable at rest, not just on hover — text-decoration's color
+     defaults to the text's own color (currentColor), so this doesn't
+     introduce a separate underline color. */
   .live-class-homework-note.live-class-homework-link {
-    display: block; text-decoration: none; color: var(--gold); cursor: pointer;
+    display: block; text-decoration: underline; color: var(--gold); cursor: pointer;
   }
-  .live-class-homework-note.live-class-homework-link:hover { text-decoration: underline; }
   .live-class-submit-btn {
     background: transparent; border: 1px solid var(--gold); color: var(--gold);
     padding: 9px 14px; border-radius: 20px;

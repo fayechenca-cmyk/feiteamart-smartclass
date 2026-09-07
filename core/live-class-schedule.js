@@ -161,7 +161,7 @@ const LIVE_CLASS_SCHEDULE = {
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68bcff71e365f04a1df7330d_cube%20sketching%20methods.pptx'
       },
       homework: {
-        description: 'Go to the Cup Lesson, watch it, and draw the cup — this is your homework for this week.',
+        description: 'Watch and draw from the cup lesson in Smart Class — that\'s your homework for this week.',
         downloadUrl: null,
         downloadLabel: null
       }
