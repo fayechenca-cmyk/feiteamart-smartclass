@@ -161,7 +161,7 @@ const LIVE_CLASS_SCHEDULE = {
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68bcff71e365f04a1df7330d_cube%20sketching%20methods.pptx'
       },
       homework: {
-        description: 'Draw a glass cup focusing on ellipses and transparency.',
+        description: 'Homework: Watch the Cup Lesson, then finish your Glass Cup drawing.',
         downloadUrl: null,
         downloadLabel: null
       }
