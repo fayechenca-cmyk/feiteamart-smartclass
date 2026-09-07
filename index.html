@@ -2425,6 +2425,22 @@
     const materialsBtn = next.materials
       ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(next.materials.url)}" target="_blank" rel="noopener">📎 ${liveClassEscapeHtml(next.materials.label)}</a>`
       : '';
+    // Homework + Submit block — same markup/CSS classes/Tally
+    // destination as renderLiveClassSessionRow() below, not a new
+    // pattern. Added here because this featured "next class" card
+    // never rendered it for ANY class (checked full git history back
+    // to the section's original commit — always missing here). The
+    // session-row version below only ever shows it for past sessions,
+    // since renderLiveClassSection() deliberately excludes the current
+    // "next" session from that list to avoid showing it twice — so
+    // whichever class is currently "next" had no path to show
+    // Homework/Submit at all until now.
+    const homework = next.homework
+      ? `
+        <div class="live-class-homework-note">📝 ${liveClassEscapeHtml(next.homework.description)}</div>
+        ${next.homework.downloadUrl ? `<a class="live-class-materials-btn" href="${liveClassEscapeHtml(next.homework.downloadUrl)}" target="_blank" rel="noopener">⬇️ ${liveClassEscapeHtml(next.homework.downloadLabel || 'Download')}</a>` : ''}
+      `
+      : '';
     return `
       <div class="live-class-next-label">NEXT CLASS</div>
       <div class="live-class-next-meta">Class ${next.classNumber} · ${liveClassEscapeHtml(next.date)} · ${liveClassEscapeHtml(next.time)}</div>
@@ -2434,6 +2450,8 @@
         ${materialsBtn}
       </div>
       ${renderLiveClassSmartRef(next, '💡')}
+      ${homework}
+      <a class="live-class-submit-btn" href="https://tally.so/r/3NN4VW" target="_blank" rel="noopener">📋 Submit Homework →</a>
     `;
   }
 
