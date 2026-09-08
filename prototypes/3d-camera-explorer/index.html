@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>3D Camera Explorer — Prototype</title>
+
+<!--
+  Scene Drawing Foundation · 3D Camera Explorer — Prototype v1.0
+  =================================================================
+  THROWAWAY PROTOTYPE. Not part of the live course, not linked from
+  any navigation, not wired into any STAGES dispatcher / IndexedDB /
+  sessionStorage / totalXP / fei_thinking_journal — no completion
+  concept at all. Zero dependency on any existing lesson file or
+  _shared/ component. Only reachable by direct link.
+
+  Purpose: validate whether "stand in a 3D scene and drag the camera
+  yourself" communicates shot-size/camera-angle better than the
+  current flat CameraZoomSlider card. If it does, Faye decides
+  separately whether/how to rebuild Unit 01 (or start Unit 02+) this
+  way — that's a future task, not this one.
+
+  REUSED FROM UNIT 01 (so the concept stays consistent if this ever
+  gets wired into the real lessons later):
+    - The exact 0-1 dolly position table, from
+      lessons/scene-drawing-foundation/_shared/camera-zoom-slider.js
+      and each lesson's lesson-data.js (autoAnimateTo / settlePosition):
+        0    = Extreme Close-Up   (lesson-05)
+        0.25 = Close-Up           (lesson-04)
+        0.5  = Medium Shot        (lesson-03)
+        0.75 = Wide / Full Shot   (lesson-02)
+        1.0  = Extreme Wide Shot  (lesson-01)
+      The HUD's shot-size label buckets the live dolly value to the
+      nearest of these 5 by quarter-interval, same convention.
+    - The exact easeInOutCubic easing function, ported verbatim from
+      camera-zoom-slider.js, used for the preset-angle transitions
+      (that slider's own animateTo() equivalent).
+    - The same "reuse, don't reinvent" spirit for controls: Pointer
+      Events for drag (mouse+touch+pen in one path), same as every
+      drag interaction elsewhere in this repo — chosen for the exact
+      same reason (unified handling, no separate touch code path).
+
+  THREE.js: pinned CDN build (r128, cdnjs), classic UMD script — no
+  build step, no ES module loading (works from file:// too, not just
+  a static server), matching this repo's "no package.json/build
+  tooling" constraint everywhere else.
+
+  Camera model: a fixed look-at target near the character
+  (world Z depth axis, camera azimuth always 0 — camera looks straight
+  down -Z toward the scene, never yaws). This keeps the perspective a
+  clean ONE-POINT setup: every world-Z-parallel edge (sidewalk edges,
+  building sides) shares a single vanishing point, which sits on the
+  horizon line at horizontal screen-center. Deliberately simpler than
+  a full free-orbit / 2-point setup — that's exactly the kind of
+  richer next step the real spec explicitly defers past this round
+  (see "explicitly out of scope": no free-drag VP construction tool
+  yet). Noted plainly in the build report, not hidden.
+
+  Grid overlay math: every value drawn (horizon line, vanishing point,
+  the two receding sidewalk-edge guide lines) is computed fresh each
+  frame from the THREE.Camera's own real projection matrix via
+  Vector3.project(camera) — not a hand-rolled approximation, not a
+  static decorative graphic. That's the part of this prototype most
+  worth getting right per the spec, so it's built on the engine's own
+  math rather than reimplementing perspective by hand.
+-->
+
+<style>
+  :root{
+    --ink:#1c1a22;
+    --accent:#2d5fa8;
+    --accent-deep:#1f4076;
+    --paper:#faf8f5;
+    --grid-line:#e0a84b;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;overflow:hidden;background:#0b0f14;}
+  body{font-family:'Work Sans',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent;}
+
+  #scene-canvas{position:fixed;inset:0;display:block;touch-action:none;cursor:grab;}
+  #scene-canvas.dragging{cursor:grabbing;}
+  #grid-overlay{position:fixed;inset:0;pointer-events:none;}
+
+  #proto-badge{
+    position:fixed;top:14px;left:14px;z-index:20;
+    background:rgba(28,26,34,.55);color:#fff;font-size:10.5px;font-weight:700;
+    letter-spacing:.4px;padding:6px 11px;border-radius:999px;
+    backdrop-filter:blur(4px);
+  }
+
+  #hud{
+    position:fixed;top:14px;right:14px;z-index:20;
+    background:rgba(28,26,34,.6);backdrop-filter:blur(6px);
+    border-radius:14px;padding:12px 16px;color:#fff;text-align:right;
+    font-variant-numeric:tabular-nums;
+  }
+  #hud .hud-shot{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:.2px;}
+  #hud .hud-angle{font-size:11.5px;color:rgba(255,255,255,.72);margin-top:2px;font-weight:600;}
+
+  #controls{
+    position:fixed;left:0;right:0;bottom:16px;z-index:20;
+    display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:0 14px;
+  }
+  .angle-btn, .grid-toggle-btn{
+    font-family:'Work Sans',sans-serif;font-weight:700;font-size:12.5px;
+    padding:10px 16px;border-radius:999px;cursor:pointer;
+    border:1.5px solid rgba(255,255,255,.35);background:rgba(28,26,34,.55);
+    color:#fff;backdrop-filter:blur(6px);transition:background .15s,border-color .15s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .angle-btn:hover, .grid-toggle-btn:hover{background:rgba(45,95,168,.55);}
+  .angle-btn.active{background:var(--accent);border-color:var(--accent-deep);}
+  .grid-toggle-btn.active{background:var(--grid-line);border-color:#b5822f;color:#1c1a22;}
+
+  #hint{
+    position:fixed;left:0;right:0;top:14px;z-index:19;text-align:center;
+    color:rgba(255,255,255,.55);font-size:11px;font-weight:600;letter-spacing:.2px;
+    pointer-events:none;
+  }
+
+  @media (max-width:480px){
+    #hud{top:auto;bottom:78px;right:14px;text-align:right;}
+    #hint{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scene-canvas"></canvas>
+<canvas id="grid-overlay"></canvas>
+
+<div id="proto-badge">🧪 3D Camera Explorer · Prototype</div>
+<div id="hint">Drag or scroll to dolly · Tap a button to change angle</div>
+
+<div id="hud">
+  <div class="hud-shot" id="hud-shot">Wide / Full Shot</div>
+  <div class="hud-angle" id="hud-angle">Eye Level</div>
+</div>
+
+<div id="controls">
+  <button class="angle-btn" data-angle="low">↙ Low Angle</button>
+  <button class="angle-btn active" data-angle="eye">— Eye Level</button>
+  <button class="angle-btn" data-angle="high">↗ High Angle</button>
+  <button class="grid-toggle-btn active" id="grid-toggle">▦ Perspective Grid</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     REUSED FROM UNIT 01 — exact easing + shot-size bucketing
+  ============================================================ */
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+  function clamp01(n) { return Math.max(0, Math.min(1, n)); }
+
+  function shotSizeLabel(t) {
+    if (t < 0.125) return 'Extreme Close-Up';
+    if (t < 0.375) return 'Close-Up';
+    if (t < 0.625) return 'Medium Shot';
+    if (t < 0.875) return 'Wide / Full Shot';
+    return 'Extreme Wide Shot';
+  }
+
+  const ANGLE_LABELS = { eye: 'Eye Level', high: 'High Angle', low: 'Low Angle' };
+  // Elevation in radians above the horizontal plane through the look-at
+  // target. Positive = camera above target (looking down = high angle).
+  const ANGLE_PHI = { eye: 0, high: 0.5, low: -0.30 };
+
+  /* ============================================================
+     THREE.js SETUP
+  ============================================================ */
+  const canvas = document.getElementById('scene-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // Without tone mapping, ambient + directional light summed on a
+  // light beige surface (the ground) clips straight to flat white —
+  // confirmed live via screenshot, not assumed. ACES rolls off
+  // overexposure instead of hard-clipping.
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xdbe4ee);
+  // No fog: tried it first (near 20 / far 55), but at the actual dolly
+  // range this used (camera up to ~30 units out, more at high angle
+  // pitch) it fogged out the building almost entirely at Wide/Extreme
+  // Wide and produced a visibly curved false "horizon" where the fog
+  // falloff intersected the flat ground plane — confirmed live via
+  // screenshots, not just theorized. Simpler and more reliable to skip
+  // atmospheric fog for this round than re-tune it per angle/distance.
+
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+  scene.add(ambient);
+  const sun = new THREE.DirectionalLight(0xfff4e0, 0.75);
+  sun.position.set(-8, 18, -6);
+  scene.add(sun);
+  // Soft fill from near the camera side so the character doesn't read
+  // as a harsh single-lit gradient blob at close dolly range.
+  const fill = new THREE.DirectionalLight(0xe8eefc, 0.35);
+  fill.position.set(2, 6, -20);
+  scene.add(fill);
+
+  /* ============================================================
+     SCENE CONTENT — simple primitives, minimal FEI palette.
+     Z increases "into" the scene: character near the camera,
+     lamp + tree midground, building far background.
+  ============================================================ */
+  const PALETTE = {
+    ground: 0xe4dccb,
+    sidewalk: 0xcfc6b0,
+    building: 0x8a95a8,
+    buildingRoof: 0x6c7793,
+    window: 0x3a4658,
+    trunk: 0x8a6a4a,
+    canopy: 0x6fa07a,
+    lampPole: 0x4a5058,
+    lampHead: 0xf0d98c,
+    charTorso: 0x2d5fa8,
+    charHead: 0xf1d9b8,
+    charLimb: 0x3c4657
+  };
+
+  function box(w, h, d, color) {
+    return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: color, roughness: 0.9 }));
+  }
+  function cyl(rTop, rBottom, h, color, segments) {
+    return new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBottom, h, segments || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function cone(r, h, color) {
+    return new THREE.Mesh(new THREE.ConeGeometry(r, h, 14), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function sphere(r, color) {
+    return new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
+  }
+
+  // Ground
+  const ground = box(50, 0.3, 60, PALETTE.ground);
+  ground.position.set(0, -0.15, 24);
+  scene.add(ground);
+
+  // Sidewalk edges (also the two guide lines the grid overlay traces
+  // to the vanishing point — real geometry, not decorative).
+  const SIDEWALK_X = 6.5;
+  const SIDEWALK_NEAR_Z = -3;
+  const SIDEWALK_FAR_Z = 46;
+  [-1, 1].forEach((side) => {
+    const strip = box(0.9, 0.06, SIDEWALK_FAR_Z - SIDEWALK_NEAR_Z, PALETTE.sidewalk);
+    strip.position.set(side * SIDEWALK_X, 0.02, (SIDEWALK_NEAR_Z + SIDEWALK_FAR_Z) / 2);
+    scene.add(strip);
+  });
+
+  // Character — simple blocky humanoid, the near/foreground subject.
+  const character = new THREE.Group();
+  const torso = box(0.5, 0.72, 0.28, PALETTE.charTorso);
+  torso.position.y = 0.36 + 0.75;
+  // Extra segments (vs. the sphere() helper's default 16x12) — at
+  // Extreme Close-Up dolly range this sphere fills most of the frame,
+  // where the default segment count showed visible faceted banding.
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 28, 20), new THREE.MeshStandardMaterial({ color: PALETTE.charHead, roughness: 0.7 }));
+  head.position.y = 0.75 + 0.72 + 0.22;
+  const legL = cyl(0.09, 0.09, 0.75, PALETTE.charLimb);
+  legL.position.set(-0.13, 0.375, 0);
+  const legR = legL.clone(); legR.position.x = 0.13;
+  const armL = cyl(0.07, 0.07, 0.62, PALETTE.charLimb);
+  armL.position.set(-0.32, 0.75 + 0.4, 0);
+  armL.rotation.z = 0.12;
+  const armR = armL.clone(); armR.position.x = 0.32; armR.rotation.z = -0.12;
+  character.add(torso, head, legL, legR, armL, armR);
+  character.position.set(0, 0, 2.2);
+  scene.add(character);
+
+  // Lamp post — midground.
+  const lamp = new THREE.Group();
+  const pole = cyl(0.06, 0.08, 3.6, PALETTE.lampPole);
+  pole.position.y = 1.8;
+  const lampHead = box(0.32, 0.24, 0.32, PALETTE.lampHead);
+  lampHead.position.y = 3.6;
+  const lampGlow = new THREE.PointLight(0xffe9b0, 0.5, 6);
+  lampGlow.position.y = 3.6;
+  lamp.add(pole, lampHead, lampGlow);
+  lamp.position.set(-4.2, 0, 9);
+  scene.add(lamp);
+
+  // Tree — midground.
+  const tree = new THREE.Group();
+  const trunk = cyl(0.16, 0.22, 2.2, PALETTE.trunk);
+  trunk.position.y = 1.1;
+  const canopy = cone(1.15, 2.4, PALETTE.canopy);
+  canopy.position.y = 2.2 + 1.0;
+  tree.add(trunk, canopy);
+  tree.position.set(4.6, 0, 14);
+  scene.add(tree);
+
+  // Building — background.
+  const building = new THREE.Group();
+  const body = box(9, 12, 7, PALETTE.building);
+  body.position.y = 6;
+  const roof = box(9.6, 0.6, 7.6, PALETTE.buildingRoof);
+  roof.position.y = 12.3;
+  building.add(body, roof);
+  // A few simple window boxes, front face only, for depth cueing.
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 4; col++) {
+      const win = box(0.9, 1.1, 0.08, PALETTE.window);
+      win.position.set(-3.15 + col * 2.1, 3 + row * 3.2, 3.55);
+      building.add(win);
+    }
+  }
+  building.position.set(0, 0, 32);
+  scene.add(building);
+
+  /* ============================================================
+     CAMERA MODEL — dolly (distance, 0-1) + preset elevation angle.
+     Azimuth is always 0 (camera looks straight down -Z at the
+     target) — see the file-level note on why this keeps the
+     perspective a clean one-point setup for this round.
+  ============================================================ */
+  const MIN_DIST = 1.8;    // t=0 (Extreme Close-Up)
+  const MAX_DIST = 27;     // t=1 (Extreme Wide Shot)
+  // Aimed at the character's face/upper-chest height (not the torso
+  // midpoint) — at MIN_DIST this reads as a real close-up on the
+  // character, not the camera sitting inside their chest (an earlier
+  // pass at 0.95/1.35 did exactly that, caught via a live screenshot,
+  // not by inspection).
+  const TARGET = new THREE.Vector3(0, 1.6, 2.2);
+
+  let dollyT = 0.7;          // current 0-1 dolly value
+  let currentPhi = ANGLE_PHI.eye;
+  let currentAngleKey = 'eye';
+  let angleAnimId = null;
+
+  function updateCameraTransform() {
+    const dist = MIN_DIST + (MAX_DIST - MIN_DIST) * dollyT;
+    const y = Math.max(0.25, TARGET.y + dist * Math.sin(currentPhi));
+    const z = TARGET.z - dist * Math.cos(currentPhi);
+    camera.position.set(TARGET.x, y, z);
+    camera.lookAt(TARGET);
+  }
+  updateCameraTransform();
+
+  function animateAngleTo(targetKey) {
+    if (angleAnimId) cancelAnimationFrame(angleAnimId);
+    const fromPhi = currentPhi;
+    const toPhi = ANGLE_PHI[targetKey];
+    const durationMs = 900;
+    const start = performance.now();
+    function step(now) {
+      const t = clamp01((now - start) / durationMs);
+      currentPhi = fromPhi + (toPhi - fromPhi) * easeInOutCubic(t);
+      updateCameraTransform();
+      if (t < 1) {
+        angleAnimId = requestAnimationFrame(step);
+      } else {
+        angleAnimId = null;
+        currentPhi = toPhi;
+        updateCameraTransform();
+      }
+    }
+    angleAnimId = requestAnimationFrame(step);
+  }
+
+  /* ============================================================
+     INPUT — Pointer Events for drag (mouse+touch+pen in one path,
+     same approach as _shared/camera-zoom-slider.js), plus wheel/
+     trackpad scroll. Drag right / scroll down = zoom OUT (t → 1,
+     Extreme Wide) — matches the original slider's own handle-right
+     = 1 = Extreme Wide convention, not a new mapping.
+  ============================================================ */
+  const DRAG_SENSITIVITY = 1 / 480;
+  const SCROLL_SENSITIVITY = 0.00065;
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartT = 0;
+
+  canvas.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartT = dollyT;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    canvas.classList.add('dragging');
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const deltaT = (e.clientX - dragStartX) * DRAG_SENSITIVITY;
+    dollyT = clamp01(dragStartT + deltaT);
+    updateCameraTransform();
+    updateHud();
+  });
+  function endDrag() {
+    dragging = false;
+    canvas.classList.remove('dragging');
+  }
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    dollyT = clamp01(dollyT + e.deltaY * SCROLL_SENSITIVITY);
+    updateCameraTransform();
+    updateHud();
+  }, { passive: false });
+
+  document.querySelectorAll('.angle-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.angle;
+      if (key === currentAngleKey) return;
+      currentAngleKey = key;
+      document.querySelectorAll('.angle-btn').forEach((b) => b.classList.toggle('active', b === btn));
+      animateAngleTo(key);
+      updateHud();
+    });
+  });
+
+  let gridEnabled = true;
+  const gridToggleBtn = document.getElementById('grid-toggle');
+  gridToggleBtn.addEventListener('click', () => {
+    gridEnabled = !gridEnabled;
+    gridToggleBtn.classList.toggle('active', gridEnabled);
+  });
+
+  /* ============================================================
+     HUD
+  ============================================================ */
+  const hudShotEl = document.getElementById('hud-shot');
+  const hudAngleEl = document.getElementById('hud-angle');
+  function updateHud() {
+    hudShotEl.textContent = shotSizeLabel(dollyT);
+    hudAngleEl.textContent = ANGLE_LABELS[currentAngleKey];
+  }
+  updateHud();
+
+  /* ============================================================
+     PERSPECTIVE GRID OVERLAY — horizon line + vanishing point +
+     two real receding sidewalk-edge guide lines. Every coordinate
+     below comes from Vector3.project(camera) against the camera's
+     actual, current projection matrix — this is genuinely derived
+     from live camera state each frame, not a static graphic.
+  ============================================================ */
+  const gridCanvas = document.getElementById('grid-overlay');
+  const gridCtx = gridCanvas.getContext('2d');
+  const _forward = new THREE.Vector3();
+  const _farPoint = new THREE.Vector3();
+  const _ndc = new THREE.Vector3();
+
+  function worldToScreen(v3, width, height) {
+    _ndc.copy(v3).project(camera);
+    return {
+      x: (_ndc.x * 0.5 + 0.5) * width,
+      y: (1 - (_ndc.y * 0.5 + 0.5)) * height,
+      behind: _ndc.z > 1 // projected point is behind the camera
+    };
+  }
+
+  function drawGridOverlay() {
+    const w = gridCanvas.width, h = gridCanvas.height;
+    gridCtx.clearRect(0, 0, w, h);
+    if (!gridEnabled) return;
+
+    gridCtx.save();
+    gridCtx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    const cw = w / (window.devicePixelRatio || 1), ch = h / (window.devicePixelRatio || 1);
+
+    // Horizon: a point at infinity, at the camera's own height, along
+    // the camera's horizontal (yaw-only) facing direction. Where that
+    // projects to on screen IS the horizon line, by definition.
+    camera.getWorldDirection(_forward);
+    _forward.y = 0; _forward.normalize();
+    _farPoint.set(
+      camera.position.x + _forward.x * 1000,
+      camera.position.y,
+      camera.position.z + _forward.z * 1000
+    );
+    const horizon = worldToScreen(_farPoint, cw, ch);
+
+    gridCtx.strokeStyle = 'rgba(224,168,75,0.85)';
+    gridCtx.lineWidth = 1.5;
+    gridCtx.setLineDash([]);
+    gridCtx.beginPath();
+    gridCtx.moveTo(0, horizon.y);
+    gridCtx.lineTo(cw, horizon.y);
+    gridCtx.stroke();
+
+    // Vanishing point for the world's own Z-depth axis (sidewalk /
+    // building edges) — with azimuth always 0 this sits on the
+    // horizon at horizontal screen-center, but is computed live, not
+    // hardcoded to center — it will visibly leave center the moment
+    // this prototype ever gains yaw/orbit.
+    _farPoint.set(camera.position.x, camera.position.y, camera.position.z + 1000);
+    const vp = worldToScreen(_farPoint, cw, ch);
+
+    if (!vp.behind) {
+      gridCtx.fillStyle = '#e0a84b';
+      gridCtx.beginPath();
+      gridCtx.arc(vp.x, vp.y, 5, 0, Math.PI * 2);
+      gridCtx.fill();
+      gridCtx.strokeStyle = 'rgba(28,26,34,0.9)';
+      gridCtx.lineWidth = 1.5;
+      gridCtx.stroke();
+
+      // Real sidewalk-edge guide lines (actual world geometry, both
+      // ends projected) converging toward the vanishing point.
+      gridCtx.strokeStyle = 'rgba(224,168,75,0.55)';
+      gridCtx.lineWidth = 1.2;
+      [-1, 1].forEach((side) => {
+        const near = worldToScreen(new THREE.Vector3(side * SIDEWALK_X, 0.03, SIDEWALK_NEAR_Z), cw, ch);
+        const far = worldToScreen(new THREE.Vector3(side * SIDEWALK_X, 0.03, SIDEWALK_FAR_Z), cw, ch);
+        if (near.behind && far.behind) return;
+        gridCtx.beginPath();
+        gridCtx.moveTo(near.x, near.y);
+        gridCtx.lineTo(far.x, far.y);
+        gridCtx.stroke();
+      });
+    }
+
+    gridCtx.restore();
+  }
+
+  /* ============================================================
+     RESIZE + RENDER LOOP
+  ============================================================ */
+  function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    const dpr = window.devicePixelRatio || 1;
+    gridCanvas.width = w * dpr;
+    gridCanvas.height = h * dpr;
+    gridCanvas.style.width = w + 'px';
+    gridCanvas.style.height = h + 'px';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function renderLoop() {
+    renderer.render(scene, camera);
+    drawGridOverlay();
+    requestAnimationFrame(renderLoop);
+  }
+  renderLoop();
+})();
+</script>
+</body>
+</html>
