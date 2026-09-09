@@ -242,6 +242,28 @@
 (function () {
   'use strict';
 
+  // Defensive check per the v2.1 bug report's own checklist: if the
+  // Three.js CDN failed/was blocked, every line below that references
+  // THREE.* would throw synchronously and halt this whole script
+  // before it ever reaches goToStep(1) at the bottom — leaving the
+  // student looking at the raw, un-touched welcome splash with zero
+  // feedback and no way to know why (reproduced live by aborting the
+  // CDN request: confirmed "THREE is not defined" as an uncaught
+  // pageerror, script halted before any of Step 1's own code ran).
+  // Not confirmed as what Faye actually hit this round (she reported
+  // hearing narration start, which only happens if the script DID
+  // reach Step 1 — see the real fix in runStep1() instead) — this is
+  // a genuine separate failure mode the checklist asked to rule out,
+  // fixed regardless since a silent, unexplained stuck screen is bad
+  // either way.
+  if (typeof THREE === 'undefined') {
+    document.getElementById('caption-text').textContent =
+      "This prototype couldn't load (a required script failed to load — check your connection and reload).";
+    document.getElementById('welcome-panel').classList.remove('hidden');
+    document.getElementById('caption-bar').style.display = 'block';
+    return;
+  }
+
   /* ============================================================
      REUSED — exact easing from _shared/camera-zoom-slider.js
   ============================================================ */
@@ -633,10 +655,33 @@
     hideAdvance();
     welcomePanel.classList.remove('hidden');
     canvas.classList.remove('visible');
-    speakLine(
-      'A scene is everything around a story — where it happens, and how big it feels.',
-      () => showAdvance('Begin')
-    );
+    const line = 'A scene is everything around a story — where it happens, and how big it feels.';
+    captionEl.textContent = line;
+    // Step 1 runs on page load, before any user gesture has happened
+    // at all. Real browsers restrict/interrupt autoplaying
+    // speechSynthesis without a prior gesture — this produced exactly
+    // what Faye reported: audio that started, sounded garbled, and
+    // cut off, while the UI stayed gated behind that same unreliable
+    // completion for several seconds (reproduced live: 5.8s-12s across
+    // runs, with a real --autoplay-policy=user-gesture-required
+    // browser launch — Playwright's own default launch args are more
+    // permissive for test convenience, which is exactly why earlier
+    // headless verification never surfaced this). Fix: attempt
+    // narration here as best-effort only — it does not gate the UI.
+    // Every LATER narrated step (2 and 3) runs only after the student
+    // has already clicked Begin/Continue at least once, and that
+    // click is itself the real user gesture that unlocks normal
+    // speechSynthesis for the rest of the page's session — so those
+    // steps keep gating Continue on narration finishing, unchanged.
+    if (!muted && window.speechSynthesis && typeof SpeechSynthesisUtterance !== 'undefined') {
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(line);
+        utter.rate = 0.95;
+        window.speechSynthesis.speak(utter);
+      } catch (e) { /* best-effort only, UI doesn't depend on this */ }
+    }
+    setTimeout(() => showAdvance('Begin'), 600);
   }
 
   function runStep2() {
