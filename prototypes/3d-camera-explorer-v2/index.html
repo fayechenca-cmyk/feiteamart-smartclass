@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>3D Camera Explorer v2 — Guided Prototype</title>
+
+<!--
+  Scene Drawing Foundation · 3D Camera Explorer — Prototype v2 (Guided)
+  =================================================================
+  THROWAWAY PROTOTYPE. Not part of the live course, not linked from
+  any navigation, not wired into any STAGES dispatcher / IndexedDB /
+  sessionStorage / totalXP / fei_thinking_journal — no completion
+  concept at all. Zero dependency on prototype v1
+  (../3d-camera-explorer/), any real lesson file, or any _shared/
+  component. v1 is left in place, untouched, alongside this file.
+
+  WHY v2 EXISTS: Faye tested v1 (free-drag dolly + 3 preset angles)
+  and found it undirected — it required someone who already
+  understood shot composition to operate it meaningfully. v2 replaces
+  that with a guided, tap-to-advance, narrated walkthrough teaching
+  exactly one concept (Extreme Wide Shot). Every camera move and scene
+  assembly happens automatically; the student's only input is tapping
+  "Continue" between steps, plus an optional small look-around once
+  the wide shot settles.
+
+  v1's free-drag dolly and 3 preset-angle buttons are NOT deleted —
+  see the "V1 CONTROLS — KEPT BUT DISABLED" block near the bottom of
+  the script, commented out, in case a later "explore after learning"
+  mode wants them.
+
+  REUSED FROM UNIT 01 / v1 (proven patterns, not reinvented):
+    - Three.js via a pinned CDN build (r128, cdnjs), classic UMD
+      script — no build step, same as v1 and the rest of this repo.
+    - The renderer/lighting setup v1 arrived at after two real bugs
+      caught via live screenshots there (fog washing out distant
+      geometry + a false curved "horizon"; ambient+directional light
+      summing past 1.0 with no tone mapping, clipping a light surface
+      to flat white): no fog, ACESFilmicToneMapping + sRGB output,
+      moderate light intensities. Copied forward here rather than
+      re-discovering the same two bugs.
+    - The exact easeInOutCubic easing from
+      _shared/camera-zoom-slider.js, reused for the camera dolly and
+      the look-around interpolation.
+    - The meet_term term-card's visual treatment (Space Grotesk,
+      weight 700, accent-deep color, opacity fade-in) for this
+      version's "EXTREME WIDE SHOT" label — adapted with a translucent
+      backing pill since it sits over a full-bleed 3D scene instead of
+      the real lesson's paper-colored page background, not a new
+      design language.
+    - demo_video's exact confirmed disclaimer line and "coming soon"
+      video-placeholder pattern, verbatim from Lessons 01-05.
+
+  NARRATION: window.speechSynthesis, no external service/API key/CDN.
+  Every narrated line is ALSO always backed by a fixed-duration
+  fallback timer (estimated from word count) racing the utterance's
+  own onend/onerror — so the flow advances correctly even if speech
+  never fires an end event (a real, observed risk in headless
+  browsers with no system voices installed) and even when the
+  mute toggle is on. See the build report for exactly what could and
+  couldn't be verified for speechSynthesis specifically in a headless
+  test.
+-->
+
+<style>
+  :root{
+    --ink:#1c1a22;
+    --ink-soft:rgba(28,26,34,.66);
+    --accent:#2d5fa8;
+    --accent-deep:#1f4076;
+    --gold:#d4a24e;
+    --paper:#faf8f5;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;overflow:hidden;background:#0b0f14;}
+  body{font-family:'Work Sans',-apple-system,BlinkMacSystemFont,sans-serif;-webkit-tap-highlight-color:transparent;}
+
+  #scene-canvas{position:fixed;inset:0;display:block;touch-action:none;opacity:0;transition:opacity .6s ease;}
+  #scene-canvas.visible{opacity:1;}
+  #scene-canvas.lookable{cursor:grab;}
+  #scene-canvas.lookable.dragging{cursor:grabbing;}
+
+  #proto-badge{
+    position:fixed;top:14px;left:14px;z-index:30;
+    background:rgba(28,26,34,.55);color:#fff;font-size:10.5px;font-weight:700;
+    letter-spacing:.4px;padding:6px 11px;border-radius:999px;backdrop-filter:blur(4px);
+  }
+
+  /* ---------- Persistent narration controls (mute / replay) ---------- */
+  #narration-controls{
+    position:fixed;top:14px;right:14px;z-index:30;display:flex;gap:8px;
+  }
+  .nc-btn{
+    width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);
+    background:rgba(28,26,34,.55);color:#fff;font-size:15px;cursor:pointer;
+    backdrop-filter:blur(6px);transition:background .15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .nc-btn:hover{background:rgba(45,95,168,.55);}
+  .nc-btn.active{background:var(--accent);border-color:var(--accent-deep);}
+
+  /* ---------- Step 1: welcome (CSS-only, no 3D needed yet) ---------- */
+  #welcome-panel{
+    position:fixed;inset:0;z-index:25;pointer-events:none;
+    background:linear-gradient(160deg,#eef2fb 0%,#dbe4ee 55%,#c9d7e8 100%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:0 28px;transition:opacity .5s ease;
+  }
+  /* pointer-events:none unconditionally — this panel is purely
+     decorative (no interactive elements of its own), and needs to
+     let clicks through to the shared #caption-bar's Begin button
+     underneath, which sits at a lower z-index. Without this, the
+     panel's own stacking (needed so its background paints over the
+     3D canvas while it's up) silently ate every click meant for that
+     button — caught live via Playwright, not by inspection. */
+  #welcome-panel.hidden{opacity:0;}
+  .welcome-kicker{font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+  .welcome-orb{
+    width:64px;height:64px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#fff 0%,var(--accent) 70%);
+    margin-bottom:22px;animation:orbBreathe 3s ease-in-out infinite;
+  }
+  @keyframes orbBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+
+  /* ---------- Term label (step 2) ---------- */
+  #term-label{
+    position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:22;
+    text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.5rem;
+    color:var(--accent-deep);background:rgba(250,248,245,.88);
+    padding:8px 22px;border-radius:999px;opacity:0;transition:opacity .6s ease;
+    pointer-events:none;letter-spacing:.5px;
+  }
+  #term-label.show{opacity:1;}
+
+  /* ---------- Caption + advance button (steps 1-3 share this bar) ---------- */
+  #caption-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:24;
+    padding:26px 20px 34px;text-align:center;
+    background:linear-gradient(0deg,rgba(11,15,20,.72) 0%,rgba(11,15,20,0) 100%);
+  }
+  #caption-text{
+    color:#fff;font-size:17px;font-weight:600;line-height:1.5;max-width:560px;
+    margin:0 auto 18px;min-height:1.5em;text-shadow:0 1px 6px rgba(0,0,0,.35);
+  }
+  .advance-btn{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+    padding:12px 30px;border-radius:999px;border:none;cursor:pointer;
+    background:var(--gold);color:var(--ink);opacity:0;pointer-events:none;
+    transform:translateY(8px);transition:opacity .35s ease,transform .35s ease;
+  }
+  .advance-btn.ready{opacity:1;pointer-events:auto;transform:translateY(0);}
+  .advance-btn:active{transform:scale(.96);}
+
+  /* ---------- Steps 4 & 5: flat overlay panels ---------- */
+  .step-panel{
+    position:fixed;inset:0;z-index:26;background:rgba(20,22,28,.55);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .step-panel.active{display:flex;}
+  .step-card{
+    background:var(--paper);border-radius:20px;padding:30px 26px;max-width:440px;width:100%;
+    text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.3);
+  }
+  .step-card .kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px;}
+  .step-card h2{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;margin:0 0 12px;color:var(--accent-deep);}
+  .step-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px;}
+  .video-embed-wrap{margin:14px 0 16px;border-radius:12px;overflow:hidden;}
+  .video-placeholder-box{
+    position:relative;padding-top:56.25%;background:linear-gradient(135deg,var(--accent),var(--accent-deep));
+    border-radius:12px;overflow:hidden;
+  }
+  .video-placeholder-box .vp-inner{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;
+  }
+  .disclaimer-line{font-size:11.5px;font-style:italic;color:rgba(28,26,34,.55);line-height:1.5;margin-top:6px;}
+  .step-card .advance-btn{position:static;opacity:1;pointer-events:auto;transform:none;margin-top:6px;}
+  .step-card .ghost-btn{
+    font-family:'Work Sans',sans-serif;font-weight:700;font-size:12.5px;margin-top:10px;
+    background:none;border:1.5px solid var(--line,rgba(28,26,34,.2));color:var(--ink-soft);
+    padding:9px 18px;border-radius:999px;cursor:pointer;
+  }
+
+  @media (max-width:480px){
+    #caption-text{font-size:15px;}
+    #term-label{font-size:1.2rem;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scene-canvas"></canvas>
+
+<div id="proto-badge">🧪 3D Camera Explorer v2 · Guided</div>
+
+<div id="narration-controls">
+  <button class="nc-btn" id="mute-btn" title="Mute narration">🔊</button>
+  <button class="nc-btn" id="replay-btn" title="Replay this step">↺</button>
+</div>
+
+<div id="term-label">EXTREME WIDE SHOT</div>
+
+<!-- Step 1: welcome -->
+<div id="welcome-panel">
+  <div class="welcome-kicker">Scene Drawing Foundation</div>
+  <div class="welcome-orb"></div>
+</div>
+
+<!-- Steps 1-3 shared caption bar -->
+<div id="caption-bar">
+  <div id="caption-text"></div>
+  <button class="advance-btn" id="advance-btn">Begin</button>
+</div>
+
+<!-- Step 4: teacher demo placeholder -->
+<div class="step-panel" id="panel-step4">
+  <div class="step-card">
+    <div class="kicker">Make</div>
+    <h2>Let's Draw Together</h2>
+    <div class="video-placeholder-box">
+      <div class="vp-inner">
+        <div style="font-size:2.2rem;">🎥</div>
+        <div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+      </div>
+    </div>
+    <p class="disclaimer-line">This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.</p>
+    <button class="advance-btn ready" id="step4-continue-btn">Continue</button>
+  </div>
+</div>
+
+<!-- Step 5: closing placeholder -->
+<div class="step-panel" id="panel-step5">
+  <div class="step-card">
+    <div class="kicker">Reflect</div>
+    <h2>Ready to draw your own scene?</h2>
+    <p>This prototype ends here — the real Draw It step already works in Lesson 01.</p>
+    <button class="ghost-btn" id="restart-btn">↺ Restart from the beginning</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     REUSED — exact easing from _shared/camera-zoom-slider.js
+  ============================================================ */
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function clamp01(n) { return Math.max(0, Math.min(1, n)); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  /* ============================================================
+     NARRATION — window.speechSynthesis, always backed by a
+     duration-estimate fallback timer so the flow never stalls
+     waiting on an event that may not fire (no system voices,
+     muted, or speechSynthesis unavailable/blocked).
+  ============================================================ */
+  let muted = false;
+  const muteBtn = document.getElementById('mute-btn');
+  const captionEl = document.getElementById('caption-text');
+
+  function estimateDurationMs(text) {
+    const words = text.trim().split(/\s+/).length;
+    return Math.max(1400, words * 420 + 500);
+  }
+
+  let activeSpeechToken = 0;
+  function speakLine(text, onDone) {
+    captionEl.textContent = text;
+    const myToken = ++activeSpeechToken;
+    const estimate = estimateDurationMs(text);
+    let done = false;
+    let safetyTimer = null;
+    function finish() {
+      if (done || myToken !== activeSpeechToken) return;
+      done = true;
+      clearTimeout(safetyTimer);
+      onDone();
+    }
+    // Safety net: fires regardless of whether speechSynthesis ever
+    // calls onend/onerror. 1.6x the estimate gives real TTS voices
+    // (which can run slower than the estimate) room to finish
+    // naturally first.
+    safetyTimer = setTimeout(finish, estimate * 1.6);
+
+    if (muted || !window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
+      setTimeout(finish, estimate);
+      return;
+    }
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 0.95;
+      utter.onend = finish;
+      utter.onerror = finish;
+      window.speechSynthesis.speak(utter);
+    } catch (e) {
+      setTimeout(finish, estimate);
+    }
+  }
+
+  function speakSequence(lines, onAllDone) {
+    let i = 0;
+    function next() {
+      if (i >= lines.length) { onAllDone && onAllDone(); return; }
+      speakLine(lines[i++], next);
+    }
+    next();
+  }
+
+  muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    muteBtn.textContent = muted ? '🔇' : '🔊';
+    muteBtn.classList.toggle('active', muted);
+    if (muted && window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+
+  /* ============================================================
+     THREE.js SETUP — same proven pattern as prototype v1 (no fog,
+     ACES tone mapping + sRGB output, moderate light intensities).
+  ============================================================ */
+  const canvas = document.getElementById('scene-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xdce8f2);
+
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 300);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+  scene.add(ambient);
+  const sun = new THREE.DirectionalLight(0xfff4e0, 0.8);
+  sun.position.set(-10, 22, -8);
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xe8eefc, 0.3);
+  fill.position.set(6, 8, 18);
+  scene.add(fill);
+
+  function box(w, h, d, color) {
+    return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: color, roughness: 0.9 }));
+  }
+  function cyl(rTop, rBottom, h, color, segments) {
+    return new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBottom, h, segments || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function cone(r, h, color, segments) {
+    return new THREE.Mesh(new THREE.ConeGeometry(r, h, segments || 16), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function sphereMesh(r, color, wSeg, hSeg) {
+    return new THREE.Mesh(new THREE.SphereGeometry(r, wSeg || 16, hSeg || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
+  }
+
+  /* ============================================================
+     SCENE CONTENT — mountains + lake + character (step 2), plus
+     snow trees + plane silhouette added for the step-3 story.
+     Simple primitives, minimal palette — no photoreal assets.
+  ============================================================ */
+  const PALETTE = {
+    ground: 0xdce4d0,
+    lake: 0xa9cfe0,
+    mountainNear: 0x7d92a8,
+    mountainFar: 0xaebcd0,
+    snowTree: 0xe7f0e6,
+    trunk: 0x8a6a4a,
+    planeBody: 0x3a4658,
+    charTorso: 0x2d5fa8,
+    charHead: 0xf1d9b8,
+    charLimb: 0x3c4657
+  };
+
+  const worldGroup = new THREE.Group();
+  scene.add(worldGroup);
+
+  const ground = box(90, 0.3, 90, PALETTE.ground);
+  ground.position.set(0, -0.15, 10);
+  worldGroup.add(ground);
+
+  const lake = new THREE.Mesh(
+    new THREE.CircleGeometry(6.5, 32),
+    new THREE.MeshStandardMaterial({ color: PALETTE.lake, roughness: 0.35, metalness: 0.1 })
+  );
+  lake.rotation.x = -Math.PI / 2;
+  // y=0.12, clearly above the ground's own top face (y=0) — the
+  // original 0.02 gap was close enough to cause visible z-fighting
+  // (a flickering white sliver where the two nearly-coplanar surfaces
+  // fought for which rendered on top), caught live via screenshot.
+  // z=9 (moved in from an original 22) — at the settled Extreme Wide
+  // framing (eye-level, ground-height objects compress hard toward
+  // the horizon the farther back they sit), z=22 put it close enough
+  // to the horizon line to read as barely a sliver. z=9 keeps it a
+  // clearly legible midground shape between the character and the
+  // mountains, also caught live via screenshot, not assumed correct
+  // from the coordinates alone.
+  lake.position.set(3.5, 0.12, 7);
+  worldGroup.add(lake);
+
+  // Character — same simple humanoid shape as v1, small in this
+  // wide scene on purpose ("how small our character feels").
+  const character = new THREE.Group();
+  const torso = box(0.5, 0.72, 0.28, PALETTE.charTorso);
+  torso.position.y = 0.36 + 0.75;
+  const head = sphereMesh(0.22, PALETTE.charHead, 24, 18);
+  head.position.y = 0.75 + 0.72 + 0.22;
+  const legL = cyl(0.09, 0.09, 0.75, PALETTE.charLimb);
+  legL.position.set(-0.13, 0.375, 0);
+  const legR = legL.clone(); legR.position.x = 0.13;
+  const armL = cyl(0.07, 0.07, 0.62, PALETTE.charLimb);
+  armL.position.set(-0.32, 0.75 + 0.4, 0);
+  armL.rotation.z = 0.12;
+  const armR = armL.clone(); armR.position.x = 0.32; armR.rotation.z = -0.12;
+  character.add(torso, head, legL, legR, armL, armR);
+  character.position.set(0, 0, 1.5);
+  worldGroup.add(character);
+
+  // Mountains — layered near/far for a little atmospheric depth cue
+  // (no fog this round, per v1's lesson — desaturated far color instead).
+  const mountainDefs = [
+    { x: -14, z: 46, r: 9, h: 16, color: PALETTE.mountainNear },
+    { x: 4, z: 52, r: 11, h: 19, color: PALETTE.mountainFar },
+    { x: 20, z: 44, r: 8, h: 14, color: PALETTE.mountainNear },
+    { x: -3, z: 60, r: 13, h: 22, color: PALETTE.mountainFar }
+  ];
+  const mountains = mountainDefs.map((def) => {
+    const m = cone(def.r, def.h, def.color, 8);
+    m.position.set(def.x, def.h / 2, def.z);
+    m.userData.finalY = def.h / 2;
+    m.visible = false;
+    worldGroup.add(m);
+    return m;
+  });
+
+  // Snow-dusted trees — added during Step 3's story assembly, hidden
+  // until then.
+  const snowTreeDefs = [
+    { x: -8, z: 14 }, { x: -11, z: 20 }, { x: 12, z: 16 },
+    { x: 16, z: 24 }, { x: -5, z: 30 }, { x: 9, z: 10 }
+  ];
+  const snowTrees = snowTreeDefs.map((def) => {
+    const g = new THREE.Group();
+    const trunk = cyl(0.14, 0.18, 1.6, PALETTE.trunk);
+    trunk.position.y = 0.8;
+    const canopy = cone(0.85, 1.9, PALETTE.snowTree, 10);
+    canopy.position.y = 1.6 + 0.8;
+    g.add(trunk, canopy);
+    g.position.set(def.x, 0, def.z);
+    g.userData.finalY = 0;
+    g.visible = false;
+    worldGroup.add(g);
+    return g;
+  });
+
+  // Plane silhouette — a simple flattened shape that flies across the
+  // sky during Step 3.
+  const plane = new THREE.Group();
+  const planeBody = box(1.6, 0.14, 0.22, PALETTE.planeBody);
+  const planeWing = box(0.28, 0.06, 1.1, PALETTE.planeBody);
+  planeWing.position.x = 0.1;
+  plane.add(planeBody, planeWing);
+  plane.visible = false;
+  scene.add(plane);
+
+  /* ============================================================
+     CAMERA MODEL — same 0-1 dolly convention as Unit 01 / v1
+     (0 = Extreme Close-Up ... 1 = Extreme Wide Shot), used here only
+     to animate from a closer starting point to the settled Extreme
+     Wide framing. No preset-angle switching in this version — see
+     the "V1 CONTROLS" block near the bottom, kept but disabled.
+  ============================================================ */
+  const MIN_DIST = 7;    // starting dolly-in point for Step 2's reveal
+  const MAX_DIST = 34;   // settled Extreme Wide Shot (t = 1)
+  const TARGET = new THREE.Vector3(0, 1.4, 4);
+  let dollyT = 0.42;
+  let settled = false;
+
+  // A level (0-pitch), human-eye-height camera looking far into the
+  // distance sees ground-level surfaces almost perfectly edge-on — a
+  // flat lake at y≈0 projects to a near-invisible sliver regardless of
+  // distance, since it has no vertical extent to catch a level view
+  // (unlike the character, which has real height). Confirmed live —
+  // moving the lake around didn't fix it; isolating the lake mesh
+  // alone (camera pointed straight down at it) confirmed the mesh
+  // itself, color and shape, was always correct. Fix: as the camera
+  // pulls back it also RISES and looks down slightly, like a real
+  // establishing shot (a crane-up, not a fixed-height dolly) — this
+  // both reveals the ground plane genuinely and reads as more
+  // "epic/establishing" than a dead-level horizon the whole way out.
+  const RISE_AMOUNT = 5.5;
+  const LOOK_DOWN_AMOUNT = 5.5;
+
+  // Small "look around" (fixed position, limited yaw/pitch) — enabled
+  // only once Step 2 settles. Not a free-fly orbit.
+  let lookYaw = 0, lookPitch = 0;
+  const LOOK_YAW_MAX = 0.3, LOOK_PITCH_MAX = 0.18;
+
+  function applyCameraTransform() {
+    const dist = MIN_DIST + (MAX_DIST - MIN_DIST) * dollyT;
+    const camY = TARGET.y + dollyT * RISE_AMOUNT;
+    camera.position.set(TARGET.x, camY, TARGET.z - dist);
+    const baseLookY = TARGET.y - dollyT * LOOK_DOWN_AMOUNT;
+    // lookAt a point slightly offset from TARGET by the look-around
+    // angles, at a fixed small radius — keeps the effect subtle
+    // regardless of dolly distance.
+    const lookRadius = 3;
+    camera.lookAt(
+      TARGET.x + Math.sin(lookYaw) * lookRadius,
+      baseLookY + Math.sin(lookPitch) * lookRadius,
+      TARGET.z + Math.cos(lookYaw) * lookRadius
+    );
+  }
+  applyCameraTransform();
+
+  let dollyAnimId = null;
+  function animateReveal(durationMs, onDone) {
+    if (dollyAnimId) cancelAnimationFrame(dollyAnimId);
+    const start = performance.now();
+    function step(now) {
+      const t = clamp01((now - start) / durationMs);
+      dollyT = lerp(0.42, 1, easeInOutCubic(t));
+      applyCameraTransform();
+      if (t < 1) {
+        dollyAnimId = requestAnimationFrame(step);
+      } else {
+        dollyAnimId = null;
+        settled = true;
+        if (onDone) onDone();
+      }
+    }
+    dollyAnimId = requestAnimationFrame(step);
+  }
+
+  // Drop-in "assemble" animation for scene objects — starts each
+  // object above its resting position and eases it down, staggered
+  // per object for a cascading feel.
+  function dropIn(obj, delayMs, durationMs) {
+    const finalY = obj.userData.finalY || 0;
+    obj.position.y = finalY + 7;
+    obj.visible = true;
+    setTimeout(() => {
+      const start = performance.now();
+      function step(now) {
+        const t = clamp01((now - start) / durationMs);
+        obj.position.y = lerp(finalY + 7, finalY, easeOutCubic(t));
+        if (t < 1) requestAnimationFrame(step); else obj.position.y = finalY;
+      }
+      requestAnimationFrame(step);
+    }, delayMs);
+  }
+
+  function flyPlaneAcross(durationMs, onDone) {
+    plane.visible = true;
+    plane.position.set(-26, 15, 40);
+    plane.rotation.y = -0.15;
+    const start = performance.now();
+    function step(now) {
+      const t = clamp01((now - start) / durationMs);
+      plane.position.x = lerp(-26, 26, t);
+      plane.position.y = 15 + Math.sin(t * Math.PI) * 1.5;
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else if (onDone) {
+        onDone();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ============================================================
+     LOOK-AROUND INPUT — enabled only once Step 2 settles.
+  ============================================================ */
+  let lookEnabled = false;
+  let dragging = false, dragStartX = 0, dragStartY = 0, dragStartYaw = 0, dragStartPitch = 0;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!lookEnabled) return;
+    dragging = true;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragStartYaw = lookYaw; dragStartPitch = lookPitch;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    canvas.classList.add('dragging');
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    lookYaw = clamp(dragStartYaw + (e.clientX - dragStartX) * -0.0025, -LOOK_YAW_MAX, LOOK_YAW_MAX);
+    lookPitch = clamp(dragStartPitch + (e.clientY - dragStartY) * -0.0025, -LOOK_PITCH_MAX, LOOK_PITCH_MAX);
+    applyCameraTransform();
+  });
+  function endDrag() { dragging = false; canvas.classList.remove('dragging'); }
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  function setLookEnabled(on) {
+    lookEnabled = on;
+    canvas.classList.toggle('lookable', on);
+  }
+
+  /* ============================================================
+     STEP MACHINE
+  ============================================================ */
+  const welcomePanel = document.getElementById('welcome-panel');
+  const advanceBtn = document.getElementById('advance-btn');
+  const termLabel = document.getElementById('term-label');
+  const panelStep4 = document.getElementById('panel-step4');
+  const panelStep5 = document.getElementById('panel-step5');
+  const replayBtn = document.getElementById('replay-btn');
+
+  let currentStep = 1;
+
+  function showAdvance(label) {
+    advanceBtn.textContent = label;
+    advanceBtn.classList.add('ready');
+  }
+  function hideAdvance() {
+    advanceBtn.classList.remove('ready');
+  }
+
+  function resetSceneForReplay() {
+    dollyT = 0.42; settled = false; lookYaw = 0; lookPitch = 0;
+    applyCameraTransform();
+    mountains.forEach((m) => { m.visible = false; });
+    snowTrees.forEach((t) => { t.visible = false; });
+    plane.visible = false;
+    termLabel.classList.remove('show');
+    setLookEnabled(false);
+  }
+
+  function runStep1() {
+    hideAdvance();
+    welcomePanel.classList.remove('hidden');
+    canvas.classList.remove('visible');
+    speakLine(
+      'A scene is everything around a story — where it happens, and how big it feels.',
+      () => showAdvance('Begin')
+    );
+  }
+
+  function runStep2() {
+    hideAdvance();
+    welcomePanel.classList.add('hidden');
+    canvas.classList.add('visible');
+    resetSceneForReplay();
+    canvas.classList.remove('lookable');
+
+    // Camera reveal + environment assembly run concurrently.
+    animateReveal(4200, () => {
+      setLookEnabled(true);
+    });
+    mountains.forEach((m, i) => dropIn(m, 300 + i * 260, 1400));
+
+    speakSequence(
+      [
+        'This is an Extreme Wide Shot.',
+        'We use it to show a huge world — and how small our character feels inside it.'
+      ],
+      () => showAdvance('Continue')
+    );
+    // Term label syncs to the second (explanatory) line, not the
+    // very start — it names the shot right as it's being explained.
+    setTimeout(() => termLabel.classList.add('show'), estimateDurationMs('This is an Extreme Wide Shot.') + 150);
+  }
+
+  function runStep3() {
+    hideAdvance();
+    snowTrees.forEach((t) => { t.visible = false; });
+    plane.visible = false;
+
+    speakLine('This winter, my best friend flew far away.', () => {
+      speakLine(
+        'A scene like this helps us feel how big the world is when someone we love goes far away.',
+        () => showAdvance('Continue')
+      );
+    });
+    snowTrees.forEach((t, i) => dropIn(t, 200 + i * 180, 1100));
+    setTimeout(() => flyPlaneAcross(3400), 500);
+  }
+
+  function runStep4() {
+    hideAdvance();
+    canvas.classList.remove('lookable');
+    termLabel.classList.remove('show');
+    captionEl.textContent = '';
+    panelStep4.classList.add('active');
+  }
+
+  function runStep5() {
+    panelStep4.classList.remove('active');
+    panelStep5.classList.add('active');
+  }
+
+  function goToStep(n) {
+    currentStep = n;
+    panelStep4.classList.remove('active');
+    panelStep5.classList.remove('active');
+    if (n === 1) runStep1();
+    else if (n === 2) runStep2();
+    else if (n === 3) runStep3();
+    else if (n === 4) runStep4();
+    else if (n === 5) runStep5();
+  }
+
+  advanceBtn.addEventListener('click', () => {
+    if (!advanceBtn.classList.contains('ready')) return;
+    goToStep(currentStep + 1);
+  });
+  document.getElementById('step4-continue-btn').addEventListener('click', () => goToStep(5));
+  document.getElementById('restart-btn').addEventListener('click', () => goToStep(1));
+
+  replayBtn.addEventListener('click', () => {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (currentStep <= 3) {
+      goToStep(currentStep);
+    } else if (currentStep === 4) {
+      runStep4();
+    }
+  });
+
+  /* ============================================================
+     V1 CONTROLS — KEPT BUT DISABLED
+     v1's free-drag dolly (mouse/touch/wheel across the full 0-1
+     range) and its 3 preset-angle buttons (Eye Level / High / Low)
+     are intentionally NOT part of this guided version's flow. Left
+     here, commented out, in case a future "explore after learning"
+     mode wants to re-enable them once the guided walkthrough ends
+     (e.g. after Step 5). Not deleted, per the build spec.
+
+  const ANGLE_PHI = { eye: 0, high: 0.5, low: -0.30 };
+  const DRAG_SENSITIVITY = 1 / 480;
+  const SCROLL_SENSITIVITY = 0.00065;
+  let freeDollyDragging = false, freeDragStartX = 0, freeDragStartT = 0;
+  canvas.addEventListener('pointerdown', (e) => {
+    freeDollyDragging = true;
+    freeDragStartX = e.clientX;
+    freeDragStartT = dollyT;
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!freeDollyDragging) return;
+    const deltaT = (e.clientX - freeDragStartX) * DRAG_SENSITIVITY;
+    dollyT = clamp01(freeDragStartT + deltaT);
+    applyCameraTransform();
+  });
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    dollyT = clamp01(dollyT + e.deltaY * SCROLL_SENSITIVITY);
+    applyCameraTransform();
+  }, { passive: false });
+  // <div id="angle-controls">
+  //   <button data-angle="low">Low Angle</button>
+  //   <button data-angle="eye">Eye Level</button>
+  //   <button data-angle="high">High Angle</button>
+  // </div>
+  ============================================================ */
+
+  /* ============================================================
+     RESIZE + RENDER LOOP
+  ============================================================ */
+  function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function renderLoop() {
+    renderer.render(scene, camera);
+    requestAnimationFrame(renderLoop);
+  }
+  renderLoop();
+
+  /* ============================================================
+     START
+  ============================================================ */
+  goToStep(1);
+
+  // Exposed for live verification only (Playwright) — not part of the
+  // student-facing UI or behavior.
+  window.__proto = { goToStep, get currentStep() { return currentStep; }, get dollyT() { return dollyT; }, scene: scene, camera: camera, lake: lake, TARGET: TARGET };
+})();
+</script>
+</body>
+</html>
