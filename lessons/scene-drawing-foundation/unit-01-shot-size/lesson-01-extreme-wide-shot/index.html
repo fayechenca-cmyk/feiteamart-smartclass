@@ -4,32 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Extreme Wide Shot</title>
-<meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 01: Extreme Wide Shot — redesign prototype.">
+<meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 01: Extreme Wide Shot.">
 
 <!--
-  REDESIGN PROTOTYPE — Faye's "Learning Canvas" brief (2026-09-10).
-  Parallel to, and does NOT replace, ../lesson-01-extreme-wide-shot/.
-  Same id/courseId ('extreme-wide-shot') as the live lesson on purpose —
-  see lesson-data.js's own header note on why.
+  LIVE LESSON — the "Learning Canvas" redesign (built across 4 local
+  rounds against Faye's brief, first dated 2026-09-10), PROMOTED to
+  this real path on 2026-09-17, replacing the pre-redesign build,
+  which is archived (not deleted) at
+  ../_archive/lesson-01-extreme-wide-shot-original/. Built and
+  reviewed at a parallel lesson-01-extreme-wide-shot-v2/ path, which
+  no longer exists post-promotion — don't go looking for it.
+  Same id/courseId ('extreme-wide-shot') as the archived original on
+  purpose — see lesson-data.js's own header note on why; this keeps
+  completedLessons/badge data stable across the promotion even though
+  no real student progress exists yet to migrate.
 
-  WHAT THIS IS: a full-screen, low-chrome sequence of 8 learning
-  MOMENTS (watch / discover / connect / look / choose / draw / compare
-  / complete), data-driven off lesson-data.js's LESSON_DATA object so
-  the same shell can carry Lessons 02-26 later without rewriting this
-  file. Lessons 02-05 (old ../lesson-0{2..5}-*/) are untouched and stay
-  on the old STAGES pattern — this file supersedes that pattern for
-  Lesson 01 ONLY; migrating the others is a separate, later decision.
+  WHAT THIS IS: a full-screen, low-chrome sequence of 9 learning
+  MOMENTS (watch / discover / when-use / look-closer / choose-story /
+  guided-drawing / teacher-demo / compare / complete), data-driven off
+  lesson-data.js's LESSON_DATA object so the same shell can carry
+  Lessons 02-26 later without rewriting this file. Lessons 02-05 (old
+  ../lesson-0{2..5}-*/) are untouched and stay on the old STAGES
+  pattern — this file supersedes that pattern for Lesson 01 ONLY;
+  migrating the others is a separate, later decision.
 
   SCOPE NOTES (flagged, not silently assumed):
   - Step 6's drawing sequence is ONE shared progressive illustration,
     not three bespoke ones per story choice — no real per-story art
     exists yet. See lesson-data.js's drawing_steps comment.
-  - Step 4's reference resources and Step 7's student examples are
-    placeholders (no real licensed art / real student work wired in
+  - Step 4's reference resources, Step 7's student examples/community
+    gallery, and the 3 per-story teacher-demo videos are placeholders
+    (no real licensed art / real student work / real video wired in
     yet) — every card is clearly marked so a later pass can swap them
     in without touching this file's structure.
-  - Access control is deliberately NOT gated, matching the live
-    sibling lesson's own unresolved TODO on the free/paid rule.
+  - Access control is deliberately NOT gated, matching this lesson's
+    own unresolved TODO on the free/paid rule (carried over from the
+    archived original, still unresolved).
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1646,18 +1656,18 @@ function afterRenderGuidedDrawing(){
 
 /* ============================================================
    STEP 6b — "Try It Yourself" homework/artwork submission. Same
-   in-browser sketch-canvas + IndexedDB pattern already used by
-   lessons/scene-drawing-foundation/unit-01-shot-size/
-   lesson-01-extreme-wide-shot/index.html's draw_task (openDB /
-   compressCanvas / saveArtwork / listArtworks) and by the Kandinsky
-   lesson template — reused verbatim, not reinvented, per Faye's
-   explicit "don't invent a new storage mechanism" instruction. Own
-   DB name (fei_scene_drawing_extreme_wide_shot_v2_storage) — this is
-   a parallel prototype file (see file header), so it gets its own
-   isolated store rather than writing into the live lesson's real
-   student data.
+   in-browser sketch-canvas + IndexedDB pattern already used by the
+   pre-redesign version of this lesson (now archived at
+   _archive/lesson-01-extreme-wide-shot-original/) and by the
+   Kandinsky lesson template — reused verbatim, not reinvented, per
+   Faye's explicit "don't invent a new storage mechanism" instruction.
+   DB name dropped its "_v2_" suffix on promotion (2026-09-17) — this
+   is now the one live lesson, not a parallel prototype, so there's no
+   longer a separate live store to avoid colliding with. No real
+   student data existed under the old name to migrate (no real users
+   yet on this lesson).
 ============================================================ */
-const PRACTICE_DB_NAME = 'fei_scene_drawing_extreme_wide_shot_v2_storage';
+const PRACTICE_DB_NAME = 'fei_scene_drawing_extreme_wide_shot_storage';
 const PRACTICE_DB_VERSION = 1;
 const PRACTICE_STORE_NAME = 'artworks';
 const PRACTICE_MAX_EDGE = 1200;

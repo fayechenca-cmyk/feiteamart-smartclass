@@ -1,6 +1,12 @@
 /* ============================================================
- * Scene Drawing Foundation · Unit 01 · Lesson 01 (REDESIGN v2)
+ * Scene Drawing Foundation · Unit 01 · Lesson 01 — LIVE
  * Extreme Wide Shot — Show the World
+ *
+ * This is the "Learning Canvas" redesign, PROMOTED to the real live
+ * path on 2026-09-17 (built and reviewed across 4 local rounds at a
+ * parallel lesson-01-extreme-wide-shot-v2/ path first, which no
+ * longer exists). The pre-redesign original is archived, not
+ * deleted, at ../_archive/lesson-01-extreme-wide-shot-original/.
  *
  * Data-only. Presentation lives entirely in index.html's generic
  * step renderer, per the redesign brief's explicit "don't hardcode
@@ -12,12 +18,14 @@
  * student_examples / completion_check) so a future lesson can supply
  * the same shape without index.html changing.
  *
- * id/courseId are UNCHANGED from the live Lesson 01
- * (lesson-01-extreme-wide-shot/lesson-data.js) on purpose — this is
- * a parallel redesign of the SAME lesson, not a new one, so it stays
+ * id/courseId are UNCHANGED from the archived original on purpose —
+ * this is a redesign of the SAME lesson, not a new one, so it stays
  * compatible with the already-wired completedLessons entry and the
- * scene_drawing_unit_01 badge (core/course-badge-registry.js), and
- * so promoting this later doesn't orphan anyone's saved progress.
+ * scene_drawing_unit_01 badge (core/course-badge-registry.js). No
+ * real student progress existed under this id to orphan at promotion
+ * time (no real users yet), but the id stays stable regardless, per
+ * Faye's standing rule against renaming identifiers this system
+ * already keys data on.
  *
  * ROUND 2 (Faye's local-preview feedback) additions:
  *   - story_prompts.items[].sceneKey — index.html looks this up in a
