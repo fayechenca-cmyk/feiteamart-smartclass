@@ -302,8 +302,13 @@ button{font-family:inherit;}
 }
 .prompt-card:active{transform:scale(.98);}
 .prompt-card.revealed{border-color:var(--sb-accent);}
-.prompt-image{aspect-ratio:3/4;display:block;position:relative;background:var(--sb-paper);}
+/* aspect-ratio 4/3 (was 3/4 portrait) — round 7: switched to match the
+   real supplied illustrations' native landscape framing (496x370) now
+   that all 6 cards use them, instead of cropping a wide scene into a
+   portrait "poker card" frame. */
+.prompt-image{aspect-ratio:4/3;display:block;position:relative;background:var(--sb-paper);}
 .prompt-image svg{width:100%;height:100%;display:block;}
+.prompt-image img{width:100%;height:100%;display:block;object-fit:cover;}
 /* Quiet corner marks, in the spirit of a production panel's own
    corner notes — not literal "CUT 01 / 00:04" labels, just the same
    restrained camera-framing-tick language already used on Step 1's
@@ -1572,6 +1577,20 @@ const SCENE_ART = {
   newworld: `<svg viewBox="0 0 300 188" preserveAspectRatio="xMidYMid slice"><rect width="300" height="188" fill="#f2ede0"/><circle cx="220" cy="60" r="32" fill="#c9a15a" opacity=".3"/><circle cx="220" cy="60" r="32" fill="none" stroke="#3a352c" stroke-width="1.6" filter="url(#sbSketch)"/><g filter="url(#sbSketch)" fill="none" stroke="#3a352c" stroke-width="1.8" stroke-linecap="round"><path d="M0,150 Q50,110 100,140 Q160,95 210,135 Q260,105 300,140"/><path d="M0,170 Q60,150 130,168 Q200,148 300,166"/></g><circle cx="108" cy="160" r="3" fill="#3a352c"/><rect x="106" y="163" width="4" height="10" fill="#3a352c"/></svg>`,
   sunrise: `<svg viewBox="0 0 300 188" preserveAspectRatio="xMidYMid slice"><rect width="300" height="188" fill="#f2ede0"/><circle cx="150" cy="128" r="30" fill="#c98a5a" opacity=".5"/><circle cx="150" cy="128" r="30" fill="none" stroke="#3a352c" stroke-width="1.6" filter="url(#sbSketch)"/><g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1.6" opacity=".7"><line x1="150" y1="70" x2="150" y2="86"/><line x1="90" y1="128" x2="106" y2="128"/><line x1="194" y1="128" x2="210" y2="128"/></g><path filter="url(#sbSketch)" d="M0,140 L60,122 L120,138 L180,116 L240,134 L300,120 L300,188 L0,188 Z" fill="none" stroke="#3a352c" stroke-width="1.8"/></svg>`
 };
+// Real illustrations Faye supplied directly for Step 3's six situation
+// cards (matched to lesson-data.js's sceneKeys by exact situation-text
+// match, verified against her own mapping — no mismatches). Scoped to
+// Step 3 only: Step 5's story-thumb further down still reuses
+// SCENE_ART's original hand-drawn SVGs for forest/newworld/thaw, since
+// no matching art was supplied for those specific thumbnails.
+const STEP3_CARD_IMAGE = {
+  storm: 'card1-storm-valley-illustration-only.png',
+  thaw: 'card2-winter-spring-illustration-only.png',
+  city: 'card3-night-city-illustration-only.png',
+  forest: 'card4-lost-forest-illustration-only.png',
+  newworld: 'card5-new-world-illustration-only.png',
+  sunrise: 'card6-sunrise-sea-illustration-only.png'
+};
 /* ============================================================
    STEP 3 — WHEN WOULD WE USE IT? (image-led tap-to-reveal prompts)
 ============================================================ */
@@ -1580,7 +1599,7 @@ function renderWhenUse(){
   const cards = d.items.map((item, i) => `
     <div class="prompt-card" id="promptCard${i}" onclick="revealPrompt(${i})">
       <div class="prompt-image">
-        ${SCENE_ART[item.sceneKey] || ''}
+        ${STEP3_CARD_IMAGE[item.sceneKey] ? `<img src="${STEP3_CARD_IMAGE[item.sceneKey]}" alt="${item.text}" loading="lazy">` : (SCENE_ART[item.sceneKey] || '')}
         <span class="prompt-panel-index">${String(i + 1).padStart(2, '0')}</span>
       </div>
       <div class="prompt-body">
