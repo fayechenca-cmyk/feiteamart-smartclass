@@ -104,21 +104,67 @@
       ]
     },
 
-    // Step 4 — placeholders per the brief's own explicit instruction
-    // ("use placeholders now if final links/assets are not yet
-    // selected"). Every item is clearly flagged placeholder:true so a
-    // future pass swapping in real, license-safe resources doesn't
-    // have to guess which ones are real. No copyrighted thumbnails
-    // are embedded — see index.html's renderLookCloser for why every
-    // preview is an original abstract card, never a hotlinked image.
+    // Step 4 — real, verified references (Faye's own brief, delivered
+    // after every prior round left this step as placeholder at her
+    // request). Every URL below was checked live this round, not
+    // invented. Rights were checked per item BEFORE deciding
+    // previewType — see rightsStatus on each item for the reasoning:
+    //   - Cleveland Museum of Art explicitly labels 1953.126 Open
+    //     Access/CC0 ("copy, modify, and distribute... without asking
+    //     permission") -> the real museum image is used directly
+    //     (previewImage is a same-folder file, a wide detail crop of
+    //     the handscroll cropped from the museum's own CC0 files —
+    //     cropping/hosting a derivative is expressly permitted by
+    //     CC0, unlike a hotlink to a copyrighted third-party image).
+    //   - Ghibli, Star Wars and the Prado all hold conventional
+    //     copyright (the Prado additionally asserts separate
+    //     photographic copyright over its own museum photos even
+    //     though Bosch's 500-year-old painting itself is public
+    //     domain — confirmed via the Prado's own Image
+    //     Bank/Terms/License pages) -> previewImage is null and
+    //     index.html renders an original FEI TeamArt illustration
+    //     (LOOK_CLOSER_ART in index.html) inspired only by each
+    //     work's spatial idea, never a reproduction of its
+    //     characters/vehicles/figures/composition. sourceUrl still
+    //     points at the real, specific official page either way.
     reference_resources: {
       items: [
-        { category: 'FILM', title: 'Add a real film example here', source: 'TBD', prompt: 'Notice how small the figure feels inside the landscape.', url: '#', placeholder: true },
-        { category: 'FILM', title: 'Add a real film example here', source: 'TBD', prompt: 'What do you notice first: the person or the world?', url: '#', placeholder: true },
-        { category: 'ILLUSTRATION', title: 'Add a real illustration example here', source: 'TBD', prompt: 'How does the artist show distance without using color?', url: '#', placeholder: true },
-        { category: 'ILLUSTRATION', title: 'Add a real illustration example here', source: 'TBD', prompt: 'Where does your eye go first, and where does it go next?', url: '#', placeholder: true },
-        { category: 'FINE ART', title: 'Add a real museum/open-access example here', source: 'TBD', prompt: 'Is the world calm, or does it feel like something is about to happen?', url: '#', placeholder: true },
-        { category: 'FINE ART', title: 'Add a real museum/open-access example here', source: 'TBD', prompt: 'How much of this picture is empty space? Why might that matter?', url: '#', placeholder: true }
+        {
+          id: 'ghibli', category: 'ANIMATION', title: 'Spirited Away',
+          creator: 'Studio Ghibli', year: '2001',
+          previewType: 'fei-inspired-preview', previewImage: null,
+          sourceName: 'Studio Ghibli — official site',
+          sourceUrl: 'https://www.ghibli.jp/works/chihiro/',
+          rightsStatus: 'Film stills are copyrighted by Studio Ghibli — not reused here. This preview is an original FEI TeamArt illustration inspired only by the spatial idea (a tiny traveler beside a huge, quiet, reflective world), not a reproduction of Chihiro, No-Face, the train, or any Ghibli character/frame.',
+          observation: 'A tiny character inside a very large, quiet world.'
+        },
+        {
+          id: 'starwars', category: 'FILM', title: 'Star Wars',
+          creator: 'Lucasfilm / Disney', year: null,
+          previewType: 'fei-inspired-preview', previewImage: null,
+          sourceName: 'StarWars.com — official Databank: Tatooine',
+          sourceUrl: 'https://www.starwars.com/databank/tatooine',
+          rightsStatus: 'Film stills are copyrighted by Lucasfilm/Disney — not reused here. This preview is an original FEI TeamArt illustration inspired only by the spatial idea (a tiny craft against an enormous twin-sun desert horizon), not a reproduction of any Star Wars vehicle, character, logo, or exact scene.',
+          observation: 'A small subject can make a huge world feel even larger.'
+        },
+        {
+          id: 'cma-streams', category: 'INK PAINTING', title: 'Streams and Mountains without End',
+          creator: 'Unknown artist, China (late Northern Song–Jin dynasty)', year: 'c. 1100–1150',
+          previewType: 'open-access-original', previewImage: 'card3-streams-mountains-cma.jpg',
+          sourceName: 'Cleveland Museum of Art (Open Access)',
+          sourceUrl: 'https://www.clevelandart.org/art/1953.126',
+          rightsStatus: 'Cleveland Museum of Art Open Access program: object 1953.126 is explicitly marked CC0 ("copy, modify, and distribute this work, all without asking permission"). Image shown is a wide detail crop from the museum’s own released file (the work is a ~11m handscroll, so the full scroll is not shrunk into one unreadable strip); VIEW ORIGINAL opens the complete artwork page. Not a claim that Song-dynasty painters used a cinematic "Extreme Wide Shot" — shown as a similar visual idea: a very large view where the landscape dominates the image.',
+          observation: 'Tiny people and buildings sit inside a much larger landscape.'
+        },
+        {
+          id: 'bosch-garden', category: 'PAINTING', title: 'The Garden of Earthly Delights',
+          creator: 'Hieronymus Bosch', year: 'c. 1490–1500',
+          previewType: 'fei-inspired-preview', previewImage: null,
+          sourceName: 'Museo Nacional del Prado — official artwork page',
+          sourceUrl: 'https://www.museodelprado.es/en/the-collection/art-work/the-garden-of-earthly-delights-triptych/02388242-6d6a-4e9e-a992-e1311eab3609',
+          rightsStatus: 'The painting itself is public domain by age, but the Prado’s own photograph of it is separately copyrighted by the museum and requires a paid license (confirmed via the Prado’s Image Bank/Terms and Conditions/License Agreement pages) — reuse is not freely available, so this preview is an original FEI TeamArt illustration inspired only by the spatial idea (a huge imagined world holding many tiny scattered scenes), not a reproduction of Bosch’s figures, creatures, architecture, or triptych composition.',
+          observation: 'A huge imagined world can hold many tiny scenes at once.'
+        }
       ]
     },
 
