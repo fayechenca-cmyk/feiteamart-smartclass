@@ -277,7 +277,7 @@ body{
 
 <div id="app">
   <div id="topbar">
-    <a class="back-link" href="../../../../creation/">← Studio</a>
+    <a class="back-link" href="../../">← Scene Drawing Foundation</a>
     <span class="zone-pill" id="zonePill"></span>
     <button class="map-btn" onclick="goMap()">◐ Map</button>
   </div>
@@ -1002,9 +1002,13 @@ async function init() {
     try {
       await window.FEIAccess.init();
       // TODO(Faye): confirm the free/paid access rule for Scene Drawing
-      // Foundation before wiring FEIAccess.gateLessonPage('creation',
+      // Foundation before wiring FEIAccess.gateLessonPage('skills',
       // 'scene-drawing-foundation-medium-shot') here. Deliberately left
       // ungated per the build prompt's explicit "out of scope."
+      // (branch corrected from 'creation' to 'skills' — round 6: this
+      // lesson was built from a Creation-lesson template and inherited
+      // its branch value along with the "← Studio" back-link that
+      // pointed to creation/, both wrong for a Skill course.)
     } catch (e) {
       console.warn('[init] FEIAccess.init failed, continuing', e);
     }
