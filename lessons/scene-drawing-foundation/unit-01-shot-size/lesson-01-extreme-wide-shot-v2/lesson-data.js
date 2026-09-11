@@ -55,7 +55,11 @@
     // lessons' CF_STREAM_CUSTOMER constant.
     intro_video: {
       title: 'What Is a Scene?',
-      videoStreamId: '5f78b788563e4c17dc8b9e587998b609'
+      videoStreamId: '5f78b788563e4c17dc8b9e587998b609',
+      // Round 4 — a designed cover with the title baked in, not the
+      // Cloudflare-generated raw-frame thumbnail (which read as a
+      // generic video-player thumbnail, per Faye's correction).
+      posterUrl: 'poster-what-is-a-scene.svg'
     },
 
     // Step 2 — real 3D scene (Three.js), ported from
@@ -113,21 +117,35 @@
     // Step 5 — `direction` is internal art-direction guidance (for
     // whoever illustrates story_choices later), not student-facing
     // copy — index.html never prints it to the student.
+    // `demoVideoStreamId` (round 4) — one placeholder teacher-
+    // demonstration video slot PER story, per Faye's explicit
+    // "showing the teacher's own process of drawing the SPECIFIC
+    // scene the student picked... one video per story option" — not
+    // a single generic demo. All three null for now (coming-soon
+    // fallback, same pattern as intro_video before its real ID
+    // arrived); `demoDisclaimer` is reused verbatim from the live
+    // Lessons 01-05 "Let's Draw Together" convention, not new copy.
     story_choices: [
       {
         id: 'spring',
         title: 'Winter has passed. Is spring getting closer?',
-        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.'
+        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.',
+        demoVideoStreamId: null,
+        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
       },
       {
         id: 'forest',
         title: 'Late at night, I became lost in the forest.',
-        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.'
+        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.',
+        demoVideoStreamId: null,
+        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
       },
       {
         id: 'newworld',
         title: 'After travelling for a long time, I suddenly discovered an incredible new world.',
-        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.'
+        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.',
+        demoVideoStreamId: null,
+        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
       }
     ],
 

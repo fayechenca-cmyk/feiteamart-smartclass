@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7cc0e8"/>
+      <stop offset="55%" stop-color="#bcdde6"/>
+      <stop offset="100%" stop-color="#e9e1bd"/>
+    </linearGradient>
+    <linearGradient id="vign" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="72%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#1c1a22" stop-opacity=".55"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#sky)"/>
+  <!-- distant mountains -->
+  <path d="M0,470 Q120,380 240,450 Q340,370 460,440 Q580,360 700,440 Q820,380 940,450 Q1080,370 1280,450 L1280,720 L0,720 Z" fill="#93aecb" opacity=".65"/>
+  <path d="M0,520 Q160,460 320,510 Q480,450 640,505 Q820,450 1000,510 Q1140,470 1280,505 L1280,720 L0,720 Z" fill="#60768a" opacity=".55"/>
+  <rect x="0" y="505" width="1280" height="215" fill="#8fbf6a"/>
+  <!-- a tiny character on the horizon, wide shot -->
+  <g transform="translate(640,505)">
+    <ellipse cx="0" cy="0" rx="5" ry="1.6" fill="#1c1a22" opacity=".18"/>
+    <path d="M-9,0 L-9,-24 Q-9,-34 0,-34 Q9,-34 9,-24 L9,0 Z" fill="#3568c9"/>
+    <circle cx="0" cy="-40" r="6.5" fill="#f0c49a"/>
+  </g>
+  <!-- camera framing marks, matching the platform's restrained sketch language -->
+  <g stroke="#faf8f5" stroke-width="3" opacity=".85">
+    <path d="M50,50 L50,90 M50,50 L90,50" fill="none"/>
+    <path d="M1230,50 L1230,90 M1230,50 L1190,50" fill="none"/>
+    <path d="M50,670 L50,630 M50,670 L90,670" fill="none"/>
+    <path d="M1230,670 L1230,630 M1230,670 L1190,670" fill="none"/>
+  </g>
+  <rect width="1280" height="720" fill="url(#vign)"/>
+  <text x="80" y="622" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="54" letter-spacing="2" fill="#faf8f5">WHAT IS A SCENE?</text>
+</svg>

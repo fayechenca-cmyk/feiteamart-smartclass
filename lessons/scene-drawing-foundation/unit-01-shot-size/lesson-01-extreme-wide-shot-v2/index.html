@@ -180,6 +180,16 @@ button{font-family:inherit;}
   font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;
   font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.92;pointer-events:none;
 }
+/* Round 4 addition — a short, quiet disclaimer at the bottom of a
+   video-stage (used by the new teacher-demo step). Non-wordy per
+   Faye's instruction, reusing Lessons 01-05's exact disclaimer text,
+   not a new explanation. */
+.video-disclaimer-overlay{
+  position:absolute;bottom:0;left:0;right:0;padding:30px 24px 18px;
+  background:linear-gradient(transparent,rgba(0,0,0,.45));
+  font-size:12px;font-style:italic;color:rgba(255,255,255,.88);line-height:1.5;
+  text-align:center;pointer-events:none;
+}
 /* Shown only if unmuted autoplay was actually blocked by the browser
    (see afterRenderIntroVideo) — a direct click here is a guaranteed-
    valid gesture, so playback (with sound) can always start one way
@@ -377,8 +387,18 @@ button{font-family:inherit;}
 .practice-tool-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
 .practice-color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
 .practice-color-dot.picked{box-shadow:0 0 0 2.5px var(--accent);transform:scale(1.1);}
+/* Round 4 addition: stroke-style tool row (fineliner/marker/
+   watercolor/fill/eraser), separate from the color row above it. */
+.practice-style-btn{
+  display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--ink-soft);
+  background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;
+}
+.practice-style-btn.picked{border-color:var(--accent);background:rgba(45,95,168,.08);color:var(--accent-deep);}
+.practice-style-btn:active{transform:scale(.96);}
+/* Round 4: substantially larger — round 2/3's 420px cap left barely
+   any room to draw on desktop, per Faye's explicit correction. */
 .practice-canvas-wrap{
-  width:100%;max-width:420px;aspect-ratio:4/3;margin:0 auto 10px;border-radius:14px;overflow:hidden;
+  width:100%;max-width:720px;aspect-ratio:4/3;margin:0 auto 10px;border-radius:14px;overflow:hidden;
   border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(28,26,34,.12);touch-action:none;background:var(--paper);
 }
 .practice-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
@@ -648,6 +668,7 @@ const STEPS = [
   { id:'look_closer',     render:renderLookCloser },
   { id:'choose_story',    render:renderChooseStory },
   { id:'guided_drawing',  render:renderGuidedDrawing,   afterRender:afterRenderGuidedDrawing },
+  { id:'teacher_demo',    render:renderTeacherDemo,     afterRender:afterRenderTeacherDemo },
   { id:'compare',         render:renderCompare,          afterRender:afterRenderCompare },
   { id:'complete',        render:renderComplete }
 ];
@@ -674,8 +695,13 @@ const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
 // click that already brought the student into this lesson. See
 // afterRenderIntroVideo for the real-gesture verification and the
 // tap-to-play fallback for when a browser blocks it anyway.
-function cfStreamSrc(streamId){
-  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
+// Round 4: accepts an optional custom poster URL — the CF-generated
+// auto-thumbnail (a raw video frame) reads as a generic video-player
+// thumbnail, not a designed cover; Faye asked for a real poster with
+// the title baked in. Falls back to the auto-thumbnail when no custom
+// poster is supplied (so lessons without a designed cover still work).
+function cfStreamSrc(streamId, posterUrl){
+  const poster = encodeURIComponent(posterUrl || `https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
   return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
 }
 // Extended from the platform's established renderVideoEmbed convention:
@@ -683,12 +709,21 @@ function cfStreamSrc(streamId){
 // iframe id so afterRender can attach the Stream Player SDK for a real
 // 'ended' event — per the brief's "on completion, transition directly
 // into next step," not a manual-only Continue.
-function renderVideoStage(streamId, title, iframeId){
+// disclaimer (round 4, optional) — a short, quiet line pinned to the
+// bottom of the frame. Used by the new teacher-demo step; Step 1 never
+// passes one.
+function renderVideoStage(streamId, title, iframeId, posterUrl, disclaimer){
+  const disclaimerHtml = disclaimer ? `<div class="video-disclaimer-overlay">${disclaimer}</div>` : '';
   if (streamId) {
+    // posterUrl must be absolute — the iframe lives on a different
+    // origin (the Cloudflare Stream customer subdomain) and can't
+    // resolve a relative path against ITS OWN origin back to ours.
+    const absolutePoster = posterUrl ? new URL(posterUrl, window.location.href).href : null;
     return `<div class="video-stage">
-      <iframe id="${iframeId}" src="${cfStreamSrc(streamId)}" loading="lazy" title="${title}"
+      <iframe id="${iframeId}" src="${cfStreamSrc(streamId, absolutePoster)}" loading="lazy" title="${title}"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
       <div class="video-title-overlay">${title}</div>
+      ${disclaimerHtml}
       <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
     </div>`;
   }
@@ -696,6 +731,7 @@ function renderVideoStage(streamId, title, iframeId){
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
       <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
     </div>
+    ${disclaimerHtml}
   </div>`;
 }
 function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
@@ -752,7 +788,7 @@ function renderIntroVideo(){
   const d = LESSON_DATA.intro_video;
   return `
     <div class="step-inner bleed">
-      ${renderVideoStage(d.videoStreamId, d.title, 'introVideoFrame')}
+      ${renderVideoStage(d.videoStreamId, d.title, 'introVideoFrame', d.posterUrl)}
     </div>
   `;
 }
@@ -916,17 +952,17 @@ async function afterRenderDiscover(){
     return new THREE.Mesh(new THREE.SphereGeometry(r, wSeg || 16, hSeg || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
   }
 
-  // Round 3 palette — noticeably more saturated than round 2's pale/
-  // grey-pink set, while staying tasteful (not cartoonish). Scoped to
-  // this Step 2 environment only, not the platform's own restrained
-  // UI color language elsewhere.
+  // Round 4 palette — same saturated direction as round 3, extended
+  // for the new midground/sky elements below.
   const PALETTE = {
     ground: 0x6fae52, lake: 0x3f9fc9, mountainNear: 0x60768a, mountainFar: 0x93aecb,
     charCloak: 0x3568c9, charHead: 0xf0c49a, charLimb: 0x3c4657, charAccent: 0xd6543f,
-    houseBody: 0xe8cfa0, houseRoof: 0xb5533c, houseDoor: 0x5c4630, houseWindow: 0xf6df8a,
+    houseBody: 0xe8cfa0, houseRoof: 0xb5533c, houseBody2: 0xd8c9a8, houseRoof2: 0x8a5a44,
+    houseDoor: 0x5c4630, houseWindow: 0xf6df8a,
     treeCanopyA: 0x3f7a46, treeCanopyB: 0x529155, trunk: 0x6b4a30,
     grass: 0x6fae52, grassLight: 0x82c25f,
-    flowerPink: 0xe888b0, flowerYellow: 0xf0d060, flowerWhite: 0xfaf3e6
+    flowerPink: 0xe888b0, flowerYellow: 0xf0d060, flowerWhite: 0xfaf3e6,
+    road: 0xcbb389, cloud: 0xfbf8f0, plane: 0x3a4658
   };
 
   const worldGroup = new THREE.Group();
@@ -936,43 +972,46 @@ async function afterRenderDiscover(){
   ground.position.set(0, -0.15, 10);
   worldGroup.add(ground);
 
+  // Round 4: substantially larger + elongated so it reads as a real
+  // body of water, not a puddle (Faye's exact critique) — moved off
+  // to the side so it doesn't collide with the new road below.
   const lake = new THREE.Mesh(
-    new THREE.CircleGeometry(6.5, 32),
+    new THREE.CircleGeometry(8, 40),
     new THREE.MeshStandardMaterial({ color: PALETTE.lake, roughness: 0.3, metalness: 0.15 })
   );
+  lake.scale.set(1.3, 1, 0.85);
   lake.rotation.x = -Math.PI / 2;
-  lake.position.set(3.5, 0.12, 7);
+  lake.position.set(11, 0.12, 15);
   worldGroup.add(lake);
 
-  // Character — round 3: a tapered cloak (cone) instead of a flat box
-  // torso, plus a small accent scarf, reads as an actual small figure
-  // rather than a bare primitive stack ("more shape/form" per Faye).
+  // Character — round 4: the cone cloak read as a rough blob rather
+  // than a person (Faye's critique). Switched to a cylinder frustum
+  // (narrow shoulders, wider hem) — an actual cloak silhouette — and
+  // dropped the two leg cylinders entirely: at this scale they sat
+  // fully inside the cloak's own footprint and were never visible,
+  // just wasted geometry that didn't help "read as a figure."
   const character = new THREE.Group();
-  const cloak = cone(0.32, 0.95, PALETTE.charCloak, 10);
+  const cloak = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.34, 0.95, 10), new THREE.MeshStandardMaterial({ color: PALETTE.charCloak, roughness: 0.85 }));
   cloak.position.y = 0.475;
-  const head = sphereMesh(0.22, PALETTE.charHead, 24, 18);
-  head.position.y = 0.95 + 0.16;
+  const head = sphereMesh(0.23, PALETTE.charHead, 24, 18);
+  head.position.y = 0.95 + 0.17;
   const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.045, 8, 16), new THREE.MeshStandardMaterial({ color: PALETTE.charAccent, roughness: 0.8 }));
   scarf.rotation.x = Math.PI / 2.3;
-  scarf.position.y = 0.92;
-  const legL = cyl(0.08, 0.08, 0.28, PALETTE.charLimb);
-  legL.position.set(-0.12, 0.14, 0);
-  const legR = legL.clone(); legR.position.x = 0.12;
+  scarf.position.y = 0.93;
   const armL = cyl(0.06, 0.06, 0.5, PALETTE.charLimb);
-  armL.position.set(-0.3, 0.62, 0);
-  armL.rotation.z = 0.2;
-  const armR = armL.clone(); armR.position.x = 0.3; armR.rotation.z = -0.2;
-  character.add(cloak, head, scarf, legL, legR, armL, armR);
+  armL.position.set(-0.28, 0.62, 0);
+  armL.rotation.z = 0.22;
+  const armR = armL.clone(); armR.position.x = 0.28; armR.rotation.z = -0.22;
+  character.add(cloak, head, scarf, armL, armR);
   character.position.set(0, 0, 1.5);
   worldGroup.add(character);
 
-  // House — round 3 addition: box body + pyramid roof + door + two
-  // warm-glow windows, more form than a bare primitive.
-  function buildHouse() {
+  // House — box body + pyramid roof + door + two warm-glow windows.
+  function buildHouse(bodyColor, roofColor) {
     const g = new THREE.Group();
-    const body = box(2.2, 1.5, 1.8, PALETTE.houseBody);
+    const body = box(2.2, 1.5, 1.8, bodyColor);
     body.position.y = 0.75;
-    const roof = cone(1.75, 1.1, PALETTE.houseRoof, 4);
+    const roof = cone(1.75, 1.1, roofColor, 4);
     roof.rotation.y = Math.PI / 4;
     roof.position.y = 1.5 + 0.55;
     const door = box(0.5, 0.85, 0.05, PALETTE.houseDoor);
@@ -984,31 +1023,63 @@ async function afterRenderDiscover(){
     g.add(body, roof, door, win1, win2);
     return g;
   }
-  const house = buildHouse();
-  house.position.set(-11, 0, 22);
+  // Round 4: "a small house or two" in the actual midground (much
+  // closer than round 3's z=22) — one of Faye's concrete midground
+  // asks, alongside the road below.
+  const house = buildHouse(PALETTE.houseBody, PALETTE.houseRoof);
+  house.position.set(-13, 0, 15);
   house.rotation.y = 0.3;
   house.userData.finalY = 0;
   house.visible = false;
   worldGroup.add(house);
+  const house2 = buildHouse(PALETTE.houseBody2, PALETTE.houseRoof2);
+  house2.scale.setScalar(0.75);
+  house2.position.set(-9.5, 0, 20);
+  house2.rotation.y = -0.5;
+  house2.userData.finalY = 0;
+  house2.visible = false;
+  worldGroup.add(house2);
 
-  // Trees — round 3 addition: two-tone stacked-cone canopy + trunk,
-  // scattered at varied positions/scales for real variety, not one
-  // repeated primitive.
+  // Road — round 4 addition: a tapering trapezoid strip (wide near,
+  // narrow far), giving the eye something to travel through from
+  // foreground to midground — Faye's exact "the middle-ground is
+  // currently empty" note.
+  function buildRoad(nearWidth, farWidth, nearZ, farZ, color) {
+    const geo = new THREE.BufferGeometry();
+    const vertices = new Float32Array([
+      -nearWidth / 2, 0, nearZ,  nearWidth / 2, 0, nearZ,
+       farWidth / 2, 0, farZ,   -farWidth / 2, 0, farZ
+    ]);
+    geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geo.setIndex([0, 1, 2, 0, 2, 3]);
+    geo.computeVertexNormals();
+    return new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: color, roughness: 0.95, side: THREE.DoubleSide }));
+  }
+  const road = buildRoad(2.4, 0.5, 3, 38, PALETTE.road);
+  road.position.set(-6, 0.02, 0);
+  worldGroup.add(road);
+
+  // Trees — ONE consistent conifer style (two-tone stacked cones),
+  // only ever varied by scale/position, never by shape — Faye's
+  // correction against last round's "sharp vs round, disjointed"
+  // mix. Spread across both midground and a few larger foreground
+  // trees, which also helps fill the "empty middle of frame."
   function buildTree(scale) {
     const g = new THREE.Group();
     const trunk = cyl(0.09, 0.13, 0.9, PALETTE.trunk);
     trunk.position.y = 0.45;
-    const canopyLower = cone(0.62, 1.1, PALETTE.treeCanopyA, 9);
-    canopyLower.position.y = 0.9 + 0.5;
-    const canopyUpper = cone(0.44, 0.85, PALETTE.treeCanopyB, 9);
-    canopyUpper.position.y = 0.9 + 1.0 + 0.36;
+    const canopyLower = cone(0.6, 1.05, PALETTE.treeCanopyA, 9);
+    canopyLower.position.y = 0.9 + 0.48;
+    const canopyUpper = cone(0.42, 0.8, PALETTE.treeCanopyB, 9);
+    canopyUpper.position.y = 0.9 + 0.96 + 0.34;
     g.add(trunk, canopyLower, canopyUpper);
     g.scale.setScalar(scale);
     return g;
   }
   const treeDefs = [
-    { x: -6, z: 12, s: 1.1 }, { x: -9, z: 17, s: 0.9 }, { x: 7, z: 10, s: 1.0 },
-    { x: 10, z: 15, s: 0.75 }, { x: -3, z: 24, s: 1.25 }, { x: 15, z: 21, s: 1.0 }
+    { x: -6, z: 12, s: 1.1 }, { x: -8.5, z: 24, s: 0.85 }, { x: 6, z: 10, s: 1.0 },
+    { x: 9, z: 16, s: 0.8 }, { x: -2, z: 26, s: 1.15 }, { x: 14, z: 19, s: 0.95 },
+    { x: 17, z: 9, s: 1.3 }, { x: -16, z: 8, s: 1.4 }
   ];
   const trees = treeDefs.map((def) => {
     const t = buildTree(def.s);
@@ -1019,15 +1090,16 @@ async function afterRenderDiscover(){
     return t;
   });
 
-  // Ground-level detail — round 3 addition, per Faye: "add ground-
-  // level detail like grass and flowers." Lightweight blade-cluster
-  // tufts + a scatter of small colored flowers near the foreground.
+  // Ground-level detail — grass tufts + flowers. Round 4: shortened
+  // the blades further and confined them close to the character/lake
+  // foreground so they read unmistakably as ground cover, never as
+  // small trees (the round-3 confusion Faye actually flagged).
   function buildGrassTuft() {
     const g = new THREE.Group();
     for (let i = 0; i < 3; i++) {
-      const blade = cone(0.04, 0.26, i % 2 === 0 ? PALETTE.grass : PALETTE.grassLight, 5);
-      blade.position.set((i - 1) * 0.07, 0.13, 0);
-      blade.rotation.z = (i - 1) * 0.35;
+      const blade = cone(0.035, 0.16, i % 2 === 0 ? PALETTE.grass : PALETTE.grassLight, 5);
+      blade.position.set((i - 1) * 0.06, 0.08, 0);
+      blade.rotation.z = (i - 1) * 0.3;
       g.add(blade);
     }
     return g;
@@ -1041,6 +1113,54 @@ async function afterRenderDiscover(){
     tuft.position.set(def.x, 0, def.z);
     worldGroup.add(tuft);
   });
+  // Foreground bushes — round 4 addition: larger-scale shrub clusters
+  // close to the camera (near z=0), spread toward the frame edges.
+  // With the framing now sitting lower (see RISE/LOOK_DOWN above), the
+  // nearest ground is genuinely in view and was otherwise still bare —
+  // these give it real foreground texture instead of flat color.
+  function buildBush(scale) {
+    const g = new THREE.Group();
+    const mat = new THREE.MeshStandardMaterial({ color: PALETTE.treeCanopyA, roughness: 0.9 });
+    const b1 = sphereMesh(0.32, PALETTE.treeCanopyA, 9, 7);
+    const b2 = new THREE.Mesh(new THREE.SphereGeometry(0.24, 9, 7), new THREE.MeshStandardMaterial({ color: PALETTE.treeCanopyB, roughness: 0.9 }));
+    b2.position.set(0.28, -0.04, 0.1);
+    const b3 = new THREE.Mesh(new THREE.SphereGeometry(0.2, 9, 7), mat);
+    b3.position.set(-0.24, -0.06, -0.05);
+    g.add(b1, b2, b3);
+    g.position.y = 0.2;
+    g.scale.setScalar(scale);
+    return g;
+  }
+  const bushDefs = [
+    { x: -6.5, z: -0.5, s: 1.2 }, { x: 6, z: 0, s: 1.0 }, { x: -3.5, z: -1.2, s: 0.85 }
+  ];
+  bushDefs.forEach((def) => {
+    const bush = buildBush(def.s);
+    bush.position.x = def.x;
+    bush.position.z = def.z;
+    worldGroup.add(bush);
+  });
+
+  // Foreground scatter, further still — the character/lake/bushes
+  // above all sit within a few units of z=0-3, which is still very
+  // far from the camera's own settled position (z≈-30 at full pull-
+  // back). Perspective means that gap is what actually renders as
+  // the empty lower frame, not the content near the horizon — objects
+  // genuinely close to the camera are what fill that area. Larger
+  // scale here is correct, not a mistake: at this proximity they
+  // SHOULD render bigger, the same way real foreground elements do in
+  // an establishing shot.
+  const foregroundDefs = [
+    { x: -16, z: -20, s: 2.2 }, { x: -9, z: -14, s: 1.8 }, { x: 4, z: -22, s: 2.4 },
+    { x: 12, z: -12, s: 1.6 }, { x: -3, z: -9, s: 1.4 }, { x: 17, z: -19, s: 2.0 }
+  ];
+  foregroundDefs.forEach((def) => {
+    const bush = buildBush(def.s);
+    bush.position.x = def.x;
+    bush.position.z = def.z;
+    worldGroup.add(bush);
+  });
+
   const flowerColors = [PALETTE.flowerPink, PALETTE.flowerYellow, PALETTE.flowerWhite];
   const flowerDefs = [
     { x: -1.6, z: 2.9 }, { x: 0.9, z: 2.5 }, { x: -2.8, z: 1.9 }, { x: 2.1, z: 3.2 },
@@ -1052,20 +1172,76 @@ async function afterRenderDiscover(){
     worldGroup.add(flower);
   });
 
+  // Mountains — round 4 rework, per Faye's exact critique: spread
+  // across a much wider horizon span (x -40..38, was clustered
+  // -14..20), varied height/radius/segment-count so each silhouette
+  // actually differs (segment count alone changes how angular/smooth
+  // a peak reads — not just a scaled copy of the same cutout), and
+  // pulled closer (z 36..52, was 44..60) so they occupy more of the
+  // frame's vertical space instead of shrinking to a thin band.
   const mountainDefs = [
-    { x: -14, z: 46, r: 9, h: 16, color: PALETTE.mountainNear },
-    { x: 4, z: 52, r: 11, h: 19, color: PALETTE.mountainFar },
-    { x: 20, z: 44, r: 8, h: 14, color: PALETTE.mountainNear },
-    { x: -3, z: 60, r: 13, h: 22, color: PALETTE.mountainFar }
+    { x: -40, z: 48, r: 7, h: 13, color: PALETTE.mountainFar, seg: 5 },
+    { x: -28, z: 38, r: 9.5, h: 18, color: PALETTE.mountainNear, seg: 7 },
+    { x: -15, z: 46, r: 7.5, h: 14, color: PALETTE.mountainFar, seg: 6 },
+    { x: -1, z: 36, r: 11.5, h: 23, color: PALETTE.mountainNear, seg: 8 },
+    { x: 13, z: 44, r: 7, h: 12.5, color: PALETTE.mountainFar, seg: 5 },
+    { x: 25, z: 39, r: 10, h: 19.5, color: PALETTE.mountainNear, seg: 7 },
+    { x: 38, z: 50, r: 8, h: 15, color: PALETTE.mountainFar, seg: 6 }
   ];
   const mountains = mountainDefs.map((def) => {
-    const m = cone(def.r, def.h, def.color, 8);
+    const m = cone(def.r, def.h, def.color, def.seg);
     m.position.set(def.x, def.h / 2, def.z);
     m.userData.finalY = def.h / 2;
     m.visible = false;
     worldGroup.add(m);
     return m;
   });
+
+  // Sky detail — round 4 addition: a few soft cloud clusters + one
+  // small plane silhouette crossing during the reveal (the plane
+  // concept is a proven pattern from prototypes/3d-camera-explorer-v2,
+  // simplified here — one flyby, not tied to a story beat).
+  function buildCloud(scale) {
+    const g = new THREE.Group();
+    const mat = new THREE.MeshStandardMaterial({ color: PALETTE.cloud, roughness: 0.95 });
+    const c1 = new THREE.Mesh(new THREE.SphereGeometry(1, 10, 8), mat);
+    const c2 = new THREE.Mesh(new THREE.SphereGeometry(0.7, 10, 8), mat); c2.position.set(1.1, 0.1, 0.1);
+    const c3 = new THREE.Mesh(new THREE.SphereGeometry(0.62, 10, 8), mat); c3.position.set(-1.0, 0.05, -0.1);
+    g.add(c1, c2, c3);
+    g.scale.setScalar(scale);
+    return g;
+  }
+  const cloudDefs = [
+    { x: -32, y: 27, z: 40, s: 1.6 }, { x: -6, y: 31, z: 50, s: 2.0 },
+    { x: 20, y: 26, z: 42, s: 1.4 }, { x: 36, y: 30, z: 52, s: 1.8 }
+  ];
+  cloudDefs.forEach((def) => {
+    const cloud = buildCloud(def.s);
+    cloud.position.set(def.x, def.y, def.z);
+    scene.add(cloud);
+  });
+  const planeMat = new THREE.MeshStandardMaterial({ color: PALETTE.plane, roughness: 0.7 });
+  const plane = new THREE.Group();
+  const planeBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.14, 0.22), planeMat);
+  const planeWing = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.06, 1.1), planeMat);
+  planeWing.position.x = 0.1;
+  plane.add(planeBody, planeWing);
+  plane.visible = false;
+  scene.add(plane);
+  function flyPlaneAcross(durationMs) {
+    plane.visible = true;
+    plane.position.set(-34, 24, 46);
+    plane.rotation.y = -0.15;
+    const start = performance.now();
+    function step(now) {
+      if (!stageState.alive) return;
+      const t = clamp01((now - start) / durationMs);
+      plane.position.x = lerp(-34, 34, t);
+      plane.position.y = 24 + Math.sin(t * Math.PI) * 2;
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
 
   function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -1075,7 +1251,16 @@ async function afterRenderDiscover(){
   // framing — no drag input in this lesson step.
   const MIN_DIST = 7, MAX_DIST = 34;
   const TARGET = new THREE.Vector3(0, 1.4, 4);
-  const RISE_AMOUNT = 5.5, LOOK_DOWN_AMOUNT = 5.5;
+  // Round 4: reduced from 5.5/5.5, then reduced again after a live
+  // screenshot still showed a mostly-empty lower half. At the old
+  // values the settled camera pitched down ~18°, which combined with
+  // far/tall mountains pinned their peaks at the very top edge of the
+  // frustum — leaving the entire lower 3/4 of the frame as empty
+  // foreground ground with nothing on it (Faye's repeat note:
+  // "packed into the top quarter, large flat empty area below").
+  // Verified each step empirically via screenshot, not just the angle
+  // math, since real framing always needs a live check.
+  const RISE_AMOUNT = 2.3, LOOK_DOWN_AMOUNT = 1.8;
   let dollyT = 0.42;
 
   function applyCameraTransform() {
@@ -1144,9 +1329,11 @@ async function afterRenderDiscover(){
   requestAnimationFrame(() => canvas.classList.add('visible'));
   setTimeout(() => {
     if (!stageState.alive) return;
-    mountains.forEach((m, i) => dropIn(m, 250 + i * 240, 1300));
-    trees.forEach((t, i) => dropIn(t, 400 + i * 150, 900));
+    mountains.forEach((m, i) => dropIn(m, 250 + i * 200, 1300));
+    trees.forEach((t, i) => dropIn(t, 400 + i * 120, 900));
     dropIn(house, 500, 1000);
+    dropIn(house2, 650, 1000);
+    setTimeout(() => flyPlaneAcross(4000), 1200);
     animateReveal(4200, () => {
       termEl.classList.add('show');
       showArtchiBubble('What changes?', 2600);
@@ -1310,12 +1497,25 @@ function pickStory(id){
    only the details the story needs).
 ============================================================ */
 function drawingSvg(){
+  // Round 4 rework — the composition guide grid below (stage 1) used
+  // to stay at full opacity through all 5 stages, layered on top of
+  // the finished artwork; applyDrawStage() now fades it to near-zero
+  // once stage 2 begins (see its own comment) — a real, identified
+  // cause of "didn't read as anything by the end," not just a polish
+  // tweak. The stage-4 foreground shapes were abstract rounded blobs
+  // with no tree-like structure at all; replaced with actual
+  // trunk+canopy silhouettes, still simple/flat/consistent with the
+  // sketch-illustration language used elsewhere in this file (Step 3's
+  // SCENE_ART table), not the 3D scene's own tree style — different
+  // medium, doesn't need to match.
   return `
     <svg viewBox="0 0 400 300">
       <!-- Stage 1 — composition guides: horizon placed low (about
            two-thirds down) plus thirds/center guide lines, showing
-           WHERE the horizon goes and why, not just corner marks. -->
-      <g class="dstage" data-stage="1" opacity="0">
+           WHERE the horizon goes and why. Faded out from stage 2
+           onward by applyDrawStage(), not left cluttering the final
+           image. -->
+      <g class="dstage guide-lines" data-stage="1" opacity="0">
         <rect x="14" y="14" width="26" height="2" fill="#8a8578"/><rect x="14" y="14" width="2" height="26" fill="#8a8578"/>
         <rect x="360" y="14" width="26" height="2" fill="#8a8578"/><rect x="384" y="14" width="2" height="26" fill="#8a8578"/>
         <rect x="14" y="284" width="26" height="2" fill="#8a8578"/><rect x="14" y="258" width="2" height="26" fill="#8a8578"/>
@@ -1325,31 +1525,36 @@ function drawingSvg(){
         <line x1="133" y1="16" x2="133" y2="284" stroke="#e6e1d3" stroke-width="1" stroke-dasharray="2 5"/>
         <line x1="267" y1="16" x2="267" y2="284" stroke="#e6e1d3" stroke-width="1" stroke-dasharray="2 5"/>
       </g>
-      <!-- Stage 2 — largest shapes: a pale, low-contrast distant
-           mountain mass (atmospheric perspective: far = light + soft). -->
+      <!-- Stage 2 — largest shapes: a mountain mass with real value
+           contrast against the sky wash (round 4: darkened from .6 to
+           .8 fill-opacity and a deeper base color — the original was
+           too pale to read once the guide grid was gone). -->
       <g class="dstage" data-stage="2" opacity="0">
-        <rect x="0" y="0" width="400" height="195" fill="#eef1e9" opacity=".55"/>
-        <path d="M0,175 Q40,150 80,168 Q130,138 180,162 Q230,140 280,164 Q330,146 400,168 L400,195 L0,195 Z" fill="#b7bfc5" opacity=".6"/>
+        <rect x="0" y="0" width="400" height="195" fill="#e4ebe0" opacity=".7"/>
+        <path d="M0,172 Q40,142 80,164 Q130,130 180,158 Q230,132 280,160 Q330,140 400,162 L400,195 L0,195 Z" fill="#98a4a8" opacity=".85"/>
       </g>
       <!-- Stage 3 — the character, small, placed on the horizon at a
-           thirds intersection (scale: tiny next to the world to come). -->
+           thirds intersection. Round 4: heavier stroke + filled head
+           so it reads as a solid small figure, not a faint outline. -->
       <g class="dstage" data-stage="3" opacity="0">
-        <path d="M147,195 L147,181 Q147,172 154,172 Q161,172 161,181 L161,195 Z" fill="none" stroke="#4b473d" stroke-width="1.4"/>
-        <circle cx="154" cy="167" r="4.5" fill="none" stroke="#4b473d" stroke-width="1.4"/>
-        <line x1="161" y1="187" x2="168" y2="195" stroke="#4b473d" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M147,195 L147,181 Q147,171 154,171 Q161,171 161,181 L161,195 Z" fill="#4b473d" opacity=".9"/>
+        <circle cx="154" cy="166" r="5" fill="#4b473d" opacity=".9"/>
       </g>
       <!-- Stage 4 — depth: a mid-value treeline overlapping the
-           distant mountains, plus dark foreground shapes at both
-           bottom corners with cross-hatch shading — overlap + value
-           progression is what actually reads as depth. -->
+           distant mountains, plus two actual foreground trees
+           (trunk + canopy, one consistent silhouette) instead of
+           round 3's abstract corner blobs — this is a forest story;
+           the foreground framing should read as trees. -->
       <g class="dstage" data-stage="4" opacity="0">
-        <path d="M0,195 Q50,178 100,190 Q160,172 220,188 Q280,174 340,190 Q370,182 400,188 L400,220 L0,220 Z" fill="#8b9284" opacity=".75"/>
-        <path d="M0,300 L0,215 Q20,195 40,215 Q46,240 34,260 L34,300 Z" fill="#3a3a34"/>
-        <path d="M366,300 L366,225 Q380,205 394,225 Q398,250 388,270 L388,300 Z" fill="#3a3a34"/>
-        <g stroke="#5a564a" stroke-width="1" opacity=".55">
-          <line x1="10" y1="240" x2="24" y2="236"/><line x1="10" y1="252" x2="22" y2="248"/><line x1="10" y1="264" x2="20" y2="260"/>
-          <line x1="374" y1="248" x2="386" y2="244"/><line x1="374" y1="260" x2="384" y2="256"/>
-        </g>
+        <path d="M0,195 Q50,176 100,189 Q160,170 220,187 Q280,172 340,189 Q370,180 400,187 L400,220 L0,220 Z" fill="#7d8a76" opacity=".85"/>
+        <!-- foreground tree, left corner -->
+        <rect x="15" y="255" width="7" height="45" fill="#4b3a2a"/>
+        <path d="M4,258 Q18,218 32,258 Q26,250 18,250 Q10,250 4,258 Z" fill="#31462f"/>
+        <path d="M0,240 Q18,196 36,240 Q28,230 18,230 Q8,230 0,240 Z" fill="#3a5636"/>
+        <!-- foreground tree, right corner -->
+        <rect x="368" y="248" width="8" height="52" fill="#4b3a2a"/>
+        <path d="M355,252 Q372,206 389,252 Q381,242 372,242 Q363,242 355,252 Z" fill="#31462f"/>
+        <path d="M350,232 Q372,182 394,232 Q383,220 372,220 Q361,220 350,232 Z" fill="#3a5636"/>
       </g>
       <!-- Stage 5 — only the details the story needs: a soft moonlight
            glow + a couple of light rays, and a few ground-texture
@@ -1390,6 +1595,15 @@ function applyDrawStage(){
   const steps = LESSON_DATA.drawing_steps;
   document.querySelectorAll('.dstage').forEach(g => {
     const s = parseInt(g.dataset.stage, 10);
+    if (g.classList.contains('guide-lines')) {
+      // Round 4 fix: the composition guide grid used to stay at full
+      // opacity through every later stage, cluttering the finished
+      // drawing (a real, identified cause of illegibility, not just
+      // polish) — full only while stage 1 is the CURRENT stage, faint
+      // once the drawing has moved past it.
+      g.style.opacity = STATE.drawStageIndex === 0 ? '1' : '0.1';
+      return;
+    }
     g.style.opacity = (s <= STATE.drawStageIndex + 1) ? '1' : '0';
   });
   document.getElementById('drawCaption').textContent = steps[STATE.drawStageIndex].instruction;
@@ -1504,17 +1718,40 @@ async function practiceGetArtwork(){
 }
 
 const PRACTICE_COLORS = ['#4b473d', '#2d5fa8', '#8a6a4a', '#5b7a96', '#3a3a34'];
+const PRACTICE_PAPER = '#faf8f5';
+// Round 4 addition: real stroke-style variety, not just one line
+// weight — per Faye's explicit ask for watercolor/marker/fineliner
+// plus a broad fill-style option suited to blocking in large sky/
+// ground areas (this being an Extreme Wide Shot lesson). Eraser
+// draws with the paper color rather than true transparency/
+// destination-out — the canvas is later compressed to JPEG for
+// storage (practiceCompressCanvas), which has no alpha channel, so a
+// transparent "erase" would composite to black on save; painting
+// with the paper color avoids that entirely and looks identical.
+const PRACTICE_TOOLS = {
+  fineliner: { label: 'Fineliner', icon: '✒️', width: 2, alpha: 1 },
+  marker: { label: 'Marker', icon: '🖊️', width: 8, alpha: 0.88 },
+  watercolor: { label: 'Watercolor', icon: '🖌️', width: 20, alpha: 0.24 },
+  fill: { label: 'Fill', icon: '🧱', width: 46, alpha: 0.5 },
+  eraser: { label: 'Eraser', icon: '🧽', width: 30, alpha: 1, isEraser: true }
+};
 let practiceColor = PRACTICE_COLORS[0];
+let practiceTool = 'fineliner';
 let practiceDrawing = false;
 let practiceLast = null;
 
 function renderDrawPractice(){
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
+  const tools = Object.keys(PRACTICE_TOOLS).map(key => {
+    const t = PRACTICE_TOOLS[key];
+    return `<button class="practice-style-btn${practiceTool === key ? ' picked' : ''}" data-tool="${key}" onclick="pickPracticeTool('${key}')">${t.icon} ${t.label}</button>`;
+  }).join('');
   return `
-    <div class="step-inner">
+    <div class="step-inner wide">
       <div class="step-kicker">Your Turn</div>
       <h2 class="step-title">Try It Yourself</h2>
-      <p class="step-sub">Use pencil-style strokes to sketch your own version of this scene. Not a finished piece — just your own pass at the same idea.</p>
+      <p class="step-sub">Sketch your own version of this scene. Not a finished piece — just your own pass at the same idea.</p>
+      <div class="practice-tool-row">${tools}</div>
       <div class="practice-tool-row">${colors}</div>
       <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
       <div class="draw-controls">
@@ -1534,11 +1771,15 @@ function pickPracticeColor(color){
   practiceColor = color;
   document.querySelectorAll('.practice-color-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
 }
+function pickPracticeTool(tool){
+  practiceTool = tool;
+  document.querySelectorAll('.practice-style-btn').forEach(el => el.classList.toggle('picked', el.dataset.tool === tool));
+}
 function clearPracticeCanvas(){
   const canvas = document.getElementById('practiceCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#faf8f5';
+  ctx.fillStyle = PRACTICE_PAPER;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 function initPracticeCanvas(){
@@ -1549,7 +1790,7 @@ function initPracticeCanvas(){
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#faf8f5';
+  ctx.fillStyle = PRACTICE_PAPER;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   canvas.onpointerdown = (e) => {
@@ -1560,14 +1801,17 @@ function initPracticeCanvas(){
   canvas.onpointermove = (e) => {
     if (!practiceDrawing) return;
     const p = practicePos(canvas, e);
-    ctx.strokeStyle = practiceColor;
-    ctx.lineWidth = 3 * dpr;
+    const tool = PRACTICE_TOOLS[practiceTool] || PRACTICE_TOOLS.fineliner;
+    ctx.strokeStyle = tool.isEraser ? PRACTICE_PAPER : practiceColor;
+    ctx.globalAlpha = tool.alpha;
+    ctx.lineWidth = tool.width * dpr;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.beginPath();
     ctx.moveTo(practiceLast.x, practiceLast.y);
     ctx.lineTo(p.x, p.y);
     ctx.stroke();
+    ctx.globalAlpha = 1;
     practiceLast = p;
   };
   canvas.onpointerup = () => { practiceDrawing = false; };
@@ -1575,6 +1819,7 @@ function initPracticeCanvas(){
 }
 async function afterRenderDrawPractice(){
   practiceColor = PRACTICE_COLORS[0];
+  practiceTool = 'fineliner';
   initPracticeCanvas();
   showContinue('Continue →', nextStep, { ghost: !STATE.ownDrawingSaved });
 }
@@ -1593,6 +1838,69 @@ async function savePracticeDrawing(){
     document.getElementById('practiceSavedNote').textContent = "Couldn't save — you can still continue without saving.";
   }
   btn.disabled = false;
+}
+
+/* ============================================================
+   STEP 6b(new) — TEACHER DEMONSTRATION VIDEO, round 4 addition.
+   Tied to the SPECIFIC story the student chose in Step 5 (one
+   placeholder video slot per story, not one generic demo) — per
+   Faye's explicit instruction. Placed AFTER Step 6's own platform-led
+   guided drawing and the student's own "Try It Yourself" pass, BEFORE
+   Step 7's Compare — placement choice, explained here rather than
+   silently picked: showing the teacher's specific-story demo before
+   the student has committed to their own attempt risked exactly the
+   "watch the teacher then copy" pattern the original brief warned
+   against for Step 6 itself; putting it here means the student has
+   already made their own drawing decisions first, and this becomes a
+   natural bridge into Step 7's Teacher/Student reference comparison.
+   Full-screen, matching the platform's existing "Let's Draw Together"
+   convention (round 3) — this does NOT replace Step 6, which stays
+   platform-led per the original brief; this is an additional
+   supporting element.
+============================================================ */
+function renderTeacherDemo(){
+  const story = LESSON_DATA.story_choices.find(c => c.id === STATE.storyChoiceId) || LESSON_DATA.story_choices[0];
+  return `
+    <div class="step-inner bleed">
+      ${renderVideoStage(story.demoVideoStreamId, "Let's Draw Together", 'teacherDemoFrame', null, story.demoDisclaimer)}
+    </div>
+  `;
+}
+function afterRenderTeacherDemo(){
+  const story = LESSON_DATA.story_choices.find(c => c.id === STATE.storyChoiceId) || LESSON_DATA.story_choices[0];
+  if (!story.demoVideoStreamId) { showContinue('Continue →', nextStep); return; }
+  // Real video path mirrors Step 1's: autoplay unmuted (this is a
+  // deliberately-produced video, not ambient narration), auto-advance
+  // on 'ended', tap-to-play fallback if a browser blocks autoplay.
+  let advanced = false;
+  const advanceOnce = () => { if (advanced) return; advanced = true; nextStep(); };
+  const sdk = document.createElement('script');
+  sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  sdk.onload = () => {
+    try {
+      const iframe = document.getElementById('teacherDemoFrame');
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (!player) return;
+      player.addEventListener('ended', advanceOnce);
+      let started = false;
+      player.addEventListener('play', () => { started = true; const o = document.getElementById('videoTapOverlay'); if (o) o.hidden = true; });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) {}
+          const p = player.play();
+          if (p && p.catch) p.catch((e) => console.warn('[teacher_demo] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
+    } catch (e) { console.warn('[teacher_demo] Stream SDK attach failed', e); }
+  };
+  sdk.onerror = () => console.warn('[teacher_demo] Stream SDK failed to load');
+  document.head.appendChild(sdk);
+  setTimeout(() => showContinue('Continue →', advanceOnce, { ghost: true }), 6000);
 }
 
 /* ============================================================
