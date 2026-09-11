@@ -71,9 +71,28 @@ button{font-family:inherit;}
   pointer-events:none;
 }
 #topbar > *{pointer-events:auto;}
+.topbar-left{display:flex;align-items:center;gap:14px;}
 .exit-link{font-size:12px;color:var(--ink-faint);text-decoration:none;font-weight:700;letter-spacing:.2px;transition:color .15s ease;}
 .exit-link:hover{color:var(--accent-deep);}
+/* Global Previous control — every step needs a visible way back, per
+   Faye's explicit round-2 flag ("real problem, not nitpicking"). One
+   control in the topbar covers all 8 steps without each step's own
+   render() needing to know about navigation. Step 1 gets it disabled,
+   not hidden, so its position stays stable across steps. */
+.prev-step-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px 5px 10px;font-weight:700;letter-spacing:.2px;
+  cursor:pointer;display:flex;align-items:center;gap:3px;transition:border-color .15s ease,color .15s ease;
+}
+.prev-step-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-deep);}
+.prev-step-btn:active:not(:disabled){transform:scale(.96);}
+.prev-step-btn:disabled{opacity:.32;cursor:default;}
 .rail{display:flex;gap:6px;align-items:center;}
+/* Narrow viewports: "← Scene Drawing Foundation" + "‹ Previous"
+   together wrapped to two lines and crowded the topbar — caught in a
+   mobile-viewport screenshot pass, not by inspection. Collapse the
+   exit link to just its arrow there; the Previous control stays full. */
+@media(max-width:420px){.exit-link-full{display:none;}}
 .rail-dot{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .2s ease,transform .2s ease;}
 .rail-dot.done{background:var(--accent);}
 .rail-dot.current{background:var(--accent-deep);transform:scale(1.5);}
@@ -90,6 +109,16 @@ button{font-family:inherit;}
 }
 .step-inner.wide{max-width:1040px;}
 .step-inner.bleed{max-width:none;padding:0 0 120px;}
+/* Content-dense steps (e.g. Look Closer's 6-card grid) can be taller
+   than the viewport. justify-content:center (the default, right for
+   short single-moment steps) makes overflowing content spill equally
+   above AND below the fold, so the true bottom padding that's meant
+   to clear the fixed continue-dock never actually sits below the
+   last visible row on first paint — the dock still overlaps it. Root
+   cause found by measuring boundingBoxes, not by eyeballing the
+   screenshot alone. flex-start anchors dense content to the top so
+   scrolling to the real end also reaches the reserved clearance. */
+.step-inner.dense{justify-content:flex-start;}
 
 .step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:10px;}
 .step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
@@ -131,53 +160,75 @@ button{font-family:inherit;}
 }
 
 /* ============================================================
-   STEP 2 — Discover: camera-distance pull
+   STEP 2 — Discover: real 3D scene (Three.js), ported from
+   prototypes/3d-camera-explorer-v2/index.html's own Step 2, per
+   Faye's round-2 correction away from the round-1 2.5D CSS-transform
+   stand-in. Fully automatic camera pull-back, no drag, no narration.
 ============================================================ */
-.camera-viewport{
-  position:relative;width:100%;max-width:640px;margin:0 auto;aspect-ratio:4/3;
-  border-radius:18px;overflow:hidden;background:#dce6f0;
+.camera3d-stage{
+  position:relative;width:100%;aspect-ratio:4/3;
+  border-radius:18px;overflow:hidden;background:#dce8f2;
   box-shadow:0 14px 34px rgba(28,26,34,.18);
 }
-.camera-world{position:absolute;inset:0;transform-origin:50% 62%;will-change:transform;}
-.camera-world svg{position:absolute;inset:0;width:100%;height:100%;}
-.camera-track-wrap{width:100%;max-width:640px;margin:18px auto 4px;padding:0 6px;}
-.camera-track{position:relative;height:40px;}
-.camera-track-line{position:absolute;left:14px;right:14px;top:50%;height:5px;transform:translateY(-50%);background:var(--line);border-radius:999px;}
-.camera-track-hit{position:absolute;inset:0;touch-action:none;cursor:pointer;}
-.camera-handle{
-  position:absolute;top:50%;width:30px;height:30px;border-radius:50%;
-  background:var(--accent);border:3px solid #fff;box-shadow:0 4px 14px rgba(28,26,34,.3);
-  transform:translate(-50%,-50%);touch-action:none;cursor:grab;
+@media(min-height:640px){.camera3d-stage{max-height:64vh;aspect-ratio:auto;height:min(64vh,58vw);}}
+.camera3d-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .7s ease;}
+.camera3d-stage canvas.visible{opacity:1;}
+.camera3d-fallback{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:0 30px;font-size:13px;color:var(--ink-soft);
 }
-.camera-handle:active{cursor:grabbing;}
-.camera-track-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:10.5px;font-weight:700;color:var(--ink-faint);letter-spacing:.6px;text-transform:uppercase;}
-.camera-hint{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:14px;min-height:1.4em;}
-.camera-term{
-  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.5rem;
-  color:var(--accent-deep);margin-top:16px;opacity:0;transform:translateY(6px);
-  transition:opacity .5s ease,transform .5s ease;
+/* Term label lives INSIDE the 3D frame, in its lower third — round-1
+   put this below the frame with a track underneath it, leaving the
+   bottom of the page empty once the track was removed; anchoring it
+   low inside the frame itself balances the composition across the
+   full height instead of clustering everything near the top. */
+.camera3d-term{
+  position:absolute;left:50%;bottom:9%;transform:translate(-50%,8px);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.35rem;
+  color:var(--accent-deep);background:rgba(250,248,245,.92);padding:9px 22px;border-radius:999px;
+  opacity:0;transition:opacity .6s ease,transform .6s ease;letter-spacing:.4px;white-space:nowrap;
+  box-shadow:0 8px 20px rgba(28,26,34,.12);
 }
-.camera-term.show{opacity:1;transform:translateY(0);}
+.camera3d-term.show{opacity:1;transform:translate(-50%,0);}
+@media(max-width:480px){.camera3d-term{font-size:1.05rem;padding:7px 16px;}}
 
 /* ============================================================
-   STEP 3 — When Would We Use It? (tap-to-reveal prompts)
+   STEP 3 — When Would We Use It? (image-led tap-to-reveal cards)
+   Round 2: was text-only, per Faye's "some students won't read
+   text-first content — lead with imagery" correction. Each card is
+   now a small original illustration (SCENE_ART table in the JS,
+   keyed by lesson-data.js's sceneKey) on top, one short line below,
+   with the tap-to-reveal PLACE/TIME/SCALE/ATMOSPHERE tag kept as-is
+   (Faye liked that mechanic).
 ============================================================ */
-.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-@media(max-width:520px){.prompt-grid{grid-template-columns:1fr;}}
+.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+@media(max-width:600px){.prompt-grid{grid-template-columns:1fr;}}
 .prompt-card{
   position:relative;background:#fff;border:1.5px solid var(--line);border-radius:14px;
-  padding:16px 16px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;
-  transition:border-color .15s ease,transform .15s ease;min-height:78px;
+  overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:border-color .15s ease,transform .15s ease;
 }
 .prompt-card:active{transform:scale(.98);}
-.prompt-card.revealed{border-color:var(--accent);background:rgba(45,95,168,.05);}
-.prompt-text{font-size:13.5px;line-height:1.45;color:var(--ink);}
+.prompt-card.revealed{border-color:var(--accent);}
+.prompt-image{aspect-ratio:16/10;display:block;}
+.prompt-image svg{width:100%;height:100%;display:block;}
+.prompt-body{padding:12px 14px 14px;}
+.prompt-text{font-size:13px;line-height:1.45;color:var(--ink);}
 .prompt-reveal{
-  display:inline-block;margin-top:8px;font-size:10px;font-weight:800;letter-spacing:1.4px;
+  display:inline-block;margin-top:9px;font-size:10px;font-weight:800;letter-spacing:1.4px;
   color:#fff;background:var(--accent);padding:3px 9px;border-radius:999px;
   opacity:0;transform:translateY(4px);transition:opacity .25s ease,transform .25s ease;
 }
 .prompt-card.revealed .prompt-reveal{opacity:1;transform:translateY(0);}
+/* Listen control — shown only when lesson-data.js's audioSrc is
+   populated (real recorded narration, not TTS). Null today, so this
+   never renders; left ready for when Faye supplies a file. */
+.listen-btn{
+  display:flex;align-items:center;gap:6px;margin:0 auto 18px;font-size:12px;font-weight:700;
+  color:var(--accent-deep);background:#fff;border:1.5px solid var(--line);border-radius:999px;
+  padding:7px 16px;cursor:pointer;
+}
+.listen-btn:active{transform:scale(.96);}
 .big-idea-line{
   text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.15rem;
   color:var(--accent-deep);margin:26px auto 4px;max-width:440px;line-height:1.45;
@@ -191,6 +242,21 @@ button{font-family:inherit;}
 .resource-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 @media(max-width:720px){.resource-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:480px){.resource-grid{grid-template-columns:1fr;}}
+/* In-flow Continue (used by dense/grid steps instead of the fixed
+   dock). A fixed dock always overlaps whatever sits at the CURRENT
+   viewport bottom on first paint, regardless of how much padding is
+   reserved further down the document — reserved space only helps
+   once the user has actually scrolled to it. Tuning padding/margins
+   under the floating dock could not fix that; an in-flow button that
+   is simply part of the document after the last card can't overlap
+   anything, at any viewport height. Confirmed by measuring the real
+   gap after this change (not just eyeballing a screenshot). */
+.step-continue-inline{
+  display:block;margin:34px auto 30px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
+  box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
+}
+.step-continue-inline:active{transform:scale(.96);}
 .resource-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;}
 .resource-preview{
   aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
@@ -239,7 +305,15 @@ button{font-family:inherit;}
 .dstage{transition:opacity .5s ease;}
 .draw-caption{
   text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;
-  color:var(--accent-deep);margin:18px auto 6px;min-height:1.6em;
+  color:var(--accent-deep);margin:18px auto 2px;min-height:1.6em;
+}
+/* Round 2 addition — a short second line explaining the actual
+   technique each stage demonstrates (Faye: round 1's stages "didn't
+   actually teach anything"). Deliberately smaller/quieter than the
+   main caption so it reads as elaboration, not a second headline. */
+.draw-teaching-note{
+  text-align:center;font-size:12px;color:var(--ink-soft);line-height:1.5;
+  max-width:440px;margin:0 auto 6px;
 }
 .draw-progress{display:flex;justify-content:center;gap:7px;margin-bottom:4px;}
 .draw-dot{width:8px;height:8px;border-radius:50%;background:var(--line);}
@@ -254,6 +328,24 @@ button{font-family:inherit;}
 .draw-btn:disabled{opacity:.3;cursor:not-allowed;}
 .draw-btn:active{transform:scale(.96);}
 
+/* ---- Round 2 addition: homework/artwork submission. Same in-browser
+   sketch-canvas + IndexedDB pattern already used by the live
+   lesson-01-extreme-wide-shot and the Kandinsky lesson template
+   (openDB/compressCanvas/saveArtwork/listArtworks) — reused, not
+   reinvented, per Faye's explicit instruction. Own DB name (see the
+   JS comment) so this prototype never writes into the live lesson's
+   real student data. ---- */
+.practice-tool-row{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.practice-color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--line);}
+.practice-color-dot.picked{box-shadow:0 0 0 2.5px var(--accent);transform:scale(1.1);}
+.practice-canvas-wrap{
+  width:100%;max-width:420px;aspect-ratio:4/3;margin:0 auto 10px;border-radius:14px;overflow:hidden;
+  border:2px solid var(--ink);box-shadow:5px 6px 0 rgba(28,26,34,.12);touch-action:none;background:var(--paper);
+}
+.practice-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
+.practice-clear-btn{border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:999px;padding:6px 14px;font-size:11px;font-weight:700;cursor:pointer;}
+.practice-saved-note{text-align:center;font-size:12.5px;color:var(--accent-deep);font-weight:700;margin-top:10px;}
+
 /* ============================================================
    STEP 7 — Compare / Other Possibilities
 ============================================================ */
@@ -263,7 +355,34 @@ button{font-family:inherit;}
 .compare-card-icon{font-size:1.8rem;}
 .compare-card-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.95rem;color:var(--accent-deep);margin-top:8px;}
 .compare-card-note{font-size:11px;color:var(--ink-faint);margin-top:4px;}
-.compare-message{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-deep);margin:26px auto 0;max-width:420px;line-height:1.5;}
+.compare-message{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-deep);margin:26px auto 32px;max-width:420px;line-height:1.5;}
+
+/* ---- Round 2 addition: "your own reference" card (shows the saved
+   Step 6 practice drawing if there is one, otherwise an upload
+   placeholder), and a community-gallery placeholder section below —
+   see lesson-data.js's community_gallery field and the file header
+   for what's real vs. placeholder here. ---- */
+.own-work-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:20px 16px;text-align:center;margin-bottom:8px;}
+.own-work-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.92rem;color:var(--accent-deep);margin-bottom:12px;}
+.own-work-img{max-width:220px;width:100%;border-radius:10px;border:1.5px solid var(--line);display:block;margin:0 auto;}
+.upload-dropzone{
+  border:1.5px dashed var(--line);border-radius:12px;padding:22px 16px;cursor:pointer;
+  transition:border-color .15s ease;position:relative;
+}
+.upload-dropzone:hover{border-color:var(--accent);}
+.upload-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-dropzone-icon{font-size:1.6rem;}
+.upload-dropzone-label{font-size:12px;color:var(--ink-soft);margin-top:6px;}
+.gallery-section{margin-top:8px;padding-top:26px;border-top:1.5px solid var(--line);}
+.gallery-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-deep);text-align:center;margin-bottom:4px;}
+.gallery-subtitle{font-size:12px;color:var(--ink-faint);text-align:center;margin-bottom:16px;}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}}
+.gallery-card{
+  aspect-ratio:1;background:repeating-linear-gradient(135deg,#f0ede6,#f0ede6 8px,#e9e5db 8px,#e9e5db 16px);
+  border-radius:10px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;color:var(--ink-faint);
+}
 
 /* ============================================================
    STEP 8 — Complete
@@ -286,6 +405,32 @@ button{font-family:inherit;}
 .complete-badge-note{font-size:12px;color:var(--accent-deep);font-weight:700;margin-top:10px;}
 .complete-exit{display:inline-block;margin-top:22px;font-size:13px;color:var(--accent-deep);text-decoration:none;font-weight:700;}
 
+/* ---- Round 2 addition: next-lesson chaining + badge progress ---- */
+.next-lesson-card{
+  display:block;text-decoration:none;background:#fff;border:2px solid var(--ink);border-radius:16px;
+  padding:16px 20px;margin:26px auto 0;max-width:360px;box-shadow:4px 5px 0 rgba(28,26,34,.12);
+  transition:transform .15s ease;
+}
+.next-lesson-card:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(28,26,34,.12);}
+.next-lesson-kicker{font-size:10px;font-weight:800;letter-spacing:1.6px;color:var(--accent);text-transform:uppercase;}
+.next-lesson-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-deep);margin-top:4px;}
+.next-lesson-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+/* Badge card — adapted from core/scene-drawing-style.css's own
+   .course-badge-card (same class names, same real renderCourseBadgeCard()
+   output), re-tokened to this file's own palette instead of linking
+   that shared stylesheet wholesale (which defines a conflicting
+   :root and page-background — see the round-1 Artchi CSS porting note
+   for why lesson pages copy in just the classes they need). */
+.course-badge-card{background:linear-gradient(135deg,#f3f0fc 0%,#eaf6f8 100%);border:1.5px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin:26px auto 0;max-width:360px;}
+.course-badge-row{display:flex;align-items:center;gap:12px;}
+.course-badge-emoji{font-size:32px;flex-shrink:0;opacity:.5;}
+.course-badge-emoji.unlocked{opacity:1;}
+.course-badge-info{flex:1;text-align:left;}
+.course-badge-name{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px;}
+.course-badge-meta{font-size:11px;color:var(--ink-muted);}
+.course-badge-progress-bar{height:5px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden;}
+.course-badge-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--accent));border-radius:3px;}
+
 /* ============================================================
    ARTCHI (ported as-is from core/scene-drawing-style.css — see
    core/scene-drawing-archi.js's own header for why this stays a
@@ -304,10 +449,20 @@ button{font-family:inherit;}
 @keyframes artchiBreathe{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
 @keyframes artchiBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-13px) rotate(-5deg);}}
 @keyframes artchiZzz{0%,100%{opacity:0;transform:translateY(0);}50%{opacity:1;transform:translateY(-6px);}}
-.artchi-bubble{position:fixed;right:20px;bottom:96px;max-width:190px;background:#fff;padding:9px 11px;border-radius:var(--radius-md);font-size:11.5px;color:var(--ink);line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.15);border:1.5px solid var(--border);z-index:59;font-weight:600;display:none;}
+/* pointer-events:none on the bubble itself — found live: its fixed
+   position (right:20px; bottom:96px, taller once text wraps) reaches
+   up over the right portion of Step 2's drag track, and being a real
+   bordered/backgrounded box, it was SILENTLY SWALLOWING pointerdown
+   events meant for the track underneath — a student dragging toward
+   "Far" right when the "Try stepping back." bubble appears (~500ms
+   into the step) would find the drag stop responding, with no visual
+   sign why. Caught by scripted repeat-click testing, not by a single
+   click or by inspection. Re-enabled only on the close "×", the one
+   part of the bubble meant to be clickable. */
+.artchi-bubble{position:fixed;right:20px;bottom:96px;max-width:190px;background:#fff;padding:9px 11px;border-radius:var(--radius-md);font-size:11.5px;color:var(--ink);line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.15);border:1.5px solid var(--border);z-index:59;font-weight:600;display:none;pointer-events:none;}
 .artchi-bubble::after{content:'';position:absolute;bottom:-7px;right:24px;width:11px;height:11px;background:#fff;transform:rotate(45deg);border-right:1.5px solid var(--border);border-bottom:1.5px solid var(--border);}
 .artchi-bubble.show{display:block;animation:artchiBubblePop .3s ease;}
-.artchi-bubble-close{position:absolute;top:3px;right:7px;color:var(--ink-muted);font-size:12px;cursor:pointer;font-weight:800;}
+.artchi-bubble-close{position:absolute;top:3px;right:7px;color:var(--ink-muted);font-size:12px;cursor:pointer;font-weight:800;pointer-events:auto;}
 @keyframes artchiBubblePop{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
 .artchi-label{position:fixed;right:20px;bottom:2px;background:var(--purple);color:#fff;padding:4px 10px;border-radius:11px;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:.5px;z-index:61;pointer-events:none;box-shadow:0 4px 14px rgba(167,139,250,.4);white-space:nowrap;transition:opacity .3s ease;}
 .artchi-label.hidden{display:none;}
@@ -345,7 +500,10 @@ button{font-family:inherit;}
 
 <div id="canvas-app">
   <div id="topbar">
-    <a class="exit-link" href="../../">← Scene Drawing Foundation</a>
+    <div class="topbar-left">
+      <a class="exit-link" href="../../">← <span class="exit-link-full">Scene Drawing Foundation</span></a>
+      <button class="prev-step-btn" id="prevStepBtn" onclick="prevStep()">‹ Previous</button>
+    </div>
     <div class="rail" id="rail"></div>
   </div>
   <div id="stage"></div>
@@ -363,6 +521,20 @@ button{font-family:inherit;}
      sessionStorage read/write the live sibling lesson uses below. -->
 <script src="../../../../core/scene-drawing-platform-bridge.js"></script>
 <script src="../../../../core/scene-drawing-archi.js"></script>
+<!-- Step 8 badge progress — the real, existing mechanism (not a new
+     one): getCourseBadgeProgress()/COURSE_BADGE_REGISTRY already
+     define scene_drawing_unit_01 keyed off completedLessons (the same
+     sessionStorage profile this file already writes to in
+     markLessonComplete). renderCourseBadgeCard() is the exact function
+     the Scene Drawing course listing itself uses to show this same
+     card — reused verbatim rather than re-implemented, per Faye's
+     "do not invent a new one" instruction. scene-drawing-app.js is
+     pure function/const definitions (no page-load side effects —
+     checked before including it), so loading it here only for this
+     one function is safe. -->
+<script src="../../../../core/course-badge-registry.js"></script>
+<script src="../../../../core/badge-catalog.js"></script>
+<script src="../../../../core/scene-drawing-app.js"></script>
 <script src="lesson-data.js"></script>
 
 <script>
@@ -377,9 +549,9 @@ button{font-family:inherit;}
 ============================================================ */
 const STEPS = [
   { id:'intro_video',     render:renderIntroVideo,     afterRender:afterRenderIntroVideo },
-  { id:'discover',        render:renderDiscover,        afterRender:afterRenderDiscover },
+  { id:'discover',        render:renderDiscover,        afterRender:afterRenderDiscover, cleanup:cleanupDiscover },
   { id:'when_use',        render:renderWhenUse,         afterRender:afterRenderWhenUse },
-  { id:'look_closer',     render:renderLookCloser,       afterRender:afterRenderLookCloser },
+  { id:'look_closer',     render:renderLookCloser },
   { id:'choose_story',    render:renderChooseStory },
   { id:'guided_drawing',  render:renderGuidedDrawing,   afterRender:afterRenderGuidedDrawing },
   { id:'compare',         render:renderCompare,          afterRender:afterRenderCompare },
@@ -390,8 +562,9 @@ let STATE = {
   stepIndex: 0,
   storyChoiceId: null,
   promptsRevealed: [],     // indices into story_prompts.items
-  cameraSettledWide: false,
   drawStageIndex: 0,
+  drawPhase: 'reference',  // 'reference' (5-stage viewer) -> 'practice' (own sketch)
+  ownDrawingSaved: false,  // Step 6 homework submission (IndexedDB)
   checkedConcepts: [],
   lessonSaved: false
 };
@@ -510,120 +683,294 @@ function afterRenderIntroVideo(){
 }
 
 /* ============================================================
-   STEP 2 — DISCOVER: camera-distance pull (2.5D, no 3D geometry —
-   see the redesign notes on why the earlier prototypes' literal
-   Three.js scene isn't reused here). One scaling "world" layer, so
-   pulling back simultaneously shrinks the character and reveals more
-   of the painted world — a single transform, not two independently
-   tuned layers.
+   STEP 2 — DISCOVER: real 3D scene, ported directly from
+   prototypes/3d-camera-explorer-v2/index.html's own Step 2 (mountains
+   + lake + character, camera dolly pull-back, staggered drop-in
+   assembly) — per Faye's round-2 correction away from round 1's
+   simplified 2.5D CSS-transform stand-in. Two deliberate differences
+   from the source prototype, both per Faye's explicit instruction:
+     - No narration (no speechSynthesis call anywhere in this step).
+     - No look-around drag either — fully automatic/non-interactive,
+       camera pulls back on its own start to finish. Still no VP,
+       grid, free-orbit, or CAD-like controls, per the original brief.
+   Renders into a BOXED container (.camera3d-stage), not the source
+   prototype's full-viewport fixed canvas — this lesson's "Learning
+   Canvas" keeps every step framed/contained, so the 3D scene is sized
+   to its own box, not window.innerWidth/innerHeight.
 ============================================================ */
-function worldSvg(){
-  // Original placeholder illustration — sky / far ridge / hills /
-  // ground / a small character near the horizon. Swappable for real
-  // art later without touching any JS (see mountCameraPull below).
-  return `
-    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#eaf1f8"/><stop offset="100%" stop-color="#cfe0ee"/>
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="400" height="300" fill="url(#skyGrad)"/>
-      <path d="M0,190 L60,140 L120,175 L190,120 L260,170 L330,135 L400,180 L400,300 L0,300 Z" fill="#9fb6cc" opacity=".55"/>
-      <path d="M0,215 L70,180 L140,205 L220,165 L300,205 L400,185 L400,300 L0,300 Z" fill="#7f9cb8" opacity=".6"/>
-      <path d="M0,300 L0,235 L90,255 L180,225 L260,250 L400,220 L400,300 Z" fill="#5b7a96"/>
-      <ellipse cx="200" cy="188" rx="7" ry="16" fill="#2d3540"/>
-      <circle cx="200" cy="166" r="6" fill="#2d3540"/>
-    </svg>
-  `;
+let _three3DState = null; // set on mount, cleared by cleanupDiscover()
+let _threeLoadPromise = null;
+function loadThreeJs(){
+  if (window.THREE) return Promise.resolve();
+  if (_threeLoadPromise) return _threeLoadPromise;
+  _threeLoadPromise = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return _threeLoadPromise;
 }
 function renderDiscover(){
-  const d = LESSON_DATA.interactive_scene;
   return `
     <div class="step-inner">
-      <div class="camera-viewport">
-        <div class="camera-world" id="cameraWorld">${worldSvg()}</div>
+      <div class="camera3d-stage" id="camera3dStage">
+        <div class="camera3d-term" id="camera3dTerm"></div>
       </div>
-      <div class="camera-track-wrap">
-        <div class="camera-track" id="cameraTrack">
-          <div class="camera-track-line"></div>
-          <div class="camera-track-hit" id="cameraHit"></div>
-          <div class="camera-handle" id="cameraHandle"></div>
-        </div>
-        <div class="camera-track-labels"><span>Close</span><span>Far</span></div>
-      </div>
-      <div class="camera-hint" id="cameraHint">${d.hint}</div>
-      <div class="camera-term" id="cameraTerm">${d.termLabel}</div>
     </div>
   `;
 }
-function afterRenderDiscover(){
-  const d = LESSON_DATA.interactive_scene;
-  const worldEl = document.getElementById('cameraWorld');
-  const handleEl = document.getElementById('cameraHandle');
-  const hitEl = document.getElementById('cameraHit');
-  const hintEl = document.getElementById('cameraHint');
-  const termEl = document.getElementById('cameraTerm');
+async function afterRenderDiscover(){
+  const stageEl = document.getElementById('camera3dStage');
+  const termEl = document.getElementById('camera3dTerm');
+  termEl.textContent = LESSON_DATA.interactive_scene.termLabel;
 
-  let pos = d.startPosition;
-  let dragging = false;
-  let hintedOnce = false;
-
-  function applyVisual(p){
-    const scale = 2.5 - p * 1.5; // p=0 -> 2.5 (tight on character), p=1 -> 1.0 (full world)
-    worldEl.style.transform = `scale(${scale.toFixed(3)})`;
-    handleEl.style.left = (p * 100) + '%';
+  try {
+    await loadThreeJs();
+  } catch (e) {
+    console.warn('[discover] Three.js failed to load', e);
+    stageEl.insertAdjacentHTML('beforeend', `<div class="camera3d-fallback">This scene couldn't load (a required script failed — check your connection and reload). Extreme Wide Shot: the camera pulls far back, showing a huge world around a very small character.</div>`);
+    showContinue('Continue →', nextStep);
+    return;
   }
-  function setPos(p, settle){
-    pos = clamp01(p);
-    applyVisual(pos);
-    if (settle && pos >= d.settlePosition - 0.06 && !STATE.cameraSettledWide) {
-      STATE.cameraSettledWide = true;
+  // Step may have been left (cleanup already ran) before the CDN
+  // script resolved — don't mount into a stage that's no longer live.
+  if (!document.getElementById('camera3dStage')) return;
+
+  const canvas = document.createElement('canvas');
+  stageEl.insertBefore(canvas, termEl);
+
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xdce8f2);
+
+  const camera = new THREE.PerspectiveCamera(55, 4 / 3, 0.1, 300);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const sun = new THREE.DirectionalLight(0xfff4e0, 0.8);
+  sun.position.set(-10, 22, -8);
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xe8eefc, 0.3);
+  fill.position.set(6, 8, 18);
+  scene.add(fill);
+
+  function box(w, h, d, color) {
+    return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: color, roughness: 0.9 }));
+  }
+  function cyl(rTop, rBottom, h, color, segments) {
+    return new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBottom, h, segments || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function cone(r, h, color, segments) {
+    return new THREE.Mesh(new THREE.ConeGeometry(r, h, segments || 16), new THREE.MeshStandardMaterial({ color: color, roughness: 0.85 }));
+  }
+  function sphereMesh(r, color, wSeg, hSeg) {
+    return new THREE.Mesh(new THREE.SphereGeometry(r, wSeg || 16, hSeg || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
+  }
+
+  const PALETTE = {
+    ground: 0xdce4d0, lake: 0xa9cfe0, mountainNear: 0x7d92a8, mountainFar: 0xaebcd0,
+    charTorso: 0x2d5fa8, charHead: 0xf1d9b8, charLimb: 0x3c4657
+  };
+
+  const worldGroup = new THREE.Group();
+  scene.add(worldGroup);
+
+  const ground = box(90, 0.3, 90, PALETTE.ground);
+  ground.position.set(0, -0.15, 10);
+  worldGroup.add(ground);
+
+  const lake = new THREE.Mesh(
+    new THREE.CircleGeometry(6.5, 32),
+    new THREE.MeshStandardMaterial({ color: PALETTE.lake, roughness: 0.35, metalness: 0.1 })
+  );
+  lake.rotation.x = -Math.PI / 2;
+  lake.position.set(3.5, 0.12, 7);
+  worldGroup.add(lake);
+
+  const character = new THREE.Group();
+  const torso = box(0.5, 0.72, 0.28, PALETTE.charTorso);
+  torso.position.y = 0.36 + 0.75;
+  const head = sphereMesh(0.22, PALETTE.charHead, 24, 18);
+  head.position.y = 0.75 + 0.72 + 0.22;
+  const legL = cyl(0.09, 0.09, 0.75, PALETTE.charLimb);
+  legL.position.set(-0.13, 0.375, 0);
+  const legR = legL.clone(); legR.position.x = 0.13;
+  const armL = cyl(0.07, 0.07, 0.62, PALETTE.charLimb);
+  armL.position.set(-0.32, 0.75 + 0.4, 0);
+  armL.rotation.z = 0.12;
+  const armR = armL.clone(); armR.position.x = 0.32; armR.rotation.z = -0.12;
+  character.add(torso, head, legL, legR, armL, armR);
+  character.position.set(0, 0, 1.5);
+  worldGroup.add(character);
+
+  const mountainDefs = [
+    { x: -14, z: 46, r: 9, h: 16, color: PALETTE.mountainNear },
+    { x: 4, z: 52, r: 11, h: 19, color: PALETTE.mountainFar },
+    { x: 20, z: 44, r: 8, h: 14, color: PALETTE.mountainNear },
+    { x: -3, z: 60, r: 13, h: 22, color: PALETTE.mountainFar }
+  ];
+  const mountains = mountainDefs.map((def) => {
+    const m = cone(def.r, def.h, def.color, 8);
+    m.position.set(def.x, def.h / 2, def.z);
+    m.userData.finalY = def.h / 2;
+    m.visible = false;
+    worldGroup.add(m);
+    return m;
+  });
+
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  // Same 0-1 dolly convention as the rest of Unit 01, used only to
+  // animate from a closer starting point to the settled Extreme Wide
+  // framing — no drag input in this lesson step.
+  const MIN_DIST = 7, MAX_DIST = 34;
+  const TARGET = new THREE.Vector3(0, 1.4, 4);
+  const RISE_AMOUNT = 5.5, LOOK_DOWN_AMOUNT = 5.5;
+  let dollyT = 0.42;
+
+  function applyCameraTransform() {
+    const dist = MIN_DIST + (MAX_DIST - MIN_DIST) * dollyT;
+    const camY = TARGET.y + dollyT * RISE_AMOUNT;
+    camera.position.set(TARGET.x, camY, TARGET.z - dist);
+    const lookY = TARGET.y - dollyT * LOOK_DOWN_AMOUNT;
+    camera.lookAt(TARGET.x, lookY, TARGET.z);
+  }
+  applyCameraTransform();
+
+  function dropIn(obj, delayMs, durationMs) {
+    const finalY = obj.userData.finalY || 0;
+    obj.position.y = finalY + 7;
+    obj.visible = true;
+    setTimeout(() => {
+      const start = performance.now();
+      function step(now) {
+        const t = clamp01((now - start) / durationMs);
+        obj.position.y = lerp(finalY + 7, finalY, easeOutCubic(t));
+        if (t < 1 && stageState.alive) requestAnimationFrame(step); else obj.position.y = finalY;
+      }
+      requestAnimationFrame(step);
+    }, delayMs);
+  }
+
+  let revealRafId = null;
+  function animateReveal(durationMs, onDone) {
+    const start = performance.now();
+    function step(now) {
+      if (!stageState.alive) return;
+      const t = clamp01((now - start) / durationMs);
+      dollyT = lerp(0.42, 1, easeInOutCubic(t));
+      applyCameraTransform();
+      if (t < 1) {
+        revealRafId = requestAnimationFrame(step);
+      } else {
+        revealRafId = null;
+        if (onDone) onDone();
+      }
+    }
+    revealRafId = requestAnimationFrame(step);
+  }
+
+  function resizeToContainer() {
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resizeToContainer();
+  window.addEventListener('resize', resizeToContainer);
+
+  const stageState = { alive: true };
+  let renderRafId = null;
+  function renderLoop() {
+    if (!stageState.alive) return;
+    renderer.render(scene, camera);
+    renderRafId = requestAnimationFrame(renderLoop);
+  }
+  renderLoop();
+
+  // Mount fade-in, then auto-play the assembly + camera pull-back —
+  // fully automatic, no user gesture required to start.
+  requestAnimationFrame(() => canvas.classList.add('visible'));
+  setTimeout(() => {
+    if (!stageState.alive) return;
+    mountains.forEach((m, i) => dropIn(m, 250 + i * 240, 1300));
+    animateReveal(4200, () => {
       termEl.classList.add('show');
-      hintEl.textContent = '';
       showArtchiBubble('What changes?', 2600);
       showContinue('Continue →', nextStep);
-    }
-  }
-  function posFromEvent(e){
-    const rect = hitEl.getBoundingClientRect();
-    const usable = { left: rect.left + 15, right: rect.right - 15 };
-    const x = Math.max(usable.left, Math.min(usable.right, e.clientX));
-    return (x - usable.left) / (usable.right - usable.left);
-  }
-  hitEl.addEventListener('pointerdown', (e) => {
-    dragging = true;
-    hitEl.setPointerCapture && hitEl.setPointerCapture(e.pointerId);
-    if (!hintedOnce) { hintedOnce = true; hintEl.textContent = ''; }
-    setPos(posFromEvent(e));
-  });
-  hitEl.addEventListener('pointermove', (e) => { if (dragging) setPos(posFromEvent(e)); });
-  hitEl.addEventListener('pointerup', () => { if (dragging) { dragging = false; setPos(pos, true); } });
-  hitEl.addEventListener('pointercancel', () => { dragging = false; });
+    });
+    ensureArtchiMounted();
+  }, 500);
 
-  applyVisual(pos);
-  ensureArtchiMounted();
-  setTimeout(() => showArtchiBubble('Try stepping back.', 2600), 500);
+  _three3DState = {
+    cleanup() {
+      stageState.alive = false;
+      if (revealRafId) cancelAnimationFrame(revealRafId);
+      if (renderRafId) cancelAnimationFrame(renderRafId);
+      window.removeEventListener('resize', resizeToContainer);
+      renderer.dispose();
+    }
+  };
+}
+function cleanupDiscover(){
+  if (_three3DState) { _three3DState.cleanup(); _three3DState = null; }
 }
 
 /* ============================================================
-   STEP 3 — WHEN WOULD WE USE IT? (tap-to-reveal story prompts)
+   STEP 3 — WHEN WOULD WE USE IT? (image-led tap-to-reveal prompts)
+   Round 2: original small illustrations, one per situation — small,
+   non-photographic, same restrained palette as the rest of the
+   lesson (no copyright concern, nothing hotlinked — see Step 4 for
+   where that rule actually matters). Swappable for real art later by
+   only editing this table, same "data says which scene, presentation
+   renders it" split as the rest of the file.
+============================================================ */
+const SCENE_ART = {
+  storm: `<svg viewBox="0 0 300 188"><rect width="300" height="188" fill="#c3cdd8"/><path d="M0,60 Q40,44 80,58 Q120,42 160,56 Q200,40 240,54 Q270,44 300,56 L300,0 L0,0 Z" fill="#8b97a6"/><path d="M0,120 L50,90 L100,110 L150,80 L200,105 L250,85 L300,100 L300,188 L0,188 Z" fill="#5d6b7c"/><g stroke="#48566a" stroke-width="2" stroke-linecap="round" opacity=".55"><line x1="60" y1="130" x2="52" y2="150"/><line x1="90" y1="140" x2="82" y2="160"/><line x1="220" y1="128" x2="212" y2="148"/></g></svg>`,
+  thaw: `<svg viewBox="0 0 300 188"><rect width="300" height="188" fill="#e7f0ee"/><path d="M0,140 L300,140 L300,188 L0,188 Z" fill="#dfe8de"/><path d="M0,140 L140,140 L120,120 L60,120 L0,132 Z" fill="#f4f8f6"/><line x1="200" y1="140" x2="200" y2="70" stroke="#8a7c6a" stroke-width="4"/><path d="M200,70 Q186,80 190,96 M200,78 Q214,86 210,100 M200,92 Q188,100 192,114" stroke="#8a7c6a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="188" cy="92" r="3.5" fill="#e8a9c0"/><circle cx="212" cy="98" r="3.5" fill="#e8a9c0"/><circle cx="192" cy="110" r="3.5" fill="#e8a9c0"/></svg>`,
+  city: `<svg viewBox="0 0 300 188"><defs><linearGradient id="citySky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e7d3c4"/><stop offset="100%" stop-color="#d3c9d6"/></linearGradient></defs><rect width="300" height="188" fill="url(#citySky)"/><rect x="0" y="130" width="300" height="58" fill="#3b3f52"/><g fill="#2c2f40"><rect x="30" y="96" width="18" height="60"/><rect x="55" y="112" width="14" height="44"/><rect x="76" y="84" width="20" height="72"/><rect x="104" y="104" width="16" height="52"/><rect x="128" y="94" width="22" height="62"/><rect x="158" y="116" width="14" height="40"/><rect x="180" y="100" width="18" height="56"/><rect x="206" y="90" width="16" height="66"/><rect x="230" y="108" width="20" height="48"/></g><g fill="#f4d98e" opacity=".85"><rect x="34" y="104" width="3" height="3"/><rect x="82" y="96" width="3" height="3"/><rect x="134" y="106" width="3" height="3"/><rect x="210" y="100" width="3" height="3"/></g></svg>`,
+  forest: `<svg viewBox="0 0 300 188"><rect width="300" height="188" fill="#242c30"/><path d="M-10,188 L-10,96 L14,60 L38,96 L38,188 Z" fill="#1a2124"/><path d="M20,188 L20,70 L52,20 L84,70 L84,188 Z" fill="#222b2e"/><path d="M70,188 L70,90 L96,48 L122,90 L122,188 Z" fill="#1a2124"/><path d="M180,188 L180,80 L210,34 L240,80 L240,188 Z" fill="#222b2e"/><path d="M230,188 L230,100 L256,58 L282,100 L282,188 Z" fill="#1a2124"/><circle cx="150" cy="140" r="4" fill="#e9dcb5"/><rect x="147" y="144" width="6" height="16" fill="#1a2124"/></svg>`,
+  newworld: `<svg viewBox="0 0 300 188"><defs><linearGradient id="newSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c9def0"/><stop offset="100%" stop-color="#eef2da"/></linearGradient></defs><rect width="300" height="188" fill="url(#newSky)"/><circle cx="220" cy="60" r="34" fill="#f3ce8a" opacity=".85"/><path d="M0,150 Q50,110 100,140 Q160,95 210,135 Q260,105 300,140 L300,188 L0,188 Z" fill="#9fb894"/><path d="M0,170 Q60,150 130,168 Q200,148 300,166 L300,188 L0,188 Z" fill="#7f9d78"/><circle cx="108" cy="160" r="3" fill="#2f3a2c"/><rect x="106" y="163" width="4" height="10" fill="#2f3a2c"/></svg>`,
+  sunrise: `<svg viewBox="0 0 300 188"><defs><linearGradient id="sunriseSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8b7a0"/><stop offset="55%" stop-color="#f2d3a8"/><stop offset="100%" stop-color="#f7e9c8"/></linearGradient></defs><rect width="300" height="188" fill="url(#sunriseSky)"/><circle cx="150" cy="128" r="30" fill="#f9e29a"/><g stroke="#f4cf82" stroke-width="3" opacity=".7"><line x1="150" y1="70" x2="150" y2="86"/><line x1="90" y1="128" x2="106" y2="128"/><line x1="194" y1="128" x2="210" y2="128"/></g><path d="M0,140 L60,122 L120,138 L180,116 L240,134 L300,120 L300,188 L0,188 Z" fill="#5b4a52"/></svg>`
+};
+/* ============================================================
+   STEP 3 — WHEN WOULD WE USE IT? (image-led tap-to-reveal prompts)
 ============================================================ */
 function renderWhenUse(){
   const d = LESSON_DATA.story_prompts;
   const cards = d.items.map((item, i) => `
     <div class="prompt-card" id="promptCard${i}" onclick="revealPrompt(${i})">
-      <div class="prompt-text">${item.text}</div>
-      <div class="prompt-reveal">${item.reveal}</div>
+      <div class="prompt-image">${SCENE_ART[item.sceneKey] || ''}</div>
+      <div class="prompt-body">
+        <div class="prompt-text">${item.text}</div>
+        <div class="prompt-reveal">${item.reveal}</div>
+      </div>
     </div>
   `).join('');
+  const listenBtn = d.audioSrc
+    ? `<button class="listen-btn" onclick="playStoryPromptAudio()">🔊 Listen</button>`
+    : '';
   return `
     <div class="step-inner wide">
       <h2 class="step-title">${d.question}</h2>
+      ${listenBtn}
       <div class="prompt-grid">${cards}</div>
       <div class="big-idea-line" id="bigIdeaLine">${d.bigIdea}</div>
     </div>
   `;
+}
+function playStoryPromptAudio(){
+  const src = LESSON_DATA.story_prompts.audioSrc;
+  if (!src) return;
+  new Audio(src).play().catch((e) => console.warn('[playStoryPromptAudio] failed', e));
 }
 function revealPrompt(i){
   if (STATE.promptsRevealed.includes(i)) return;
@@ -670,15 +1017,13 @@ function renderLookCloser(){
     </div>
   `).join('');
   return `
-    <div class="step-inner wide">
+    <div class="step-inner wide dense">
       <div class="step-kicker">Look Closer</div>
       <h2 class="step-title">See It in Art</h2>
       <div class="resource-grid">${cards}</div>
+      <button class="step-continue-inline" onclick="nextStep()">Continue →</button>
     </div>
   `;
-}
-function afterRenderLookCloser(){
-  showContinue('Continue →', nextStep);
 }
 
 /* ============================================================
@@ -708,41 +1053,76 @@ function pickStory(id){
    STEP 6 — GUIDED DRAWING (platform-led progressive reveal, NOT a
    recorded teacher demo — see file header). One shared illustration,
    5 cumulative layers matching drawing_steps' 5 captions exactly.
+
+   Round 2: substantially more visual craft per stage, each one now
+   demonstrating a real, nameable technique (composition/horizon
+   placement, atmospheric value, scale relationship, overlap for
+   depth + cross-hatch shading, selective detail/restraint) instead of
+   abstract placeholder shapes — per Faye's "as a student I didn't
+   actually learn anything from watching it" correction. Order matches
+   the original brief's 5 captions exactly (Start the big world / Build
+   the largest shapes / Place the character small / Create depth / Add
+   only the details the story needs).
 ============================================================ */
 function drawingSvg(){
   return `
     <svg viewBox="0 0 400 300">
+      <!-- Stage 1 — composition guides: horizon placed low (about
+           two-thirds down) plus thirds/center guide lines, showing
+           WHERE the horizon goes and why, not just corner marks. -->
       <g class="dstage" data-stage="1" opacity="0">
-        <rect x="14" y="14" width="30" height="2" fill="#8a8578"/><rect x="14" y="14" width="2" height="30" fill="#8a8578"/>
-        <rect x="356" y="14" width="30" height="2" fill="#8a8578"/><rect x="384" y="14" width="2" height="30" fill="#8a8578"/>
-        <rect x="14" y="284" width="30" height="2" fill="#8a8578"/><rect x="14" y="254" width="2" height="30" fill="#8a8578"/>
-        <rect x="356" y="284" width="30" height="2" fill="#8a8578"/><rect x="384" y="254" width="2" height="30" fill="#8a8578"/>
-        <line x1="10" y1="210" x2="390" y2="198" stroke="#a39d8e" stroke-width="1.4" stroke-dasharray="3 4"/>
+        <rect x="14" y="14" width="26" height="2" fill="#8a8578"/><rect x="14" y="14" width="2" height="26" fill="#8a8578"/>
+        <rect x="360" y="14" width="26" height="2" fill="#8a8578"/><rect x="384" y="14" width="2" height="26" fill="#8a8578"/>
+        <rect x="14" y="284" width="26" height="2" fill="#8a8578"/><rect x="14" y="258" width="2" height="26" fill="#8a8578"/>
+        <rect x="360" y="284" width="26" height="2" fill="#8a8578"/><rect x="384" y="258" width="2" height="26" fill="#8a8578"/>
+        <line x1="10" y1="195" x2="390" y2="195" stroke="#b7b1a2" stroke-width="1.2" stroke-dasharray="4 4"/>
+        <line x1="200" y1="16" x2="200" y2="284" stroke="#d6d0c1" stroke-width="1" stroke-dasharray="2 5"/>
+        <line x1="133" y1="16" x2="133" y2="284" stroke="#e6e1d3" stroke-width="1" stroke-dasharray="2 5"/>
+        <line x1="267" y1="16" x2="267" y2="284" stroke="#e6e1d3" stroke-width="1" stroke-dasharray="2 5"/>
       </g>
+      <!-- Stage 2 — largest shapes: a pale, low-contrast distant
+           mountain mass (atmospheric perspective: far = light + soft). -->
       <g class="dstage" data-stage="2" opacity="0">
-        <path d="M0,150 L80,95 L160,135 L240,80 L320,130 L400,100 L400,300 L0,300 Z" fill="none" stroke="#7d7669" stroke-width="2"/>
-        <path d="M0,230 L400,205 L400,300 L0,300 Z" fill="none" stroke="#7d7669" stroke-width="2"/>
+        <rect x="0" y="0" width="400" height="195" fill="#eef1e9" opacity=".55"/>
+        <path d="M0,175 Q40,150 80,168 Q130,138 180,162 Q230,140 280,164 Q330,146 400,168 L400,195 L0,195 Z" fill="#b7bfc5" opacity=".6"/>
       </g>
+      <!-- Stage 3 — the character, small, placed on the horizon at a
+           thirds intersection (scale: tiny next to the world to come). -->
       <g class="dstage" data-stage="3" opacity="0">
-        <path d="M0,190 L70,160 L150,185 L230,150 L310,182 L400,160" fill="none" stroke="#6b6558" stroke-width="1.6"/>
-        <path d="M20,300 L20,240 Q26,224 34,240 L34,300 Z" fill="none" stroke="#6b6558" stroke-width="1.6"/>
-        <path d="M360,300 L360,250 Q368,232 378,250 L378,300 Z" fill="none" stroke="#6b6558" stroke-width="1.6"/>
+        <path d="M147,195 L147,181 Q147,172 154,172 Q161,172 161,181 L161,195 Z" fill="none" stroke="#4b473d" stroke-width="1.4"/>
+        <circle cx="154" cy="167" r="4.5" fill="none" stroke="#4b473d" stroke-width="1.4"/>
+        <line x1="161" y1="187" x2="168" y2="195" stroke="#4b473d" stroke-width="1.2" stroke-linecap="round"/>
       </g>
+      <!-- Stage 4 — depth: a mid-value treeline overlapping the
+           distant mountains, plus dark foreground shapes at both
+           bottom corners with cross-hatch shading — overlap + value
+           progression is what actually reads as depth. -->
       <g class="dstage" data-stage="4" opacity="0">
-        <ellipse cx="200" cy="222" rx="6" ry="14" fill="none" stroke="#4b473d" stroke-width="1.6"/>
-        <circle cx="200" cy="202" r="5" fill="none" stroke="#4b473d" stroke-width="1.6"/>
+        <path d="M0,195 Q50,178 100,190 Q160,172 220,188 Q280,174 340,190 Q370,182 400,188 L400,220 L0,220 Z" fill="#8b9284" opacity=".75"/>
+        <path d="M0,300 L0,215 Q20,195 40,215 Q46,240 34,260 L34,300 Z" fill="#3a3a34"/>
+        <path d="M366,300 L366,225 Q380,205 394,225 Q398,250 388,270 L388,300 Z" fill="#3a3a34"/>
+        <g stroke="#5a564a" stroke-width="1" opacity=".55">
+          <line x1="10" y1="240" x2="24" y2="236"/><line x1="10" y1="252" x2="22" y2="248"/><line x1="10" y1="264" x2="20" y2="260"/>
+          <line x1="374" y1="248" x2="386" y2="244"/><line x1="374" y1="260" x2="384" y2="256"/>
+        </g>
       </g>
+      <!-- Stage 5 — only the details the story needs: a soft moonlight
+           glow + a couple of light rays, and a few ground-texture
+           marks near the character's feet. Restraint, not clutter. -->
       <g class="dstage" data-stage="5" opacity="0">
-        <path d="M60,105 q4,-6 8,0" stroke="#4b473d" stroke-width="1" fill="none"/>
-        <path d="M80,112 q4,-6 8,0" stroke="#4b473d" stroke-width="1" fill="none"/>
-        <line x1="30" y1="260" x2="34" y2="248" stroke="#4b473d" stroke-width="1"/>
-        <line x1="40" y1="262" x2="44" y2="250" stroke="#4b473d" stroke-width="1"/>
-        <line x1="370" y1="270" x2="374" y2="258" stroke="#4b473d" stroke-width="1"/>
+        <circle cx="270" cy="58" r="30" fill="#f3ecc9" opacity=".26"/>
+        <circle cx="270" cy="58" r="10" fill="#f6f0d8" opacity=".55"/>
+        <line x1="270" y1="88" x2="255" y2="138" stroke="#f3ecc9" stroke-width="1" opacity=".3"/>
+        <line x1="270" y1="88" x2="285" y2="143" stroke="#f3ecc9" stroke-width="1" opacity=".3"/>
+        <g stroke="#4b473d" stroke-width=".8" opacity=".5">
+          <path d="M140,196 q3,-4 6,0" fill="none"/><path d="M158,197 q3,-4 6,0" fill="none"/><path d="M168,196 q3,-4 6,0" fill="none"/>
+        </g>
       </g>
     </svg>
   `;
 }
 function renderGuidedDrawing(){
+  if (STATE.drawPhase === 'practice') return renderDrawPractice();
   const steps = LESSON_DATA.drawing_steps;
   const dots = steps.map((s, i) => `<span class="draw-dot${i < STATE.drawStageIndex ? ' done' : ''}${i === STATE.drawStageIndex ? ' current' : ''}"></span>`).join('');
   const storyTitle = STATE.storyChoiceId ? (LESSON_DATA.story_choices.find(c => c.id === STATE.storyChoiceId) || {}).title : null;
@@ -752,6 +1132,7 @@ function renderGuidedDrawing(){
       <div class="draw-canvas-wrap">${drawingSvg()}</div>
       <div class="draw-progress">${dots}</div>
       <div class="draw-caption" id="drawCaption"></div>
+      <div class="draw-teaching-note" id="drawTeachingNote"></div>
       <div class="draw-controls">
         <button class="draw-btn" id="drawPrevBtn" onclick="drawStep(-1)">← Previous</button>
         <button class="draw-btn" onclick="drawReplay()">↺ Replay</button>
@@ -767,6 +1148,7 @@ function applyDrawStage(){
     g.style.opacity = (s <= STATE.drawStageIndex + 1) ? '1' : '0';
   });
   document.getElementById('drawCaption').textContent = steps[STATE.drawStageIndex].instruction;
+  document.getElementById('drawTeachingNote').textContent = steps[STATE.drawStageIndex].teachingNote || '';
   document.getElementById('drawPrevBtn').disabled = STATE.drawStageIndex === 0;
   document.querySelectorAll('.draw-dot').forEach((el, i) => {
     el.classList.toggle('done', i < STATE.drawStageIndex);
@@ -774,8 +1156,8 @@ function applyDrawStage(){
   });
   const nextBtn = document.getElementById('drawNextBtn');
   if (STATE.drawStageIndex >= steps.length - 1) {
-    nextBtn.textContent = 'Continue →';
-    nextBtn.onclick = () => nextStep();
+    nextBtn.textContent = 'Try It Yourself →';
+    nextBtn.onclick = () => { STATE.drawPhase = 'practice'; renderCurrentStep(); };
   } else {
     nextBtn.textContent = 'Next Step →';
     nextBtn.onclick = () => drawStep(1);
@@ -798,32 +1180,256 @@ function drawReplay(){
     applyDrawStage();
   }, 950);
 }
-function afterRenderGuidedDrawing(){ applyDrawStage(); }
+function afterRenderGuidedDrawing(){
+  if (STATE.drawPhase === 'practice') { afterRenderDrawPractice(); return; }
+  applyDrawStage();
+}
+
+/* ============================================================
+   STEP 6b — "Try It Yourself" homework/artwork submission. Same
+   in-browser sketch-canvas + IndexedDB pattern already used by
+   lessons/scene-drawing-foundation/unit-01-shot-size/
+   lesson-01-extreme-wide-shot/index.html's draw_task (openDB /
+   compressCanvas / saveArtwork / listArtworks) and by the Kandinsky
+   lesson template — reused verbatim, not reinvented, per Faye's
+   explicit "don't invent a new storage mechanism" instruction. Own
+   DB name (fei_scene_drawing_extreme_wide_shot_v2_storage) — this is
+   a parallel prototype file (see file header), so it gets its own
+   isolated store rather than writing into the live lesson's real
+   student data.
+============================================================ */
+const PRACTICE_DB_NAME = 'fei_scene_drawing_extreme_wide_shot_v2_storage';
+const PRACTICE_DB_VERSION = 1;
+const PRACTICE_STORE_NAME = 'artworks';
+const PRACTICE_MAX_EDGE = 1200;
+const PRACTICE_JPEG_QUALITY = 0.85;
+let _practiceDbPromise = null;
+function practiceOpenDB(){
+  if (_practiceDbPromise) return _practiceDbPromise;
+  _practiceDbPromise = new Promise((resolve, reject) => {
+    if (!window.indexedDB) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(PRACTICE_DB_NAME, PRACTICE_DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PRACTICE_STORE_NAME)) {
+        db.createObjectStore(PRACTICE_STORE_NAME, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _practiceDbPromise;
+}
+function practiceCompressCanvas(canvas){
+  return new Promise((resolve, reject) => {
+    let width = canvas.width, height = canvas.height;
+    const longestEdge = Math.max(width, height);
+    let source = canvas;
+    if (longestEdge > PRACTICE_MAX_EDGE) {
+      const scale = PRACTICE_MAX_EDGE / longestEdge;
+      const small = document.createElement('canvas');
+      small.width = Math.round(width * scale);
+      small.height = Math.round(height * scale);
+      small.getContext('2d').drawImage(canvas, 0, 0, small.width, small.height);
+      source = small;
+    }
+    source.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', PRACTICE_JPEG_QUALITY);
+  });
+}
+async function practiceSaveArtwork(canvas){
+  const compressed = await practiceCompressCanvas(canvas);
+  const db = await practiceOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PRACTICE_STORE_NAME, 'readwrite');
+    const record = { id: LESSON_DATA.courseId, blob: compressed, savedAt: Date.now() };
+    const req = tx.objectStore(PRACTICE_STORE_NAME).put(record); // one record per lesson — overwrite on re-save
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function practiceGetArtwork(){
+  const db = await practiceOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PRACTICE_STORE_NAME, 'readonly');
+    const req = tx.objectStore(PRACTICE_STORE_NAME).get(LESSON_DATA.courseId);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+const PRACTICE_COLORS = ['#4b473d', '#2d5fa8', '#8a6a4a', '#5b7a96', '#3a3a34'];
+let practiceColor = PRACTICE_COLORS[0];
+let practiceDrawing = false;
+let practiceLast = null;
+
+function renderDrawPractice(){
+  const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Your Turn</div>
+      <h2 class="step-title">Try It Yourself</h2>
+      <p class="step-sub">Use pencil-style strokes to sketch your own version of this scene. Not a finished piece — just your own pass at the same idea.</p>
+      <div class="practice-tool-row">${colors}</div>
+      <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
+      <div class="draw-controls">
+        <button class="draw-btn" onclick="clearPracticeCanvas()">Clear</button>
+        <button class="draw-btn primary" id="practiceSaveBtn" onclick="savePracticeDrawing()">Save My Drawing</button>
+      </div>
+      <div class="practice-saved-note" id="practiceSavedNote">${STATE.ownDrawingSaved ? '✓ Saved — you can keep drawing or continue.' : ''}</div>
+    </div>
+  `;
+}
+function practicePos(canvas, e){
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+}
+function pickPracticeColor(color){
+  practiceColor = color;
+  document.querySelectorAll('.practice-color-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
+}
+function clearPracticeCanvas(){
+  const canvas = document.getElementById('practiceCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#faf8f5';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+function initPracticeCanvas(){
+  const canvas = document.getElementById('practiceCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 300, h = canvas.clientHeight || 225;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#faf8f5';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  canvas.onpointerdown = (e) => {
+    practiceDrawing = true;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    practiceLast = practicePos(canvas, e);
+  };
+  canvas.onpointermove = (e) => {
+    if (!practiceDrawing) return;
+    const p = practicePos(canvas, e);
+    ctx.strokeStyle = practiceColor;
+    ctx.lineWidth = 3 * dpr;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(practiceLast.x, practiceLast.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    practiceLast = p;
+  };
+  canvas.onpointerup = () => { practiceDrawing = false; };
+  canvas.onpointercancel = () => { practiceDrawing = false; };
+}
+async function afterRenderDrawPractice(){
+  practiceColor = PRACTICE_COLORS[0];
+  initPracticeCanvas();
+  showContinue('Continue →', nextStep, { ghost: !STATE.ownDrawingSaved });
+}
+async function savePracticeDrawing(){
+  const canvas = document.getElementById('practiceCanvas');
+  const btn = document.getElementById('practiceSaveBtn');
+  if (!canvas) return;
+  btn.disabled = true;
+  try {
+    await practiceSaveArtwork(canvas);
+    STATE.ownDrawingSaved = true;
+    document.getElementById('practiceSavedNote').textContent = '✓ Saved — you can keep drawing or continue.';
+    showContinue('Continue →', nextStep);
+  } catch (e) {
+    console.warn('[savePracticeDrawing] failed', e);
+    document.getElementById('practiceSavedNote').textContent = "Couldn't save — you can still continue without saving.";
+  }
+  btn.disabled = false;
+}
 
 /* ============================================================
    STEP 7 — COMPARE: SAME IDEA. DIFFERENT SCENES. (shown only after
    the student's own drawing pass — never before, per the brief.)
+
+   Round 2 reframe, per Faye's correction: round 1 showed a single
+   named mascot's example ("Jojo's Idea"), which reads as one branded
+   character's take rather than what a self-study platform's first-
+   time student actually needs — two clear reference points. Now:
+   Teacher Reference + Student Reference (generic, lesson-data.js's
+   student_examples), the student's OWN Step 6 drawing (or an upload
+   placeholder if they skipped saving one), and a community-gallery
+   placeholder section below (real submissions later — see
+   lesson-data.js's community_gallery field).
+
+   SCOPE FLAG: Faye's brief also floated an optional short "how this
+   was made" teacher-process breakdown bridging into the gallery.
+   Deliberately NOT added this round — the step already grew
+   substantially (own-work card + upload + gallery); stacking one more
+   speculative content block risked diluting all of it. Flagging this
+   explicitly rather than silently dropping it, per her own request.
 ============================================================ */
 function renderCompare(){
   const examples = LESSON_DATA.student_examples;
-  const cards = examples.map(ex => `
+  const referenceCards = examples.map(ex => `
     <div class="compare-card">
-      <div class="compare-card-icon">🖼️</div>
+      <div class="compare-card-icon">${ex.role === 'teacher' ? '🎨' : '✏️'}</div>
       <div class="compare-card-label">${ex.label}</div>
       ${ex.placeholder ? '<div class="compare-card-note">Coming soon</div>' : ''}
     </div>
   `).join('');
+  const gallery = LESSON_DATA.community_gallery;
+  const galleryCards = Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
       <div class="step-kicker">Same Idea</div>
       <h2 class="step-title">Different Scenes.</h2>
-      <div class="compare-grid">${cards}</div>
+      <div class="compare-grid">${referenceCards}</div>
       <p class="compare-message">There is more than one way to tell the same story.</p>
+
+      <div class="own-work-card" id="ownWorkCard"><!-- filled by afterRenderCompare --></div>
+
+      <div class="gallery-section">
+        <div class="gallery-title">${gallery.title}</div>
+        <div class="gallery-subtitle">${gallery.subtitle}</div>
+        <div class="gallery-grid">${galleryCards}</div>
+      </div>
     </div>
   `;
 }
-function afterRenderCompare(){
+async function afterRenderCompare(){
+  const host = document.getElementById('ownWorkCard');
+  let record = null;
+  try { record = await practiceGetArtwork(); } catch (e) { console.warn('[afterRenderCompare] practiceGetArtwork failed', e); }
+  if (record && record.blob) {
+    const url = URL.createObjectURL(record.blob);
+    host.innerHTML = `
+      <div class="own-work-title">Your Drawing</div>
+      <img class="own-work-img" src="${url}" alt="Your own drawing from this lesson">
+    `;
+  } else {
+    // No saved practice drawing (student skipped Step 6's "Try It
+    // Yourself", or IndexedDB wasn't available) — real file upload,
+    // client-side preview only (no backend exists to persist this to).
+    host.innerHTML = `
+      <div class="own-work-title">Add Your Own Reference</div>
+      <label class="upload-dropzone" id="uploadDropzone">
+        <input type="file" accept="image/*" onchange="previewUpload(event)">
+        <div class="upload-dropzone-icon">📤</div>
+        <div class="upload-dropzone-label">Upload a photo of your drawing</div>
+      </label>
+    `;
+  }
   showContinue('Continue →', nextStep);
+}
+function previewUpload(e){
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const zone = document.getElementById('uploadDropzone');
+  if (zone) zone.outerHTML = `<img class="own-work-img" src="${url}" alt="Your uploaded reference">`;
 }
 
 /* ============================================================
@@ -844,12 +1450,26 @@ function renderComplete(){
   `;
 }
 function renderCompleteDone(){
+  const next = LESSON_DATA.next_lesson;
+  // Real, existing badge-progress mechanism (not invented here) — see
+  // the <script> include comment above. Degrades to '' if either
+  // script failed to load, rather than throwing.
+  const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('scene_drawing_unit_01') : '';
+  const nextLessonHtml = next ? `
+    <a class="next-lesson-card" href="${next.href}">
+      <div class="next-lesson-kicker">Next Lesson</div>
+      <div class="next-lesson-title">${next.title}</div>
+      <div class="next-lesson-sub">${next.subtitle}</div>
+    </a>
+  ` : '';
   return `
     <div class="step-inner">
       <div class="complete-done">
         <div class="complete-check">✓</div>
         <h2 class="step-title">Lesson Complete</h2>
         <p class="step-sub">${LESSON_DATA.title} — ${LESSON_DATA.subtitle}</p>
+        ${nextLessonHtml}
+        ${badgeHtml}
         <a class="complete-exit" href="../../">← Back to Scene Drawing Foundation</a>
       </div>
     </div>
@@ -891,18 +1511,39 @@ function finishLesson(){
 function renderRail(){
   const dots = STEPS.map((s, i) => `<span class="rail-dot${i < STATE.stepIndex ? ' done' : ''}${i === STATE.stepIndex ? ' current' : ''}"></span>`).join('');
   document.getElementById('rail').innerHTML = dots;
+  // Disabled (not hidden) on Step 1 so the control's position never
+  // shifts as the student moves through the lesson.
+  document.getElementById('prevStepBtn').disabled = STATE.stepIndex === 0;
 }
+// Set to whichever step is currently live so renderCurrentStep can
+// clean it up before swapping away — needed for Step 2's Three.js
+// renderer/requestAnimationFrame loop, which would otherwise keep
+// running in the background (a real, growing leak) every time the
+// student navigates off Step 2, in either direction.
+let _liveStep = null;
 function renderCurrentStep(){
   hideContinue();
+  if (_liveStep && _liveStep.cleanup) {
+    try { _liveStep.cleanup(); } catch (e) { console.warn('[cleanup] failed', e); }
+  }
   const step = STEPS[STATE.stepIndex];
   const stageEl = document.getElementById('stage');
   stageEl.innerHTML = `<div class="step">${step.render()}</div>`;
   renderRail();
   window.scrollTo(0, 0);
+  _liveStep = step;
   if (step.afterRender) step.afterRender();
 }
 function nextStep(){
   if (STATE.stepIndex < STEPS.length - 1) { STATE.stepIndex++; renderCurrentStep(); }
+}
+// Global Previous — added per Faye's round-2 feedback ("no way to go
+// back anywhere in the flow... real problem, not nitpicking"). Steps
+// with their own internal sub-sequence (Step 6's 5 drawing stages)
+// keep their own inline Previous for THAT sub-sequence unchanged; this
+// is the separate, lesson-level "go back a whole step" control.
+function prevStep(){
+  if (STATE.stepIndex > 0) { STATE.stepIndex--; renderCurrentStep(); }
 }
 function goToStep(i){
   STATE.stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));

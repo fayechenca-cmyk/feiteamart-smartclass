@@ -18,6 +18,27 @@
  * compatible with the already-wired completedLessons entry and the
  * scene_drawing_unit_01 badge (core/course-badge-registry.js), and
  * so promoting this later doesn't orphan anyone's saved progress.
+ *
+ * ROUND 2 (Faye's local-preview feedback) additions:
+ *   - story_prompts.items[].sceneKey — index.html looks this up in a
+ *     small built-in illustration table to render an actual image per
+ *     card (round 1 was text-only; Faye asked for imagery-first).
+ *   - story_prompts.audioSrc — left null. Faye may supply a real
+ *     recorded (ElevenLabs) narration file later; index.html only
+ *     shows a "Listen" control when this is populated. No TTS here.
+ *   - drawing_steps[].teachingNote — a short secondary line under each
+ *     stage's caption, explaining WHY that stage looks the way it
+ *     does (round 1's stages read as decoration with no teaching
+ *     content, per Faye's "didn't actually learn anything" note).
+ *   - student_examples — relabeled away from a named mascot ("Jojo's
+ *     Idea") to generic Teacher/Student reference roles, per Faye's
+ *     explicit correction that a self-study platform needs two clear
+ *     reference points, not one branded character's take.
+ *   - community_gallery — new placeholder field for Step 7's
+ *     community/discussion-style section (real submissions later).
+ *   - next_lesson — new field so Step 8 can chain into Lesson 02
+ *     without index.html hardcoding a path; each future lesson
+ *     supplies its own.
  * ============================================================ */
 (function (global) {
   'use strict';
@@ -37,32 +58,37 @@
       videoStreamId: '5f78b788563e4c17dc8b9e587998b609'
     },
 
-    // Step 2 — camera-distance interaction only (no angle, no grid,
-    // no VP — see index.html's own note on why). settlePosition
-    // reuses the exact locked Unit 01 dolly table value for Extreme
-    // Wide Shot (1.0) from _shared/camera-zoom-slider.js.
+    // Step 2 — real 3D scene (Three.js), ported from
+    // prototypes/3d-camera-explorer-v2/index.html's own Step 2, per
+    // Faye's explicit round-2 correction away from the round-1 2.5D
+    // CSS-transform stand-in. Fully automatic (camera pulls back on
+    // its own — no drag), no narration for this lesson.
     interactive_scene: {
-      kind: 'camera_distance',
-      startPosition: 0.1,
-      settlePosition: 1.0,
-      termLabel: 'EXTREME WIDE SHOT',
-      hint: 'Pull the camera back.'
+      kind: 'camera_distance_3d',
+      termLabel: 'EXTREME WIDE SHOT'
     },
 
     // Step 3
     story_prompts: {
       question: 'When might we step back and show more of the world?',
       bigIdea: 'Sometimes, the story is bigger than the character.',
-      // `reveal` is a short single-word clue chip shown after a tap —
-      // never a taught "formula" (the brief explicitly warns against
+      // Real recorded narration (ElevenLabs mp3, per Faye) goes here
+      // later — index.html shows a small "Listen" control only when
+      // this is populated. No speechSynthesis/TTS pass for this step.
+      audioSrc: null,
+      // `sceneKey` picks one of index.html's built-in original
+      // illustrations (SCENE_ART table) — small, non-photographic,
+      // same restrained palette as the rest of the lesson. `reveal` is
+      // a short single-word clue chip shown after a tap — never a
+      // taught "formula" (the brief explicitly warns against
       // "Extreme Wide = sadness" style equations).
       items: [
-        { text: 'A storm is moving across the valley.', reveal: 'ATMOSPHERE' },
-        { text: 'Winter is ending. Is spring getting closer?', reveal: 'TIME' },
-        { text: 'After walking all night, I finally saw the city.', reveal: 'DISTANCE' },
-        { text: 'I was completely lost in the forest.', reveal: 'PLACE' },
-        { text: 'I arrived in a world I had never seen before.', reveal: 'SCALE' },
-        { text: 'The sun was rising over a place I had never visited.', reveal: 'TIME' }
+        { text: 'A storm is moving across the valley.', reveal: 'ATMOSPHERE', sceneKey: 'storm' },
+        { text: 'Winter is ending. Is spring getting closer?', reveal: 'TIME', sceneKey: 'thaw' },
+        { text: 'After walking all night, I finally saw the city.', reveal: 'DISTANCE', sceneKey: 'city' },
+        { text: 'I was completely lost in the forest.', reveal: 'PLACE', sceneKey: 'forest' },
+        { text: 'I arrived in a world I had never seen before.', reveal: 'SCALE', sceneKey: 'newworld' },
+        { text: 'The sun was rising over a place I had never visited.', reveal: 'TIME', sceneKey: 'sunrise' }
       ]
     },
 
@@ -111,12 +137,33 @@
     // scope simplification for this prototype pass, flagged here
     // rather than silently done. The chosen story only changes the
     // short context line shown alongside the same 5 stages.
+    // `instruction` is the exact caption text from the original brief
+    // (kept verbatim); `teachingNote` is new in round 2 — a short
+    // second line naming the actual technique that stage
+    // demonstrates, so the sequence teaches something concrete rather
+    // than just showing shapes appear (Faye: "didn't actually learn
+    // anything" from round 1's version).
     drawing_steps: [
-      { instruction: 'Start with the big world.', asset: null },
-      { instruction: 'Build the largest shapes.', asset: null },
-      { instruction: 'Place the character small.', asset: null },
-      { instruction: 'Create depth.', asset: null },
-      { instruction: 'Add only the details the story needs.', asset: null }
+      {
+        instruction: 'Start with the big world.',
+        teachingNote: 'Place the horizon low — it leaves more sky and world to fill with story.'
+      },
+      {
+        instruction: 'Build the largest shapes.',
+        teachingNote: 'Far shapes stay lighter and simpler than near ones — that value drop-off is what reads as distance.'
+      },
+      {
+        instruction: 'Place the character small.',
+        teachingNote: 'Compare the character to the nearest foreground shape — small next to something large is what makes the world feel big.'
+      },
+      {
+        instruction: 'Create depth.',
+        teachingNote: 'Overlap near and far shapes so each layer blocks the one behind it — overlap alone tells the eye what is closer.'
+      },
+      {
+        instruction: 'Add only the details the story needs.',
+        teachingNote: 'A few chosen details carry the moment better than many — this is restraint, not lack of effort.'
+      }
     ],
 
     audio: {
@@ -127,14 +174,34 @@
       narrationAvailable: false
     },
 
-    // Step 7 — placeholders, per the brief's explicit "teacher
-    // example / Jojo example / other student work" list, shown only
-    // AFTER the student's own drawing (index.html enforces the
-    // ordering, not this data).
+    // Step 7 — round 2: relabeled away from a named mascot ("Jojo's
+    // Idea") to generic Teacher/Student reference roles, per Faye's
+    // explicit correction — a self-study platform needs two clear
+    // reference points on first viewing, not one branded character's
+    // take. Still placeholders (no real images yet).
     student_examples: [
-      { label: "Teacher's Idea", placeholder: true },
-      { label: "Jojo's Idea", placeholder: true }
+      { label: 'Teacher Reference', role: 'teacher', placeholder: true },
+      { label: 'Student Reference', role: 'student', placeholder: true }
     ],
+
+    // Step 7 — round 2 addition. Real submissions come later; this is
+    // just the placeholder structure/layout Faye asked to have built
+    // now, framed as a lightweight community/discussion space.
+    community_gallery: {
+      title: 'From Other Students',
+      subtitle: "Real student work will appear here once it's shared.",
+      placeholderCount: 4
+    },
+
+    // Step 8 — round 2 addition, so the completion step can chain into
+    // the next lesson without index.html hardcoding a path. Lessons
+    // 02-26 each supply their own next_lesson (or omit it on the last
+    // lesson of a unit/course).
+    next_lesson: {
+      href: '../lesson-02-wide-full-shot/',
+      title: 'Wide / Full Shot',
+      subtitle: 'Character + World'
+    },
 
     // Step 8 — multi-select, no single "correct" combination; every
     // option is a legitimate answer, matching the brief's explicit
