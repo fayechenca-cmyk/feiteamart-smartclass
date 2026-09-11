@@ -87,12 +87,34 @@ button{font-family:inherit;}
 .prev-step-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-deep);}
 .prev-step-btn:active:not(:disabled){transform:scale(.96);}
 .prev-step-btn:disabled{opacity:.32;cursor:default;}
+/* My Journey entry point — round 3. The real component (see the
+   ported modal further down) is Foundation A's existing My Journey
+   (cross-course JournalStorage stats + timeline), reused as-is, not
+   rebuilt. Its usual home elsewhere on the platform is a sticky
+   side-panel button inside a two-column desktop grid layout — this
+   Learning Canvas is deliberately single-column/full-viewport on
+   every step (the original brief's own "avoid multi-column content
+   during active learning" rule), so retrofitting that grid would
+   fight the rest of the design. Placing the same real entry point in
+   this topbar instead keeps it "fixed" (the topbar is already
+   position:sticky;top:0 on every step) without importing a layout
+   that contradicts the lesson's own design language — a judgment
+   call, flagged as such in the round-3 report. */
+.journey-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px;font-weight:700;letter-spacing:.2px;cursor:pointer;
+  display:flex;align-items:center;gap:4px;transition:border-color .15s ease,color .15s ease;
+}
+.journey-btn:hover{border-color:var(--accent);color:var(--accent-deep);}
+.journey-btn:active{transform:scale(.96);}
 .rail{display:flex;gap:6px;align-items:center;}
-/* Narrow viewports: "← Scene Drawing Foundation" + "‹ Previous"
-   together wrapped to two lines and crowded the topbar — caught in a
+/* Narrow viewports: "← Scene Drawing Foundation" + "‹ Previous" +
+   "📖 Journey" together wrapped and crowded the topbar — caught in a
    mobile-viewport screenshot pass, not by inspection. Collapse the
-   exit link to just its arrow there; the Previous control stays full. */
-@media(max-width:420px){.exit-link-full{display:none;}}
+   exit link to just its arrow there, and the Journey button to just
+   its icon; the Previous control stays full (it's the one Faye
+   specifically flagged as a real usability gap). */
+@media(max-width:420px){.exit-link-full{display:none;}.journey-btn-full{display:none;}}
 .rail-dot{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .2s ease,transform .2s ease;}
 .rail-dot.done{background:var(--accent);}
 .rail-dot.current{background:var(--accent-deep);transform:scale(1.5);}
@@ -158,6 +180,18 @@ button{font-family:inherit;}
   font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;
   font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.92;pointer-events:none;
 }
+/* Shown only if unmuted autoplay was actually blocked by the browser
+   (see afterRenderIntroVideo) — a direct click here is a guaranteed-
+   valid gesture, so playback (with sound) can always start one way
+   or another; the video is never silently left on muted-autoplay. */
+.video-tap-overlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+  padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
 
 /* ============================================================
    STEP 2 — Discover: real 3D scene (Three.js), ported from
@@ -167,7 +201,12 @@ button{font-family:inherit;}
 ============================================================ */
 .camera3d-stage{
   position:relative;width:100%;aspect-ratio:4/3;
-  border-radius:18px;overflow:hidden;background:#dce8f2;
+  border-radius:18px;overflow:hidden;
+  /* Round 3: a real sky gradient instead of a flat fill — the
+   * renderer clears to transparent (see afterRenderDiscover) so this
+   * shows through behind the scene. Scoped to this Step 2 environment
+   * only, not a change to the platform's own restrained palette. */
+  background:linear-gradient(180deg,#7cc0e8 0%,#a9dbe6 45%,#e3ddb3 100%);
   box-shadow:0 14px 34px rgba(28,26,34,.18);
 }
 @media(min-height:640px){.camera3d-stage{max-height:64vh;aspect-ratio:auto;height:min(64vh,58vw);}}
@@ -494,6 +533,44 @@ button{font-family:inherit;}
   .artchi-bubble{right:26px;bottom:112px;max-width:220px;}
   .artchi-label{right:26px;bottom:6px;}
 }
+
+/* ============================================================
+   MY JOURNEY MODAL — round 3. Adapted from lesson-1-sphere's own
+   .journey-* CSS (same class names, same real component), re-tokened
+   to this file's palette rather than an exact copy — same porting
+   approach as the Artchi CSS above. Shows the REAL cross-course
+   JournalStorage data (this lesson's saves plus every other course
+   that writes into the same shared 'fei_thinking_journal' key), not a
+   lesson-scoped view.
+============================================================ */
+.journey-modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.journey-modal-backdrop.show{display:flex;}
+.journey-modal{background:#fff;border-radius:var(--radius-lg);max-width:560px;width:100%;padding:28px 24px 22px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.journey-close{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:.5px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
+.journey-close:hover{background:var(--ink);color:#fff;transform:rotate(90deg);}
+.journey-hero{text-align:center;margin-bottom:18px;padding:0 4px;}
+.journey-kicker{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:5px 12px;border-radius:20px;margin-bottom:12px;}
+.journey-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.journey-subtitle{font-size:12px;color:var(--ink-soft);line-height:1.5;font-style:italic;}
+.journey-stats{display:flex;gap:10px;justify-content:center;margin-bottom:20px;padding:14px 12px;background:linear-gradient(135deg,#e7f4ec 0%,#fbf0c7 100%);border-radius:var(--radius-md);}
+.journey-stat{text-align:center;flex:1;}
+.journey-stat-number{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
+.journey-stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);}
+.journey-timeline{display:flex;flex-direction:column;gap:12px;}
+.journey-empty{text-align:center;padding:28px 16px;color:var(--ink-faint);font-size:13px;font-style:italic;line-height:1.6;}
+.journey-empty-icon{font-size:36px;margin-bottom:10px;}
+.journey-entry{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--radius-md);padding:14px 16px;position:relative;transition:box-shadow .2s;}
+.journey-entry:hover{box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.journey-entry-meta{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.journey-entry-lesson{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:3px 8px;border-radius:4px;}
+.journey-entry-moment{font-size:9px;font-weight:700;color:var(--ink-faint);letter-spacing:1px;text-transform:uppercase;}
+.journey-entry-date{font-size:9px;font-weight:600;color:var(--ink-faint);letter-spacing:.5px;margin-left:auto;}
+.journey-entry-prompt{font-size:11px;color:var(--ink-faint);font-style:italic;margin-bottom:8px;line-height:1.5;padding-left:10px;border-left:2px solid var(--line);}
+.journey-entry-text{font-size:13px;color:var(--ink);line-height:1.6;}
+.journey-entry-delete{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--ink-faint);font-size:14px;cursor:pointer;padding:4px 8px;border-radius:4px;opacity:0;transition:all .2s;}
+.journey-entry:hover .journey-entry-delete{opacity:.6;}
+.journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
+@media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
 </style>
 </head>
 <body>
@@ -503,6 +580,7 @@ button{font-family:inherit;}
     <div class="topbar-left">
       <a class="exit-link" href="../../">← <span class="exit-link-full">Scene Drawing Foundation</span></a>
       <button class="prev-step-btn" id="prevStepBtn" onclick="prevStep()">‹ Previous</button>
+      <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
     </div>
     <div class="rail" id="rail"></div>
   </div>
@@ -512,6 +590,22 @@ button{font-family:inherit;}
 <div class="continue-dock" id="continueDock"></div>
 
 <div id="artchi-mount"></div>
+
+<!-- MY JOURNEY MODAL — round 3, ported from Foundation A's real
+     component (see the CSS block's own note on why the entry point
+     lives in the topbar here instead of a sticky side-panel). -->
+<div class="journey-modal-backdrop" id="journeyModalBackdrop" onclick="if(event.target===this) closeMyJourney();">
+  <div class="journey-modal">
+    <div class="journey-close" onclick="closeMyJourney()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">✨ Thinking journey</div>
+      <div class="journey-title">Your thoughts, over time</div>
+      <div class="journey-subtitle">This is your private thinking space — only you can see it.</div>
+    </div>
+    <div class="journey-stats" id="journeyStats"></div>
+    <div class="journey-timeline" id="journeyTimeline"></div>
+  </div>
+</div>
 
 <script src="../../../../core/auth.js"></script>
 <script src="../../../../core/access.js"></script>
@@ -573,9 +667,16 @@ let STATE = {
    SHARED HELPERS
 ============================================================ */
 const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+// Round 3: autoplay=true added, muted stays explicit false. This is a
+// deliberately-produced video with its own sound (not ambient
+// narration) — per Faye's correction, it should play automatically
+// WITH sound, not sit muted or wait for an extra click on top of the
+// click that already brought the student into this lesson. See
+// afterRenderIntroVideo for the real-gesture verification and the
+// tap-to-play fallback for when a browser blocks it anyway.
 function cfStreamSrc(streamId){
   const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
-  return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}&muted=false&preload=auto`;
+  return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
 }
 // Extended from the platform's established renderVideoEmbed convention:
 // full-bleed, minimal-chrome (no big traditional player card), an
@@ -588,6 +689,7 @@ function renderVideoStage(streamId, title, iframeId){
       <iframe id="${iframeId}" src="${cfStreamSrc(streamId)}" loading="lazy" title="${title}"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
       <div class="video-title-overlay">${title}</div>
+      <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
     </div>`;
   }
   return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
@@ -670,16 +772,48 @@ function afterRenderIntroVideo(){
     try {
       const iframe = document.getElementById('introVideoFrame');
       const player = window.Stream && iframe ? window.Stream(iframe) : null;
-      if (player) player.addEventListener('ended', advanceOnce);
+      if (!player) return;
+      player.addEventListener('ended', advanceOnce);
+
+      // The iframe src already requests autoplay=true&muted=false — per
+      // Faye, this is a deliberately-produced video with its own sound,
+      // not ambient narration, so it should never sit silently on
+      // muted-autoplay. A real browser generally allows unmuted
+      // autoplay here IF the navigation onto this page was itself
+      // triggered by a genuine user click/tap (verified live via a
+      // real click-through, not page.goto — see the round-3 build
+      // notes). If that assumption doesn't hold for some browser/path,
+      // playback simply stays paused; a 'play' event never fires, and
+      // the tap-to-play button below appears so sound-on playback is
+      // still one guaranteed-valid click away — never a silent fallback
+      // to muted.
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[intro_video] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
     } catch (e) { console.warn('[intro_video] Stream SDK attach failed', e); }
   };
   sdk.onerror = () => console.warn('[intro_video] Stream SDK failed to load');
   document.head.appendChild(sdk);
 
   // Fallback — a quiet, always-available way forward, in case the SDK
-  // event never fires (blocked script, autoplay policy, short clip
-  // already finished before the SDK attached).
-  setTimeout(() => showContinue('Continue →', advanceOnce, { ghost: true }), 4000);
+  // event never fires at all (blocked script, short clip already
+  // finished before the SDK attached).
+  setTimeout(() => showContinue('Continue →', advanceOnce, { ghost: true }), 6000);
 }
 
 /* ============================================================
@@ -741,22 +875,31 @@ async function afterRenderDiscover(){
   const canvas = document.createElement('canvas');
   stageEl.insertBefore(canvas, termEl);
 
-  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  // alpha:true + a transparent clear color — the CSS sky gradient on
+  // .camera3d-stage shows through behind the scene instead of a flat
+  // THREE.Color fill (round 3: "improve the sky so it reads as a real
+  // environment, not a flat backdrop").
+  const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 1.05;
   renderer.outputEncoding = THREE.sRGBEncoding;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xdce8f2);
 
   const camera = new THREE.PerspectiveCamera(55, 4 / 3, 0.1, 300);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const sun = new THREE.DirectionalLight(0xfff4e0, 0.8);
+  // Round 3: slightly less flat ambient + a warmer, slightly stronger
+  // sun reads as richer/more saturated without changing the overall
+  // no-fog/ACES approach that already fixed real bugs in the source
+  // prototype (see that file's own notes) — lighting-only tuning,
+  // scoped to this scene.
+  scene.add(new THREE.AmbientLight(0xffffff, 0.48));
+  const sun = new THREE.DirectionalLight(0xfff1d6, 0.95);
   sun.position.set(-10, 22, -8);
   scene.add(sun);
-  const fill = new THREE.DirectionalLight(0xe8eefc, 0.3);
+  const fill = new THREE.DirectionalLight(0xdce8f8, 0.28);
   fill.position.set(6, 8, 18);
   scene.add(fill);
 
@@ -773,9 +916,17 @@ async function afterRenderDiscover(){
     return new THREE.Mesh(new THREE.SphereGeometry(r, wSeg || 16, hSeg || 12), new THREE.MeshStandardMaterial({ color: color, roughness: 0.7 }));
   }
 
+  // Round 3 palette — noticeably more saturated than round 2's pale/
+  // grey-pink set, while staying tasteful (not cartoonish). Scoped to
+  // this Step 2 environment only, not the platform's own restrained
+  // UI color language elsewhere.
   const PALETTE = {
-    ground: 0xdce4d0, lake: 0xa9cfe0, mountainNear: 0x7d92a8, mountainFar: 0xaebcd0,
-    charTorso: 0x2d5fa8, charHead: 0xf1d9b8, charLimb: 0x3c4657
+    ground: 0x6fae52, lake: 0x3f9fc9, mountainNear: 0x60768a, mountainFar: 0x93aecb,
+    charCloak: 0x3568c9, charHead: 0xf0c49a, charLimb: 0x3c4657, charAccent: 0xd6543f,
+    houseBody: 0xe8cfa0, houseRoof: 0xb5533c, houseDoor: 0x5c4630, houseWindow: 0xf6df8a,
+    treeCanopyA: 0x3f7a46, treeCanopyB: 0x529155, trunk: 0x6b4a30,
+    grass: 0x6fae52, grassLight: 0x82c25f,
+    flowerPink: 0xe888b0, flowerYellow: 0xf0d060, flowerWhite: 0xfaf3e6
   };
 
   const worldGroup = new THREE.Group();
@@ -787,27 +938,119 @@ async function afterRenderDiscover(){
 
   const lake = new THREE.Mesh(
     new THREE.CircleGeometry(6.5, 32),
-    new THREE.MeshStandardMaterial({ color: PALETTE.lake, roughness: 0.35, metalness: 0.1 })
+    new THREE.MeshStandardMaterial({ color: PALETTE.lake, roughness: 0.3, metalness: 0.15 })
   );
   lake.rotation.x = -Math.PI / 2;
   lake.position.set(3.5, 0.12, 7);
   worldGroup.add(lake);
 
+  // Character — round 3: a tapered cloak (cone) instead of a flat box
+  // torso, plus a small accent scarf, reads as an actual small figure
+  // rather than a bare primitive stack ("more shape/form" per Faye).
   const character = new THREE.Group();
-  const torso = box(0.5, 0.72, 0.28, PALETTE.charTorso);
-  torso.position.y = 0.36 + 0.75;
+  const cloak = cone(0.32, 0.95, PALETTE.charCloak, 10);
+  cloak.position.y = 0.475;
   const head = sphereMesh(0.22, PALETTE.charHead, 24, 18);
-  head.position.y = 0.75 + 0.72 + 0.22;
-  const legL = cyl(0.09, 0.09, 0.75, PALETTE.charLimb);
-  legL.position.set(-0.13, 0.375, 0);
-  const legR = legL.clone(); legR.position.x = 0.13;
-  const armL = cyl(0.07, 0.07, 0.62, PALETTE.charLimb);
-  armL.position.set(-0.32, 0.75 + 0.4, 0);
-  armL.rotation.z = 0.12;
-  const armR = armL.clone(); armR.position.x = 0.32; armR.rotation.z = -0.12;
-  character.add(torso, head, legL, legR, armL, armR);
+  head.position.y = 0.95 + 0.16;
+  const scarf = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.045, 8, 16), new THREE.MeshStandardMaterial({ color: PALETTE.charAccent, roughness: 0.8 }));
+  scarf.rotation.x = Math.PI / 2.3;
+  scarf.position.y = 0.92;
+  const legL = cyl(0.08, 0.08, 0.28, PALETTE.charLimb);
+  legL.position.set(-0.12, 0.14, 0);
+  const legR = legL.clone(); legR.position.x = 0.12;
+  const armL = cyl(0.06, 0.06, 0.5, PALETTE.charLimb);
+  armL.position.set(-0.3, 0.62, 0);
+  armL.rotation.z = 0.2;
+  const armR = armL.clone(); armR.position.x = 0.3; armR.rotation.z = -0.2;
+  character.add(cloak, head, scarf, legL, legR, armL, armR);
   character.position.set(0, 0, 1.5);
   worldGroup.add(character);
+
+  // House — round 3 addition: box body + pyramid roof + door + two
+  // warm-glow windows, more form than a bare primitive.
+  function buildHouse() {
+    const g = new THREE.Group();
+    const body = box(2.2, 1.5, 1.8, PALETTE.houseBody);
+    body.position.y = 0.75;
+    const roof = cone(1.75, 1.1, PALETTE.houseRoof, 4);
+    roof.rotation.y = Math.PI / 4;
+    roof.position.y = 1.5 + 0.55;
+    const door = box(0.5, 0.85, 0.05, PALETTE.houseDoor);
+    door.position.set(0, 0.425, 0.93);
+    const win1 = box(0.35, 0.35, 0.05, PALETTE.houseWindow);
+    win1.position.set(-0.7, 0.95, 0.93);
+    const win2 = win1.clone();
+    win2.position.x = 0.7;
+    g.add(body, roof, door, win1, win2);
+    return g;
+  }
+  const house = buildHouse();
+  house.position.set(-11, 0, 22);
+  house.rotation.y = 0.3;
+  house.userData.finalY = 0;
+  house.visible = false;
+  worldGroup.add(house);
+
+  // Trees — round 3 addition: two-tone stacked-cone canopy + trunk,
+  // scattered at varied positions/scales for real variety, not one
+  // repeated primitive.
+  function buildTree(scale) {
+    const g = new THREE.Group();
+    const trunk = cyl(0.09, 0.13, 0.9, PALETTE.trunk);
+    trunk.position.y = 0.45;
+    const canopyLower = cone(0.62, 1.1, PALETTE.treeCanopyA, 9);
+    canopyLower.position.y = 0.9 + 0.5;
+    const canopyUpper = cone(0.44, 0.85, PALETTE.treeCanopyB, 9);
+    canopyUpper.position.y = 0.9 + 1.0 + 0.36;
+    g.add(trunk, canopyLower, canopyUpper);
+    g.scale.setScalar(scale);
+    return g;
+  }
+  const treeDefs = [
+    { x: -6, z: 12, s: 1.1 }, { x: -9, z: 17, s: 0.9 }, { x: 7, z: 10, s: 1.0 },
+    { x: 10, z: 15, s: 0.75 }, { x: -3, z: 24, s: 1.25 }, { x: 15, z: 21, s: 1.0 }
+  ];
+  const trees = treeDefs.map((def) => {
+    const t = buildTree(def.s);
+    t.position.set(def.x, 0, def.z);
+    t.userData.finalY = 0;
+    t.visible = false;
+    worldGroup.add(t);
+    return t;
+  });
+
+  // Ground-level detail — round 3 addition, per Faye: "add ground-
+  // level detail like grass and flowers." Lightweight blade-cluster
+  // tufts + a scatter of small colored flowers near the foreground.
+  function buildGrassTuft() {
+    const g = new THREE.Group();
+    for (let i = 0; i < 3; i++) {
+      const blade = cone(0.04, 0.26, i % 2 === 0 ? PALETTE.grass : PALETTE.grassLight, 5);
+      blade.position.set((i - 1) * 0.07, 0.13, 0);
+      blade.rotation.z = (i - 1) * 0.35;
+      g.add(blade);
+    }
+    return g;
+  }
+  const grassDefs = [
+    { x: -2, z: 2.6 }, { x: 1.5, z: 2.2 }, { x: -1, z: 1.4 }, { x: 2.6, z: 1.8 },
+    { x: -3.4, z: 3.2 }, { x: 0.2, z: 3.6 }, { x: -4.5, z: 2 }, { x: 3.6, z: 3 }
+  ];
+  grassDefs.forEach((def) => {
+    const tuft = buildGrassTuft();
+    tuft.position.set(def.x, 0, def.z);
+    worldGroup.add(tuft);
+  });
+  const flowerColors = [PALETTE.flowerPink, PALETTE.flowerYellow, PALETTE.flowerWhite];
+  const flowerDefs = [
+    { x: -1.6, z: 2.9 }, { x: 0.9, z: 2.5 }, { x: -2.8, z: 1.9 }, { x: 2.1, z: 3.2 },
+    { x: -0.4, z: 1.7 }, { x: 3.2, z: 2.3 }
+  ];
+  flowerDefs.forEach((def, i) => {
+    const flower = sphereMesh(0.055, flowerColors[i % flowerColors.length], 8, 6);
+    flower.position.set(def.x, 0.1, def.z);
+    worldGroup.add(flower);
+  });
 
   const mountainDefs = [
     { x: -14, z: 46, r: 9, h: 16, color: PALETTE.mountainNear },
@@ -902,6 +1145,8 @@ async function afterRenderDiscover(){
   setTimeout(() => {
     if (!stageState.alive) return;
     mountains.forEach((m, i) => dropIn(m, 250 + i * 240, 1300));
+    trees.forEach((t, i) => dropIn(t, 400 + i * 150, 900));
+    dropIn(house, 500, 1000);
     animateReveal(4200, () => {
       termEl.classList.add('show');
       showArtchiBubble('What changes?', 2600);
@@ -1506,6 +1751,108 @@ function finishLesson(){
 }
 
 /* ============================================================
+   MY JOURNEY — round 3. Real component, adapted from lesson-1-
+   sphere's openMyJourney/closeMyJourney/renderJourneyContent, reading
+   the SAME shared JournalStorage this file already writes to in
+   finishLesson() (bare global from core/scene-drawing-platform-
+   bridge.js — not a new storage mechanism). JournalStorage.getAll()
+   is platform-wide, not scoped to this course, so the stats below
+   genuinely aggregate across every course that writes into
+   'fei_thinking_journal' — Creation and Foundation together, per
+   Faye's own description of what this should show.
+
+   Foundation A's own timeline row assumes every entry carries
+   promptText/studentText/inputType/ageGroup (its own reflection-entry
+   shape). This lesson's own finishLesson() entry doesn't — and any
+   other course's entries may not either — so the row below is
+   defensive: it falls back to a synthesized summary instead of
+   printing "undefined" for entries that aren't shaped like Foundation
+   A's. This isn't cosmetic — it's what a genuinely SHARED cross-
+   platform journey view actually needs, not just cover for this one
+   lesson's own entries.
+============================================================ */
+function openMyJourney(){
+  renderJourneyModalContent();
+  document.getElementById('journeyModalBackdrop').classList.add('show');
+}
+function closeMyJourney(){
+  document.getElementById('journeyModalBackdrop').classList.remove('show');
+}
+function journeyEscapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+function journeyFormatRelativeDate(timestamp){
+  const diff = Date.now() - timestamp;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  if (seconds < 60) return 'just now';
+  if (minutes < 60) return minutes + ' min ago';
+  if (hours < 24) return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
+  if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+  if (days < 30) return Math.floor(days / 7) + ' week' + (Math.floor(days / 7) > 1 ? 's' : '') + ' ago';
+  return new Date(timestamp).toLocaleDateString();
+}
+// Best-effort summary for entries that don't carry Foundation A's own
+// promptText/studentText fields (this lesson's completion entry, or
+// any other course's differently-shaped one).
+function journeySummarize(e){
+  if (e.promptText || e.studentText) {
+    return { prompt: e.promptText || '', text: e.studentText || '' };
+  }
+  if (e.momentKey === 'lesson_complete') {
+    const bits = [];
+    if (e.storyChoice) bits.push('chose "' + e.storyChoice + '"');
+    if (Array.isArray(e.checkedConcepts) && e.checkedConcepts.length) bits.push('understood: ' + e.checkedConcepts.join(', '));
+    return { prompt: '', text: 'Completed this lesson' + (bits.length ? ' — ' + bits.join('; ') : '') + '.' };
+  }
+  return { prompt: '', text: 'Saved a moment in this lesson.' };
+}
+function renderJourneyModalContent(){
+  const entries = (typeof JournalStorage !== 'undefined') ? JournalStorage.getAll() : [];
+  const statsEl = document.getElementById('journeyStats');
+  const timelineEl = document.getElementById('journeyTimeline');
+
+  const totalEntries = entries.length;
+  const courseEntries = entries.filter(e => e.courseId === LESSON_DATA.courseId).length;
+  const firstEntry = entries[entries.length - 1];
+  const daysSinceFirst = firstEntry ? Math.max(1, Math.floor((Date.now() - firstEntry.createdAt) / 86400000)) : 0;
+  statsEl.innerHTML = `
+    <div class="journey-stat"><div class="journey-stat-number">${totalEntries}</div><div class="journey-stat-label">Thoughts</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${courseEntries}</div><div class="journey-stat-label">This lesson</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${daysSinceFirst}</div><div class="journey-stat-label">Day${daysSinceFirst !== 1 ? 's' : ''} growing</div></div>
+  `;
+
+  if (entries.length === 0) {
+    timelineEl.innerHTML = `<div class="journey-empty"><div class="journey-empty-icon">💭</div><div>No thoughts yet — your journey starts when you save your first moment.</div></div>`;
+    return;
+  }
+  timelineEl.innerHTML = entries.map(e => {
+    const summary = journeySummarize(e);
+    return `
+      <div class="journey-entry">
+        <button class="journey-entry-delete" onclick="deleteJourneyEntry('${e.id}')" title="Delete this thought">🗑</button>
+        <div class="journey-entry-meta">
+          <span class="journey-entry-lesson">${journeyEscapeHtml(e.lessonId || e.courseId || 'lesson')}</span>
+          ${e.momentKey ? `<span class="journey-entry-moment">${journeyEscapeHtml(e.momentKey)}</span>` : ''}
+          <span class="journey-entry-date">${journeyFormatRelativeDate(e.createdAt)}</span>
+        </div>
+        ${summary.prompt ? `<div class="journey-entry-prompt">${journeyEscapeHtml(summary.prompt)}</div>` : ''}
+        <div class="journey-entry-text">${journeyEscapeHtml(summary.text)}</div>
+      </div>
+    `;
+  }).join('');
+}
+function deleteJourneyEntry(entryId){
+  if (!confirm('Delete this thought? This cannot be undone.')) return;
+  JournalStorage.remove(entryId);
+  renderJourneyModalContent();
+}
+
+/* ============================================================
    NAVIGATION + RAIL
 ============================================================ */
 function renderRail(){
@@ -1534,8 +1881,24 @@ function renderCurrentStep(){
   _liveStep = step;
   if (step.afterRender) step.afterRender();
 }
+// Step-transition chime — round 3. Reuses the exact same synthesized-
+// tone mechanism Foundation Skill lessons already use for lightweight
+// UI feedback (artchiPlayTone, ported verbatim from Foundation A's own
+// playTone() in core/scene-drawing-archi.js — no new sound asset).
+// 880Hz/0.12s matches that codebase's existing single-ding feedback
+// calls (e.g. lesson-1-sphere's own `playTone(880, 0.1)`), not the
+// multi-note ascending sequences reserved for bigger celebrations.
+// Lives in the shared nav functions below so it covers every lesson-
+// level step-to-step move uniformly — Step 1's video and Step 2's
+// automatic camera reveal only reach these functions once each
+// sequence has already finished on its own, so the chime marks the
+// discrete navigation action, never layers over the video's own audio
+// or the reveal animation itself.
+function playStepAdvanceTone(){
+  if (typeof artchiPlayTone === 'function') artchiPlayTone(880, 0.12);
+}
 function nextStep(){
-  if (STATE.stepIndex < STEPS.length - 1) { STATE.stepIndex++; renderCurrentStep(); }
+  if (STATE.stepIndex < STEPS.length - 1) { playStepAdvanceTone(); STATE.stepIndex++; renderCurrentStep(); }
 }
 // Global Previous — added per Faye's round-2 feedback ("no way to go
 // back anywhere in the flow... real problem, not nitpicking"). Steps
@@ -1543,9 +1906,10 @@ function nextStep(){
 // keep their own inline Previous for THAT sub-sequence unchanged; this
 // is the separate, lesson-level "go back a whole step" control.
 function prevStep(){
-  if (STATE.stepIndex > 0) { STATE.stepIndex--; renderCurrentStep(); }
+  if (STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex--; renderCurrentStep(); }
 }
 function goToStep(i){
+  playStepAdvanceTone();
   STATE.stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
   renderCurrentStep();
 }
