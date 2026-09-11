@@ -131,29 +131,42 @@
     // scene the student picked... one video per story option" — not
     // a single generic demo. All three null for now (coming-soon
     // fallback, same pattern as intro_video before its real ID
-    // arrived); `demoDisclaimer` is reused verbatim from the live
-    // Lessons 01-05 "Let's Draw Together" convention, not new copy.
+    // arrived).
+    // `demoDisclaimer` (round 5) — rewritten from the Lessons 01-05
+    // verbatim wording to explicitly invite drawing along on real
+    // paper, per Faye's exact round-5 correction; the point is
+    // inviting physical-media participation, not implying the demo is
+    // only a digital-viewing moment.
+    // `audioSrc` (round 5) — same data-driven slot pattern as
+    // story_prompts.audioSrc in Step 3: null until Faye supplies a
+    // real recorded (ElevenLabs) narration file per story. No
+    // browser TTS/speechSynthesis — she found the synthesized voice
+    // too robotic. index.html only shows a "Listen" control once this
+    // is populated.
     story_choices: [
       {
         id: 'spring',
         title: 'Winter has passed. Is spring getting closer?',
         direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.',
         demoVideoStreamId: null,
-        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
+        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
+        audioSrc: null
       },
       {
         id: 'forest',
         title: 'Late at night, I became lost in the forest.',
         direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.',
         demoVideoStreamId: null,
-        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
+        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
+        audioSrc: null
       },
       {
         id: 'newworld',
         title: 'After travelling for a long time, I suddenly discovered an incredible new world.',
         direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.',
         demoVideoStreamId: null,
-        demoDisclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas."
+        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
+        audioSrc: null
       }
     ],
 
@@ -213,6 +226,11 @@
     // Step 7 — round 2 addition. Real submissions come later; this is
     // just the placeholder structure/layout Faye asked to have built
     // now, framed as a lightweight community/discussion space.
+    // Round 5: strengthened the "shared community" framing per
+    // Faye's explicit correction — the whole point of this section
+    // is "my work + my classmates' work, together," not a private
+    // result screen. See index.html's renderCompare for the shared
+    // "Our Community" wrapper this title now sits inside.
     community_gallery: {
       title: 'From Other Students',
       subtitle: "Real student work will appear here once it's shared.",
