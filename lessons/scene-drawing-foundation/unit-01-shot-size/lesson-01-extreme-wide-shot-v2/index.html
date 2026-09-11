@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Extreme Wide Shot</title>
+<meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 01: Extreme Wide Shot — redesign prototype.">
+
+<!--
+  REDESIGN PROTOTYPE — Faye's "Learning Canvas" brief (2026-09-10).
+  Parallel to, and does NOT replace, ../lesson-01-extreme-wide-shot/.
+  Same id/courseId ('extreme-wide-shot') as the live lesson on purpose —
+  see lesson-data.js's own header note on why.
+
+  WHAT THIS IS: a full-screen, low-chrome sequence of 8 learning
+  MOMENTS (watch / discover / connect / look / choose / draw / compare
+  / complete), data-driven off lesson-data.js's LESSON_DATA object so
+  the same shell can carry Lessons 02-26 later without rewriting this
+  file. Lessons 02-05 (old ../lesson-0{2..5}-*/) are untouched and stay
+  on the old STAGES pattern — this file supersedes that pattern for
+  Lesson 01 ONLY; migrating the others is a separate, later decision.
+
+  SCOPE NOTES (flagged, not silently assumed):
+  - Step 6's drawing sequence is ONE shared progressive illustration,
+    not three bespoke ones per story choice — no real per-story art
+    exists yet. See lesson-data.js's drawing_steps comment.
+  - Step 4's reference resources and Step 7's student examples are
+    placeholders (no real licensed art / real student work wired in
+    yet) — every card is clearly marked so a later pass can swap them
+    in without touching this file's structure.
+  - Access control is deliberately NOT gated, matching the live
+    sibling lesson's own unresolved TODO on the free/paid rule.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1a22;
+  --ink-soft:rgba(28,26,34,.66);
+  --ink-faint:rgba(28,26,34,.42);
+  --ink-muted:rgba(28,26,34,.42);
+  --accent:#2d5fa8;
+  --accent-deep:#1f4076;
+  --line:rgba(28,26,34,.14);
+  --border:rgba(28,26,34,.14);
+  --paper:#faf8f5;
+  --purple:#a78bfa;
+  --radius-sm:10px;
+  --radius-md:14px;
+  --radius-lg:20px;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;overflow-x:hidden;
+}
+.display{font-family:'Space Grotesk',sans-serif;}
+button{font-family:inherit;}
+
+/* ============================================================
+   LEARNING CANVAS SHELL — minimal chrome, full-viewport stage.
+============================================================ */
+#canvas-app{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
+
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;position:sticky;top:0;z-index:80;
+  background:linear-gradient(var(--paper) 70%, transparent);
+  pointer-events:none;
+}
+#topbar > *{pointer-events:auto;}
+.exit-link{font-size:12px;color:var(--ink-faint);text-decoration:none;font-weight:700;letter-spacing:.2px;transition:color .15s ease;}
+.exit-link:hover{color:var(--accent-deep);}
+.rail{display:flex;gap:6px;align-items:center;}
+.rail-dot{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .2s ease,transform .2s ease;}
+.rail-dot.done{background:var(--accent);}
+.rail-dot.current{background:var(--accent-deep);transform:scale(1.5);}
+
+#stage{flex:1;position:relative;display:flex;flex-direction:column;}
+.step{
+  flex:1;display:flex;flex-direction:column;
+  animation:stepIn .5s ease;
+}
+@keyframes stepIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.step-inner{
+  flex:1;width:100%;max-width:760px;margin:0 auto;
+  padding:6px 22px 120px;display:flex;flex-direction:column;justify-content:center;
+}
+.step-inner.wide{max-width:1040px;}
+.step-inner.bleed{max-width:none;padding:0 0 120px;}
+
+.step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:10px;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
+.step-sub{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 auto 22px;line-height:1.6;max-width:520px;}
+
+/* ---- Continue dock (quiet, floats in only once a step is "done").
+   The scrim behind it keeps the button from visually cutting into
+   card text on content-dense steps (e.g. Look Closer's 6-card grid)
+   when the viewport is shorter than the content — caught in a live
+   screenshot, not by inspection. ---- */
+.continue-dock{
+  position:fixed;left:0;right:0;bottom:0;padding-bottom:clamp(18px,4vh,34px);
+  display:flex;justify-content:center;align-items:flex-end;z-index:70;pointer-events:none;
+  height:104px;background:linear-gradient(transparent, var(--paper) 62%);
+}
+.continue-dock:empty{background:none;}
+.continue-btn{
+  pointer-events:none;opacity:0;transform:translateY(10px);
+  transition:opacity .35s ease,transform .35s ease;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
+  box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
+}
+.continue-btn.ready{opacity:1;transform:translateY(0);pointer-events:auto;}
+.continue-btn:active{transform:scale(.96);}
+.continue-btn.ghost{background:transparent;color:var(--ink-faint);box-shadow:none;font-weight:600;font-size:12.5px;}
+
+/* ============================================================
+   STEP 1 — What Is a Scene? (video)
+============================================================ */
+.video-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
+@media(min-height:640px){.video-stage{max-height:72vh;aspect-ratio:auto;height:min(72vh,62vw);}}
+.video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.video-title-overlay{
+  position:absolute;top:0;left:0;right:0;padding:22px 24px 40px;
+  background:linear-gradient(rgba(0,0,0,.4),transparent);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;
+  font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:.92;pointer-events:none;
+}
+
+/* ============================================================
+   STEP 2 — Discover: camera-distance pull
+============================================================ */
+.camera-viewport{
+  position:relative;width:100%;max-width:640px;margin:0 auto;aspect-ratio:4/3;
+  border-radius:18px;overflow:hidden;background:#dce6f0;
+  box-shadow:0 14px 34px rgba(28,26,34,.18);
+}
+.camera-world{position:absolute;inset:0;transform-origin:50% 62%;will-change:transform;}
+.camera-world svg{position:absolute;inset:0;width:100%;height:100%;}
+.camera-track-wrap{width:100%;max-width:640px;margin:18px auto 4px;padding:0 6px;}
+.camera-track{position:relative;height:40px;}
+.camera-track-line{position:absolute;left:14px;right:14px;top:50%;height:5px;transform:translateY(-50%);background:var(--line);border-radius:999px;}
+.camera-track-hit{position:absolute;inset:0;touch-action:none;cursor:pointer;}
+.camera-handle{
+  position:absolute;top:50%;width:30px;height:30px;border-radius:50%;
+  background:var(--accent);border:3px solid #fff;box-shadow:0 4px 14px rgba(28,26,34,.3);
+  transform:translate(-50%,-50%);touch-action:none;cursor:grab;
+}
+.camera-handle:active{cursor:grabbing;}
+.camera-track-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:10.5px;font-weight:700;color:var(--ink-faint);letter-spacing:.6px;text-transform:uppercase;}
+.camera-hint{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:14px;min-height:1.4em;}
+.camera-term{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.5rem;
+  color:var(--accent-deep);margin-top:16px;opacity:0;transform:translateY(6px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+.camera-term.show{opacity:1;transform:translateY(0);}
+
+/* ============================================================
+   STEP 3 — When Would We Use It? (tap-to-reveal prompts)
+============================================================ */
+.prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+@media(max-width:520px){.prompt-grid{grid-template-columns:1fr;}}
+.prompt-card{
+  position:relative;background:#fff;border:1.5px solid var(--line);border-radius:14px;
+  padding:16px 16px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:border-color .15s ease,transform .15s ease;min-height:78px;
+}
+.prompt-card:active{transform:scale(.98);}
+.prompt-card.revealed{border-color:var(--accent);background:rgba(45,95,168,.05);}
+.prompt-text{font-size:13.5px;line-height:1.45;color:var(--ink);}
+.prompt-reveal{
+  display:inline-block;margin-top:8px;font-size:10px;font-weight:800;letter-spacing:1.4px;
+  color:#fff;background:var(--accent);padding:3px 9px;border-radius:999px;
+  opacity:0;transform:translateY(4px);transition:opacity .25s ease,transform .25s ease;
+}
+.prompt-card.revealed .prompt-reveal{opacity:1;transform:translateY(0);}
+.big-idea-line{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.15rem;
+  color:var(--accent-deep);margin:26px auto 4px;max-width:440px;line-height:1.45;
+  opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;
+}
+.big-idea-line.show{opacity:1;transform:translateY(0);}
+
+/* ============================================================
+   STEP 4 — Look Closer (external reference resources)
+============================================================ */
+.resource-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+@media(max-width:720px){.resource-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.resource-grid{grid-template-columns:1fr;}}
+.resource-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;}
+.resource-preview{
+  aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;
+  color:rgba(255,255,255,.92);text-align:center;padding:10px;
+}
+.resource-body{padding:12px 14px 14px;flex:1;display:flex;flex-direction:column;}
+.resource-cat{font-size:9.5px;font-weight:800;letter-spacing:1.6px;color:var(--accent);margin-bottom:4px;}
+.resource-title{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;margin-bottom:6px;}
+.resource-prompt{font-size:11.5px;color:var(--ink-soft);line-height:1.5;flex:1;margin-bottom:10px;}
+.resource-link{
+  align-self:flex-start;font-size:11px;font-weight:700;color:var(--accent-deep);text-decoration:none;
+  border-bottom:1.5px solid var(--accent-deep);padding-bottom:1px;
+}
+.resource-placeholder-tag{font-size:9px;color:var(--ink-faint);margin-top:6px;font-style:italic;}
+
+/* ============================================================
+   STEP 5 — Choose Your Story
+============================================================ */
+.story-grid{display:flex;flex-direction:column;gap:14px;}
+@media(min-width:700px){.story-grid{flex-direction:row;}}
+.story-card{
+  flex:1;background:#fff;border:2px solid var(--line);border-radius:16px;padding:22px 20px;
+  display:flex;flex-direction:column;transition:border-color .15s ease,transform .15s ease;
+}
+.story-card:hover{border-color:var(--accent);}
+.story-card-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.02rem;line-height:1.4;color:var(--ink);margin-bottom:16px;flex:1;}
+.story-choose-btn{
+  align-self:flex-start;font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:999px;
+  border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
+}
+.story-choose-btn:active{transform:scale(.95);}
+.story-card.picked{border-color:var(--accent-deep);background:rgba(45,95,168,.05);}
+.story-card.picked .story-choose-btn{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
+
+/* ============================================================
+   STEP 6 — Guided Drawing (progressive illustration)
+============================================================ */
+.draw-context{text-align:center;font-size:12px;color:var(--ink-faint);margin-bottom:10px;}
+.draw-canvas-wrap{
+  position:relative;width:100%;max-width:520px;margin:0 auto;aspect-ratio:4/3;
+  border-radius:16px;overflow:hidden;background:var(--paper);border:2px solid var(--ink);
+  box-shadow:5px 6px 0 rgba(28,26,34,.12);
+}
+.draw-canvas-wrap svg{position:absolute;inset:0;width:100%;height:100%;}
+.dstage{transition:opacity .5s ease;}
+.draw-caption{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;
+  color:var(--accent-deep);margin:18px auto 6px;min-height:1.6em;
+}
+.draw-progress{display:flex;justify-content:center;gap:7px;margin-bottom:4px;}
+.draw-dot{width:8px;height:8px;border-radius:50%;background:var(--line);}
+.draw-dot.done{background:var(--accent);}
+.draw-dot.current{background:var(--accent-deep);transform:scale(1.35);}
+.draw-controls{display:flex;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.draw-btn{
+  font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--ink);background:transparent;color:var(--ink);
+}
+.draw-btn.primary{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
+.draw-btn:disabled{opacity:.3;cursor:not-allowed;}
+.draw-btn:active{transform:scale(.96);}
+
+/* ============================================================
+   STEP 7 — Compare / Other Possibilities
+============================================================ */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
+@media(max-width:480px){.compare-grid{grid-template-columns:1fr;}}
+.compare-card{background:#fff;border:1.5px dashed var(--line);border-radius:14px;padding:26px 16px;text-align:center;}
+.compare-card-icon{font-size:1.8rem;}
+.compare-card-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.95rem;color:var(--accent-deep);margin-top:8px;}
+.compare-card-note{font-size:11px;color:var(--ink-faint);margin-top:4px;}
+.compare-message{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-deep);margin:26px auto 0;max-width:420px;line-height:1.5;}
+
+/* ============================================================
+   STEP 8 — Complete
+============================================================ */
+.check-chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:18px 0 4px;}
+.check-chip{
+  font-weight:700;font-size:12.5px;padding:9px 16px;border-radius:999px;cursor:pointer;
+  border:2px solid var(--line);background:#fff;color:var(--ink-soft);transition:all .15s ease;
+}
+.check-chip.picked{border-color:var(--accent);background:rgba(45,95,168,.08);color:var(--accent-deep);}
+.complete-btn{
+  display:block;margin:26px auto 0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  padding:14px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;
+  box-shadow:0 10px 26px rgba(28,26,34,.2);
+}
+.complete-btn:disabled{opacity:.3;cursor:not-allowed;box-shadow:none;}
+.complete-btn:active{transform:scale(.97);}
+.complete-done{text-align:center;}
+.complete-check{font-size:2.6rem;}
+.complete-badge-note{font-size:12px;color:var(--accent-deep);font-weight:700;margin-top:10px;}
+.complete-exit{display:inline-block;margin-top:22px;font-size:13px;color:var(--accent-deep);text-decoration:none;font-weight:700;}
+
+/* ============================================================
+   ARTCHI (ported as-is from core/scene-drawing-style.css — see
+   core/scene-drawing-archi.js's own header for why this stays a
+   true port, not a new mascot). Kept quiet: only 2-3 short bubble
+   moments fire across the whole lesson — see JS below.
+============================================================ */
+.artchi-mascot{position:fixed;right:18px;bottom:18px;width:64px;height:64px;cursor:grab;z-index:60;user-select:none;transition:transform .3s;filter:drop-shadow(0 6px 20px rgba(167,139,250,.45));}
+.artchi-mascot:active{cursor:grabbing;}
+.artchi-mascot.awake{animation:artchiBreathe 3s ease-in-out infinite;}
+.artchi-mascot.excited{animation:artchiBounce .6s ease-in-out 3;}
+.artchi-mascot.sleep .artchi-eye{transform:scaleY(.1);transform-origin:center;}
+.artchi-mascot.sleep::after{content:'z';position:absolute;top:-4px;right:-6px;font-size:16px;color:var(--ink-muted);font-weight:900;animation:artchiZzz 2s ease-in-out infinite;font-style:italic;font-family:'Space Grotesk',sans-serif;}
+.artchi-mascot.hidden{display:none;}
+.artchi-mascot.awake::before{content:'';position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.18) 0%,transparent 70%);z-index:-1;animation:artchiHalo 2.8s ease-in-out infinite;pointer-events:none;}
+@keyframes artchiHalo{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.85;transform:scale(1.1);}}
+@keyframes artchiBreathe{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+@keyframes artchiBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-13px) rotate(-5deg);}}
+@keyframes artchiZzz{0%,100%{opacity:0;transform:translateY(0);}50%{opacity:1;transform:translateY(-6px);}}
+.artchi-bubble{position:fixed;right:20px;bottom:96px;max-width:190px;background:#fff;padding:9px 11px;border-radius:var(--radius-md);font-size:11.5px;color:var(--ink);line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.15);border:1.5px solid var(--border);z-index:59;font-weight:600;display:none;}
+.artchi-bubble::after{content:'';position:absolute;bottom:-7px;right:24px;width:11px;height:11px;background:#fff;transform:rotate(45deg);border-right:1.5px solid var(--border);border-bottom:1.5px solid var(--border);}
+.artchi-bubble.show{display:block;animation:artchiBubblePop .3s ease;}
+.artchi-bubble-close{position:absolute;top:3px;right:7px;color:var(--ink-muted);font-size:12px;cursor:pointer;font-weight:800;}
+@keyframes artchiBubblePop{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.artchi-label{position:fixed;right:20px;bottom:2px;background:var(--purple);color:#fff;padding:4px 10px;border-radius:11px;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:.5px;z-index:61;pointer-events:none;box-shadow:0 4px 14px rgba(167,139,250,.4);white-space:nowrap;transition:opacity .3s ease;}
+.artchi-label.hidden{display:none;}
+.artchi-label.muted{opacity:0;visibility:hidden;}
+.artchi-onboard-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.artchi-onboard-backdrop.show{display:flex;animation:artchiFadeIn .35s ease;}
+.artchi-onboard-card{background:#fff;border-radius:var(--radius-lg);padding:26px 22px;max-width:280px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:artchiSlideUp .4s ease;}
+.artchi-onboard-svg-wrap{margin:0 auto 12px;width:76px;}
+.artchi-onboard-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.artchi-onboard-sub{font-size:12px;color:var(--ink-soft);margin-bottom:4px;}
+@keyframes artchiFadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes artchiSlideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.artchi-chat{display:none;position:fixed;bottom:18px;right:18px;width:calc(100vw - 36px);max-width:300px;background:#fff;border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,.18);z-index:200;overflow:hidden;border:.5px solid var(--border);}
+.artchi-chat.show{display:block;animation:artchiSlideUp .35s ease;}
+.artchi-chat-head{padding:13px 15px;background:linear-gradient(135deg,var(--ink) 0%,#374151 100%);color:#fff;display:flex;justify-content:space-between;align-items:center;}
+.artchi-chat-head-info b{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;}
+.artchi-chat-head-info span{font-family:'Space Grotesk',sans-serif;font-size:9px;color:#67e8f9;letter-spacing:1px;text-transform:uppercase;display:block;margin-top:2px;}
+.artchi-chat-close{color:rgba(255,255,255,.7);font-size:19px;font-weight:700;cursor:pointer;padding:2px 8px;}
+.artchi-chat-body{padding:13px;max-height:200px;overflow-y:auto;background:var(--paper);}
+.artchi-msg{padding:9px 11px;border-radius:var(--radius-sm);font-size:11.5px;line-height:1.5;margin-bottom:7px;max-width:85%;}
+.artchi-msg.bot{background:#fff;color:var(--ink);border-left:3px solid var(--accent);}
+.artchi-msg.user{background:var(--ink);color:#fff;margin-left:auto;}
+.artchi-chat-input-wrap{display:flex;gap:6px;padding:9px 11px;border-top:.5px solid var(--border);background:#fff;}
+.artchi-chat-input{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'Work Sans',sans-serif;font-size:11.5px;outline:none;}
+.artchi-chat-input:focus{border-color:var(--ink);}
+.artchi-chat-send{padding:8px 11px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;letter-spacing:.6px;text-transform:uppercase;}
+@media(min-width:640px){
+  .artchi-mascot{width:76px;height:76px;right:24px;bottom:24px;}
+  .artchi-bubble{right:26px;bottom:112px;max-width:220px;}
+  .artchi-label{right:26px;bottom:6px;}
+}
+</style>
+</head>
+<body>
+
+<div id="canvas-app">
+  <div id="topbar">
+    <a class="exit-link" href="../../">← Scene Drawing Foundation</a>
+    <div class="rail" id="rail"></div>
+  </div>
+  <div id="stage"></div>
+</div>
+
+<div class="continue-dock" id="continueDock"></div>
+
+<div id="artchi-mount"></div>
+
+<script src="../../../../core/auth.js"></script>
+<script src="../../../../core/access.js"></script>
+<!-- JournalStorage (bare global, not window.JournalStorage — see the
+     bridge file's own top-of-file note) is the only piece of this
+     bridge this lesson uses; profile/XP go through the same direct
+     sessionStorage read/write the live sibling lesson uses below. -->
+<script src="../../../../core/scene-drawing-platform-bridge.js"></script>
+<script src="../../../../core/scene-drawing-archi.js"></script>
+<script src="lesson-data.js"></script>
+
+<script>
+/* ============================================================
+   STEP LIST — generic dispatcher. Each entry's render() returns
+   the step's HTML; afterRender() (optional) wires up interaction
+   once that HTML is in the DOM. Nothing here is Lesson-01-specific
+   beyond which render functions are plugged in — the shell itself
+   (topbar, rail, continue dock, transitions) has no lesson content
+   baked in, so Lessons 02-26 can reuse it with a different STEPS
+   array and a different lesson-data.js.
+============================================================ */
+const STEPS = [
+  { id:'intro_video',     render:renderIntroVideo,     afterRender:afterRenderIntroVideo },
+  { id:'discover',        render:renderDiscover,        afterRender:afterRenderDiscover },
+  { id:'when_use',        render:renderWhenUse,         afterRender:afterRenderWhenUse },
+  { id:'look_closer',     render:renderLookCloser,       afterRender:afterRenderLookCloser },
+  { id:'choose_story',    render:renderChooseStory },
+  { id:'guided_drawing',  render:renderGuidedDrawing,   afterRender:afterRenderGuidedDrawing },
+  { id:'compare',         render:renderCompare,          afterRender:afterRenderCompare },
+  { id:'complete',        render:renderComplete }
+];
+
+let STATE = {
+  stepIndex: 0,
+  storyChoiceId: null,
+  promptsRevealed: [],     // indices into story_prompts.items
+  cameraSettledWide: false,
+  drawStageIndex: 0,
+  checkedConcepts: [],
+  lessonSaved: false
+};
+
+/* ============================================================
+   SHARED HELPERS
+============================================================ */
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(streamId){
+  const poster = encodeURIComponent(`https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}&muted=false&preload=auto`;
+}
+// Extended from the platform's established renderVideoEmbed convention:
+// full-bleed, minimal-chrome (no big traditional player card), an
+// iframe id so afterRender can attach the Stream Player SDK for a real
+// 'ended' event — per the brief's "on completion, transition directly
+// into next step," not a manual-only Continue.
+function renderVideoStage(streamId, title, iframeId){
+  if (streamId) {
+    return `<div class="video-stage">
+      <iframe id="${iframeId}" src="${cfStreamSrc(streamId)}" loading="lazy" title="${title}"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
+      <div class="video-title-overlay">${title}</div>
+    </div>`;
+  }
+  return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div>`;
+}
+function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
+function clamp01(n){ return Math.max(0, Math.min(1, n)); }
+
+function showContinue(label, onClick, opts){
+  const dock = document.getElementById('continueDock');
+  opts = opts || {};
+  dock.innerHTML = `<button class="continue-btn${opts.ghost ? ' ghost' : ''}" id="continueBtn">${label}</button>`;
+  const btn = document.getElementById('continueBtn');
+  btn.onclick = onClick;
+  requestAnimationFrame(() => btn.classList.add('ready'));
+}
+function hideContinue(){
+  document.getElementById('continueDock').innerHTML = '';
+}
+
+/* ============================================================
+   PROFILE / XP — direct sessionStorage read-write, matching the
+   live sibling lesson's own bumpXP/markLessonComplete exactly (the
+   real, verified fei_user_profile convention — sessionStorage, not
+   localStorage; see that file's own comment on the Safari-iframe fix
+   this depends on). core/scene-drawing-platform-bridge.js's
+   SceneDrawingProfileBridge uses localStorage instead and is NOT the
+   convention actually used by any live lesson page, so it is
+   deliberately not used here for profile/XP — only for JournalStorage.
+============================================================ */
+function bumpXP(amount){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.totalXP = (profile.totalXP || 0) + amount;
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[bumpXP] failed', e); }
+}
+function markLessonComplete(){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+    if (!profile.completedLessons.includes(LESSON_DATA.courseId)) {
+      profile.completedLessons.push(LESSON_DATA.courseId);
+    }
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[markLessonComplete] failed', e); }
+}
+
+/* ============================================================
+   STEP 1 — WHAT IS A SCENE? (real Cloudflare Stream video)
+============================================================ */
+function renderIntroVideo(){
+  const d = LESSON_DATA.intro_video;
+  return `
+    <div class="step-inner bleed">
+      ${renderVideoStage(d.videoStreamId, d.title, 'introVideoFrame')}
+    </div>
+  `;
+}
+function afterRenderIntroVideo(){
+  const d = LESSON_DATA.intro_video;
+  if (!d.videoStreamId) { showContinue('Continue →', nextStep); return; }
+  let advanced = false;
+  const advanceOnce = () => { if (advanced) return; advanced = true; nextStep(); };
+
+  // Best-effort real "ended" detection via the Cloudflare Stream Player
+  // SDK — never gates the UI if it fails to load (see the fallback
+  // timer below), matching this codebase's own "never gate a moment
+  // on an unreliable async API" lesson from the 3D-explorer debugging.
+  const sdk = document.createElement('script');
+  sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  sdk.onload = () => {
+    try {
+      const iframe = document.getElementById('introVideoFrame');
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (player) player.addEventListener('ended', advanceOnce);
+    } catch (e) { console.warn('[intro_video] Stream SDK attach failed', e); }
+  };
+  sdk.onerror = () => console.warn('[intro_video] Stream SDK failed to load');
+  document.head.appendChild(sdk);
+
+  // Fallback — a quiet, always-available way forward, in case the SDK
+  // event never fires (blocked script, autoplay policy, short clip
+  // already finished before the SDK attached).
+  setTimeout(() => showContinue('Continue →', advanceOnce, { ghost: true }), 4000);
+}
+
+/* ============================================================
+   STEP 2 — DISCOVER: camera-distance pull (2.5D, no 3D geometry —
+   see the redesign notes on why the earlier prototypes' literal
+   Three.js scene isn't reused here). One scaling "world" layer, so
+   pulling back simultaneously shrinks the character and reveals more
+   of the painted world — a single transform, not two independently
+   tuned layers.
+============================================================ */
+function worldSvg(){
+  // Original placeholder illustration — sky / far ridge / hills /
+  // ground / a small character near the horizon. Swappable for real
+  // art later without touching any JS (see mountCameraPull below).
+  return `
+    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#eaf1f8"/><stop offset="100%" stop-color="#cfe0ee"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="400" height="300" fill="url(#skyGrad)"/>
+      <path d="M0,190 L60,140 L120,175 L190,120 L260,170 L330,135 L400,180 L400,300 L0,300 Z" fill="#9fb6cc" opacity=".55"/>
+      <path d="M0,215 L70,180 L140,205 L220,165 L300,205 L400,185 L400,300 L0,300 Z" fill="#7f9cb8" opacity=".6"/>
+      <path d="M0,300 L0,235 L90,255 L180,225 L260,250 L400,220 L400,300 Z" fill="#5b7a96"/>
+      <ellipse cx="200" cy="188" rx="7" ry="16" fill="#2d3540"/>
+      <circle cx="200" cy="166" r="6" fill="#2d3540"/>
+    </svg>
+  `;
+}
+function renderDiscover(){
+  const d = LESSON_DATA.interactive_scene;
+  return `
+    <div class="step-inner">
+      <div class="camera-viewport">
+        <div class="camera-world" id="cameraWorld">${worldSvg()}</div>
+      </div>
+      <div class="camera-track-wrap">
+        <div class="camera-track" id="cameraTrack">
+          <div class="camera-track-line"></div>
+          <div class="camera-track-hit" id="cameraHit"></div>
+          <div class="camera-handle" id="cameraHandle"></div>
+        </div>
+        <div class="camera-track-labels"><span>Close</span><span>Far</span></div>
+      </div>
+      <div class="camera-hint" id="cameraHint">${d.hint}</div>
+      <div class="camera-term" id="cameraTerm">${d.termLabel}</div>
+    </div>
+  `;
+}
+function afterRenderDiscover(){
+  const d = LESSON_DATA.interactive_scene;
+  const worldEl = document.getElementById('cameraWorld');
+  const handleEl = document.getElementById('cameraHandle');
+  const hitEl = document.getElementById('cameraHit');
+  const hintEl = document.getElementById('cameraHint');
+  const termEl = document.getElementById('cameraTerm');
+
+  let pos = d.startPosition;
+  let dragging = false;
+  let hintedOnce = false;
+
+  function applyVisual(p){
+    const scale = 2.5 - p * 1.5; // p=0 -> 2.5 (tight on character), p=1 -> 1.0 (full world)
+    worldEl.style.transform = `scale(${scale.toFixed(3)})`;
+    handleEl.style.left = (p * 100) + '%';
+  }
+  function setPos(p, settle){
+    pos = clamp01(p);
+    applyVisual(pos);
+    if (settle && pos >= d.settlePosition - 0.06 && !STATE.cameraSettledWide) {
+      STATE.cameraSettledWide = true;
+      termEl.classList.add('show');
+      hintEl.textContent = '';
+      showArtchiBubble('What changes?', 2600);
+      showContinue('Continue →', nextStep);
+    }
+  }
+  function posFromEvent(e){
+    const rect = hitEl.getBoundingClientRect();
+    const usable = { left: rect.left + 15, right: rect.right - 15 };
+    const x = Math.max(usable.left, Math.min(usable.right, e.clientX));
+    return (x - usable.left) / (usable.right - usable.left);
+  }
+  hitEl.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    hitEl.setPointerCapture && hitEl.setPointerCapture(e.pointerId);
+    if (!hintedOnce) { hintedOnce = true; hintEl.textContent = ''; }
+    setPos(posFromEvent(e));
+  });
+  hitEl.addEventListener('pointermove', (e) => { if (dragging) setPos(posFromEvent(e)); });
+  hitEl.addEventListener('pointerup', () => { if (dragging) { dragging = false; setPos(pos, true); } });
+  hitEl.addEventListener('pointercancel', () => { dragging = false; });
+
+  applyVisual(pos);
+  ensureArtchiMounted();
+  setTimeout(() => showArtchiBubble('Try stepping back.', 2600), 500);
+}
+
+/* ============================================================
+   STEP 3 — WHEN WOULD WE USE IT? (tap-to-reveal story prompts)
+============================================================ */
+function renderWhenUse(){
+  const d = LESSON_DATA.story_prompts;
+  const cards = d.items.map((item, i) => `
+    <div class="prompt-card" id="promptCard${i}" onclick="revealPrompt(${i})">
+      <div class="prompt-text">${item.text}</div>
+      <div class="prompt-reveal">${item.reveal}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="step-inner wide">
+      <h2 class="step-title">${d.question}</h2>
+      <div class="prompt-grid">${cards}</div>
+      <div class="big-idea-line" id="bigIdeaLine">${d.bigIdea}</div>
+    </div>
+  `;
+}
+function revealPrompt(i){
+  if (STATE.promptsRevealed.includes(i)) return;
+  STATE.promptsRevealed.push(i);
+  document.getElementById('promptCard' + i).classList.add('revealed');
+  const total = LESSON_DATA.story_prompts.items.length;
+  if (STATE.promptsRevealed.length >= Math.min(3, total)) {
+    const line = document.getElementById('bigIdeaLine');
+    line.classList.add('show');
+    showContinue('Continue →', nextStep);
+  }
+}
+function afterRenderWhenUse(){
+  if (STATE.promptsRevealed.length >= Math.min(3, LESSON_DATA.story_prompts.items.length)) {
+    document.getElementById('bigIdeaLine').classList.add('show');
+  }
+}
+
+/* ============================================================
+   STEP 4 — LOOK CLOSER (external, license-safe reference resources)
+   COPYRIGHT RULE: never a hotlinked/scraped copyrighted image — every
+   preview here is an original abstract card keyed off category, and
+   every resource links OUT (new tab) to its real source rather than
+   embedding it. Swap in a real thumbnail only once licensing is
+   confirmed for that specific item.
+============================================================ */
+const CATEGORY_GRADIENT = {
+  'FILM': 'linear-gradient(135deg,#3c5a78,#1f3550)',
+  'ILLUSTRATION': 'linear-gradient(135deg,#6b7fa8,#3d4f78)',
+  'FINE ART': 'linear-gradient(135deg,#8a97ab,#4c5b70)'
+};
+function renderLookCloser(){
+  const d = LESSON_DATA.reference_resources;
+  const cards = d.items.map(item => `
+    <div class="resource-card">
+      <div class="resource-preview" style="background:${CATEGORY_GRADIENT[item.category] || CATEGORY_GRADIENT['FILM']};">${item.category}</div>
+      <div class="resource-body">
+        <div class="resource-cat">${item.category}</div>
+        <div class="resource-title">${item.title}${item.source && item.source !== 'TBD' ? ' — ' + item.source : ''}</div>
+        <div class="resource-prompt">${item.prompt}</div>
+        <a class="resource-link" href="${item.url}" target="_blank" rel="noopener noreferrer">See the source ↗</a>
+        ${item.placeholder ? '<div class="resource-placeholder-tag">Reference pending — link not yet final</div>' : ''}
+      </div>
+    </div>
+  `).join('');
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">Look Closer</div>
+      <h2 class="step-title">See It in Art</h2>
+      <div class="resource-grid">${cards}</div>
+    </div>
+  `;
+}
+function afterRenderLookCloser(){
+  showContinue('Continue →', nextStep);
+}
+
+/* ============================================================
+   STEP 5 — CHOOSE YOUR STORY
+============================================================ */
+function renderChooseStory(){
+  const cards = LESSON_DATA.story_choices.map(c => `
+    <div class="story-card${STATE.storyChoiceId === c.id ? ' picked' : ''}" id="storyCard-${c.id}">
+      <div class="story-card-title">${c.title}</div>
+      <button class="story-choose-btn" onclick="pickStory('${c.id}')">Choose This Story</button>
+    </div>
+  `).join('');
+  return `
+    <div class="step-inner wide">
+      <h2 class="step-title">Choose Your Story</h2>
+      <p class="step-sub">Same visual tool. Different stories.</p>
+      <div class="story-grid">${cards}</div>
+    </div>
+  `;
+}
+function pickStory(id){
+  STATE.storyChoiceId = id;
+  setTimeout(() => nextStep(), 260);
+}
+
+/* ============================================================
+   STEP 6 — GUIDED DRAWING (platform-led progressive reveal, NOT a
+   recorded teacher demo — see file header). One shared illustration,
+   5 cumulative layers matching drawing_steps' 5 captions exactly.
+============================================================ */
+function drawingSvg(){
+  return `
+    <svg viewBox="0 0 400 300">
+      <g class="dstage" data-stage="1" opacity="0">
+        <rect x="14" y="14" width="30" height="2" fill="#8a8578"/><rect x="14" y="14" width="2" height="30" fill="#8a8578"/>
+        <rect x="356" y="14" width="30" height="2" fill="#8a8578"/><rect x="384" y="14" width="2" height="30" fill="#8a8578"/>
+        <rect x="14" y="284" width="30" height="2" fill="#8a8578"/><rect x="14" y="254" width="2" height="30" fill="#8a8578"/>
+        <rect x="356" y="284" width="30" height="2" fill="#8a8578"/><rect x="384" y="254" width="2" height="30" fill="#8a8578"/>
+        <line x1="10" y1="210" x2="390" y2="198" stroke="#a39d8e" stroke-width="1.4" stroke-dasharray="3 4"/>
+      </g>
+      <g class="dstage" data-stage="2" opacity="0">
+        <path d="M0,150 L80,95 L160,135 L240,80 L320,130 L400,100 L400,300 L0,300 Z" fill="none" stroke="#7d7669" stroke-width="2"/>
+        <path d="M0,230 L400,205 L400,300 L0,300 Z" fill="none" stroke="#7d7669" stroke-width="2"/>
+      </g>
+      <g class="dstage" data-stage="3" opacity="0">
+        <path d="M0,190 L70,160 L150,185 L230,150 L310,182 L400,160" fill="none" stroke="#6b6558" stroke-width="1.6"/>
+        <path d="M20,300 L20,240 Q26,224 34,240 L34,300 Z" fill="none" stroke="#6b6558" stroke-width="1.6"/>
+        <path d="M360,300 L360,250 Q368,232 378,250 L378,300 Z" fill="none" stroke="#6b6558" stroke-width="1.6"/>
+      </g>
+      <g class="dstage" data-stage="4" opacity="0">
+        <ellipse cx="200" cy="222" rx="6" ry="14" fill="none" stroke="#4b473d" stroke-width="1.6"/>
+        <circle cx="200" cy="202" r="5" fill="none" stroke="#4b473d" stroke-width="1.6"/>
+      </g>
+      <g class="dstage" data-stage="5" opacity="0">
+        <path d="M60,105 q4,-6 8,0" stroke="#4b473d" stroke-width="1" fill="none"/>
+        <path d="M80,112 q4,-6 8,0" stroke="#4b473d" stroke-width="1" fill="none"/>
+        <line x1="30" y1="260" x2="34" y2="248" stroke="#4b473d" stroke-width="1"/>
+        <line x1="40" y1="262" x2="44" y2="250" stroke="#4b473d" stroke-width="1"/>
+        <line x1="370" y1="270" x2="374" y2="258" stroke="#4b473d" stroke-width="1"/>
+      </g>
+    </svg>
+  `;
+}
+function renderGuidedDrawing(){
+  const steps = LESSON_DATA.drawing_steps;
+  const dots = steps.map((s, i) => `<span class="draw-dot${i < STATE.drawStageIndex ? ' done' : ''}${i === STATE.drawStageIndex ? ' current' : ''}"></span>`).join('');
+  const storyTitle = STATE.storyChoiceId ? (LESSON_DATA.story_choices.find(c => c.id === STATE.storyChoiceId) || {}).title : null;
+  return `
+    <div class="step-inner">
+      ${storyTitle ? `<div class="draw-context">Drawing: “${storyTitle}”</div>` : ''}
+      <div class="draw-canvas-wrap">${drawingSvg()}</div>
+      <div class="draw-progress">${dots}</div>
+      <div class="draw-caption" id="drawCaption"></div>
+      <div class="draw-controls">
+        <button class="draw-btn" id="drawPrevBtn" onclick="drawStep(-1)">← Previous</button>
+        <button class="draw-btn" onclick="drawReplay()">↺ Replay</button>
+        <button class="draw-btn primary" id="drawNextBtn" onclick="drawStep(1)">Next Step →</button>
+      </div>
+    </div>
+  `;
+}
+function applyDrawStage(){
+  const steps = LESSON_DATA.drawing_steps;
+  document.querySelectorAll('.dstage').forEach(g => {
+    const s = parseInt(g.dataset.stage, 10);
+    g.style.opacity = (s <= STATE.drawStageIndex + 1) ? '1' : '0';
+  });
+  document.getElementById('drawCaption').textContent = steps[STATE.drawStageIndex].instruction;
+  document.getElementById('drawPrevBtn').disabled = STATE.drawStageIndex === 0;
+  document.querySelectorAll('.draw-dot').forEach((el, i) => {
+    el.classList.toggle('done', i < STATE.drawStageIndex);
+    el.classList.toggle('current', i === STATE.drawStageIndex);
+  });
+  const nextBtn = document.getElementById('drawNextBtn');
+  if (STATE.drawStageIndex >= steps.length - 1) {
+    nextBtn.textContent = 'Continue →';
+    nextBtn.onclick = () => nextStep();
+  } else {
+    nextBtn.textContent = 'Next Step →';
+    nextBtn.onclick = () => drawStep(1);
+  }
+}
+function drawStep(dir){
+  const steps = LESSON_DATA.drawing_steps;
+  STATE.drawStageIndex = Math.max(0, Math.min(steps.length - 1, STATE.drawStageIndex + dir));
+  applyDrawStage();
+}
+function drawReplay(){
+  STATE.drawStageIndex = 0;
+  applyDrawStage();
+  const steps = LESSON_DATA.drawing_steps;
+  let i = 0;
+  const timer = setInterval(() => {
+    i++;
+    if (i >= steps.length) { clearInterval(timer); return; }
+    STATE.drawStageIndex = i;
+    applyDrawStage();
+  }, 950);
+}
+function afterRenderGuidedDrawing(){ applyDrawStage(); }
+
+/* ============================================================
+   STEP 7 — COMPARE: SAME IDEA. DIFFERENT SCENES. (shown only after
+   the student's own drawing pass — never before, per the brief.)
+============================================================ */
+function renderCompare(){
+  const examples = LESSON_DATA.student_examples;
+  const cards = examples.map(ex => `
+    <div class="compare-card">
+      <div class="compare-card-icon">🖼️</div>
+      <div class="compare-card-label">${ex.label}</div>
+      ${ex.placeholder ? '<div class="compare-card-note">Coming soon</div>' : ''}
+    </div>
+  `).join('');
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Same Idea</div>
+      <h2 class="step-title">Different Scenes.</h2>
+      <div class="compare-grid">${cards}</div>
+      <p class="compare-message">There is more than one way to tell the same story.</p>
+    </div>
+  `;
+}
+function afterRenderCompare(){
+  showContinue('Continue →', nextStep);
+}
+
+/* ============================================================
+   STEP 8 — COMPLETE
+============================================================ */
+function renderComplete(){
+  if (STATE.lessonSaved) return renderCompleteDone();
+  const d = LESSON_DATA.completion_check;
+  const chips = d.options.map(opt => `
+    <div class="check-chip" data-opt="${opt}" onclick="toggleCheck(this,'${opt}')">${opt}</div>
+  `).join('');
+  return `
+    <div class="step-inner">
+      <h2 class="step-title">${d.question}</h2>
+      <div class="check-chips">${chips}</div>
+      <button class="complete-btn" id="completeBtn" disabled onclick="finishLesson()">Complete Lesson</button>
+    </div>
+  `;
+}
+function renderCompleteDone(){
+  return `
+    <div class="step-inner">
+      <div class="complete-done">
+        <div class="complete-check">✓</div>
+        <h2 class="step-title">Lesson Complete</h2>
+        <p class="step-sub">${LESSON_DATA.title} — ${LESSON_DATA.subtitle}</p>
+        <a class="complete-exit" href="../../">← Back to Scene Drawing Foundation</a>
+      </div>
+    </div>
+  `;
+}
+function toggleCheck(el, opt){
+  const picked = el.classList.toggle('picked');
+  if (picked) STATE.checkedConcepts.push(opt);
+  else STATE.checkedConcepts = STATE.checkedConcepts.filter(o => o !== opt);
+  document.getElementById('completeBtn').disabled = STATE.checkedConcepts.length === 0;
+}
+function finishLesson(){
+  bumpXP(30);
+  markLessonComplete();
+  try {
+    JournalStorage.save({
+      courseId: LESSON_DATA.courseId,
+      lessonId: LESSON_DATA.courseId,
+      momentKey: 'lesson_complete',
+      storyChoice: STATE.storyChoiceId,
+      checkedConcepts: STATE.checkedConcepts.slice()
+    });
+  } catch (e) { console.warn('[finishLesson] JournalStorage.save failed', e); }
+  STATE.lessonSaved = true;
+  document.getElementById('stage').innerHTML = `<div class="step">${renderCompleteDone()}</div>`;
+  hideContinue();
+  ensureArtchiMounted();
+  // A lesson-accurate line, not the shared ARTCHI_LINES.lessonComplete
+  // pool — those were written for the perspective lessons ("you
+  // completed this perspective challenge!", "ready for the next
+  // room?") and would misdescribe this one. Caught in the completion
+  // screenshot, not by inspection.
+  showArtchiBubble('Nicely done — you showed the whole world. ✨', 3200);
+}
+
+/* ============================================================
+   NAVIGATION + RAIL
+============================================================ */
+function renderRail(){
+  const dots = STEPS.map((s, i) => `<span class="rail-dot${i < STATE.stepIndex ? ' done' : ''}${i === STATE.stepIndex ? ' current' : ''}"></span>`).join('');
+  document.getElementById('rail').innerHTML = dots;
+}
+function renderCurrentStep(){
+  hideContinue();
+  const step = STEPS[STATE.stepIndex];
+  const stageEl = document.getElementById('stage');
+  stageEl.innerHTML = `<div class="step">${step.render()}</div>`;
+  renderRail();
+  window.scrollTo(0, 0);
+  if (step.afterRender) step.afterRender();
+}
+function nextStep(){
+  if (STATE.stepIndex < STEPS.length - 1) { STATE.stepIndex++; renderCurrentStep(); }
+}
+function goToStep(i){
+  STATE.stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
+  renderCurrentStep();
+}
+
+/* ============================================================
+   ARTCHI — mounted lazily, starting at Step 2, NOT on init(). Step 1
+   is the full-screen intro video and must stay completely free of
+   chrome; showArtchi()'s own first-visit onboarding is a full-
+   viewport blocking modal (core/scene-drawing-style.css
+   .artchi-onboard-backdrop), so firing it during the video would trap
+   the whole lesson behind a popup before the student sees anything —
+   caught live in a Playwright pass, not by inspection. Archi's first
+   real appearance now lines up with her first bubble line anyway
+   (Step 2's "Try stepping back."), matching the brief's "only very
+   short moments" instruction.
+============================================================ */
+let artchiMounted = false;
+function ensureArtchiMounted(){
+  if (artchiMounted) return;
+  artchiMounted = true;
+  document.getElementById('artchi-mount').innerHTML = artchiMarkup();
+  initArtchiDrag();
+  // Reveal only — deliberately NOT calling the shared showArtchi(),
+  // which also triggers either a full-screen onboarding modal (first
+  // platform visit) or a generic idle bubble a few hundred ms later.
+  // Both would collide with this lesson's own deliberate, sparse
+  // bubble cues (the brief's "should NOT constantly speak" rule), and
+  // the onboarding modal specifically is a full-viewport popup that
+  // would block the Learning Canvas mid-interaction — caught live in
+  // a Playwright pass, not by inspection. Everything else (markup,
+  // drag, bubble, chat) is the same shared component, untouched.
+  const character = document.getElementById('artchi-character');
+  const label = document.getElementById('artchi-label');
+  if (character) character.classList.remove('hidden');
+  if (label) label.classList.remove('hidden');
+  resetArtchiSleep();
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init(){
+  if (window.FEIAccess) {
+    try {
+      await window.FEIAccess.init();
+      // Deliberately ungated — matches the live sibling lesson's own
+      // unresolved TODO on Scene Drawing's free/paid rule.
+    } catch (e) { console.warn('[init] FEIAccess.init failed, continuing', e); }
+  }
+  renderCurrentStep();
+}
+init();
+</script>
+</body>
+</html>
