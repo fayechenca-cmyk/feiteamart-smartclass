@@ -251,6 +251,66 @@ button{font-family:inherit;}
 .scene-question-alt{font-size:12px;color:var(--ink-soft);margin-top:4px;}
 @media(max-width:480px){.scene-question{top:3%;padding:10px 16px;}.scene-question-text{font-size:13px;}}
 
+/* Round 2 — two-card intro before Situation 1. */
+.intro-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:56vh;gap:6px;}
+.intro-card-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,2.9rem);color:var(--accent-deep);}
+.intro-card-line{font-size:16px;color:var(--ink-soft);max-width:480px;line-height:1.65;margin:0;}
+
+/* Round 2 — pre-scene reveal: "Situation N" + the situation line,
+   both typed out, then a 3-2-1 countdown, all inside the same
+   camera3d-stage the scene itself mounts into right after. Sits on
+   its own dark scrim so it reads clearly regardless of what the sky
+   gradient behind it looks like once the 3D canvas appears. */
+.scene-reveal{
+  position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;text-align:center;padding:0 24px;background:rgba(28,26,34,.82);
+  opacity:1;transition:opacity .5s ease;pointer-events:none;
+}
+.scene-reveal.hide{opacity:0;}
+.scene-reveal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,4.5vw,2rem);color:#fff;letter-spacing:.5px;min-height:1.2em;}
+.scene-reveal-line{font-size:clamp(13px,2.6vw,16px);color:rgba(255,255,255,.86);max-width:560px;line-height:1.5;min-height:1.5em;}
+.scene-reveal-countdown{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:3.2rem;color:var(--accent);
+  min-height:1.3em;
+}
+.scene-reveal-countdown.pulse{animation:sceneCountdownPulse .7s ease;}
+@keyframes sceneCountdownPulse{0%{transform:scale(1.5);opacity:0;}30%{opacity:1;}100%{transform:scale(1);opacity:1;}}
+
+/* Round 2 — per-scene teacher-reference overlay, small storyboard-
+   panel style consistent with Lesson 01's round-6 direction (thin ink
+   border, warm paper, corner ticks). Fades in with the question. */
+.teacher-overlay{
+  position:absolute;top:50%;transform:translateY(-50%);width:84px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:none;border:none;padding:0;cursor:pointer;
+  opacity:0;transition:opacity .6s ease,transform .6s ease;pointer-events:none;z-index:4;
+}
+.teacher-overlay.show{opacity:1;pointer-events:auto;}
+.teacher-overlay-left{left:14px;}
+.teacher-overlay-right{right:14px;}
+.teacher-overlay-frame{
+  width:72px;height:72px;background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 6px 16px rgba(28,26,34,.2);
+}
+.teacher-overlay-frame::before,.teacher-overlay-frame::after{content:'';position:absolute;width:10px;height:10px;border-color:var(--sb-ink-faint);border-style:solid;pointer-events:none;}
+.teacher-overlay-frame::before{top:5px;left:5px;border-width:1.3px 0 0 1.3px;}
+.teacher-overlay-frame::after{bottom:5px;right:5px;border-width:0 1.3px 1.3px 0;}
+.teacher-overlay-icon{font-size:1.5rem;filter:grayscale(1) contrast(.9);opacity:.7;}
+.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);text-align:center;}
+@media(max-width:600px){.teacher-overlay{width:56px;}.teacher-overlay-frame{width:52px;height:52px;}.teacher-overlay-icon{font-size:1.1rem;}.teacher-overlay-label{font-size:8px;}}
+
+/* Round 2 — teacher-reference lightbox (enlarge-on-tap). */
+.teacher-lightbox-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.teacher-lightbox-backdrop.show{display:flex;}
+.teacher-lightbox{background:var(--sb-panel);border-radius:var(--radius-lg);max-width:360px;width:100%;padding:26px 22px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
+.teacher-lightbox-frame{
+  aspect-ratio:4/3;background:var(--sb-paper);border:1.5px solid var(--sb-ink);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+.teacher-lightbox-icon{font-size:2.6rem;filter:grayscale(1) contrast(.9);opacity:.6;}
+.teacher-lightbox-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--sb-ink);}
+.teacher-lightbox-note{font-size:12px;color:var(--sb-ink-faint);margin-top:6px;font-style:italic;}
+
 /* ============================================================
    STEP 2 — What Is a Wide Shot? Reuses the .lc-card "small visual
    showroom" card system built for Lesson 01's Step 4 "Look Closer"
@@ -663,6 +723,20 @@ button{font-family:inherit;}
   </div>
 </div>
 
+<!-- TEACHER REFERENCE LIGHTBOX — round 2, opened by each Step 3
+     scene's small overlay (renderTeacherOverlay/openTeacherLightbox).
+     Same backdrop-click-to-close pattern as My Journey above. -->
+<div class="teacher-lightbox-backdrop" id="teacherLightboxBackdrop" onclick="if(event.target===this) closeTeacherLightbox();">
+  <div class="teacher-lightbox">
+    <div class="journey-close teacher-lightbox-close" onclick="closeTeacherLightbox()" title="Close">×</div>
+    <div class="teacher-lightbox-frame">
+      <div class="teacher-lightbox-icon">🎨</div>
+    </div>
+    <div class="teacher-lightbox-label" id="teacherLightboxLabel"></div>
+    <div class="teacher-lightbox-note" id="teacherLightboxNote"></div>
+  </div>
+</div>
+
 <script src="../../../../core/auth.js"></script>
 <script src="../../../../core/access.js"></script>
 <!-- JournalStorage (bare global, not window.JournalStorage — see the
@@ -711,20 +785,29 @@ button{font-family:inherit;}
 // these six from LESSON_DATA.story_scenes + SCENE3D_BUILDERS (see
 // that section further down) instead of writing them out by hand,
 // so the two stay in sync automatically.
-const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.map(s => ({
+// Round 2: each scene's own index feeds its "Situation N" numbering
+// and its teacher-overlay side (alternates left/right) — passed
+// through here rather than re-deriving it from LESSON_DATA at render
+// time. cleanupStoryScene (not just cleanupActive3DStage) now also
+// cancels the pre-reveal typewriter/countdown timers — see that
+// function's own comment.
+const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.map((s, i) => ({
   id: 'scene_' + s.id,
-  render: () => renderStoryScene(s),
-  afterRender: () => afterRenderStoryScene(s),
-  cleanup: cleanupActive3DStage
+  render: () => renderStoryScene(s, i),
+  afterRender: () => afterRenderStoryScene(s, i),
+  cleanup: cleanupStoryScene
 }));
 const STEPS = [
-  { id:'classroom_reveal', render:renderClassroomReveal, afterRender:afterRenderClassroomReveal, cleanup:cleanupActive3DStage },
-  { id:'concept',          render:renderConcept },
+  { id:'classroom_reveal',   render:renderClassroomReveal,      afterRender:afterRenderClassroomReveal, cleanup:cleanupActive3DStage },
+  { id:'concept',            render:renderConcept },
+  // Round 2 — two-card intro before Situation 1 (LESSON_DATA.scenes_intro).
+  { id:'scenes_intro_title', render:renderScenesIntroTitle,     afterRender:afterRenderScenesIntroTitle },
+  { id:'scenes_intro_explain', render:renderScenesIntroExplain, afterRender:afterRenderScenesIntroExplain },
   ...STORY_SCENE_STEPS,
-  { id:'choose_scene',     render:renderChooseScene },
-  { id:'guided_drawing',   render:renderGuidedDrawing,   afterRender:afterRenderGuidedDrawing },
-  { id:'teacher_community',render:renderTeacherCommunity, afterRender:afterRenderTeacherCommunity },
-  { id:'complete',         render:renderComplete }
+  { id:'choose_scene',       render:renderChooseScene },
+  { id:'guided_drawing',     render:renderGuidedDrawing,        afterRender:afterRenderGuidedDrawing },
+  { id:'artwork_community',  render:renderTeacherCommunity,     afterRender:afterRenderTeacherCommunity },
+  { id:'complete',           render:renderComplete }
 ];
 
 let STATE = {
@@ -797,6 +880,21 @@ function markLessonComplete(){
 let _active3DStage = null; // set on mount by createThreeStage(); one stage live at a time
 function cleanupActive3DStage(){
   if (_active3DStage) { _active3DStage.cleanup(); _active3DStage = null; }
+}
+// Round 2 — Step 3's six scenes now run a typewriter/countdown reveal
+// BEFORE the 3D stage even mounts (see renderStoryScene/
+// afterRenderStoryScene). If Previous/Next navigates away mid-reveal,
+// those pending setTimeout chains would otherwise keep firing after
+// the DOM elements they touch are gone — the same class of bug
+// intro_video/teacher_demo's "step already left" checks guard against
+// elsewhere in this file. cleanupStoryScene cancels them AND the 3D
+// stage (which may not exist yet), so it's the one `cleanup` every
+// STORY_SCENE_STEPS entry uses.
+let _sceneRevealTimers = [];
+function cleanupStoryScene(){
+  _sceneRevealTimers.forEach(id => clearTimeout(id));
+  _sceneRevealTimers = [];
+  cleanupActive3DStage();
 }
 let _threeLoadPromise = null;
 function loadThreeJs(){
@@ -872,6 +970,29 @@ function buildKid(opts) {
   );
   hairCap.position.y = 0.03;
   headGroup.add(hairCap);
+  // Round 2 — simple facial features (eyes, nose, mouth), per Faye's
+  // "faces read as blank shapes" note. Positioned on the front (+Z,
+  // this rig's established forward direction) of the head sphere;
+  // simple primitives, not modeled geometry — legible at the small
+  // sizes these characters render at, not meant to hold up in a
+  // close-up.
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x2a2420, roughness: 0.5 });
+  const eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 6), eyeMat);
+  eyeL.position.set(-0.055, 0.02, 0.134);
+  headGroup.add(eyeL);
+  const eyeR = eyeL.clone();
+  eyeR.position.x = 0.055;
+  headGroup.add(eyeR);
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6), new THREE.MeshStandardMaterial({ color: skin, roughness: 0.6 }));
+  nose.position.set(0, -0.015, 0.148);
+  headGroup.add(nose);
+  const mouth = new THREE.Mesh(
+    new THREE.TorusGeometry(0.026, 0.007, 6, 8, Math.PI),
+    new THREE.MeshStandardMaterial({ color: 0x9c4a3c, roughness: 0.6 })
+  );
+  mouth.rotation.z = Math.PI; // opens downward — reads as a small smile
+  mouth.position.set(0, -0.06, 0.128);
+  headGroup.add(mouth);
   if (opts.ponytail) {
     const pt = cyl3(0.03, 0.05, 0.22, hair);
     pt.position.set(0, 0, -0.16);
@@ -1100,6 +1221,64 @@ function buildGate3() {
   const top = box3(2.0, 0.12, 0.12, 0x8a5a3c);
   top.position.set(0, 1.36, 0);
   g.add(top);
+  return g;
+}
+// Round 2 — a canvas-texture sign (readable text on a panel), used for
+// the school building's signage. Ordinary Three.js primitives can't
+// render legible text; a small offscreen 2D canvas drawn once and
+// applied as a texture is the standard, lightweight way to do it.
+function buildTextSign(text, w, h, opts) {
+  opts = opts || {};
+  const canvas = document.createElement('canvas');
+  canvas.width = 512; canvas.height = Math.round(512 * (h / w));
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = opts.bg || '#f5f2ea';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = opts.border || '#8a5a3c';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+  ctx.fillStyle = opts.color || '#3a352c';
+  ctx.font = `bold ${Math.round(canvas.height * 0.34)}px 'Space Grotesk', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.encoding = THREE.sRGBEncoding; // r128 API — newer THREE.SRGBColorSpace doesn't exist on this pinned version
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: texture }));
+  return mesh;
+}
+// Round 2 — a simple low-poly dog/cat, for the "small bit of animal
+// life" detail requested on the outdoor scenes. CapsuleGeometry isn't
+// available on the pinned r128 build, so the body is a stretched
+// sphere instead.
+function buildAnimal3(color, earShape) {
+  const g = new THREE.Group();
+  const body = sphere3(0.11, color, 12, 8);
+  body.scale.set(1.7, 0.85, 0.9);
+  body.position.set(0, 0.15, 0);
+  g.add(body);
+  const head = sphere3(0.09, color, 12, 10);
+  head.position.set(0.19, 0.19, 0);
+  g.add(head);
+  const snout = box3(0.06, 0.045, 0.05, color);
+  snout.position.set(0.25, 0.16, 0);
+  g.add(snout);
+  [[-0.05, 1], [0.05, 1]].forEach(([dz]) => {
+    const ear = earShape === 'cat'
+      ? cone3(0.03, 0.06, color, 6)
+      : box3(0.03, 0.06, 0.02, color);
+    ear.position.set(0.19, 0.27, dz * 0.06);
+    g.add(ear);
+  });
+  [[-0.08, -0.08], [-0.08, 0.08], [0.08, -0.08], [0.08, 0.08]].forEach(([x, z]) => {
+    const leg = cyl3(0.02, 0.02, 0.15, color);
+    leg.position.set(x, 0.075, z);
+    g.add(leg);
+  });
+  const tail = cyl3(0.015, 0.02, 0.18, color);
+  tail.position.set(-0.2, 0.22, 0);
+  tail.rotation.z = earShape === 'cat' ? 1.3 : 0.6;
+  g.add(tail);
   return g;
 }
 function buildUmbrella3(color) {
@@ -1416,64 +1595,234 @@ async function afterRenderClassroomReveal() {
 }
 
 /* ============================================================
+   INTRO — two-card intro before Situation 1 (round 2, new).
+   LESSON_DATA.scenes_intro supplies the copy; both cards use the
+   standard fixed-dock Continue, same as every other simple step.
+============================================================ */
+function renderScenesIntroTitle(){
+  return `
+    <div class="step-inner intro-card">
+      <div class="intro-card-title">${LESSON_DATA.scenes_intro.titleCard}</div>
+    </div>
+  `;
+}
+function afterRenderScenesIntroTitle(){
+  showContinue('Next →', nextStep);
+}
+function renderScenesIntroExplain(){
+  return `
+    <div class="step-inner intro-card">
+      <p class="intro-card-line">${LESSON_DATA.scenes_intro.explainerCard}</p>
+    </div>
+  `;
+}
+function afterRenderScenesIntroExplain(){
+  showContinue('Next →', nextStep);
+}
+
+/* ============================================================
    STEP 3 — SIX STORY SCENES (exploration only, no drawing yet). Each
    scene is its own top-level STEPS entry (STORY_SCENE_STEPS, built
    above from LESSON_DATA.story_scenes) sharing this ONE render/
-   afterRender pair — a real 3D camera sweep (SCENE3D_BUILDERS below),
-   then a short comprehension question fades in once the camera
-   settles. Individually skippable, one step at a time in either
-   direction — the plain top-level stepIndex++/-- already does that
-   correctly since these are flat STEPS entries, not sub-stages (see
-   STORY_SCENE_STEPS's own comment for why that matters).
+   afterRender pair. Individually skippable, one step at a time in
+   either direction — the plain top-level stepIndex++/-- already does
+   that correctly since these are flat STEPS entries, not sub-stages
+   (see STORY_SCENE_STEPS's own comment for why that matters).
+
+   Round 2 — three additions to the original camera-sweep-straight-in
+   flow, applied UNIFORMLY to all six (including Situation 1 — no
+   special-casing the first one):
+     1. A pre-reveal sequence: "Situation N" typed out, then the
+        scene's one-line situationLine typed out (prefixed "Situation
+        N:"), a synthesized suspense sound (playSuspenseSound — Web
+        Audio, no audio asset file) playing alongside, then a 3-2-1
+        countdown — THEN the existing camera sweep begins.
+     2. A per-scene teacher-reference overlay (renderTeacherOverlay),
+        shown once the camera settles, alongside the question.
+     3. cleanupStoryScene (not just cleanupActive3DStage) as this
+        step's cleanup — see that function's own comment on why the
+        reveal sequence needs its own timer cancellation.
 ============================================================ */
-function renderStoryScene(sceneData) {
+function typewriterInto(el, text, speed, timers, onDone){
+  el.textContent = '';
+  let i = 0;
+  function tick(){
+    if (i >= text.length) { if (onDone) onDone(); return; }
+    el.textContent += text.charAt(i);
+    i++;
+    timers.push(setTimeout(tick, speed));
+  }
+  tick();
+}
+function runRevealCountdown(el, timers, onDone){
+  const seq = ['3', '2', '1'];
+  let i = 0;
+  function tick(){
+    if (i >= seq.length) { onDone(); return; }
+    el.textContent = seq[i];
+    el.classList.remove('pulse');
+    void el.offsetWidth; // restart the CSS animation
+    el.classList.add('pulse');
+    i++;
+    timers.push(setTimeout(tick, 700));
+  }
+  tick();
+}
+// Synthesized "suspense/drumroll" cue — a rising triangle-wave tone
+// with a fast tremolo (a second oscillator modulating the main gain),
+// not a recorded sound effect asset. Best-effort: some browsers block
+// AudioContext before any gesture on the page, or a user may have
+// audio disabled entirely — either way this never blocks the reveal
+// sequence itself, it just plays silently-failed.
+let _sceneAudioCtx = null;
+function getSceneAudioCtx(){
+  if (_sceneAudioCtx) return _sceneAudioCtx;
+  try { _sceneAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  catch (e) { return null; }
+  return _sceneAudioCtx;
+}
+function playSuspenseSound(durationMs){
+  const ctx = getSceneAudioCtx();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime, dur = durationMs / 1000;
+    const osc = ctx.createOscillator();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(110, now);
+    osc.frequency.linearRampToValueAtTime(210, now + dur);
+    const mainGain = ctx.createGain();
+    mainGain.gain.setValueAtTime(0.0001, now);
+    mainGain.gain.linearRampToValueAtTime(0.05, now + 0.25);
+    mainGain.gain.setValueAtTime(0.05, now + Math.max(0.25, dur - 0.25));
+    mainGain.gain.linearRampToValueAtTime(0.0001, now + dur);
+    const tremolo = ctx.createOscillator();
+    tremolo.frequency.setValueAtTime(11, now); // ~11Hz flutter reads as a drumroll
+    const tremGain = ctx.createGain();
+    tremGain.gain.setValueAtTime(0.5, now);
+    tremolo.connect(tremGain);
+    tremGain.connect(mainGain.gain);
+    osc.connect(mainGain);
+    mainGain.connect(ctx.destination);
+    osc.start(now); tremolo.start(now);
+    osc.stop(now + dur + 0.1); tremolo.stop(now + dur + 0.1);
+  } catch (e) { console.warn('[playSuspenseSound] failed', e); }
+}
+
+// Round 2 — per-scene teacher-reference overlay: a small framed panel
+// on one side of the 3D frame (alternating left/right per scene, styled
+// like a small storyboard panel — same --sb-* tokens as elsewhere in
+// this Unit's storyboard direction), shown once the scene settles.
+// All six are placeholder art for now (LESSON_DATA.teacher_references)
+// — clicking/tapping opens a larger lightbox so the student can look
+// closer. Swapping in real art later only needs that data field
+// edited, not this function.
+function renderTeacherOverlay(sceneData, side) {
+  const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneData.id);
+  if (!ref) return '';
+  return `
+    <button class="teacher-overlay teacher-overlay-${side}" id="teacherOverlay" onclick="openTeacherLightbox('${sceneData.id}')" aria-label="Enlarge teacher reference for ${sceneData.title}">
+      <div class="teacher-overlay-frame">
+        <div class="teacher-overlay-icon">🎨</div>
+      </div>
+      <div class="teacher-overlay-label">Teacher Reference</div>
+    </button>
+  `;
+}
+function openTeacherLightbox(sceneId) {
+  const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneId);
+  if (!ref) return;
+  document.getElementById('teacherLightboxLabel').textContent = ref.label;
+  document.getElementById('teacherLightboxNote').textContent = ref.placeholder
+    ? "Coming soon — Faye will supply this scene's real teacher reference drawing."
+    : '';
+  document.getElementById('teacherLightboxBackdrop').classList.add('show');
+}
+function closeTeacherLightbox() {
+  document.getElementById('teacherLightboxBackdrop').classList.remove('show');
+}
+
+function renderStoryScene(sceneData, sceneIndex) {
+  const side = sceneIndex % 2 === 0 ? 'right' : 'left';
   return `
     <div class="step-inner bleed">
       <div class="camera3d-stage" id="camera3dStage">
+        <div class="scene-reveal" id="sceneReveal">
+          <div class="scene-reveal-title" id="sceneRevealTitle"></div>
+          <div class="scene-reveal-line" id="sceneRevealLine"></div>
+          <div class="scene-reveal-countdown" id="sceneRevealCountdown"></div>
+        </div>
         <div class="scene-question" id="sceneQuestion">
           <div class="scene-question-title">${sceneData.title}</div>
           <div class="scene-question-text">${sceneData.question}</div>
           ${sceneData.altQuestion ? `<div class="scene-question-alt">${sceneData.altQuestion}</div>` : ''}
         </div>
+        ${renderTeacherOverlay(sceneData, side)}
       </div>
     </div>
   `;
 }
-async function afterRenderStoryScene(sceneData) {
+async function afterRenderStoryScene(sceneData, sceneIndex) {
   const stageEl = document.getElementById('camera3dStage');
   const questionEl = document.getElementById('sceneQuestion');
-  try {
-    await loadThreeJs();
-  } catch (e) {
-    console.warn('[story_scene] Three.js failed to load', e);
-    stageEl.insertAdjacentHTML('beforeend', `<div class="camera3d-fallback">This scene couldn't load (a required script failed — check your connection and reload). ${sceneData.title}: ${sceneData.question}</div>`);
-    questionEl.classList.add('show');
-    showContinue('Continue →', nextStep);
-    return;
-  }
-  if (!document.getElementById('camera3dStage')) return; // step already left
+  const teacherOverlayEl = document.getElementById('teacherOverlay');
+  const revealEl = document.getElementById('sceneReveal');
+  const revealTitleEl = document.getElementById('sceneRevealTitle');
+  const revealLineEl = document.getElementById('sceneRevealLine');
+  const countdownEl = document.getElementById('sceneRevealCountdown');
+  _sceneRevealTimers = []; // fresh set for this scene; cleanupStoryScene clears whatever's pending on the way out
 
-  const stage = createThreeStage(stageEl);
-  const build = SCENE3D_BUILDERS[sceneData.sceneKey];
-  const camCfg = build ? build(stage) : null;
-  const start = (camCfg && camCfg.start) || { pos: { x: 0, y: 4, z: 8 }, look: { x: 0, y: 1, z: 0 } };
-  const settle = (camCfg && camCfg.settle) || { pos: { x: 0, y: 2.6, z: 5 }, look: { x: 0, y: 1, z: 0 } };
-  stage.camera.position.set(start.pos.x, start.pos.y, start.pos.z);
-  stage.camera.lookAt(start.look.x, start.look.y, start.look.z);
-
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      if (!stage.state.alive) return;
-      animateCameraTo(stage, start.pos, settle.pos, start.look, settle.look, 3200, () => {
-        questionEl.classList.add('show');
-        ensureArtchiMounted();
-        showContinue('Continue →', nextStep);
+  const situationNum = sceneIndex + 1;
+  typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
+    _sceneRevealTimers.push(setTimeout(() => {
+      playSuspenseSound(2400);
+      typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
+        _sceneRevealTimers.push(setTimeout(() => {
+          runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
+            _sceneRevealTimers.push(setTimeout(mountScene, 300));
+          });
+        }, 450));
       });
-    }, 300);
+    }, 350));
   });
 
-  _active3DStage = stage;
+  async function mountScene() {
+    revealEl.classList.add('hide');
+    try {
+      await loadThreeJs();
+    } catch (e) {
+      console.warn('[story_scene] Three.js failed to load', e);
+      if (!document.getElementById('camera3dStage')) return;
+      stageEl.insertAdjacentHTML('beforeend', `<div class="camera3d-fallback">This scene couldn't load (a required script failed — check your connection and reload). ${sceneData.title}: ${sceneData.question}</div>`);
+      questionEl.classList.add('show');
+      showContinue('Continue →', nextStep);
+      return;
+    }
+    if (!document.getElementById('camera3dStage')) return; // step already left mid-reveal
+
+    const stage = createThreeStage(stageEl);
+    const build = SCENE3D_BUILDERS[sceneData.sceneKey];
+    const camCfg = build ? build(stage) : null;
+    const start = (camCfg && camCfg.start) || { pos: { x: 0, y: 4, z: 8 }, look: { x: 0, y: 1, z: 0 } };
+    const settle = (camCfg && camCfg.settle) || { pos: { x: 0, y: 2.6, z: 5 }, look: { x: 0, y: 1, z: 0 } };
+    stage.camera.position.set(start.pos.x, start.pos.y, start.pos.z);
+    stage.camera.lookAt(start.look.x, start.look.y, start.look.z);
+
+    requestAnimationFrame(() => {
+      _sceneRevealTimers.push(setTimeout(() => {
+        if (!stage.state.alive) return;
+        animateCameraTo(stage, start.pos, settle.pos, start.look, settle.look, 3200, () => {
+          questionEl.classList.add('show');
+          if (teacherOverlayEl) teacherOverlayEl.classList.add('show');
+          ensureArtchiMounted();
+          showContinue('Continue →', nextStep);
+        });
+      }, 300));
+    });
+
+    _active3DStage = stage;
+  }
 }
+
 
 // ---- Scene builders. Each populates stage.scene and returns a
 // {start,settle} camera config; the wrapper above handles the sweep
@@ -1487,17 +1836,20 @@ function buildSceneLateForClass(stage) {
   const worldGroup = new THREE.Group();
   stage.scene.add(worldGroup);
   const FLOOR = 0xdcb789, WALL = 0xf3ead2;
-  const floor = box3(6.2, 0.15, 5.0, FLOOR);
-  floor.position.set(0, -0.075, -0.2);
+  // Room deepened from 5.0 to 6.6 (round 2) to fit a fuller classroom
+  // — more desk rows, a teacher, toys — without crowding the two
+  // focal characters near the front.
+  const floor = box3(6.2, 0.15, 6.6, FLOOR);
+  floor.position.set(0, -0.075, -0.9);
   worldGroup.add(floor);
   const backWall = box3(6.2, 2.8, 0.15, WALL);
-  backWall.position.set(0, 1.4, -2.7);
+  backWall.position.set(0, 1.4, -4.1);
   worldGroup.add(backWall);
-  const leftWall = box3(0.15, 2.8, 5.0, WALL);
-  leftWall.position.set(-3.1, 1.4, -0.2);
+  const leftWall = box3(0.15, 2.8, 6.6, WALL);
+  leftWall.position.set(-3.1, 1.4, -0.9);
   worldGroup.add(leftWall);
   const blackboard = buildBlackboard();
-  blackboard.position.set(0.6, 1.45, -2.6);
+  blackboard.position.set(0.6, 1.45, -4.0);
   blackboard.scale.setScalar(0.85);
   worldGroup.add(blackboard);
   const door = buildDoor3(0.9, 1.85, 0x5a9dd6);
@@ -1508,7 +1860,76 @@ function buildSceneLateForClass(stage) {
   doorFrame.rotation.y = Math.PI / 2;
   doorFrame.position.set(-3.05, 0.975, 1.7);
   worldGroup.add(doorFrame);
+  // More windows (round 2 — brief asked for "more windows and a door").
+  [-1.4, -2.8].forEach((z) => {
+    const win = buildWindow3(0.75, 0.95);
+    win.rotation.y = Math.PI / 2;
+    win.position.set(-3.12, 1.65, z);
+    worldGroup.add(win);
+  });
+  // Wall posters + a "student map" — round 2 detail pass.
+  const artColors = [0xe0574a, 0xf0c04a, 0x5cb85c, 0xa15ce0, 0xe888b0];
+  for (let i = 0; i < 4; i++) {
+    const art = box3(0.24, 0.3, 0.02, artColors[i % artColors.length]);
+    art.position.set(2.1 + (i % 2) * 0.32, 2.1 - Math.floor(i / 2) * 0.38, -4.02);
+    worldGroup.add(art);
+  }
+  const mapBoard = box3(0.55, 0.42, 0.02, 0xf5f0dd);
+  mapBoard.position.set(-1.4, 1.95, -4.02);
+  worldGroup.add(mapBoard);
+  [[-0.16, 0.06, 0x9ec98a], [0.05, -0.08, 0xe8c48a], [0.14, 0.1, 0x8ac9c4]].forEach(([dx, dy, c]) => {
+    const blob = box3(0.14, 0.1, 0.01, c);
+    blob.position.set(-1.4 + dx, 1.95 + dy, -4.01);
+    worldGroup.add(blob);
+  });
 
+  // Six rows worth of desk seating (round 2 — "aim for something like
+  // six rows of desks"). The room's real depth only comfortably fits
+  // 3 rows of 2 without crowding the two focal characters near the
+  // front — approximated as 3 rows x 2 columns (6 desks total) rather
+  // than literally 6 rows, flagged here rather than cramming the room
+  // and losing the two-character read.
+  const deskRowZ = [-3.15, -2.15, -1.15];
+  const deskChairColors = [0xe888b0, 0x5a9dd6, 0xf0c04a, 0x5cb85c, 0xa15ce0, 0x5a9dd6];
+  let deskI = 0;
+  deskRowZ.forEach((z) => {
+    [-0.9, 0.6].forEach((x) => {
+      const desk = buildDesk(0xf5f2ea);
+      desk.position.set(x, 0, z);
+      worldGroup.add(desk);
+      const chair = buildChair(deskChairColors[deskI % deskChairColors.length]);
+      chair.position.set(x, 0, z + 0.42);
+      worldGroup.add(chair);
+      deskI++;
+    });
+  });
+  // Floor toys (round 2).
+  [0xe0574a, 0x4a90d6, 0xf0c04a].forEach((c, i) => {
+    const block = box3(0.12, 0.12, 0.12, c);
+    block.position.set(-2.4 + i * 0.16, 0.06, -0.3);
+    block.rotation.y = i * 0.5;
+    worldGroup.add(block);
+  });
+  const toyBall = sphere3(0.09, 0x5cb85c, 14, 10);
+  toyBall.position.set(-2.1, 0.09, 0.1);
+  worldGroup.add(toyBall);
+  const bookshelfHere = buildBookshelf();
+  bookshelfHere.scale.setScalar(0.8);
+  bookshelfHere.position.set(2.75, 0.48, -3.7);
+  worldGroup.add(bookshelfHere);
+
+  // Teacher — standing near the blackboard, taller scale, watching
+  // the door (round 2 — "a teacher figure present in the room").
+  const teacher = buildKid({ skin: 0xd9a06c, hair: 0x2b2117, shirt: 0x8a6a4a, pants: 0x3a3a34, shoe: 0x222222 });
+  poseKid(teacher, { headTurn: -0.6, armL: { shoulder: -0.2 }, armR: { shoulder: -0.15 } });
+  teacher.scale.setScalar(1.28);
+  teacher.position.set(-0.3, 0, -3.4);
+  teacher.rotation.y = 0.4;
+  worldGroup.add(teacher);
+
+  // The two focal desks, front-most and closest to camera — kept
+  // separate from the six background desks above so the runner and
+  // her friend always read as the clear foreground focus.
   const deskA = buildDesk(0xf5f2ea);
   deskA.position.set(-0.9, 0, -0.4);
   worldGroup.add(deskA);
@@ -1549,13 +1970,23 @@ function buildSceneLateForClass(stage) {
   // Girl with a backpack, running in late — mid-stride pose, animated
   // sprinting from the door toward the empty desk.
   const runner = buildKid({ skin: 0xc9895c, hair: 0x1c1410, shirt: 0xf0c04a, pants: 0x2d5fa8, shoe: 0x2c2c2c, backpack: 0xe0574a, ponytail: true });
+  // Round 2 BUG FIX: the run cycle only ever animated the THIGH pivots
+  // (a sin() swing) — the KNEE pivots were set once here and never
+  // touched again, so once the swing settled back near zero at the
+  // end of the animation, both knees were left stuck at their fixed,
+  // asymmetric starting bend with no thigh angle to justify it,
+  // reading as "both legs folded forward" rather than a stride.
+  // Fixed below: knees now bend IN SYNC with the thigh swing (the
+  // trailing leg lifts/bends, the leading leg stays straighter), and
+  // the animation freezes on an explicit, designed stride pose at the
+  // end instead of an arbitrary sin() endpoint.
   poseKid(runner, {
-    lean: 0.25,
-    armR: { shoulder: -0.9 }, armL: { shoulder: 0.7 },
-    legL: { thigh: 0.65, knee: -0.9 }, legR: { thigh: -0.75, knee: 0.6 }
+    lean: 0.2,
+    armR: { shoulder: 0.5 }, armL: { shoulder: -0.55 },
+    legL: { thigh: -0.55, knee: 0.2 }, legR: { thigh: 0.62, knee: -1.1 }
   });
   runner.position.set(-2.7, 0, 1.55);
-  runner.rotation.y = Math.PI / 2 - 0.5;
+  runner.rotation.y = 0.45; // a 3/4 angle toward the camera — the old near-90° angle showed mostly her back/backpack, hiding both the new facial features and the leg stride
   worldGroup.add(runner);
   (function animateRun() {
     const t0 = performance.now();
@@ -1566,12 +1997,23 @@ function buildSceneLateForClass(stage) {
       const t = clamp01((now - t0) / 2800);
       runner.position.x = lerp(from.x, to.x, easeOutCubic(t));
       runner.position.z = lerp(from.z, to.z, easeOutCubic(t));
-      const swing = Math.sin(t * Math.PI * 7) * 0.7;
-      parts.legL.thighPivot.rotation.x = swing;
-      parts.legR.thighPivot.rotation.x = -swing;
-      parts.armR.shoulder.rotation.x = -swing * 0.8;
-      parts.armL.shoulder.rotation.x = swing * 0.8;
-      if (t < 1) requestAnimationFrame(step);
+      if (t < 1) {
+        const swing = Math.sin(t * Math.PI * 7) * 0.7;
+        parts.legL.thighPivot.rotation.x = swing;
+        parts.legR.thighPivot.rotation.x = -swing;
+        parts.legL.kneePivot.rotation.x = Math.max(0, swing) * 1.6;
+        parts.legR.kneePivot.rotation.x = Math.max(0, -swing) * 1.6;
+        parts.armR.shoulder.rotation.x = -swing * 0.8;
+        parts.armL.shoulder.rotation.x = swing * 0.8;
+        requestAnimationFrame(step);
+      } else {
+        // freeze on the same clean stride pose the character started
+        // in, rather than whatever the sin() last computed
+        poseKid(runner, {
+          legL: { thigh: -0.55, knee: 0.2 }, legR: { thigh: 0.62, knee: -1.1 },
+          armR: { shoulder: 0.45 }, armL: { shoulder: -0.5 }
+        });
+      }
     }
     requestAnimationFrame(step);
   })();
@@ -1595,6 +2037,16 @@ function buildSceneArtProject(stage) {
   shelf.scale.setScalar(0.8);
   shelf.position.set(2.3, 0.48, -2.2);
   worldGroup.add(shelf);
+  // Round 2 — more furniture, styled clearly as school furniture: a
+  // stool + a smaller side table along the back wall.
+  const sideTable = buildDesk(0xe8c48a);
+  sideTable.scale.set(0.8, 0.9, 0.8);
+  sideTable.position.set(-2.4, 0, -2.0);
+  worldGroup.add(sideTable);
+  const stool = buildChair(0xf0c04a);
+  stool.scale.set(0.7, 0.6, 0.7);
+  stool.position.set(-2.4, 0, -1.65);
+  worldGroup.add(stool);
 
   const table = box3(1.1, 0.36, 0.6, 0xe8c48a);
   table.position.set(0, 0, -0.3);
@@ -1638,7 +2090,7 @@ function buildSceneArtProject(stage) {
     legL: { thigh: -1.4, knee: 1.3 }, legR: { thigh: -1.4, knee: 1.3 }
   });
   kidA.position.set(-0.55, 0, 0.15);
-  kidA.rotation.y = Math.PI - 0.5;
+  kidA.rotation.y = 0.5; // faces the camera, not the back wall
   worldGroup.add(kidA);
 
   const kidB = buildKid({ skin: 0xc9895c, hair: 0x1c1410, shirt: 0xf0c04a, pants: 0x2d5fa8, shoe: 0x2c2c2c, ponytail: true });
@@ -1648,7 +2100,7 @@ function buildSceneArtProject(stage) {
     legL: { thigh: -1.4, knee: 1.3 }, legR: { thigh: -1.4, knee: 1.3 }
   });
   kidB.position.set(0.55, 0, 0.15);
-  kidB.rotation.y = Math.PI + 0.5;
+  kidB.rotation.y = -0.5; // faces the camera, not the back wall
   worldGroup.add(kidB);
 
   // background classmates, smaller/simpler, further back
@@ -1656,10 +2108,27 @@ function buildSceneArtProject(stage) {
     const bg = buildKid({ skin: 0xd9a06c, hair: 0x4a3527, shirt: i ? 0xa15ce0 : 0x5a9dd6, pants: 0x3a3a34, shoe: 0x222222 });
     poseKid(bg, { crouch: 0.26, legL: { thigh: -1.4, knee: 1.3 }, legR: { thigh: -1.4, knee: 1.3 } });
     bg.position.set(x, 0, -1.6);
-    bg.rotation.y = Math.PI;
+    bg.rotation.y = i ? -0.2 : 0.2;
     bg.scale.setScalar(0.85);
     worldGroup.add(bg);
   });
+
+  // Round 2 — scattered materials around the table: a couple of books
+  // dropped on the floor + general clutter, so the scene reads full
+  // rather than empty.
+  [[-0.9, 0.7, 0x5a9dd6], [-0.7, 0.85, 0xe0574a], [1.0, 0.75, 0x5cb85c]].forEach(([x, z, c]) => {
+    const bookOnFloor = box3(0.16, 0.03, 0.12, c);
+    bookOnFloor.position.set(x, 0.02, z);
+    bookOnFloor.rotation.y = Math.random() * 1.2;
+    worldGroup.add(bookOnFloor);
+  });
+  const crayonBox = box3(0.14, 0.04, 0.08, 0xf0c04a);
+  crayonBox.position.set(-1.55, 0.3, -1.9);
+  worldGroup.add(crayonBox);
+  const paperScraps = box3(0.1, 0.005, 0.08, 0xffffff);
+  paperScraps.rotation.y = 0.4;
+  paperScraps.position.set(0.75, 0.005, 0.55);
+  worldGroup.add(paperScraps);
 
   return {
     start: { pos: { x: 0, y: 4.2, z: 5.4 }, look: { x: 0, y: 0.6, z: -0.3 } },
@@ -1687,6 +2156,10 @@ function buildSceneAfterSchool(stage) {
     win.position.set(i * 1.6, 1.9, -3.4);
     worldGroup.add(win);
   }
+  // Round 2 — clear signage identifying this as a school.
+  const sign = buildTextSign('ELEMENTARY SCHOOL', 2.2, 0.5, { bg: '#f5f2ea', color: '#2d5fa8', border: '#8a5a3c' });
+  sign.position.set(0, 2.75, -3.39);
+  worldGroup.add(sign);
   const gate = buildGate3();
   gate.position.set(0, 0, 0.4);
   worldGroup.add(gate);
@@ -1699,6 +2172,64 @@ function buildSceneAfterSchool(stage) {
     worldGroup.add(b);
   });
 
+  // Round 2 — playground: a slide + two kids playing soccer, set back
+  // to the side so they add life without competing with the two
+  // focal characters walking out the gate.
+  const slideGroup = new THREE.Group();
+  const slidePlatform = box3(0.5, 0.05, 0.5, 0xf0c04a);
+  slidePlatform.position.y = 0.7;
+  slideGroup.add(slidePlatform);
+  [[-0.22, -0.22], [0.22, -0.22], [-0.22, 0.22], [0.22, 0.22]].forEach(([x, z]) => {
+    const leg = cyl3(0.03, 0.03, 0.7, 0xbfc4c9);
+    leg.position.set(x, 0.35, z);
+    slideGroup.add(leg);
+  });
+  const slideRamp = box3(0.5, 0.04, 1.1, 0x5a9dd6);
+  slideRamp.position.set(0, 0.42, 0.75);
+  slideRamp.rotation.x = -0.6;
+  slideGroup.add(slideRamp);
+  slideGroup.position.set(4.6, 0, -2.2);
+  slideGroup.rotation.y = -0.3;
+  worldGroup.add(slideGroup);
+  const soccerBall = sphere3(0.1, 0xffffff, 12, 10);
+  soccerBall.position.set(4.0, 0.1, -0.6);
+  worldGroup.add(soccerBall);
+  const soccerKidA = buildKid({ skin: 0xd9a06c, hair: 0x1c1410, shirt: 0xe0574a, pants: 0x3a3a34, shoe: 0x222222 });
+  poseKid(soccerKidA, { lean: 0.2, legR: { thigh: -0.8, knee: 0.3 }, armL: { shoulder: 0.4 }, armR: { shoulder: -0.3 } });
+  soccerKidA.position.set(4.4, 0, -1.0);
+  soccerKidA.rotation.y = -0.6;
+  soccerKidA.scale.setScalar(0.85);
+  worldGroup.add(soccerKidA);
+  const soccerKidB = buildKid({ skin: 0xf0c49a, hair: 0x6b3e26, shirt: 0x5cb85c, pants: 0x2d5fa8, shoe: 0x8a5a3c });
+  poseKid(soccerKidB, { legL: { thigh: 0.3, knee: -0.3 }, armR: { shoulder: 0.3 } });
+  soccerKidB.position.set(3.5, 0, -0.15);
+  soccerKidB.rotation.y = 0.3;
+  soccerKidB.scale.setScalar(0.85);
+  worldGroup.add(soccerKidB);
+
+  // Round 2 — distant mountains + more sky depth.
+  [{ x: -8, r: 2.2, h: 3.2 }, { x: -4.5, r: 2.6, h: 3.8 }, { x: 7, r: 2.4, h: 3.4 }].forEach((m) => {
+    const mtn = cone3(m.r, m.h, 0x93aecb, 6);
+    mtn.position.set(m.x, m.h / 2, -9);
+    worldGroup.add(mtn);
+  });
+  [buildCloud3(1.3), buildCloud3(1.6), buildCloud3(1.1)].forEach((c, i) => {
+    c.position.set(i === 0 ? -6 : (i === 1 ? 5 : 0), 5.5 + i * 0.6, -8 - i);
+    stage.scene.add(c);
+  });
+  // Round 2 — ground detail: flowers scattered in the grass.
+  const flowerColors = [0xe888b0, 0xf0d060, 0xfaf3e6];
+  for (let i = 0; i < 10; i++) {
+    const flower = sphere3(0.045, flowerColors[i % flowerColors.length], 7, 6);
+    flower.position.set((Math.sin(i * 3.1) * 4.5), 0.06, -1.5 + Math.cos(i * 2.3) * 2.2);
+    worldGroup.add(flower);
+  }
+  // Round 2 — a small dog trotting past for a touch of life.
+  const dog = buildAnimal3(0xc9895c, 'dog');
+  dog.position.set(-2.2, 0, 1.4);
+  dog.rotation.y = 1.4;
+  worldGroup.add(dog);
+
   const kidA = buildKid({ skin: 0xf0c49a, hair: 0x6b3e26, shirt: 0xe888b0, pants: 0x3568c9, shoe: 0x8a5a3c, backpack: 0x5cb85c, ponytail: true });
   poseKid(kidA, {
     headTurn: 0.4,
@@ -1706,7 +2237,7 @@ function buildSceneAfterSchool(stage) {
     legL: { thigh: 0.35, knee: -0.4 }, legR: { thigh: -0.4, knee: 0.5 }
   });
   kidA.position.set(-0.35, 0, 2.6);
-  kidA.rotation.y = Math.PI + 0.25;
+  kidA.rotation.y = 0.25; // faces the camera, walking toward the viewer
   worldGroup.add(kidA);
 
   const kidB = buildKid({ skin: 0xc9895c, hair: 0x2b2117, shirt: 0x4a90d6, pants: 0x3a3a34, shoe: 0x222222, backpack: 0xe0574a });
@@ -1716,13 +2247,8 @@ function buildSceneAfterSchool(stage) {
     legR: { thigh: 0.3, knee: -0.35 }, legL: { thigh: -0.35, knee: 0.45 }
   });
   kidB.position.set(0.35, 0, 2.4);
-  kidB.rotation.y = Math.PI - 0.25;
+  kidB.rotation.y = -0.25; // faces the camera, walking toward the viewer
   worldGroup.add(kidB);
-
-  [buildCloud3(1.3), buildCloud3(1.6)].forEach((c, i) => {
-    c.position.set(i === 0 ? -6 : 5, 5.5 + i, -8);
-    stage.scene.add(c);
-  });
 
   return {
     start: { pos: { x: -4.5, y: 3.4, z: 6.5 }, look: { x: 0, y: 1, z: 0 } },
@@ -1751,6 +2277,29 @@ function buildSceneLostBall(stage) {
   ball.position.set(-1.5, 0.11, -0.95); // just visible under/behind the bench
   worldGroup.add(ball);
 
+  // Round 2 — same outdoor enrichment as After School: distant
+  // mountains, sky depth, flowers in the grass, a small animal.
+  [{ x: -7, r: 2.0, h: 2.9 }, { x: 6.5, r: 2.4, h: 3.3 }, { x: 1, r: 2.8, h: 3.6 }].forEach((m) => {
+    const mtn = cone3(m.r, m.h, 0x93aecb, 6);
+    mtn.position.set(m.x, m.h / 2, -9);
+    worldGroup.add(mtn);
+  });
+  [buildCloud3(1.3), buildCloud3(1.5)].forEach((c, i) => {
+    c.position.set(i === 0 ? -5 : 6, 5.6 + i * 0.5, -8 - i);
+    stage.scene.add(c);
+  });
+  const flowerColorsLB = [0xe888b0, 0xf0d060, 0xfaf3e6];
+  for (let i = 0; i < 9; i++) {
+    const flower = sphere3(0.045, flowerColorsLB[i % flowerColorsLB.length], 7, 6);
+    flower.position.set(-3.5 + (i % 3) * 1.4 + Math.sin(i) * 0.4, 0.06, 0.6 + Math.floor(i / 3) * 0.7);
+    worldGroup.add(flower);
+  }
+  const cat = buildAnimal3(0xe8e2d6, 'cat');
+  cat.scale.setScalar(0.85);
+  cat.position.set(-2.0, 0, -1.1);
+  cat.rotation.y = -0.6;
+  worldGroup.add(cat);
+
   const kneelingKid = buildKid({ skin: 0xf0c49a, hair: 0x4a3527, shirt: 0xf0c04a, pants: 0x2d5fa8, shoe: 0x2c2c2c });
   poseKid(kneelingKid, {
     crouch: 0.32, lean: 0.75, headTilt: 0.3,
@@ -1758,7 +2307,7 @@ function buildSceneLostBall(stage) {
     legL: { thigh: -1.5, knee: 1.6 }, legR: { thigh: -1.7, knee: 1.9 }
   });
   kneelingKid.position.set(-1.1, 0, -0.35);
-  kneelingKid.rotation.y = 2.6;
+  kneelingKid.rotation.y = 0.6; // faces toward camera/bench, not away
   worldGroup.add(kneelingKid);
 
   const pointingKid = buildKid({ skin: 0xc9895c, hair: 0x1c1410, shirt: 0x5cb85c, pants: 0x3a3a34, shoe: 0x222222, ponytail: true });
@@ -1768,7 +2317,7 @@ function buildSceneLostBall(stage) {
     legL: { thigh: 0.15 }, legR: { thigh: -0.15 }
   });
   pointingKid.position.set(0.9, 0, 0.9);
-  pointingKid.rotation.y = 2.4;
+  pointingKid.rotation.y = 0.5; // faces toward camera, not away
   worldGroup.add(pointingKid);
 
   return {
@@ -1793,12 +2342,51 @@ function buildSceneRainyDay(stage) {
   puddle.rotation.x = -Math.PI / 2;
   puddle.position.set(0.35, 0.022, 1.6);
   worldGroup.add(puddle);
-  // simple splash droplets near the puddle
-  for (let i = 0; i < 5; i++) {
-    const d = sphere3(0.02, 0xbfe3f2, 6, 5);
-    d.position.set(0.35 + Math.cos(i) * 0.22, 0.15 + i * 0.02, 1.6 + Math.sin(i) * 0.22);
+  // Round 2 — an actual ANIMATED splash at the point of impact (was
+  // just static droplets sitting motionless near the puddle, which
+  // isn't a splash) — a repeating burst of small droplets that launch
+  // outward/up from the puddle center under simple gravity, timed to
+  // loop with the stepping kid's foot landing.
+  const SPLASH_ORIGIN = { x: 0.35, y: 0.03, z: 1.6 };
+  const splashDrops = Array.from({ length: 10 }, () => {
+    const d = sphere3(0.018, 0xcfeaf7, 6, 5);
+    d.visible = false;
     worldGroup.add(d);
+    return { mesh: d, vx: 0, vy: 0, vz: 0, life: 0 };
+  });
+  function burstSplash() {
+    splashDrops.forEach((p, i) => {
+      const a = (i / splashDrops.length) * Math.PI * 2;
+      p.vx = Math.cos(a) * 0.35;
+      p.vz = Math.sin(a) * 0.35;
+      p.vy = 0.9 + Math.random() * 0.4;
+      p.mesh.position.set(SPLASH_ORIGIN.x, SPLASH_ORIGIN.y, SPLASH_ORIGIN.z);
+      p.mesh.visible = true;
+      p.life = 0;
+    });
   }
+  let splashTimer = 0;
+  (function animateSplash() {
+    let last = performance.now();
+    function step(now) {
+      if (!stage.state.alive) return;
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      splashTimer -= dt;
+      if (splashTimer <= 0) { burstSplash(); splashTimer = 2.6; }
+      splashDrops.forEach((p) => {
+        if (!p.mesh.visible) return;
+        p.life += dt;
+        p.vy -= 2.4 * dt;
+        p.mesh.position.x += p.vx * dt;
+        p.mesh.position.y += p.vy * dt;
+        p.mesh.position.z += p.vz * dt;
+        if (p.mesh.position.y <= SPLASH_ORIGIN.y || p.life > 1) p.mesh.visible = false;
+      });
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  })();
   // simple rain — a handful of thin falling lines
   const rainDrops = [];
   for (let i = 0; i < 24; i++) {
@@ -1832,7 +2420,7 @@ function buildSceneRainyDay(stage) {
     legL: { thigh: 0.2 }, legR: { thigh: -0.2 }
   });
   kidA.position.set(-0.15, 0, 1.75);
-  kidA.rotation.y = Math.PI;
+  kidA.rotation.y = 0.15; // faces the camera, not away
   worldGroup.add(kidA);
 
   const kidB = buildKid({ skin: 0xc9895c, hair: 0x1c1410, shirt: 0xf0c04a, pants: 0x2d5fa8, shoe: 0x2c2c2c });
@@ -1842,8 +2430,51 @@ function buildSceneRainyDay(stage) {
     armL: { shoulder: 0.3 }, armR: { shoulder: -0.15 }
   });
   kidB.position.set(0.45, 0, 1.55);
-  kidB.rotation.y = Math.PI - 0.15;
+  kidB.rotation.y = -0.15; // faces the camera, not away
   worldGroup.add(kidB);
+
+  // Round 2 — a couple of other students nearby, further down the
+  // sidewalk, also caught in the rain (no umbrella of their own).
+  [{ x: -0.6, z: 3.1, shirt: 0x5cb85c }, { x: 0.7, z: 3.4, shirt: 0xa15ce0 }].forEach((def, i) => {
+    const bystander = buildKid({ skin: i ? 0xc9895c : 0xf0c49a, hair: i ? 0x1c1410 : 0x6b3e26, shirt: def.shirt, pants: 0x3a3a34, shoe: 0x222222 });
+    poseKid(bystander, { headTilt: 0.1, legR: { thigh: i ? -0.3 : 0.3, knee: 0.2 } });
+    bystander.position.set(def.x, 0, def.z);
+    bystander.rotation.y = i ? -0.3 : 0.4;
+    bystander.scale.setScalar(0.9);
+    worldGroup.add(bystander);
+  });
+
+  // Round 2 — a vehicle passing in the background street, beyond the
+  // sidewalk (optional per the brief, included for extra life).
+  function buildCar3() {
+    const cg = new THREE.Group();
+    const bodyLow = box3(0.9, 0.28, 0.42, 0xe0574a);
+    bodyLow.position.y = 0.28;
+    cg.add(bodyLow);
+    const cabin = box3(0.5, 0.22, 0.4, 0xdfe6ea, { metalness: 0.1, roughness: 0.3 });
+    cabin.position.set(-0.05, 0.52, 0);
+    cg.add(cabin);
+    [[-0.3, -0.19], [0.3, -0.19], [-0.3, 0.19], [0.3, 0.19]].forEach(([x, z]) => {
+      const wheel = cyl3(0.11, 0.11, 0.08, 0x222222, 14);
+      wheel.rotation.z = Math.PI / 2;
+      wheel.position.set(x, 0.13, z);
+      cg.add(wheel);
+    });
+    return cg;
+  }
+  const car = buildCar3();
+  car.position.set(-5, 0, -2.6);
+  worldGroup.add(car);
+  (function driveCar() {
+    const t0 = performance.now();
+    function step(now) {
+      if (!stage.state.alive) return;
+      const t = ((now - t0) / 6000) % 1;
+      car.position.x = lerp(-6, 6, t);
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  })();
 
   return {
     start: { pos: { x: -3.4, y: 3.2, z: 5.6 }, look: { x: 0.1, y: 1, z: 1 } },
@@ -1863,18 +2494,60 @@ function buildSceneSleepover(stage) {
   const win = buildWindow3(0.9, 1.0);
   win.position.set(1.9, 1.7, -2.3);
   worldGroup.add(win);
+  // Round 2 — curtains flanking the window.
+  [-0.58, 0.58].forEach((dx) => {
+    const curtain = box3(0.16, 1.15, 0.03, 0xe888b0, { roughness: 0.9 });
+    curtain.position.set(1.9 + dx, 1.68, -2.24);
+    worldGroup.add(curtain);
+  });
+  // Round 2 — wall decorations: pinned-up student artwork/photos.
+  const wallArtColors = [0xf0c04a, 0x5cb85c, 0xe0574a, 0xa15ce0];
+  for (let i = 0; i < 4; i++) {
+    const art = box3(0.22, 0.28, 0.02, wallArtColors[i]);
+    art.position.set(-1.0 + (i % 2) * 0.3, 2.0 - Math.floor(i / 2) * 0.36, -2.32);
+    worldGroup.add(art);
+  }
 
   const bed = buildBed3();
   bed.rotation.y = Math.PI / 2;
   bed.position.set(-2.0, 0, -0.8);
   worldGroup.add(bed);
 
-  // floor toys
+  // Round 2 — a cozy floor lamp beside the bed, with a warm glow.
+  const lampGroup = new THREE.Group();
+  const lampPole = cyl3(0.025, 0.03, 1.1, 0x8a6a4a);
+  lampPole.position.y = 0.55;
+  lampGroup.add(lampPole);
+  const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.24, 12, 1, true), new THREE.MeshBasicMaterial({ color: 0xfff3c4, side: THREE.DoubleSide }));
+  lampShade.position.y = 1.18;
+  lampGroup.add(lampShade);
+  const lampGlow = new THREE.PointLight(0xffdb8a, 0.6, 3);
+  lampGlow.position.y = 1.05;
+  lampGroup.add(lampGlow);
+  lampGroup.position.set(-2.9, 0, 0.2);
+  worldGroup.add(lampGroup);
+
+  // Round 2 — more floor objects + a cat lying down for coziness.
   [0xe0574a, 0x5cb85c, 0xf0c04a].forEach((c, i) => {
     const t = sphere3(0.08, c, 12, 10);
     t.position.set(1.6 - i * 0.2, 0.08, 0.9 + i * 0.15);
     worldGroup.add(t);
   });
+  const bookStack = box3(0.18, 0.06, 0.14, 0x5a9dd6);
+  bookStack.position.set(-1.1, 0.03, 0.9);
+  worldGroup.add(bookStack);
+  const bookStack2 = box3(0.16, 0.05, 0.13, 0xe888b0);
+  bookStack2.position.set(-1.08, 0.085, 0.87);
+  bookStack2.rotation.y = 0.3;
+  worldGroup.add(bookStack2);
+  const plushToy = sphere3(0.07, 0xf5deb3, 10, 8);
+  plushToy.position.set(-0.2, 0.07, 1.1);
+  worldGroup.add(plushToy);
+  const cat = buildAnimal3(0xd9a06c, 'cat');
+  cat.scale.setScalar(0.9);
+  cat.rotation.y = 0.9;
+  cat.position.set(0.1, 0, 0.2);
+  worldGroup.add(cat);
 
   // blanket fort — a simple lean-to: two chair "poles" holding a
   // draped blanket panel, patterned via two color bands.
@@ -1901,7 +2574,7 @@ function buildSceneSleepover(stage) {
     legL: { thigh: -1.3, knee: 1.4 }, legR: { thigh: -1.3, knee: 1.4 }
   });
   kidA.position.set(0.5, 0, 0.55);
-  kidA.rotation.y = Math.PI + 0.3;
+  kidA.rotation.y = 0.3; // faces the camera, not away
   worldGroup.add(kidA);
 
   const flashlightProp = () => {
@@ -1922,7 +2595,7 @@ function buildSceneSleepover(stage) {
     legL: { thigh: -1.3, knee: 1.4 }, legR: { thigh: -1.3, knee: 1.4 }
   });
   kidB.position.set(1.3, 0, 0.55);
-  kidB.rotation.y = Math.PI - 0.3;
+  kidB.rotation.y = -0.3; // faces the camera, not away
   worldGroup.add(kidB);
 
   return {
@@ -2383,37 +3056,25 @@ async function savePracticeDrawing(){
 }
 
 /* ============================================================
-   STEP 6 — TEACHER REFERENCE + ARTWORK COMMUNITY. Maps to Lesson 01's
-   Step 7 "Compare" (same mechanism: a reference card, the student's
-   own saved work pulled from IndexedDB or an upload fallback, then
-   the shared community gallery) — but the reference card here is ONE
-   TEACHER REFERENCE keyed to whichever of the six scenes the student
-   actually chose in Step 4, not a generic teacher/student icon pair,
-   since the student could have drawn any of the six. No separate
-   teacher-demo VIDEO step in this lesson (Lesson 01's Step 6b) — the
-   brief only asked for a reference image here, not a recorded demo.
+   STEP 6 — ARTWORK COMMUNITY. Maps to Lesson 01's Step 7 "Compare"
+   mechanism (student's own saved work pulled from IndexedDB or an
+   upload fallback, then the shared community gallery) — round 2
+   DROPPED the teacher-reference card that used to sit here, per
+   Faye's instruction: the teacher reference now shows up per-scene
+   during Step 3 exploration instead (renderTeacherOverlay), so
+   showing it again here for only the one chosen scene was redundant.
+   This step is now student-work-only: your drawing + everyone else's.
 ============================================================ */
 function renderTeacherCommunity(){
-  const scene = LESSON_DATA.story_choices.find(c => c.id === STATE.sceneChoiceId) || LESSON_DATA.story_choices[0];
-  const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === (scene && scene.id)) || LESSON_DATA.teacher_references[0];
   const gallery = LESSON_DATA.community_gallery;
   const galleryCards = Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
-      <div class="step-kicker">Teacher Reference</div>
-      <h2 class="step-title">${scene ? scene.title : 'Your Scene'}</h2>
-      <div class="compare-grid compare-grid-single">
-        <div class="compare-card">
-          <div class="compare-card-icon">🎨</div>
-          <div class="compare-card-label">${ref.label}</div>
-          ${ref.placeholder ? '<div class="compare-card-note">Coming soon</div>' : ''}
-        </div>
-      </div>
-      <p class="compare-message">There is more than one way to draw the same scene.</p>
+      <div class="step-kicker">Our Community</div>
+      <h2 class="step-title">Your Drawing, Together With Everyone Else's</h2>
+      <p class="compare-message">Save your drawing here — it joins the gallery below, alongside work from students like you.</p>
 
       <div class="community-section">
-        <div class="community-kicker">Our Community</div>
-        <p class="community-lead">Save your drawing here — it joins the gallery below, alongside work from students like you.</p>
         <div class="own-work-card" id="ownWorkCard"><!-- filled by afterRenderTeacherCommunity --></div>
         <div class="gallery-section">
           <div class="gallery-title">${gallery.title}</div>

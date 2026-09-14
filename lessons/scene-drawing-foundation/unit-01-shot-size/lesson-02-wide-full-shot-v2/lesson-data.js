@@ -26,11 +26,21 @@
  *     Previous-navigation bug (see index.html's own note).
  *   - story_choices (Step 4) — six items instead of three, same
  *     shape otherwise.
- *   - teacher_references (Step 6) — NEW shape vs. Lesson 01's
- *     student_examples: one item PER SCENE (6 slots, keyed by
- *     sceneId) rather than one generic teacher/student pair, since
- *     the student could have drawn any of the six scenes and the
- *     "teacher reference" needs to match whichever one they picked.
+ *   - teacher_references — NEW shape vs. Lesson 01's student_examples:
+ *     one item PER SCENE (6 slots, keyed by sceneId). Round 2: now
+ *     shown as a small expandable overlay DURING each of the six
+ *     scenes in Step 3 (not just once, for whichever scene the
+ *     student eventually picks) — see index.html's renderTeacherOverlay.
+ *     The final community step (old Step 6) no longer shows a teacher
+ *     reference at all, per Faye's round-2 instruction — it now shows
+ *     only the student's own saved work + the community gallery.
+ *   - story_scenes[].situationLine — round 2 addition, the one-line
+ *     story sentence typed out during each scene's new pre-reveal
+ *     sequence ("Situation N: ..."), per Faye's explicit example
+ *     wording. Distinct from `question` (the comprehension prompt
+ *     shown once the scene has settled).
+ *   - scenes_intro — round 2 addition, the two-card intro shown once
+ *     before Situation 1 (title card + a short explainer card).
  *
  * id/courseId: 'wide-full-shot' — REUSED VERBATIM from the old, live
  * build (checked against core/course-badge-registry.js's
@@ -83,48 +93,70 @@
       ]
     },
 
+    // Round 2 — two-card intro shown once, before Situation 1's reveal
+    // sequence. Copy is Claude Code's own wording (the brief invited a
+    // reword "if something reads more natural in context" and asked
+    // to flag it, not match a given line verbatim) — flagged here per
+    // that instruction, not silently written as if it were given.
+    scenes_intro: {
+      titleCard: 'Scene Drawing Practice',
+      explainerCard: "You'll walk through six short story situations, one at a time. Just watch and think for now — you'll pick one to draw after."
+    },
+
     // Step 3 — six demonstration scenes (own 3D build + a short
     // comprehension question each), exploration only, no drawing yet.
     // Each maps to its own top-level STEPS entry in index.html
-    // (STEP3_SCENE_IDS) — see that file's own note on why this is
+    // (STORY_SCENE_STEPS) — see that file's own note on why this is
     // flat, not nested. `sceneKey` selects which of index.html's
     // SCENE3D_BUILDERS to mount; `question`/`altQuestion` are the
     // brief's own wording verbatim (altQuestion shown as a smaller
-    // second line where the brief gave one).
+    // second line where the brief gave one). `situationLine` (round 2)
+    // is the one-line story sentence typed out during the new
+    // pre-reveal sequence, matching the brief's own given example
+    // format ("A girl runs into the classroom, late for class.") —
+    // Scene 1's line is that exact example; the other five are Claude
+    // Code's own summaries of each scene's brief description, flagged
+    // here since none were given verbatim.
     story_scenes: [
       {
         id: 'late_for_class', sceneKey: 'lateForClass', setting: 'indoor',
         title: 'Late for Class',
+        situationLine: 'A girl runs into the classroom, late for class.',
         question: 'Who arrived late? What is her friend doing?',
         altQuestion: 'Why do we need a Wide Shot for this scene?'
       },
       {
         id: 'art_project', sceneKey: 'artProject', setting: 'indoor',
         title: 'The Art Project',
+        situationLine: 'Two friends work together on an art project at a table.',
         question: 'Are they working together, or arguing?',
         altQuestion: null
       },
       {
         id: 'after_school', sceneKey: 'afterSchool', setting: 'outdoor',
         title: 'See You After School',
+        situationLine: 'Two friends walk out through the school gate together.',
         question: 'What are they going to do next?',
         altQuestion: null
       },
       {
         id: 'lost_ball', sceneKey: 'lostBall', setting: 'outdoor',
         title: 'The Lost Ball',
+        situationLine: 'Two kids search the park for a ball they lost.',
         question: 'Where is the ball? Who finds it first?',
         altQuestion: null
       },
       {
         id: 'rainy_day', sceneKey: 'rainyDay', setting: 'outdoor',
         title: 'Rainy Day Surprise',
+        situationLine: 'Two friends share an umbrella — and one steps in a puddle.',
         question: 'What happened one second ago?',
         altQuestion: null
       },
       {
         id: 'sleepover', sceneKey: 'sleepover', setting: 'indoor',
         title: 'The Sleepover',
+        situationLine: 'Two best friends build a blanket fort at a sleepover.',
         question: 'What are they building together?',
         altQuestion: null
       }
@@ -182,12 +214,13 @@
       narrationAvailable: false
     },
 
-    // Step 6 — Teacher Reference (one slot PER scene, keyed by
-    // sceneId — see file header) + the student's own saved work, then
-    // the shared Artwork Community gallery. All six placeholder:true
-    // for now; Faye supplies real per-scene teacher reference art
-    // later, the same way she supplied Lesson 01's Step 4 art —
-    // swapping one in only needs this array edited, not index.html.
+    // Round 2: shown per-scene during Step 3 exploration (one small
+    // expandable overlay per scene, keyed by sceneId — see file header
+    // and index.html's renderTeacherOverlay), NOT in the final
+    // community step anymore. All six placeholder:true for now; Faye
+    // supplies real per-scene teacher reference art later, the same
+    // way she supplied Lesson 01's Step 4 art — swapping one in only
+    // needs this array edited, not index.html.
     teacher_references: [
       { sceneId: 'late_for_class', label: 'Teacher Reference — Late for Class', placeholder: true },
       { sceneId: 'art_project', label: 'Teacher Reference — The Art Project', placeholder: true },
@@ -197,9 +230,16 @@
       { sceneId: 'sleepover', label: 'Teacher Reference — The Sleepover', placeholder: true }
     ],
 
+    // Round 2: the final community step now shows ONLY the student's
+    // own work + this gallery — the teacher-reference card that used
+    // to sit alongside it moved to a per-scene overlay in Step 3 (see
+    // teacher_references above). Faye has real photos of other
+    // students' drawings for this gallery but hasn't sent them yet —
+    // placeholderCount stays a placeholder grid until she does, same
+    // pattern as Step 3's reference images.
     community_gallery: {
       title: 'From Other Students',
-      subtitle: "Real student work will appear here once it's shared.",
+      subtitle: "Real student photos will appear here once Faye shares them.",
       placeholderCount: 4
     },
 
