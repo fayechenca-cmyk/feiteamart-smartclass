@@ -1,214 +1,265 @@
 /* ============================================================
- * Scene Drawing Foundation · Unit 01 · Lesson 02 — Wide / Full Shot
- * Lesson content data — all 13 stages, per the real
- * "Scene Drawing Foundation · Unit 01 · Lesson 02 / Wide / Full Shot:
- * Character + World — Spec v1.0" pasted by Faye.
+ * Scene Drawing Foundation · Unit 01 · Lesson 02 — LIVE
+ * Wide Shot — Character + World, Together
  *
- * ASSET NOTE: same situation as Lesson 01 — every image below is an
- * inline placeholder SVG (via svgPlaceholder()), not real art. The
- * spec's visual notes (character shown FULL BODY, with enough
- * environment to read where they are — never shrunk to a dot the way
- * Lesson 01's extreme-wide art was) are honored in spirit via the
- * emoji choice, but the real illustrations still need to come later;
- * swapping in real image URLs needs no other code change.
+ * This is the "Learning Canvas" redesign, PROMOTED to the real live
+ * path on 2026-09-14 (built and reviewed across 2 local rounds at a
+ * parallel lesson-02-wide-full-shot-v2/ path first, which no longer
+ * exists). The original 13-stage build is archived, not deleted, at
+ * ../_archive/lesson-02-wide-full-shot-original/.
  *
- * connect_you is copied VERBATIM from Lesson 01's lesson-data.js per
- * the spec's explicit "reuse as-is, don't rewrite" instruction — same
- * title, options, icons, and bubble-response copy.
+ * Same shell/pattern as the now-live Lesson 01
+ * (lesson-01-extreme-wide-shot/lesson-data.js) — this file follows
+ * that one's field-naming conventions directly rather than inventing
+ * new ones, per the brief's "should feel like a direct sibling of
+ * Lesson 01" instruction. Differences from Lesson 01's shape, each
+ * flagged inline below where they occur:
+ *   - no intro_video field — this lesson opens straight into a 3D
+ *     scene (interactive_scene), per the brief's explicit "no video"
+ *     instruction.
+ *   - concept_contrast (Step 2) is new — Lesson 01 had no equivalent
+ *     step contrasting itself against an already-known shot size.
+ *   - story_scenes (Step 3) is new — six full demonstration scenes
+ *     (own 3D build + comprehension question each), where Lesson 01's
+ *     equivalent step (story_prompts) was six small illustrated
+ *     tap-reveal cards, not full 3D scenes. Rendered as SIX separate
+ *     top-level STEPS entries in index.html (not nested sub-stages)
+ *     specifically to avoid reproducing Lesson 01 round 5's
+ *     Previous-navigation bug (see index.html's own note).
+ *   - story_choices (Step 4) — six items instead of three, same
+ *     shape otherwise.
+ *   - teacher_references — NEW shape vs. Lesson 01's student_examples:
+ *     one item PER SCENE (6 slots, keyed by sceneId). Round 2: now
+ *     shown as a small expandable overlay DURING each of the six
+ *     scenes in Step 3 (not just once, for whichever scene the
+ *     student eventually picks) — see index.html's renderTeacherOverlay.
+ *     The final community step (old Step 6) no longer shows a teacher
+ *     reference at all, per Faye's round-2 instruction — it now shows
+ *     only the student's own saved work + the community gallery.
+ *   - story_scenes[].situationLine — round 2 addition, the one-line
+ *     story sentence typed out during each scene's new pre-reveal
+ *     sequence ("Situation N: ..."), per Faye's explicit example
+ *     wording. Distinct from `question` (the comprehension prompt
+ *     shown once the scene has settled).
+ *   - scenes_intro — round 2 addition, the two-card intro shown once
+ *     before Situation 1 (title card + a short explainer card).
  *
- * COPY FLAGGED AS CLAUDE CODE'S OWN (not verbatim spec text, same as
- * the equivalent flags in Lesson 01's file):
- *   - video_intro.keySentence
- *   - demo_video.subtitle
- * Everything else below (big_idea/meet_term text, story_a/story_b,
- * transition_question, draw_task prompts + short labels, reflect
- * sentence template + reason options) is the spec's own wording.
+ * id/courseId are UNCHANGED from the archived original on purpose —
+ * this is a redesign of the SAME lesson, not a new one, so it stays
+ * compatible with the already-wired completedLessons entry and the
+ * scene_drawing_unit_01 badge (core/course-badge-registry.js). No
+ * real student progress existed under this id to orphan at promotion
+ * time (no real users yet), but the id stays stable regardless, per
+ * Faye's standing rule against renaming identifiers this system
+ * already keys data on.
  * ============================================================ */
 (function (global) {
   'use strict';
-
-  // Same inline SVG placeholder helper as Lesson 01's lesson-data.js —
-  // a colored rounded card with a centered emoji (or short emoji
-  // sequence, when a stage needs both "character" and "world" read at
-  // a glance in one placeholder).
-  function svgPlaceholder(bg, emoji, w, h) {
-    w = w || 300; h = h || 220;
-    const fontSize = Math.round(Math.min(w, h) * 0.36);
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<rect width="' + w + '" height="' + h + '" rx="18" fill="' + bg + '"/>'
-      + '<text x="50%" y="54%" font-size="' + fontSize + '" text-anchor="middle" dominant-baseline="middle">' + emoji + '</text>'
-      + '</svg>';
-    return 'data:image/svg+xml,' + encodeURIComponent(svg);
-  }
 
   const LESSON_DATA = {
     id: 'wide-full-shot',
     unit: 'unit-01-shot-size',
     courseId: 'wide-full-shot',
+    title: 'Wide Shot',
+    subtitle: 'Character + World, Together',
 
-    welcome: {
-      title: 'Wide / Full Shot',
-      subtitle: 'Character + World',
-      heroImage: svgPlaceholder('#dbe4ee', '🧍🏔️', 500, 300),
-      startLabel: 'Start →'
+    // Step 1 — 3D classroom reveal, no video (per the brief). See
+    // index.html's renderClassroomReveal — built from the same
+    // primitive-based Three.js toolkit as Lesson 01's Step 2, with an
+    // articulated (head/torso/2-segment limbs) character builder
+    // instead of Lesson 01's simple cloak silhouette, since this
+    // lesson's brief explicitly asks for a step up in character
+    // detail/posing.
+    interactive_scene: {
+      kind: 'classroom_reveal_3d',
+      termLabel: 'WIDE SHOT'
     },
 
-    video_intro: {
-      title: 'What is a Wide Shot?',
-      // Claude Code's own line — not spec'd verbatim, flagged per the
-      // file-level note above (same treatment as Lesson 01's Stage 2).
-      keySentence: "A wide shot shows all of the character — head to toe — plus enough of the world around them to know where they are.",
-      videoStreamId: null,
-      videoTitle: 'What is a Wide Shot? — concept intro'
-    },
-
-    // Reused VERBATIM from Lesson 01's lesson-data.js, per the spec's
-    // explicit "same 3 options, don't rewrite" instruction.
-    connect_you: {
-      title: "It's About You!",
-      options: [
-        { key: 'people', icon: '🧑', label: 'I usually draw people', response: "Great! Today we'll practice showing the world around your characters too." },
-        { key: 'places', icon: '🏞️', label: 'I usually draw places', response: "Nice! You already think about scenes — let's give them names and rules." },
-        { key: 'both', icon: '✨', label: 'I draw both', response: "Perfect mix! You'll love learning how far the camera can pull back." }
+    // Step 2 — concept explainer, contrasting directly against
+    // Extreme Wide Shot (Lesson 01), copy close to verbatim from the
+    // brief. `references` are curated by Faye herself later (her own
+    // illustrations, same process as Lesson 01's Step 4 "See It in
+    // Art") — every item below is placeholder:true and clearly
+    // flagged in index.html's rendering, same established convention
+    // as every other placeholder asset in this project (e.g. the old
+    // lesson-02's svgPlaceholder cards). Swapping in real images later
+    // needs no index.html change — only this array.
+    concept_contrast: {
+      extremeWideLine: 'Extreme Wide Shot: the environment dominates over the character.',
+      wideLine: "Wide Shot: the character's full body is basically visible — you can tell WHERE the character is and WHAT is happening.",
+      references: [
+        { title: 'Reference coming soon', category: 'PAINTING', placeholder: true },
+        { title: 'Reference coming soon', category: 'ILLUSTRATION', placeholder: true },
+        { title: 'Reference coming soon', category: 'ANIMATION', placeholder: true },
+        { title: 'Reference coming soon', category: 'FILM', placeholder: true }
       ]
     },
 
-    transition_question: {
-      title: 'What Should We Show?',
-      options: [
-        { key: 'character', label: 'The Character?' },
-        { key: 'world', label: 'The World?' }
-      ],
-      // Shown after either bubble is picked, then the stage
-      // auto-advances — unlike Lesson 01's immediate-advance version,
-      // per this lesson's spec.
-      transitionLine: "Let's see what happens when we show both..."
+    // Round 2 — two-card intro shown once, before Situation 1's reveal
+    // sequence. Copy is Claude Code's own wording (the brief invited a
+    // reword "if something reads more natural in context" and asked
+    // to flag it, not match a given line verbatim) — flagged here per
+    // that instruction, not silently written as if it were given.
+    scenes_intro: {
+      titleCard: 'Scene Drawing Practice',
+      explainerCard: "You'll walk through six short story situations, one at a time. Just watch and think for now — you'll pick one to draw after."
     },
 
-    // Stage 5 — first ABChoiceCard instance. Extreme Wide (A) keeps the
-    // knight a tiny dot against the ruin; Wide/Full (B) shows the
-    // knight's whole body AND enough of the ruin to read the scene.
-    story_a: {
-      kicker: 'Story',
-      prompt: 'A knight stood at the edge of the ruined castle, unsure whether to enter.',
-      question: 'Which one lets you see how the knight feels?',
-      optionA: {
-        image: svgPlaceholder('#7b5ea8', '🏰'),
-        label: 'The Whole Ruin',
-        description: 'Shows the huge, crumbling castle.',
-        feedback: 'A shows the scale of the ruin, but we can barely see the knight. Let’s try showing both next.'
+    // Step 3 — six demonstration scenes (own 3D build + a short
+    // comprehension question each), exploration only, no drawing yet.
+    // Each maps to its own top-level STEPS entry in index.html
+    // (STORY_SCENE_STEPS) — see that file's own note on why this is
+    // flat, not nested. `sceneKey` selects which of index.html's
+    // SCENE3D_BUILDERS to mount; `question`/`altQuestion` are the
+    // brief's own wording verbatim (altQuestion shown as a smaller
+    // second line where the brief gave one). `situationLine` (round 2)
+    // is the one-line story sentence typed out during the new
+    // pre-reveal sequence, matching the brief's own given example
+    // format ("A girl runs into the classroom, late for class.") —
+    // Scene 1's line is that exact example; the other five are Claude
+    // Code's own summaries of each scene's brief description, flagged
+    // here since none were given verbatim.
+    story_scenes: [
+      {
+        id: 'late_for_class', sceneKey: 'lateForClass', setting: 'indoor',
+        title: 'Late for Class',
+        situationLine: 'A girl runs into the classroom, late for class.',
+        question: 'Who arrived late? What is her friend doing?',
+        altQuestion: 'Why do we need a Wide Shot for this scene?'
       },
-      optionB: {
-        image: svgPlaceholder('#2d5fa8', '🤺🏰'),
-        label: "The Knight's Choice",
-        description: "Shows the knight's posture AND the castle.",
-        feedback: 'B shows the knight’s whole body — we can read their hesitation!'
-      }
-    },
-    // Stage 6 — second ABChoiceCard instance, different story.
-    story_b: {
-      kicker: 'Story',
-      prompt: 'A young explorer stepped off the boat onto a new island.',
-      question: 'Which one shows us WHO this explorer is, not just where they are?',
-      optionA: {
-        image: svgPlaceholder('#3fa8a0', '🏝️'),
-        label: 'The New Island',
-        description: 'Shows the whole unexplored coastline.',
-        feedback: 'A shows a lot of the island, but the explorer is tiny. Let’s try showing both.'
+      {
+        id: 'art_project', sceneKey: 'artProject', setting: 'indoor',
+        title: 'The Art Project',
+        situationLine: 'Two friends work together on an art project at a table.',
+        question: 'Are they working together, or arguing?',
+        altQuestion: null
       },
-      optionB: {
-        image: svgPlaceholder('#e8862e', '🧭🏝️'),
-        label: "The Explorer's Arrival",
-        description: "Shows the explorer's curious pose AND the coastline.",
-        feedback: 'B shows the explorer’s whole body — we can see their curiosity!'
+      {
+        id: 'after_school', sceneKey: 'afterSchool', setting: 'outdoor',
+        title: 'See You After School',
+        situationLine: 'Two friends walk out through the school gate together.',
+        question: 'What are they going to do next?',
+        altQuestion: null
+      },
+      {
+        id: 'lost_ball', sceneKey: 'lostBall', setting: 'outdoor',
+        title: 'The Lost Ball',
+        situationLine: 'Two kids search the park for a ball they lost.',
+        question: 'Where is the ball? Who finds it first?',
+        altQuestion: null
+      },
+      {
+        id: 'rainy_day', sceneKey: 'rainyDay', setting: 'outdoor',
+        title: 'Rainy Day Surprise',
+        situationLine: 'Two friends share an umbrella — and one steps in a puddle.',
+        question: 'What happened one second ago?',
+        altQuestion: null
+      },
+      {
+        id: 'sleepover', sceneKey: 'sleepover', setting: 'indoor',
+        title: 'The Sleepover',
+        situationLine: 'Two best friends build a blanket fort at a sleepover.',
+        question: 'What are they building together?',
+        altQuestion: null
       }
+    ],
+
+    // Step 4 — Choose Your Scene. Same card mechanism as Lesson 01's
+    // Choose Your Story (index.html's story-grid/story-card CSS,
+    // reused as scene-grid/scene-card), six choices instead of three.
+    // `thumbSceneKey` reuses the SAME SCENE3D_BUILDERS key as Step 3 —
+    // no separate thumbnail art needed, a still frame's worth of the
+    // same scene the student already watched is rendered small as an
+    // SVG-free static preview (see index.html's sceneThumbSvg()).
+    story_choices: [
+      { id: 'late_for_class', title: 'Late for Class', thumbSceneKey: 'lateForClass' },
+      { id: 'art_project', title: 'The Art Project', thumbSceneKey: 'artProject' },
+      { id: 'after_school', title: 'See You After School', thumbSceneKey: 'afterSchool' },
+      { id: 'lost_ball', title: 'The Lost Ball', thumbSceneKey: 'lostBall' },
+      { id: 'rainy_day', title: 'Rainy Day Surprise', thumbSceneKey: 'rainyDay' },
+      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover' }
+    ],
+
+    // Step 5 — guided drawing. SCOPE FLAG, same simplification Lesson
+    // 01 made and flagged in its own file: ONE shared progressive
+    // drawing sequence, not six bespoke ones per scene (no real
+    // per-scene drawing-stage art exists yet) — the chosen scene only
+    // changes the context line shown alongside the same 5 stages.
+    // Content here teaches WIDE SHOT construction specifically
+    // (character placed full-body + environment built around them),
+    // not Lesson 01's Extreme-Wide "tiny character in a huge world"
+    // sequence — genuinely different teaching content, not a reskin.
+    drawing_steps: [
+      {
+        instruction: 'Decide where your character stands.',
+        teachingNote: "Leave room above their head and below their feet — a Wide Shot needs the character's full body inside the frame, not touching the edges."
+      },
+      {
+        instruction: 'Block in the character, full body.',
+        teachingNote: "Head to toe should already read clearly at this stage, even as a simple shape — that's what makes it a Wide Shot instead of a close-up."
+      },
+      {
+        instruction: 'Build the space around them.',
+        teachingNote: 'Add the floor, walls, or ground line the character is standing on — this is what tells us WHERE they are.'
+      },
+      {
+        instruction: 'Add one or two props that explain the action.',
+        teachingNote: "A desk, a ball, an umbrella — one clear object nearby is what tells us WHAT is happening, without needing any words."
+      },
+      {
+        instruction: 'Finish the character’s pose and expression.',
+        teachingNote: 'Because the whole body is visible, the pose itself can tell the story — a lean, a reach, a turned head all read clearly at this size.'
+      }
+    ],
+
+    audio: {
+      narrationAvailable: false
     },
 
-    // Stages 7+8 — locked Unit 01 slider position table: 0.75 = Wide /
-    // Full Shot. Auto-animates from the shared neutral midpoint (0.5),
-    // same as every lesson in this unit, per the build prompt's own
-    // "no cross-lesson state carryover, always start from neutral"
-    // note.
-    big_idea: {
-      title: 'We see the whole character — and enough of the world to know where they are.',
-      autoAnimateFrom: 0.5,
-      autoAnimateTo: 0.75,
-      autoAnimateDurationMs: 1800
-    },
-    meet_term: {
-      term: 'WIDE / FULL SHOT',
-      subtitle: 'Character + World',
-      labels: ['CHARACTER', 'WORLD', 'BALANCE']
+    // Round 2: shown per-scene during Step 3 exploration (one small
+    // expandable overlay per scene, keyed by sceneId — see file header
+    // and index.html's renderTeacherOverlay), NOT in the final
+    // community step anymore. All six placeholder:true for now; Faye
+    // supplies real per-scene teacher reference art later, the same
+    // way she supplied Lesson 01's Step 4 art — swapping one in only
+    // needs this array edited, not index.html.
+    teacher_references: [
+      { sceneId: 'late_for_class', label: 'Teacher Reference — Late for Class', placeholder: true },
+      { sceneId: 'art_project', label: 'Teacher Reference — The Art Project', placeholder: true },
+      { sceneId: 'after_school', label: 'Teacher Reference — See You After School', placeholder: true },
+      { sceneId: 'lost_ball', label: 'Teacher Reference — The Lost Ball', placeholder: true },
+      { sceneId: 'rainy_day', label: 'Teacher Reference — Rainy Day Surprise', placeholder: true },
+      { sceneId: 'sleepover', label: 'Teacher Reference — The Sleepover', placeholder: true }
+    ],
+
+    // Round 2: the final community step now shows ONLY the student's
+    // own work + this gallery — the teacher-reference card that used
+    // to sit alongside it moved to a per-scene overlay in Step 3 (see
+    // teacher_references above). Faye has real photos of other
+    // students' drawings for this gallery but hasn't sent them yet —
+    // placeholderCount stays a placeholder grid until she does, same
+    // pattern as Step 3's reference images.
+    community_gallery: {
+      title: 'From Other Students',
+      subtitle: "Real student photos will appear here once Faye shares them.",
+      placeholderCount: 4
     },
 
-    // Stage 9 — same 3 category names as Lesson 01 (don't rename), new
-    // placeholder art per-lesson (character full body + environment,
-    // not shrunk to a dot).
-    real_examples: {
-      title: 'Real Examples',
-      examples: [
-        { key: 'nature', label: 'Nature', image: svgPlaceholder('#3fa8a0', '🧍🏞️', 400, 300) },
-        { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '🧍🏙️', 400, 300) },
-        { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '🧍🏰', 400, 300) }
-      ]
+    // Step 7 — chains into Lesson 03 (Medium Shot). Title/subtitle
+    // copied from lesson-03-medium-shot/lesson-data.js's own
+    // welcome.title/subtitle so this card matches what that lesson
+    // actually calls itself.
+    next_lesson: {
+      href: '../lesson-03-medium-shot/',
+      title: 'Medium Shot',
+      subtitle: 'Show the Action'
     },
 
-    // Stage 10 — disclaimer reused VERBATIM from Lesson 01's confirmed
-    // version, per the spec's explicit instruction.
-    demo_video: {
-      title: "Let's Draw Together",
-      // Claude Code's own line — not spec'd verbatim, flagged per the
-      // file-level note above.
-      subtitle: 'How I balance the character and the world',
-      disclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.",
-      videoStreamId: null,
-      videoTitle: "Let's Draw Together — thinking sketch"
-    },
-
-    // Stage 11 — 3 new tasks. `label` is the full evocative prompt
-    // shown on-screen (the spec gives full sentences here, longer than
-    // Lesson 01's short task names); `reflectLabel` is the separate
-    // short form the spec gives for Stage 13's reflect chips.
-    draw_task: {
-      title: 'Your Turn: Draw 3 Scenes',
-      tasks: [
-        { key: 'astronaut_flag', label: 'The astronaut planted a flag on the new planet.', reflectLabel: 'Astronaut on a New Planet' },
-        { key: 'new_kid_school', label: 'The new kid stood at the school gate on the first day.', reflectLabel: 'First Day at School' },
-        { key: 'musician_stage', label: 'A young musician performed on a big stage for the first time.', reflectLabel: 'Big Stage Performance' }
-      ],
-      xpPerScene: 20
-    },
-
-    // Stage 12 — same tab names as Lesson 01 (don't rename), new
-    // placeholder images.
-    see_ideas: {
-      title: 'See Other Ideas',
-      tabs: [
-        { key: 'teacher', label: "Teacher's Idea", image: svgPlaceholder('#2d5fa8', '🧍🖼️', 400, 300) },
-        { key: 'jojo', label: "Jojo's Idea", image: svgPlaceholder('#e8862e', '🧍🖼️', 400, 300) }
-      ]
-    },
-
-    // Stage 13 — ReflectionJournal config, using the two new upstream
-    // options (_shared/reflection-journal.js): a corrected
-    // sentenceTemplate (the original Lesson 01 "I chose the ___ view
-    // because ___" doesn't hold up once "view" means "which of my 3
-    // same-shot-type drawings" — the spec's fix reframes it around the
-    // drawing itself and what the student meant to show) and a
-    // freeText "something else" reasonOptions entry.
-    reflect: {
-      title: 'My Choice',
-      sentenceTemplate: 'I chose my {a} drawing because I wanted to show {b}.',
-      viewOptions: ['Astronaut on a New Planet', 'First Day at School', 'Big Stage Performance'],
-      reasonOptions: [
-        "the character's whole body",
-        'the place around them',
-        'both together',
-        { label: 'something else', freeText: true }
-      ]
+    completion_check: {
+      question: 'What does a Wide Shot help us show?',
+      options: ['The Character', 'The Place', 'The Action', 'Both Together']
     }
   };
 
   global.LESSON_DATA = LESSON_DATA;
-  global.svgPlaceholder = svgPlaceholder;
 })(window);
