@@ -14,9 +14,10 @@
  * reuse the system for Lessons 02–26" requirement. Every field name
  * below matches the brief's own Section 10 list
  * (intro_video / interactive_scene / story_prompts /
- * reference_resources / story_choices / drawing_steps / audio /
- * student_examples / completion_check) so a future lesson can supply
- * the same shape without index.html changing.
+ * reference_resources / practice_intro / story_choices /
+ * drawing_steps / audio / community_gallery / completion_check) so a
+ * future lesson can supply the same shape without index.html
+ * changing.
  *
  * id/courseId are UNCHANGED from the archived original on purpose —
  * this is a redesign of the SAME lesson, not a new one, so it stays
@@ -38,15 +39,43 @@
  *     stage's caption, explaining WHY that stage looks the way it
  *     does (round 1's stages read as decoration with no teaching
  *     content, per Faye's "didn't actually learn anything" note).
- *   - student_examples — relabeled away from a named mascot ("Jojo's
- *     Idea") to generic Teacher/Student reference roles, per Faye's
- *     explicit correction that a self-study platform needs two clear
- *     reference points, not one branded character's take.
  *   - community_gallery — new placeholder field for Step 7's
  *     community/discussion-style section (real submissions later).
  *   - next_lesson — new field so Step 8 can chain into Lesson 02
  *     without index.html hardcoding a path; each future lesson
  *     supplies its own.
+ *
+ * PRACTICE-SECTION RESTRUCTURE (live, post-promotion round — real
+ * UX/content change to already-shipped content, not a new lesson):
+ *   - Removed the "pick ONE of three stories" mechanic entirely
+ *     (old choose_story step + STATE.storyChoiceId). The student now
+ *     goes through ALL THREE story_choices in sequence — each with
+ *     its own storyline reveal (typed out, "Story A/B/C" labeled) +
+ *     its own two-panel guided-drawing round (teacher's guide on the
+ *     left, the student's own canvas — formerly a separate "Try It
+ *     Yourself" step — on the right). See index.html's
+ *     STORY_PRACTICE_STEPS/renderStoryPractice for the mechanism.
+ *   - Removed demoVideoStreamId/demoDisclaimer/audioSrc from each
+ *     story_choices item — these existed only to feed the old
+ *     per-story teacher-DEMO-VIDEO step (Step 6b), which this
+ *     restructure also removes (see index.html's own note on why:
+ *     it depended entirely on the now-deleted single-story-choice
+ *     mechanic, and its actual teaching content — watching the
+ *     teacher draw this specific story — is now shown inline, live,
+ *     in every story's own two-panel round, making a separate video
+ *     step doubly redundant even before considering it was 100%
+ *     unconfigured placeholder with zero real video content to lose).
+ *   - Removed student_examples entirely — the old Teacher/Student
+ *     Reference compare-cards it fed are gone too (redundant with the
+ *     teacher's guide now being shown three times, once per story,
+ *     during practice itself). See index.html's renderCompare —
+ *     retitled "Student Artwork Community," now gallery + a submit
+ *     prompt only, no reference cards.
+ *   - practice_intro — new field for the two-card intro shown once,
+ *     before Story A ("Let's have a practice" + a short explainer).
+ *   - story_choices[].title doubles as each story's typed-out
+ *     storyline text during its reveal — no new field needed, this
+ *     was already the exact line each story tells.
  * ============================================================ */
 (function (global) {
   'use strict';
@@ -168,51 +197,38 @@
       ]
     },
 
-    // Step 5 — `direction` is internal art-direction guidance (for
-    // whoever illustrates story_choices later), not student-facing
-    // copy — index.html never prints it to the student.
-    // `demoVideoStreamId` (round 4) — one placeholder teacher-
-    // demonstration video slot PER story, per Faye's explicit
-    // "showing the teacher's own process of drawing the SPECIFIC
-    // scene the student picked... one video per story option" — not
-    // a single generic demo. All three null for now (coming-soon
-    // fallback, same pattern as intro_video before its real ID
-    // arrived).
-    // `demoDisclaimer` (round 5) — rewritten from the Lessons 01-05
-    // verbatim wording to explicitly invite drawing along on real
-    // paper, per Faye's exact round-5 correction; the point is
-    // inviting physical-media participation, not implying the demo is
-    // only a digital-viewing moment.
-    // `audioSrc` (round 5) — same data-driven slot pattern as
-    // story_prompts.audioSrc in Step 3: null until Faye supplies a
-    // real recorded (ElevenLabs) narration file per story. No
-    // browser TTS/speechSynthesis — she found the synthesized voice
-    // too robotic. index.html only shows a "Listen" control once this
-    // is populated.
+    // Step 4 (new) — the two-card practice intro, shown once before
+    // Story A. Copy is Claude Code's own wording — "Let's have a
+    // practice" is the brief's exact title, but the explainer line
+    // below it was not given verbatim, flagged per the brief's own
+    // "flag if you land on different copy" instruction.
+    practice_intro: {
+      title: "Let's have a practice",
+      line: "You'll train this skill with three different story situations, one at a time."
+    },
+
+    // Steps 5-7 (restructured) — `direction` is internal art-direction
+    // guidance (for whoever illustrates story_choices later), not
+    // student-facing copy — index.html never prints it to the
+    // student. `title` doubles as the story's own typed-out storyline
+    // text during its reveal sequence (index.html's
+    // renderStoryPractice) — the exact same three lines the old
+    // Choose Your Story step showed, unchanged.
     story_choices: [
       {
         id: 'spring',
         title: 'Winter has passed. Is spring getting closer?',
-        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.',
-        demoVideoStreamId: null,
-        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
-        audioSrc: null
+        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.'
       },
       {
         id: 'forest',
         title: 'Late at night, I became lost in the forest.',
-        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.',
-        demoVideoStreamId: null,
-        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
-        audioSrc: null
+        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.'
       },
       {
         id: 'newworld',
         title: 'After travelling for a long time, I suddenly discovered an incredible new world.',
-        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.',
-        demoVideoStreamId: null,
-        demoDisclaimer: "Let's draw together on paper — if you'd like to draw this one on paper too, grab a pencil and follow along.",
-        audioSrc: null
+        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.'
       }
     ],
 
@@ -259,24 +275,15 @@
       narrationAvailable: false
     },
 
-    // Step 7 — round 2: relabeled away from a named mascot ("Jojo's
-    // Idea") to generic Teacher/Student reference roles, per Faye's
-    // explicit correction — a self-study platform needs two clear
-    // reference points on first viewing, not one branded character's
-    // take. Still placeholders (no real images yet).
-    student_examples: [
-      { label: 'Teacher Reference', role: 'teacher', placeholder: true },
-      { label: 'Student Reference', role: 'student', placeholder: true }
-    ],
-
-    // Step 7 — round 2 addition. Real submissions come later; this is
-    // just the placeholder structure/layout Faye asked to have built
-    // now, framed as a lightweight community/discussion space.
-    // Round 5: strengthened the "shared community" framing per
-    // Faye's explicit correction — the whole point of this section
-    // is "my work + my classmates' work, together," not a private
-    // result screen. See index.html's renderCompare for the shared
-    // "Our Community" wrapper this title now sits inside.
+    // Step 7 — "Student Artwork Community" (renamed from "Same Idea.
+    // Different Scenes."). The old Teacher/Student reference compare-
+    // cards this field used to feed are gone — the teacher's guide is
+    // now shown three times, inline, during practice itself (once per
+    // story), so showing it a fourth time here was redundant. This
+    // step is now gallery + a submit prompt only.
+    // Round 5: "shared community" framing kept — the whole point of
+    // this section is "my work + my classmates' work, together," not
+    // a private result screen.
     community_gallery: {
       title: 'From Other Students',
       subtitle: "Real student work will appear here once it's shared.",
