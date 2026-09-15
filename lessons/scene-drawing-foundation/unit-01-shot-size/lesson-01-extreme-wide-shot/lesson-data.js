@@ -218,12 +218,14 @@
     // `demoVideoStreamId` (real quick-sketch video for the LEFT panel
     // of a story's two-panel guided-drawing round — see index.html's
     // renderTwoPanelMarkup/attachStoryTeacherVideo/playQuickSketchDemo).
-    // Stories A and B have one now, real and produced by Faye; null
-    // means that story still shows the platform-led drawingSvg() demo
-    // instead (unchanged, not a placeholder for the video — the two
-    // are genuinely different teaching mechanisms, rendered the same
-    // "quick sketch, no step controls" way either way as of the
-    // round-3 redesign). Story C still awaits its real video.
+    // All three stories have one now, real and produced by Faye. Kept
+    // as a per-story field (not hoisted out) rather than deleted now
+    // that every story has one — a future lesson reusing this same
+    // shape may still ship without video for some/all of its stories,
+    // and the platform-led drawingSvg() demo (playQuickSketchDemo)
+    // stays the null-case fallback for that, rendered the same "quick
+    // sketch, no step controls" way either way as of the round-3
+    // redesign.
     story_choices: [
       {
         id: 'spring',
@@ -241,7 +243,7 @@
         id: 'newworld',
         title: 'After travelling for a long time, I suddenly discovered an incredible new world.',
         direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.',
-        demoVideoStreamId: null
+        demoVideoStreamId: '2da068f264530cc59193add39876ddda'
       }
     ],
 

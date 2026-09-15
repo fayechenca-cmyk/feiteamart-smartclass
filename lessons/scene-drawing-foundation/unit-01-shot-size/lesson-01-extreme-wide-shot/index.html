@@ -109,12 +109,14 @@
     case is gone with it — there's no manual sub-stage left to step
     back through.
 
-  ROUND 4 (same live path) — real video wired in for Story B too, same
-  data-driven story_choices[].demoVideoStreamId pattern as Story A, no
-  index.html changes needed (renderTwoPanelMarkup already branches on
-  hasVideo generically, not on which story it is). Story C still shows
-  the platform-led drawingSvg() quick-sketch demo until Faye supplies
-  its video.
+  ROUND 4 (same live path) — real video wired in for Stories B and C,
+  same data-driven story_choices[].demoVideoStreamId pattern as Story
+  A, no index.html changes needed either time (renderTwoPanelMarkup
+  already branches on hasVideo generically, not on which story it is).
+  All three stories now play a real Faye-produced video in the LEFT
+  panel; the platform-led drawingSvg() quick-sketch demo
+  (playQuickSketchDemo) stays in the code as the fallback for whichever
+  story lacks one, but nothing currently exercises that path live.
 
   SCOPE NOTES (flagged, not silently assumed):
   - Step 5 (the shared teacher's-guide sequence inside every story's
