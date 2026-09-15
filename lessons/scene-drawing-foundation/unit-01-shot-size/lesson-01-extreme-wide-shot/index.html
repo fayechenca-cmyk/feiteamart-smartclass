@@ -20,8 +20,8 @@
   no real student progress exists yet to migrate.
 
   WHAT THIS IS: a full-screen, low-chrome sequence of learning MOMENTS
-  (watch / discover / when-use / look-closer / practice-intro / three
-  story-practice rounds / compare / complete), data-driven off
+  (watch / discover / when-use / practice-intro / three story-practice
+  rounds / compare / complete), data-driven off
   lesson-data.js's LESSON_DATA object so the same shell can carry
   Lessons 02-26 later without rewriting this file. Lessons 02-05 (old
   ../lesson-0{2..5}-*/) are untouched and stay on the old STAGES
@@ -58,15 +58,37 @@
   was actually drawn digitally) is right, or whether paper-choice
   stories should be handled differently.
 
+  FOLLOW-UP ROUND (same live path, on top of the restructure above):
+  - REAL BUG FIXED: Step 3's tap-to-reveal cards went permanently dead
+    for any previously-revealed index after leaving the step and
+    coming back via Previous — STATE.promptsRevealed was never reset
+    on re-entry, only ever appended to in revealPrompt(). Fixed by
+    resetting it at the top of renderWhenUse() (called fresh on every
+    entry to this step), so each visit starts genuinely clean — see
+    that function's own comment for the full diagnosis.
+  - The old separate "Look Closer" step is gone — folded into Step 3
+    as a single collapsed text/link resource callout at the bottom
+    (renderResourceCallout), not its own step. No images at all
+    anymore, not even the FEI-inspired preview illustrations the old
+    step used — a derivative illustration is still a derivative, so
+    the copyright caution now extends to those too; every reference
+    is a short explanation + a real "View Original" link. Removing a
+    step needed no other fixes — checked, not assumed (see the STEPS
+    array's own comment).
+  - The per-story reveal's 3-2-1 countdown (700ms/digit, ~2.1s total)
+    wasn't enough time to actually read the line before it advanced —
+    now 5-4-3-2-1 at 1000ms/digit, a real 5-second pause.
+
   SCOPE NOTES (flagged, not silently assumed):
-  - Step 5 (now: the shared teacher's-guide sequence inside every
-    story's two-panel round) is still ONE shared progressive
+  - Step 5 (the shared teacher's-guide sequence inside every story's
+    two-panel round — unaffected by this round's step-count change)
+    is still ONE shared progressive
     illustration, not three bespoke ones per story — no real per-story
     art exists yet. See lesson-data.js's drawing_steps comment.
-  - Step 4's reference resources and the community gallery are
-    placeholders (no real licensed art / real student work wired in
-    yet) — every card is clearly marked so a later pass can swap them
-    in without touching this file's structure.
+  - Step 3's four folded-in reference resources and the community
+    gallery are placeholders (no real licensed art / real student work
+    wired in yet) — every one is clearly marked so a later pass can
+    swap them in without touching this file's structure.
   - The "Submit My Work" action in Student Artwork Community records
     the submission locally (JournalStorage) and confirms honestly —
     there is no real shared backend yet to actually publish it where
@@ -382,55 +404,41 @@ button{font-family:inherit;}
 .big-idea-line.show{opacity:1;transform:translateY(0);}
 
 /* ============================================================
-   STEP 4 — Look Closer (real, verified reference cards — 2x2 "small
-   visual showroom", not academic resource cards). Card illustrations
-   reuse round 6's warm --sb-* tokens + #sbSketch filter (the same
-   pencil/fine-liner/grey-wash system as Steps 3/5/6/7), since Faye's
-   own style spec for these previews maps onto it almost verbatim.
+   REAL-WORLD REFERENCE FOLD-IN — was its own image-led "Look Closer"
+   step (2x2 card grid, --sb-* storyboard tokens). Now a single
+   collapsed resource callout at the bottom of Step 3, text/link only
+   — no images, not even the original FEI-inspired preview
+   illustrations the old step used (see index.html's
+   renderResourceCallout for why: a derivative illustration is still
+   a derivative, so the same copyright caution now extends to those).
 ============================================================ */
-.lookcloser-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px;}
-@media(max-width:640px){.lookcloser-grid{grid-template-columns:1fr;}}
-.lc-subtitle{font-size:13.5px;color:var(--ink-soft);text-align:center;margin:-4px 0 3px;}
-.lc-support-line{font-size:12px;color:var(--ink-faint);text-align:center;max-width:520px;margin:0 auto 22px;}
-.lc-ending-line{font-size:12.5px;color:var(--ink-faint);text-align:center;font-style:italic;margin:22px auto 0;max-width:480px;}
-.lc-card{
-  position:relative;background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;
-  overflow:hidden;cursor:pointer;
+.resource-callout{margin:30px auto 0;max-width:640px;}
+.resource-callout-toggle{
+  display:block;width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
+  padding:13px 20px;border-radius:12px;border:1.5px solid var(--sb-ink);background:var(--sb-panel);
+  color:var(--sb-ink);cursor:pointer;text-align:center;transition:border-color .15s ease,background .15s ease;
 }
-.lc-card::before,.lc-card::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--sb-ink-faint);border-style:solid;pointer-events:none;z-index:2;}
-.lc-card::before{top:6px;left:6px;border-width:1.5px 0 0 1.5px;}
-.lc-card::after{bottom:6px;right:6px;border-width:0 1.5px 1.5px 0;}
-.lc-media{display:block;aspect-ratio:16/9;background:var(--sb-paper);}
-.lc-media svg,.lc-img{width:100%;height:100%;display:block;object-fit:cover;}
-.lc-body{padding:12px 15px 15px;}
-.lc-cat{font-size:9.5px;font-weight:800;letter-spacing:1.6px;color:var(--sb-accent);margin-bottom:3px;}
-.lc-title{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;color:var(--sb-ink);line-height:1.3;}
-.lc-reveal{max-height:0;opacity:0;overflow:hidden;transition:max-height .28s ease,opacity .22s ease,margin-top .28s ease;}
-.lc-card:hover .lc-reveal,.lc-card:focus-within .lc-reveal,.lc-card.revealed .lc-reveal{max-height:96px;opacity:1;margin-top:9px;}
-.lc-observation{font-size:12px;color:var(--sb-ink-soft);line-height:1.5;margin-bottom:9px;}
-.lc-view-btn{
+.resource-callout-toggle:hover{border-color:var(--sb-accent);}
+.resource-callout-toggle:active{transform:scale(.98);}
+.resource-callout-panel{margin-top:14px;}
+.resource-callout-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 16px;text-align:center;}
+.resource-list{display:flex;flex-direction:column;gap:14px;}
+.resource-row{background:var(--sb-panel);border:1.5px solid var(--sb-line);border-radius:8px;padding:14px 16px;}
+.resource-row-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-bottom:6px;}
+.resource-row-cat{font-size:9px;font-weight:800;letter-spacing:1.4px;color:var(--sb-accent);}
+.resource-row-title{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:var(--sb-ink);}
+.resource-row-creator{font-size:11px;color:var(--sb-ink-faint);}
+.resource-row-observation{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;margin:0 0 8px;}
+.resource-row-link{
   display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.4px;
-  color:var(--sb-panel);background:var(--sb-ink);padding:6px 13px;border-radius:2px;text-decoration:none;
+  color:var(--sb-panel);background:var(--sb-ink);padding:5px 12px;border-radius:2px;text-decoration:none;
 }
-.lc-view-btn:hover{background:var(--sb-accent);}
-/* In-flow Continue (used by dense/grid steps instead of the fixed
-   dock). A fixed dock always overlaps whatever sits at the CURRENT
-   viewport bottom on first paint, regardless of how much padding is
-   reserved further down the document — reserved space only helps
-   once the user has actually scrolled to it. Tuning padding/margins
-   under the floating dock could not fix that; an in-flow button that
-   is simply part of the document after the last card can't overlap
-   anything, at any viewport height. Confirmed by measuring the real
-   gap after this change (not just eyeballing a screenshot). */
-.step-continue-inline{
-  display:block;margin:34px auto 30px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
-  padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
-  box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
-}
-.step-continue-inline:active{transform:scale(.96);}
+.resource-row-link:hover{background:var(--sb-accent);}
 
 /* ============================================================
-   STEP 4b — Practice Intro (two-card intro before Story A).
+   STEP 4 — Practice Intro (two-card intro before Story A). Renumbered
+   from 4b to 4 — the old Step 4 "Look Closer" is gone, folded into
+   Step 3 as a resource callout (see that step's own comment).
 ============================================================ */
 .intro-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:56vh;gap:10px;}
 .intro-card-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,2.9rem);color:var(--accent-deep);}
@@ -830,11 +838,17 @@ const STORY_PRACTICE_STEPS = LESSON_DATA.story_choices.map((s, i) => ({
   afterRender: () => afterRenderStoryPractice(s, i),
   cleanup: cleanupStoryPractice
 }));
+// "look_closer" is gone as its own step — folded into when_use as a
+// text/link resource callout (see renderResourceCallout). Removing a
+// step here needs no other change anywhere: renderRail/nextStep/
+// prevStep/goToStep all key off STEPS.length dynamically, and the
+// only hardcoded stepIndex comparison in the file (disabling Previous
+// on the very first step) is index-0-relative, not count-relative —
+// checked, not assumed.
 const STEPS = [
   { id:'intro_video',     render:renderIntroVideo,     afterRender:afterRenderIntroVideo },
   { id:'discover',        render:renderDiscover,        afterRender:afterRenderDiscover, cleanup:cleanupDiscover },
-  { id:'when_use',        render:renderWhenUse,         afterRender:afterRenderWhenUse },
-  { id:'look_closer',     render:renderLookCloser },
+  { id:'when_use',        render:renderWhenUse },
   { id:'practice_intro',  render:renderPracticeIntro,   afterRender:afterRenderPracticeIntro },
   ...STORY_PRACTICE_STEPS,
   { id:'compare',         render:renderCompare,          afterRender:afterRenderCompare },
@@ -1646,7 +1660,35 @@ const STEP3_CARD_IMAGE = {
 /* ============================================================
    STEP 3 — WHEN WOULD WE USE IT? (image-led tap-to-reveal prompts)
 ============================================================ */
+/* ============================================================
+   STEP 3 — WHEN WOULD WE USE IT? (image-led tap-to-reveal prompts),
+   now also folding in the old separate "Look Closer" step as a
+   text/link-only reference callout at the bottom (see REAL-WORLD
+   REFERENCE FOLD-IN below) — no longer its own step.
+
+   REAL BUG FIX: STATE.promptsRevealed was never reset when this step
+   is (re-)entered — only ever appended to, in revealPrompt(). Repro:
+   tap 3+ cards to reveal them and unlock Continue, advance forward,
+   then press Previous back to this step. The fresh render draws every
+   card looking untapped again, but revealPrompt(i)'s own guard
+   (`if (STATE.promptsRevealed.includes(i)) return;`) is still holding
+   whichever indices were revealed on the earlier visit — silently a
+   no-op for any of those, which reads as "tapping does nothing."
+   Since a normal first pass needs at least 3 reveals to ever leave
+   this step, on return most or all cards can be dead this way. Fixed
+   at the actual root (state not reset on re-entry — the same class of
+   bug this file has fixed before, e.g. pickStory's drawStageIndex/
+   drawPhase reset), not by patching revealPrompt's guard — resetting
+   promptsRevealed at the top of render() means every (re-)entry to
+   this step starts genuinely fresh, matching the "re-entering a step
+   replays it clean" convention already used elsewhere (Lesson 02's
+   scene reveals, this lesson's own story-practice rounds).
+   afterRenderWhenUse is gone with it — its entire body was just
+   re-showing the big-idea line from a promptsRevealed count that can
+   now never be non-zero immediately after a fresh render.
+============================================================ */
 function renderWhenUse(){
+  STATE.promptsRevealed = [];
   const d = LESSON_DATA.story_prompts;
   const cards = d.items.map((item, i) => `
     <div class="prompt-card" id="promptCard${i}" onclick="revealPrompt(${i})">
@@ -1670,6 +1712,7 @@ function renderWhenUse(){
       ${listenBtn}
       <div class="prompt-grid">${cards}</div>
       <div class="big-idea-line" id="bigIdeaLine">${d.bigIdea}</div>
+      ${renderResourceCallout()}
     </div>
   `;
 }
@@ -1691,162 +1734,58 @@ function revealPrompt(i){
     showContinue('Continue →', nextStep);
   }
 }
-function afterRenderWhenUse(){
-  if (STATE.promptsRevealed.length >= Math.min(3, LESSON_DATA.story_prompts.items.length)) {
-    document.getElementById('bigIdeaLine').classList.add('show');
-  }
-}
 
 /* ============================================================
-   STEP 4 — LOOK CLOSER (real, verified reference cards)
-   COPYRIGHT RULE: an item only ever shows a real photographed/scanned
-   image when its rights holder has explicitly marked it reusable
-   (checked per item — see rightsStatus in lesson-data.js). Otherwise
-   it shows an ORIGINAL FEI TeamArt illustration below, inspired only
-   by that work's spatial idea (never its characters, vehicles,
-   figures, or exact composition) — reusing round 6's warm --sb-*
-   tokens + #sbSketch hand-drawn filter so these previews read as the
-   same pencil/fine-liner/grey-wash family as Steps 3/5/6/7, not
-   glossy AI concept art. Every card still links OUT (new tab, real
-   URL) to its actual official/open-access source — nothing here is
-   embedded via iframe.
+   REAL-WORLD REFERENCE FOLD-IN (was its own step, "Look Closer" /
+   "See It in Art") — now a single collapsed resource callout inside
+   Step 3 instead of a dedicated step with embedded images.
+   COPYRIGHT RULE, extended: even the original FEI-inspired preview
+   illustrations this used to show are dropped here — a derivative
+   illustration is still a derivative, so the copyright caution now
+   extends to those too. Text/link only: each of the four references
+   explains in words what to look for and why it demonstrates
+   stepping back to reveal the world, then links out (new tab) to its
+   real, verified source — same four legitimate sources already
+   established, just presented as a resource callout rather than a
+   dedicated image-led step.
 ============================================================ */
-const LOOK_CLOSER_ART = {
-  // Ghibli-inspired only in spatial idea (tiny traveler, huge quiet
-  // reflective water, a distant train-like shape crossing it) — no
-  // Chihiro, No-Face, or the real train design.
-  ghibli: `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
-    <rect width="320" height="180" fill="#f2ede0"/>
-    <circle cx="248" cy="38" r="15" fill="#c9a15a" opacity=".22"/>
-    <circle cx="248" cy="38" r="15" fill="none" stroke="#3a352c" stroke-width="1.3" filter="url(#sbSketch)" opacity=".5"/>
-    <path filter="url(#sbSketch)" d="M215,96 Q245,80 270,92 Q292,82 320,94 L320,100 L215,100 Z" fill="#3a352c" opacity=".14" stroke="#3a352c" stroke-width="1.4"/>
-    <rect x="0" y="100" width="320" height="80" fill="#e4e7de"/>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1" opacity=".28">
-      <line x1="0" y1="120" x2="320" y2="120"/>
-      <line x1="0" y1="140" x2="320" y2="140"/>
-      <line x1="0" y1="160" x2="320" y2="160"/>
-    </g>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1.6" stroke-linecap="round">
-      <line x1="34" y1="112" x2="264" y2="112"/>
-      <line x1="60" y1="112" x2="60" y2="119"/>
-      <line x1="120" y1="112" x2="120" y2="119"/>
-      <line x1="180" y1="112" x2="180" y2="119"/>
-      <line x1="236" y1="112" x2="236" y2="119"/>
-    </g>
-    <g filter="url(#sbSketch)" fill="#eee7d6" stroke="#3a352c" stroke-width="1.5" stroke-linejoin="round">
-      <rect x="132" y="99" width="34" height="13" rx="2"/>
-    </g>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1.4" opacity=".7">
-      <line x1="140" y1="103" x2="140" y2="109"/>
-      <line x1="150" y1="103" x2="150" y2="109"/>
-      <line x1="160" y1="103" x2="160" y2="109"/>
-    </g>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="2" stroke-linecap="round">
-      <circle cx="54" cy="143" r="3.4" fill="#f2ede0"/>
-      <line x1="54" y1="147" x2="54" y2="160"/>
-      <line x1="54" y1="151" x2="48" y2="156"/>
-      <line x1="54" y1="151" x2="60" y2="156"/>
-      <line x1="54" y1="160" x2="49" y2="167"/>
-      <line x1="54" y1="160" x2="59" y2="167"/>
-    </g>
-  </svg>`,
-  // Star Wars-inspired only in spatial idea (tiny original craft, twin
-  // small suns, huge dune horizon) — no X-wing/Falcon/AT-AT or any
-  // real vehicle design.
-  starwars: `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
-    <rect width="320" height="180" fill="#f2ede0"/>
-    <circle cx="150" cy="46" r="12" fill="#c98a5a" opacity=".3"/>
-    <circle cx="150" cy="46" r="12" fill="none" stroke="#3a352c" stroke-width="1.3" filter="url(#sbSketch)" opacity=".55"/>
-    <circle cx="176" cy="52" r="7" fill="#c98a5a" opacity=".22"/>
-    <circle cx="176" cy="52" r="7" fill="none" stroke="#3a352c" stroke-width="1.1" filter="url(#sbSketch)" opacity=".5"/>
-    <g filter="url(#sbSketch)" fill="none" stroke="#3a352c" stroke-width="1.6" stroke-linecap="round">
-      <path d="M0,108 Q60,88 120,104 Q180,82 240,102 Q280,88 320,100"/>
-      <path d="M0,132 Q70,114 140,130 Q210,110 320,128"/>
-    </g>
-    <path filter="url(#sbSketch)" d="M0,150 Q80,126 160,148 Q240,122 320,146 L320,180 L0,180 Z" fill="#eee7d6" stroke="#3a352c" stroke-width="1.6"/>
-    <g filter="url(#sbSketch)" fill="#3a352c" opacity=".85">
-      <path d="M92,151 L104,147 L118,151 L104,155 Z"/>
-      <path d="M104,147 L104,140 L108,147 Z"/>
-      <path d="M104,155 L104,161 L100,155 Z"/>
-    </g>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1.8" stroke-linecap="round">
-      <circle cx="60" cy="158" r="3" fill="#f2ede0"/>
-      <line x1="60" y1="161" x2="60" y2="171"/>
-      <line x1="60" y1="164" x2="55" y2="168"/>
-      <line x1="60" y1="164" x2="65" y2="168"/>
-    </g>
-  </svg>`,
-  // Bosch-inspired only in spatial idea (a huge imagined world holding
-  // several small, unrelated tiny "events" at once) — no Bosch
-  // creatures, figures, architecture, or triptych layout.
-  'bosch-garden': `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
-    <rect width="320" height="180" fill="#f2ede0"/>
-    <g filter="url(#sbSketch)" fill="none" stroke="#3a352c" stroke-width="1.4" stroke-linecap="round" opacity=".55">
-      <path d="M0,112 Q60,100 120,110 Q180,96 240,108 Q280,100 320,106"/>
-    </g>
-    <path filter="url(#sbSketch)" d="M0,140 Q70,118 140,138 Q210,114 320,136 L320,180 L0,180 Z" fill="#eee7d6" stroke="#3a352c" stroke-width="1.6"/>
-    <circle cx="228" cy="66" r="20" fill="#c9a15a" opacity=".18"/>
-    <circle cx="228" cy="66" r="20" fill="none" stroke="#3a352c" stroke-width="1.4" filter="url(#sbSketch)"/>
-    <line x1="208" y1="66" x2="248" y2="66" stroke="#3a352c" stroke-width="1" filter="url(#sbSketch)" opacity=".45"/>
-    <g filter="url(#sbSketch)" fill="none" stroke="#3a352c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M64,150 L64,96 Q64,84 76,84 Q88,84 88,96 L88,150"/>
-      <circle cx="76" cy="76" r="9" fill="#eee7d6"/>
-    </g>
-    <g filter="url(#sbSketch)" fill="none" stroke="#3a352c" stroke-width="1.3" stroke-linecap="round">
-      <path d="M150,150 Q150,130 158,130 Q166,130 166,150"/>
-      <circle cx="158" cy="126" r="6" fill="#c98fa0" opacity=".5"/>
-      <circle cx="158" cy="126" r="6" fill="none" stroke="#3a352c" stroke-width="1"/>
-    </g>
-    <g filter="url(#sbSketch)" stroke="#3a352c" stroke-width="1.6" stroke-linecap="round" opacity=".85">
-      <circle cx="40" cy="158" r="2.2" fill="#f2ede0"/><line x1="40" y1="160" x2="40" y2="168"/>
-      <circle cx="106" cy="163" r="2.2" fill="#f2ede0"/><line x1="106" y1="165" x2="106" y2="173"/>
-      <circle cx="192" cy="158" r="2.2" fill="#f2ede0"/><line x1="192" y1="160" x2="192" y2="168"/>
-      <circle cx="264" cy="152" r="2.2" fill="#f2ede0"/><line x1="264" y1="154" x2="264" y2="162"/>
-      <circle cx="288" cy="163" r="2.2" fill="#f2ede0"/><line x1="288" y1="165" x2="288" y2="173"/>
-    </g>
-  </svg>`
-};
-function renderLookCloser(){
-  const d = LESSON_DATA.reference_resources;
-  const cards = d.items.map(item => {
-    const media = item.previewType === 'open-access-original'
-      ? `<img class="lc-img" src="${item.previewImage}" alt="${item.title}, ${item.creator}" loading="lazy">`
-      : (LOOK_CLOSER_ART[item.id] || '');
-    return `
-    <div class="lc-card" id="lcCard-${item.id}">
-      <a class="lc-media" href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" aria-label="View the original source for ${item.title}">${media}</a>
-      <div class="lc-body" onclick="toggleLookCloserCard(this)">
-        <div class="lc-cat">${item.category}</div>
-        <div class="lc-title">${item.title}</div>
-        <div class="lc-reveal">
-          <div class="lc-observation">${item.observation}</div>
-          <a class="lc-view-btn" href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">VIEW ORIGINAL ↗</a>
-        </div>
+function renderResourceCallout(){
+  const items = LESSON_DATA.reference_resources.items;
+  const rows = items.map(item => `
+    <div class="resource-row">
+      <div class="resource-row-head">
+        <span class="resource-row-cat">${item.category}</span>
+        <span class="resource-row-title">${item.title}</span>
+        ${item.creator ? `<span class="resource-row-creator">${item.creator}${item.year ? ', ' + item.year : ''}</span>` : ''}
       </div>
-    </div>`;
-  }).join('');
+      <p class="resource-row-observation">${item.observation}</p>
+      <a class="resource-row-link" href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer">View Original ↗</a>
+    </div>
+  `).join('');
   return `
-    <div class="step-inner wide dense">
-      <div class="step-kicker">Look Closer</div>
-      <h2 class="step-title">Extreme Wide Shot in the Real World</h2>
-      <div class="lc-subtitle">See how artists and filmmakers use very large views.</div>
-      <div class="lc-support-line">A huge world can appear in animation, film, painting, and imagined worlds.</div>
-      <div class="lookcloser-grid">${cards}</div>
-      <div class="lc-ending-line">Different worlds. The same idea: step far back and let us see the whole view.</div>
-      <button class="step-continue-inline" onclick="nextStep()">Continue →</button>
+    <div class="resource-callout">
+      <button class="resource-callout-toggle" id="resourceCalloutToggle" onclick="toggleResourceCallout()" aria-expanded="false" aria-controls="resourceCalloutPanel">
+        📚 See This Idea in Real Art &amp; Film
+      </button>
+      <div class="resource-callout-panel" id="resourceCalloutPanel" hidden>
+        <p class="resource-callout-intro">Extreme Wide Shots show up across very different kinds of storytelling — here's what to look for in each, and where to see the real thing:</p>
+        <div class="resource-list">${rows}</div>
+      </div>
     </div>
   `;
 }
-// Touch/tap fallback for the hover-reveal (observation + VIEW ORIGINAL)
-// — :hover alone never fires on touch devices, so tapping the card
-// body toggles the same reveal state directly.
-function toggleLookCloserCard(el){
-  const card = el.closest('.lc-card');
-  if (card) card.classList.toggle('revealed');
+function toggleResourceCallout(){
+  const panel = document.getElementById('resourceCalloutPanel');
+  const btn = document.getElementById('resourceCalloutToggle');
+  if (!panel || !btn) return;
+  const willShow = panel.hidden;
+  panel.hidden = !willShow;
+  btn.setAttribute('aria-expanded', String(willShow));
 }
 
+
 /* ============================================================
-   STEP 4b — PRACTICE INTRO. Two-card intro shown once, before Story
+   STEP 4 — PRACTICE INTRO. Two-card intro shown once, before Story
    A — replaces the old "Choose Your Story" screen entirely (no more
    picking one story; the student now goes through all three).
 ============================================================ */
@@ -1922,8 +1861,12 @@ function typewriterInto(el, text, speed, timers, onDone, onChar){
   }
   tick();
 }
+// Faye found 3 seconds (the original 3-2-1 spec) wasn't enough time
+// to actually read the storyline before it advanced — 5-4-3-2-1 at
+// 1000ms per digit gives a real 5-second pause, still a visible
+// countdown rather than a silent wait.
 function runPracticeCountdown(el, timers, onDone){
-  const seq = ['3', '2', '1'];
+  const seq = ['5', '4', '3', '2', '1'];
   let i = 0;
   function tick(){
     if (i >= seq.length) { onDone(); return; }
@@ -1932,7 +1875,7 @@ function runPracticeCountdown(el, timers, onDone){
     void el.offsetWidth; // restart the CSS animation
     el.classList.add('pulse');
     i++;
-    timers.push(setTimeout(tick, 700));
+    timers.push(setTimeout(tick, 1000));
   }
   tick();
 }

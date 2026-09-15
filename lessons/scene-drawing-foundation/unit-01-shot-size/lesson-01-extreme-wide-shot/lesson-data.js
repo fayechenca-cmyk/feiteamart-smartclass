@@ -133,29 +133,30 @@
       ]
     },
 
-    // Step 4 — real, verified references (Faye's own brief, delivered
-    // after every prior round left this step as placeholder at her
-    // request). Every URL below was checked live this round, not
-    // invented. Rights were checked per item BEFORE deciding
-    // previewType — see rightsStatus on each item for the reasoning:
+    // Step 3 (folded in as a text/link resource callout — see
+    // index.html's renderResourceCallout; this used to be its own
+    // Step 4 "Look Closer" step with embedded images) — real, verified
+    // references. Every URL below was checked live, not invented.
+    // Rights were checked per item — see rightsStatus on each for the
+    // reasoning:
     //   - Cleveland Museum of Art explicitly labels 1953.126 Open
     //     Access/CC0 ("copy, modify, and distribute... without asking
-    //     permission") -> the real museum image is used directly
-    //     (previewImage is a same-folder file, a wide detail crop of
-    //     the handscroll cropped from the museum's own CC0 files —
-    //     cropping/hosting a derivative is expressly permitted by
-    //     CC0, unlike a hotlink to a copyrighted third-party image).
+    //     permission").
     //   - Ghibli, Star Wars and the Prado all hold conventional
     //     copyright (the Prado additionally asserts separate
     //     photographic copyright over its own museum photos even
     //     though Bosch's 500-year-old painting itself is public
     //     domain — confirmed via the Prado's own Image
-    //     Bank/Terms/License pages) -> previewImage is null and
-    //     index.html renders an original FEI TeamArt illustration
-    //     (LOOK_CLOSER_ART in index.html) inspired only by each
-    //     work's spatial idea, never a reproduction of its
-    //     characters/vehicles/figures/composition. sourceUrl still
-    //     points at the real, specific official page either way.
+    //     Bank/Terms/License pages).
+    // FOLLOW-UP ROUND: previewType/previewImage below are no longer
+    // consumed by index.html at all — the callout is text/link only
+    // for all four now, not even the FEI-inspired preview
+    // illustrations the old image-led step used for the three
+    // copyrighted ones (a derivative illustration is still a
+    // derivative). Left in the data as an audit trail of the rights
+    // research already done per item, not because anything still
+    // reads them. sourceUrl still points at the real, specific
+    // official page for every item either way.
     reference_resources: {
       items: [
         {
