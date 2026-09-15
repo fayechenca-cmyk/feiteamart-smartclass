@@ -158,6 +158,27 @@
   branch (community_gallery.items) is the same data-driven fallback
   pattern already used for demoVideoStreamId.
 
+  ROUND 7 (same live path) — "Submit My Work" made real. DIAGNOSIS
+  FIRST (per Faye's ask): the button WAS wired to a function
+  (submitToCommunity onclick), not unwired dead chrome — that function
+  just disabled the button, showed a static "thank you," and wrote a
+  local-only JournalStorage record. No upload, no database row, no
+  backend at all; nothing another student or Faye could ever see.
+  Built for real: reuses the platform's EXISTING student_submissions
+  table + student-artwork Storage bucket (core/teacher-submission.js's
+  pattern, mirrored inline — see submitToCommunity's own comment for
+  why core/submissions.js's FEISubmissions.submit() can't be used here:
+  it requires a live Supabase Auth session this login-less course never
+  has). Submitted work goes in with community_status: 'pending' and
+  does NOT appear publicly — teacher-admin (extended, not a new
+  interface — see its own header note) approves each piece, flipping
+  it to 'approved', which is the only thing loadApprovedCommunitySubmissions
+  queries for. Schema: supabase/community_gallery_submissions_migration.sql
+  adds story_id + community_status columns AND an anon UPDATE policy —
+  student_submissions had SELECT/INSERT but no UPDATE policy at all
+  (verified live: a PATCH silently no-oped, HTTP 200 but zero rows
+  changed) — flagged in that file rather than working around it.
+
   SCOPE NOTES (flagged, not silently assumed):
   - Step 5 (the shared teacher's-guide sequence inside every story's
     two-panel round — unaffected by this round's step-count change)
@@ -171,12 +192,11 @@
     round 6 — it shows 5 real student photos Faye supplied (see
     lesson-data.js's community_gallery.items); the dashed-placeholder
     card only remains as the code path for if items is ever empty.
-  - The "Submit My Work" action in Student Artwork Community records
-    the submission locally (JournalStorage) and confirms honestly —
-    there is no real shared backend yet to actually publish it where
-    other students would see it (same "no backend to persist to"
-    honesty already used elsewhere in this file, e.g. the old upload
-    fallback this replaces).
+  - The "Submit My Work" action is NO LONGER a local-only stub as of
+    round 7 — it really uploads to Supabase (student-artwork bucket +
+    student_submissions table) and shows up in teacher-admin's review
+    queue, appearing in the public gallery only once approved there.
+    See round 7's own header note and submitToCommunity's comment.
   - Access control is deliberately NOT gated, matching this lesson's
     own unresolved TODO on the free/paid rule (carried over from the
     archived original, still unresolved).
@@ -2564,6 +2584,12 @@ function choosePreferPaper(){
    optional short "how this was made" teacher-process breakdown
    bridging into the gallery. Still not added — flagging again rather
    than letting the flag silently disappear across restructures.
+
+   ROUND 7 — "Submit My Work" is now real (was non-functional UI
+   chrome: it disabled itself and showed a static "thank you" with no
+   upload anywhere — confirmed by reading the old submitToCommunity()
+   before changing anything, per Faye's diagnose-first ask). See
+   submitToCommunity()'s own comment for the full design.
 ============================================================ */
 function renderCompare(){
   const gallery = LESSON_DATA.community_gallery;
@@ -2571,6 +2597,9 @@ function renderCompare(){
   // supplied some; the dashed-placeholder emoji cards stay as the
   // fallback for a future lesson reusing this same field shape before
   // it has real photos of its own — see lesson-data.js's own comment.
+  // galleryGrid has an id now — approved student submissions get
+  // appended into it asynchronously by loadApprovedCommunitySubmissions
+  // (called from afterRenderCompare), alongside these curated ones.
   const galleryCards = (gallery.items && gallery.items.length)
     ? gallery.items.map(item => `<div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>`).join('')
     : Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
@@ -2582,7 +2611,7 @@ function renderCompare(){
       <div class="gallery-section">
         <div class="gallery-title">${gallery.title}</div>
         <div class="gallery-subtitle">${gallery.subtitle}</div>
-        <div class="gallery-grid">${galleryCards}</div>
+        <div class="gallery-grid" id="galleryGrid">${galleryCards}</div>
       </div>
 
       <div class="community-section">
@@ -2626,21 +2655,184 @@ async function afterRenderCompare(){
     submitBtn.disabled = true;
     document.getElementById('communitySubmitNote').textContent = 'Draw at least one story digitally to submit it here.';
   }
+  loadApprovedCommunitySubmissions(); // fire-and-forget, non-blocking
   showContinue('Continue →', nextStep);
 }
-// No real shared backend exists yet to actually publish this where
-// other students would see it (same honest "no backend to persist
-// to" limitation the old upload fallback already had) — this records
-// the submission choice locally (JournalStorage) and gives an honest
-// confirmation rather than pretending to publish anywhere.
-function submitToCommunity(){
+
+/* ============================================================
+   REAL SUBMISSION (round 7) — mirrors the platform's two EXISTING
+   upload patterns rather than inventing a third:
+     - core/teacher-submission.js: raw fetch() + the anon key directly
+       against student-artwork Storage + student_submissions, no
+       Supabase Auth session required.
+     - core/submissions.js (FEISubmissions.submit): the supabase-js SDK
+       client, but REQUIRES a live Supabase Auth session.
+   This course never loads core/auth.js (see file header — no login
+   gate at all), so FEISubmissions.submit() cannot be used here full
+   stop; the raw-fetch pattern is mirrored inline below instead (not a
+   literal <script src> of teacher-submission.js — that file also
+   depends on globals like UserProfile/LESSON/StudentRoster this
+   course's architecture doesn't have).
+
+   This flow is deliberately DISTINCT from "submit to your teacher"
+   despite sharing the table/bucket: it writes course_id:
+   'scene-drawing-foundation' (not 'foundation-a') and sets
+   community_status: 'pending' — a NEW column (see supabase/
+   community_gallery_submissions_migration.sql) that "submit to your
+   teacher" rows never set. That column is the actual moderation gate:
+   loadApprovedCommunitySubmissions() below only ever shows rows where
+   a teacher has flipped it to 'approved' in teacher-admin — nothing
+   a student submits appears publicly on its own.
+
+   IDENTITY (flagged, not silently decided): this course has no login
+   system, so there's no student-account identity to attach beyond
+   whatever fei_user_profile the main platform's sign-in may have
+   already written to sessionStorage (same key bumpXP/markLessonComplete
+   already read — often empty here, since nothing on this course
+   requires having signed in). When it's empty, this asks for a name via
+   a plain prompt() rather than inventing a login flow this course was
+   never built with — simplest honest way to get a real name on a
+   public submission. Faye may want a nicer inline field instead; easy
+   swap, flagging the choice rather than hiding it.
+============================================================ */
+const COMMUNITY_UPLOAD_URL = 'https://rudztwseatwayhztbarj.supabase.co';
+const COMMUNITY_UPLOAD_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk';
+
+function communitySubmitterIdentity(){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return null;
+    const p = JSON.parse(raw);
+    return {
+      studentCode: p.studentCode || null,
+      userId: p.supabaseUserId || null,
+      email: p.email || null,
+      name: p.name || null
+    };
+  } catch (e) { return null; }
+}
+function escapeHtmlLite(str){
+  const d = document.createElement('div');
+  d.textContent = str == null ? '' : String(str);
+  return d.innerHTML;
+}
+
+async function submitToCommunity(){
   const btn = document.getElementById('communitySubmitBtn');
   const note = document.getElementById('communitySubmitNote');
+
+  let identity = communitySubmitterIdentity();
+  if (!identity || !identity.name) {
+    const typed = (window.prompt('What name should we show with your artwork? (First name is fine.)') || '').trim();
+    if (!typed) return; // cancelled — leave the button as-is, no partial submit
+    identity = Object.assign({}, identity || {}, { name: typed });
+  }
+
+  const toSubmit = [];
+  for (let i = 0; i < LESSON_DATA.story_choices.length; i++) {
+    if (STATE.storyResults[i] === 'digital') toSubmit.push(i);
+  }
+  if (toSubmit.length === 0) {
+    note.textContent = 'Draw at least one story digitally to submit it here.';
+    return;
+  }
+
   btn.disabled = true;
-  note.textContent = '✓ Submitted — thank you for sharing your work with the community!';
+  note.textContent = 'Uploading…';
+
+  let successCount = 0;
+  for (const i of toSubmit) {
+    const story = LESSON_DATA.story_choices[i];
+    const storyLabel = 'Story ' + String.fromCharCode(65 + i);
+    try {
+      const record = await practiceGetArtwork(practiceKeyForStory(story.id));
+      if (!record || !record.blob) continue;
+      const fileName = LESSON_DATA.courseId + '_' + story.id + '_' + Date.now() + '.jpg';
+
+      const uploadRes = await fetch(
+        COMMUNITY_UPLOAD_URL + '/storage/v1/object/student-artwork/' + fileName,
+        {
+          method: 'POST',
+          headers: {
+            apikey: COMMUNITY_UPLOAD_KEY,
+            Authorization: 'Bearer ' + COMMUNITY_UPLOAD_KEY,
+            'Content-Type': 'image/jpeg',
+            'x-upsert': 'true'
+          },
+          body: record.blob
+        }
+      );
+      if (!uploadRes.ok) { console.warn('[submitToCommunity] storage upload failed', storyLabel, uploadRes.status); continue; }
+      const imageUrl = COMMUNITY_UPLOAD_URL + '/storage/v1/object/public/student-artwork/' + fileName;
+
+      const insertRes = await fetch(COMMUNITY_UPLOAD_URL + '/rest/v1/student_submissions', {
+        method: 'POST',
+        headers: {
+          apikey: COMMUNITY_UPLOAD_KEY,
+          Authorization: 'Bearer ' + COMMUNITY_UPLOAD_KEY,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          student_code: identity.studentCode,
+          user_id: identity.userId,
+          user_name: identity.name,
+          user_email: identity.email,
+          course_id: 'scene-drawing-foundation',
+          lesson_id: LESSON_DATA.courseId,
+          lesson_title: 'Extreme Wide Shot',
+          story_id: storyLabel,
+          image_url: imageUrl,
+          community_status: 'pending'
+        })
+      });
+      if (insertRes.ok) {
+        successCount++;
+      } else {
+        console.warn('[submitToCommunity] insert failed', storyLabel, insertRes.status, await insertRes.text().catch(() => ''));
+      }
+    } catch (e) {
+      console.warn('[submitToCommunity] failed for', storyLabel, e);
+    }
+  }
+
+  if (successCount > 0) {
+    note.textContent = '✓ Submitted — a teacher will review it before it appears in the gallery.';
+    try {
+      JournalStorage.save({ courseId: LESSON_DATA.courseId, lessonId: LESSON_DATA.courseId, momentKey: 'community_submit' });
+    } catch (e) { console.warn('[submitToCommunity] JournalStorage.save failed', e); }
+  } else {
+    note.textContent = "Couldn't submit — please check your connection and try again.";
+    btn.disabled = false;
+  }
+}
+
+// Appends APPROVED student submissions into the same #galleryGrid the
+// curated gallery.items already render into — "the gallery, same as
+// the 5 curated images" per Faye's spec, not a separate section.
+// community_status=eq.approved is the whole moderation gate: a row
+// only ever gets that value via teacher-admin's Approve button.
+async function loadApprovedCommunitySubmissions(){
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
   try {
-    JournalStorage.save({ courseId: LESSON_DATA.courseId, lessonId: LESSON_DATA.courseId, momentKey: 'community_submit' });
-  } catch (e) { console.warn('[submitToCommunity] JournalStorage.save failed', e); }
+    const url = COMMUNITY_UPLOAD_URL + '/rest/v1/student_submissions'
+      + '?course_id=eq.scene-drawing-foundation'
+      + '&lesson_id=eq.' + encodeURIComponent(LESSON_DATA.courseId)
+      + '&community_status=eq.approved'
+      + '&select=image_url,user_name,story_id'
+      + '&order=created_at.desc';
+    const res = await fetch(url, { headers: { apikey: COMMUNITY_UPLOAD_KEY, Authorization: 'Bearer ' + COMMUNITY_UPLOAD_KEY } });
+    if (!res.ok) return;
+    const rows = await res.json();
+    if (!Array.isArray(rows) || rows.length === 0) return;
+    const html = rows.map(r => {
+      const who = escapeHtmlLite(r.user_name || 'a student');
+      const story = escapeHtmlLite(r.story_id || '');
+      return `<div class="gallery-photo-card"><img src="${r.image_url}" alt="${story ? story + ' — ' : ''}submitted by ${who}" loading="lazy"></div>`;
+    }).join('');
+    grid.insertAdjacentHTML('beforeend', html);
+  } catch (e) { console.warn('[loadApprovedCommunitySubmissions] failed (non-fatal)', e); }
 }
 
 /* ============================================================

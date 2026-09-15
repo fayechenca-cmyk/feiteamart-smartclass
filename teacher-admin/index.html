@@ -492,6 +492,62 @@
     padding: 10px 12px;
   }
 
+  /* Round 7 — the community-gallery approval block (buildCommunity-
+     ApprovalBlock), visually distinct from teacher feedback below it:
+     gold accent (matches .card-lesson-pill's gold) for "waiting on
+     you," green for "already public" — same green .reviewed-banner
+     already uses for "feedback sent," since both mean "this teacher
+     action is done." */
+  .community-approve-box {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(200,169,110,0.1);
+    border: 1px solid rgba(200,169,110,0.35);
+  }
+  .community-approve-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .community-approve-btn {
+    width: 100%;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+    transition: opacity 0.15s;
+  }
+  .community-approve-btn:hover { opacity: 0.88; }
+  .community-approve-btn:disabled { opacity: 0.6; cursor: default; }
+  .community-approved-banner {
+    background: rgba(29,158,117,0.1);
+    color: var(--green);
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .community-undo-btn {
+    width: 100%;
+    background: none;
+    border: 1px solid var(--ink-veryfaint);
+    color: var(--ink-soft);
+    padding: 9px;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .community-undo-btn:hover { border-color: var(--red); color: var(--red); }
+
   .card-lesson-pill {
     display: inline-block;
     background: rgba(200,169,110,0.16);
@@ -940,7 +996,12 @@
     cone: 'Cone',
     icecream: 'Ice Cream',
     intersecting: 'Intersecting Forms',
-    papercrane: 'Paper Crane'
+    papercrane: 'Paper Crane',
+    // Round 7: Scene Drawing Foundation's Lesson 01 "Submit to
+    // Community" feature reuses this same table (see index.html's
+    // submitToCommunity) — real LESSON_DATA.courseId value, not the
+    // lesson's folder name (lesson-01-extreme-wide-shot).
+    'extreme-wide-shot': 'Extreme Wide Shot (Scene Drawing)'
   };
 
   const TEACHER_CODES = ['TEACHER-FAYE', 'FAYE-00', 'TEACHER-DAWN'];
@@ -952,15 +1013,17 @@
   const SESSION_KEY = 'fei_teacher_admin_authed';
   const TEACHER_CODE_KEY = 'fei_teacher_admin_code';
 
-  // NOTE on student identity: student_submissions has no student_code
-  // column, and there's no way to derive one — student_progress (see
-  // core/progress.js) has no user_id column to join against, and
-  // FEISubmissions.submit() (core/submissions.js) requires an active
-  // Supabase Auth session, so legacy access-code students (JOJO-10 etc.,
-  // who sign in with a plain code, no Supabase session) can never submit
-  // through this system in the first place. Every row that CAN exist here
-  // already carries its real identity directly as user_name/user_email —
-  // that's used as-is below, no lookup/matching needed.
+  // NOTE on student identity (stale note corrected — student_submissions
+  // DOES have a student_code column, verified live): core/teacher-
+  // submission.js's raw-fetch upload (used by every Foundation A lesson,
+  // and now Scene Drawing Foundation's Lesson 01 community submissions
+  // too — see index.html's submitToCommunity) writes student_code
+  // directly for legacy access-code students, so they show up here fine.
+  // Only core/submissions.js's FEISubmissions.submit() actually requires
+  // a live Supabase Auth session — that's a different, narrower upload
+  // path nothing currently live uses. Every row already carries its real
+  // identity directly as student_code/user_name/user_email — used as-is
+  // below, no lookup/matching needed.
 
   function sbHeaders(extra) {
     return Object.assign({
@@ -1109,7 +1172,17 @@
     // rule) actually works — same fix already applied to #loginScreen/
     // #dashboard earlier in this file.
     loadingState.style.display = 'flex';
-    emptyState.hidden = true;
+    // emptyState.style.display, not .hidden — .empty-state sets
+    // `display:flex` unconditionally in the CSS (shared with
+    // .loading-state), which always overrides the `[hidden]` UA rule
+    // regardless of specificity — the exact bug already fixed for
+    // loadingState just above (see its own comment) and for the
+    // schedule-view elements further down. This one spot in the main
+    // submissions render was missed at the time — found live while
+    // testing round 7's community-approval feature (the "No
+    // submissions yet" message stayed visible, overlapping real
+    // cards, even though .hidden was correctly true).
+    emptyState.style.display = 'none';
     groupsContainer.hidden = true;
 
     // Fallback: if nothing below has hidden the spinner within 5s (an
@@ -1123,7 +1196,7 @@
       console.log('[Admin] Fallback timeout fired — still loading after 5s, forcing spinner off');
       loadingState.style.display = 'none';
       groupsContainer.hidden = true;
-      emptyState.hidden = false;
+      emptyState.style.display = 'flex';
       emptyStateMsg.textContent = 'Could not load — please refresh.';
     }, 5000);
 
@@ -1186,7 +1259,7 @@
     } catch (err) {
       console.log('[Admin] Error:', err);
       groupsContainer.hidden = true;
-      emptyState.hidden = false;
+      emptyState.style.display = 'flex';
       emptyStateMsg.textContent = 'Could not load submissions. Check your connection.';
     } finally {
       clearTimeout(watchdogTimer);
@@ -1263,14 +1336,14 @@
     });
 
     if (appState.submissions.length === 0) {
-      emptyState.hidden = false;
+      emptyState.style.display = 'flex';
       groupsContainer.hidden = true;
       emptyStateMsg.textContent = 'No submissions yet. Students will appear here after they submit their work.';
       return;
     }
 
     if (filtered.length === 0) {
-      emptyState.hidden = false;
+      emptyState.style.display = 'flex';
       groupsContainer.hidden = true;
       const lessonLabel = appState.lessonFilter ? (LESSON_DISPLAY_NAMES[appState.lessonFilter] || appState.lessonFilter) : null;
       if (lessonLabel) {
@@ -1283,7 +1356,7 @@
       return;
     }
 
-    emptyState.hidden = true;
+    emptyState.style.display = 'none';
     groupsContainer.hidden = false;
 
     // Group by the student's identity. student_code (access-code
@@ -1377,8 +1450,19 @@
 
     const meta = document.createElement('div');
     meta.className = 'card-meta';
-    meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—') + ' · Submitted ' + formatDate(sub.created_at);
+    meta.textContent = 'Lesson: ' + (sub.lesson_title || sub.lesson_id || '—')
+      + (sub.story_id ? ' · ' + sub.story_id : '')
+      + ' · Submitted ' + formatDate(sub.created_at);
     body.appendChild(meta);
+
+    // Round 7: community_status only exists on rows submitted through
+    // "Submit to Community" flows (Scene Drawing Foundation's Lesson 01
+    // so far) — regular "submit to your teacher" rows have it null and
+    // never show this block at all. This is a SEPARATE gate from the
+    // feedback loop below: a piece can get teacher feedback without
+    // ever being public, and approving it for the public gallery
+    // doesn't require feedback either.
+    if (sub.community_status) body.appendChild(buildCommunityApprovalBlock(sub));
 
     feedbackRows.forEach(feedbackRow => {
       const banner = document.createElement('div');
@@ -1400,6 +1484,74 @@
 
     card.appendChild(body);
     return card;
+  }
+
+  // Round 7: the actual moderation gate for Lesson 01's "Submit to
+  // Community" feature (Scene Drawing Foundation) — a submission with
+  // community_status set only ever becomes publicly visible once this
+  // Approve button has been pressed. Uses PATCH against
+  // student_submissions directly (an UPDATE RLS policy for it was
+  // added in supabase/community_gallery_submissions_migration.sql —
+  // that table only had SELECT/INSERT before this round).
+  function buildCommunityApprovalBlock(sub) {
+    const box = document.createElement('div');
+    box.className = 'community-approve-box';
+
+    if (sub.community_status === 'approved') {
+      const banner = document.createElement('div');
+      banner.className = 'community-approved-banner';
+      banner.textContent = '🌟 Approved — visible in the public "From Other Students" gallery';
+      box.appendChild(banner);
+
+      const undoBtn = document.createElement('button');
+      undoBtn.type = 'button';
+      undoBtn.className = 'community-undo-btn';
+      undoBtn.textContent = 'Remove from gallery';
+      undoBtn.addEventListener('click', () => setCommunityStatus(sub, 'pending', undoBtn, box));
+      box.appendChild(undoBtn);
+      return box;
+    }
+
+    const label = document.createElement('div');
+    label.className = 'community-approve-label';
+    label.textContent = '⏳ Waiting for review before it can appear in the public gallery';
+    box.appendChild(label);
+
+    const approveBtn = document.createElement('button');
+    approveBtn.type = 'button';
+    approveBtn.className = 'community-approve-btn';
+    approveBtn.textContent = 'Approve for Community Gallery →';
+    approveBtn.addEventListener('click', () => setCommunityStatus(sub, 'approved', approveBtn, box));
+    box.appendChild(approveBtn);
+
+    const errorEl = document.createElement('div');
+    errorEl.className = 'send-error';
+    box.appendChild(errorEl);
+
+    return box;
+  }
+
+  async function setCommunityStatus(sub, newStatus, btn, box) {
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = newStatus === 'approved' ? 'Approving…' : 'Removing…';
+    try {
+      const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?id=eq.${sub.id}`, {
+        method: 'PATCH',
+        headers: sbHeaders({ 'Content-Type': 'application/json', Prefer: 'return=minimal' }),
+        body: JSON.stringify({ community_status: newStatus })
+      });
+      if (!res.ok) throw new Error('Update failed (' + res.status + ')');
+      sub.community_status = newStatus;
+      const fresh = buildCommunityApprovalBlock(sub);
+      box.replaceWith(fresh);
+    } catch (err) {
+      console.error('[teacher-admin] community status update failed', err);
+      btn.disabled = false;
+      btn.textContent = originalText;
+      const errorEl = box.querySelector('.send-error');
+      if (errorEl) { errorEl.textContent = 'Could not update — please try again.'; errorEl.classList.add('visible'); }
+    }
   }
 
   function buildFeedbackForm(sub) {
