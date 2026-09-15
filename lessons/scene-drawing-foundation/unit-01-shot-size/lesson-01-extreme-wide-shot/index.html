@@ -146,16 +146,31 @@
     request — if she'd rather see all 5 stages, or a different
     layout, REF_STAGE_INDICES/the thumbnail count is a one-line change.
 
+  ROUND 6 (same live path) — Step 7's "From Other Students" gallery
+  wired to 5 real student photos Faye supplied (Cloudflare Images
+  URLs), replacing the 4 dashed-placeholder emoji cards. 5, not 4 —
+  the grid no longer assumes a fixed count at all: .gallery-grid moved
+  from a hardcoded repeat(4,1fr) (+ a separate 2-column mobile
+  override) to repeat(auto-fit,minmax(120px,1fr)), which lands on 5
+  even columns at this step's width and 2 on a narrow phone with no
+  media query needed — wraps cleanly for whatever count a lesson ends
+  up with, not just today's 5. renderCompare's real-vs-placeholder
+  branch (community_gallery.items) is the same data-driven fallback
+  pattern already used for demoVideoStreamId.
+
   SCOPE NOTES (flagged, not silently assumed):
   - Step 5 (the shared teacher's-guide sequence inside every story's
     two-panel round — unaffected by this round's step-count change)
     is still ONE shared progressive
     illustration, not three bespoke ones per story — no real per-story
     art exists yet. See lesson-data.js's drawing_steps comment.
-  - Step 3's four folded-in reference resources and the community
-    gallery are placeholders (no real licensed art / real student work
-    wired in yet) — every one is clearly marked so a later pass can
-    swap them in without touching this file's structure.
+  - Step 3's four folded-in reference resources are still placeholders
+    (no real licensed art wired in yet) — clearly marked so a later
+    pass can swap them in without touching this file's structure. The
+    Student Artwork Community gallery is NO LONGER a placeholder as of
+    round 6 — it shows 5 real student photos Faye supplied (see
+    lesson-data.js's community_gallery.items); the dashed-placeholder
+    card only remains as the code path for if items is ever empty.
   - The "Submit My Work" action in Student Artwork Community records
     the submission locally (JournalStorage) and confirms honestly —
     there is no real shared backend yet to actually publish it where
@@ -660,13 +675,28 @@ button{font-family:inherit;}
 .gallery-section{margin-top:22px;}
 .gallery-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--sb-ink);text-align:center;margin-bottom:4px;}
 .gallery-subtitle{font-size:12px;color:var(--sb-ink-faint);text-align:center;margin-bottom:16px;}
-.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}}
+/* auto-fit + minmax, not a hardcoded column count: the placeholder
+   count (4) and the real photo count Faye actually supplies (5, and
+   maybe a different number later) don't have to match, and this way
+   they never need to — the grid just wraps to however many items
+   exist, evenly sized, no dead trailing gap (auto-fit collapses empty
+   tracks; auto-fill would not). minmax(120px,1fr) lands on 5 even
+   columns at this step's ~760px width (5's real photo count) and 2 on
+   a narrow phone — no separate mobile override needed. */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
 .gallery-card{
   aspect-ratio:1;background:repeating-linear-gradient(135deg,var(--sb-panel),var(--sb-panel) 8px,var(--sb-paper) 8px,var(--sb-paper) 16px);
   border-radius:4px;border:1.5px dashed var(--sb-ink-faint);display:flex;align-items:center;justify-content:center;
   font-size:1.3rem;color:var(--sb-ink-faint);filter:grayscale(1);opacity:.85;
 }
+/* Real student photos (gallery.items) — same storyboard-panel framing
+   as .draw-canvas-wrap/.own-work-img elsewhere in this file (thin ink
+   border, small radius), deliberately NOT the placeholder's dashed/
+   grayscale treatment, which specifically signals "nothing here yet." */
+.gallery-photo-card{
+  aspect-ratio:1;border-radius:4px;border:1.5px solid var(--sb-ink);overflow:hidden;background:var(--sb-paper);
+}
+.gallery-photo-card img{width:100%;height:100%;object-fit:cover;display:block;}
 
 /* ============================================================
    STEP 7 — Complete
@@ -2537,7 +2567,13 @@ function choosePreferPaper(){
 ============================================================ */
 function renderCompare(){
   const gallery = LESSON_DATA.community_gallery;
-  const galleryCards = Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
+  // Real photos (gallery.items) render as actual images now that Faye's
+  // supplied some; the dashed-placeholder emoji cards stay as the
+  // fallback for a future lesson reusing this same field shape before
+  // it has real photos of its own — see lesson-data.js's own comment.
+  const galleryCards = (gallery.items && gallery.items.length)
+    ? gallery.items.map(item => `<div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>`).join('')
+    : Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
       <div class="step-kicker">Our Community</div>

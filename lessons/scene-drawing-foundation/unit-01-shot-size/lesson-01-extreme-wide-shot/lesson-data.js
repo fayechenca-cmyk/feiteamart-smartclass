@@ -305,9 +305,20 @@
     // Round 5: "shared community" framing kept — the whole point of
     // this section is "my work + my classmates' work, together," not
     // a private result screen.
+    // `items` — 5 real photos of student work, supplied by Faye.
+    // `placeholderCount` stays as the fallback for `items` being empty
+    // (a future lesson reusing this same field shape before it has real
+    // photos yet) — see index.html's renderCompare for the branch.
     community_gallery: {
       title: 'From Other Students',
-      subtitle: "Real student work will appear here once it's shared.",
+      subtitle: 'Real work from students who took this lesson.',
+      items: [
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f592c68c-cafd-4970-ac71-7e5e708a5700/public', alt: 'Student artwork from the Extreme Wide Shot lesson, 1 of 5' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f0f56d3e-ba4a-47b2-95a0-5bcd26f1c500/public', alt: 'Student artwork from the Extreme Wide Shot lesson, 2 of 5' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/e27d650d-825e-47e3-2be2-9ca992628400/public', alt: 'Student artwork from the Extreme Wide Shot lesson, 3 of 5' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/9611b795-b2de-42ad-2f31-5107cecee500/public', alt: 'Student artwork from the Extreme Wide Shot lesson, 4 of 5' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/12cf92b6-f11d-421d-74fc-4919885a1f00/public', alt: 'Student artwork from the Extreme Wide Shot lesson, 5 of 5' }
+      ],
       placeholderCount: 4
     },
 
