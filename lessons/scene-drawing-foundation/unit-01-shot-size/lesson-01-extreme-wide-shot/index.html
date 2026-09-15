@@ -78,6 +78,36 @@
   - The per-story reveal's 3-2-1 countdown (700ms/digit, ~2.1s total)
     wasn't enough time to actually read the line before it advanced —
     now 5-4-3-2-1 at 1000ms/digit, a real 5-second pause.
+  - Real teacher video wired in for Story A's teacher panel (real
+    Cloudflare Stream content, produced by Faye), data-driven off
+    story_choices[].demoVideoStreamId — Stories B/C still use the
+    platform-led drawingSvg() demo until Faye supplies their videos.
+
+  ROUND 3 (same live path) — QUICK-SKETCH REDESIGN of the two-panel
+  round's teacher panel: it was still a manual step-by-step tutorial
+  (progress dots, a caption per stage, Prev/Replay/Next buttons) even
+  after Story A's video was wired in — the wrong format regardless of
+  video, per Faye's correction ("Faye made this as a quick sketch demo
+  of the scene idea," not a formal lesson to click through). Fixed for
+  ALL THREE stories, not just Story A:
+  - The panel title is now "Quick Sketch" (was "Teacher's Guide" — that
+    name implied the step-by-step format this round removes). Flagging
+    the exact wording in case Faye prefers different copy.
+  - A short line under the title now tells the student this is a fast
+    idea sketch, not a formal exercise, and that they can sketch
+    quickly too, digitally or on paper.
+  - Story A's video now just plays on its own (autoplay, no dots/
+    captions/step buttons around it — it never had per-stage dots or
+    buttons to begin with, but the "Teacher's Guide" title and its
+    step-tutorial framing implied the wrong format).
+  - Stories B/C's drawingSvg() demo (playQuickSketchDemo, replacing the
+    old applyDrawStage/drawStep/drawReplay) now plays automatically on
+    a timer instead of the student clicking through it — same "watch
+    it finish, then it's your turn" unlock contract the video uses,
+    just driven by setInterval instead of an 'ended' event. prevStep's
+    old "step back through drawStageIndex one frame at a time" special
+    case is gone with it — there's no manual sub-stage left to step
+    back through.
 
   SCOPE NOTES (flagged, not silently assumed):
   - Step 5 (the shared teacher's-guide sequence inside every story's
@@ -471,6 +501,10 @@ button{font-family:inherit;}
 @media(max-width:820px){.practice-two-panel{grid-template-columns:1fr;}}
 .practice-panel{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:18px 16px 20px;position:relative;}
 .practice-panel-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);text-align:center;margin-bottom:10px;}
+/* Round 3 (quick-sketch redesign) — the framing line under the
+   teacher panel's title, telling the student this is a fast idea
+   sketch (not a formal tutorial) and that they can sketch quickly too. */
+.practice-panel-hint{font-size:11.5px;color:var(--sb-ink-soft);text-align:center;line-height:1.5;margin:-2px 0 14px;}
 /* Real teacher video in the teacher panel (Story A) — .video-stage's
    own min-height media query sizes its height off 62vw, tuned for
    Step 1's full-viewport-width video; inside this narrower ~half-
@@ -507,22 +541,12 @@ button{font-family:inherit;}
 .draw-canvas-wrap::before{top:9px;left:9px;border-width:1.5px 0 0 1.5px;}
 .draw-canvas-wrap::after{bottom:9px;right:9px;border-width:0 1.5px 1.5px 0;}
 .dstage{transition:opacity .5s ease;}
-.draw-caption{
-  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;
-  color:var(--accent-deep);margin:18px auto 2px;min-height:1.6em;
-}
-/* Round 2 addition — a short second line explaining the actual
-   technique each stage demonstrates (Faye: round 1's stages "didn't
-   actually teach anything"). Deliberately smaller/quieter than the
-   main caption so it reads as elaboration, not a second headline. */
-.draw-teaching-note{
-  text-align:center;font-size:12px;color:var(--ink-soft);line-height:1.5;
-  max-width:440px;margin:0 auto 6px;
-}
-.draw-progress{display:flex;justify-content:center;gap:7px;margin-bottom:4px;}
-.draw-dot{width:8px;height:8px;border-radius:50%;background:var(--line);}
-.draw-dot.done{background:var(--accent);}
-.draw-dot.current{background:var(--accent-deep);transform:scale(1.35);}
+/* .draw-caption/.draw-teaching-note/.draw-progress/.draw-dot (the old
+   per-stage caption, teaching note, and progress dots) were removed
+   in the round-3 quick-sketch redesign along with the manual Prev/
+   Replay/Next controls they went with — see playQuickSketchDemo's own
+   comment. .draw-controls/.draw-btn below stay: the student panel's
+   Clear/Save buttons still use them. */
 .draw-controls{display:flex;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap;}
 .draw-btn{
   font-weight:700;font-size:13px;padding:10px 20px;border-radius:999px;cursor:pointer;
@@ -1948,7 +1972,7 @@ function afterRenderStoryPractice(story, i){
     if (story.demoVideoStreamId) {
       attachStoryTeacherVideo(story);
     } else {
-      applyDrawStage();
+      playQuickSketchDemo();
     }
     initPracticeCanvas();
   }
@@ -2006,25 +2030,24 @@ function attachStoryTeacherVideo(story){
   };
   document.head.appendChild(sdk);
 }
+// Redesign (Faye's correction, round 3 on this panel): this LEFT
+// panel is a quick idea sketch of the scene, not a formal step-by-step
+// tutorial — the old drawing_steps UI (progress dots, Prev/Replay/Next
+// buttons, a caption per stage) was the wrong format even before a
+// real video existed for it, and it's wrong for every story, not just
+// whichever one currently lacks video. Both branches below now share
+// the same contract: something plays on its own, with no manual
+// controls, and finishing it unlocks the student's own canvas — see
+// playQuickSketchDemo() (the drawingSvg() replacement for stories
+// without video yet) and attachStoryTeacherVideo() (Story A).
+// Panel title picked as "Quick Sketch" — reads as "a fast demo of the
+// idea," not "the correct steps to follow." Flagging the exact wording
+// in case Faye prefers different copy (e.g. "See the Idea").
 function renderTwoPanelMarkup(story, i){
   const hasVideo = !!story.demoVideoStreamId;
   const teacherPanelInner = hasVideo
-    ? renderVideoStage(story.demoVideoStreamId, "Teacher's Guide", 'storyTeacherVideoFrame', null, null)
-    : (() => {
-        const steps = LESSON_DATA.drawing_steps;
-        const dots = steps.map(() => `<span class="draw-dot"></span>`).join('');
-        return `
-          <div class="draw-canvas-wrap large">${drawingSvg()}</div>
-          <div class="draw-progress">${dots}</div>
-          <div class="draw-caption" id="drawCaption"></div>
-          <div class="draw-teaching-note" id="drawTeachingNote"></div>
-          <div class="draw-controls">
-            <button class="draw-btn" id="drawPrevBtn" onclick="drawStep(-1)">← Previous</button>
-            <button class="draw-btn" onclick="drawReplay()">↺ Replay</button>
-            <button class="draw-btn primary" id="drawNextBtn" onclick="drawStep(1)">Next Step →</button>
-          </div>
-        `;
-      })();
+    ? renderVideoStage(story.demoVideoStreamId, 'Quick Sketch', 'storyTeacherVideoFrame', null, null)
+    : `<div class="draw-canvas-wrap large">${drawingSvg()}</div>`;
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
     const t = PRACTICE_TOOLS[key];
@@ -2034,13 +2057,14 @@ function renderTwoPanelMarkup(story, i){
     <div class="practice-story-label">Story ${String.fromCharCode(65 + i)}: “${story.title}”</div>
     <div class="practice-two-panel">
       <div class="practice-panel practice-panel-teacher${hasVideo ? ' practice-panel-video' : ''}">
-        <div class="practice-panel-label">Teacher's Guide</div>
+        <div class="practice-panel-label">Quick Sketch</div>
+        <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
         ${teacherPanelInner}
       </div>
       <div class="practice-panel practice-panel-student locked" id="practiceStudentPanel">
         <div class="practice-panel-label">Your Turn</div>
         <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
-        <div class="practice-lock-overlay">Finish the teacher's guide on the left first →</div>
+        <div class="practice-lock-overlay">Watch the quick sketch on the left first →</div>
         <div class="practice-tool-row">${tools}</div>
         <div class="practice-tool-row">${colors}</div>
         <div class="draw-controls">
@@ -2061,12 +2085,13 @@ function unlockStudentPanel(){
 }
 
 /* ============================================================
-   STEP 5 (shared sub-component) — the teacher's guide sequence
-   (platform-led progressive reveal, NOT a recorded teacher demo — see
-   file header). One shared illustration, 5 cumulative layers matching
-   drawing_steps' 5 captions exactly.
+   STEP 5 (shared sub-component) — the platform-led quick-sketch demo
+   (drawingSvg's 5 cumulative layers), used for whichever stories don't
+   have a real video yet. One shared illustration across all three
+   stories — no real per-story art exists yet, see lesson-data.js's
+   drawing_steps comment.
 
-   Round 2: substantially more visual craft per stage, each one now
+   Round 2: substantially more visual craft per stage, each one
    demonstrating a real, nameable technique (composition/horizon
    placement, atmospheric value, scale relationship, overlap for
    depth + cross-hatch shading, selective detail/restraint) instead of
@@ -2074,7 +2099,12 @@ function unlockStudentPanel(){
    actually learn anything from watching it" correction. Order matches
    the original brief's 5 captions exactly (Start the big world / Build
    the largest shapes / Place the character small / Create depth / Add
-   only the details the story needs).
+   only the details the story needs) — those captions/teachingNotes
+   still live in lesson-data.js but are no longer displayed as of the
+   round-3 redesign below: this used to be a manual step-by-step
+   tutorial (Prev/Replay/Next buttons, one caption per stage, progress
+   dots) and that format was wrong for this panel — see
+   playQuickSketchDemo's own comment for why and what replaced it.
 ============================================================ */
 function drawingSvg(){
   // Round 6: redrawn as ink-line storyboard sketch art (same
@@ -2152,15 +2182,20 @@ function drawingSvg(){
     </svg>
   `;
 }
-// applyDrawStage/drawStep/drawReplay are unchanged mechanics from the
-// old single-panel version — still reused as-is for the LEFT
-// (teacher's guide) panel of every story's two-panel round. Only the
-// "reached the last stage" branch changed: it used to switch this
-// step into a separate "practice" phase (STATE.drawPhase); now the
-// practice canvas is the RIGHT panel, already visible the whole time
-// (just locked), so reaching the end instead unlocks it in place.
-function applyDrawStage(){
-  const steps = LESSON_DATA.drawing_steps;
+// Redesign (replaces the old applyDrawStage/drawStep/drawReplay manual
+// step-by-step tutorial — Prev/Replay/Next buttons, a caption + a
+// progress dot per stage): Faye's correction was that this panel is a
+// quick idea sketch, not a formal lesson to click through, and that
+// should hold for every story, not just whichever one currently lacks
+// a real video. playQuickSketchDemo() now plays the same drawingSvg()
+// stages on its own, on a timer, with no buttons/captions/dots visible
+// — the same "watch it play, no skipping, then it's your turn"
+// contract attachStoryTeacherVideo() already uses for Story A's real
+// video, just driven by setInterval instead of an 'ended' event.
+// paintDrawStage() is the visual-only half (just fades in the SVG
+// layers for the current STATE.drawStageIndex) — no DOM elements left
+// to update now that the caption/dots/buttons markup is gone.
+function paintDrawStage(){
   document.querySelectorAll('.dstage').forEach(g => {
     const s = parseInt(g.dataset.stage, 10);
     if (g.classList.contains('guide-lines')) {
@@ -2174,38 +2209,30 @@ function applyDrawStage(){
     }
     g.style.opacity = (s <= STATE.drawStageIndex + 1) ? '1' : '0';
   });
-  document.getElementById('drawCaption').textContent = steps[STATE.drawStageIndex].instruction;
-  document.getElementById('drawTeachingNote').textContent = steps[STATE.drawStageIndex].teachingNote || '';
-  document.getElementById('drawPrevBtn').disabled = STATE.drawStageIndex === 0;
-  document.querySelectorAll('.draw-dot').forEach((el, i) => {
-    el.classList.toggle('done', i < STATE.drawStageIndex);
-    el.classList.toggle('current', i === STATE.drawStageIndex);
-  });
-  const nextBtn = document.getElementById('drawNextBtn');
-  const atEnd = STATE.drawStageIndex >= steps.length - 1;
-  nextBtn.disabled = atEnd;
-  nextBtn.textContent = atEnd ? "Guide Complete ✓" : 'Next Step →';
-  if (atEnd && !STATE.reachedEnd) {
-    STATE.reachedEnd = true;
-    unlockStudentPanel();
-  }
 }
-function drawStep(dir){
+function playQuickSketchDemo(){
   const steps = LESSON_DATA.drawing_steps;
-  STATE.drawStageIndex = Math.max(0, Math.min(steps.length - 1, STATE.drawStageIndex + dir));
-  applyDrawStage();
-}
-function drawReplay(){
   STATE.drawStageIndex = 0;
-  applyDrawStage();
-  const steps = LESSON_DATA.drawing_steps;
+  paintDrawStage();
   let i = 0;
   const timer = setInterval(() => {
     i++;
-    if (i >= steps.length) { clearInterval(timer); return; }
-    STATE.drawStageIndex = i;
-    applyDrawStage();
-  }, 950);
+    STATE.drawStageIndex = Math.min(i, steps.length - 1);
+    paintDrawStage();
+    if (i >= steps.length - 1) {
+      clearInterval(timer);
+      if (!STATE.reachedEnd) {
+        STATE.reachedEnd = true;
+        unlockStudentPanel();
+      }
+    }
+  }, 900);
+  // Pushed into the same cleanup bucket afterRenderStoryPractice's
+  // reveal timers use (cleanupStoryPractice clears it on Previous/
+  // Next away from this story) — clearTimeout and clearInterval share
+  // one id space in every browser, so a clearTimeout-based cleanup
+  // list safely cancels an interval id too.
+  _storyRevealTimers.push(timer);
 }
 
 /* ============================================================
@@ -2743,33 +2770,22 @@ function nextStep(){
 // Choose Your Story, because this function only ever thinks in whole
 // top-level steps.
 //
-// PRACTICE-SECTION RESTRUCTURE carries this same fix forward for the
-// new story_* steps: each one's teacher's-guide panel still has its
-// own drawStageIndex sub-sequence (now shared with the always-visible
-// right-panel canvas, rather than a separate "practice" phase — see
-// applyDrawStage's own comment), so the same "step back through the
-// sub-stage first" logic applies. Checked by id PREFIX (any of the
-// three story_* steps), not by id list, so this doesn't need editing
-// if a lesson like this ever grew a fourth story. See
-// choosePreferPaper/savePracticeDrawingForStory's own STATE.
-// storyResults reset for the other half of this pattern (re-entering
-// a story via Previous+Next always starts its reveal fresh, never
-// stale mid-way state from an earlier pass).
+// PRACTICE-SECTION RESTRUCTURE originally carried this same fix
+// forward for the new story_* steps too, special-casing a Previous
+// press to step back through the teacher panel's own drawStageIndex
+// sub-sequence one frame at a time before leaving the story. That
+// special-case is gone as of the round-3 quick-sketch redesign: the
+// teacher panel's drawing demo (playQuickSketchDemo) is no longer
+// manually stepped by the student at all — it plays on its own, same
+// as Story A's video — so there's no sub-stage left for Previous to
+// walk back through. Previous from any story_* step now just leaves
+// the story via the plain top-level path below; cleanupStoryPractice
+// cancels any pending reveal/demo timers. See choosePreferPaper/
+// savePracticeDrawingForStory's own STATE.storyResults reset for the
+// other half of this pattern (re-entering a story via Previous+Next
+// always starts its reveal fresh, never stale mid-way state from an
+// earlier pass).
 function prevStep(){
-  const current = STEPS[STATE.stepIndex];
-  if (current && current.id && current.id.indexOf('story_') === 0) {
-    if (STATE.drawStageIndex > 0) {
-      playStepAdvanceTone();
-      drawStep(-1);
-      return;
-    }
-    // else: the reveal (typed line/countdown) is still playing, or
-    // the two-panel round has just mounted at its first stage —
-    // either way there's no in-step sub-stage left to step back
-    // through, so fall through to the normal top-level behavior
-    // (leaves this story entirely; cleanupStoryPractice cancels any
-    // pending reveal timers).
-  }
   if (STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex--; renderCurrentStep(); }
 }
 function goToStep(i){

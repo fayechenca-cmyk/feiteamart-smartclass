@@ -260,6 +260,12 @@
     // demonstrates, so the sequence teaches something concrete rather
     // than just showing shapes appear (Faye: "didn't actually learn
     // anything" from round 1's version).
+    // Round 3 (quick-sketch redesign): index.html no longer displays
+    // either field — the per-stage caption/teaching-note text went
+    // away with the manual step-by-step tutorial UI it belonged to
+    // (see index.html's playQuickSketchDemo comment). Left in place
+    // rather than deleted in case a future per-stage caption format
+    // comes back in some other form.
     drawing_steps: [
       {
         instruction: 'Start with the big world.',
