@@ -3288,7 +3288,7 @@
       }
     }
     
-    const profile = {
+    let profile = {
       id: user.id,
       studentCode: null,                  // null → Supabase user (not legacy code)
       supabaseUserId: user.id,
@@ -3305,6 +3305,23 @@
       createdAt: existing ? existing.createdAt : Date.now(),
       lastSeenAt: Date.now()
     };
+
+    // PLATFORM-WIDE FIX: fei_user_profile is sessionStorage (deliberate,
+    // Safari-iframe fix — untouched here), so `existing` above is null
+    // whenever the browser was fully closed since the last visit — this
+    // was the confirmed root cause of "lesson restarts from step 1."
+    // Supabase is the durable backup: merge in whatever's saved there
+    // (see core/progress.js's platform-wide-fix note) before this
+    // profile gets written to sessionStorage, so a resumed session
+    // picks up the real step position even with no `existing` at all.
+    // Best-effort — a failed/slow lookup just leaves `profile` as built
+    // above, same as before this fix existed.
+    if (window.FEIProgress) {
+      try {
+        profile = await window.FEIProgress.loadForProfile(profile);
+      } catch (e) { console.warn('[onAuthSuccess] FEIProgress restore failed (non-fatal)', e); }
+    }
+
     saveProfile(profile);
 
     // Pre-load access status (creates row if needed) and sync membership

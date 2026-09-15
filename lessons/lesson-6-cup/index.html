@@ -11108,27 +11108,30 @@ function continueJourney() {
 
   // Background check: does Supabase have more progress than this device?
   // (e.g. student continued on another device since this browser last synced)
-  if (window.FEIProgress && profile.studentCode) {
-    FEIProgress.load(profile.studentCode).then(supabaseProgress => {
-      if (supabaseProgress) {
-        const merged = FEIProgress.mergeWithLocal(supabaseProgress, profile);
-        if ((merged.totalXP || 0) > (profile.totalXP || 0)) {
-          // Supabase has more progress than local — update
-          state.currentStepIndex = merged.currentStepIdx || 0;
-          state.xp = merged.totalXP || 0;
-          state.completedSteps = [];
-          for (let i = 0; i < state.currentStepIndex; i++) {
-            state.completedSteps.push(i);
-          }
-          UserProfile.update({
-            currentStepIdx: merged.currentStepIdx,
-            totalXP: merged.totalXP,
-            completedLessons: merged.completedLessons
-          });
-          renderStep();
-          renderRailDots();
-          console.log('[FEIProgress] Updated from Supabase on re-entry');
+  // PLATFORM-WIDE FIX: was gated on profile.studentCode only, so this
+  // cross-device catch-up NEVER ran for real Supabase-Auth accounts
+  // (email/Google sign-in always have studentCode: null — see index.
+  // html's onAuthSuccess). Now uses FEIProgress.loadForProfile, which
+  // picks student_code or supabaseUserId, whichever the profile has —
+  // see core/progress.js's platform-wide-fix note.
+  if (window.FEIProgress && (profile.studentCode || profile.supabaseUserId)) {
+    FEIProgress.loadForProfile(profile).then(merged => {
+      if (merged && (merged.totalXP || 0) > (profile.totalXP || 0)) {
+        // Supabase has more progress than local — update
+        state.currentStepIndex = merged.currentStepIdx || 0;
+        state.xp = merged.totalXP || 0;
+        state.completedSteps = [];
+        for (let i = 0; i < state.currentStepIndex; i++) {
+          state.completedSteps.push(i);
         }
+        UserProfile.update({
+          currentStepIdx: merged.currentStepIdx,
+          totalXP: merged.totalXP,
+          completedLessons: merged.completedLessons
+        });
+        renderStep();
+        renderRailDots();
+        console.log('[FEIProgress] Updated from Supabase on re-entry');
       }
     }).catch(e => console.warn('[FEIProgress] Re-entry check failed (non-fatal):', e));
   }
