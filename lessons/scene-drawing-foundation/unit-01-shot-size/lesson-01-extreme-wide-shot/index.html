@@ -118,6 +118,34 @@
   (playQuickSketchDemo) stays in the code as the fallback for whichever
   story lacks one, but nothing currently exercises that path live.
 
+  ROUND 5 (same live path, same panel, all three stories) — two real
+  fixes plus a design addition, prompted by Faye watching the live
+  panel once all three videos were in:
+  - REMOVED THE "Your Turn" LOCK: the right (student canvas) panel no
+    longer waits for the left side to finish — it's open the moment
+    the round mounts, so a student can sketch along in real time
+    instead of only after watching. STATE.reachedEnd and the .locked/
+    .practice-lock-overlay markup+CSS are gone; unlockStudentPanel()
+    is renamed showStudentContinue() and called once immediately on
+    mount (see its own comment).
+  - HEIGHT MISMATCH FIX: the video (16:9) is shorter than the right
+    panel's canvas + tool rows + controls, which used to leave the
+    left panel visibly shorter with blank space under the video.
+    Fixed by adding real content below the video (next bullet), not
+    by forcing equal heights artificially.
+  - REFERENCE STRIP (renderReferenceStrip/paintReferenceStrip, video
+    branch only): 3 frozen frames (start/midpoint/final,
+    REF_STAGE_INDICES) of the SAME shared drawingSvg() progression the
+    no-video fallback already uses, plus "This is just a reference —
+    you can always sketch it your own way." underneath. Deliberately a
+    small PROGRESSION, not one polished "final" image — Faye was
+    explicit that she doesn't want students feeling there's one
+    correct way to draw the scene, and a process strip reads as "here
+    is one way this could build up," not "copy this." This was shared
+    as a screenshot for Faye's reaction before pushing, per her
+    request — if she'd rather see all 5 stages, or a different
+    layout, REF_STAGE_INDICES/the thumbnail count is a one-line change.
+
   SCOPE NOTES (flagged, not silently assumed):
   - Step 5 (the shared teacher's-guide sequence inside every story's
     two-panel round — unaffected by this round's step-count change)
@@ -522,17 +550,28 @@ button{font-family:inherit;}
    sizing here, scoped to this context only. */
 .practice-panel-video{padding:14px;}
 .practice-panel-video .video-stage{aspect-ratio:16/9;max-height:none;height:auto;border-radius:3px;overflow:hidden;}
-.practice-panel-student.locked .practice-canvas-wrap,
-.practice-panel-student.locked .practice-tool-row,
-.practice-panel-student.locked .draw-controls,
-.practice-panel-student.locked .prefer-paper-btn{opacity:.25;pointer-events:none;}
-.practice-lock-overlay{
-  position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:0 24px;
-  font-size:13px;color:var(--sb-ink-soft);font-weight:600;background:rgba(250,247,238,.6);z-index:3;border-radius:4px;
-}
-.practice-panel-student.locked .practice-lock-overlay{display:flex;}
+/* Round 5: the "Your Turn" canvas is no longer gated behind the video/
+   demo finishing (.practice-panel-student.locked and .practice-lock-
+   overlay, which used to dim the canvas + tools and show "Watch the
+   quick sketch on the left first," are gone) — students can draw
+   alongside the video from the moment the panel mounts, per Faye's
+   correction that some students want to sketch along in real time. */
 .prefer-paper-btn{display:block;margin:14px auto 0;background:none;border:none;font-size:12.5px;font-weight:700;color:var(--sb-ink-soft);text-decoration:underline;cursor:pointer;}
 .prefer-paper-btn.picked{color:var(--sb-accent);}
+/* Round 5: static reference strip under the video — a few frozen
+   frames of the same shared drawingSvg() progression (see
+   renderReferenceStrip/paintReferenceStrip), for students who found
+   the video too fast to follow, and to close the height gap the
+   video's 16:9 shortness otherwise leaves under it. Deliberately a
+   PROGRESSION (several small stages), not one "final" image — Faye
+   doesn't want students feeling there's one correct final drawing to
+   copy. */
+.qs-reference{margin-top:14px;}
+.qs-reference-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sb-ink-faint);text-align:center;margin-bottom:8px;}
+.qs-reference-strip{display:flex;gap:10px;justify-content:center;}
+.qs-ref-thumb{flex:1;max-width:170px;aspect-ratio:4/3;position:relative;border:1.5px solid var(--sb-ink);border-radius:3px;background:var(--sb-paper);overflow:hidden;}
+.qs-ref-thumb svg{position:absolute;inset:0;width:100%;height:100%;}
+.qs-reference-note{text-align:center;font-size:11px;font-style:italic;color:var(--sb-ink-faint);line-height:1.45;margin-top:9px;}
 
 /* Round 6: storyboard panel frame, matching Steps 3/5 — warm paper,
    ink-toned border, quiet corner marks. "large" (the practice-section
@@ -899,8 +938,7 @@ const STEPS = [
 let STATE = {
   stepIndex: 0,
   promptsRevealed: [],     // indices into story_prompts.items
-  drawStageIndex: 0,       // current story's teacher-guide stage (reset per story)
-  reachedEnd: false,       // has the teacher's guide reached its last stage THIS story (unlocks the student's canvas)
+  drawStageIndex: 0,       // current story's teacher-guide stage (reset per story; only used by the no-video fallback demo)
   storyResults: [null, null, null], // per story: null (not yet resolved) | 'digital' | 'paper'
   checkedConcepts: [],
   lessonSaved: false
@@ -1851,16 +1889,19 @@ function afterRenderPracticeIntro(){
      1. A pre-round reveal: "Story A/B/C" label (static), then the
         story's own line (LESSON_DATA.story_choices[i].title) typed
         out in quotes with a typing sound, then a 3-2-1 countdown.
-     2. A two-panel guided-drawing round: LEFT = the teacher's guide
-        (the SAME shared 5-stage drawingSvg() sequence as before —
-        still ONE shared illustration, not three bespoke ones; see
-        lesson-data.js's drawing_steps comment), RIGHT = the
-        student's own canvas (formerly the separate "Try It Yourself"
-        step, now living here). The right panel stays locked until
-        the teacher's guide reaches its last stage; once unlocked the
-        student either draws + saves digitally, or picks "I would
-        prefer to work on paper" — either way records STATE.
-        storyResults[i] and reveals Continue into the next story.
+     2. A two-panel guided-drawing round: LEFT = the quick-sketch demo
+        (a real video where Faye has supplied one, else the shared
+        5-stage drawingSvg() sequence — see lesson-data.js's
+        drawing_steps comment), RIGHT = the student's own canvas
+        (formerly the separate "Try It Yourself" step, now living
+        here). The right panel is open from the moment the round
+        mounts — round 5 removed the earlier "locked until the left
+        side finishes" gate, so a student can sketch along in real
+        time instead of only after watching (see
+        renderTwoPanelMarkup's own comment). The student either draws
+        + saves digitally, or picks "I would prefer to work on paper"
+        — either way records STATE.storyResults[i] and reveals
+        Continue into the next story.
    cleanupStoryPractice (not a bare reset) is this step's cleanup —
    see that function's own comment on why the reveal sequence needs
    its own timer cancellation, same pattern Lesson 02 uses for its
@@ -1931,7 +1972,7 @@ function cleanupStoryPractice(){
   _storyRevealTimers = [];
 }
 // Set at the start of every afterRenderStoryPractice call — lets the
-// shared drawStep/applyDrawStage/savePracticeDrawingForStory/
+// shared paintDrawStage/playQuickSketchDemo/savePracticeDrawingForStory/
 // choosePreferPaper functions below know which story is currently
 // active without each of the three steps needing its own bespoke
 // copy of them.
@@ -1955,7 +1996,6 @@ function afterRenderStoryPractice(story, i){
   _currentStory = story;
   _currentStoryIndex = i;
   STATE.drawStageIndex = 0;
-  STATE.reachedEnd = false;
   _storyRevealTimers = [];
   _lastTypeTickAt = 0;
   const lineEl = document.getElementById('practiceRevealLine');
@@ -1980,36 +2020,34 @@ function afterRenderStoryPractice(story, i){
     stepInner.innerHTML = renderTwoPanelMarkup(story, i);
     if (story.demoVideoStreamId) {
       attachStoryTeacherVideo(story);
+      paintReferenceStrip();
     } else {
       playQuickSketchDemo();
     }
     initPracticeCanvas();
+    // Round 5: the right panel is never locked now — show the (ghost,
+    // if unresolved) Continue immediately on mount instead of waiting
+    // for the video/demo to finish. See showStudentContinue's own
+    // comment for why.
+    showStudentContinue();
   }
 }
-// Real teacher video (LEFT panel) for whichever story has one, in
-// place of the platform-led drawingSvg() stage sequence — same "no
-// skip, the only way forward is the real 'ended' event" convention
-// Step 1's intro video already established (see afterRenderIntroVideo
-// for the pattern this mirrors), generalized here to "unlock the
-// student's own canvas" instead of "advance to the next step" (the
-// two-panel round's own equivalent of finishing the teacher's side —
-// see applyDrawStage's matching branch for the drawingSvg case).
+// Real quick-sketch video (LEFT panel) for whichever story has one.
+// Round 5 simplification: this used to also own "unlock the student's
+// canvas on 'ended'" (mirroring Step 1's intro-video pattern) — that
+// unlock concept is gone along with the lock itself (see
+// showStudentContinue's comment), so this is back to just playing the
+// video and handling the one real failure mode that still matters:
+// browsers blocking unmuted autoplay. Same tap-to-play fallback Step
+// 1's intro video already established.
 function attachStoryTeacherVideo(story){
-  let unlocked = false;
-  const unlockOnce = () => {
-    if (unlocked) return;
-    unlocked = true;
-    STATE.reachedEnd = true;
-    unlockStudentPanel();
-  };
   const sdk = document.createElement('script');
   sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
   sdk.onload = () => {
     try {
       const iframe = document.getElementById('storyTeacherVideoFrame');
       const player = window.Stream && iframe ? window.Stream(iframe) : null;
-      if (!player) { unlockOnce(); return; }
-      player.addEventListener('ended', unlockOnce);
+      if (!player) return;
       let started = false;
       player.addEventListener('play', () => {
         started = true;
@@ -2030,14 +2068,47 @@ function attachStoryTeacherVideo(story){
       }, 1200);
     } catch (e) {
       console.warn('[story_teacher_video] Stream SDK attach failed', e);
-      unlockOnce(); // genuine failure — never leave the student stuck behind a locked canvas
     }
   };
   sdk.onerror = () => {
     console.warn('[story_teacher_video] Stream SDK failed to load');
-    unlockOnce();
   };
   document.head.appendChild(sdk);
+}
+// Round 5: a few frozen frames of the shared drawingSvg() progression,
+// shown below the video as a static double-check reference — reuses
+// drawingSvg() verbatim (same markup as the no-video fallback demo),
+// just painted at fixed stages instead of animated. REF_STAGE_INDICES
+// picks 3 representative checkpoints (start / midpoint / final)
+// rather than all 5 — legible at this panel's width; the full 5-stage
+// version is one line away (swap the array) if Faye would rather see
+// every stage. Deliberately NOT the video's own final frame — this is
+// the platform's shared illustration, a different piece of art from
+// whatever specific scene each video actually draws, so it reads as
+// "here's the general technique," not "here's what you should have
+// drawn," matching the "just a reference" note under it.
+const REF_STAGE_INDICES = [0, 2, 4];
+function renderReferenceStrip(){
+  const thumbs = REF_STAGE_INDICES.map(() => `<div class="qs-ref-thumb">${drawingSvg()}</div>`).join('');
+  return `
+    <div class="qs-reference" id="storyReferenceStrip">
+      <div class="qs-reference-label">Reference — how the sketch builds up</div>
+      <div class="qs-reference-strip">${thumbs}</div>
+      <div class="qs-reference-note">This is just a reference — you can always sketch it your own way.</div>
+    </div>
+  `;
+}
+function paintReferenceStrip(){
+  const container = document.getElementById('storyReferenceStrip');
+  if (!container) return;
+  container.querySelectorAll('.qs-ref-thumb').forEach((thumbEl, idx) => {
+    const stageIndex = REF_STAGE_INDICES[idx];
+    thumbEl.querySelectorAll('.dstage').forEach(g => {
+      const s = parseInt(g.dataset.stage, 10);
+      if (g.classList.contains('guide-lines')) { g.style.opacity = stageIndex === 0 ? '1' : '0.1'; return; }
+      g.style.opacity = (s <= stageIndex + 1) ? '1' : '0';
+    });
+  });
 }
 // Redesign (Faye's correction, round 3 on this panel): this LEFT
 // panel is a quick idea sketch of the scene, not a formal step-by-step
@@ -2054,8 +2125,16 @@ function attachStoryTeacherVideo(story){
 // in case Faye prefers different copy (e.g. "See the Idea").
 function renderTwoPanelMarkup(story, i){
   const hasVideo = !!story.demoVideoStreamId;
+  // Round 5: the video branch now appends a static reference strip
+  // below it — the video (16:9) is shorter than the canvas + tools
+  // column on the right, which used to leave this panel visibly
+  // shorter/emptier than its neighbor; the strip both fills that gap
+  // and gives students something to double-check the (fast, one-take)
+  // video against. The no-video fallback branch doesn't need this —
+  // its drawingSvg() is already the same 4:3 ratio as the canvas next
+  // to it, so the two panels are already close in height.
   const teacherPanelInner = hasVideo
-    ? renderVideoStage(story.demoVideoStreamId, 'Quick Sketch', 'storyTeacherVideoFrame', null, null)
+    ? renderVideoStage(story.demoVideoStreamId, 'Quick Sketch', 'storyTeacherVideoFrame', null, null) + renderReferenceStrip()
     : `<div class="draw-canvas-wrap large">${drawingSvg()}</div>`;
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
@@ -2070,10 +2149,9 @@ function renderTwoPanelMarkup(story, i){
         <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
         ${teacherPanelInner}
       </div>
-      <div class="practice-panel practice-panel-student locked" id="practiceStudentPanel">
+      <div class="practice-panel practice-panel-student" id="practiceStudentPanel">
         <div class="practice-panel-label">Your Turn</div>
         <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
-        <div class="practice-lock-overlay">Watch the quick sketch on the left first →</div>
         <div class="practice-tool-row">${tools}</div>
         <div class="practice-tool-row">${colors}</div>
         <div class="draw-controls">
@@ -2086,9 +2164,13 @@ function renderTwoPanelMarkup(story, i){
     </div>
   `;
 }
-function unlockStudentPanel(){
-  const panel = document.getElementById('practiceStudentPanel');
-  if (panel) panel.classList.remove('locked');
+// Round 5 rename (was unlockStudentPanel): the panel it used to
+// unlock is never locked now, so its only remaining job is showing
+// Continue — ghost until the student has actually resolved this story
+// (saved a drawing or picked paper), real once they have. Called once
+// immediately on mount instead of being gated behind the video/demo
+// finishing.
+function showStudentContinue(){
   const resolved = STATE.storyResults[_currentStoryIndex] != null;
   showContinue('Continue →', nextStep, { ghost: !resolved });
 }
@@ -2197,10 +2279,10 @@ function drawingSvg(){
 // quick idea sketch, not a formal lesson to click through, and that
 // should hold for every story, not just whichever one currently lacks
 // a real video. playQuickSketchDemo() now plays the same drawingSvg()
-// stages on its own, on a timer, with no buttons/captions/dots visible
-// — the same "watch it play, no skipping, then it's your turn"
-// contract attachStoryTeacherVideo() already uses for Story A's real
-// video, just driven by setInterval instead of an 'ended' event.
+// stages on its own, on a timer, with no buttons/captions/dots visible.
+// Round 5: it no longer needs to unlock anything at the end (the
+// right panel is never locked — see showStudentContinue's comment),
+// so it just plays through once and stops on the final stage.
 // paintDrawStage() is the visual-only half (just fades in the SVG
 // layers for the current STATE.drawStageIndex) — no DOM elements left
 // to update now that the caption/dots/buttons markup is gone.
@@ -2228,13 +2310,7 @@ function playQuickSketchDemo(){
     i++;
     STATE.drawStageIndex = Math.min(i, steps.length - 1);
     paintDrawStage();
-    if (i >= steps.length - 1) {
-      clearInterval(timer);
-      if (!STATE.reachedEnd) {
-        STATE.reachedEnd = true;
-        unlockStudentPanel();
-      }
-    }
+    if (i >= steps.length - 1) clearInterval(timer);
   }, 900);
   // Pushed into the same cleanup bucket afterRenderStoryPractice's
   // reveal timers use (cleanupStoryPractice clears it on Previous/
@@ -2410,9 +2486,10 @@ function initPracticeCanvas(){
 }
 // Save (digital) or choosePreferPaper (paper) — either way resolves
 // STATE.storyResults[_currentStoryIndex] and reveals a real (non-
-// ghost) Continue. Both only ever run once the teacher's guide has
-// reached its end and unlockStudentPanel() has removed the .locked
-// class, so there's no need to re-check that here.
+// ghost) Continue. Round 5: the right panel is open from the moment
+// the round mounts (no more "only once the left side finishes" gate),
+// so either of these can now genuinely fire while the video/demo is
+// still playing — no gating to check here either way.
 async function savePracticeDrawingForStory(){
   const canvas = document.getElementById('practiceCanvas');
   const btn = document.getElementById('practiceSaveBtn');
