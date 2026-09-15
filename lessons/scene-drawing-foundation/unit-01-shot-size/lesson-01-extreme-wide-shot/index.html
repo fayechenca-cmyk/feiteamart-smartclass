@@ -471,6 +471,14 @@ button{font-family:inherit;}
 @media(max-width:820px){.practice-two-panel{grid-template-columns:1fr;}}
 .practice-panel{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:18px 16px 20px;position:relative;}
 .practice-panel-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);text-align:center;margin-bottom:10px;}
+/* Real teacher video in the teacher panel (Story A) — .video-stage's
+   own min-height media query sizes its height off 62vw, tuned for
+   Step 1's full-viewport-width video; inside this narrower ~half-
+   width panel that formula would make the video far taller than the
+   panel is wide, so it's overridden back to plain aspect-ratio
+   sizing here, scoped to this context only. */
+.practice-panel-video{padding:14px;}
+.practice-panel-video .video-stage{aspect-ratio:16/9;max-height:none;height:auto;border-radius:3px;overflow:hidden;}
 .practice-panel-student.locked .practice-canvas-wrap,
 .practice-panel-student.locked .practice-tool-row,
 .practice-panel-student.locked .draw-controls,
@@ -1937,13 +1945,86 @@ function afterRenderStoryPractice(story, i){
     practiceColor = PRACTICE_COLORS[0];
     practiceTool = 'fineliner';
     stepInner.innerHTML = renderTwoPanelMarkup(story, i);
-    applyDrawStage();
+    if (story.demoVideoStreamId) {
+      attachStoryTeacherVideo(story);
+    } else {
+      applyDrawStage();
+    }
     initPracticeCanvas();
   }
 }
+// Real teacher video (LEFT panel) for whichever story has one, in
+// place of the platform-led drawingSvg() stage sequence — same "no
+// skip, the only way forward is the real 'ended' event" convention
+// Step 1's intro video already established (see afterRenderIntroVideo
+// for the pattern this mirrors), generalized here to "unlock the
+// student's own canvas" instead of "advance to the next step" (the
+// two-panel round's own equivalent of finishing the teacher's side —
+// see applyDrawStage's matching branch for the drawingSvg case).
+function attachStoryTeacherVideo(story){
+  let unlocked = false;
+  const unlockOnce = () => {
+    if (unlocked) return;
+    unlocked = true;
+    STATE.reachedEnd = true;
+    unlockStudentPanel();
+  };
+  const sdk = document.createElement('script');
+  sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  sdk.onload = () => {
+    try {
+      const iframe = document.getElementById('storyTeacherVideoFrame');
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (!player) { unlockOnce(); return; }
+      player.addEventListener('ended', unlockOnce);
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[story_teacher_video] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
+    } catch (e) {
+      console.warn('[story_teacher_video] Stream SDK attach failed', e);
+      unlockOnce(); // genuine failure — never leave the student stuck behind a locked canvas
+    }
+  };
+  sdk.onerror = () => {
+    console.warn('[story_teacher_video] Stream SDK failed to load');
+    unlockOnce();
+  };
+  document.head.appendChild(sdk);
+}
 function renderTwoPanelMarkup(story, i){
-  const steps = LESSON_DATA.drawing_steps;
-  const dots = steps.map((s, idx) => `<span class="draw-dot"></span>`).join('');
+  const hasVideo = !!story.demoVideoStreamId;
+  const teacherPanelInner = hasVideo
+    ? renderVideoStage(story.demoVideoStreamId, "Teacher's Guide", 'storyTeacherVideoFrame', null, null)
+    : (() => {
+        const steps = LESSON_DATA.drawing_steps;
+        const dots = steps.map(() => `<span class="draw-dot"></span>`).join('');
+        return `
+          <div class="draw-canvas-wrap large">${drawingSvg()}</div>
+          <div class="draw-progress">${dots}</div>
+          <div class="draw-caption" id="drawCaption"></div>
+          <div class="draw-teaching-note" id="drawTeachingNote"></div>
+          <div class="draw-controls">
+            <button class="draw-btn" id="drawPrevBtn" onclick="drawStep(-1)">← Previous</button>
+            <button class="draw-btn" onclick="drawReplay()">↺ Replay</button>
+            <button class="draw-btn primary" id="drawNextBtn" onclick="drawStep(1)">Next Step →</button>
+          </div>
+        `;
+      })();
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
     const t = PRACTICE_TOOLS[key];
@@ -1952,17 +2033,9 @@ function renderTwoPanelMarkup(story, i){
   return `
     <div class="practice-story-label">Story ${String.fromCharCode(65 + i)}: “${story.title}”</div>
     <div class="practice-two-panel">
-      <div class="practice-panel practice-panel-teacher">
+      <div class="practice-panel practice-panel-teacher${hasVideo ? ' practice-panel-video' : ''}">
         <div class="practice-panel-label">Teacher's Guide</div>
-        <div class="draw-canvas-wrap large">${drawingSvg()}</div>
-        <div class="draw-progress">${dots}</div>
-        <div class="draw-caption" id="drawCaption"></div>
-        <div class="draw-teaching-note" id="drawTeachingNote"></div>
-        <div class="draw-controls">
-          <button class="draw-btn" id="drawPrevBtn" onclick="drawStep(-1)">← Previous</button>
-          <button class="draw-btn" onclick="drawReplay()">↺ Replay</button>
-          <button class="draw-btn primary" id="drawNextBtn" onclick="drawStep(1)">Next Step →</button>
-        </div>
+        ${teacherPanelInner}
       </div>
       <div class="practice-panel practice-panel-student locked" id="practiceStudentPanel">
         <div class="practice-panel-label">Your Turn</div>

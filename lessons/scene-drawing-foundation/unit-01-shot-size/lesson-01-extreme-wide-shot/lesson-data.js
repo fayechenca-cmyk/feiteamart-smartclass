@@ -215,21 +215,36 @@
     // text during its reveal sequence (index.html's
     // renderStoryPractice) — the exact same three lines the old
     // Choose Your Story step showed, unchanged.
+    // `demoVideoStreamId` (real teacher video for the LEFT panel of a
+    // story's two-panel guided-drawing round — see index.html's
+    // renderTwoPanelMarkup/attachStoryTeacherVideo). Only Story A has
+    // one so far, real and produced by Faye; null means that story
+    // still shows the platform-led drawingSvg() stage sequence
+    // instead (unchanged, not a placeholder for the video — the two
+    // are genuinely different teaching mechanisms, this lesson uses
+    // both side by side until Faye supplies real video for B and C
+    // too). Not the same field/mechanism as the old, removed
+    // teacher_demo step ("Let's Draw Together") — that was a separate
+    // full-bleed step shown after the drawing; this replaces the
+    // drawing guide itself for whichever story has one.
     story_choices: [
       {
         id: 'spring',
         title: 'Winter has passed. Is spring getting closer?',
-        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.'
+        direction: 'Large quiet winter/spring transitional landscape. Poetic, spacious, calm.',
+        demoVideoStreamId: 'ecc1b06c9eb16a7b2255ca6e4e0ea358'
       },
       {
         id: 'forest',
         title: 'Late at night, I became lost in the forest.',
-        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.'
+        direction: 'Side-view forest composition. Trees overlap other trees. Large foreground trunks. Small figure. No obvious one-point-perspective road.',
+        demoVideoStreamId: null
       },
       {
         id: 'newworld',
         title: 'After travelling for a long time, I suddenly discovered an incredible new world.',
-        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.'
+        direction: 'Wonder / discovery. Large unknown world. Small traveler. Distinct from A and B.',
+        demoVideoStreamId: null
       }
     ],
 
