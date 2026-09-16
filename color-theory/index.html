@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Color Theory</title>
+<meta name="description" content="Color Theory — a standalone Skill course. Mix a real gouache-style palette from Red, Yellow and Blue, then discover analogous and complementary color through play.">
+<meta name="keywords" content="Skill, Color Theory, Gouache, Painting, Color Mixing">
+
+<!--
+  LIVE LESSON — new course, built per Faye's "Color Theory — Interactive
+  Framework" spec (2026-09-16), round 1 of an open-ended number of
+  rounds (what comes after Lesson 3 is intentionally undecided; Faye
+  reviews this round first).
+
+  WHAT THIS IS: a standalone Skill-tier course, sibling to art-theory/
+  (not nested under lessons/ — Color Theory is its own top-level Skills
+  subtrack in index.html, same nav depth as Art Theory, not one level
+  down inside Drawing's own sub-screen the way Scene Drawing Foundation
+  sits). One self-contained file, decided with Faye rather than split
+  per lesson: keeps the persistent cross-lesson palette state trivial
+  (no cross-file sync needed) and matches "the palette carries across
+  all three lessons" directly.
+
+  TEMPLATE: follows lessons/kandinsky-music-into-shape/index.html's
+  STAGES/goStage(id) dispatcher and its renderVideoEmbed(src,title)
+  "coming soon" fallback verbatim (both confirmed against that file
+  before writing this one) — the two things Faye's spec named
+  explicitly. Adapted, not copied wholesale: STAGES entries here use a
+  Scene-Drawing-Foundation-style {id,render,afterRender} shape instead
+  of kandinsky's zone/music fields (this course has neither concept),
+  and every meaningful screen — including each lesson's internal
+  sub-parts — is its OWN flat top-level STAGES entry, never a nested
+  sub-stage tracked in extra state. That's deliberate, not incidental:
+  a step with its own internal sub-stage state needs goNext/goPrev to
+  know about that sub-stage specially, which is exactly the bug class
+  Scene Drawing Foundation hit and fixed earlier this project (see
+  lessons/scene-drawing-foundation/.../lesson-01-extreme-wide-shot/
+  index.html's own prevStep comment for the original diagnosis) — flat
+  stages sidestep it entirely, no special-casing needed here.
+
+  MEDIUM: gouache — diluted it behaves like watercolor, thick like an
+  opaque paint, so mixing here deliberately reads as a loaded brush
+  (soft edges, stroke texture, slight opacity variation) rather than a
+  flat CSS gradient. See paintStrokeSwatch, the one shared canvas-based
+  mixing widget every guided mix in Lessons 1-3 reuses — built once,
+  used three times, per the spec's own instruction.
+
+  PERSISTENT PALETTE: one evolving object carried across all three
+  lessons, sessionStorage (not localStorage — the platform's Safari-
+  iframe fix; see index.html's own PROFILE_KEY comment), under
+  'fei_color_theory_palette' — a NEW key scoped to this course only,
+  never touching fei_user_profile/totalXP/completedLessons/
+  FOUNDATION_A_PATH. See loadPalette/savePalette.
+
+  ACCESS CONTROL: deliberately NOT gated this round — confirmed with
+  Faye rather than assumed. Matches every Scene Drawing Foundation
+  lesson shipped so far (each one flagged the same "not gated, unresolved
+  free/paid TODO" rather than wiring FEIAccess.canOpenLesson). Wiring
+  the real "Lesson 2+ paywalled" rule would mean adding this course's
+  stage ids to core/access.js's FREE_SKILLS allowlist AND calling
+  canOpenLesson on load — neither done here, flagged instead.
+
+  BADGE/PROGRESS: totalXP/completedLessons bump via the existing
+  fei_user_profile sessionStorage convention (same as every other live
+  lesson) once the student finishes Lesson 3 — see finishCourse(). No
+  core/course-badge-registry.js entry yet — premature while what comes
+  after Lesson 3 is still undecided (confirmed with Faye, not assumed).
+
+  SCOPE (confirmed with Faye before building): exactly Intro + Lesson 1
+  (Primary) + Lesson 2 (Analogous) + Lesson 3 (Complementary), all real
+  Cloudflare Stream video deferred to renderVideoEmbed's own "coming
+  soon" fallback. Nothing beyond Lesson 3 this round.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Paint colors — reused from sibling lessons' own real values, not
+     invented fresh: --red/--yellow are My Sweet Fridge's --cherry/
+     --mustard (lessons/thiebaud-my-sweet-fridge/index.html), --blue is
+     Kandinsky's own --blue. Ties this course's "bright and colorful,
+     closer to My Sweet Fridge" tone to real precedent rather than a
+     new arbitrary palette. */
+  --paint-red:#d8432c;
+  --paint-yellow:#e2a83f;
+  --paint-blue:#2d5fa8;
+  --paint-white:#faf8f2;
+  --paint-black:#292420;
+
+  --paper:#fdf8ec;
+  --paper-deep:#f4e8cc;
+  --panel:#ffffff;
+  --ink:#2b2438;
+  --ink-soft:rgba(43,36,56,.66);
+  --ink-faint:rgba(43,36,56,.42);
+  --line:rgba(43,36,56,.14);
+  --accent:#d8432c;
+  --accent-deep:#ad3018;
+  --mint:#4f9d84;
+  --lavender:#8a76b8;
+  --radius-sm:10px;
+  --radius-md:14px;
+  --radius-lg:22px;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;overflow-x:hidden;
+}
+.display{font-family:'Space Grotesk',sans-serif;}
+button{font-family:inherit;}
+
+/* ============================================================
+   SHELL — minimal chrome, full-viewport stage. Same "Learning Canvas"
+   shape as Scene Drawing Foundation (low-chrome, full-screen moments),
+   built fresh here rather than sharing that file's CSS wholesale — its
+   :root tokens are the muted storyboard palette this course explicitly
+   should NOT look like (see file header — "bright and colorful,
+   closer to My Sweet Fridge than the platform's usual muted palette").
+============================================================ */
+#app{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;position:sticky;top:0;z-index:80;
+  background:linear-gradient(var(--paper) 70%, transparent);
+  pointer-events:none;
+}
+#topbar > *{pointer-events:auto;}
+.exit-link{font-size:12px;color:var(--ink-faint);text-decoration:none;font-weight:700;letter-spacing:.2px;transition:color .15s ease;}
+.exit-link:hover{color:var(--accent-deep);}
+.prev-step-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px 5px 10px;font-weight:700;letter-spacing:.2px;
+  cursor:pointer;display:flex;align-items:center;gap:3px;transition:border-color .15s ease,color .15s ease;
+}
+.prev-step-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-deep);}
+.prev-step-btn:active:not(:disabled){transform:scale(.96);}
+.prev-step-btn:disabled{opacity:.32;cursor:default;}
+.rail{display:flex;gap:6px;align-items:center;}
+.exit-link-mobile{display:none;}
+@media(max-width:420px){.exit-link-full{display:none;}.exit-link-mobile{display:inline;}}
+.rail-dot{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .2s ease,transform .2s ease;}
+.rail-dot.done{background:var(--accent);}
+.rail-dot.current{background:var(--accent-deep);transform:scale(1.5);}
+
+#stage{flex:1;position:relative;display:flex;flex-direction:column;}
+.step{flex:1;display:flex;flex-direction:column;animation:stepIn .4s ease;}
+@keyframes stepIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.step-inner{
+  flex:1;width:100%;max-width:760px;margin:0 auto;
+  padding:6px 22px 120px;display:flex;flex-direction:column;justify-content:center;
+}
+.step-inner.wide{max-width:980px;}
+.step-inner.bleed{max-width:none;padding:0 0 120px;}
+
+.step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:800;margin-bottom:10px;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--ink);}
+.step-sub{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 auto 22px;line-height:1.6;max-width:520px;}
+
+.continue-dock{
+  position:fixed;left:0;right:0;bottom:0;padding-bottom:clamp(18px,4vh,34px);
+  display:flex;justify-content:center;align-items:flex-end;z-index:70;pointer-events:none;
+  height:104px;background:linear-gradient(transparent, var(--paper) 62%);
+}
+.continue-dock:empty{background:none;}
+.continue-btn{
+  pointer-events:none;opacity:0;transform:translateY(10px);
+  transition:opacity .35s ease,transform .35s ease;
+  font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;
+  padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
+  box-shadow:0 10px 28px rgba(216,67,44,.35);cursor:pointer;
+}
+.continue-btn.ready{opacity:1;transform:translateY(0);pointer-events:auto;}
+.continue-btn:active{transform:scale(.96);}
+.continue-btn.ghost{background:transparent;color:var(--ink-faint);box-shadow:none;font-weight:700;font-size:12.5px;}
+
+/* ============================================================
+   VIDEO SCREEN — renderVideoEmbed, ported verbatim from kandinsky-
+   music-into-shape/index.html (same function name/signature/fallback
+   markup), retoned to this course's own palette instead of that
+   file's blue/violet gradient.
+============================================================ */
+.video-embed-wrap{width:100%;max-width:820px;margin:0 auto;}
+.video-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--radius-md);overflow:hidden;}
+@media(min-height:640px){.video-stage{max-height:70vh;aspect-ratio:auto;height:min(70vh,60vw);}}
+.video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.video-tap-overlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+  padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(43,36,56,.72);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
+
+/* ============================================================
+   PALETTE TRAY — shared across Lessons 1-3, real gouache mixing-tray
+   styling (rounded wells, warm paper background) rather than a plain
+   grid of digital swatches.
+============================================================ */
+.palette-tray{
+  background:var(--panel);border:2px solid var(--ink);border-radius:var(--radius-lg);
+  padding:16px;box-shadow:6px 7px 0 rgba(43,36,56,.1);
+}
+.palette-tray-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink-faint);text-align:center;margin-bottom:12px;}
+.palette-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;}
+@media(max-width:480px){.palette-grid{grid-template-columns:repeat(5,1fr);}}
+.palette-well{
+  aspect-ratio:1;border-radius:50%;border:2px solid var(--ink);position:relative;overflow:hidden;
+  background:var(--paper-deep);display:flex;align-items:center;justify-content:center;
+}
+.palette-well.empty{border-style:dashed;border-color:var(--ink-faint);}
+.palette-well canvas{position:absolute;inset:0;width:100%;height:100%;}
+.palette-well-fixed{background:var(--paint-black);}
+.palette-well-fixed.white{background:var(--paint-white);border-color:var(--line);}
+.palette-well-num{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-size:8px;color:var(--ink-faint);font-weight:700;}
+
+/* Mixing bowl gesture — two tubes + a bowl, drag a tube into the bowl
+   to trigger the blend. */
+.mixing-stage{display:flex;align-items:center;justify-content:center;gap:26px;margin:22px 0 26px;min-height:120px;}
+.mix-tube{
+  width:64px;height:64px;border-radius:50%;border:2.5px solid var(--ink);cursor:grab;
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-weight:800;font-size:11px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);
+  box-shadow:4px 5px 0 rgba(43,36,56,.14);touch-action:none;user-select:none;position:relative;z-index:2;
+  transition:transform .15s ease;
+}
+.mix-tube:active{cursor:grabbing;}
+.mix-tube.dragging{opacity:.35;}
+.mix-bowl{
+  width:84px;height:84px;border-radius:50%;border:2.5px dashed var(--ink-faint);
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--ink-faint);
+  background:var(--paper-deep);transition:border-color .15s ease,background .15s ease,transform .15s ease;
+}
+.mix-bowl.hover{border-color:var(--accent);border-style:solid;transform:scale(1.08);background:#fff;}
+.drag-ghost{
+  position:fixed;width:64px;height:64px;border-radius:50%;border:2.5px solid var(--ink);
+  pointer-events:none;z-index:500;box-shadow:0 10px 26px rgba(0,0,0,.3);
+}
+.mix-hint{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:4px;}
+.mix-hint b{color:var(--ink);}
+
+/* ============================================================
+   Generic bright/playful bits reused across lessons.
+============================================================ */
+.big-idea-line{
+  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;
+  color:var(--accent-deep);margin:20px auto 4px;max-width:440px;line-height:1.4;
+}
+.play-btn{
+  display:block;margin:22px auto 0;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:14px;
+  padding:13px 26px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;
+  box-shadow:0 8px 20px rgba(216,67,44,.3);
+}
+.play-btn:active{transform:scale(.97);}
+.play-btn:disabled{opacity:.35;cursor:default;box-shadow:none;}
+
+/* ============================================================
+   LESSON 1 — intro triangle diagram (static) + the free-exploration
+   triangle (interactive).
+============================================================ */
+.intro-triangle-wrap{display:flex;justify-content:center;margin:14px 0 6px;}
+.intro-triangle-svg{width:100%;max-width:280px;height:auto;}
+.intro-vertex-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;fill:#fff;text-anchor:middle;}
+
+.triangle-explore-wrap{position:relative;width:100%;max-width:340px;margin:8px auto 4px;aspect-ratio:1/0.92;}
+.triangle-explore-wrap canvas{width:100%;height:100%;display:block;}
+.triangle-vertex-tag{
+  position:absolute;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:11px;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.45);pointer-events:none;transform:translate(-50%,-50%);
+}
+.explore-handle{
+  position:absolute;width:26px;height:26px;border-radius:50%;border:3px solid #fff;
+  box-shadow:0 3px 10px rgba(0,0,0,.35),0 0 0 1.5px var(--ink);
+  transform:translate(-50%,-50%);cursor:grab;touch-action:none;z-index:3;
+}
+.explore-handle:active{cursor:grabbing;}
+.explore-preview-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;}
+.explore-preview-swatch{
+  width:56px;height:56px;border-radius:50%;border:2.5px solid var(--ink);box-shadow:4px 5px 0 rgba(43,36,56,.12);
+  transition:background .05s linear;
+}
+.explore-preview-label{font-size:12.5px;color:var(--ink-soft);}
+
+/* ============================================================
+   LESSON 2 — the full 12-hue wheel, rendered as a ring of nodes
+   (clock-style layout, not an SVG pie) — simpler and just as readable
+   as "a wheel", and reused as-is for Lesson 3's complement-picking.
+============================================================ */
+.wheel-wrap{position:relative;width:100%;max-width:300px;aspect-ratio:1;margin:18px auto 8px;}
+.wheel-node{
+  position:absolute;width:15%;aspect-ratio:1;border-radius:50%;border:2px solid var(--ink);
+  transform:translate(-50%,-50%);cursor:pointer;transition:transform .2s ease,opacity .2s ease,box-shadow .2s ease;
+  box-shadow:2px 3px 0 rgba(43,36,56,.14);
+}
+.wheel-node:hover{transform:translate(-50%,-50%) scale(1.08);}
+.wheel-node.dim{opacity:.3;}
+.wheel-node.family{transform:translate(-50%,-50%) scale(1.22);box-shadow:0 4px 14px rgba(43,36,56,.3);z-index:2;border-width:3px;}
+.wheel-node.family.picked{border-color:#fff;box-shadow:0 0 0 3px var(--ink),0 4px 14px rgba(43,36,56,.3);}
+.wheel-center-label{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;color:var(--ink);
+  max-width:64%;line-height:1.3;pointer-events:none;
+}
+.wheel-hint{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:2px;}
+
+/* Lesson 2 guided-mixing "round" header — which base hue's neighbors
+   this round is about. */
+.mix-round-label{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-bottom:4px;}
+
+/* ============================================================
+   LESSON 3 — complement pop-out + collision animation + found-pairs
+   tray. .collision-clone is a temporary fixed-position element
+   (appended to body, removed after the animation) — not part of the
+   wheel's own DOM, so it can fly to the wheel's true screen center
+   regardless of which node started where.
+============================================================ */
+.collision-clone{
+  position:fixed;width:40px;height:40px;border-radius:50%;transform:translate(-50%,-50%);
+  transition:left .38s cubic-bezier(.3,.6,.3,1),top .38s cubic-bezier(.3,.6,.3,1),background .3s ease,opacity .3s ease;
+  z-index:400;pointer-events:none;box-shadow:0 6px 16px rgba(0,0,0,.25);
+}
+.found-pairs-tray{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px;min-height:52px;}
+.found-pair-card{
+  display:flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;
+  box-shadow:2px 3px 0 rgba(43,36,56,.14);animation:pairDrop .35s ease;
+}
+@keyframes pairDrop{from{transform:translateY(-14px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.found-pair-dot{width:26px;height:26px;}
+
+.neutrals-row{display:flex;justify-content:center;gap:10px;margin-top:14px;}
+.neutral-swatch{width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);overflow:hidden;position:relative;}
+.neutral-swatch canvas{position:absolute;inset:0;width:100%;height:100%;}
+
+/* ============================================================
+   COMPLETE — short wrap-up, matching this course's "extremely short
+   text" instruction.
+============================================================ */
+.complete-wrap{text-align:center;}
+.complete-check{font-size:2.6rem;margin-bottom:6px;}
+.complete-palette-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;max-width:420px;margin:18px auto 0;}
+.complete-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ink);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <a class="exit-link" href="../" title="Back to Art GPS"><span class="exit-link-full">← Skill</span><span class="exit-link-mobile">←</span></a>
+      <button class="prev-step-btn" id="prevBtn" onclick="prevStage()" disabled>‹ Back</button>
+    </div>
+    <div class="rail" id="rail"></div>
+  </div>
+  <div id="stage"></div>
+  <div class="continue-dock" id="continueDock"></div>
+</div>
+
+<script>
+/* ============================================================
+   COLOR MATH — shared by the free-exploration triangle, every guided
+   mix, and paintStrokeSwatch. Simple linear RGB blending (not a
+   pigment-accurate subtractive model) — matches the spec's own
+   framing ("a quick, playful way to feel how the three primaries
+   relate"), not a colorimetrically rigorous mixing simulation.
+============================================================ */
+function hexToRgb(hex){
+  const h = hex.replace('#','');
+  return { r: parseInt(h.substring(0,2),16), g: parseInt(h.substring(2,4),16), b: parseInt(h.substring(4,6),16) };
+}
+function rgbToHex(r,g,b){
+  const c = (n) => Math.max(0,Math.min(255,Math.round(n))).toString(16).padStart(2,'0');
+  return '#' + c(r) + c(g) + c(b);
+}
+function hexToRgba(hex, alpha){
+  const {r,g,b} = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function mixColors(hexA, hexB, t){
+  if (t === undefined) t = 0.5;
+  const a = hexToRgb(hexA), b = hexToRgb(hexB);
+  return rgbToHex(a.r+(b.r-a.r)*t, a.g+(b.g-a.g)*t, a.b+(b.b-a.b)*t);
+}
+function mixThree(hexA, hexB, hexC, wA, wB, wC){
+  const a = hexToRgb(hexA), b = hexToRgb(hexB), c = hexToRgb(hexC);
+  return rgbToHex(a.r*wA+b.r*wB+c.r*wC, a.g*wA+b.g*wB+c.g*wC, a.b*wA+b.b*wB+c.b*wC);
+}
+// Tiny seeded PRNG (mulberry32) — deterministic per swatch so the same
+// mix recipe always paints the same stroke texture on re-render
+// (e.g. navigating back to a step), not a different random pattern
+// each time.
+function mulberry32(seed){
+  let a = seed >>> 0;
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function seedFromString(str){
+  let h = 0;
+  for (let i=0;i<str.length;i++){ h = (Math.imul(31,h) + str.charCodeAt(i)) | 0; }
+  return h;
+}
+
+/* ============================================================
+   PAINTERLY MIXING WIDGET — the ONE shared canvas-based blend used by
+   every guided mix in Lessons 1-3 (per the spec's own "build once,
+   reuse three times" instruction). Several overlapping soft-edged
+   radial-gradient "strokes", randomized position/size/blend-bias per
+   stroke (seeded, so it's stable per recipe) — reads as a loaded
+   brush laid down wet-on-wet, not a flat gradient. Draws directly
+   into the given canvas at its current pixel size (caller sets
+   canvas.width/height first).
+============================================================ */
+function paintStrokeSwatch(canvas, hexA, hexB, seedKey){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const cx = w/2, cy = h/2, maxR = Math.min(w,h)/2;
+  ctx.clearRect(0,0,w,h);
+  const rng = mulberry32(seedFromString(seedKey || (hexA+hexB)));
+
+  // Base wash — a soft, mostly-even fill so no canvas shows through
+  // between strokes, colored at the true 50/50 mix.
+  const base = mixColors(hexA, hexB, 0.5);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = base;
+  ctx.beginPath(); ctx.arc(cx, cy, maxR - 1, 0, Math.PI*2); ctx.fill();
+
+  // Overlapping loaded-brush strokes — each one biased toward A or B
+  // by a random t, at a random offset/size/rotation, soft-edged via a
+  // radial gradient fading to transparent. Painted with 'multiply' on
+  // alternating strokes for depth, 'source-over' on others, mimicking
+  // how real gouache strokes layer unevenly when wet-on-wet.
+  const strokeCount = 7;
+  for (let i=0;i<strokeCount;i++){
+    const t = rng();
+    const col = mixColors(hexA, hexB, t);
+    const angle = rng()*Math.PI*2;
+    const dist = rng()*maxR*0.45;
+    const sx = cx + Math.cos(angle)*dist;
+    const sy = cy + Math.sin(angle)*dist;
+    const r = maxR * (0.45 + rng()*0.5);
+    const grad = ctx.createRadialGradient(sx,sy,0,sx,sy,r);
+    grad.addColorStop(0, hexToRgba(col, 0.55 + rng()*0.25));
+    grad.addColorStop(0.7, hexToRgba(col, 0.28));
+    grad.addColorStop(1, hexToRgba(col, 0));
+    ctx.globalCompositeOperation = i % 2 === 0 ? 'source-over' : 'multiply';
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Fine grain — sparse low-opacity dots, breaks up any remaining
+  // flatness so it reads as textured paper/pigment, not a vector fill.
+  const grainCount = Math.round(maxR * 1.4);
+  for (let i=0;i<grainCount;i++){
+    const angle = rng()*Math.PI*2;
+    const dist = rng()*(maxR-1);
+    const gx = cx + Math.cos(angle)*dist;
+    const gy = cy + Math.sin(angle)*dist;
+    ctx.fillStyle = rng() > 0.5 ? hexToRgba('#000000', 0.03) : hexToRgba('#ffffff', 0.04);
+    ctx.beginPath(); ctx.arc(gx, gy, 0.6 + rng()*0.8, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Clip mask — re-apply the circular boundary so grain/strokes never
+  // spill square corners outside the round well.
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = '#000';
+  ctx.beginPath(); ctx.arc(cx, cy, maxR - 1, 0, Math.PI*2); ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+}
+function sizeCanvasToDisplay(canvas){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+}
+
+/* ============================================================
+   PERSISTENT PALETTE — sessionStorage, new course-scoped key (see
+   file header). WHEEL_LABELS/WHEEL_HEX are the standard 12-step color
+   wheel in order; index 0/4/8 (Red/Yellow/Blue) are the given
+   primaries, pre-filled from the start — not "mixed", never null.
+   The other 9 start null and fill in one at a time via
+   GUIDED_MIX_SEQUENCE (Lesson 1).
+============================================================ */
+const PALETTE_KEY = 'fei_color_theory_palette';
+const WHEEL_LABELS = ['Red','Red-Orange','Orange','Yellow-Orange','Yellow','Yellow-Green','Green','Blue-Green','Blue','Blue-Violet','Violet','Red-Violet'];
+const PRIMARY_IDX = { red:0, yellow:4, blue:8 };
+
+// Each step: mix wheel[aIdx] + wheel[bIdx] -> fills wheel[resultIdx].
+// Ordered so every step only ever depends on colors that already
+// exist by that point (primaries first, then the 3 secondaries, then
+// the 6 tertiaries) — 3 primaries (given) + 9 of these = the 12-step
+// wheel, matching the spec exactly.
+const GUIDED_MIX_SEQUENCE = [
+  { a:0, b:4, result:2,  label:'Orange' },
+  { a:4, b:8, result:6,  label:'Green' },
+  { a:8, b:0, result:10, label:'Violet' },
+  { a:0, b:2, result:1,  label:'Red-Orange' },
+  { a:4, b:2, result:3,  label:'Yellow-Orange' },
+  { a:4, b:6, result:5,  label:'Yellow-Green' },
+  { a:8, b:6, result:7,  label:'Blue-Green' },
+  { a:8, b:10, result:9, label:'Blue-Violet' },
+  { a:0, b:10, result:11, label:'Red-Violet' }
+];
+
+function defaultPalette(){
+  const wheel = new Array(12).fill(null);
+  wheel[0] = { hex: '#d8432c', from: null, label: 'Red' };
+  wheel[4] = { hex: '#e2a83f', from: null, label: 'Yellow' };
+  wheel[8] = { hex: '#2d5fa8', from: null, label: 'Blue' };
+  return {
+    wheel: wheel,
+    neutrals: [],           // Lesson 3's complementary-pair mixes (gray results)
+    lessonsDone: { lesson1:false, lesson2:false, lesson3:false }
+  };
+}
+function loadPalette(){
+  try {
+    const raw = sessionStorage.getItem(PALETTE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Defensive shape-check — a half-written/older-shape record
+      // should never crash the course; fall back to fresh rather than
+      // throw.
+      if (parsed && Array.isArray(parsed.wheel) && parsed.wheel.length === 12) return parsed;
+    }
+  } catch (e) { console.warn('[loadPalette] failed', e); }
+  return defaultPalette();
+}
+function savePalette(){
+  try { sessionStorage.setItem(PALETTE_KEY, JSON.stringify(PALETTE)); }
+  catch (e) { console.warn('[savePalette] failed', e); }
+}
+let PALETTE = loadPalette();
+
+/* Renders the persistent palette tray — 12 wheel wells (filled or
+   dashed-empty) + fixed Black/White. Reused as-is on every screen from
+   Lesson 1 onward (Lessons 2/3 don't re-render a different tray, they
+   render this exact one, already populated). */
+function renderPaletteTray(){
+  const wells = PALETTE.wheel.map((entry, i) => {
+    if (!entry) return `<div class="palette-well empty"><span style="font-size:9px;color:var(--ink-faint);">${i+1}</span></div>`;
+    return `<div class="palette-well" data-wheel-idx="${i}"><canvas></canvas></div>`;
+  }).join('');
+  return `
+    <div class="palette-tray">
+      <div class="palette-tray-label">Your Palette</div>
+      <div class="palette-grid">
+        ${wells}
+        <div class="palette-well palette-well-fixed" title="Black"></div>
+        <div class="palette-well palette-well-fixed white" title="White"></div>
+      </div>
+    </div>
+  `;
+}
+// Paints every filled well's canvas AFTER renderPaletteTray's HTML is
+// actually in the DOM (canvas needs real layout size before sizing it
+// — see sizeCanvasToDisplay). Call this from every stage's afterRender
+// that shows the tray.
+function paintPaletteTrayCanvases(){
+  document.querySelectorAll('.palette-well[data-wheel-idx] canvas').forEach(canvas => {
+    const idx = Number(canvas.closest('.palette-well').dataset.wheelIdx);
+    const entry = PALETTE.wheel[idx];
+    if (!entry) return;
+    sizeCanvasToDisplay(canvas);
+    if (entry.from) {
+      paintStrokeSwatch(canvas, PALETTE.wheel[entry.from[0]].hex, PALETTE.wheel[entry.from[1]].hex, 'wheel'+idx);
+    } else {
+      // Given primaries (Red/Yellow/Blue) — a flat tube color, not a
+      // mixed stroke (nothing was mixed to make them).
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width, h = canvas.height;
+      ctx.fillStyle = entry.hex;
+      ctx.beginPath(); ctx.arc(w/2,h/2,Math.min(w,h)/2-1,0,Math.PI*2); ctx.fill();
+    }
+  });
+}
+
+/* ============================================================
+   STAGE LIST — flat, one entry per screen INCLUDING each lesson's own
+   internal sub-parts (see file header for why flat, not nested).
+============================================================ */
+const STAGES = [
+  { id:'intro_video', render:renderIntroVideo, afterRender:afterRenderIntroVideo },
+  { id:'lesson1_intro', render:renderLesson1Intro, afterRender:afterRenderLesson1Intro },
+  { id:'lesson1_explore', render:renderLesson1Explore, afterRender:afterRenderLesson1Explore },
+  { id:'lesson1_mixing', render:renderLesson1Mixing, afterRender:afterRenderLesson1Mixing },
+  { id:'lesson2_video', render:() => renderLessonVideo('Lesson 2 · Analogous Colors', 'Colors That Get Along', LESSON2_VIDEO_SRC), afterRender:() => afterRenderLessonVideo(LESSON2_VIDEO_SRC) },
+  { id:'lesson2_wheel', render:renderLesson2Wheel, afterRender:afterRenderLesson2Wheel },
+  { id:'lesson2_mixing', render:renderLesson2Mixing, afterRender:afterRenderLesson2Mixing },
+  { id:'lesson3_video', render:() => renderLessonVideo('Lesson 3 · Complementary Colors', 'Opposites Attract', LESSON3_VIDEO_SRC), afterRender:() => afterRenderLessonVideo(LESSON3_VIDEO_SRC) },
+  { id:'lesson3_wheel', render:renderLesson3Wheel, afterRender:afterRenderLesson3Wheel },
+  { id:'lesson3_mixing', render:renderLesson3Mixing, afterRender:afterRenderLesson3Mixing },
+  { id:'complete', render:renderComplete, afterRender:afterRenderComplete }
+];
+
+let STATE = { stageIndex: 0 };
+
+function showContinue(label, onClick, opts){
+  const dock = document.getElementById('continueDock');
+  opts = opts || {};
+  dock.innerHTML = `<button class="continue-btn${opts.ghost ? ' ghost' : ''}" id="continueBtn">${label}</button>`;
+  const btn = document.getElementById('continueBtn');
+  btn.onclick = onClick;
+  requestAnimationFrame(() => btn.classList.add('ready'));
+}
+function hideContinue(){
+  document.getElementById('continueDock').innerHTML = '';
+}
+function renderRail(){
+  const rail = document.getElementById('rail');
+  rail.innerHTML = STAGES.map((s,i) => `<span class="rail-dot${i < STATE.stageIndex ? ' done' : ''}${i === STATE.stageIndex ? ' current' : ''}"></span>`).join('');
+}
+function renderCurrentStage(){
+  const stage = STAGES[STATE.stageIndex];
+  document.getElementById('stage').innerHTML = `<div class="step">${stage.render()}</div>`;
+  document.getElementById('prevBtn').disabled = STATE.stageIndex === 0;
+  renderRail();
+  hideContinue();
+  window.scrollTo(0,0);
+  if (stage.afterRender) stage.afterRender();
+}
+function nextStage(){
+  if (STATE.stageIndex < STAGES.length - 1) { STATE.stageIndex++; renderCurrentStage(); }
+}
+function prevStage(){
+  if (STATE.stageIndex > 0) { STATE.stageIndex--; renderCurrentStage(); }
+}
+
+/* ============================================================
+   STAGE — INTRO VIDEO. renderVideoEmbed ported verbatim from
+   kandinsky-music-into-shape/index.html (same name/signature/
+   fallback), retoned to this course's palette. Flow branches on
+   whether a real src exists: no src (today) -> Continue appears
+   immediately, nothing to wait for; a real src (later) -> Continue is
+   gated behind the video's own real 'ended' event, same "no skip"
+   convention Scene Drawing Foundation's intro video already
+   established — dropping in the real Cloudflare Stream id later only
+   means setting INTRO_VIDEO_SRC below, no flow-logic changes.
+============================================================ */
+// Real Cloudflare Stream iframe srcs, set individually per lesson when
+// Faye supplies each video. All three still null today — every video
+// screen in this course (intro + Lessons 2/3) uses the SAME generic
+// renderLessonVideo/afterRenderLessonVideo pair below, so dropping a
+// real src in for any one of them is a one-line change, no flow-logic
+// touched.
+const INTRO_VIDEO_SRC = null;
+const LESSON2_VIDEO_SRC = null;
+const LESSON3_VIDEO_SRC = null;
+
+function renderVideoEmbed(src, title){
+  if (src) {
+    return `<div class="video-embed-wrap"><div class="video-stage">
+      <iframe id="lessonVideoFrame" src="${src}" loading="lazy" title="${title}"
+        style="border:none;position:absolute;top:0;left:0;height:100%;width:100%;"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true"></iframe>
+      <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
+    </div></div>`;
+  }
+  return `<div class="video-embed-wrap"><div class="video-stage" style="background:linear-gradient(135deg,var(--paint-red),var(--paint-blue));">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+      <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+    </div>
+  </div></div>`;
+}
+// Generic video screen — the intro screen AND Lessons 2/3's video
+// screens all render/behave identically (only kicker/title/src
+// differ), so this is the one function all four use rather than
+// three near-duplicate copies.
+function renderLessonVideo(kicker, title, src){
+  return `
+    <div class="step-inner bleed" style="justify-content:center;">
+      <div class="step-kicker">${kicker}</div>
+      <h2 class="step-title">${title}</h2>
+      ${renderVideoEmbed(src, title)}
+    </div>
+  `;
+}
+function renderIntroVideo(){
+  return renderLessonVideo('Color Theory', 'Why Color?', INTRO_VIDEO_SRC);
+}
+function afterRenderIntroVideo(){
+  afterRenderLessonVideo(INTRO_VIDEO_SRC);
+}
+// Real-video path (inert today — every *_VIDEO_SRC above is null — but
+// verified logic, mirrors Lesson 01's own attachStoryTeacherVideo
+// pattern: Stream SDK attach, unlock on the real 'ended' event, a
+// tap-to-play fallback if unmuted autoplay gets blocked). No src ->
+// nothing to wait for, Continue shows immediately.
+function afterRenderLessonVideo(src){
+  if (!src) {
+    showContinue('Continue →', nextStage);
+    return;
+  }
+  const sdk = document.createElement('script');
+  sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  sdk.onload = () => {
+    try {
+      const iframe = document.getElementById('lessonVideoFrame');
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (!player) { showContinue('Continue →', nextStage); return; }
+      player.addEventListener('ended', () => showContinue('Continue →', nextStage));
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) {}
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[lesson_video] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
+    } catch (e) {
+      console.warn('[lesson_video] Stream SDK attach failed', e);
+      showContinue('Continue →', nextStage);
+    }
+  };
+  sdk.onerror = () => {
+    console.warn('[lesson_video] Stream SDK failed to load');
+    showContinue('Continue →', nextStage);
+  };
+  document.head.appendChild(sdk);
+}
+
+/* ============================================================
+   COURSE-COMPLETE XP/PROGRESS — same fei_user_profile sessionStorage
+   convention every other live lesson uses (bumpXP/markLessonComplete
+   pattern — see e.g. lessons/scene-drawing-foundation/.../lesson-01-
+   extreme-wide-shot/index.html's own versions of these). No-ops
+   cleanly if no profile exists (this course, like Scene Drawing
+   Foundation, isn't login-gated — see file header). courseId
+   'color-theory' is new, not reused from anywhere else.
+============================================================ */
+const COURSE_ID = 'color-theory';
+function bumpXP(amount){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.totalXP = (profile.totalXP || 0) + amount;
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[bumpXP] failed', e); }
+}
+function markCourseComplete(){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+    if (!profile.completedLessons.includes(COURSE_ID)) profile.completedLessons.push(COURSE_ID);
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[markCourseComplete] failed', e); }
+}
+
+/* ============================================================
+   LESSON 1a — SET UP THE IDEA (static triangle diagram, no video —
+   fully interactive lesson, per spec). Extremely short text: the
+   interaction (next two stages) carries the teaching, not this one.
+============================================================ */
+function renderLesson1Intro(){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Lesson 1 · Primary Colors</div>
+      <h2 class="step-title">Where every color starts</h2>
+      <p class="step-sub">Red, Yellow and Blue. Mix them and you can make almost any color.</p>
+      <div class="intro-triangle-wrap">
+        <svg class="intro-triangle-svg" viewBox="0 0 200 180">
+          <polygon points="100,14 20,164 180,164" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="100" cy="14" r="26" fill="var(--paint-red)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text class="intro-vertex-label" x="100" y="19">R</text>
+          <circle cx="20" cy="164" r="26" fill="var(--paint-yellow)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text class="intro-vertex-label" x="20" y="169">Y</text>
+          <circle cx="180" cy="164" r="26" fill="var(--paint-blue)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text class="intro-vertex-label" x="180" y="169">B</text>
+        </svg>
+      </div>
+      <div class="big-idea-line">Every other color is mixed from these three.</div>
+    </div>
+  `;
+}
+function afterRenderLesson1Intro(){
+  showContinue('Try it →', nextStage);
+}
+
+/* ============================================================
+   LESSON 1b — FREE EXPLORATION. A continuous R/Y/B color-mesh
+   triangle the student can drag anywhere inside — the live preview
+   swatch updates at true barycentric-blend speed (recomputed on every
+   pointer move, cheap), so it feels instant. The mesh itself is
+   painted once per entry (renderTriangleMesh — an O(pixels) canvas
+   fill, not per-frame) so the whole interior already shows the blend
+   field; dragging is "sampling" it, not generating it live.
+============================================================ */
+function triangleVertices(w, h){
+  // Same layout as the intro SVG (R top, Y bottom-left, B bottom-right),
+  // in CSS-pixel space (the container's own rect) — kept separate from
+  // the canvas's raster (DPR-scaled) space; barycentric math below
+  // always happens in this one CSS-pixel space regardless of DPR.
+  return {
+    R: { x: w/2, y: h*0.08 },
+    Y: { x: w*0.09, y: h*0.94 },
+    B: { x: w*0.91, y: h*0.94 }
+  };
+}
+function barycentric(px,py, ax,ay, bx,by, cx,cy){
+  const v0x=bx-ax, v0y=by-ay, v1x=cx-ax, v1y=cy-ay, v2x=px-ax, v2y=py-ay;
+  const d00=v0x*v0x+v0y*v0y, d01=v0x*v1x+v0y*v1y, d11=v1x*v1x+v1y*v1y, d20=v2x*v0x+v2y*v0y, d21=v2x*v1x+v2y*v1y;
+  const denom = d00*d11 - d01*d01;
+  const v = (d11*d20 - d01*d21)/denom;
+  const w = (d00*d21 - d01*d20)/denom;
+  const u = 1 - v - w;
+  return { u, v, w };
+}
+function clampToTriangle(u,v,w){
+  // Free exploration should never let the handle escape the triangle —
+  // clamp negative weights to 0 and renormalize so it settles on the
+  // nearest edge/corner instead of just stopping the drag dead.
+  u = Math.max(0,u); v = Math.max(0,v); w = Math.max(0,w);
+  const sum = u+v+w || 1;
+  return { u: u/sum, v: v/sum, w: w/sum };
+}
+function renderTriangleMesh(canvas, vertsCss, dpr){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const R = { x: vertsCss.R.x*dpr, y: vertsCss.R.y*dpr };
+  const Y = { x: vertsCss.Y.x*dpr, y: vertsCss.Y.y*dpr };
+  const B = { x: vertsCss.B.x*dpr, y: vertsCss.B.y*dpr };
+  const colR = hexToRgb('#d8432c'), colY = hexToRgb('#e2a83f'), colB = hexToRgb('#2d5fa8');
+  const img = ctx.createImageData(w,h);
+  const data = img.data;
+  for (let y=0;y<h;y++){
+    for (let x=0;x<w;x++){
+      const { u,v,w:wt } = barycentric(x,y, R.x,R.y, Y.x,Y.y, B.x,B.y);
+      const idx = (y*w+x)*4;
+      if (u<-0.01||v<-0.01||wt<-0.01){ data[idx+3]=0; continue; }
+      data[idx]   = colR.r*u + colY.r*v + colB.r*wt;
+      data[idx+1] = colR.g*u + colY.g*v + colB.g*wt;
+      data[idx+2] = colR.b*u + colY.b*v + colB.b*wt;
+      data[idx+3] = 255;
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+function renderLesson1Explore(){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Lesson 1 · Primary Colors</div>
+      <h2 class="step-title">Play with the mix</h2>
+      <p class="step-sub">Drag anywhere inside the triangle.</p>
+      <div class="triangle-explore-wrap" id="exploreWrap">
+        <canvas id="exploreCanvas"></canvas>
+        <div class="triangle-vertex-tag" id="tagR">RED</div>
+        <div class="triangle-vertex-tag" id="tagY">YELLOW</div>
+        <div class="triangle-vertex-tag" id="tagB">BLUE</div>
+        <div class="explore-handle" id="exploreHandle"></div>
+      </div>
+      <div class="explore-preview-row">
+        <div class="explore-preview-swatch" id="explorePreview"></div>
+        <div class="explore-preview-label">That's your color right now.</div>
+      </div>
+    </div>
+  `;
+}
+function afterRenderLesson1Explore(){
+  const wrap = document.getElementById('exploreWrap');
+  const canvas = document.getElementById('exploreCanvas');
+  const handle = document.getElementById('exploreHandle');
+  const preview = document.getElementById('explorePreview');
+  const dpr = window.devicePixelRatio || 1;
+
+  function layout(){
+    const rect = wrap.getBoundingClientRect();
+    canvas.width = Math.round(rect.width*dpr);
+    canvas.height = Math.round(rect.height*dpr);
+    const verts = triangleVertices(rect.width, rect.height);
+    renderTriangleMesh(canvas, verts, dpr);
+    document.getElementById('tagR').style.left = verts.R.x+'px'; document.getElementById('tagR').style.top = verts.R.y+'px';
+    document.getElementById('tagY').style.left = verts.Y.x+'px'; document.getElementById('tagY').style.top = (verts.Y.y+22)+'px';
+    document.getElementById('tagB').style.left = verts.B.x+'px'; document.getElementById('tagB').style.top = (verts.B.y+22)+'px';
+    return verts;
+  }
+  let verts = layout();
+
+  function setHandle(px, py){
+    handle.style.left = px+'px';
+    handle.style.top = py+'px';
+    const raw = barycentric(px,py, verts.R.x,verts.R.y, verts.Y.x,verts.Y.y, verts.B.x,verts.B.y);
+    const { u,v,w } = clampToTriangle(raw.u, raw.v, raw.w);
+    const hex = mixThree('#d8432c','#e2a83f','#2d5fa8', u,v,w);
+    preview.style.background = hex;
+    handle.dataset.hex = hex;
+  }
+  // Start centered (an even blend), not at a corner — reads as "already mixing," not "pick a primary."
+  const centroid = { x:(verts.R.x+verts.Y.x+verts.B.x)/3, y:(verts.R.y+verts.Y.y+verts.B.y)/3 };
+  setHandle(centroid.x, centroid.y);
+
+  let dragging = false;
+  function pointerToLocal(e){
+    const rect = wrap.getBoundingClientRect();
+    return { x: e.clientX-rect.left, y: e.clientY-rect.top };
+  }
+  function onMove(e){
+    if (!dragging) return;
+    const p = pointerToLocal(e);
+    setHandle(p.x, p.y);
+  }
+  handle.addEventListener('pointerdown', (e) => { dragging = true; handle.setPointerCapture(e.pointerId); e.preventDefault(); });
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target === handle) return;
+    dragging = true;
+    const p = pointerToLocal(e);
+    setHandle(p.x, p.y);
+  });
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', () => { dragging = false; });
+
+  showContinue('Next: Mix Them →', nextStage);
+}
+
+/* ============================================================
+   LESSON 1c — GUIDED MIXING. Drag either source tube into the bowl
+   between them to trigger the shared paintStrokeSwatch blend, which
+   fills the next empty wheel well. Resumable by construction — the
+   "current step" is always just "the first GUIDED_MIX_SEQUENCE entry
+   whose result well is still empty", not separate tracked progress —
+   so re-entering this stage after Back/Next always picks up correctly
+   with zero extra state.
+============================================================ */
+function nextMixStepIndex(){
+  for (let i=0;i<GUIDED_MIX_SEQUENCE.length;i++){
+    if (!PALETTE.wheel[GUIDED_MIX_SEQUENCE[i].result]) return i;
+  }
+  return GUIDED_MIX_SEQUENCE.length;
+}
+function renderLesson1Mixing(){
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">Lesson 1 · Primary Colors</div>
+      <h2 class="step-title">Build your palette</h2>
+      <div id="mixingArea"></div>
+      <div id="paletteTrayMount">${renderPaletteTray()}</div>
+    </div>
+  `;
+}
+// Re-renders the tray's HTML from current PALETTE state (not just
+// repainting existing canvases) — needed every time a mix fills a
+// well that was rendered "empty" at the tray's last render, which
+// paintPaletteTrayCanvases() alone can't fix (it only paints canvases
+// that already exist in the DOM, and an empty well has none). Reused
+// by every guided-mixing stage across Lessons 1-3.
+function refreshPaletteTrayMount(){
+  const mount = document.getElementById('paletteTrayMount');
+  if (!mount) return;
+  mount.innerHTML = renderPaletteTray();
+  paintPaletteTrayCanvases();
+}
+function renderMixingStageInner(){
+  const stepIdx = nextMixStepIndex();
+  if (stepIdx >= GUIDED_MIX_SEQUENCE.length) {
+    return `<div class="mix-hint" style="margin-bottom:14px;">🎉 <b>12 colors, all mixed by you.</b></div>`;
+  }
+  const step = GUIDED_MIX_SEQUENCE[stepIdx];
+  const aEntry = PALETTE.wheel[step.a], bEntry = PALETTE.wheel[step.b];
+  return `
+    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> to make <b>${step.label}</b></div>
+    <div class="mixing-stage">
+      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
+      <div class="mix-bowl" id="mixBowl">＋</div>
+      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
+    </div>
+  `;
+}
+function afterRenderLesson1Mixing(){
+  const area = document.getElementById('mixingArea');
+  area.innerHTML = renderMixingStageInner();
+  refreshPaletteTrayMount();
+  // Re-point the shared drag-drop hook at THIS lesson's advance
+  // function every time this stage is (re-)entered — Lesson 2/3's own
+  // mixing stages reassign window.performCurrentMix to their own
+  // function while active, so navigating back here after visiting one
+  // of those must explicitly restore it, not assume it's still this.
+  window.performCurrentMix = performLesson1Mix;
+  wireMixDrag();
+  if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+    PALETTE.lessonsDone.lesson1 = true;
+    savePalette();
+    showContinue('Continue →', nextStage);
+  } else {
+    hideContinue();
+  }
+}
+// Shared drag-a-tube-into-the-bowl gesture — used here, and again by
+// Lessons 2/3 (same function, different step source, per the spec's
+// "same mixing mechanic" instruction).
+function wireMixDrag(){
+  const bowl = document.getElementById('mixBowl');
+  if (!bowl) return;
+  let ghost = null, dragTube = null;
+  function moveGhost(e){ if (ghost) { ghost.style.left=(e.clientX-32)+'px'; ghost.style.top=(e.clientY-32)+'px'; } }
+  function inBowl(e){
+    const r = bowl.getBoundingClientRect();
+    return e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom;
+  }
+  function cleanup(tube){
+    tube.classList.remove('dragging');
+    bowl.classList.remove('hover');
+    if (ghost) { ghost.remove(); ghost = null; }
+    dragTube = null;
+  }
+  document.querySelectorAll('.mix-tube').forEach(tube => {
+    tube.addEventListener('pointerdown', (e) => {
+      dragTube = tube;
+      tube.classList.add('dragging');
+      ghost = document.createElement('div');
+      ghost.className = 'drag-ghost';
+      ghost.style.background = tube.dataset.hex;
+      document.body.appendChild(ghost);
+      moveGhost(e);
+      tube.setPointerCapture(e.pointerId);
+    });
+    tube.addEventListener('pointermove', (e) => {
+      if (dragTube !== tube) return;
+      moveGhost(e);
+      bowl.classList.toggle('hover', inBowl(e));
+    });
+    tube.addEventListener('pointerup', (e) => {
+      if (dragTube !== tube) return;
+      const hit = inBowl(e);
+      cleanup(tube);
+      if (hit && window.performCurrentMix) window.performCurrentMix();
+    });
+    tube.addEventListener('pointercancel', () => cleanup(tube));
+  });
+}
+// window.performCurrentMix is the shared hook wireMixDrag() calls on a
+// successful bowl drop — reassigned per mixing stage (see each
+// lesson's own afterRender) so the SAME drag gesture can point at
+// whichever lesson's current recipe is active, without threading extra
+// parameters through wireMixDrag itself. performLesson1Mix is Lesson
+// 1's own version; afterRenderLesson1Mixing assigns
+// window.performCurrentMix = performLesson1Mix every time that stage
+// is (re-)entered, same pattern Lesson 2/3 each follow for their own.
+function performLesson1Mix(){
+  const stepIdx = nextMixStepIndex();
+  if (stepIdx >= GUIDED_MIX_SEQUENCE.length) return;
+  const step = GUIDED_MIX_SEQUENCE[stepIdx];
+  const aEntry = PALETTE.wheel[step.a], bEntry = PALETTE.wheel[step.b];
+  PALETTE.wheel[step.result] = { hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from: [step.a, step.b], label: step.label };
+  savePalette();
+  const area = document.getElementById('mixingArea');
+  area.innerHTML = renderMixingStageInner();
+  refreshPaletteTrayMount();
+  wireMixDrag();
+  if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+    PALETTE.lessonsDone.lesson1 = true;
+    savePalette();
+    showContinue('Continue →', nextStage);
+  }
+}
+
+/* ============================================================
+   COLOR WHEEL — shared ring-of-nodes layout, used by Lesson 2
+   (analogous neighbor highlighting) and Lesson 3 (complement
+   pop-out). Percent-based positions (not JS-computed pixels), so it's
+   resolution-independent with no relayout-on-resize needed.
+============================================================ */
+function wheelNodePositions(total, radiusPct){
+  const pts = [];
+  for (let i=0;i<total;i++){
+    const angle = (i/total)*2*Math.PI - Math.PI/2; // index 0 (Red) at 12 o'clock
+    pts.push({ x: 50 + radiusPct*Math.cos(angle), y: 50 + radiusPct*Math.sin(angle) });
+  }
+  return pts;
+}
+function renderColorWheel(onclickFnName, centerText){
+  const pts = wheelNodePositions(12, 42);
+  const nodes = PALETTE.wheel.map((entry,i) => {
+    const p = pts[i];
+    return `<div class="wheel-node" id="wheelNode${i}" style="left:${p.x}%;top:${p.y}%;background:${entry.hex};" onclick="${onclickFnName}(${i})"></div>`;
+  }).join('');
+  return `
+    <div class="wheel-wrap">
+      ${nodes}
+      <div class="wheel-center-label" id="wheelCenterLabel">${centerText || ''}</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   LESSON 2a — DISCOVER ANALOGOUS COLORS ON THE WHEEL. Tapping any
+   node highlights it + its two immediate neighbors as a "family";
+   tapping a different node re-highlights that one's own family. Label
+   stays a short phrase (per spec) — the clicking-around IS the
+   lesson, not the caption.
+============================================================ */
+let analogousClicked = new Set();
+function selectAnalogous(i){
+  analogousClicked.add(i);
+  const family = [(i+11)%12, i, (i+1)%12];
+  document.querySelectorAll('.wheel-node').forEach((el, idx) => {
+    el.classList.toggle('family', family.includes(idx));
+    el.classList.toggle('dim', !family.includes(idx));
+  });
+  document.getElementById('wheelCenterLabel').textContent = 'A color family.';
+  if (analogousClicked.size >= 2) showContinue('Next: Mix Them →', nextStage);
+}
+function renderLesson2Wheel(){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Lesson 2 · Analogous Colors</div>
+      <h2 class="step-title">Color families</h2>
+      <p class="step-sub">Tap a color. Its neighbors light up too.</p>
+      ${renderColorWheel('selectAnalogous', 'Tap a color')}
+      <div class="wheel-hint">Try a few different ones.</div>
+    </div>
+  `;
+}
+function afterRenderLesson2Wheel(){
+  analogousClicked = new Set();
+  hideContinue();
+}
+
+/* ============================================================
+   LESSON 2b — GUIDED MIXING. Re-confirms the SAME mixing mechanic
+   (wireMixDrag/performCurrentMix — window.performCurrentMix is
+   reassigned to this lesson's own advance function on entry) against
+   3 "rounds", one per base hue (Yellow, Red, Blue), each mixing that
+   base's two immediate wheel neighbors — same recipe pairs
+   GUIDED_MIX_SEQUENCE already defines, just re-triggered here tied to
+   "these are BASE's neighbors" rather than "fill the next empty
+   well" (every target well is already filled from Lesson 1 — this
+   doesn't create new palette state, it reinforces the relationship by
+   having the student physically re-mix it).
+============================================================ */
+const LESSON2_MIX_ROUNDS = [
+  { baseIdx:4, baseLabel:'Yellow', neighbors:[3,5] },
+  { baseIdx:0, baseLabel:'Red', neighbors:[11,1] },
+  { baseIdx:8, baseLabel:'Blue', neighbors:[7,9] }
+];
+let lesson2Round = 0, lesson2NeighborStep = 0;
+function lesson2CurrentRecipe(){
+  const round = LESSON2_MIX_ROUNDS[lesson2Round];
+  if (!round) return null;
+  const targetIdx = round.neighbors[lesson2NeighborStep];
+  const recipe = GUIDED_MIX_SEQUENCE.find(s => s.result === targetIdx);
+  return { round, targetIdx, recipe };
+}
+function renderLesson2MixingInner(){
+  const cur = lesson2CurrentRecipe();
+  if (!cur) {
+    return `<div class="mix-hint" style="margin-bottom:14px;">🎉 <b>All three neighbor families confirmed.</b></div>`;
+  }
+  const { round, recipe } = cur;
+  const aEntry = PALETTE.wheel[recipe.a], bEntry = PALETTE.wheel[recipe.b];
+  return `
+    <div class="mix-round-label">Round ${lesson2Round+1} of 3 · Base: ${round.baseLabel}</div>
+    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> to confirm <b>${recipe.label}</b></div>
+    <div class="mixing-stage">
+      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
+      <div class="mix-bowl" id="mixBowl">＋</div>
+      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
+    </div>
+  `;
+}
+function renderLesson2Mixing(){
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">Lesson 2 · Analogous Colors</div>
+      <h2 class="step-title">Mix a family</h2>
+      <div id="mixingArea"></div>
+      <div id="paletteTrayMount">${renderPaletteTray()}</div>
+    </div>
+  `;
+}
+function afterRenderLesson2Mixing(){
+  lesson2Round = 0; lesson2NeighborStep = 0;
+  document.getElementById('mixingArea').innerHTML = renderLesson2MixingInner();
+  refreshPaletteTrayMount();
+  window.performCurrentMix = performLesson2Mix;
+  wireMixDrag();
+  hideContinue();
+}
+function performLesson2Mix(){
+  const cur = lesson2CurrentRecipe();
+  if (!cur) return;
+  const { round, targetIdx, recipe } = cur;
+  const aEntry = PALETTE.wheel[recipe.a], bEntry = PALETTE.wheel[recipe.b];
+  // Re-paints the same well with the same recipe — deterministic
+  // (paintStrokeSwatch's seed is keyed by wheel index, not randomized
+  // per call), so the stroke texture looks identical to how it looked
+  // after Lesson 1. That's intentional, not a missed refresh: nothing
+  // NEW is being mixed here, the student is re-confirming a relationship
+  // that already exists — an unchanged, correct swatch is the right
+  // outcome, not a bug to paper over with a fake "fresh" repaint.
+  PALETTE.wheel[targetIdx] = { hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from:[recipe.a, recipe.b], label: recipe.label };
+  savePalette();
+  lesson2NeighborStep++;
+  if (lesson2NeighborStep >= round.neighbors.length) { lesson2NeighborStep = 0; lesson2Round++; }
+  document.getElementById('mixingArea').innerHTML = renderLesson2MixingInner();
+  refreshPaletteTrayMount();
+  wireMixDrag();
+  if (!lesson2CurrentRecipe()) {
+    PALETTE.lessonsDone.lesson2 = true;
+    savePalette();
+    showContinue('Continue →', nextStage);
+  }
+}
+
+/* ============================================================
+   LESSON 3a — DISCOVER COMPLEMENTS ON THE WHEEL. Tapping any node
+   pops out its complement (the wheel position exactly 6 steps away —
+   directly opposite on a 12-node ring). A "collision" animation flies
+   both colors to the wheel's center, merges them toward the true
+   mixed gray (real hex math, not a generic gray placeholder), then
+   the pair drops into a found-pairs tray. Any 3 of the 6 possible
+   distinct pairs satisfy the round (spec's own red/green,
+   yellow/violet, blue/orange are examples, not the only valid set —
+   "e.g." in the spec, not a fixed list).
+============================================================ */
+const LESSON3_TARGET_PAIRS = 3;
+let foundPairs = new Set();
+function pairKey(i, j){ return Math.min(i,j) + '-' + Math.max(i,j); }
+function animateCollision(i, comp, onDone){
+  const nodeA = document.getElementById('wheelNode'+i);
+  const nodeB = document.getElementById('wheelNode'+comp);
+  const wrap = nodeA.closest('.wheel-wrap');
+  const wrapRect = wrap.getBoundingClientRect();
+  const rectA = nodeA.getBoundingClientRect();
+  const rectB = nodeB.getBoundingClientRect();
+  const grayHex = mixColors(PALETTE.wheel[i].hex, PALETTE.wheel[comp].hex, 0.5);
+  const cloneA = document.createElement('div');
+  const cloneB = document.createElement('div');
+  cloneA.className = 'collision-clone'; cloneB.className = 'collision-clone';
+  cloneA.style.left = (rectA.left+rectA.width/2)+'px'; cloneA.style.top = (rectA.top+rectA.height/2)+'px'; cloneA.style.background = PALETTE.wheel[i].hex;
+  cloneB.style.left = (rectB.left+rectB.width/2)+'px'; cloneB.style.top = (rectB.top+rectB.height/2)+'px'; cloneB.style.background = PALETTE.wheel[comp].hex;
+  document.body.appendChild(cloneA); document.body.appendChild(cloneB);
+  const midX = wrapRect.left+wrapRect.width/2, midY = wrapRect.top+wrapRect.height/2;
+  requestAnimationFrame(() => {
+    cloneA.style.left = midX+'px'; cloneA.style.top = midY+'px';
+    cloneB.style.left = midX+'px'; cloneB.style.top = midY+'px';
+  });
+  setTimeout(() => { cloneA.style.background = grayHex; cloneB.style.opacity = '0'; }, 380);
+  setTimeout(() => { cloneA.remove(); cloneB.remove(); onDone(); }, 720);
+}
+function appendFoundPair(i, comp){
+  const tray = document.getElementById('foundPairsTray');
+  if (!tray) return;
+  const card = document.createElement('div');
+  card.className = 'found-pair-card';
+  card.innerHTML = `<span class="found-pair-dot" style="background:${PALETTE.wheel[i].hex};"></span><span class="found-pair-dot" style="background:${PALETTE.wheel[comp].hex};"></span>`;
+  tray.appendChild(card);
+}
+function selectComplement(i){
+  const comp = (i+6)%12;
+  const key = pairKey(i, comp);
+  document.querySelectorAll('.wheel-node').forEach((el, idx) => {
+    el.classList.toggle('family', idx===i || idx===comp);
+    el.classList.toggle('dim', idx!==i && idx!==comp);
+  });
+  document.getElementById('wheelCenterLabel').textContent = 'Opposites.';
+  if (foundPairs.has(key)) return; // already collected — highlight only, no repeat animation/tray entry
+  animateCollision(i, comp, () => {
+    foundPairs.add(key);
+    appendFoundPair(i, comp);
+    if (foundPairs.size >= LESSON3_TARGET_PAIRS) showContinue('Next: Mix Them →', nextStage);
+  });
+}
+function renderLesson3Wheel(){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">Lesson 3 · Complementary Colors</div>
+      <h2 class="step-title">Opposites on the wheel</h2>
+      <p class="step-sub">Tap a color. Its opposite pops out.</p>
+      ${renderColorWheel('selectComplement', 'Tap a color')}
+      <div class="found-pairs-tray" id="foundPairsTray"></div>
+    </div>
+  `;
+}
+function afterRenderLesson3Wheel(){
+  foundPairs = new Set();
+  hideContinue();
+}
+
+/* ============================================================
+   LESSON 3b — GUIDED MIXING: complements neutralize. Fixed set of 3
+   pairs (same ones named in the spec) — deliberately NOT threading
+   the student's own freely-explored foundPairs from the wheel stage
+   through to here (those are an arbitrary subset of 6 possible pairs
+   picked in any order); using one fixed, known sequence keeps this
+   stage simple and its outcome predictable, and the pedagogical point
+   ("complements mixed together trend toward gray") holds for any
+   complementary pair, not specifically whichever ones were clicked a
+   moment ago. Same drag-into-the-bowl mechanic, but the result is NOT
+   a wheel color — it's pushed into PALETTE.neutrals, a genuinely new
+   addition to the palette (unlike Lesson 2's re-confirmed wheel
+   wells).
+============================================================ */
+const LESSON3_MIX_PAIRS = [
+  { a:0, b:6, label:'Red + Green' },
+  { a:4, b:10, label:'Yellow + Violet' },
+  { a:2, b:8, label:'Orange + Blue' }
+];
+let lesson3PairIdx = 0;
+function renderLesson3MixingInner(){
+  if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) {
+    return `<div class="mix-hint" style="margin-bottom:14px;">🎉 <b>Complements neutralize each other.</b></div>`;
+  }
+  const pair = LESSON3_MIX_PAIRS[lesson3PairIdx];
+  const aEntry = PALETTE.wheel[pair.a], bEntry = PALETTE.wheel[pair.b];
+  return `
+    <div class="mix-round-label">Pair ${lesson3PairIdx+1} of 3</div>
+    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> — watch what happens.</div>
+    <div class="mixing-stage">
+      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
+      <div class="mix-bowl" id="mixBowl">＋</div>
+      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
+    </div>
+  `;
+}
+function renderNeutralsRow(){
+  if (!PALETTE.neutrals.length) return '<div class="neutrals-row" id="neutralsRow"></div>';
+  const swatches = PALETTE.neutrals.map((n,i) => `<div class="neutral-swatch" data-neutral-idx="${i}"><canvas></canvas></div>`).join('');
+  return `<div class="neutrals-row" id="neutralsRow">${swatches}</div>`;
+}
+function paintNeutralsRow(){
+  document.querySelectorAll('.neutral-swatch[data-neutral-idx] canvas').forEach(canvas => {
+    const idx = Number(canvas.closest('.neutral-swatch').dataset.neutralIdx);
+    const n = PALETTE.neutrals[idx];
+    if (!n) return;
+    sizeCanvasToDisplay(canvas);
+    paintStrokeSwatch(canvas, PALETTE.wheel[n.from[0]].hex, PALETTE.wheel[n.from[1]].hex, 'neutral'+idx);
+  });
+}
+function renderLesson3Mixing(){
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">Lesson 3 · Complementary Colors</div>
+      <h2 class="step-title">Mix opposites</h2>
+      <div id="mixingArea"></div>
+      <div id="paletteTrayMount">${renderPaletteTray()}</div>
+      <div id="neutralsMount">${renderNeutralsRow()}</div>
+    </div>
+  `;
+}
+function afterRenderLesson3Mixing(){
+  lesson3PairIdx = 0;
+  document.getElementById('mixingArea').innerHTML = renderLesson3MixingInner();
+  refreshPaletteTrayMount();
+  paintNeutralsRow();
+  window.performCurrentMix = performLesson3Mix;
+  wireMixDrag();
+  hideContinue();
+}
+function performLesson3Mix(){
+  if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) return;
+  const pair = LESSON3_MIX_PAIRS[lesson3PairIdx];
+  const aEntry = PALETTE.wheel[pair.a], bEntry = PALETTE.wheel[pair.b];
+  PALETTE.neutrals.push({ hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from:[pair.a, pair.b], label:'Neutral' });
+  savePalette();
+  lesson3PairIdx++;
+  document.getElementById('mixingArea').innerHTML = renderLesson3MixingInner();
+  document.getElementById('neutralsMount').innerHTML = renderNeutralsRow();
+  paintNeutralsRow();
+  wireMixDrag();
+  if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) {
+    PALETTE.lessonsDone.lesson3 = true;
+    savePalette();
+    showContinue('Finish →', () => { markCourseComplete(); bumpXP(30); nextStage(); });
+  }
+}
+
+/* ============================================================
+   COMPLETE — short wrap-up (extremely short text, per spec). XP/
+   completedLessons already bumped by the "Finish →" button above,
+   not here, so Back-navigating into this screen and forward again
+   never double-counts it.
+============================================================ */
+function renderComplete(){
+  return `
+    <div class="step-inner complete-wrap">
+      <div class="complete-check">🎨</div>
+      <h2 class="step-title">Your palette, your way.</h2>
+      <p class="step-sub">12 mixed colors, black, white, and a few neutrals — all from Red, Yellow and Blue.</p>
+      <div class="complete-palette-row" id="completePaletteRow"></div>
+      <a class="play-btn" href="../" style="display:inline-block;text-decoration:none;margin-top:26px;">Back to Skill</a>
+    </div>
+  `;
+}
+function afterRenderComplete(){
+  const row = document.getElementById('completePaletteRow');
+  row.innerHTML = PALETTE.wheel.map(w => `<span class="complete-dot" style="background:${w.hex};"></span>`).join('')
+    + `<span class="complete-dot" style="background:var(--paint-black);"></span><span class="complete-dot" style="background:var(--paint-white);"></span>`
+    + PALETTE.neutrals.map(n => `<span class="complete-dot" style="background:${n.hex};"></span>`).join('');
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+renderCurrentStage();
+</script>
+</body>
+</html>
