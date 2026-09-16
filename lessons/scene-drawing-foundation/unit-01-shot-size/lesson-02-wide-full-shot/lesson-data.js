@@ -216,20 +216,22 @@
       narrationAvailable: false
     },
 
-    // Round 2: shown per-scene during Step 3 exploration (one small
-    // expandable overlay per scene, keyed by sceneId — see file header
-    // and index.html's renderTeacherOverlay), NOT in the final
-    // community step anymore. All six placeholder:true for now; Faye
-    // supplies real per-scene teacher reference art later, the same
-    // way she supplied Lesson 01's Step 4 art — swapping one in only
-    // needs this array edited, not index.html.
+    // Round 3 (Faye's correction, matching Lesson 01's own): renamed
+    // "Teacher Reference" -> "Quick Sketch Reference" throughout — the
+    // old name implied one authoritative correct answer, same fix
+    // already applied to Lesson 01's practice videos. Real videos for
+    // Scenes 1-2 (Faye-produced, Cloudflare Stream) via demoVideoStreamId
+    // — same field name/meaning as Lesson 01's story_choices, and the
+    // same data-driven fallback: null/absent means the placeholder
+    // "coming soon" lightbox state, not an error. Scenes 3-6 stay
+    // placeholder:true until Faye supplies their videos too.
     teacher_references: [
-      { sceneId: 'late_for_class', label: 'Teacher Reference — Late for Class', placeholder: true },
-      { sceneId: 'art_project', label: 'Teacher Reference — The Art Project', placeholder: true },
-      { sceneId: 'after_school', label: 'Teacher Reference — See You After School', placeholder: true },
-      { sceneId: 'lost_ball', label: 'Teacher Reference — The Lost Ball', placeholder: true },
-      { sceneId: 'rainy_day', label: 'Teacher Reference — Rainy Day Surprise', placeholder: true },
-      { sceneId: 'sleepover', label: 'Teacher Reference — The Sleepover', placeholder: true }
+      { sceneId: 'late_for_class', label: 'Quick Sketch Reference — Late for Class', demoVideoStreamId: '5aef7587f314a6b478802d14639408b3' },
+      { sceneId: 'art_project', label: 'Quick Sketch Reference — The Art Project', demoVideoStreamId: '2ddecd6ee5218854539cbeeae06ea139' },
+      { sceneId: 'after_school', label: 'Quick Sketch Reference — See You After School', placeholder: true },
+      { sceneId: 'lost_ball', label: 'Quick Sketch Reference — The Lost Ball', placeholder: true },
+      { sceneId: 'rainy_day', label: 'Quick Sketch Reference — Rainy Day Surprise', placeholder: true },
+      { sceneId: 'sleepover', label: 'Quick Sketch Reference — The Sleepover', placeholder: true }
     ],
 
     // Round 2: the final community step now shows ONLY the student's

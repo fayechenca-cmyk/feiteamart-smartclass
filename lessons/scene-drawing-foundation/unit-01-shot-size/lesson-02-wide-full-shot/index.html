@@ -38,9 +38,12 @@
 
   SCOPE NOTES (flagged, not silently assumed — see the chat reports
   from both build rounds for the full list):
-  - The four Step 2 reference images and all six teacher-reference
-    overlays are still placeholders (Faye supplies the real curated
-    art later, same process as Lesson 01's own placeholder art).
+  - The four Step 2 reference images are still placeholders. Of the six
+    per-scene Quick Sketch Reference overlays (renamed from "Teacher
+    Reference" — round 3, same correction already applied to Lesson
+    01), Scenes 1-2 now have real Faye-produced videos; Scenes 3-6 stay
+    placeholder until she supplies theirs too (same process as Lesson
+    01's own story videos).
   - The guided-drawing sequence is ONE shared progressive illustration
     across all six scenes, not six bespoke ones — same simplification
     Lesson 01 made for its own three story choices; no real per-scene
@@ -280,39 +283,70 @@ button{font-family:inherit;}
 .scene-reveal-countdown.pulse{animation:sceneCountdownPulse .7s ease;}
 @keyframes sceneCountdownPulse{0%{transform:scale(1.5);opacity:0;}30%{opacity:1;}100%{transform:scale(1);opacity:1;}}
 
-/* Round 2 — per-scene teacher-reference overlay, small storyboard-
-   panel style consistent with Lesson 01's round-6 direction (thin ink
-   border, warm paper, corner ticks). Fades in with the question. */
+/* Round 3 (Faye's correction — was too small, and read as "the one
+   correct answer"): the per-scene reference overlay moved from a
+   vertically-centered 72px icon badge to a much bigger bottom-corner
+   panel with a real 16:9 preview thumbnail, so a glance at it actually
+   shows something rather than a tiny paint icon. Still storyboard-
+   panel styled (thin ink border, warm paper, corner ticks) and still
+   alternates left/right per scene (round 2's own reasoning: never
+   covering the same part of the 3D scene twice in a row) — just
+   anchored to the bottom of the frame now instead of mid-height,
+   which reads better for a "reference in the corner" than dead center
+   on the scene's tallest axis. */
 .teacher-overlay{
-  position:absolute;top:50%;transform:translateY(-50%);width:84px;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
+  position:absolute;bottom:16px;width:170px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
   background:none;border:none;padding:0;cursor:pointer;
   opacity:0;transition:opacity .6s ease,transform .6s ease;pointer-events:none;z-index:4;
 }
 .teacher-overlay.show{opacity:1;pointer-events:auto;}
-.teacher-overlay-left{left:14px;}
-.teacher-overlay-right{right:14px;}
+.teacher-overlay-left{left:16px;}
+.teacher-overlay-right{right:16px;}
 .teacher-overlay-frame{
-  width:72px;height:72px;background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 6px 16px rgba(28,26,34,.2);
+  width:100%;aspect-ratio:16/9;background:var(--sb-panel) center/cover no-repeat;border:1.5px solid var(--sb-ink);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 8px 20px rgba(28,26,34,.28);
 }
-.teacher-overlay-frame::before,.teacher-overlay-frame::after{content:'';position:absolute;width:10px;height:10px;border-color:var(--sb-ink-faint);border-style:solid;pointer-events:none;}
-.teacher-overlay-frame::before{top:5px;left:5px;border-width:1.3px 0 0 1.3px;}
-.teacher-overlay-frame::after{bottom:5px;right:5px;border-width:0 1.3px 1.3px 0;}
-.teacher-overlay-icon{font-size:1.5rem;filter:grayscale(1) contrast(.9);opacity:.7;}
-.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.5);text-align:center;}
-@media(max-width:600px){.teacher-overlay{width:56px;}.teacher-overlay-frame{width:52px;height:52px;}.teacher-overlay-icon{font-size:1.1rem;}.teacher-overlay-label{font-size:8px;}}
+.teacher-overlay-frame::before,.teacher-overlay-frame::after{content:'';position:absolute;width:12px;height:12px;border-color:rgba(255,255,255,.75);border-style:solid;pointer-events:none;}
+.teacher-overlay-frame::before{top:6px;left:6px;border-width:1.5px 0 0 1.5px;}
+.teacher-overlay-frame::after{bottom:6px;right:6px;border-width:0 1.5px 1.5px 0;}
+/* Play-triangle badge, shown only when the frame has a real video
+   thumbnail behind it (.has-video) — signals "tap to watch," not just
+   "tap to enlarge a picture." */
+.teacher-overlay-frame.has-video::after{content:'▶';border:none;bottom:auto;right:auto;top:50%;left:50%;
+  transform:translate(-50%,-50%);width:auto;height:auto;font-size:1.6rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+.teacher-overlay-icon{font-size:1.7rem;filter:grayscale(1) contrast(.9);opacity:.7;}
+.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.4px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:center;line-height:1.3;}
+@media(max-width:600px){.teacher-overlay{width:128px;bottom:12px;}.teacher-overlay-label{font-size:9.5px;}}
 
-/* Round 2 — teacher-reference lightbox (enlarge-on-tap). */
+/* Round 2 layout, round 3 sizing/content — the lightbox itself now
+   actually plays video (was always a static painted-icon placeholder,
+   even for scenes that had one) — see openTeacherLightbox. Widened
+   from 360px so a 16:9 video actually reads at a real size, not a
+   postage stamp. */
 .teacher-lightbox-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
 .teacher-lightbox-backdrop.show{display:flex;}
-.teacher-lightbox{background:var(--sb-panel);border-radius:var(--radius-lg);max-width:360px;width:100%;padding:26px 22px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
+.teacher-lightbox{background:var(--sb-panel);border-radius:var(--radius-lg);max-width:560px;width:100%;padding:26px 22px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
 .teacher-lightbox-frame{
   aspect-ratio:4/3;background:var(--sb-paper);border:1.5px solid var(--sb-ink);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;position:relative;
+}
+/* Video mode: the frame becomes a plain 16:9 video stage, not the 4:3
+   icon box — same override reasoning as Lesson 01's
+   .practice-panel-video .video-stage (a fixed aspect-ratio box, no
+   competing sizing rules). */
+.teacher-lightbox-frame.has-video{aspect-ratio:16/9;background:#000;}
+.teacher-lightbox-frame.has-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.teacher-lightbox-video-tap{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  padding:14px 26px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:2;
 }
 .teacher-lightbox-icon{font-size:2.6rem;filter:grayscale(1) contrast(.9);opacity:.6;}
 .teacher-lightbox-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--sb-ink);}
+.teacher-lightbox-disclaimer{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;margin-top:8px;max-width:420px;margin-left:auto;margin-right:auto;}
 .teacher-lightbox-note{font-size:12px;color:var(--sb-ink-faint);margin-top:6px;font-style:italic;}
 
 /* ============================================================
@@ -480,11 +514,15 @@ button{font-family:inherit;}
 .practice-saved-note{text-align:center;font-size:12.5px;color:var(--accent-deep);font-weight:700;margin-top:10px;}
 
 /* ============================================================
-   STEP 6 — Teacher Reference + Artwork Community. Same storyboard/
-   production-panel card treatment as Lesson 01's equivalent (Compare)
-   — warm paper, ink-toned dashed border reading as "placeholder."
-   compare-grid-single centers ONE card (this lesson shows one
-   scene-specific teacher reference, not a teacher/student pair).
+   STEP 6 — Artwork Community. Same storyboard/production-panel card
+   treatment as Lesson 01's equivalent (Compare) — warm paper, ink-
+   toned dashed border reading as "placeholder." The Teacher/Quick-
+   Sketch-Reference card that used to sit here is gone as of round 2 —
+   moved to the per-scene overlay in Step 3 (renderTeacherOverlay) —
+   see this file's header for why. compare-grid-single (still used
+   below) predates that move; kept as-is since nothing currently needs
+   a second grid column here, not because a reference card still
+   belongs in it.
 ============================================================ */
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;}
 @media(max-width:480px){.compare-grid{grid-template-columns:1fr;}}
@@ -727,16 +765,21 @@ button{font-family:inherit;}
   </div>
 </div>
 
-<!-- TEACHER REFERENCE LIGHTBOX — round 2, opened by each Step 3
-     scene's small overlay (renderTeacherOverlay/openTeacherLightbox).
-     Same backdrop-click-to-close pattern as My Journey above. -->
+<!-- QUICK SKETCH REFERENCE LIGHTBOX — round 2, renamed + rebuilt round
+     3, opened by each Step 3 scene's corner overlay
+     (renderTeacherOverlay/openTeacherLightbox). Same backdrop-click-to-
+     close pattern as My Journey above. teacherLightboxFrame's content
+     is rebuilt per-open by openTeacherLightbox() — a real video for
+     Scenes 1-2, the placeholder icon for Scenes 3-6 — so there's
+     nothing scene-specific hardcoded in this static markup. -->
 <div class="teacher-lightbox-backdrop" id="teacherLightboxBackdrop" onclick="if(event.target===this) closeTeacherLightbox();">
   <div class="teacher-lightbox">
     <div class="journey-close teacher-lightbox-close" onclick="closeTeacherLightbox()" title="Close">×</div>
-    <div class="teacher-lightbox-frame">
+    <div class="teacher-lightbox-frame" id="teacherLightboxFrame">
       <div class="teacher-lightbox-icon">🎨</div>
     </div>
     <div class="teacher-lightbox-label" id="teacherLightboxLabel"></div>
+    <div class="teacher-lightbox-disclaimer" id="teacherLightboxDisclaimer" hidden>This is just one reference — there are many possible ways to draw this scene.</div>
     <div class="teacher-lightbox-note" id="teacherLightboxNote"></div>
   </div>
 </div>
@@ -1712,37 +1755,120 @@ function playSuspenseSound(durationMs){
   } catch (e) { console.warn('[playSuspenseSound] failed', e); }
 }
 
-// Round 2 — per-scene teacher-reference overlay: a small framed panel
-// on one side of the 3D frame (alternating left/right per scene, styled
-// like a small storyboard panel — same --sb-* tokens as elsewhere in
-// this Unit's storyboard direction), shown once the scene settles.
-// All six are placeholder art for now (LESSON_DATA.teacher_references)
-// — clicking/tapping opens a larger lightbox so the student can look
-// closer. Swapping in real art later only needs that data field
-// edited, not this function.
+// Round 2 (enlarged + rebuilt round 3) — per-scene "Quick Sketch
+// Reference" overlay: a bottom-corner panel on one side of the 3D
+// frame (alternating left/right per scene, round 2's own reasoning —
+// never covering the same part of the 3D scene twice in a row), shown
+// once the scene settles. Renamed from "Teacher Reference" per Faye's
+// correction (implied one authoritative correct answer — same fix
+// already applied to Lesson 01's practice videos). Scenes with a real
+// video (LESSON_DATA.teacher_references[].demoVideoStreamId) show its
+// actual poster frame as the corner preview + a play-triangle badge,
+// not just a generic icon — clicking/tapping opens the lightbox
+// (openTeacherLightbox) where the video actually plays. Scenes without
+// one yet keep the plain icon placeholder. Swapping in real video for
+// a remaining scene only needs that data field edited, not this
+// function.
+const TEACHER_REF_CF_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function teacherRefPosterUrl(streamId){
+  return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`;
+}
 function renderTeacherOverlay(sceneData, side) {
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneData.id);
   if (!ref) return '';
+  const hasVideo = !!ref.demoVideoStreamId;
+  const frameStyle = hasVideo ? ` style="background-image:url('${teacherRefPosterUrl(ref.demoVideoStreamId)}')"` : '';
+  const inner = hasVideo ? '' : `<div class="teacher-overlay-icon">🎨</div>`;
   return `
-    <button class="teacher-overlay teacher-overlay-${side}" id="teacherOverlay" onclick="openTeacherLightbox('${sceneData.id}')" aria-label="Enlarge teacher reference for ${sceneData.title}">
-      <div class="teacher-overlay-frame">
-        <div class="teacher-overlay-icon">🎨</div>
-      </div>
-      <div class="teacher-overlay-label">Teacher Reference</div>
+    <button class="teacher-overlay teacher-overlay-${side}" id="teacherOverlay" onclick="openTeacherLightbox('${sceneData.id}')" aria-label="Open Quick Sketch Reference for ${sceneData.title}">
+      <div class="teacher-overlay-frame${hasVideo ? ' has-video' : ''}"${frameStyle}>${inner}</div>
+      <div class="teacher-overlay-label">Quick Sketch Reference</div>
     </button>
   `;
+}
+
+// Round 3 — the lightbox now actually plays video for whichever scenes
+// have one, instead of always showing the static painted-icon
+// placeholder. Mirrors Lesson 01's attachStoryTeacherVideo pattern
+// (Stream SDK attach + tap-to-play fallback if unmuted autoplay is
+// blocked) — this lesson had no video-embedding code of its own to
+// reuse (Step 1 here isn't a video), so that already-verified pattern
+// is the one being followed, not a new one invented for this lightbox.
+// The iframe is torn down on close (not just hidden) so the video
+// actually stops — this is a repeatedly open/closed modal, unlike
+// Lesson 01's always-mounted practice panel, so leaving it playing
+// in the background on close would be a real bug, not just untidy.
+function teacherRefVideoSrc(streamId){
+  const poster = encodeURIComponent(teacherRefPosterUrl(streamId));
+  return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
+}
+function attachTeacherRefVideo(streamId){
+  const sdk = document.createElement('script');
+  sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+  sdk.onload = () => {
+    try {
+      const iframe = document.getElementById('teacherLightboxVideoFrame');
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (!player) return;
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('teacherLightboxVideoTap');
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('teacherLightboxVideoTap');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[teacher_ref_video] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
+    } catch (e) {
+      console.warn('[teacher_ref_video] Stream SDK attach failed', e);
+    }
+  };
+  sdk.onerror = () => console.warn('[teacher_ref_video] Stream SDK failed to load');
+  document.head.appendChild(sdk);
 }
 function openTeacherLightbox(sceneId) {
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneId);
   if (!ref) return;
+  const frame = document.getElementById('teacherLightboxFrame');
+  const disclaimerEl = document.getElementById('teacherLightboxDisclaimer');
   document.getElementById('teacherLightboxLabel').textContent = ref.label;
-  document.getElementById('teacherLightboxNote').textContent = ref.placeholder
-    ? "Coming soon — Faye will supply this scene's real teacher reference drawing."
-    : '';
+  if (ref.demoVideoStreamId) {
+    frame.className = 'teacher-lightbox-frame has-video';
+    frame.innerHTML = `
+      <iframe id="teacherLightboxVideoFrame" src="${teacherRefVideoSrc(ref.demoVideoStreamId)}" loading="lazy" title="${ref.label}"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
+      <button class="teacher-lightbox-video-tap" id="teacherLightboxVideoTap" hidden>🔊 Tap to Play</button>
+    `;
+    attachTeacherRefVideo(ref.demoVideoStreamId);
+    disclaimerEl.hidden = false;
+    document.getElementById('teacherLightboxNote').textContent = '';
+  } else {
+    frame.className = 'teacher-lightbox-frame';
+    frame.innerHTML = `<div class="teacher-lightbox-icon">🎨</div>`;
+    disclaimerEl.hidden = true;
+    document.getElementById('teacherLightboxNote').textContent =
+      "Coming soon — Faye will supply this scene's real quick-sketch reference video.";
+  }
   document.getElementById('teacherLightboxBackdrop').classList.add('show');
 }
 function closeTeacherLightbox() {
   document.getElementById('teacherLightboxBackdrop').classList.remove('show');
+  // Tear the iframe down so a playing video actually stops, rather
+  // than continuing to play (and make sound) behind the closed modal.
+  const frame = document.getElementById('teacherLightboxFrame');
+  if (frame && frame.classList.contains('has-video')) {
+    frame.className = 'teacher-lightbox-frame';
+    frame.innerHTML = `<div class="teacher-lightbox-icon">🎨</div>`;
+  }
 }
 
 function renderStoryScene(sceneData, sceneIndex) {
