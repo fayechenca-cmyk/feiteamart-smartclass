@@ -404,6 +404,37 @@ button{font-family:inherit;}
 .journey-entry:hover .journey-entry-delete{opacity:.6;}
 .journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
 @media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
+
+/* ---- Course map modal (§6) — same backdrop mechanics as My Journey
+   above, xuan-paper toned to match the rest of this course. ---- */
+.map-modal-backdrop{position:fixed;inset:0;background:rgba(43,38,32,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.map-modal-backdrop.show{display:flex;}
+.map-modal{
+  background-color:var(--xuan);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.16 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  border:1px solid var(--xuan-line);border-radius:8px;max-width:520px;width:100%;
+  padding:28px 24px 22px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(43,38,32,.35);
+}
+.map-animal-list{display:flex;flex-direction:column;gap:8px;}
+.map-animal-row{border:1.5px solid var(--xuan-line);border-radius:6px;background:#fffaf0;overflow:hidden;}
+.map-animal-row.locked{opacity:.55;}
+.map-animal-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;}
+.map-animal-row.locked .map-animal-head{cursor:default;}
+.map-animal-char{font-size:1.4rem;width:32px;text-align:center;flex-shrink:0;color:var(--ink-red);}
+.map-animal-info{flex:1;min-width:0;}
+.map-animal-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink-warm);}
+.map-animal-meta{font-size:11px;color:var(--ink-warm-faint);margin-top:1px;}
+.map-animal-caret{font-size:12px;color:var(--ink-warm-faint);flex-shrink:0;}
+.map-step-list{border-top:1px solid var(--xuan-line);padding:6px 10px 10px;}
+.map-step-row{display:flex;align-items:center;gap:9px;padding:8px 6px;border-radius:5px;cursor:pointer;}
+.map-step-row:hover{background:var(--xuan);}
+.map-step-row.pending{opacity:.45;cursor:default;}
+.map-step-row.done .map-step-num{background:var(--bamboo);color:#fff;border-color:var(--bamboo);}
+.map-step-row.current{background:var(--ink-red-soft);}
+.map-step-row.current .map-step-num{background:var(--ink-red);color:#fff;border-color:var(--ink-red);}
+.map-step-num{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--xuan-line);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;font-family:'Space Grotesk',sans-serif;color:var(--ink-warm-faint);flex-shrink:0;background:#fff;}
+.map-step-title{flex:1;font-size:12.5px;color:var(--ink-warm);}
+.map-step-tag{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink-red);flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -413,6 +444,10 @@ button{font-family:inherit;}
     <div class="topbar-left">
       <a class="exit-link" href="../../" title="Back to Art GPS">← <span class="exit-link-full">Skill</span></a>
       <button class="prev-step-btn" id="prevStepBtn" onclick="prevStage()">‹ Previous</button>
+      <!-- §6 — course map (all 12 zodiac animals, Rat -> Pig), so
+           students see the full scope up front, not just step-after-
+           step with no sense of how large the course is. -->
+      <button class="journey-btn" onclick="openCourseMap()">🗺️ <span class="journey-btn-full">Map</span></button>
       <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
     </div>
     <div class="rail" id="rail"></div>
@@ -421,6 +456,18 @@ button{font-family:inherit;}
 </div>
 
 <div class="continue-dock" id="continueDock"></div>
+
+<div class="map-modal-backdrop" id="mapModalBackdrop" onclick="if(event.target===this) closeCourseMap();">
+  <div class="map-modal">
+    <div class="journey-close" onclick="closeCourseMap()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">十二生肖 · Course Map</div>
+      <div class="journey-title">Zodiac Brush Technique</div>
+      <div class="journey-subtitle">All twelve zodiac animals — the Rat is live today; the rest are coming soon.</div>
+    </div>
+    <div class="map-animal-list" id="mapAnimalList"></div>
+  </div>
+</div>
 
 <div class="journey-modal-backdrop" id="journeyModalBackdrop" onclick="if(event.target===this) closeMyJourney();">
   <div class="journey-modal">
@@ -497,6 +544,26 @@ const COURSE_ID = 'zodiac-skill';
 // ACCESS/PAYWALL note for why this is step-granularity, not a
 // FREE_SKILLS page-id entry.
 const FREE_STEP_COUNT = 2;
+
+// §6 — the full 12-animal order (Rat -> Pig), used ONLY by the course
+// map to show real scope. Deliberately separate from ZODIAC_ANIMALS
+// (which only Rat populates so far, with real steps) — an entry here
+// with no matching ZODIAC_ANIMALS record just renders "Coming soon" in
+// the map, no step data invented for it.
+const ZODIAC_ORDER = [
+  { id:'rat', label:'Rat', chineseCharacter:'鼠' },
+  { id:'ox', label:'Ox', chineseCharacter:'牛' },
+  { id:'tiger', label:'Tiger', chineseCharacter:'虎' },
+  { id:'rabbit', label:'Rabbit', chineseCharacter:'兔' },
+  { id:'dragon', label:'Dragon', chineseCharacter:'龙' },
+  { id:'snake', label:'Snake', chineseCharacter:'蛇' },
+  { id:'horse', label:'Horse', chineseCharacter:'马' },
+  { id:'goat', label:'Goat', chineseCharacter:'羊' },
+  { id:'monkey', label:'Monkey', chineseCharacter:'猴' },
+  { id:'rooster', label:'Rooster', chineseCharacter:'鸡' },
+  { id:'dog', label:'Dog', chineseCharacter:'狗' },
+  { id:'pig', label:'Pig', chineseCharacter:'猪' }
+];
 
 /* ============================================================
    STAGES — flat-mapped from ZODIAC_ANIMALS, one animal for now.
@@ -962,6 +1029,80 @@ function deleteJourneyEntry(entryId){
   if (!confirm('Delete this thought? This cannot be undone.')) return;
   JournalStorage.remove(entryId);
   renderJourneyModalContent();
+}
+
+/* ============================================================
+   COURSE MAP (§6) — all 12 zodiac animals, so students see the real
+   scope of the course, not just step-after-step with no sense of
+   scale. Rat (the only built animal) starts expanded; clicking a real
+   step jumps there and closes the modal. Ox-Pig are shown, not
+   hidden, but not clickable — no step data exists for them yet.
+============================================================ */
+let mapExpandedAnimalId = 'rat';
+function openCourseMap(){
+  renderMapModalContent();
+  document.getElementById('mapModalBackdrop').classList.add('show');
+}
+function closeCourseMap(){
+  document.getElementById('mapModalBackdrop').classList.remove('show');
+}
+function toggleMapAnimal(animalId){
+  mapExpandedAnimalId = mapExpandedAnimalId === animalId ? null : animalId;
+  renderMapModalContent();
+}
+function goToMapStep(animalId, stepNumber){
+  const idx = STAGES.findIndex(s => s.id === animalId + '_step_' + stepNumber);
+  if (idx === -1) return;
+  closeCourseMap();
+  goStage(idx);
+}
+function renderMapModalContent(){
+  const listEl = document.getElementById('mapAnimalList');
+  const currentStageId = STAGES[STATE.stageIndex] ? STAGES[STATE.stageIndex].id : null;
+  listEl.innerHTML = ZODIAC_ORDER.map(entry => {
+    const built = ZODIAC_ANIMALS.find(a => a.id === entry.id);
+    if (!built) {
+      return `
+        <div class="map-animal-row locked">
+          <div class="map-animal-head">
+            <div class="map-animal-char">${entry.chineseCharacter}</div>
+            <div class="map-animal-info">
+              <div class="map-animal-name">${entry.label}</div>
+              <div class="map-animal-meta">Coming soon</div>
+            </div>
+          </div>
+        </div>`;
+    }
+    const expanded = mapExpandedAnimalId === entry.id;
+    const availableCount = built.steps.filter(s => s.videoUrl).length;
+    const stepsHtml = built.steps.map(s => {
+      const stageId = entry.id + '_step_' + s.stepNumber;
+      const idx = STAGES.findIndex(st => st.id === stageId);
+      const cls = [];
+      if (!s.videoUrl) cls.push('pending');
+      if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
+      if (stageId === currentStageId) cls.push('current');
+      const clickable = idx > -1;
+      return `
+        <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
+          <span class="map-step-num">${s.stepNumber}</span>
+          <span class="map-step-title">${escapeHtml(s.title)}</span>
+          ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
+        </div>`;
+    }).join('');
+    return `
+      <div class="map-animal-row built${expanded ? ' expanded' : ''}">
+        <div class="map-animal-head" onclick="toggleMapAnimal('${entry.id}')">
+          <div class="map-animal-char">${entry.chineseCharacter}</div>
+          <div class="map-animal-info">
+            <div class="map-animal-name">${entry.label}</div>
+            <div class="map-animal-meta">${availableCount} of ${built.steps.length} steps available</div>
+          </div>
+          <div class="map-animal-caret">${expanded ? '▾' : '▸'}</div>
+        </div>
+        ${expanded ? `<div class="map-step-list">${stepsHtml}</div>` : ''}
+      </div>`;
+  }).join('');
 }
 
 /* ============================================================
