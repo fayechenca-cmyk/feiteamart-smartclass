@@ -8,15 +8,28 @@
  *
  * Free access rules (per Final Registration Decision):
  *   Skills branch:   `preparation` + `cube` are free. 3rd Skills lesson triggers paywall.
- *   Creation branch: any 2 lessons free. 3rd unique Creation lesson triggers paywall.
+ *   Creation branch: fully open for now, no paywall (per Faye, Sept 2026 —
+ *                     see canOpenLesson's 'creation' branch; the old any-2-
+ *                     lessons-free limit is left in place, unused, for a
+ *                     later subscription-model pass, not this one again).
  *
  * Public API (window.FEIAccess):
  *   FEIAccess.init()                      → Promise<void>
- *   FEIAccess.getStatus()                 → Promise<{membership, openedCreationLessons, openedSkillLessons, isLegacy}>
+ *   FEIAccess.getStatus()                 → Promise<{membership, openedCreationLessons, openedSkillLessons, isLegacy, isLiveClass, isAdmin, hasFullAccess}>
  *   FEIAccess.canOpenLesson(branch, id)   → Promise<{allowed, reason}>
  *                                           branch = 'skills' | 'creation'
  *   FEIAccess.recordLessonOpened(branch, id) → Promise<void>
  *   FEIAccess.markPaid()                  → Promise<void>   (after Stripe success)
+ *
+ * hasFullAccess (Sept 2026 addition) — the field a NEW paid course (e.g.
+ * Zodiac) should check for "is this genuinely a full-access identity,"
+ * NOT isLegacy. isLegacy is true for every access-code student including
+ * the 4 isLiveClass-flagged ones (JOJO-10, A7Q9-FOX, SELENA-23, XIDA-25),
+ * who per Faye's explicit instruction should NOT get a blanket bypass on
+ * courses outside their enrolled live course. hasFullAccess is false for
+ * exactly that one case; true for admin (FAYE-00), true for every other
+ * legacy code (unchanged original "access code = paid" behavior), and
+ * mirrors `membership === 'paid'` for real Supabase accounts.
  *
  * Companion Supabase table (created via /core/access-schema.sql):
  *   smartclass_access (user_id PK, membership, membership_type,
@@ -59,6 +72,30 @@
       const p = JSON.parse(raw);
       return !!(p && p.studentCode && p.tier);
     } catch (e) { return false; }
+  }
+
+  // Sept 2026 — per Faye's platform-wide access clarification: not every
+  // legacy access-code student should count as "full access to literally
+  // everything." isLiveClass-flagged codes (core/student-access-codes.js —
+  // JOJO-10, A7Q9-FOX, SELENA-23, XIDA-25) are enrolled in ONE live course
+  // (currently Foundation of Sketch A) and should see normal free/paid
+  // rules everywhere else, e.g. Zodiac's Step 3 paywall — same as any
+  // other student. FAYE-00 (isAdmin:true) is the one deliberate blanket
+  // exception. Reads the raw profile once so getStatus() can report real
+  // isLiveClass/isAdmin instead of the old hardcoded isLiveClass:false.
+  // Deliberately NOT used by canOpenLesson() below — that function's
+  // existing isLegacy-based bypass stays untouched (Creation/Sketch's
+  // working access paths, including the home page's separate
+  // isLiveClassStudent() override for Sketch, don't go through this) —
+  // this is additive, read directly by course files (e.g. Zodiac) that
+  // need the finer distinction.
+  function _legacyProfileFlags() {
+    try {
+      const raw = global.sessionStorage.getItem('fei_user_profile');
+      if (!raw) return { isLiveClass: false, isAdmin: false };
+      const p = JSON.parse(raw);
+      return { isLiveClass: !!(p && p.isLiveClass), isAdmin: !!(p && p.isAdmin) };
+    } catch (e) { return { isLiveClass: false, isAdmin: false }; }
   }
 
   async function _fetchOrCreateRow(userId) {
@@ -114,10 +151,21 @@
   async function getStatus() {
     // Legacy access-code students bypass everything
     if (_isLegacyAccessCode()) {
+      const flags = _legacyProfileFlags();
       return {
         membership: 'paid',
         membershipType: null,
-        isLiveClass: false,
+        isLiveClass: flags.isLiveClass,
+        isAdmin: flags.isAdmin,
+        // True blanket "open every course, including new paid ones" —
+        // admin always; a plain legacy code (no isLiveClass) always,
+        // matching this platform's original "access code = paid" design;
+        // an isLiveClass-but-not-admin code is scoped to their enrolled
+        // live course instead (see canOpenLesson/attachSkillsLessonGuard's
+        // separate isLiveClassStudent() override for that course) — NOT
+        // a blanket pass on every other course a course file may check
+        // this field for (e.g. Zodiac).
+        hasFullAccess: flags.isAdmin || !flags.isLiveClass,
         openedCreationLessons: [],
         openedSkillLessons: [],
         isLegacy: true,
@@ -131,6 +179,8 @@
         membership: null,
         membershipType: null,
         isLiveClass: false,
+        isAdmin: false,
+        hasFullAccess: false,
         openedCreationLessons: [],
         openedSkillLessons: [],
         isLegacy: false,
@@ -143,6 +193,8 @@
       membership: row.membership || 'free',
       membershipType: row.membership_type || null,
       isLiveClass: row.membership_type === 'live_class',
+      isAdmin: false,
+      hasFullAccess: row.membership === 'paid',
       openedCreationLessons: Array.isArray(row.opened_creation_lessons) ? row.opened_creation_lessons : [],
       openedSkillLessons: Array.isArray(row.opened_skill_lessons) ? row.opened_skill_lessons : [],
       isLegacy: false,

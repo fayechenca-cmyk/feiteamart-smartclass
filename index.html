@@ -1905,6 +1905,13 @@
         const nameMatch      = blockText.match(/displayName\s*:\s*["']([^"']+)["']/);
         const trialMatch     = blockText.match(/isTrial\s*:\s*(true|false)/);
         const liveClassMatch = blockText.match(/isLiveClass\s*:\s*(true|false)/);
+        // Sept 2026 — parsed for the first time: core/student-access-codes.js
+        // already carries isAdmin on FAYE-00, but it was never read here, so
+        // it never reached the session profile / core/access.js's
+        // hasFullAccess check. Needed now to distinguish Faye's blanket
+        // access from the isLiveClass-only students (JOJO-10 etc.), who per
+        // Faye's explicit instruction should NOT get a platform-wide bypass.
+        const adminMatch      = blockText.match(/isAdmin\s*:\s*(true|false)/);
 
         if (!idMatch || !nameMatch) continue;
 
@@ -1913,7 +1920,8 @@
           {
             displayName: nameMatch[1],
             isTrial: trialMatch ? trialMatch[1] === 'true' : false,
-            isLiveClass: liveClassMatch ? liveClassMatch[1] === 'true' : false
+            isLiveClass: liveClassMatch ? liveClassMatch[1] === 'true' : false,
+            isAdmin: adminMatch ? adminMatch[1] === 'true' : false
           }
         );
       }
@@ -3001,6 +3009,7 @@
       name: match.displayName,
       tier: match.isTrial ? 'trial' : 'member',
       isLiveClass: !!match.isLiveClass,
+      isAdmin: !!match.isAdmin,
       memberSince: existing ? existing.memberSince : Date.now(),
       currentLesson: existing ? existing.currentLesson : 'cube',
       currentStepIdx: existing ? existing.currentStepIdx : 0,

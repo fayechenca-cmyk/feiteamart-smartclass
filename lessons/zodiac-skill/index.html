@@ -75,25 +75,26 @@
   page, not a continuation of the same drawing — matching the real
   physical lesson's own structure (a literal separate practice sheet).
 
-  ACCESS / PAYWALL (addendum item 7 — supersedes the base prompt's
-  "leave fully open for now"): Foundation's own core/access.js gates
-  at the PAGE level (FREE_SKILLS = ['preparation','cube'], one fixed
-  free list checked per distinct lesson id) — that shape doesn't map
-  onto a single-file, multi-step course the way it maps onto
+  ACCESS / PAYWALL (addendum item 7, refined by Faye's Sept 2026
+  platform-wide access clarification): Foundation's own core/access.js
+  gates at the PAGE level (FREE_SKILLS = ['preparation','cube'], one
+  fixed free list checked per distinct lesson id) — that shape doesn't
+  map onto a single-file, multi-step course the way it maps onto
   Foundation's separate lesson pages. Rather than inventing a second,
-  parallel access table, this file reuses the SAME underlying signal
-  FREE_SKILLS itself is built from (window.FEIAccess.getStatus():
-  legacy access-code OR membership==='paid' grants full access) and
-  applies it at STEP granularity instead of page granularity: Steps 1
-  and 2 (Materials, Draw the Nose) are free — the same "first 1-2
-  free" shape as preparation+cube — Step 3 onward shows an inline
-  paywall in place of the step content for a free account. FLAGGED
-  FOR FAYE, not decided silently: this is a NEW gating shape (step-
-  level, single-file) built specifically for this course's structure,
-  not a literal reuse of FREE_SKILLS' page-id array — see the OUTPUT
-  report for the exact step number and an explicit ask to confirm her
-  own account's membership already bypasses it (isLegacy or paid),
-  rather than this file adding a Faye-only special case.
+  parallel access table, this file reuses window.FEIAccess.getStatus()
+  and applies it at STEP granularity instead of page granularity:
+  Steps 1 and 2 (Materials, Draw the Nose) are free, Step 3 onward
+  shows an inline paywall in place of the step content.
+
+  Checks status.hasFullAccess, NOT status.isLegacy — confirmed with
+  Faye directly: the 4 isLiveClass-flagged legacy codes (JOJO-10,
+  A7Q9-FOX, SELENA-23, XIDA-25, enrolled in the live Foundation of
+  Sketch A / Sketch course) are isLegacy:true but must see this
+  course's normal free/paid wall like anyone else, not a blanket
+  bypass — hasFullAccess (core/access.js) is false for exactly that
+  case, true for FAYE-00 (isAdmin) and every other legacy code
+  (unchanged original "access code = paid" behavior), and mirrors real
+  paid membership for Supabase accounts.
 
   MY JOURNEY / PROGRESS (addendum item 5): JournalStorage (the real
   bare-global bridge from core/scene-drawing-platform-bridge.js,
@@ -416,18 +417,30 @@ function escapeHtml(str){
 }
 
 /* ============================================================
-   ACCESS — reuses window.FEIAccess.getStatus() (the same underlying
-   smartclass_access membership signal FREE_SKILLS is built from),
-   applied at step granularity. Fails OPEN on any error, matching
-   core/access.js's own gateLessonPage philosophy (never lock a
-   student out because of a network hiccup or bug here).
+   ACCESS — reuses window.FEIAccess.getStatus(), applied at step
+   granularity. Checks status.hasFullAccess (NOT status.isLegacy) —
+   per Faye's Sept 2026 platform-access clarification, the 4
+   isLiveClass-flagged legacy codes (JOJO-10, A7Q9-FOX, SELENA-23,
+   XIDA-25) are isLegacy:true but must NOT get a blanket bypass here;
+   they should see the same Step 1-2-free/Step 3-paid wall as anyone
+   else. hasFullAccess (core/access.js) is false for exactly that
+   case, true for admin (FAYE-00) and every other legacy code, and
+   mirrors real paid membership for Supabase accounts. Fails OPEN on
+   any error, matching core/access.js's own gateLessonPage philosophy
+   (never lock a student out because of a network hiccup or bug here).
 ============================================================ */
 async function computeAccess(){
   if (!window.FEIAccess) { STATE.hasFullAccess = true; return; }
   try {
     await window.FEIAccess.init();
     const status = await window.FEIAccess.getStatus();
-    STATE.hasFullAccess = !!(status.isLegacy || status.membership === 'paid');
+    // NOT `|| status.membership === 'paid'` — real bug caught live: every
+    // legacy account (including the scoped live-class ones) hardcodes
+    // membership:'paid' in getStatus() for unrelated reasons, which made
+    // that OR always true and silently defeated hasFullAccess's narrowing
+    // for JOJO-10 etc. hasFullAccess already folds the Supabase paid case
+    // in (see core/access.js's non-legacy branch), so it alone is correct.
+    STATE.hasFullAccess = !!status.hasFullAccess;
   } catch (e) {
     console.warn('[access] check failed, allowing through', e);
     STATE.hasFullAccess = true;
