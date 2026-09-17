@@ -395,27 +395,35 @@ button{font-family:inherit;}
 .journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
 @media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
 
-/* Course Map cards — adapted from lessons/scene-drawing-foundation/
-   index.html's own .lesson-card (core/scene-drawing-style.css),
-   re-tokened to this file's palette. That course's version is a real
-   <a href> to a separate lesson page; Color Theory has no separate
-   pages to link to (all four sections are internal stages in this one
-   file), so these are buttons that jump STATE.stageIndex and close
-   this modal instead — same list-of-sections-with-status concept,
-   adapted to a single-file course rather than a multi-file one. */
-.map-card-list{display:flex;flex-direction:column;gap:10px;}
-.map-card{
-  display:block;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);
-  border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+/* Course Map — round 3 rebuild, colored dots + bloom transition
+   (replaces the round-2 card-list modal, now a real stage). */
+.map-dot-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:28px 34px;margin-top:34px;}
+.map-dot-item{
+  display:flex;flex-direction:column;align-items:center;gap:8px;width:150px;
+  background:none;border:none;cursor:pointer;padding:10px 6px;border-radius:var(--radius-md);
+  transition:transform .15s ease;
 }
-.map-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(43,36,56,.08);border-color:var(--accent);}
-.map-card.current{border-color:var(--accent);background:#fff;box-shadow:0 4px 16px rgba(216,67,44,.12);}
-.map-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
-.map-card-number{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-deep);}
-.map-card-status{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink-faint);}
-.map-card-status.done{color:#2f8f5b;}
-.map-card-status.current{color:var(--accent-deep);}
-.map-card-title{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);}
+.map-dot-item:hover{transform:translateY(-2px);}
+.map-dot-item:active{transform:scale(.96);}
+.map-dot{
+  width:76px;height:76px;border-radius:50%;box-shadow:0 8px 20px rgba(43,36,56,.22),inset 0 0 0 3px rgba(255,255,255,.5);
+  border:2.5px solid var(--ink);
+}
+.map-dot.current{box-shadow:0 8px 20px rgba(43,36,56,.22),0 0 0 4px rgba(216,67,44,.25),inset 0 0 0 3px rgba(255,255,255,.5);}
+.map-dot-label{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--ink);text-align:center;}
+.map-dot-blurb{font-size:11.5px;color:var(--ink-soft);text-align:center;line-height:1.4;}
+.map-dot-status{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink-faint);}
+.map-dot-status.done{color:#2f8f5b;}
+.map-dot-status.current{color:var(--accent-deep);}
+/* The bloom itself — a fixed circle grown from the tapped dot's own
+   position via a scale transform (GPU-cheap, keeps it centered on its
+   own transform-origin as it grows), not a screen-wide element sized
+   from the start. */
+.map-bloom{
+  position:fixed;border-radius:50%;transform:translate(-50%,-50%) scale(1);
+  transition:transform .56s cubic-bezier(.2,.7,.25,1),opacity .42s ease;
+  z-index:900;pointer-events:none;opacity:1;
+}
 
 /* Badge card — adapted from core/scene-drawing-style.css's own
    .course-badge-card (same class names, same real renderCourseBadgeCard()
@@ -438,32 +446,16 @@ button{font-family:inherit;}
     <div style="display:flex;align-items:center;gap:14px;">
       <a class="exit-link" href="../" title="Back to Art GPS"><span class="exit-link-full">← Skill</span><span class="exit-link-mobile">←</span></a>
       <button class="prev-step-btn" id="prevBtn" onclick="prevStage()" disabled>‹ Back</button>
-      <button class="journey-btn" onclick="openCourseMap()">🗺️ <span class="journey-btn-full">Map</span></button>
+      <!-- Round 3: navigates straight to the real Map stage (index 0)
+           instead of opening a modal — see the Course Map comment in
+           the script block for why. -->
+      <button class="journey-btn" onclick="goStageIndex(0)">🗺️ <span class="journey-btn-full">Map</span></button>
       <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
     </div>
     <div class="rail" id="rail"></div>
   </div>
   <div id="stage"></div>
   <div class="continue-dock" id="continueDock"></div>
-</div>
-
-<!-- COURSE MAP MODAL — round 2, corrected: "return to Map" means this
-     course's OWN internal section list (Intro/Lesson 1/2/3), same
-     logic as Foundation A/Scene Drawing Foundation's course-internal
-     lesson list — NOT the exit link (that's a genuinely different,
-     separate control; see its own comment in the script block for
-     why this had to be a modal rather than a real page, and why it's
-     a distinct button from My Journey rather than combined). -->
-<div class="journey-modal-backdrop" id="courseMapModalBackdrop" onclick="if(event.target===this) closeCourseMap();">
-  <div class="journey-modal">
-    <div class="journey-close" onclick="closeCourseMap()" title="Close">×</div>
-    <div class="journey-hero">
-      <div class="journey-kicker">🗺️ Color Theory</div>
-      <div class="journey-title">Jump to any part</div>
-      <div class="journey-subtitle">Pick up where you left off, or revisit an earlier lesson.</div>
-    </div>
-    <div class="map-card-list" id="courseMapList"></div>
-  </div>
 </div>
 
 <!-- MY JOURNEY MODAL — round 2, ported from the SAME real component
@@ -722,6 +714,11 @@ function paintPaletteTrayCanvases(){
    internal sub-parts (see file header for why flat, not nested).
 ============================================================ */
 const STAGES = [
+  // Round 3, item 1 — the literal first stage (index 0, STATE's own
+  // default), so entering the course lands here before anything else,
+  // not straight into the intro video. See the Course Map block below
+  // for renderCourseMap/bloomToSection.
+  { id:'course_map', render:renderCourseMap, afterRender:afterRenderCourseMap },
   { id:'intro_video', render:renderIntroVideo, afterRender:afterRenderIntroVideo },
   { id:'lesson1_intro', render:renderLesson1Intro, afterRender:afterRenderLesson1Intro },
   { id:'lesson1_explore', render:renderLesson1Explore, afterRender:afterRenderLesson1Explore },
@@ -944,33 +941,30 @@ const JournalStorage = {
 };
 
 /* ============================================================
-   COURSE MAP — round 2 correction. "Return to Map" means Color
-   Theory's OWN internal section list (Intro/Lesson 1/2/3), the exact
-   same logic as Foundation A/Scene Drawing Foundation's course-
-   internal lesson list — NOT the exit link. Confirmed by re-checking
-   Scene Drawing Foundation directly: a lesson's exit-link href
-   ("../../" from a unit-01 lesson) resolves to
-   lessons/scene-drawing-foundation/index.html — that COURSE's own
-   catalog page (lesson cards, real <a href>), not the site-wide
-   Skills page. This is a genuinely different control from that exit
-   link (which still correctly leaves to Skills) and from My Journey
-   (a private thinking log, unrelated concept) — a separate button,
-   not a repurposed one.
+   COURSE MAP — round 3 rebuild. Round 2 already fixed "return to Map"
+   to mean this course's own internal section list rather than the
+   exit link (confirmed correct — the modal below jumped
+   STATE.stageIndex, not window.location). Round 3's actual ask is
+   different: the map is no longer a modal you opt into mid-course —
+   it's now STAGES[0], the literal first thing a student sees on
+   entering the course (see the STAGES array below), so "don't drop
+   the student straight into Lesson 1" is true by construction, not by
+   convention. The 🗺️ Map button now navigates back to this real stage
+   (goStageIndex(0)) instead of reopening a modal on top of wherever
+   they were.
 
-   Adapted, not copied verbatim: that catalog page is a real separate
-   page because Scene Drawing Foundation's 5 lessons are 5 separate
-   files; Color Theory's 4 sections are internal STAGES in this one
-   file, so there's no separate page to link to — this is a modal
-   that jumps STATE.stageIndex instead of a page navigation, same
-   list-with-status concept, same card visual language
-   (.lesson-card ported as .map-card — see the CSS block's own note),
-   just adapted to a single-file course.
+   One dot per existing course section — the safest default per
+   Faye's own suggestion, not a new information architecture. Each
+   section carries a short blurb (what it covers, one line) and
+   dotColors (1-3 real paint tokens, not arbitrary hex) so each dot's
+   coloring is actually tied to that section's content — primaries'
+   dot is genuinely red/yellow/blue split, etc.
 ============================================================ */
 const COURSE_MAP_SECTIONS = [
-  { key:'intro', label:'Intro Video', firstStageId:'intro_video' },
-  { key:'lesson1', label:'Lesson 1 · Primary Colors', firstStageId:'lesson1_intro' },
-  { key:'lesson2', label:'Lesson 2 · Analogous Colors', firstStageId:'lesson2_video' },
-  { key:'lesson3', label:'Lesson 3 · Complementary Colors', firstStageId:'lesson3_video' }
+  { key:'intro', label:'Why Color', blurb:'What color even is', firstStageId:'intro_video', dotColors:['var(--paint-red)','var(--paint-yellow)','var(--paint-blue)'] },
+  { key:'lesson1', label:'Primary Colors', blurb:'Mix red, yellow & blue', firstStageId:'lesson1_intro', dotColors:['var(--paint-red)','var(--paint-yellow)','var(--paint-blue)'] },
+  { key:'lesson2', label:'Analogous Colors', blurb:'Colors that sit side by side', firstStageId:'lesson2_video', dotColors:['var(--paint-yellow)','var(--accent)'] },
+  { key:'lesson3', label:'Complementary Colors', blurb:'Colors that sit across from each other', firstStageId:'lesson3_video', dotColors:['var(--accent)','var(--mint)'] }
 ];
 // Resolves each section's stage-index range by looking up its first
 // stage's real position in STAGES (not hardcoded indices) — a section
@@ -992,36 +986,80 @@ function courseMapSectionStatus(section){
   if (doneFlag) return 'done';
   return STATE.stageIndex > section.endIdx ? 'done' : 'upcoming';
 }
-function renderCourseMapContent(){
-  const list = document.getElementById('courseMapList');
-  const sections = courseMapSectionRanges();
-  list.innerHTML = sections.map((s, i) => {
-    const status = courseMapSectionStatus(s);
-    const statusLabel = status === 'done' ? '✓ Done' : status === 'current' ? '● Here now' : 'Not started';
-    return `
-      <button class="map-card${status === 'current' ? ' current' : ''}" onclick="goToMapSection('${s.firstStageId}')">
-        <div class="map-card-top">
-          <div class="map-card-number">${i === 0 ? 'Intro' : 'Lesson ' + i}</div>
-          <div class="map-card-status ${status}">${statusLabel}</div>
-        </div>
-        <div class="map-card-title">${s.label}</div>
-      </button>
-    `;
-  }).join('');
-}
-function goToMapSection(stageId){
-  const idx = STAGES.findIndex(s => s.id === stageId);
-  if (idx === -1) return;
-  closeCourseMap();
+// Direct stage navigation — used by the topbar Map button (always
+// jumps to the map, index 0) and available generally. Distinct from
+// nextStage/prevStage, which only ever move by one.
+function goStageIndex(idx){
+  if (idx < 0 || idx >= STAGES.length) return;
   STATE.stageIndex = idx;
   renderCurrentStage();
 }
-function openCourseMap(){
-  renderCourseMapContent();
-  document.getElementById('courseMapModalBackdrop').classList.add('show');
+
+function renderCourseMap(){
+  const sections = courseMapSectionRanges();
+  const dots = sections.map((s, i) => {
+    const status = courseMapSectionStatus(s);
+    const statusLabel = status === 'done' ? '✓ Done' : status === 'current' ? '● Here now' : '';
+    const gradient = s.dotColors.length > 1
+      ? `conic-gradient(${s.dotColors.map((c, ci) => `${c} ${Math.round(ci*360/s.dotColors.length)}deg ${Math.round((ci+1)*360/s.dotColors.length)}deg`).join(',')})`
+      : s.dotColors[0];
+    return `
+      <button class="map-dot-item" data-section-idx="${i}" onclick="bloomToSection(this, ${i})">
+        <span class="map-dot${status === 'current' ? ' current' : ''}" style="background:${gradient};"></span>
+        <span class="map-dot-label">${s.label}</span>
+        <span class="map-dot-blurb">${s.blurb}</span>
+        ${statusLabel ? `<span class="map-dot-status ${status}">${statusLabel}</span>` : ''}
+      </button>
+    `;
+  }).join('');
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">Color Theory</div>
+      <h2 class="step-title">Where would you like to go?</h2>
+      <p class="step-sub">Tap a stop to jump in. You can always come back here.</p>
+      <div class="map-dot-grid" id="mapDotGrid">${dots}</div>
+    </div>
+  `;
 }
-function closeCourseMap(){
-  document.getElementById('courseMapModalBackdrop').classList.remove('show');
+function afterRenderCourseMap(){
+  hideContinue();
+}
+// The "bloom" transition — the tapped dot's own color spreads out to
+// fill the screen (like ink hitting water, or a loaded brush pressed
+// onto paper) instead of a flat instant screen-swap. A real fixed
+// overlay grown from the dot's own on-screen position/size, not a
+// generic fade — genuinely originates from where the student tapped.
+function bloomToSection(dotBtn, sectionIdx){
+  const section = courseMapSectionRanges()[sectionIdx];
+  if (!section) return;
+  const targetIdx = STAGES.findIndex(s => s.id === section.firstStageId);
+  if (targetIdx === -1) return;
+
+  const dotEl = dotBtn.querySelector('.map-dot');
+  const rect = dotEl.getBoundingClientRect();
+  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+  const size = Math.max(rect.width, rect.height);
+  const scale = (Math.max(window.innerWidth, window.innerHeight) * 2.3) / size;
+
+  const bloom = document.createElement('div');
+  bloom.className = 'map-bloom';
+  bloom.style.left = cx + 'px';
+  bloom.style.top = cy + 'px';
+  bloom.style.width = size + 'px';
+  bloom.style.height = size + 'px';
+  bloom.style.background = dotEl.style.background; // same solid/gradient fill as the tapped dot itself
+  document.body.appendChild(bloom);
+
+  requestAnimationFrame(() => {
+    bloom.style.transform = `translate(-50%,-50%) scale(${scale})`;
+  });
+  setTimeout(() => {
+    goStageIndex(targetIdx);
+    setTimeout(() => {
+      bloom.style.opacity = '0';
+      setTimeout(() => bloom.remove(), 420);
+    }, 60);
+  }, 560);
 }
 
 function openMyJourney(){
