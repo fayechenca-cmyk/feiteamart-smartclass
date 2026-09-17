@@ -204,6 +204,14 @@ button{font-family:inherit;}
 .step-inner{flex:1;width:100%;max-width:760px;margin:0 auto;padding:6px 22px 120px;display:flex;flex-direction:column;justify-content:center;}
 .step-inner.wide{max-width:900px;}
 .step-inner.scroll-wide{max-width:1140px;}
+.step-inner.full-bleed{max-width:1040px;text-align:center;}
+
+/* ---- Course intro (§3) — the one full-screen, no-side-panel step. ---- */
+.course-intro-kicker{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-red);font-weight:700;margin-bottom:10px;}
+.course-intro-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,5vw,2.6rem);margin:0 0 10px;color:var(--ink-warm);}
+.course-intro-sub{font-size:14px;color:var(--ink-warm-soft);max-width:520px;margin:0 auto 22px;line-height:1.6;}
+.video-stage-intro{aspect-ratio:16/9;}
+@media(min-height:560px){.video-stage-intro{max-height:78vh;aspect-ratio:auto;height:min(78vh,72vw);}}
 
 /* ---- Scroll panel — the mounted "paper" surface step content sits
    on, distinct from the deeper xuan-deep page backdrop behind it
@@ -466,6 +474,11 @@ const FREE_STEP_COUNT = 2;
 function animalLessonId(animal){ return 'zodiac-' + animal.id; }
 function buildStages(){
   const stages = [];
+  // Course-level intro (§3) — one flat stage, no `animal`/`step`
+  // fields (renderRail/renderStepScreen guard for that). Free
+  // regardless of paywall state, matching Faye's own "Free = course
+  // intro/description..." framing from the platform-access addendum.
+  stages.push({ id:'course_intro', render: renderCourseIntro, afterRender: afterRenderCourseIntro });
   ZODIAC_ANIMALS.forEach(animal => {
     animal.steps.forEach(step => {
       stages.push({
@@ -548,6 +561,7 @@ function hideContinue(){ document.getElementById('continueDock').innerHTML = '';
 function renderRail(){
   const current = STAGES[STATE.stageIndex];
   const animal = current.animal;
+  if (!animal) { document.getElementById('rail').innerHTML = ''; document.getElementById('prevStepBtn').disabled = STATE.stageIndex === 0; return; }
   const dots = animal.steps.map(s => {
     const stageId = animal.id + '_step_' + s.stepNumber;
     const idx = STAGES.findIndex(st => st.id === stageId);
@@ -574,15 +588,16 @@ function renderCurrentStage(){
    so future per-timestamp annotation points (not built here) have
    one hook instead of a rewrite. See file-header note.
 ============================================================ */
-function renderZodiacVideoStage(step, iframeId){
+function renderZodiacVideoStage(step, iframeId, variant){
+  const cls = 'video-stage' + (variant ? ' video-stage-' + variant : '');
   if (!step.videoUrl) {
-    return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
+    return `<div class="${cls}" style="background:linear-gradient(135deg,var(--ink-warm),#453e33);">
       <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
         <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
       </div>
     </div>`;
   }
-  return `<div class="video-stage">
+  return `<div class="${cls}">
     <iframe id="${iframeId}" src="${cfStreamSrc(step.videoUrl, step.posterUrl)}" loading="lazy" title="${escapeHtml(step.title)}"
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
     <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
@@ -631,6 +646,29 @@ function afterRenderZodiacVideoStage(step, iframeId){
       }, 1200);
     } catch (e) { console.warn('[video] Stream SDK attach failed', e); }
   }).catch((e) => console.warn('[video] Stream SDK failed to load', e));
+}
+
+/* ============================================================
+   COURSE INTRO (§3) — full-screen, before any animal's steps. No real
+   video yet; renders the existing "coming soon" fallback full-size.
+   Free regardless of paywall state (Faye's own framing: "Free = course
+   intro/description...").
+============================================================ */
+function renderCourseIntro(){
+  const introStep = { videoUrl: null, posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
+  const videoHtml = renderZodiacVideoStage(introStep, 'zodiacVideo_course_intro', 'intro');
+  return `
+    <div class="step-inner full-bleed">
+      <div class="course-intro-kicker">十二生肖 · The Twelve Zodiac Animals</div>
+      <h1 class="course-intro-title">Zodiac Brush Technique</h1>
+      <p class="course-intro-sub">A full introduction to the course and all twelve zodiac animals — coming soon. Starting today: the Rat.</p>
+      ${videoHtml}
+    </div>
+  `;
+}
+function afterRenderCourseIntro(){
+  afterRenderZodiacVideoStage({ videoUrl: null }, 'zodiacVideo_course_intro');
+  showContinue('Begin →', nextStage);
 }
 
 /* ============================================================
