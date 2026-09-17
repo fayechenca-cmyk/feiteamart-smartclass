@@ -127,16 +127,39 @@
   --radius-sm:10px;
   --radius-md:14px;
   --radius-lg:20px;
-  /* Ink/brush motif, practice-sheet + badge accents only — scoped,
-     not a departure from the platform's own accent-blue chrome. */
+  /* Ink/brush motif, practice-sheet + badge accents — kept for the
+     platform shell chrome (topbar/rail/My Journey modal/badge card),
+     which stays consistent with the rest of the Skill tier per the
+     original addendum instruction. */
   --ink-red:#8a2e22;
   --ink-red-soft:rgba(138,46,34,.1);
+
+  /* Scroll/rice-paper palette — Sept 2026 visual redesign (per Faye:
+     "needs to feel like opening an East Asian painting scroll, not a
+     standard web lesson template"). Scoped to the STEP CONTENT area
+     (.scroll-panel and what lives inside it) — the shell chrome above
+     stays on the platform's own tokens so navigation still reads as
+     part of the same Smart Class Skill tier. */
+  --xuan:#f4ecd8;              /* 宣纸 xuan paper — warm, light */
+  --xuan-deep:#e6d9b8;         /* page backdrop behind the mounted scroll */
+  --xuan-line:rgba(58,48,30,.2);
+  --ink-warm:#2b2620;          /* warm near-black ink, not pure black */
+  --ink-warm-soft:rgba(43,38,32,.64);
+  --ink-warm-faint:rgba(43,38,32,.42);
+  --bamboo:#5c7a52;            /* technique badge accent */
+  --bamboo-soft:rgba(92,122,82,.12);
 }
 *{box-sizing:border-box;}
 html,body{height:100%;}
 body{
-  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  margin:0;font-family:'Work Sans',sans-serif;color:var(--ink);
   -webkit-tap-highlight-color:transparent;overflow-x:hidden;
+  /* Rice-paper backdrop for the whole course, not just the video —
+     a subtle fiber-noise texture over a warm cream wash, replacing the
+     old flat --paper background that (combined with the video-stage's
+     large black box) read as generic/dark rather than scroll-like. */
+  background-color:var(--xuan-deep);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.24 0 0 0 0 0.19 0 0 0 0 0.11 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .display{font-family:'Space Grotesk',sans-serif;}
 button{font-family:inherit;}
@@ -180,13 +203,48 @@ button{font-family:inherit;}
 @keyframes stepIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 .step-inner{flex:1;width:100%;max-width:760px;margin:0 auto;padding:6px 22px 120px;display:flex;flex-direction:column;justify-content:center;}
 .step-inner.wide{max-width:900px;}
+.step-inner.scroll-wide{max-width:1140px;}
 
-.step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:10px;}
-.step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 14px;color:var(--accent-deep);}
+/* ---- Scroll panel — the mounted "paper" surface step content sits
+   on, distinct from the deeper xuan-deep page backdrop behind it
+   (body). A lighter fiber-noise texture than the backdrop, plus a
+   soft ink-toned top/bottom band standing in for a scroll's fabric
+   mounting edge. ---- */
+.scroll-panel{
+  position:relative;background-color:var(--xuan);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.16 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  border:1px solid var(--xuan-line);border-radius:5px;
+  padding:32px 34px;box-shadow:0 20px 44px rgba(43,38,32,.22);
+}
+.scroll-panel::before,.scroll-panel::after{content:'';position:absolute;left:10px;right:10px;height:7px;background:linear-gradient(180deg,rgba(43,38,32,.16),transparent);pointer-events:none;}
+.scroll-panel::before{top:0;}
+.scroll-panel::after{bottom:0;transform:rotate(180deg);}
+@media(max-width:600px){.scroll-panel{padding:22px 18px;}}
 
-.step-type-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin:0 auto 16px;}
-.step-type-badge-wrap{text-align:center;}
-.step-type-badge.technique{background:rgba(45,95,168,.1);color:var(--accent-deep);border:1.5px solid rgba(45,95,168,.3);}
+.scroll-layout{display:flex;gap:30px;align-items:flex-start;}
+.scroll-title-col{flex:0 0 210px;padding-top:4px;}
+.scroll-video-col{flex:1;min-width:0;}
+@media(max-width:760px){
+  /* align-items:flex-start from the row layout above becomes a WIDTH
+     (cross-axis) rule once flex-direction flips to column — real bug
+     caught live: it shrink-fit .scroll-video-col to its content
+     instead of stretching it, and since that content (.video-stage)
+     is width:100% OF video-col, the two collapsed to 0 together.
+     stretch (the flex default, but not the inherited value here)
+     fixes it. */
+  .scroll-layout{flex-direction:column;gap:18px;align-items:stretch;}
+  .scroll-title-col{flex:none;width:100%;text-align:center;}
+}
+
+.step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink-red);text-align:center;font-weight:700;margin-bottom:10px;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,3.4vw,1.9rem);text-align:center;margin:0 0 14px;color:var(--ink-warm);}
+.scroll-title-col .step-kicker,.scroll-title-col .step-title{text-align:left;}
+@media(max-width:760px){.scroll-title-col .step-kicker,.scroll-title-col .step-title{text-align:center;}}
+
+.step-type-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin:0 0 16px;}
+.step-type-badge-wrap{text-align:left;}
+@media(max-width:760px){.step-type-badge-wrap{text-align:center;}}
+.step-type-badge.technique{background:var(--bamboo-soft);color:var(--bamboo);border:1.5px solid rgba(92,122,82,.32);}
 .step-type-badge.practice{background:var(--ink-red-soft);color:var(--ink-red);border:1.5px solid rgba(138,46,34,.32);}
 
 /* ---- Continue dock ---- */
@@ -206,54 +264,75 @@ button{font-family:inherit;}
 .continue-btn.ready{opacity:1;transform:translateY(0);pointer-events:auto;}
 .continue-btn:active{transform:scale(.96);}
 
-/* ---- Video stage (enlarged — addendum item 2, scoped to this course) ---- */
-.video-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--radius-md);overflow:hidden;box-shadow:0 14px 34px rgba(28,26,34,.22);}
-@media(min-height:560px){.video-stage{max-height:80vh;aspect-ratio:auto;height:min(80vh,74vw);}}
+/* ---- Video stage — stretches horizontally, filling the width of its
+   scroll column (addendum item 2's "noticeably larger" now expressed
+   as a wide horizontal band, not a tall centered box — Sept 2026
+   redesign). Ink-warm fill instead of flat #000: the transient black-
+   before-load flash still happens (real video), but the letterbox
+   itself reads as "ink," not "generic dark screen." ---- */
+.video-stage{position:relative;width:100%;aspect-ratio:2/1;background:var(--ink-warm);border-radius:4px;overflow:hidden;box-shadow:0 12px 28px rgba(43,38,32,.32);}
 .video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+/* Always-visible sound affordance (§5 audio fix — see afterRenderZodiacVideoStage's
+   own comment for why this replaced the old auto-hiding "tap to play"
+   overlay: the Stream Player SDK's own .muted/.volume getters don't
+   reflect a real silent muted-autoplay fallback, so nothing here can
+   safely auto-hide once shown). Small and corner-anchored, not a
+   blocking centered prompt — present the whole time a video is up. */
+.video-sound-btn{
+  position:absolute;right:12px;bottom:12px;z-index:2;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+  padding:8px 14px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(43,38,32,.68);color:#fff;backdrop-filter:blur(4px);
+  box-shadow:0 6px 16px rgba(0,0,0,.3);
+}
+.video-sound-btn:active{transform:scale(.95);}
+/* Bigger, centered — shown only if the video genuinely never started
+   playing at all (a real, reliably-detectable state via play/pause
+   events), distinct from the mute-uncertainty case above. */
 .video-tap-overlay{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
   padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
-  background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  background:rgba(43,38,32,.75);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:3;
 }
 .video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
 
-/* ---- Practice-sheet treatment (base prompt UI section) ---- */
+/* ---- Practice-sheet treatment ---- */
 .practice-sheet-wrap{
-  border:2px dashed var(--ink-red);border-radius:var(--radius-md);padding:18px;
+  border:2px dashed var(--ink-red);border-radius:6px;padding:16px;
   background:
-    repeating-linear-gradient(180deg, rgba(138,46,34,.05) 0px, rgba(138,46,34,.05) 1px, transparent 1px, transparent 34px),
-    #fffaf5;
+    repeating-linear-gradient(180deg, rgba(138,46,34,.06) 0px, rgba(138,46,34,.06) 1px, transparent 1px, transparent 30px),
+    #fbf3e6;
   position:relative;
 }
 .practice-sheet-ribbon{
-  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  position:absolute;top:-11px;left:20px;
   background:var(--ink-red);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;
   font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;padding:4px 14px;border-radius:999px;
   box-shadow:0 4px 10px rgba(138,46,34,.3);
 }
 
-/* ---- Paywall (addendum item 7) ---- */
+/* ---- Paywall ---- */
 .zodiac-paywall-card{
-  max-width:420px;margin:0 auto;text-align:center;background:#fff;border:1.5px solid var(--line);
-  border-radius:var(--radius-lg);padding:34px 26px;box-shadow:0 14px 34px rgba(28,26,34,.1);
+  max-width:420px;margin:0 auto;text-align:center;background:var(--xuan);border:1px solid var(--xuan-line);
+  border-radius:6px;padding:34px 26px;
 }
 .zodiac-paywall-icon{font-size:2.6rem;margin-bottom:10px;}
-.zodiac-paywall-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;color:var(--accent-deep);margin:0 0 10px;}
-.zodiac-paywall-body{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 22px;}
+.zodiac-paywall-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;color:var(--ink-warm);margin:0 0 10px;}
+.zodiac-paywall-body{font-size:13.5px;color:var(--ink-warm-soft);line-height:1.6;margin:0 0 22px;}
 .zodiac-paywall-cta{
   display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
-  padding:12px 24px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;
-  box-shadow:0 8px 20px rgba(45,95,168,.3);
+  padding:12px 24px;border-radius:999px;background:var(--ink-red);color:#fff;text-decoration:none;
+  box-shadow:0 8px 20px rgba(138,46,34,.3);
 }
 .zodiac-paywall-cta:active{transform:scale(.97);}
 
 /* ---- Complete screen ---- */
 .complete-done{text-align:center;}
-.complete-check{margin:6px auto 14px;width:64px;height:64px;border-radius:50%;background:rgba(45,95,168,.08);display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
+.complete-check{margin:6px auto 14px;width:64px;height:64px;border-radius:50%;background:var(--ink-red-soft);display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
 .complete-exit{display:inline-block;margin-top:22px;font-size:12.5px;color:var(--ink-faint);text-decoration:none;font-weight:700;}
-.complete-exit:hover{color:var(--accent-deep);}
+.complete-exit:hover{color:var(--ink-red);}
 
 /* ---- Course badge card (ported verbatim from color-theory/index.html,
    same real renderCourseBadgeCard() output/class names) ---- */
@@ -568,12 +647,26 @@ function renderStepScreen(animal, step){
   const body = isPractice
     ? `<div class="practice-sheet-wrap"><span class="practice-sheet-ribbon">✎ Practice Sheet</span>${videoHtml}</div>`
     : videoHtml;
+  // Scroll composition: title/kicker/badge in a narrower left column,
+  // the video as a wide horizontal band filling the rest — East Asian
+  // scroll convention (left-right panels), not the old stacked
+  // top-to-bottom layout. Collapses to stacked on narrow viewports
+  // (see .scroll-layout's own media query) — there's no honest way to
+  // keep true side-by-side panels readable under ~760px.
   return `
-    <div class="step-inner wide">
-      <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
-      <h2 class="step-title">${escapeHtml(step.title)}</h2>
-      ${badge}
-      ${body}
+    <div class="step-inner scroll-wide">
+      <div class="scroll-panel">
+        <div class="scroll-layout">
+          <div class="scroll-title-col">
+            <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
+            <h2 class="step-title">${escapeHtml(step.title)}</h2>
+            ${badge}
+          </div>
+          <div class="scroll-video-col">
+            ${body}
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -588,12 +681,14 @@ function afterRenderStepScreen(animal, step){
 function renderZodiacPaywallScreen(animal, step){
   return `
     <div class="step-inner">
-      <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
-      <div class="zodiac-paywall-card">
-        <div class="zodiac-paywall-icon">🔒</div>
-        <div class="zodiac-paywall-title">Unlock the rest of ${escapeHtml(animal.label)}'s Brush Technique</div>
-        <div class="zodiac-paywall-body">The first ${FREE_STEP_COUNT} steps are free to try. Upgrade to continue with "${escapeHtml(step.title)}" and every step after it.</div>
-        <a class="zodiac-paywall-cta" href="../../upgrade/?reason=paywall_skills&branch=skills">See teacher-supported plans →</a>
+      <div class="scroll-panel">
+        <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
+        <div class="zodiac-paywall-card">
+          <div class="zodiac-paywall-icon">🔒</div>
+          <div class="zodiac-paywall-title">Unlock the rest of ${escapeHtml(animal.label)}'s Brush Technique</div>
+          <div class="zodiac-paywall-body">The first ${FREE_STEP_COUNT} steps are free to try. Upgrade to continue with "${escapeHtml(step.title)}" and every step after it.</div>
+          <a class="zodiac-paywall-cta" href="../../upgrade/?reason=paywall_skills&branch=skills">See teacher-supported plans →</a>
+        </div>
       </div>
     </div>
   `;
@@ -651,12 +746,14 @@ function renderComplete(animal){
   const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('zodiac_' + animal.id) : '';
   return `
     <div class="step-inner">
-      <div class="complete-done">
-        <div class="complete-check">🖌️</div>
-        <h2 class="step-title">${escapeHtml(animal.label)} Complete</h2>
-        <p style="text-align:center;font-size:13.5px;color:var(--ink-soft);">You've worked through every recorded step of ${animal.chineseCharacter} ${escapeHtml(animal.label)}'s brush technique.</p>
-        ${badgeHtml}
-        <a class="complete-exit" href="../../">← Back to Skill</a>
+      <div class="scroll-panel">
+        <div class="complete-done">
+          <div class="complete-check">🖌️</div>
+          <h2 class="step-title">${escapeHtml(animal.label)} Complete</h2>
+          <p style="text-align:center;font-size:13.5px;color:var(--ink-warm-soft);">You've worked through every recorded step of ${animal.chineseCharacter} ${escapeHtml(animal.label)}'s brush technique.</p>
+          ${badgeHtml}
+          <a class="complete-exit" href="../../">← Back to Skill</a>
+        </div>
       </div>
     </div>
   `;
