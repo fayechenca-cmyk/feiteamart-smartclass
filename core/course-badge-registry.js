@@ -27,6 +27,16 @@ window.COURSE_BADGE_REGISTRY = {
     requiredIds: ['thiebaud-my-sweet-fridge']
   },
 
+  // Color Theory (Skill) — round 2 revision, reverses round 1's "no
+  // badge yet" call now that the course itself is settled. Single-
+  // lesson-course pattern, same as collage_creator/fridge_curator
+  // above: color-theory/index.html's markCourseComplete() writes
+  // 'color-theory' into completedLessons on Finish, same as every
+  // other course here.
+  color_theory: {
+    requiredIds: ['color-theory']
+  },
+
   // Scene Drawing Foundation, Unit 01 · Shot Size — the 5
   // lessons/scene-drawing-foundation/unit-01-shot-size/ lesson pages,
   // each writing its own LESSON_DATA.courseId into completedLessons the

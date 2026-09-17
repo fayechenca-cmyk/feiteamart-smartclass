@@ -30,6 +30,7 @@ window.BADGE_CATALOG = [
   { id:'portfolio_builder', title:'Portfolio Builder', artist:'Des. by Regina', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69ced4efc423b6f032f27496_7ce471ab56c32f732fa052a1ef003958.JPG', emoji:'📂', color:'#1e3a8a' },
   { id:'collage_creator', title:'Collage Creator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🦎', color:'#2f8f5b' },
   { id:'fridge_curator', title:'Fridge Curator', artist:'Des. by Mrs. Dawn', imgUrl:'', emoji:'🧁', color:'#4f8f7c' },
+  { id:'color_theory', title:'Color Mixer', artist:'', imgUrl:'', emoji:'🎨', color:'#d8432c', earnedMessage:'you mixed a full palette from Red, Yellow and Blue.' },
 
   // Scene Drawing Foundation (the newer course, distinct from the
   // renamed Perspective Drawing Foundation above) — badged per Unit

@@ -343,6 +343,64 @@ button{font-family:inherit;}
 .complete-check{font-size:2.6rem;margin-bottom:6px;}
 .complete-palette-row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;max-width:420px;margin:18px auto 0;}
 .complete-dot{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ink);}
+
+/* ============================================================
+   PLATFORM SHELL — round 2. My Journey entry point + modal, ported
+   from lessons/scene-drawing-foundation/.../lesson-01-extreme-wide-
+   shot/index.html verbatim (same class names, same real component —
+   see JournalStorage's own comment in the script block for why this
+   is a copy, not a shared <script src>), retoned to this file's own
+   palette instead of that file's storyboard --sb-* tokens.
+============================================================ */
+.journey-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px;font-weight:700;letter-spacing:.2px;cursor:pointer;
+  display:flex;align-items:center;gap:4px;transition:border-color .15s ease,color .15s ease;
+}
+.journey-btn:hover{border-color:var(--accent);color:var(--accent-deep);}
+.journey-btn:active{transform:scale(.96);}
+@media(max-width:420px){.journey-btn-full{display:none;}}
+
+.journey-modal-backdrop{position:fixed;inset:0;background:rgba(43,36,56,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.journey-modal-backdrop.show{display:flex;}
+.journey-modal{background:#fff;border-radius:var(--radius-lg);max-width:560px;width:100%;padding:28px 24px 22px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.journey-close{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:.5px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
+.journey-close:hover{background:var(--ink);color:#fff;transform:rotate(90deg);}
+.journey-hero{text-align:center;margin-bottom:18px;padding:0 4px;}
+.journey-kicker{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);background:rgba(216,67,44,.08);padding:5px 12px;border-radius:20px;margin-bottom:12px;}
+.journey-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.journey-subtitle{font-size:12px;color:var(--ink-soft);line-height:1.5;font-style:italic;}
+.journey-stats{display:flex;gap:10px;justify-content:center;margin-bottom:20px;padding:14px 12px;background:linear-gradient(135deg,#fbeee7 0%,#fbf0c7 100%);border-radius:var(--radius-md);}
+.journey-stat{text-align:center;flex:1;}
+.journey-stat-number{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
+.journey-stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);}
+.journey-timeline{display:flex;flex-direction:column;gap:12px;}
+.journey-empty{text-align:center;font-size:13px;color:var(--ink-faint);padding:20px 0;}
+.journey-entry{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--radius-md);padding:14px 16px;position:relative;transition:box-shadow .2s;}
+.journey-entry:hover{box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.journey-entry-meta{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.journey-entry-lesson{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-deep);background:rgba(216,67,44,.08);padding:3px 8px;border-radius:4px;}
+.journey-entry-moment{font-size:9px;font-weight:700;color:var(--ink-faint);letter-spacing:1px;text-transform:uppercase;}
+.journey-entry-date{font-size:9px;font-weight:600;color:var(--ink-faint);letter-spacing:.5px;margin-left:auto;}
+.journey-entry-text{font-size:13px;color:var(--ink);line-height:1.6;}
+.journey-entry-delete{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--ink-faint);font-size:14px;cursor:pointer;padding:4px 8px;border-radius:4px;opacity:0;transition:all .2s;}
+.journey-entry:hover .journey-entry-delete{opacity:.6;}
+.journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
+@media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
+
+/* Badge card — adapted from core/scene-drawing-style.css's own
+   .course-badge-card (same class names, same real renderCourseBadgeCard()
+   output), re-tokened to this file's own palette rather than linking
+   that shared stylesheet wholesale (it defines a conflicting :root). */
+.course-badge-card{background:linear-gradient(135deg,#fdf0e3 0%,#fbf0c7 100%);border:1.5px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin:26px auto 0;max-width:360px;}
+.course-badge-row{display:flex;align-items:center;gap:12px;}
+.course-badge-emoji{font-size:32px;flex-shrink:0;opacity:.5;}
+.course-badge-emoji.unlocked{opacity:1;}
+.course-badge-info{flex:1;text-align:left;}
+.course-badge-name{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px;}
+.course-badge-meta{font-size:11px;color:var(--ink-faint);}
+.course-badge-progress-bar{height:5px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden;}
+.course-badge-progress-fill{height:100%;background:linear-gradient(90deg,var(--lavender),var(--accent));border-radius:3px;}
 </style>
 </head>
 <body>
@@ -351,6 +409,7 @@ button{font-family:inherit;}
     <div style="display:flex;align-items:center;gap:14px;">
       <a class="exit-link" href="../" title="Back to Art GPS"><span class="exit-link-full">← Skill</span><span class="exit-link-mobile">←</span></a>
       <button class="prev-step-btn" id="prevBtn" onclick="prevStage()" disabled>‹ Back</button>
+      <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
     </div>
     <div class="rail" id="rail"></div>
   </div>
@@ -358,6 +417,33 @@ button{font-family:inherit;}
   <div class="continue-dock" id="continueDock"></div>
 </div>
 
+<!-- MY JOURNEY MODAL — round 2, ported from the SAME real component
+     every other live lesson uses (Foundation A's original; Scene
+     Drawing Foundation's own port is the copy this was checked
+     against — see JournalStorage's own comment below for why it's a
+     verbatim copy, not a shared <script src>). -->
+<div class="journey-modal-backdrop" id="journeyModalBackdrop" onclick="if(event.target===this) closeMyJourney();">
+  <div class="journey-modal">
+    <div class="journey-close" onclick="closeMyJourney()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">✨ Thinking journey</div>
+      <div class="journey-title">Your thoughts, over time</div>
+      <div class="journey-subtitle">This is your private thinking space — only you can see it.</div>
+    </div>
+    <div class="journey-stats" id="journeyStats"></div>
+    <div class="journey-timeline" id="journeyTimeline"></div>
+  </div>
+</div>
+
+<script src="../core/course-badge-registry.js"></script>
+<script src="../core/badge-catalog.js"></script>
+<!-- Loaded only for the one function, scene-drawing-app.js is pure
+     function/const definitions with no page-load side effects (same
+     check Lesson 01 already did before reusing it this same way — see
+     that file's own comment) — reused verbatim rather than
+     reimplemented, per Faye's standing "don't invent a new one"
+     instruction. -->
+<script src="../core/scene-drawing-app.js"></script>
 <script>
 /* ============================================================
    COLOR MATH — shared by the free-exploration triangle, every guided
@@ -767,6 +853,122 @@ function markCourseComplete(){
 }
 
 /* ============================================================
+   MY JOURNEY — round 2 platform-shell integration (item 1). Every
+   live lesson's own copy of JournalStorage is IDENTICAL (localStorage
+   key 'fei_thinking_journal') — copied verbatim here too, per that
+   established convention, not a new <script src> dependency (Lesson
+   01's own comment explains why: each lesson file stays self-
+   contained rather than importing a shared script for one object).
+   NOTE: this is genuinely localStorage, not sessionStorage — that's
+   not a slip against the "sessionStorage not localStorage" rule.
+   That rule is specifically about fei_user_profile (the Safari-iframe
+   fix); JournalStorage has always been localStorage-based, unrelated
+   and pre-existing, across every course that already uses it — using
+   sessionStorage here instead would just make Color Theory's entries
+   fail to show up in the one real shared "My Journey" timeline every
+   other course's entries land in, defeating the actual point of this
+   item.
+============================================================ */
+const JournalStorage = {
+  config: {
+    storageKey: 'fei_thinking_journal',
+    supabase: { enabled: false, url: '', anonKey: '', tableName: 'thinking_journal' }
+  },
+  save(entry) {
+    const fullEntry = { id: 'entry_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now(), createdAt: Date.now(), ...entry };
+    this._saveToLocal(fullEntry);
+    return fullEntry;
+  },
+  getAll() { return this._loadFromLocal().sort((a, b) => b.createdAt - a.createdAt); },
+  remove(entryId) {
+    const filtered = this._loadFromLocal().filter(e => e.id !== entryId);
+    localStorage.setItem(this.config.storageKey, JSON.stringify(filtered));
+  },
+  _loadFromLocal() {
+    try { const raw = localStorage.getItem(this.config.storageKey); return raw ? JSON.parse(raw) : []; }
+    catch (e) { console.warn('[JournalStorage] Local load failed:', e); return []; }
+  },
+  _saveToLocal(entry) {
+    try { const all = this._loadFromLocal(); all.push(entry); localStorage.setItem(this.config.storageKey, JSON.stringify(all)); }
+    catch (e) { console.warn('[JournalStorage] Local save failed:', e); }
+  }
+};
+function openMyJourney(){
+  renderJourneyModalContent();
+  document.getElementById('journeyModalBackdrop').classList.add('show');
+}
+function closeMyJourney(){
+  document.getElementById('journeyModalBackdrop').classList.remove('show');
+}
+function journeyEscapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+function journeyFormatRelativeDate(timestamp){
+  const diff = Date.now() - timestamp;
+  const minutes = Math.floor(diff/60000), hours = Math.floor(minutes/60), days = Math.floor(hours/24);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return minutes + ' min ago';
+  if (hours < 24) return hours + ' hour' + (hours>1?'s':'') + ' ago';
+  if (days < 7) return days + ' day' + (days>1?'s':'') + ' ago';
+  return new Date(timestamp).toLocaleDateString();
+}
+// This course's entries only ever carry a momentKey (no open-ended
+// reflection text — nothing here asks the student to write anything),
+// so every branch is a synthesized summary — same defensive fallback
+// pattern Lesson 01's own journeySummarize already established for
+// non-reflection entries (e.g. its own 'community_submit').
+function journeySummarize(e){
+  if (e.momentKey === 'course_complete') return { prompt:'', text:'Finished Color Theory — mixed a full palette from Red, Yellow and Blue.' };
+  if (e.momentKey === 'lesson1_complete') return { prompt:'', text:'Mixed a 12-color wheel from the three primaries.' };
+  if (e.momentKey === 'lesson2_complete') return { prompt:'', text:'Explored analogous color families and mixed three of them.' };
+  if (e.momentKey === 'lesson3_complete') return { prompt:'', text:'Found complementary pairs and mixed them toward gray.' };
+  return { prompt:'', text:'Saved a moment in Color Theory.' };
+}
+function renderJourneyModalContent(){
+  const entries = (typeof JournalStorage !== 'undefined') ? JournalStorage.getAll() : [];
+  const statsEl = document.getElementById('journeyStats');
+  const timelineEl = document.getElementById('journeyTimeline');
+  const totalEntries = entries.length;
+  const courseEntries = entries.filter(e => e.courseId === COURSE_ID).length;
+  const firstEntry = entries[entries.length-1];
+  const daysSinceFirst = firstEntry ? Math.max(1, Math.floor((Date.now()-firstEntry.createdAt)/86400000)) : 0;
+  statsEl.innerHTML = `
+    <div class="journey-stat"><div class="journey-stat-number">${totalEntries}</div><div class="journey-stat-label">Thoughts</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${courseEntries}</div><div class="journey-stat-label">This course</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${daysSinceFirst}</div><div class="journey-stat-label">Day${daysSinceFirst!==1?'s':''} growing</div></div>
+  `;
+  if (entries.length === 0) {
+    timelineEl.innerHTML = `<div class="journey-empty">💭 No thoughts yet — your journey starts when you save your first moment.</div>`;
+    return;
+  }
+  timelineEl.innerHTML = entries.map(e => {
+    const summary = journeySummarize(e);
+    return `
+      <div class="journey-entry">
+        <button class="journey-entry-delete" onclick="deleteJourneyEntry('${e.id}')" title="Delete this thought">🗑</button>
+        <div class="journey-entry-meta">
+          <span class="journey-entry-lesson">${journeyEscapeHtml(e.lessonId || e.courseId || 'lesson')}</span>
+          ${e.momentKey ? `<span class="journey-entry-moment">${journeyEscapeHtml(e.momentKey)}</span>` : ''}
+          <span class="journey-entry-date">${journeyFormatRelativeDate(e.createdAt)}</span>
+        </div>
+        <div class="journey-entry-text">${journeyEscapeHtml(summary.text)}</div>
+      </div>
+    `;
+  }).join('');
+}
+function deleteJourneyEntry(entryId){
+  if (!confirm('Delete this thought? This cannot be undone.')) return;
+  JournalStorage.remove(entryId);
+  renderJourneyModalContent();
+}
+function saveJourneyMoment(momentKey){
+  try { JournalStorage.save({ courseId: COURSE_ID, lessonId: COURSE_ID, momentKey: momentKey }); }
+  catch (e) { console.warn('[saveJourneyMoment] failed', e); }
+}
+
+/* ============================================================
    LESSON 1a — SET UP THE IDEA (static triangle diagram, no video —
    fully interactive lesson, per spec). Extremely short text: the
    interaction (next two stages) carries the teaching, not this one.
@@ -996,6 +1198,7 @@ function afterRenderLesson1Mixing(){
   window.performCurrentMix = performLesson1Mix;
   wireMixDrag();
   if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+    if (!PALETTE.lessonsDone.lesson1) saveJourneyMoment('lesson1_complete');
     PALETTE.lessonsDone.lesson1 = true;
     savePalette();
     showContinue('Continue →', nextStage);
@@ -1066,6 +1269,7 @@ function performLesson1Mix(){
   refreshPaletteTrayMount();
   wireMixDrag();
   if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+    if (!PALETTE.lessonsDone.lesson1) saveJourneyMoment('lesson1_complete');
     PALETTE.lessonsDone.lesson1 = true;
     savePalette();
     showContinue('Continue →', nextStage);
@@ -1214,6 +1418,7 @@ function performLesson2Mix(){
   refreshPaletteTrayMount();
   wireMixDrag();
   if (!lesson2CurrentRecipe()) {
+    if (!PALETTE.lessonsDone.lesson2) saveJourneyMoment('lesson2_complete');
     PALETTE.lessonsDone.lesson2 = true;
     savePalette();
     showContinue('Continue →', nextStage);
@@ -1377,9 +1582,17 @@ function performLesson3Mix(){
   paintNeutralsRow();
   wireMixDrag();
   if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) {
+    if (!PALETTE.lessonsDone.lesson3) saveJourneyMoment('lesson3_complete');
     PALETTE.lessonsDone.lesson3 = true;
     savePalette();
-    showContinue('Finish →', () => { markCourseComplete(); bumpXP(30); nextStage(); });
+    showContinue('Finish →', () => {
+      // Guards against a duplicate journal entry if the student backs
+      // up into this stage and redoes the 3 mixes again after already
+      // finishing once (re-entering resets lesson3PairIdx to 0, so this
+      // branch — and the Finish button — can genuinely fire again).
+      if (!PALETTE.courseCompleteSaved) { saveJourneyMoment('course_complete'); PALETTE.courseCompleteSaved = true; savePalette(); }
+      markCourseComplete(); bumpXP(30); nextStage();
+    });
   }
 }
 
@@ -1396,6 +1609,7 @@ function renderComplete(){
       <h2 class="step-title">Your palette, your way.</h2>
       <p class="step-sub">12 mixed colors, black, white, and a few neutrals — all from Red, Yellow and Blue.</p>
       <div class="complete-palette-row" id="completePaletteRow"></div>
+      <div id="completeBadgeMount"></div>
       <a class="play-btn" href="../" style="display:inline-block;text-decoration:none;margin-top:26px;">Back to Skill</a>
     </div>
   `;
@@ -1405,6 +1619,11 @@ function afterRenderComplete(){
   row.innerHTML = PALETTE.wheel.map(w => `<span class="complete-dot" style="background:${w.hex};"></span>`).join('')
     + `<span class="complete-dot" style="background:var(--paint-black);"></span><span class="complete-dot" style="background:var(--paint-white);"></span>`
     + PALETTE.neutrals.map(n => `<span class="complete-dot" style="background:${n.hex};"></span>`).join('');
+  // Real, existing badge mechanism (item 2) — not invented here, see
+  // core/course-badge-registry.js's own color_theory entry. Degrades
+  // to '' if either script failed to load, rather than throwing.
+  const badgeMount = document.getElementById('completeBadgeMount');
+  badgeMount.innerHTML = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('color_theory') : '';
 }
 
 /* ============================================================
