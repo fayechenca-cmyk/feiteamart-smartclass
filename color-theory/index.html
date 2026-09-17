@@ -318,10 +318,6 @@ button{font-family:inherit;}
 }
 .wheel-hint{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-top:2px;}
 
-/* Lesson 2 guided-mixing "round" header — which base hue's neighbors
-   this round is about. */
-.mix-round-label{text-align:center;font-size:12.5px;color:var(--ink-faint);margin-bottom:4px;}
-
 /* ============================================================
    LESSON 3 — complement pop-out + collision animation + found-pairs
    tray. .collision-clone is a temporary fixed-position element
@@ -1479,62 +1475,6 @@ function confirmCurrentMix(){
   window.performCurrentMix(sampleMixResultHex());
 }
 
-// TEMPORARY — Lessons 2/3's mixing stages still use the OLD drag-a-
-// tube-into-a-bowl gesture (this function) rather than the new swirl
-// widget above; deliberately not wired yet, pending Faye's sign-off on
-// Lesson 1's version first (per her own "show me before wiring into
-// all three" instruction). This function was accidentally deleted
-// when Lesson 1's mixing code was replaced, breaking Lessons 2/3 —
-// restored here; remove this whole function once 2/3 are migrated to
-// the swirl widget too, matching the "one shared widget reused three
-// times" end state.
-function wireMixDrag(){
-  const bowl = document.getElementById('mixBowl');
-  if (!bowl) return;
-  let ghost = null, dragTube = null;
-  function moveGhost(e){ if (ghost) { ghost.style.left=(e.clientX-32)+'px'; ghost.style.top=(e.clientY-32)+'px'; } }
-  function inBowl(e){
-    const r = bowl.getBoundingClientRect();
-    return e.clientX>=r.left && e.clientX<=r.right && e.clientY>=r.top && e.clientY<=r.bottom;
-  }
-  function cleanup(tube){
-    tube.classList.remove('dragging');
-    bowl.classList.remove('hover');
-    if (ghost) { ghost.remove(); ghost = null; }
-    dragTube = null;
-  }
-  document.querySelectorAll('.mix-tube').forEach(tube => {
-    tube.addEventListener('pointerdown', (e) => {
-      dragTube = tube;
-      tube.classList.add('dragging');
-      ghost = document.createElement('div');
-      ghost.className = 'drag-ghost';
-      ghost.style.background = tube.dataset.hex;
-      document.body.appendChild(ghost);
-      moveGhost(e);
-      tube.setPointerCapture(e.pointerId);
-    });
-    tube.addEventListener('pointermove', (e) => {
-      if (dragTube !== tube) return;
-      moveGhost(e);
-      bowl.classList.toggle('hover', inBowl(e));
-    });
-    tube.addEventListener('pointerup', (e) => {
-      if (dragTube !== tube) return;
-      const hit = inBowl(e);
-      cleanup(tube);
-      // No argument — performLesson2Mix/performLesson3Mix (the only
-      // two things still using this old gesture) compute their own
-      // 50/50 result internally, same as before item 3. Only
-      // performLesson1Mix takes a resultHex argument now (from the new
-      // swirl widget) — the two mixing mechanics are independent until
-      // 2/3 are migrated too.
-      if (hit && window.performCurrentMix) window.performCurrentMix();
-    });
-    tube.addEventListener('pointercancel', () => cleanup(tube));
-  });
-}
-
 function renderMixingStageInner(){
   const stepIdx = nextMixStepIndex();
   if (stepIdx >= GUIDED_MIX_SEQUENCE.length) {
@@ -1662,16 +1602,17 @@ function afterRenderLesson2Wheel(){
 }
 
 /* ============================================================
-   LESSON 2b — GUIDED MIXING. Re-confirms the SAME mixing mechanic
-   (wireMixDrag/performCurrentMix — window.performCurrentMix is
-   reassigned to this lesson's own advance function on entry) against
-   3 "rounds", one per base hue (Yellow, Red, Blue), each mixing that
-   base's two immediate wheel neighbors — same recipe pairs
-   GUIDED_MIX_SEQUENCE already defines, just re-triggered here tied to
-   "these are BASE's neighbors" rather than "fill the next empty
-   well" (every target well is already filled from Lesson 1 — this
-   doesn't create new palette state, it reinforces the relationship by
-   having the student physically re-mix it).
+   LESSON 2b — GUIDED MIXING. Round 2 item 3: now uses the SAME swirl-
+   mixing widget as Lesson 1 (initMixCanvas/confirmCurrentMix —
+   window.performCurrentMix reassigned to this lesson's own advance
+   function on entry), against 3 "rounds", one per base hue (Yellow,
+   Red, Blue), each mixing that base's two immediate wheel neighbors —
+   same recipe pairs GUIDED_MIX_SEQUENCE already defines, just re-
+   triggered here tied to "these are BASE's neighbors" rather than
+   "fill the next empty well" (every target well is already filled
+   from Lesson 1 — this doesn't create new palette state, it
+   reinforces the relationship by having the student physically re-mix
+   it).
 ============================================================ */
 const LESSON2_MIX_ROUNDS = [
   { baseIdx:4, baseLabel:'Yellow', neighbors:[3,5] },
@@ -1693,15 +1634,7 @@ function renderLesson2MixingInner(){
   }
   const { round, recipe } = cur;
   const aEntry = PALETTE.wheel[recipe.a], bEntry = PALETTE.wheel[recipe.b];
-  return `
-    <div class="mix-round-label">Round ${lesson2Round+1} of 3 · Base: ${round.baseLabel}</div>
-    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> to confirm <b>${recipe.label}</b></div>
-    <div class="mixing-stage">
-      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
-      <div class="mix-bowl" id="mixBowl">＋</div>
-      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
-    </div>
-  `;
+  return renderMixCanvasBlock(`Round ${lesson2Round+1} of 3 · Base: <b>${round.baseLabel}</b><br>Scrub together to confirm <b>${recipe.label}</b>`, aEntry.hex, bEntry.hex);
 }
 function renderLesson2Mixing(){
   return `
@@ -1718,29 +1651,29 @@ function afterRenderLesson2Mixing(){
   document.getElementById('mixingArea').innerHTML = renderLesson2MixingInner();
   refreshPaletteTrayMount();
   window.performCurrentMix = performLesson2Mix;
-  wireMixDrag();
+  const cur = lesson2CurrentRecipe();
+  if (cur) initMixCanvas(PALETTE.wheel[cur.recipe.a].hex, PALETTE.wheel[cur.recipe.b].hex);
   hideContinue();
 }
-function performLesson2Mix(){
+function performLesson2Mix(resultHex){
   const cur = lesson2CurrentRecipe();
   if (!cur) return;
   const { round, targetIdx, recipe } = cur;
-  const aEntry = PALETTE.wheel[recipe.a], bEntry = PALETTE.wheel[recipe.b];
-  // Re-paints the same well with the same recipe — deterministic
-  // (paintStrokeSwatch's seed is keyed by wheel index, not randomized
-  // per call), so the stroke texture looks identical to how it looked
-  // after Lesson 1. That's intentional, not a missed refresh: nothing
-  // NEW is being mixed here, the student is re-confirming a relationship
-  // that already exists — an unchanged, correct swatch is the right
-  // outcome, not a bug to paper over with a fake "fresh" repaint.
-  PALETTE.wheel[targetIdx] = { hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from:[recipe.a, recipe.b], label: recipe.label };
+  // Re-paints the same well with whatever the student just mixed —
+  // nothing NEW is being added to the palette here (that well is
+  // already filled from Lesson 1), this reinforces the relationship
+  // by having the student physically re-mix it. Uses their real
+  // sampled result rather than the stored hex, same as Lesson 1, so
+  // it's a genuine repeat of the gesture, not a no-op animation.
+  PALETTE.wheel[targetIdx] = { hex: resultHex, from:[recipe.a, recipe.b], label: recipe.label };
   savePalette();
   lesson2NeighborStep++;
   if (lesson2NeighborStep >= round.neighbors.length) { lesson2NeighborStep = 0; lesson2Round++; }
   document.getElementById('mixingArea').innerHTML = renderLesson2MixingInner();
   refreshPaletteTrayMount();
-  wireMixDrag();
-  if (!lesson2CurrentRecipe()) {
+  const next = lesson2CurrentRecipe();
+  if (next) initMixCanvas(PALETTE.wheel[next.recipe.a].hex, PALETTE.wheel[next.recipe.b].hex);
+  if (!next) {
     if (!PALETTE.lessonsDone.lesson2) saveJourneyMoment('lesson2_complete');
     PALETTE.lessonsDone.lesson2 = true;
     savePalette();
@@ -1824,18 +1757,22 @@ function afterRenderLesson3Wheel(){
 }
 
 /* ============================================================
-   LESSON 3b — GUIDED MIXING: complements neutralize. Fixed set of 3
-   pairs (same ones named in the spec) — deliberately NOT threading
+   LESSON 3b — GUIDED MIXING: complements neutralize. Round 2 item 3:
+   now uses the same swirl-mixing widget as Lessons 1-2. Fixed set of
+   3 pairs (same ones named in the spec) — deliberately NOT threading
    the student's own freely-explored foundPairs from the wheel stage
    through to here (those are an arbitrary subset of 6 possible pairs
    picked in any order); using one fixed, known sequence keeps this
    stage simple and its outcome predictable, and the pedagogical point
    ("complements mixed together trend toward gray") holds for any
    complementary pair, not specifically whichever ones were clicked a
-   moment ago. Same drag-into-the-bowl mechanic, but the result is NOT
-   a wheel color — it's pushed into PALETTE.neutrals, a genuinely new
-   addition to the palette (unlike Lesson 2's re-confirmed wheel
-   wells).
+   moment ago. The result is NOT a wheel color — it's pushed into
+   PALETTE.neutrals, a genuinely new addition to the palette (unlike
+   Lesson 2's re-confirmed wheel wells). Watching the ACTUAL swirl
+   trend toward gray as they scrub is arguably a better fit for this
+   lesson's own point than any other — this is the one place the
+   widget's live, progressive blending is the whole payoff, not just
+   the mechanism.
 ============================================================ */
 const LESSON3_MIX_PAIRS = [
   { a:0, b:6, label:'Red + Green' },
@@ -1849,15 +1786,7 @@ function renderLesson3MixingInner(){
   }
   const pair = LESSON3_MIX_PAIRS[lesson3PairIdx];
   const aEntry = PALETTE.wheel[pair.a], bEntry = PALETTE.wheel[pair.b];
-  return `
-    <div class="mix-round-label">Pair ${lesson3PairIdx+1} of 3</div>
-    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> — watch what happens.</div>
-    <div class="mixing-stage">
-      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
-      <div class="mix-bowl" id="mixBowl">＋</div>
-      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
-    </div>
-  `;
+  return renderMixCanvasBlock(`Pair ${lesson3PairIdx+1} of 3 — scrub <b>${aEntry.label}</b> + <b>${bEntry.label}</b> and watch what happens`, aEntry.hex, bEntry.hex);
 }
 function renderNeutralsRow(){
   if (!PALETTE.neutrals.length) return '<div class="neutrals-row" id="neutralsRow"></div>';
@@ -1890,20 +1819,30 @@ function afterRenderLesson3Mixing(){
   refreshPaletteTrayMount();
   paintNeutralsRow();
   window.performCurrentMix = performLesson3Mix;
-  wireMixDrag();
+  if (lesson3PairIdx < LESSON3_MIX_PAIRS.length) {
+    const pair = LESSON3_MIX_PAIRS[lesson3PairIdx];
+    initMixCanvas(PALETTE.wheel[pair.a].hex, PALETTE.wheel[pair.b].hex);
+  }
   hideContinue();
 }
-function performLesson3Mix(){
+function performLesson3Mix(resultHex){
   if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) return;
   const pair = LESSON3_MIX_PAIRS[lesson3PairIdx];
-  const aEntry = PALETTE.wheel[pair.a], bEntry = PALETTE.wheel[pair.b];
-  PALETTE.neutrals.push({ hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from:[pair.a, pair.b], label:'Neutral' });
+  // Uses the student's actual swirled-together result, not a fixed
+  // 50/50 — this is the one lesson where that matters pedagogically:
+  // watching their OWN mix genuinely trend toward gray as they scrub
+  // is the point being made, not just the mechanism for landing on a
+  // predetermined answer.
+  PALETTE.neutrals.push({ hex: resultHex, from:[pair.a, pair.b], label:'Neutral' });
   savePalette();
   lesson3PairIdx++;
   document.getElementById('mixingArea').innerHTML = renderLesson3MixingInner();
   document.getElementById('neutralsMount').innerHTML = renderNeutralsRow();
   paintNeutralsRow();
-  wireMixDrag();
+  if (lesson3PairIdx < LESSON3_MIX_PAIRS.length) {
+    const nextPair = LESSON3_MIX_PAIRS[lesson3PairIdx];
+    initMixCanvas(PALETTE.wheel[nextPair.a].hex, PALETTE.wheel[nextPair.b].hex);
+  }
   if (lesson3PairIdx >= LESSON3_MIX_PAIRS.length) {
     if (!PALETTE.lessonsDone.lesson3) saveJourneyMoment('lesson3_complete');
     PALETTE.lessonsDone.lesson3 = true;
