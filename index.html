@@ -1589,40 +1589,17 @@
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
-  
-  <!-- Live as of round 1 (2026-09-16): Intro + Lessons 1-3 (Primary/
-       Analogous/Complementary). Same nav depth as Art Theory below
-       (its own top-level course, not nested under Drawing's own
-       sub-screen) — see color-theory/index.html's own header for why. -->
+
+  <!-- Renamed from "Color Theory" — per Faye's IA restructure (Sept
+       2026): it's a hands-on color-mixing course, not a theory course.
+       Same href/page, only the nav label changed — color-theory/
+       index.html's own internal title is untouched, out of scope for
+       this pass. -->
   <a href="color-theory/" class="subtrack">
     <div class="subtrack-emoji">🎨</div>
     <div class="subtrack-info">
-      <div class="subtrack-name">Color Theory</div>
+      <div class="subtrack-name">Color Practice</div>
       <div class="subtrack-meta">Mix Your Own Palette</div>
-    </div>
-    <div class="subtrack-arrow">→</div>
-  </a>
-
-  <a href="art-theory/" class="subtrack">
-    <div class="subtrack-emoji">📐</div>
-    <div class="subtrack-info">
-      <div class="subtrack-name">Art Theory</div>
-      <div class="subtrack-meta">Western &amp; Chinese Art History</div>
-    </div>
-    <div class="subtrack-arrow">→</div>
-  </a>
-
-  <!-- Internal review build (Rat, Steps 1-8 of 14) — per Faye's
-       explicit "stop and show me before building Ox" instruction, this
-       card exists so she can actually reach the course from navigation
-       to review it, same as Color Theory's own live-but-in-progress
-       card above. Working title, courseId 'zodiac-skill' internally —
-       see lessons/zodiac-skill/index.html's own header. -->
-  <a href="lessons/zodiac-skill/" class="subtrack">
-    <div class="subtrack-emoji">🖌️</div>
-    <div class="subtrack-info">
-      <div class="subtrack-name">Zodiac Brush Technique</div>
-      <div class="subtrack-meta">Chinese Brush Painting · Rat (in progress)</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -1632,6 +1609,111 @@
     <div class="subtrack-info">
       <div class="subtrack-name">Material Arts</div>
       <div class="subtrack-meta">Leather Craft &amp; more</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+  <!-- NEW top-level category, parallel to Drawing (Sept 2026 IA
+       restructure). Zodiac Brush Technique no longer lives here as a
+       flat sibling — it's nested Painting → Ink Painting → 十二生肖兽图
+       → the course itself, see paintingCoursesScreen below. -->
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showPaintingCourses();">
+    <div class="subtrack-emoji">🖌️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Painting</div>
+      <div class="subtrack-meta">Ink Painting &amp; more</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+  <!-- Moved to the bottom of the list order per Faye's IA restructure. -->
+  <a href="art-theory/" class="subtrack">
+    <div class="subtrack-emoji">📐</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Art Theory</div>
+      <div class="subtrack-meta">Western &amp; Chinese Art History</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAINTING COURSES SCREEN — medium category, parallel to Drawing.
+     Sept 2026 IA restructure. Today: one child (Ink Painting). Future
+     siblings here could include Oil Painting, not built yet.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="painting-courses-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
+
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">Painting</div>
+    <div class="section-sub">Choose a painting medium.</div>
+  </div>
+
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showInkPaintingCourses();">
+    <div class="subtrack-emoji">🖋️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Ink Painting</div>
+      <div class="subtrack-meta">Chinese, Japanese &amp; Korean Traditions</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     INK PAINTING COURSES SCREEN — medium-level category, deliberately
+     NOT nationality-specific (stays open to Chinese/Japanese/Korean
+     ink traditions). Today: one child (十二生肖兽图 / Zodiac Beast
+     Paintings, a subject-matter category). Future siblings here could
+     include 花鸟 (flowers-birds) or 山水 (landscape), not built yet.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="ink-painting-courses-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showPaintingCourses();">← Back to Painting</button>
+
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">Ink Painting</div>
+    <div class="section-sub">Choose a subject.</div>
+  </div>
+
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showZodiacBeastCourses();">
+    <div class="subtrack-emoji">🐉</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">十二生肖兽图</div>
+      <div class="subtrack-meta">Zodiac Beast Paintings</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     十二生肖兽图 (ZODIAC BEAST PAINTINGS) COURSES SCREEN — subject-
+     matter category within Ink Painting. Today: one child (the actual
+     course, Zodiac Brush Technique). Sept 2026 IA restructure.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="zodiac-beast-courses-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showInkPaintingCourses();">← Back to Ink Painting</button>
+
+  <div class="section-heading" style="text-align:center; margin-top: 8px;">
+    <div class="section-title" style="font-size:22px;">十二生肖兽图</div>
+    <div class="section-sub">Zodiac Beast Paintings — choose a course to start or continue.</div>
+  </div>
+
+  <!-- Internal review build (Rat, Steps 1-8 of 14) — per Faye's
+       explicit "stop and show me before building Ox" instruction, this
+       card exists so she can actually reach the course from navigation
+       to review it. Working title, courseId 'zodiac-skill' internally
+       — see lessons/zodiac-skill/index.html's own header. -->
+  <a href="lessons/zodiac-skill/" class="subtrack">
+    <div class="subtrack-emoji">🖌️</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Zodiac Brush Technique</div>
+      <div class="subtrack-meta">Rat (in progress)</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -2024,6 +2106,9 @@
     document.getElementById('drawing-courses-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
     document.getElementById('material-arts-courses-screen').style.display = 'none';
+    document.getElementById('painting-courses-screen').style.display = 'none';
+    document.getElementById('ink-painting-courses-screen').style.display = 'none';
+    document.getElementById('zodiac-beast-courses-screen').style.display = 'none';
   }
   
   function showSignIn() {
@@ -2068,6 +2153,31 @@
     window.scrollTo(0, 0);
   }
   window.showMaterialArtsCourses = showMaterialArtsCourses;
+
+  // Painting → Ink Painting → 十二生肖兽图 — Sept 2026 IA restructure,
+  // three medium/subject levels deep so future siblings (Oil Painting;
+  // 花鸟/flowers-birds, 山水/landscape) each get their own level without
+  // restructuring this drill-down again.
+  function showPaintingCourses() {
+    hideAllScreens();
+    document.getElementById('painting-courses-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showPaintingCourses = showPaintingCourses;
+
+  function showInkPaintingCourses() {
+    hideAllScreens();
+    document.getElementById('ink-painting-courses-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showInkPaintingCourses = showInkPaintingCourses;
+
+  function showZodiacBeastCourses() {
+    hideAllScreens();
+    document.getElementById('zodiac-beast-courses-screen').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+  window.showZodiacBeastCourses = showZodiacBeastCourses;
 
   function showDrawing() {
     hideAllScreens();
