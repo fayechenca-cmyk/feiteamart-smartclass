@@ -521,12 +521,25 @@ const ZODIAC_ANIMALS = [
           { icon:'🖌️', label:'Brush (毛笔)' }
         ] },
       { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
+      // §7 REORDER (per Faye's review — practice/breakdown must come
+      // immediately BEFORE the technique step it supports):
+      //   - Ear pair: was Draw the Ears(4) then its practice(5) — now
+      //     swapped, practice(4) then Draw the Ears(5). Clear pairing.
+      //   - Torso pair: was Torso(7) then its practice(8) — now
+      //     swapped, practice(7) then Torso(8). Clear pairing.
+      //   - Eye practice (below, unchanged at 3): FLAGGED, not
+      //     reordered — there is no "Draw the Eyes" technique step
+      //     anywhere in Steps 1-8 to pair it against (only "Draw the
+      //     Nose" exists). Left in its original position rather than
+      //     guessing which step it's meant to precede; needs Faye's
+      //     confirmation against the teacher's material — see the
+      //     build report.
       { stepNumber:3,  title:'Breakdown 1 — Eye Brush Technique',          stepType:'practice',  videoUrl:'e5ff9e3928f792adfec1fc9d631d7541', posterUrl:null },
-      { stepNumber:4,  title:'Draw the Ears',                              stepType:'technique', videoUrl:'19104c7886d50c84b8fbf54df97bdc55', posterUrl:null },
-      { stepNumber:5,  title:'Breakdown 2 — Ear Brush Technique',          stepType:'practice',  videoUrl:'42eb32971c1417e25f69766493160e40', posterUrl:null },
+      { stepNumber:4,  title:'Breakdown 2 — Ear Brush Technique',          stepType:'practice',  videoUrl:'42eb32971c1417e25f69766493160e40', posterUrl:null },
+      { stepNumber:5,  title:'Draw the Ears',                              stepType:'technique', videoUrl:'19104c7886d50c84b8fbf54df97bdc55', posterUrl:null },
       { stepNumber:6,  title:'Head & Hands',                               stepType:'technique', videoUrl:'fa132a0665dd9de005961668923886ab', posterUrl:null },
-      { stepNumber:7,  title:'Torso',                                     stepType:'technique', videoUrl:'4df356429002b37734f71c9fd7a1ff95', posterUrl:null },
-      { stepNumber:8,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null },
+      { stepNumber:7,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null },
+      { stepNumber:8,  title:'Torso',                                     stepType:'technique', videoUrl:'4df356429002b37734f71c9fd7a1ff95', posterUrl:null },
       // Steps 9-14 — not yet recorded. Real entries (so step count/
       // progress indicator are accurate), videoUrl:null renders the
       // existing platform "coming soon" fallback. No content invented.
