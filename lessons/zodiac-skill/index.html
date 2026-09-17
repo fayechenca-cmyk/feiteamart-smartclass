@@ -627,10 +627,17 @@ function renderZodiacVideoStage(step, iframeId, variant){
       </div>
     </div>`;
   }
+  // Two independent controls, NOT one — see afterRenderZodiacVideoStage's
+  // comment for why. #videoTapOverlay_ (big, centered, auto-hides) only
+  // ever means "playback never started at all" — a genuinely detectable
+  // state via play/pause events. #videoSoundBtn_ (small, corner, NEVER
+  // auto-hides) is the guaranteed real path to sound, because whether
+  // playback is silently muted is NOT reliably detectable here.
   return `<div class="${cls}">
     <iframe id="${iframeId}" src="${cfStreamSrc(step.videoUrl, step.posterUrl)}" loading="lazy" title="${escapeHtml(step.title)}"
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
-    <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
+    <button class="video-tap-overlay" id="videoTapOverlay_${iframeId}" hidden>▶ Tap to Play</button>
+    <button class="video-sound-btn" id="videoSoundBtn_${iframeId}" title="Tap if you can't hear the video">🔊 Sound</button>
   </div>`;
 }
 let _streamSdkPromise = null;
@@ -645,34 +652,61 @@ function loadStreamSdk(){
   });
   return _streamSdkPromise;
 }
-// Never gates Next on the video finishing — this course's spec just
-// asks for ordinary Back/Next, not a forced-watch lock. Only job here
-// is: start unmuted, and if the browser blocked that, offer a real
-// tap-to-play that starts it unmuted (never a silent fallback to muted).
+// §5 AUDIO FIX — diagnosed live (Sept 2026), not re-applying the same
+// broken fix. ROOT CAUSE: when a real browser's autoplay policy blocks
+// unmuted autoplay, Cloudflare Stream's OWN player silently retries
+// and succeeds MUTED (same industry-standard fallback YouTube/etc.
+// use) — it does not just stay paused. The 'play' event fires exactly
+// the same either way, so the old code (which hid the only recovery
+// control the instant 'play' fired) wrongly treated "started muted"
+// as "started with sound." Verified with --autoplay-policy=user-
+// gesture-required: the cross-origin <video> element read muted:true,
+// playing, while this code's own play-event handler had already
+// declared success.
+//
+// This ALSO means the Stream Player SDK's own player.muted/.volume
+// getters can't be trusted to detect it — verified live too: they kept
+// reporting muted:false/volume:1 the entire time the underlying video
+// was genuinely muted (the SDK echoes back what it was last told via
+// postMessage, not a live DOM query). So there is no reliable read-
+// based signal here at all, in either direction.
+//
+// FIX: stop trying to detect "is it unmuted" and auto-hide accordingly.
+// The small #videoSoundBtn_ is always visible for as long as the video
+// is, forcing muted=false on a REAL click (a genuine user gesture,
+// which browsers do honor for an explicit unmute, unlike the original
+// unmuted-autoplay attempt that had no gesture behind it at all).
+// #videoTapOverlay_ stays separate and conditional — "did playback
+// start at all" (via play/pause) IS reliably detectable, and covers
+// the different, stricter case where autoplay is blocked outright
+// with no muted-fallback.
 function afterRenderZodiacVideoStage(step, iframeId){
   if (!step.videoUrl) return;
+  const soundBtn = document.getElementById('videoSoundBtn_' + iframeId);
   loadStreamSdk().then(() => {
     try {
       const iframe = document.getElementById(iframeId);
       const player = window.Stream && iframe ? window.Stream(iframe) : null;
       if (!player) return;
+      const forceSound = () => {
+        try { player.muted = false; player.volume = 1; } catch (e) { /* best-effort */ }
+        const playResult = player.play();
+        if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
+      };
+      if (soundBtn) soundBtn.onclick = forceSound;
+
       let started = false;
       player.addEventListener('play', () => {
         started = true;
-        const overlay = document.getElementById('videoTapOverlay');
+        const overlay = document.getElementById('videoTapOverlay_' + iframeId);
         if (overlay) overlay.hidden = true;
       });
       setTimeout(() => {
         if (started) return;
-        const overlay = document.getElementById('videoTapOverlay');
+        const overlay = document.getElementById('videoTapOverlay_' + iframeId);
         if (!overlay) return;
         overlay.hidden = false;
-        overlay.onclick = () => {
-          try { player.muted = false; } catch (e) { /* best-effort */ }
-          const playResult = player.play();
-          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
-          overlay.hidden = true;
-        };
+        overlay.onclick = () => { forceSound(); overlay.hidden = true; };
       }, 1200);
     } catch (e) { console.warn('[video] Stream SDK attach failed', e); }
   }).catch((e) => console.warn('[video] Stream SDK failed to load', e));
