@@ -172,15 +172,15 @@
     }
 
     if (branch === 'creation') {
-      const opened = status.openedCreationLessons;
-      if (opened.includes(lessonId)) {
-        // Already started — review allowed
-        return { allowed: true, reason: 'creation_review' };
-      }
-      if (opened.length < FREE_CREATION_LIMIT) {
-        return { allowed: true, reason: 'free_creation' };
-      }
-      return { allowed: false, reason: 'paywall_creation' };
+      // Sept 2026 — per Faye's platform-wide access clarification: Creation
+      // is fully open to everyone for now ("functioning like a playground
+      // while the library is small"), no paywall. FREE_CREATION_LIMIT and
+      // the opened-lessons tracking above are left in place, unused by
+      // this branch, deliberately — she's planning a subscription model
+      // once the library grows, not this per-course free-limit again, but
+      // wants the option to flip this single early-return back off in the
+      // meantime without rebuilding the tracking machinery.
+      return { allowed: true, reason: 'creation_open_for_now' };
     }
 
     return { allowed: false, reason: 'unknown_branch' };
