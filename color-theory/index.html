@@ -218,30 +218,41 @@ button{font-family:inherit;}
 .palette-well-fixed.white{background:var(--paint-white);border-color:var(--line);}
 .palette-well-num{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-size:8px;color:var(--ink-faint);font-weight:700;}
 
-/* Mixing bowl gesture — two tubes + a bowl, drag a tube into the bowl
-   to trigger the blend. */
-.mixing-stage{display:flex;align-items:center;justify-content:center;gap:26px;margin:22px 0 26px;min-height:120px;}
-.mix-tube{
-  width:64px;height:64px;border-radius:50%;border:2.5px solid var(--ink);cursor:grab;
-  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
-  font-weight:800;font-size:11px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);
-  box-shadow:4px 5px 0 rgba(43,36,56,.14);touch-action:none;user-select:none;position:relative;z-index:2;
-  transition:transform .15s ease;
-}
-.mix-tube:active{cursor:grabbing;}
-.mix-tube.dragging{opacity:.35;}
-.mix-bowl{
-  width:84px;height:84px;border-radius:50%;border:2.5px dashed var(--ink-faint);
-  display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--ink-faint);
-  background:var(--paper-deep);transition:border-color .15s ease,background .15s ease,transform .15s ease;
-}
-.mix-bowl.hover{border-color:var(--accent);border-style:solid;transform:scale(1.08);background:#fff;}
-.drag-ghost{
-  position:fixed;width:64px;height:64px;border-radius:50%;border:2.5px solid var(--ink);
-  pointer-events:none;z-index:500;box-shadow:0 10px 26px rgba(0,0,0,.3);
-}
-.mix-hint{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:4px;}
+/* ============================================================
+   REAL PAINT-MIXING WIDGET — round 2 item 3, replaces the old drag-
+   a-tube-into-a-bowl gesture entirely (was "too digital" per Faye's
+   correction). One shared canvas: two soft blobs of paint sit near
+   each other on a palette surface; the student presses and drags
+   directly on the canvas — a real smudge simulation (see
+   mixCanvasSmudgeStep in the script) drags existing paint along the
+   pointer path and deposits it with partial opacity, so scrubbing
+   back and forth over the seam between the two blobs progressively
+   homogenizes them, exactly like working two dabs of gouache together
+   with a palette knife. Not a tweak on paintStrokeSwatch (the static
+   "stroke texture" swatch renderer) — a different, actively-simulated
+   widget; paintStrokeSwatch is unchanged and still what paints the
+   FINAL result into the palette tray/paint-box afterward.
+============================================================ */
+.mix-hint{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
 .mix-hint b{color:var(--ink);}
+.mix-canvas-wrap{
+  position:relative;width:100%;max-width:360px;aspect-ratio:16/10;margin:0 auto 14px;
+  border:2.5px solid var(--ink);border-radius:var(--radius-md);overflow:hidden;
+  box-shadow:5px 6px 0 rgba(43,36,56,.14);touch-action:none;cursor:grab;
+}
+.mix-canvas-wrap:active{cursor:grabbing;}
+.mix-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.mix-progress-wrap{width:100%;max-width:360px;margin:0 auto 6px;}
+.mix-progress-track{height:8px;border-radius:999px;background:var(--paper-deep);border:1.5px solid var(--ink);overflow:hidden;}
+.mix-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--lavender));width:0%;transition:width .15s ease;}
+.mix-progress-label{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:6px;}
+.mix-confirm-btn{
+  display:block;margin:14px auto 0;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;
+  padding:11px 24px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;
+  box-shadow:0 8px 18px rgba(216,67,44,.3);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;
+}
+.mix-confirm-btn.ready{opacity:1;pointer-events:auto;}
+.mix-confirm-btn:active{transform:scale(.96);}
 
 /* ============================================================
    Generic bright/playful bits reused across lessons.
@@ -388,6 +399,28 @@ button{font-family:inherit;}
 .journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
 @media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
 
+/* Course Map cards — adapted from lessons/scene-drawing-foundation/
+   index.html's own .lesson-card (core/scene-drawing-style.css),
+   re-tokened to this file's palette. That course's version is a real
+   <a href> to a separate lesson page; Color Theory has no separate
+   pages to link to (all four sections are internal stages in this one
+   file), so these are buttons that jump STATE.stageIndex and close
+   this modal instead — same list-of-sections-with-status concept,
+   adapted to a single-file course rather than a multi-file one. */
+.map-card-list{display:flex;flex-direction:column;gap:10px;}
+.map-card{
+  display:block;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);
+  border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.map-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(43,36,56,.08);border-color:var(--accent);}
+.map-card.current{border-color:var(--accent);background:#fff;box-shadow:0 4px 16px rgba(216,67,44,.12);}
+.map-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.map-card-number{font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-deep);}
+.map-card-status{font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--ink-faint);}
+.map-card-status.done{color:#2f8f5b;}
+.map-card-status.current{color:var(--accent-deep);}
+.map-card-title{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);}
+
 /* Badge card — adapted from core/scene-drawing-style.css's own
    .course-badge-card (same class names, same real renderCourseBadgeCard()
    output), re-tokened to this file's own palette rather than linking
@@ -409,12 +442,32 @@ button{font-family:inherit;}
     <div style="display:flex;align-items:center;gap:14px;">
       <a class="exit-link" href="../" title="Back to Art GPS"><span class="exit-link-full">← Skill</span><span class="exit-link-mobile">←</span></a>
       <button class="prev-step-btn" id="prevBtn" onclick="prevStage()" disabled>‹ Back</button>
+      <button class="journey-btn" onclick="openCourseMap()">🗺️ <span class="journey-btn-full">Map</span></button>
       <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
     </div>
     <div class="rail" id="rail"></div>
   </div>
   <div id="stage"></div>
   <div class="continue-dock" id="continueDock"></div>
+</div>
+
+<!-- COURSE MAP MODAL — round 2, corrected: "return to Map" means this
+     course's OWN internal section list (Intro/Lesson 1/2/3), same
+     logic as Foundation A/Scene Drawing Foundation's course-internal
+     lesson list — NOT the exit link (that's a genuinely different,
+     separate control; see its own comment in the script block for
+     why this had to be a modal rather than a real page, and why it's
+     a distinct button from My Journey rather than combined). -->
+<div class="journey-modal-backdrop" id="courseMapModalBackdrop" onclick="if(event.target===this) closeCourseMap();">
+  <div class="journey-modal">
+    <div class="journey-close" onclick="closeCourseMap()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">🗺️ Color Theory</div>
+      <div class="journey-title">Jump to any part</div>
+      <div class="journey-subtitle">Pick up where you left off, or revisit an earlier lesson.</div>
+    </div>
+    <div class="map-card-list" id="courseMapList"></div>
+  </div>
 </div>
 
 <!-- MY JOURNEY MODAL — round 2, ported from the SAME real component
@@ -893,6 +946,88 @@ const JournalStorage = {
     catch (e) { console.warn('[JournalStorage] Local save failed:', e); }
   }
 };
+
+/* ============================================================
+   COURSE MAP — round 2 correction. "Return to Map" means Color
+   Theory's OWN internal section list (Intro/Lesson 1/2/3), the exact
+   same logic as Foundation A/Scene Drawing Foundation's course-
+   internal lesson list — NOT the exit link. Confirmed by re-checking
+   Scene Drawing Foundation directly: a lesson's exit-link href
+   ("../../" from a unit-01 lesson) resolves to
+   lessons/scene-drawing-foundation/index.html — that COURSE's own
+   catalog page (lesson cards, real <a href>), not the site-wide
+   Skills page. This is a genuinely different control from that exit
+   link (which still correctly leaves to Skills) and from My Journey
+   (a private thinking log, unrelated concept) — a separate button,
+   not a repurposed one.
+
+   Adapted, not copied verbatim: that catalog page is a real separate
+   page because Scene Drawing Foundation's 5 lessons are 5 separate
+   files; Color Theory's 4 sections are internal STAGES in this one
+   file, so there's no separate page to link to — this is a modal
+   that jumps STATE.stageIndex instead of a page navigation, same
+   list-with-status concept, same card visual language
+   (.lesson-card ported as .map-card — see the CSS block's own note),
+   just adapted to a single-file course.
+============================================================ */
+const COURSE_MAP_SECTIONS = [
+  { key:'intro', label:'Intro Video', firstStageId:'intro_video' },
+  { key:'lesson1', label:'Lesson 1 · Primary Colors', firstStageId:'lesson1_intro' },
+  { key:'lesson2', label:'Lesson 2 · Analogous Colors', firstStageId:'lesson2_video' },
+  { key:'lesson3', label:'Lesson 3 · Complementary Colors', firstStageId:'lesson3_video' }
+];
+// Resolves each section's stage-index range by looking up its first
+// stage's real position in STAGES (not hardcoded indices) — a section
+// runs from its own firstStageId up to (but not including) the next
+// section's firstStageId, so reordering/adding stages later doesn't
+// silently desync this list.
+function courseMapSectionRanges(){
+  const starts = COURSE_MAP_SECTIONS.map(s => STAGES.findIndex(st => st.id === s.firstStageId));
+  return COURSE_MAP_SECTIONS.map((s, i) => ({
+    ...s,
+    startIdx: starts[i],
+    endIdx: (i + 1 < starts.length ? starts[i + 1] : STAGES.length) - 1
+  }));
+}
+function courseMapSectionStatus(section){
+  if (STATE.stageIndex >= section.startIdx && STATE.stageIndex <= section.endIdx) return 'current';
+  if (section.key === 'intro') return STATE.stageIndex > section.endIdx ? 'done' : 'upcoming';
+  const doneFlag = PALETTE.lessonsDone[section.key];
+  if (doneFlag) return 'done';
+  return STATE.stageIndex > section.endIdx ? 'done' : 'upcoming';
+}
+function renderCourseMapContent(){
+  const list = document.getElementById('courseMapList');
+  const sections = courseMapSectionRanges();
+  list.innerHTML = sections.map((s, i) => {
+    const status = courseMapSectionStatus(s);
+    const statusLabel = status === 'done' ? '✓ Done' : status === 'current' ? '● Here now' : 'Not started';
+    return `
+      <button class="map-card${status === 'current' ? ' current' : ''}" onclick="goToMapSection('${s.firstStageId}')">
+        <div class="map-card-top">
+          <div class="map-card-number">${i === 0 ? 'Intro' : 'Lesson ' + i}</div>
+          <div class="map-card-status ${status}">${statusLabel}</div>
+        </div>
+        <div class="map-card-title">${s.label}</div>
+      </button>
+    `;
+  }).join('');
+}
+function goToMapSection(stageId){
+  const idx = STAGES.findIndex(s => s.id === stageId);
+  if (idx === -1) return;
+  closeCourseMap();
+  STATE.stageIndex = idx;
+  renderCurrentStage();
+}
+function openCourseMap(){
+  renderCourseMapContent();
+  document.getElementById('courseMapModalBackdrop').classList.add('show');
+}
+function closeCourseMap(){
+  document.getElementById('courseMapModalBackdrop').classList.remove('show');
+}
+
 function openMyJourney(){
   renderJourneyModalContent();
   document.getElementById('journeyModalBackdrop').classList.add('show');
@@ -1170,45 +1305,189 @@ function refreshPaletteTrayMount(){
   mount.innerHTML = renderPaletteTray();
   paintPaletteTrayCanvases();
 }
-function renderMixingStageInner(){
-  const stepIdx = nextMixStepIndex();
-  if (stepIdx >= GUIDED_MIX_SEQUENCE.length) {
-    return `<div class="mix-hint" style="margin-bottom:14px;">🎉 <b>12 colors, all mixed by you.</b></div>`;
-  }
-  const step = GUIDED_MIX_SEQUENCE[stepIdx];
-  const aEntry = PALETTE.wheel[step.a], bEntry = PALETTE.wheel[step.b];
+
+/* ============================================================
+   REAL PAINT-MIXING WIDGET (round 2, item 3) — replaces the old
+   drag-a-tube-into-a-bowl gesture entirely. One shared canvas: two
+   soft blobs of paint sit near each other on a palette surface; the
+   student presses and drags directly on the canvas. Each pointer move
+   samples whatever paint is CURRENTLY at the previous point and
+   deposits it (soft-edged, partial opacity) at the new point — a real
+   smudge simulation, the same technique a photo-editor's smudge/
+   finger tool uses — so scrubbing back and forth over the seam
+   between the two blobs progressively homogenizes them, exactly like
+   working two dabs of gouache together with a palette knife. This is
+   NOT a tweak on paintStrokeSwatch (the static textured-swatch
+   renderer used elsewhere) — a different, actively-simulated widget.
+   paintStrokeSwatch is unchanged and still what paints the FINAL
+   confirmed result into the palette tray/paint-box afterward, per
+   Faye's explicit "keep that part as-is" instruction.
+
+   "Enough" mixing is real, not assumed: the confirm button only
+   becomes clickable once cumulative pointer-travel crosses a
+   threshold, and the result color is SAMPLED from the actual canvas
+   (averaged across it) at confirm time — a lazy single tap-and-drag
+   produces a half-mixed, still-two-toned result if confirmed early;
+   confirm is gated until the average has had a real chance to
+   converge, but the sampled color still genuinely reflects whatever
+   the student actually did, not a hardcoded 50/50 regardless of
+   effort.
+============================================================ */
+let _mixState = null; // { canvas, ctx, w, h } — the currently-live mixing canvas, if any
+function renderMixCanvasBlock(hintHtml, hexA, hexB){
   return `
-    <div class="mix-hint">Mix <b>${aEntry.label}</b> + <b>${bEntry.label}</b> to make <b>${step.label}</b></div>
-    <div class="mixing-stage">
-      <div class="mix-tube" id="mixTubeA" data-hex="${aEntry.hex}" style="background:${aEntry.hex};">${aEntry.label}</div>
-      <div class="mix-bowl" id="mixBowl">＋</div>
-      <div class="mix-tube" id="mixTubeB" data-hex="${bEntry.hex}" style="background:${bEntry.hex};">${bEntry.label}</div>
+    <div class="mix-hint">${hintHtml}</div>
+    <div class="mix-canvas-wrap" id="mixCanvasWrap"><canvas id="mixCanvas"></canvas></div>
+    <div class="mix-progress-wrap">
+      <div class="mix-progress-track"><div class="mix-progress-fill" id="mixProgressFill"></div></div>
+      <div class="mix-progress-label" id="mixProgressLabel">Press and swirl the two colors together.</div>
     </div>
+    <button class="mix-confirm-btn" id="mixConfirmBtn" onclick="confirmCurrentMix()">Looks mixed! →</button>
   `;
 }
-function afterRenderLesson1Mixing(){
-  const area = document.getElementById('mixingArea');
-  area.innerHTML = renderMixingStageInner();
-  refreshPaletteTrayMount();
-  // Re-point the shared drag-drop hook at THIS lesson's advance
-  // function every time this stage is (re-)entered — Lesson 2/3's own
-  // mixing stages reassign window.performCurrentMix to their own
-  // function while active, so navigating back here after visiting one
-  // of those must explicitly restore it, not assume it's still this.
-  window.performCurrentMix = performLesson1Mix;
-  wireMixDrag();
-  if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
-    if (!PALETTE.lessonsDone.lesson1) saveJourneyMoment('lesson1_complete');
-    PALETTE.lessonsDone.lesson1 = true;
-    savePalette();
-    showContinue('Continue →', nextStage);
-  } else {
-    hideContinue();
+// A blob of PURE paint (no blending here — just a believably uneven
+// edge via a few overlapping soft strokes of the same hue). Seeded so
+// re-rendering the same recipe looks the same, matching
+// paintStrokeSwatch's own determinism convention elsewhere in this file.
+function drawPaintBlob(ctx, cx, cy, r, hex, seed){
+  const rng = mulberry32(seed);
+  for (let i=0;i<5;i++){
+    const jx = (rng()-0.5)*r*0.3, jy = (rng()-0.5)*r*0.3;
+    const jr = r * (0.75 + rng()*0.35);
+    const grad = ctx.createRadialGradient(cx+jx,cy+jy,0,cx+jx,cy+jy,jr);
+    grad.addColorStop(0, hexToRgba(hex, 0.92));
+    grad.addColorStop(0.75, hexToRgba(hex, 0.75));
+    grad.addColorStop(1, hexToRgba(hex, 0));
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(cx+jx, cy+jy, jr, 0, Math.PI*2); ctx.fill();
   }
 }
-// Shared drag-a-tube-into-the-bowl gesture — used here, and again by
-// Lessons 2/3 (same function, different step source, per the spec's
-// "same mixing mechanic" instruction).
+function initMixCanvas(hexA, hexB){
+  const wrap = document.getElementById('mixCanvasWrap');
+  const canvas = document.getElementById('mixCanvas');
+  if (!wrap || !canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = wrap.getBoundingClientRect();
+  canvas.width = Math.round(rect.width*dpr);
+  canvas.height = Math.round(rect.height*dpr);
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+
+  ctx.fillStyle = '#f4ecda'; // palette-surface color, not this file's paper (reads as a mixing tray, not the page background)
+  ctx.fillRect(0,0,w,h);
+  const r = Math.min(w,h)*0.34;
+  drawPaintBlob(ctx, w*0.32, h*0.5, r, hexA, seedFromString(hexA+'A'));
+  drawPaintBlob(ctx, w*0.68, h*0.5, r, hexB, seedFromString(hexB+'B'));
+
+  // Smudge brush setup — a scratch canvas (sampled patch) and a
+  // precomputed soft round alpha mask, reused every step rather than
+  // rebuilt per pointer move.
+  const brushR = Math.min(w,h)*0.15;
+  const scratch = document.createElement('canvas');
+  scratch.width = brushR*2; scratch.height = brushR*2;
+  const scratchCtx = scratch.getContext('2d');
+  const mask = document.createElement('canvas');
+  mask.width = brushR*2; mask.height = brushR*2;
+  const maskCtx = mask.getContext('2d');
+  const mgrad = maskCtx.createRadialGradient(brushR,brushR,0,brushR,brushR,brushR);
+  mgrad.addColorStop(0,'rgba(0,0,0,1)'); mgrad.addColorStop(0.7,'rgba(0,0,0,0.85)'); mgrad.addColorStop(1,'rgba(0,0,0,0)');
+  maskCtx.fillStyle = mgrad;
+  maskCtx.beginPath(); maskCtx.arc(brushR,brushR,brushR,0,Math.PI*2); maskCtx.fill();
+
+  let dragging = false, lastX = null, lastY = null, cumDistance = 0;
+  const targetDistance = (w+h) * 1.6; // roughly "a few real scrubs back and forth"
+
+  function smudgeStep(fromX, fromY, toX, toY){
+    scratchCtx.clearRect(0,0,scratch.width,scratch.height);
+    // Sample whatever paint is CURRENTLY at the trailing point...
+    scratchCtx.drawImage(canvas, fromX-brushR, fromY-brushR, brushR*2, brushR*2, 0, 0, scratch.width, scratch.height);
+    scratchCtx.globalCompositeOperation = 'destination-in';
+    scratchCtx.drawImage(mask, 0, 0);
+    scratchCtx.globalCompositeOperation = 'source-over';
+    // ...and deposit it at the leading point, partial opacity so it
+    // blends with what's already there instead of overwriting it.
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(scratch, toX-brushR, toY-brushR, brushR*2, brushR*2);
+    ctx.globalAlpha = 1;
+  }
+  function updateProgress(){
+    const pct = Math.min(100, Math.round((cumDistance/targetDistance)*100));
+    const fill = document.getElementById('mixProgressFill');
+    const label = document.getElementById('mixProgressLabel');
+    const confirmBtn = document.getElementById('mixConfirmBtn');
+    if (fill) fill.style.width = pct + '%';
+    if (label) label.textContent = pct >= 100 ? 'Beautifully mixed!' : 'Press and swirl the two colors together.';
+    if (confirmBtn) confirmBtn.classList.toggle('ready', pct >= 100);
+  }
+  function pointerPos(e){
+    const r2 = wrap.getBoundingClientRect();
+    return { x: (e.clientX-r2.left)*(w/r2.width), y: (e.clientY-r2.top)*(h/r2.height) };
+  }
+  wrap.onpointerdown = (e) => {
+    dragging = true;
+    const p = pointerPos(e);
+    lastX = p.x; lastY = p.y;
+    wrap.setPointerCapture(e.pointerId);
+  };
+  wrap.onpointermove = (e) => {
+    if (!dragging) return;
+    const p = pointerPos(e);
+    const dist = Math.hypot(p.x-lastX, p.y-lastY);
+    if (dist < 0.5) return;
+    const steps = Math.max(1, Math.ceil(dist/(brushR*0.5)));
+    for (let i=1;i<=steps;i++){
+      const ix = lastX + (p.x-lastX)*i/steps;
+      const iy = lastY + (p.y-lastY)*i/steps;
+      smudgeStep(lastX, lastY, ix, iy);
+      lastX = ix; lastY = iy;
+    }
+    cumDistance += dist;
+    updateProgress();
+  };
+  wrap.onpointerup = () => { dragging = false; };
+  wrap.onpointercancel = () => { dragging = false; };
+
+  _mixState = { canvas, ctx, w, h };
+  updateProgress();
+}
+// Averages the canvas's current pixels — sampling every Nth pixel is
+// plenty for a stable average and much cheaper than reading every one.
+// Samples only the CENTER of the canvas, not the whole thing — the
+// swirl gesture only ever works a roughly-central zone; the untouched
+// palette-surface background still shows at the far corners even
+// after a full, correct mix (nothing ever smudges out there), and
+// averaging those in dragged the result toward the light background
+// color instead of the true paint blend (caught live: a Red+Yellow
+// mix was coming out as a pale peach, not orange, until this was
+// scoped down). A 55%-of-width/height centered box comfortably covers
+// where any real swirl actually goes.
+function sampleMixResultHex(){
+  if (!_mixState) return '#888888';
+  const { ctx, w, h } = _mixState;
+  const boxW = w*0.55, boxH = h*0.55;
+  const x0 = Math.round((w-boxW)/2), y0 = Math.round((h-boxH)/2);
+  const data = ctx.getImageData(x0, y0, Math.round(boxW), Math.round(boxH)).data;
+  let r=0,g=0,b=0,n=0;
+  const stride = 4*6;
+  for (let i=0;i<data.length;i+=stride){ r+=data[i]; g+=data[i+1]; b+=data[i+2]; n++; }
+  return rgbToHex(r/n, g/n, b/n);
+}
+function confirmCurrentMix(){
+  const btn = document.getElementById('mixConfirmBtn');
+  if (!btn || !btn.classList.contains('ready')) return; // not mixed enough yet
+  if (!window.performCurrentMix) return;
+  window.performCurrentMix(sampleMixResultHex());
+}
+
+// TEMPORARY — Lessons 2/3's mixing stages still use the OLD drag-a-
+// tube-into-a-bowl gesture (this function) rather than the new swirl
+// widget above; deliberately not wired yet, pending Faye's sign-off on
+// Lesson 1's version first (per her own "show me before wiring into
+// all three" instruction). This function was accidentally deleted
+// when Lesson 1's mixing code was replaced, breaking Lessons 2/3 —
+// restored here; remove this whole function once 2/3 are migrated to
+// the swirl widget too, matching the "one shared widget reused three
+// times" end state.
 function wireMixDrag(){
   const bowl = document.getElementById('mixBowl');
   if (!bowl) return;
@@ -1244,31 +1523,75 @@ function wireMixDrag(){
       if (dragTube !== tube) return;
       const hit = inBowl(e);
       cleanup(tube);
+      // No argument — performLesson2Mix/performLesson3Mix (the only
+      // two things still using this old gesture) compute their own
+      // 50/50 result internally, same as before item 3. Only
+      // performLesson1Mix takes a resultHex argument now (from the new
+      // swirl widget) — the two mixing mechanics are independent until
+      // 2/3 are migrated too.
       if (hit && window.performCurrentMix) window.performCurrentMix();
     });
     tube.addEventListener('pointercancel', () => cleanup(tube));
   });
 }
-// window.performCurrentMix is the shared hook wireMixDrag() calls on a
-// successful bowl drop — reassigned per mixing stage (see each
-// lesson's own afterRender) so the SAME drag gesture can point at
-// whichever lesson's current recipe is active, without threading extra
-// parameters through wireMixDrag itself. performLesson1Mix is Lesson
-// 1's own version; afterRenderLesson1Mixing assigns
+
+function renderMixingStageInner(){
+  const stepIdx = nextMixStepIndex();
+  if (stepIdx >= GUIDED_MIX_SEQUENCE.length) {
+    return `<div class="mix-hint" style="margin-bottom:14px;">🎉 <b>12 colors, all mixed by you.</b></div>`;
+  }
+  const step = GUIDED_MIX_SEQUENCE[stepIdx];
+  const aEntry = PALETTE.wheel[step.a], bEntry = PALETTE.wheel[step.b];
+  return renderMixCanvasBlock(`Scrub the two colors together to make <b>${step.label}</b>`, aEntry.hex, bEntry.hex);
+}
+function afterRenderLesson1Mixing(){
+  const area = document.getElementById('mixingArea');
+  area.innerHTML = renderMixingStageInner();
+  refreshPaletteTrayMount();
+  // Re-point the shared confirm hook at THIS lesson's advance function
+  // every time this stage is (re-)entered — Lesson 2/3's own mixing
+  // stages reassign window.performCurrentMix to their own function
+  // while active, so navigating back here after visiting one of those
+  // must explicitly restore it, not assume it's still this.
+  window.performCurrentMix = performLesson1Mix;
+  const stepIdx = nextMixStepIndex();
+  if (stepIdx < GUIDED_MIX_SEQUENCE.length) {
+    const step = GUIDED_MIX_SEQUENCE[stepIdx];
+    initMixCanvas(PALETTE.wheel[step.a].hex, PALETTE.wheel[step.b].hex);
+  }
+  if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+    if (!PALETTE.lessonsDone.lesson1) saveJourneyMoment('lesson1_complete');
+    PALETTE.lessonsDone.lesson1 = true;
+    savePalette();
+    showContinue('Continue →', nextStage);
+  } else {
+    hideContinue();
+  }
+}
+// window.performCurrentMix(resultHex) is the shared hook
+// confirmCurrentMix() calls once the student has actually mixed
+// "enough" — reassigned per mixing stage (see each lesson's own
+// afterRender) so the SAME canvas widget can hand its sampled result
+// to whichever lesson's current recipe is active, without threading
+// extra parameters through the widget itself. performLesson1Mix is
+// Lesson 1's own version; afterRenderLesson1Mixing assigns
 // window.performCurrentMix = performLesson1Mix every time that stage
 // is (re-)entered, same pattern Lesson 2/3 each follow for their own.
-function performLesson1Mix(){
+function performLesson1Mix(resultHex){
   const stepIdx = nextMixStepIndex();
   if (stepIdx >= GUIDED_MIX_SEQUENCE.length) return;
   const step = GUIDED_MIX_SEQUENCE[stepIdx];
-  const aEntry = PALETTE.wheel[step.a], bEntry = PALETTE.wheel[step.b];
-  PALETTE.wheel[step.result] = { hex: mixColors(aEntry.hex, bEntry.hex, 0.5), from: [step.a, step.b], label: step.label };
+  PALETTE.wheel[step.result] = { hex: resultHex, from: [step.a, step.b], label: step.label };
   savePalette();
   const area = document.getElementById('mixingArea');
   area.innerHTML = renderMixingStageInner();
   refreshPaletteTrayMount();
-  wireMixDrag();
-  if (nextMixStepIndex() >= GUIDED_MIX_SEQUENCE.length) {
+  const nextIdx = nextMixStepIndex();
+  if (nextIdx < GUIDED_MIX_SEQUENCE.length) {
+    const nextStep = GUIDED_MIX_SEQUENCE[nextIdx];
+    initMixCanvas(PALETTE.wheel[nextStep.a].hex, PALETTE.wheel[nextStep.b].hex);
+  }
+  if (nextIdx >= GUIDED_MIX_SEQUENCE.length) {
     if (!PALETTE.lessonsDone.lesson1) saveJourneyMoment('lesson1_complete');
     PALETTE.lessonsDone.lesson1 = true;
     savePalette();
