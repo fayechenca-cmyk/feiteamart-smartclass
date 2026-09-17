@@ -46,6 +46,17 @@ window.COURSE_BADGE_REGISTRY = {
   // here later, this one doesn't get restructured when they're added.
   scene_drawing_unit_01: {
     requiredIds: ['extreme-wide-shot', 'wide-full-shot', 'medium-shot', 'close-up', 'extreme-close-up']
+  },
+
+  // Zodiac Brush Technique (Skill, internal review build) — badged per
+  // animal, not per eventual whole 12-animal course, same reasoning as
+  // scene_drawing_unit_01 above ("badge per Unit, doesn't get
+  // restructured when more are added"). lessons/zodiac-skill/
+  // index.html's markAnimalComplete() writes 'zodiac-rat' into
+  // completedLessons once every recorded step of Rat is finished. A
+  // future Ox entry gets its own 'zodiac_ox' badge id here.
+  zodiac_rat: {
+    requiredIds: ['zodiac-rat']
   }
 
 };

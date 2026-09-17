@@ -38,5 +38,10 @@ window.BADGE_CATALOG = [
   // one Unit at a time. Unit 02+ get their own entries here the same way
   // once they're built, per Faye's explicit "don't restructure this one"
   // instruction.
-  { id:'scene_drawing_unit_01', title:'Unit 01 · Shot Size', artist:'', imgUrl:'', emoji:'🎥', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' }
+  { id:'scene_drawing_unit_01', title:'Unit 01 · Shot Size', artist:'', imgUrl:'', emoji:'🎥', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' },
+
+  // Zodiac Brush Technique (internal review build) — placeholder
+  // artwork/icon per Faye's addendum ("actual artwork can be a
+  // placeholder for now"); ink-painting motif (brush + seal-stamp red).
+  { id:'zodiac_rat', title:'Rat Brush Master', artist:'', imgUrl:'', emoji:'🖌️', color:'#8a2e22', earnedMessage:'you completed the Rat\'s brush technique, stroke by stroke.' }
 ];

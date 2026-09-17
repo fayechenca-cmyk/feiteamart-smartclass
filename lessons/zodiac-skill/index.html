@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Zodiac Brush Technique</title>
+<meta name="description" content="Skill-tier elective: precise Chinese brush-painting technique, one zodiac animal at a time. Internal review build — Rat, Steps 1-8.">
+
+<!--
+  ZODIAC BRUSH TECHNIQUE — Skill tier, new elective. INTERNAL REVIEW
+  BUILD (Rat, Steps 1-8 of 14), built per Faye's two-part prompt
+  (base scaffold + addendum) for her own review with the teacher
+  before anything here is finalized. Working title only — courseId
+  is 'zodiac-skill' internally so a rename later is a data change
+  (this file/title), not a refactor.
+
+  ARCHITECTURE: same flat STAGES/goStage dispatcher as
+  lessons/kandinsky-music-into-shape/index.html, per Faye's explicit
+  instruction to reuse that pattern rather than invent a new one.
+  Shell chrome (topbar/exit-link/prev-step-btn/journey-btn/rail,
+  step-inner/step-kicker/step-title, continue-dock, video-stage +
+  unmuted-autoplay-with-tap-fallback, My Journey modal + JournalStorage,
+  course badge card) is copied from the LIVE Scene Drawing Foundation
+  lesson (lessons/scene-drawing-foundation/unit-01-shot-size/
+  lesson-01-extreme-wide-shot/index.html) per Faye's addendum
+  instruction to match Foundation/Sync's guided, structured visual
+  language — explicitly NOT Creation's playful/exploratory one (Ink
+  Animal Studio, Waves & Yokai, etc.), which this file never touches.
+
+  DATA MODEL: ZODIAC_ANIMALS is an array of per-animal records, each
+  carrying its own `steps` array — step count and step type mix vary
+  per animal (Rat: 14 steps; a future Ox entry might be 12) rather
+  than a fixed schema. STAGES is built by flat-mapping every animal's
+  steps into top-level stage entries (one animal only, for now) — the
+  same flat-not-nested discipline used elsewhere on this platform
+  specifically to avoid the Back-button bug class a step that tracks
+  its own internal sub-stage state can introduce.
+
+  REAL CONTENT: Rat steps 1-8 have real Cloudflare Stream video ids,
+  supplied directly by Faye. Steps 9-14 (tail & claws, tail-brush
+  practice, claw-brush practice, whiskers, signature, seal) are NOT
+  yet recorded — they exist as real entries in the data array (so the
+  step count/progress indicator is accurate) with videoUrl:null, which
+  renderZodiacVideoStage renders as the existing platform "coming
+  soon" fallback. No content is invented for them.
+
+  VIDEO COMPONENT (addendum item 4, future-proofing): every step's
+  video goes through the single renderZodiacVideoStage()/
+  afterRenderZodiacVideoStage() pair, never inlined raw HTML per step
+  — Faye's explicit ask, so that per-timestamp pause/annotation points
+  (planned later, NOT built here) have one place to hook into instead
+  of a rewrite across 14+ call sites.
+
+  AUDIO (addendum item 3): the Cloudflare iframe src requests
+  autoplay=true&muted=false explicitly (cfStreamSrc, same convention
+  as the live Foundation lesson's own cfStreamSrc) — the teacher's
+  narration is core content and must never default to muted. A
+  browser that blocks unmuted autoplay leaves playback paused (never
+  silently falls back to muted) and shows a tap-to-play overlay, which
+  starts it unmuted on a guaranteed-valid click — same fallback the
+  live Foundation lesson uses. UNLIKE that lesson's Step 1, advancing
+  to the next step is never gated on the video finishing — Faye's
+  spec here just asks for ordinary Back/Next, not a forced-watch lock.
+
+  VIDEO SIZE (addendum item 2): .video-stage's max-height formula is
+  widened specifically in THIS file's own CSS (min(80vh,74vw) vs. the
+  shared convention's min(72vh,62vw)) — scoped to this course only,
+  not a platform-wide change — since brush-stroke detail needs to
+  read clearly.
+
+  PRACTICE VS TECHNIQUE (base prompt UI section): each step carries a
+  stepType badge; practice-type steps additionally get a dashed-ink-
+  red "practice sheet" card treatment (see .step-type-badge.practice /
+  .practice-sheet-wrap) so they visually read as a separate practice
+  page, not a continuation of the same drawing — matching the real
+  physical lesson's own structure (a literal separate practice sheet).
+
+  ACCESS / PAYWALL (addendum item 7 — supersedes the base prompt's
+  "leave fully open for now"): Foundation's own core/access.js gates
+  at the PAGE level (FREE_SKILLS = ['preparation','cube'], one fixed
+  free list checked per distinct lesson id) — that shape doesn't map
+  onto a single-file, multi-step course the way it maps onto
+  Foundation's separate lesson pages. Rather than inventing a second,
+  parallel access table, this file reuses the SAME underlying signal
+  FREE_SKILLS itself is built from (window.FEIAccess.getStatus():
+  legacy access-code OR membership==='paid' grants full access) and
+  applies it at STEP granularity instead of page granularity: Steps 1
+  and 2 (Materials, Draw the Nose) are free — the same "first 1-2
+  free" shape as preparation+cube — Step 3 onward shows an inline
+  paywall in place of the step content for a free account. FLAGGED
+  FOR FAYE, not decided silently: this is a NEW gating shape (step-
+  level, single-file) built specifically for this course's structure,
+  not a literal reuse of FREE_SKILLS' page-id array — see the OUTPUT
+  report for the exact step number and an explicit ask to confirm her
+  own account's membership already bypasses it (isLegacy or paid),
+  rather than this file adding a Faye-only special case.
+
+  MY JOURNEY / PROGRESS (addendum item 5): JournalStorage (the real
+  bare-global bridge from core/scene-drawing-platform-bridge.js,
+  localStorage key 'fei_thinking_journal') + direct sessionStorage
+  fei_user_profile reads/writes for XP and completedLessons — the
+  EXACT mechanism the live Foundation lesson uses, not a parallel
+  tracker. sessionStorage (not localStorage) for fei_user_profile
+  specifically, per the platform's Safari-iframe fix convention.
+
+  BADGE (addendum item 6): core/course-badge-registry.js gets one new
+  'zodiac_rat' entry (requiredIds:['zodiac-rat']) — same single-
+  course-badge pattern as color_theory/collage_creator/fridge_curator.
+  Badged per-animal (not per whole eventual 12-animal course), same
+  reasoning as Scene Drawing Foundation's "badge per Unit, not per
+  whole course, doesn't get restructured when more are added" — a
+  future Ox entry gets its own badge id here, this one won't change.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1a22;
+  --ink-soft:rgba(28,26,34,.66);
+  --ink-faint:rgba(28,26,34,.42);
+  --accent:#2d5fa8;
+  --accent-deep:#1f4076;
+  --line:rgba(28,26,34,.14);
+  --paper:#faf8f5;
+  --radius-sm:10px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  /* Ink/brush motif, practice-sheet + badge accents only — scoped,
+     not a departure from the platform's own accent-blue chrome. */
+  --ink-red:#8a2e22;
+  --ink-red-soft:rgba(138,46,34,.1);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;overflow-x:hidden;
+}
+.display{font-family:'Space Grotesk',sans-serif;}
+button{font-family:inherit;}
+
+/* ---------- Shell (ported from the live Scene Drawing Foundation lesson) ---------- */
+#canvas-app{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;position:sticky;top:0;z-index:80;
+  background:linear-gradient(var(--paper) 70%, transparent);
+  pointer-events:none;
+}
+#topbar > *{pointer-events:auto;}
+.topbar-left{display:flex;align-items:center;gap:14px;}
+.exit-link{font-size:12px;color:var(--ink-faint);text-decoration:none;font-weight:700;letter-spacing:.2px;transition:color .15s ease;}
+.exit-link:hover{color:var(--accent-deep);}
+.prev-step-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px 5px 10px;font-weight:700;letter-spacing:.2px;
+  cursor:pointer;display:flex;align-items:center;gap:3px;transition:border-color .15s ease,color .15s ease;
+}
+.prev-step-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-deep);}
+.prev-step-btn:active:not(:disabled){transform:scale(.96);}
+.prev-step-btn:disabled{opacity:.32;cursor:default;}
+.journey-btn{
+  font-size:12px;color:var(--ink-soft);background:none;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 13px;font-weight:700;letter-spacing:.2px;cursor:pointer;
+  display:flex;align-items:center;gap:4px;transition:border-color .15s ease,color .15s ease;
+}
+.journey-btn:hover{border-color:var(--accent);color:var(--accent-deep);}
+.journey-btn:active{transform:scale(.96);}
+.rail{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:46%;}
+@media(max-width:420px){.exit-link-full{display:none;}.journey-btn-full{display:none;}}
+.rail-dot{width:6px;height:6px;border-radius:50%;background:var(--line);transition:background .2s ease,transform .2s ease;flex-shrink:0;}
+.rail-dot.done{background:var(--accent);}
+.rail-dot.current{background:var(--accent-deep);transform:scale(1.5);}
+.rail-dot.pending{background:transparent;border:1.5px solid var(--ink-faint);}
+
+#stage{flex:1;position:relative;display:flex;flex-direction:column;}
+.step{flex:1;display:flex;flex-direction:column;animation:stepIn .45s ease;}
+@keyframes stepIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.step-inner{flex:1;width:100%;max-width:760px;margin:0 auto;padding:6px 22px 120px;display:flex;flex-direction:column;justify-content:center;}
+.step-inner.wide{max-width:900px;}
+
+.step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:10px;}
+.step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 14px;color:var(--accent-deep);}
+
+.step-type-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin:0 auto 16px;}
+.step-type-badge-wrap{text-align:center;}
+.step-type-badge.technique{background:rgba(45,95,168,.1);color:var(--accent-deep);border:1.5px solid rgba(45,95,168,.3);}
+.step-type-badge.practice{background:var(--ink-red-soft);color:var(--ink-red);border:1.5px solid rgba(138,46,34,.32);}
+
+/* ---- Continue dock ---- */
+.continue-dock{
+  position:fixed;left:0;right:0;bottom:0;padding-bottom:clamp(18px,4vh,34px);
+  display:flex;justify-content:center;align-items:flex-end;z-index:70;pointer-events:none;
+  height:104px;background:linear-gradient(transparent, var(--paper) 62%);
+}
+.continue-dock:empty{background:none;}
+.continue-btn{
+  pointer-events:none;opacity:0;transform:translateY(10px);
+  transition:opacity .3s ease,transform .3s ease;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
+  box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
+}
+.continue-btn.ready{opacity:1;transform:translateY(0);pointer-events:auto;}
+.continue-btn:active{transform:scale(.96);}
+
+/* ---- Video stage (enlarged — addendum item 2, scoped to this course) ---- */
+.video-stage{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--radius-md);overflow:hidden;box-shadow:0 14px 34px rgba(28,26,34,.22);}
+@media(min-height:560px){.video-stage{max-height:80vh;aspect-ratio:auto;height:min(80vh,74vw);}}
+.video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.video-tap-overlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+  padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
+
+/* ---- Practice-sheet treatment (base prompt UI section) ---- */
+.practice-sheet-wrap{
+  border:2px dashed var(--ink-red);border-radius:var(--radius-md);padding:18px;
+  background:
+    repeating-linear-gradient(180deg, rgba(138,46,34,.05) 0px, rgba(138,46,34,.05) 1px, transparent 1px, transparent 34px),
+    #fffaf5;
+  position:relative;
+}
+.practice-sheet-ribbon{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--ink-red);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;
+  font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;padding:4px 14px;border-radius:999px;
+  box-shadow:0 4px 10px rgba(138,46,34,.3);
+}
+
+/* ---- Paywall (addendum item 7) ---- */
+.zodiac-paywall-card{
+  max-width:420px;margin:0 auto;text-align:center;background:#fff;border:1.5px solid var(--line);
+  border-radius:var(--radius-lg);padding:34px 26px;box-shadow:0 14px 34px rgba(28,26,34,.1);
+}
+.zodiac-paywall-icon{font-size:2.6rem;margin-bottom:10px;}
+.zodiac-paywall-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.3rem;color:var(--accent-deep);margin:0 0 10px;}
+.zodiac-paywall-body{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 22px;}
+.zodiac-paywall-cta{
+  display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
+  padding:12px 24px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;
+  box-shadow:0 8px 20px rgba(45,95,168,.3);
+}
+.zodiac-paywall-cta:active{transform:scale(.97);}
+
+/* ---- Complete screen ---- */
+.complete-done{text-align:center;}
+.complete-check{margin:6px auto 14px;width:64px;height:64px;border-radius:50%;background:rgba(45,95,168,.08);display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
+.complete-exit{display:inline-block;margin-top:22px;font-size:12.5px;color:var(--ink-faint);text-decoration:none;font-weight:700;}
+.complete-exit:hover{color:var(--accent-deep);}
+
+/* ---- Course badge card (ported verbatim from color-theory/index.html,
+   same real renderCourseBadgeCard() output/class names) ---- */
+.course-badge-card{background:linear-gradient(135deg,#fdf0e3 0%,#fbf0c7 100%);border:1.5px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin:26px auto 0;max-width:360px;}
+.course-badge-row{display:flex;align-items:center;gap:12px;}
+.course-badge-emoji{font-size:32px;flex-shrink:0;opacity:.5;}
+.course-badge-emoji.unlocked{opacity:1;}
+.course-badge-info{flex:1;text-align:left;}
+.course-badge-name{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px;}
+.course-badge-meta{font-size:11px;color:var(--ink-faint);}
+.course-badge-progress-bar{height:5px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden;}
+.course-badge-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-deep));border-radius:3px;}
+
+/* ---- My Journey modal (ported verbatim from the live Foundation
+   lesson's own component — same class names, same real JournalStorage) ---- */
+.journey-modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.journey-modal-backdrop.show{display:flex;}
+.journey-modal{background:#fff;border-radius:var(--radius-lg);max-width:560px;width:100%;padding:28px 24px 22px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.journey-close{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:.5px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
+.journey-close:hover{background:var(--ink);color:#fff;transform:rotate(90deg);}
+.journey-hero{text-align:center;margin-bottom:18px;padding:0 4px;}
+.journey-kicker{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:5px 12px;border-radius:20px;margin-bottom:12px;}
+.journey-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.journey-subtitle{font-size:12px;color:var(--ink-soft);line-height:1.5;font-style:italic;}
+.journey-stats{display:flex;gap:10px;justify-content:center;margin-bottom:20px;padding:14px 12px;background:linear-gradient(135deg,#e7f4ec 0%,#fbf0c7 100%);border-radius:var(--radius-md);}
+.journey-stat{text-align:center;flex:1;}
+.journey-stat-number{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
+.journey-stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);}
+.journey-timeline{display:flex;flex-direction:column;gap:12px;}
+.journey-empty{text-align:center;padding:28px 16px;color:var(--ink-faint);font-size:13px;font-style:italic;line-height:1.6;}
+.journey-empty-icon{font-size:36px;margin-bottom:10px;}
+.journey-entry{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--radius-md);padding:14px 16px;position:relative;transition:box-shadow .2s;}
+.journey-entry:hover{box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.journey-entry-meta{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+.journey-entry-lesson{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:3px 8px;border-radius:4px;}
+.journey-entry-moment{font-size:9px;font-weight:700;color:var(--ink-faint);letter-spacing:1px;text-transform:uppercase;}
+.journey-entry-date{font-size:9px;font-weight:600;color:var(--ink-faint);letter-spacing:.5px;margin-left:auto;}
+.journey-entry-text{font-size:13px;color:var(--ink);line-height:1.6;}
+.journey-entry-delete{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--ink-faint);font-size:14px;cursor:pointer;padding:4px 8px;border-radius:4px;opacity:0;transition:all .2s;}
+.journey-entry:hover .journey-entry-delete{opacity:.6;}
+.journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
+@media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
+</style>
+</head>
+<body>
+
+<div id="canvas-app">
+  <div id="topbar">
+    <div class="topbar-left">
+      <a class="exit-link" href="../../" title="Back to Art GPS">← <span class="exit-link-full">Skill</span></a>
+      <button class="prev-step-btn" id="prevStepBtn" onclick="prevStage()">‹ Previous</button>
+      <button class="journey-btn" onclick="openMyJourney()">📖 <span class="journey-btn-full">My Journey</span></button>
+    </div>
+    <div class="rail" id="rail"></div>
+  </div>
+  <div id="stage"></div>
+</div>
+
+<div class="continue-dock" id="continueDock"></div>
+
+<div class="journey-modal-backdrop" id="journeyModalBackdrop" onclick="if(event.target===this) closeMyJourney();">
+  <div class="journey-modal">
+    <div class="journey-close" onclick="closeMyJourney()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">✨ Thinking journey</div>
+      <div class="journey-title">Your thoughts, over time</div>
+      <div class="journey-subtitle">This is your private thinking space — only you can see it.</div>
+    </div>
+    <div class="journey-stats" id="journeyStats"></div>
+    <div class="journey-timeline" id="journeyTimeline"></div>
+  </div>
+</div>
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+<!-- JournalStorage (bare global) — same shared bridge the live Scene
+     Drawing Foundation lesson uses, not a new storage mechanism. -->
+<script src="../../core/scene-drawing-platform-bridge.js"></script>
+<!-- Badge registry/catalog + renderCourseBadgeCard() — the real,
+     existing mechanism, reused verbatim (scene-drawing-app.js is pure
+     function/const definitions, no page-load side effects). -->
+<script src="../../core/course-badge-registry.js"></script>
+<script src="../../core/badge-catalog.js"></script>
+<script src="../../core/scene-drawing-app.js"></script>
+
+<script>
+/* ============================================================
+   DATA — per-animal step arrays, not a fixed schema. Only Rat is
+   populated this pass; a future animal is appended here as its own
+   entry with its own steps array (any length, any stepType mix).
+============================================================ */
+const CF_STREAM_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
+function cfStreamSrc(streamId, posterUrl){
+  const poster = encodeURIComponent(posterUrl || `https://${CF_STREAM_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`);
+  return `https://${CF_STREAM_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
+}
+
+const ZODIAC_ANIMALS = [
+  {
+    id: 'rat', label: 'Rat', chineseCharacter: '鼠',
+    steps: [
+      { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null },
+      { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
+      { stepNumber:3,  title:'Breakdown 1 — Eye Brush Technique',          stepType:'practice',  videoUrl:'e5ff9e3928f792adfec1fc9d631d7541', posterUrl:null },
+      { stepNumber:4,  title:'Draw the Ears',                              stepType:'technique', videoUrl:'19104c7886d50c84b8fbf54df97bdc55', posterUrl:null },
+      { stepNumber:5,  title:'Breakdown 2 — Ear Brush Technique',          stepType:'practice',  videoUrl:'42eb32971c1417e25f69766493160e40', posterUrl:null },
+      { stepNumber:6,  title:'Head & Hands',                               stepType:'technique', videoUrl:'fa132a0665dd9de005961668923886ab', posterUrl:null },
+      { stepNumber:7,  title:'Torso',                                     stepType:'technique', videoUrl:'4df356429002b37734f71c9fd7a1ff95', posterUrl:null },
+      { stepNumber:8,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null },
+      // Steps 9-14 — not yet recorded. Real entries (so step count/
+      // progress indicator are accurate), videoUrl:null renders the
+      // existing platform "coming soon" fallback. No content invented.
+      { stepNumber:9,  title:'Tail & Claws',                               stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:10, title:'Breakdown 4 — Tail Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null },
+      { stepNumber:11, title:'Breakdown 5 — Claw Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null },
+      { stepNumber:12, title:'Whiskers',                                   stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:14, title:'Seal',                                       stepType:'technique', videoUrl:null, posterUrl:null }
+    ]
+  }
+];
+const COURSE_ID = 'zodiac-skill';
+// Steps 1-2 free, Step 3 onward requires payment — see the file-header
+// ACCESS/PAYWALL note for why this is step-granularity, not a
+// FREE_SKILLS page-id entry.
+const FREE_STEP_COUNT = 2;
+
+/* ============================================================
+   STAGES — flat-mapped from ZODIAC_ANIMALS, one animal for now.
+============================================================ */
+function animalLessonId(animal){ return 'zodiac-' + animal.id; }
+function buildStages(){
+  const stages = [];
+  ZODIAC_ANIMALS.forEach(animal => {
+    animal.steps.forEach(step => {
+      stages.push({
+        id: animal.id + '_step_' + step.stepNumber,
+        animal: animal,
+        step: step,
+        render: () => renderStepScreen(animal, step),
+        afterRender: () => afterRenderStepScreen(animal, step)
+      });
+    });
+    stages.push({
+      id: animal.id + '_complete',
+      animal: animal,
+      render: () => renderComplete(animal),
+      afterRender: () => afterRenderComplete(animal)
+    });
+  });
+  return stages;
+}
+const STAGES = buildStages();
+
+const STATE = { stageIndex: 0, hasFullAccess: false, savedComplete: {} };
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+/* ============================================================
+   ACCESS — reuses window.FEIAccess.getStatus() (the same underlying
+   smartclass_access membership signal FREE_SKILLS is built from),
+   applied at step granularity. Fails OPEN on any error, matching
+   core/access.js's own gateLessonPage philosophy (never lock a
+   student out because of a network hiccup or bug here).
+============================================================ */
+async function computeAccess(){
+  if (!window.FEIAccess) { STATE.hasFullAccess = true; return; }
+  try {
+    await window.FEIAccess.init();
+    const status = await window.FEIAccess.getStatus();
+    STATE.hasFullAccess = !!(status.isLegacy || status.membership === 'paid');
+  } catch (e) {
+    console.warn('[access] check failed, allowing through', e);
+    STATE.hasFullAccess = true;
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function goStage(idx){
+  STATE.stageIndex = Math.max(0, Math.min(STAGES.length - 1, idx));
+  renderCurrentStage();
+}
+function nextStage(){ if (STATE.stageIndex < STAGES.length - 1) goStage(STATE.stageIndex + 1); }
+function prevStage(){ if (STATE.stageIndex > 0) goStage(STATE.stageIndex - 1); }
+
+function showContinue(label, onClick){
+  const dock = document.getElementById('continueDock');
+  dock.innerHTML = `<button class="continue-btn" id="continueBtn">${label}</button>`;
+  const btn = document.getElementById('continueBtn');
+  btn.onclick = onClick;
+  requestAnimationFrame(() => btn.classList.add('ready'));
+}
+function hideContinue(){ document.getElementById('continueDock').innerHTML = ''; }
+
+function renderRail(){
+  const current = STAGES[STATE.stageIndex];
+  const animal = current.animal;
+  const dots = animal.steps.map(s => {
+    const stageId = animal.id + '_step_' + s.stepNumber;
+    const idx = STAGES.findIndex(st => st.id === stageId);
+    const cls = [];
+    if (!s.videoUrl) cls.push('pending');
+    if (idx < STATE.stageIndex) cls.push('done');
+    if (idx === STATE.stageIndex) cls.push('current');
+    return `<span class="rail-dot ${cls.join(' ')}"></span>`;
+  }).join('');
+  document.getElementById('rail').innerHTML = dots;
+  document.getElementById('prevStepBtn').disabled = STATE.stageIndex === 0;
+}
+function renderCurrentStage(){
+  hideContinue();
+  const stage = STAGES[STATE.stageIndex];
+  document.getElementById('stage').innerHTML = `<div class="step">${stage.render()}</div>`;
+  renderRail();
+  window.scrollTo(0, 0);
+  if (stage.afterRender) stage.afterRender();
+}
+
+/* ============================================================
+   VIDEO COMPONENT — single place every step's video goes through,
+   so future per-timestamp annotation points (not built here) have
+   one hook instead of a rewrite. See file-header note.
+============================================================ */
+function renderZodiacVideoStage(step, iframeId){
+  if (!step.videoUrl) {
+    return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;">
+        <div style="font-size:2.2rem;">🎥</div><div style="font-size:13px;margin-top:6px;">Video coming soon!</div>
+      </div>
+    </div>`;
+  }
+  return `<div class="video-stage">
+    <iframe id="${iframeId}" src="${cfStreamSrc(step.videoUrl, step.posterUrl)}" loading="lazy" title="${escapeHtml(step.title)}"
+      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
+    <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
+  </div>`;
+}
+let _streamSdkPromise = null;
+function loadStreamSdk(){
+  if (_streamSdkPromise) return _streamSdkPromise;
+  _streamSdkPromise = new Promise((resolve, reject) => {
+    const sdk = document.createElement('script');
+    sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
+    sdk.onload = resolve;
+    sdk.onerror = reject;
+    document.body.appendChild(sdk);
+  });
+  return _streamSdkPromise;
+}
+// Never gates Next on the video finishing — this course's spec just
+// asks for ordinary Back/Next, not a forced-watch lock. Only job here
+// is: start unmuted, and if the browser blocked that, offer a real
+// tap-to-play that starts it unmuted (never a silent fallback to muted).
+function afterRenderZodiacVideoStage(step, iframeId){
+  if (!step.videoUrl) return;
+  loadStreamSdk().then(() => {
+    try {
+      const iframe = document.getElementById(iframeId);
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
+      if (!player) return;
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay');
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
+          overlay.hidden = true;
+        };
+      }, 1200);
+    } catch (e) { console.warn('[video] Stream SDK attach failed', e); }
+  }).catch((e) => console.warn('[video] Stream SDK failed to load', e));
+}
+
+/* ============================================================
+   STEP SCREEN
+============================================================ */
+function renderStepScreen(animal, step){
+  if (step.stepNumber > FREE_STEP_COUNT && !STATE.hasFullAccess) {
+    return renderZodiacPaywallScreen(animal, step);
+  }
+  const isPractice = step.stepType === 'practice';
+  const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span></div>`;
+  const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
+  const videoHtml = renderZodiacVideoStage(step, iframeId);
+  const body = isPractice
+    ? `<div class="practice-sheet-wrap"><span class="practice-sheet-ribbon">✎ Practice Sheet</span>${videoHtml}</div>`
+    : videoHtml;
+  return `
+    <div class="step-inner wide">
+      <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
+      <h2 class="step-title">${escapeHtml(step.title)}</h2>
+      ${badge}
+      ${body}
+    </div>
+  `;
+}
+function afterRenderStepScreen(animal, step){
+  if (step.stepNumber > FREE_STEP_COUNT && !STATE.hasFullAccess) return;
+  const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
+  afterRenderZodiacVideoStage(step, iframeId);
+  const isLast = STATE.stageIndex === STAGES.length - 1;
+  showContinue(isLast ? 'Finish →' : 'Next →', nextStage);
+}
+
+function renderZodiacPaywallScreen(animal, step){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
+      <div class="zodiac-paywall-card">
+        <div class="zodiac-paywall-icon">🔒</div>
+        <div class="zodiac-paywall-title">Unlock the rest of ${escapeHtml(animal.label)}'s Brush Technique</div>
+        <div class="zodiac-paywall-body">The first ${FREE_STEP_COUNT} steps are free to try. Upgrade to continue with "${escapeHtml(step.title)}" and every step after it.</div>
+        <a class="zodiac-paywall-cta" href="../../upgrade/?reason=paywall_skills&branch=skills">See teacher-supported plans →</a>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PROFILE / XP — direct sessionStorage read-write (fei_user_profile),
+   matching the live sibling lesson's own bumpXP/markLessonComplete
+   exactly. sessionStorage, not localStorage — Safari-iframe fix.
+============================================================ */
+function bumpXP(amount){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.totalXP = (profile.totalXP || 0) + amount;
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[bumpXP] failed', e); }
+}
+function markAnimalComplete(animal){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return;
+    const profile = JSON.parse(raw);
+    profile.completedLessons = Array.isArray(profile.completedLessons) ? profile.completedLessons : [];
+    const id = animalLessonId(animal);
+    if (!profile.completedLessons.includes(id)) profile.completedLessons.push(id);
+    sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
+  } catch (e) { console.warn('[markAnimalComplete] failed', e); }
+}
+
+/* ============================================================
+   COMPLETE SCREEN
+============================================================ */
+function renderComplete(animal){
+  // Side effects run here, BEFORE badgeHtml is built — renderCourseBadgeCard
+  // reads completedLessons synchronously off sessionStorage, so marking
+  // complete has to happen before this string is built, not in
+  // afterRender (which fires after render() already returned the HTML —
+  // real bug caught live: the badge card showed "Locked" on the very
+  // screen that unlocked it). Guarded by STATE.savedComplete so a Back/
+  // Forward revisit never double-awards XP or double-writes the journal.
+  if (!STATE.savedComplete[animal.id]) {
+    STATE.savedComplete[animal.id] = true;
+    bumpXP(30);
+    markAnimalComplete(animal);
+    try {
+      JournalStorage.save({
+        courseId: COURSE_ID,
+        lessonId: animalLessonId(animal),
+        momentKey: animal.id + '_complete'
+      });
+    } catch (e) { console.warn('[renderComplete] JournalStorage.save failed', e); }
+  }
+  const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('zodiac_' + animal.id) : '';
+  return `
+    <div class="step-inner">
+      <div class="complete-done">
+        <div class="complete-check">🖌️</div>
+        <h2 class="step-title">${escapeHtml(animal.label)} Complete</h2>
+        <p style="text-align:center;font-size:13.5px;color:var(--ink-soft);">You've worked through every recorded step of ${animal.chineseCharacter} ${escapeHtml(animal.label)}'s brush technique.</p>
+        ${badgeHtml}
+        <a class="complete-exit" href="../../">← Back to Skill</a>
+      </div>
+    </div>
+  `;
+}
+function afterRenderComplete(animal){
+  hideContinue();
+}
+
+/* ============================================================
+   MY JOURNEY — ported verbatim from the live Foundation lesson's
+   openMyJourney/closeMyJourney/renderJourneyModalContent, reading the
+   same shared JournalStorage this file also writes to above.
+============================================================ */
+function openMyJourney(){
+  renderJourneyModalContent();
+  document.getElementById('journeyModalBackdrop').classList.add('show');
+}
+function closeMyJourney(){
+  document.getElementById('journeyModalBackdrop').classList.remove('show');
+}
+function journeyEscapeHtml(str){ return escapeHtml(str); }
+function journeyFormatRelativeDate(timestamp){
+  const diff = Date.now() - timestamp;
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  if (seconds < 60) return 'just now';
+  if (minutes < 60) return minutes + ' min ago';
+  if (hours < 24) return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
+  if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+  if (days < 30) return Math.floor(days / 7) + ' week' + (Math.floor(days / 7) > 1 ? 's' : '') + ' ago';
+  return new Date(timestamp).toLocaleDateString();
+}
+function journeySummarize(e){
+  if (e.promptText || e.studentText) return { prompt: e.promptText || '', text: e.studentText || '' };
+  if (e.courseId === COURSE_ID) {
+    const animal = ZODIAC_ANIMALS.find(a => animalLessonId(a) === e.lessonId);
+    const label = animal ? animal.label : 'this animal';
+    return { prompt: '', text: `Completed ${label}'s brush technique steps.` };
+  }
+  return { prompt: '', text: 'Saved a moment in this lesson.' };
+}
+function renderJourneyModalContent(){
+  const entries = (typeof JournalStorage !== 'undefined') ? JournalStorage.getAll() : [];
+  const statsEl = document.getElementById('journeyStats');
+  const timelineEl = document.getElementById('journeyTimeline');
+
+  const totalEntries = entries.length;
+  const courseEntries = entries.filter(e => e.courseId === COURSE_ID).length;
+  const firstEntry = entries[entries.length - 1];
+  const daysSinceFirst = firstEntry ? Math.max(1, Math.floor((Date.now() - firstEntry.createdAt) / 86400000)) : 0;
+  statsEl.innerHTML = `
+    <div class="journey-stat"><div class="journey-stat-number">${totalEntries}</div><div class="journey-stat-label">Thoughts</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${courseEntries}</div><div class="journey-stat-label">This course</div></div>
+    <div class="journey-stat"><div class="journey-stat-number">${daysSinceFirst}</div><div class="journey-stat-label">Day${daysSinceFirst !== 1 ? 's' : ''} growing</div></div>
+  `;
+
+  if (entries.length === 0) {
+    timelineEl.innerHTML = `<div class="journey-empty"><div class="journey-empty-icon">💭</div><div>No thoughts yet — your journey starts when you save your first moment.</div></div>`;
+    return;
+  }
+  timelineEl.innerHTML = entries.map(e => {
+    const summary = journeySummarize(e);
+    return `
+      <div class="journey-entry">
+        <button class="journey-entry-delete" onclick="deleteJourneyEntry('${e.id}')" title="Delete this thought">🗑</button>
+        <div class="journey-entry-meta">
+          <span class="journey-entry-lesson">${journeyEscapeHtml(e.lessonId || e.courseId || 'lesson')}</span>
+          ${e.momentKey ? `<span class="journey-entry-moment">${journeyEscapeHtml(e.momentKey)}</span>` : ''}
+          <span class="journey-entry-date">${journeyFormatRelativeDate(e.createdAt)}</span>
+        </div>
+        ${summary.prompt ? `<div class="journey-entry-prompt">${journeyEscapeHtml(summary.prompt)}</div>` : ''}
+        <div class="journey-entry-text">${journeyEscapeHtml(summary.text)}</div>
+      </div>
+    `;
+  }).join('');
+}
+function deleteJourneyEntry(entryId){
+  if (!confirm('Delete this thought? This cannot be undone.')) return;
+  JournalStorage.remove(entryId);
+  renderJourneyModalContent();
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init(){
+  await computeAccess();
+  renderCurrentStage();
+}
+init();
+</script>
+</body>
+</html>
