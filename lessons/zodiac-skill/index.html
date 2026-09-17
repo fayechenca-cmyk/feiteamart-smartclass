@@ -213,6 +213,27 @@ button{font-family:inherit;}
 .video-stage-intro{aspect-ratio:16/9;}
 @media(min-height:560px){.video-stage-intro{max-height:78vh;aspect-ratio:auto;height:min(78vh,72vw);}}
 
+/* ---- Materials layout (§4) — video + a right-side vertical numbered
+   list, bamboo-stalk rhythm (a thin connecting line between segment
+   "nodes"). ---- */
+.materials-row{display:flex;gap:24px;align-items:stretch;}
+.materials-video-col{flex:1.6;min-width:0;}
+.materials-list{flex:0 0 190px;display:flex;flex-direction:column;justify-content:center;}
+.materials-item{display:flex;align-items:center;gap:11px;padding:12px 0;position:relative;}
+.materials-item:not(:last-child)::after{content:'';position:absolute;left:17px;top:calc(100% - 4px);width:2px;height:12px;background:var(--bamboo);opacity:.55;}
+.materials-item-num{
+  width:34px;height:34px;border-radius:50%;background:var(--xuan);border:1.5px solid var(--bamboo);
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-weight:800;font-size:13px;color:var(--bamboo);flex-shrink:0;z-index:1;
+}
+.materials-item-icon{font-size:1.35rem;flex-shrink:0;line-height:1;}
+.materials-item-label{font-size:12px;color:var(--ink-warm);font-weight:600;line-height:1.35;}
+@media(max-width:900px){
+  .materials-row{flex-direction:column;}
+  .materials-list{flex:none;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:0 18px;}
+  .materials-item:not(:last-child)::after{display:none;}
+}
+
 /* ---- Scroll panel — the mounted "paper" surface step content sits
    on, distinct from the deeper xuan-deep page backdrop behind it
    (body). A lighter fiber-noise texture than the backdrop, plus a
@@ -442,7 +463,16 @@ const ZODIAC_ANIMALS = [
   {
     id: 'rat', label: 'Rat', chineseCharacter: '鼠',
     steps: [
-      { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null },
+      { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null,
+        // §4 — vertical numbered materials list, rendered to the right
+        // of the video by renderMaterialsLayout(). Icons are emoji
+        // placeholders (no real product photography supplied yet).
+        materialsList: [
+          { icon:'🪣', label:'Brush-washing container' },
+          { icon:'⬛', label:'Ink dish (砚台)' },
+          { icon:'📜', label:'Rice paper (宣纸)' },
+          { icon:'🖌️', label:'Brush (毛笔)' }
+        ] },
       { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
       { stepNumber:3,  title:'Breakdown 1 — Eye Brush Technique',          stepType:'practice',  videoUrl:'e5ff9e3928f792adfec1fc9d631d7541', posterUrl:null },
       { stepNumber:4,  title:'Draw the Ears',                              stepType:'technique', videoUrl:'19104c7886d50c84b8fbf54df97bdc55', posterUrl:null },
@@ -672,6 +702,28 @@ function afterRenderCourseIntro(){
 }
 
 /* ============================================================
+   MATERIALS LAYOUT (§4) — video on one side, a vertical numbered list
+   to its RIGHT (not below), bamboo-stalk rhythm between items. Only
+   Rat's Step 1 carries a materialsList this pass; any future step
+   that sets one gets the same treatment automatically.
+============================================================ */
+function renderMaterialsLayout(step, videoHtml){
+  const items = step.materialsList.map((m, i) => `
+    <div class="materials-item">
+      <div class="materials-item-num">${i + 1}</div>
+      <div class="materials-item-icon">${m.icon}</div>
+      <div class="materials-item-label">${escapeHtml(m.label)}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="materials-row">
+      <div class="materials-video-col">${videoHtml}</div>
+      <div class="materials-list">${items}</div>
+    </div>
+  `;
+}
+
+/* ============================================================
    STEP SCREEN
 ============================================================ */
 function renderStepScreen(animal, step){
@@ -682,9 +734,11 @@ function renderStepScreen(animal, step){
   const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span></div>`;
   const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
   const videoHtml = renderZodiacVideoStage(step, iframeId);
-  const body = isPractice
-    ? `<div class="practice-sheet-wrap"><span class="practice-sheet-ribbon">✎ Practice Sheet</span>${videoHtml}</div>`
-    : videoHtml;
+  const body = step.materialsList
+    ? renderMaterialsLayout(step, videoHtml)
+    : isPractice
+      ? `<div class="practice-sheet-wrap"><span class="practice-sheet-ribbon">✎ Practice Sheet</span>${videoHtml}</div>`
+      : videoHtml;
   // Scroll composition: title/kicker/badge in a narrower left column,
   // the video as a wide horizontal band filling the rest — East Asian
   // scroll convention (left-right panels), not the old stacked
