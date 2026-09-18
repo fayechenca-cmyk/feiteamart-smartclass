@@ -311,11 +311,10 @@ button{font-family:inherit;}
    short on a tall monitor. */
 @media(min-height:640px){.video-stage{aspect-ratio:auto;height:58vh;}}
 .video-stage iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-/* Small, always-visible sound safety net (Addendum 2, §2) — shown once
-   playback has actually started (added alongside the iframe in
-   startZodiacVideo()), for the residual case where even a direct-click
-   iframe creation still gets silently muted by the browser. Not the
-   primary interaction — see .video-gate below for that. */
+/* Small, always-visible sound safety net — present from the moment the
+   video renders (autoplay is attempted immediately, see
+   afterRenderZodiacVideoStage), for the residual case where autoplay
+   lands muted. Never gates playback itself. */
 .video-sound-btn{
   position:absolute;right:12px;bottom:12px;z-index:2;
   font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
@@ -324,21 +323,17 @@ button{font-family:inherit;}
   box-shadow:0 6px 16px rgba(0,0,0,.3);
 }
 .video-sound-btn:active{transform:scale(.95);}
-/* Tap-to-play gate (Addendum 2, §2) — the ONLY interaction needed to
-   start a video: nothing autoplays, no iframe exists until this is
-   tapped. Full poster image, one big centered button. */
-.video-gate{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-}
-.video-gate::before{content:'';position:absolute;inset:0;background:rgba(43,38,32,.4);}
-.video-gate-btn{
-  position:relative;z-index:1;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+/* Bigger, centered — shown only if the video genuinely never started
+   playing at all (a real, reliably-detectable state via play/pause
+   events), distinct from the mute-uncertainty case above. */
+.video-tap-overlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
   padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
   background:rgba(43,38,32,.75);color:#fff;backdrop-filter:blur(6px);
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:3;
 }
-.video-gate-btn:active{transform:scale(.96);}
+.video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
 
 /* ---- Practice-sheet treatment ---- */
 .practice-sheet-wrap{
@@ -715,42 +710,30 @@ function renderCurrentStage(){
    so future per-timestamp annotation points (not built here) have
    one hook instead of a rewrite. See file-header note.
 ============================================================ */
-// §2 (Addendum 2) AUDIO REDESIGN — re-diagnosed live, not re-applying
-// the earlier fix. That fix (a) kept an always-visible "tap to add
-// sound" button AFTER the video had already started playing muted —
-// exactly the "tap to unmute" pattern Faye said was wrong, not "tap
-// to play." Tested three different ways to get genuine unmuted
-// autoplay with zero clicks before concluding it isn't reliably
-// achievable here at all:
-//   1. Declarative autoplay=true&muted=false on page load — silently
-//      falls back to muted (confirmed earlier).
-//   2. A real click-driven navigation into the step, then a script-
-//      initiated player.play() call — the SDK's play() promise never
-//      settles at all (tested live, 10s timeout, no resolve/reject).
-//   3. Creating a BRAND NEW iframe with autoplay=true&muted=false
-//      directly inside a genuine click handler (the freshest possible
-//      gesture, same trick many sites use) — STILL muted:true on the
-//      real cross-origin <video> element, tested live under both the
-//      default and --autoplay-policy=user-gesture-required policies.
-// All three land on muted. This points at the embedded origin's own
-// (near-zero, for a fresh visitor) media engagement index gating
-// unmuted autoplay for this cross-origin iframe, not anything fixable
-// from our side of the frame boundary.
+// URGENT REVERT (Sept 2026) — the tap-to-play gate this block used to
+// implement (§2, Addendum 2) turned "navigate to a step -> video
+// autoplays immediately" into a mandatory extra tap before ANY
+// playback started, on top of the existing sound-button safety net —
+// three actions total where there used to be zero. Confirmed via git
+// log: that gate was introduced in commit 9d9fb81 ("audio redesign -
+// tap to play"), replacing THIS exact immediate-autoplay design
+// (commit a22812b). Faye confirmed live that the pre-9d9fb81 version
+// autoplayed unmuted with zero taps for her — my own automated
+// diagnosis (documented in 9d9fb81's own commit message) had shown
+// muted:true under headless/incognito-style test conditions with no
+// real browsing history, which is a different environment from a
+// real daily browser profile with its own accumulated media
+// engagement for the embed's origin. Reverting to this architecture
+// takes her live report as the authoritative signal over my own
+// automated test result, since it's the one that reflects real usage.
 //
-// So: stop attempting autoplay at all. Every video now starts behind
-// an explicit "Tap to Play" gate (poster image + button, no iframe in
-// the DOM yet) — matching exactly what Faye specified as the
-// acceptable fallback. The iframe is created for the first time
-// inside that click handler, with autoplay=true&muted=false, giving
-// it the single best real shot at starting WITH sound on that click
-// (this is genuinely the earliest/freshest gesture available, even
-// though step 3 above shows it can still be overridden). A small,
-// always-visible "Sound" button stays as a safety net for exactly
-// that residual case — not the primary interaction, just a backstop,
-// since detecting "is it actually unmuted" has no reliable signal at
-// all (verified: the SDK's own muted/volume getters lie, per the
-// original diagnosis, and play()'s promise never settles either).
-let _zodiacVideoRegistry = {};
+// Two independent controls, NOT one — #videoTapOverlay_ (big,
+// centered, auto-hides) only ever means "playback never started at
+// all" — a genuinely detectable state via play/pause events.
+// #videoSoundBtn_ (small, corner, NEVER auto-hides) stays as a
+// backstop for the case where autoplay silently lands muted — kept
+// deliberately non-blocking (never gates playback itself), unlike the
+// tap-to-play gate this replaces.
 function renderZodiacVideoStage(step, iframeId, variant){
   const cls = 'video-stage' + (variant ? ' video-stage-' + variant : '');
   if (!step.videoUrl) {
@@ -760,12 +743,11 @@ function renderZodiacVideoStage(step, iframeId, variant){
       </div>
     </div>`;
   }
-  _zodiacVideoRegistry[iframeId] = step;
-  const poster = step.posterUrl || `https://${CF_STREAM_CUSTOMER}/${step.videoUrl}/thumbnails/thumbnail.jpg?time=&height=600`;
   return `<div class="${cls}">
-    <div class="video-gate" id="videoGate_${iframeId}" style="background-image:url('${poster}');" onclick="startZodiacVideo('${iframeId}')">
-      <button class="video-gate-btn" onclick="event.stopPropagation();startZodiacVideo('${iframeId}')">▶ Tap to Play</button>
-    </div>
+    <iframe id="${iframeId}" src="${cfStreamSrc(step.videoUrl, step.posterUrl)}" loading="lazy" title="${escapeHtml(step.title)}"
+      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
+    <button class="video-tap-overlay" id="videoTapOverlay_${iframeId}" hidden>▶ Tap to Play</button>
+    <button class="video-sound-btn" id="videoSoundBtn_${iframeId}" title="Tap if you can't hear the video">🔊 Sound</button>
   </div>`;
 }
 let _streamSdkPromise = null;
@@ -780,51 +762,44 @@ function loadStreamSdk(){
   });
   return _streamSdkPromise;
 }
-// Called directly from the gate button's onclick — the iframe is
-// created HERE, inside the real click handler, not before. autoplay=
-// true&muted=false in its src gives it the freshest possible gesture
-// to start with sound; the small #videoSoundBtn_ safety net covers
-// the case where the browser still overrides that.
-function startZodiacVideo(iframeId){
-  const step = _zodiacVideoRegistry[iframeId];
-  if (!step) return;
-  const gate = document.getElementById('videoGate_' + iframeId);
-  if (!gate) return;
-  const wrap = gate.parentElement;
-  gate.remove();
-
-  const iframe = document.createElement('iframe');
-  iframe.id = iframeId;
-  iframe.loading = 'lazy';
-  iframe.title = step.title || '';
-  iframe.setAttribute('allow', 'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;');
-  iframe.allowFullscreen = true;
-  iframe.src = cfStreamSrc(step.videoUrl, step.posterUrl);
-  wrap.appendChild(iframe);
-
-  const soundBtn = document.createElement('button');
-  soundBtn.className = 'video-sound-btn';
-  soundBtn.id = 'videoSoundBtn_' + iframeId;
-  soundBtn.title = "Tap if you can't hear the video";
-  soundBtn.textContent = '🔊 Sound';
-  wrap.appendChild(soundBtn);
-
+// Called synchronously from afterRenderStepScreen -> afterRenderZodiacVideoStage,
+// itself called synchronously inside renderCurrentStage — i.e. within
+// the SAME call stack as the Next/step-card click handler that
+// navigated here. The iframe's autoplay=true&muted=false (its src,
+// set above during render — already in the DOM by the time this
+// runs) is what actually attempts unmuted autoplay; this function
+// only wires up the two recovery controls, it never gates playback.
+function afterRenderZodiacVideoStage(step, iframeId){
+  if (!step.videoUrl) return;
+  const soundBtn = document.getElementById('videoSoundBtn_' + iframeId);
   loadStreamSdk().then(() => {
     try {
-      const player = window.Stream ? window.Stream(iframe) : null;
+      const iframe = document.getElementById(iframeId);
+      const player = window.Stream && iframe ? window.Stream(iframe) : null;
       if (!player) return;
-      soundBtn.onclick = () => {
+      const forceSound = () => {
         try { player.muted = false; player.volume = 1; } catch (e) { /* best-effort */ }
         const playResult = player.play();
         if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
       };
+      if (soundBtn) soundBtn.onclick = forceSound;
+
+      let started = false;
+      player.addEventListener('play', () => {
+        started = true;
+        const overlay = document.getElementById('videoTapOverlay_' + iframeId);
+        if (overlay) overlay.hidden = true;
+      });
+      setTimeout(() => {
+        if (started) return;
+        const overlay = document.getElementById('videoTapOverlay_' + iframeId);
+        if (!overlay) return;
+        overlay.hidden = false;
+        overlay.onclick = () => { forceSound(); overlay.hidden = true; };
+      }, 1200);
     } catch (e) { console.warn('[video] Stream SDK attach failed', e); }
   }).catch((e) => console.warn('[video] Stream SDK failed to load', e));
 }
-// No-op now that playback never starts until the gate is tapped —
-// kept as the call site every step already uses (future per-
-// timestamp annotation hooks still attach here once built).
-function afterRenderZodiacVideoStage(step, iframeId){}
 
 /* ============================================================
    COURSE INTRO (§3) — full-screen, before any animal's steps. No real
