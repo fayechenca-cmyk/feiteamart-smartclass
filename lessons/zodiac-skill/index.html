@@ -218,6 +218,35 @@ button{font-family:inherit;}
 .video-stage-intro{aspect-ratio:16/9;}
 @media(min-height:560px){.video-stage-intro{max-height:78vh;aspect-ratio:auto;height:min(78vh,72vw);}}
 
+/* ---- Opening scroll-unroll animation (course_intro only) ---- */
+.scroll-unroll-stage{position:relative;width:100%;}
+.scroll-unroll-paper{
+  position:relative;clip-path:inset(0 50% 0 50%);
+  transition:clip-path 1.3s cubic-bezier(.2,.7,.15,1);
+}
+.scroll-unroll-stage.unrolled .scroll-unroll-paper{clip-path:inset(0 0% 0 0%);}
+.scroll-roller{
+  position:absolute;top:-10px;bottom:-10px;width:20px;z-index:5;
+  background:linear-gradient(90deg,#4a2f1c,#8a5a34 35%,#8a5a34 65%,#4a2f1c);
+  border-radius:10px;box-shadow:0 6px 16px rgba(43,38,32,.45);
+  transition:left 1.3s cubic-bezier(.2,.7,.15,1), right 1.3s cubic-bezier(.2,.7,.15,1);
+}
+.scroll-roller::before,.scroll-roller::after{content:'';position:absolute;left:50%;transform:translateX(-50%);width:32px;height:14px;background:#3a2416;border-radius:7px;}
+.scroll-roller::before{top:-5px;}
+.scroll-roller::after{bottom:-5px;}
+.scroll-roller-left{left:calc(50% - 10px);}
+.scroll-unroll-stage.unrolled .scroll-roller-left{left:0;}
+.scroll-roller-right{right:calc(50% - 10px);}
+.scroll-unroll-stage.unrolled .scroll-roller-right{right:0;}
+/* 筆墨紙硯 motifs — fade in staggered, after the rollers have mostly
+   finished separating, along the bottom edge of the revealed paper. */
+.scroll-motif-row{display:flex;justify-content:center;gap:20px;margin-top:14px;}
+.scroll-motif{
+  font-size:1.4rem;opacity:0;transform:translateY(6px);
+  transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--d) * .15s + .95s);
+}
+.scroll-unroll-stage.unrolled .scroll-motif{opacity:1;transform:translateY(0);}
+
 /* ---- Materials layout (§4) — video + a right-side vertical numbered
    list, bamboo-stalk rhythm (a thin connecting line between segment
    "nodes"). ---- */
@@ -232,6 +261,7 @@ button{font-family:inherit;}
   font-weight:800;font-size:13px;color:var(--bamboo);flex-shrink:0;z-index:1;
 }
 .materials-item-icon{font-size:1.35rem;flex-shrink:0;line-height:1;}
+.materials-item-photo{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1.5px solid var(--xuan-line);}
 .materials-item-label{font-size:12px;color:var(--ink-warm);font-weight:600;line-height:1.35;}
 @media(max-width:900px){
   .materials-row{flex-direction:column;}
@@ -526,11 +556,16 @@ const ZODIAC_ANIMALS = [
         // washing container" -> "brush washer" (笔洗) and "ink dish" ->
         // "inkstone" (砚台), the standard art-historical/professional
         // English terms, confirmed via reference/museum sources.
+        // imageUrl:null for all four — real reference photos not in the
+        // repo yet (Faye has them for inkstone + brush washer; flagged
+        // in the build report for where to hand them off). Falls back
+        // to the emoji icon until a real imageUrl is set — see
+        // renderMaterialsLayout.
         materialsList: [
-          { icon:'🪣', label:'Brush washer' },
-          { icon:'⬛', label:'Inkstone (砚台)' },
-          { icon:'📜', label:'Rice paper (宣纸)' },
-          { icon:'🖌️', label:'Brush (毛笔)' }
+          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:null },
+          { icon:'⬛', label:'Inkstone (砚台)', imageUrl:null },
+          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:null },
+          { icon:'🖌️', label:'Brush (毛笔)', imageUrl:null }
         ] },
       { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
       // §7 REORDER (per Faye's review — practice/breakdown must come
@@ -802,10 +837,32 @@ function afterRenderZodiacVideoStage(step, iframeId){
 }
 
 /* ============================================================
-   COURSE INTRO (§3) — full-screen, before any animal's steps. No real
-   video yet; renders the existing "coming soon" fallback full-size.
-   Free regardless of paywall state (Faye's own framing: "Free = course
-   intro/description...").
+   COURSE INTRO (§3, + opening scroll-unroll animation) — full-screen,
+   before any animal's steps. No real video yet; renders the existing
+   "coming soon" fallback full-size, through the same
+   renderZodiacVideoStage/afterRenderZodiacVideoStage pair every other
+   step uses (so the real teacher video, once supplied, gets this same
+   treatment with no further rework). Free regardless of paywall state.
+
+   OPENING ANIMATION — one-time, this stage only (not every step
+   transition, per Faye's explicit scoping): two scroll rollers (笔墨
+   纸砚's own mounting dowels) start together at center and slide to
+   the container's edges as the paper between them — via clip-path,
+   not a width change, so the video/content underneath never reflows
+   — widens from a thin center sliver to fully revealed. 筆(brush)/墨
+   (ink)/紙(paper)/硯(inkstone) motifs fade in along the bottom edge
+   as it opens, staggered, per Faye's "the objects should feel like
+   they're speaking as the scroll opens" brief.
+
+   The video iframe is still created SYNCHRONOUSLY as part of this
+   stage's own render() (same as every other step, per the urgent
+   autoplay-regression fix) and afterRenderZodiacVideoStage() is
+   called immediately in afterRenderCourseIntro() below — the autoplay
+   attempt starts as early as possible for gesture-freshness, it's
+   just visually hidden behind the rollers for the ~1.3s the unroll
+   takes, so by the time it's revealed it's already playing (or has
+   already fallen back to the sound safety net) rather than starting
+   fresh at reveal time.
 ============================================================ */
 function renderCourseIntro(){
   const introStep = { videoUrl: null, posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
@@ -815,12 +872,32 @@ function renderCourseIntro(){
       <div class="course-intro-kicker">十二生肖 · The Twelve Zodiac Animals</div>
       <h1 class="course-intro-title">Zodiac Brush Technique</h1>
       <p class="course-intro-sub">A full introduction to the course and all twelve zodiac animals — coming soon. Starting today: the Rat.</p>
-      ${videoHtml}
+      <div class="scroll-unroll-stage" id="scrollUnrollStage">
+        <div class="scroll-unroll-paper">
+          ${videoHtml}
+          <div class="scroll-motif-row">
+            <span class="scroll-motif" style="--d:0">🖌️</span>
+            <span class="scroll-motif" style="--d:1">🖤</span>
+            <span class="scroll-motif" style="--d:2">📜</span>
+            <span class="scroll-motif" style="--d:3">🪨</span>
+          </div>
+        </div>
+        <div class="scroll-roller scroll-roller-left"></div>
+        <div class="scroll-roller scroll-roller-right"></div>
+      </div>
     </div>
   `;
 }
 function afterRenderCourseIntro(){
   afterRenderZodiacVideoStage({ videoUrl: null }, 'zodiacVideo_course_intro');
+  const stage = document.getElementById('scrollUnrollStage');
+  // Double rAF: forces the browser to paint the rolled-up starting
+  // state on its own frame before the class that triggers the CSS
+  // transition is added — otherwise the browser can coalesce both
+  // into one frame and skip the animation entirely.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { if (stage) stage.classList.add('unrolled'); });
+  });
   showContinue('Begin →', nextStage);
 }
 
@@ -831,13 +908,22 @@ function afterRenderCourseIntro(){
    that sets one gets the same treatment automatically.
 ============================================================ */
 function renderMaterialsLayout(step, videoHtml){
-  const items = step.materialsList.map((m, i) => `
+  const items = step.materialsList.map((m, i) => {
+    // Real photo once Faye supplies one (imageUrl set) — until then,
+    // the emoji icon. Never silently keeps showing a generic icon
+    // once a real photo IS available; this branch is the only place
+    // that decides which one renders.
+    const visual = m.imageUrl
+      ? `<img class="materials-item-photo" src="${m.imageUrl}" alt="${escapeHtml(m.label)}">`
+      : `<div class="materials-item-icon">${m.icon}</div>`;
+    return `
     <div class="materials-item">
       <div class="materials-item-num">${i + 1}</div>
-      <div class="materials-item-icon">${m.icon}</div>
+      ${visual}
       <div class="materials-item-label">${escapeHtml(m.label)}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
   return `
     <div class="materials-row">
       <div class="materials-video-col">${videoHtml}</div>
