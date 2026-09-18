@@ -273,8 +273,13 @@ button{font-family:inherit;}
    LESSON 1 — intro triangle diagram (static) + the free-exploration
    triangle (interactive).
 ============================================================ */
+/* Round 3, item 2 — was capped at max-width:280px regardless of
+   viewport, so on tablet/desktop (inside a 760px-980px step-inner)
+   this sat narrow in the middle of the screen with large empty
+   margins on both sides. Scales generously now instead of staying
+   fixed-width. */
 .intro-triangle-wrap{display:flex;justify-content:center;margin:14px 0 6px;}
-.intro-triangle-svg{width:100%;max-width:280px;height:auto;}
+.intro-triangle-svg{width:100%;max-width:600px;height:auto;}
 .intro-vertex-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:13px;fill:#fff;text-anchor:middle;}
 
 .triangle-explore-wrap{position:relative;width:100%;max-width:340px;margin:8px auto 4px;aspect-ratio:1/0.92;}
@@ -1144,7 +1149,7 @@ function saveJourneyMoment(momentKey){
 ============================================================ */
 function renderLesson1Intro(){
   return `
-    <div class="step-inner">
+    <div class="step-inner wide">
       <div class="step-kicker">Lesson 1 · Primary Colors</div>
       <h2 class="step-title">Where every color starts</h2>
       <p class="step-sub">Red, Yellow and Blue. Mix them and you can make almost any color.</p>
@@ -1231,7 +1236,7 @@ function renderLesson1Explore(){
     <div class="step-inner">
       <div class="step-kicker">Lesson 1 · Primary Colors</div>
       <h2 class="step-title">Play with the mix</h2>
-      <p class="step-sub">Drag anywhere inside the triangle.</p>
+      <p class="step-sub">Drag toward any corner and watch the color shift. Just a preview — real mixing is next.</p>
       <div class="triangle-explore-wrap" id="exploreWrap">
         <canvas id="exploreCanvas"></canvas>
         <div class="triangle-vertex-tag" id="tagR">RED</div>
