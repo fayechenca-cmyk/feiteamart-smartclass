@@ -20,11 +20,11 @@ window.COLOR_LAB = {
     ['🎨','Palette'], ['▱','Paint paper'], ['◫','Cloth']
   ],
   mixes: {
-    warm: { from:'#e6b633', to:'#dc493a', names:['Yellow','Golden yellow','Orange','Red-orange','Red'],
-      colors:['#e6b633','#e39a31','#dd762f','#d95834','#dc493a'], prompt:'Add a little red.', idea:'Proportion changes color.' },
-    violet: { from:'#dc493a', to:'#315e9f', names:['Red','Red-violet','Violet','Blue-violet','Blue'],
-      colors:['#dc493a','#a44667','#754982','#514f91','#315e9f'], prompt:'Add a little blue.', idea:'One color slowly becomes another.' },
-    green: { from:'#315e9f', to:'#e6b633', names:['Blue','Blue-green','Green','Yellow-green','Yellow'],
-      colors:['#315e9f','#327d78','#47935b','#91a842','#e6b633'], prompt:'Move the color balance.', idea:'Different balance. Different result.' }
+    warm: { from:'#e6b633', to:'#dc493a', names:['Yellow','Golden yellow','Orange','Red-orange','Red-rich orange'],
+      colors:['#e6b633','#e39a31','#dd762f','#d95834','#d45137'], prompt:'Add a little red.', idea:'Even the last mix still contains some yellow.' },
+    violet: { from:'#dc493a', to:'#315e9f', names:['Red','Red-violet','Violet','Blue-violet','Blue-rich violet'],
+      colors:['#dc493a','#a44667','#754982','#514f91','#3d5692'], prompt:'Add a little blue.', idea:'Even the last mix still contains some red.' },
+    green: { from:'#315e9f', to:'#e6b633', names:['Blue','Blue-green','Green','Yellow-green','Yellow-rich green'],
+      colors:['#315e9f','#327d78','#47935b','#91a842','#c4b43d'], prompt:'Move the color balance.', idea:'Even the last mix still contains some blue, so it is not pure yellow.' }
   }
 };
