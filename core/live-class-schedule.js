@@ -175,15 +175,15 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'cone',
-      smartClassNote: 'Watch the Cone lesson in Smart Class before class.',
+      smartClassNote: 'Go to the Cone lesson in Smart Class and complete your cone drawing.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68cf6d1681fd6b44c8945aec_sketch3%20by%20eira%20wang.pptx'
       },
       homework: {
-        description: 'Draw the cone reference provided.',
-        downloadUrl: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68cf6ee9f6367143a524efb2_e05468d0bf6aea9d11d8daafccf853e8.jpg',
-        downloadLabel: 'Download Homework Reference'
+        description: 'Watch the Cone lesson in Smart Class and draw the cone — that\'s your homework for this week.',
+        downloadUrl: null,
+        downloadLabel: null
       }
     },
     {
