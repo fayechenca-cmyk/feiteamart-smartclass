@@ -48,8 +48,10 @@
     across all six scenes, not six bespoke ones — same simplification
     Lesson 01 made for its own three story choices; no real per-scene
     drawing-stage art exists yet.
-  - The community gallery is the same placeholder-grid pattern Lesson
-    01 already uses (real student photos come later, not yet sent).
+  - The community gallery started as the same placeholder-grid pattern Lesson
+    01 already uses; two real student drawings are now wired in via
+    lesson-data.js's community_gallery.items (same data-driven branch
+    as Lesson 01), placeholders only render if items is empty.
   - Full production-detail polish (lighting/finishing pass) was only
     done for the classroom reveal and Scene 1 ("Late for Class") —
     Scenes 2-6 have real geometry/correct props/correct posing per
@@ -567,13 +569,22 @@ button{font-family:inherit;}
 .gallery-section{margin-top:22px;}
 .gallery-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--sb-ink);text-align:center;margin-bottom:4px;}
 .gallery-subtitle{font-size:12px;color:var(--sb-ink-faint);text-align:center;margin-bottom:16px;}
-.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
 @media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}}
 .gallery-card{
   aspect-ratio:1;background:repeating-linear-gradient(135deg,var(--sb-panel),var(--sb-panel) 8px,var(--sb-paper) 8px,var(--sb-paper) 16px);
   border-radius:4px;border:1.5px dashed var(--sb-ink-faint);display:flex;align-items:center;justify-content:center;
   font-size:1.3rem;color:var(--sb-ink-faint);filter:grayscale(1);opacity:.85;
 }
+/* Real student work (gallery.items) — same thin-ink-border framing as
+   Lesson 01's .gallery-photo-card, but 4:3 + object-fit:contain instead
+   of a square crop: these are landscape sketchbook pages (about 1.75:1
+   and 1.3:1), and a square cover-crop would cut off whole panels of the
+   drawing. Contain shows the full page on the paper-colored card. */
+.gallery-photo-card{
+  aspect-ratio:4/3;border-radius:4px;border:1.5px solid var(--sb-ink);overflow:hidden;background:var(--sb-paper);
+}
+.gallery-photo-card img{width:100%;height:100%;object-fit:contain;display:block;}
 
 /* ============================================================
    STEP 7 — Complete
@@ -3206,7 +3217,11 @@ async function savePracticeDrawing(){
 ============================================================ */
 function renderTeacherCommunity(){
   const gallery = LESSON_DATA.community_gallery;
-  const galleryCards = Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
+  // Real photos (gallery.items) when supplied, dashed placeholders only
+  // when there are none — same data-driven branch as Lesson 01.
+  const galleryCards = (gallery.items && gallery.items.length)
+    ? gallery.items.map(item => `<div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>`).join('')
+    : Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
       <div class="step-kicker">Our Community</div>

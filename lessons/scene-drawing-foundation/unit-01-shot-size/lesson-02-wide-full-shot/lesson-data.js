@@ -248,7 +248,22 @@
     // pattern as Step 3's reference images.
     community_gallery: {
       title: 'From Other Students',
-      subtitle: "Real student photos will appear here once Faye shares them.",
+      subtitle: 'Real work from students who took this lesson.',
+      // Same shape as Lesson 01's community_gallery.items (src + alt),
+      // plus `credit` — the display name used in alt text, following the
+      // same convention as Lesson 01's approved-submission cards (name
+      // appears in the image's alt text, NOT as a visible caption).
+      // DEFAULT, not confirmed by Faye: first name + last initial
+      // ("Amy H."), never the full name — same anonymity principle as
+      // Lesson 01's real submission flow. Both images are credited to
+      // the same student on the instruction that they're a pair; that
+      // attribution is also unconfirmed.
+      items: [
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f1ce61b6-9a71-4c09-de55-705314f4c000/public', credit: 'Amy H.', alt: 'Student artwork from the Wide Shot lesson: four wide-shot scenes (school gate, rainy day, lost ball, sleepover), by Amy H.' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f4cf5e1f-1cc1-4e83-b4b0-143f8b2e7d00/public', credit: 'Amy H.', alt: 'Student artwork from the Wide Shot lesson: a two-panel wide-shot sketch of a school hallway and art classroom, by Amy H.' }
+      ],
+      // Only used when items is empty (same data-driven fallback as
+      // Lesson 01).
       placeholderCount: 4
     },
 
