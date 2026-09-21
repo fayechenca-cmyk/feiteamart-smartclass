@@ -4,6 +4,12 @@
  * The "which is bigger — the world or the person?" comparison device
  * (proposal prototype: /prototypes/shot-size-compare/index.html).
  *
+ * LIVES IN shared/, NOT _shared/ — on purpose: GitHub Pages (Jekyll) does not
+ * publish underscore-prefixed directories, so anything under _shared/ 404s on
+ * the live site. (This file originally sat in _shared/ and Lesson 03 Step 1
+ * rendered blank in production; local servers do serve _ dirs, which is why
+ * it looked fine in dev.)
+ *
  * IDEA: ONE scene is drawn once and never re-drawn. The "camera" is
  * just a frame (an SVG viewBox) moving over it, so the SCENE stays the
  * star and the person is one small figure inside it. As the frame
