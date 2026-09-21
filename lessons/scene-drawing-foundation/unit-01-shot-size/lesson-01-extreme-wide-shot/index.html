@@ -607,6 +607,7 @@ button{font-family:inherit;}
 .qs-ref-thumb{flex:1;max-width:170px;aspect-ratio:4/3;position:relative;border:1.5px solid var(--sb-ink);border-radius:3px;background:var(--sb-paper);overflow:hidden;}
 .qs-ref-thumb svg{position:absolute;inset:0;width:100%;height:100%;}
 .qs-reference-note{text-align:center;font-size:11px;font-style:italic;color:var(--sb-ink-faint);line-height:1.45;margin-top:9px;}
+.qs-caption{margin-top:10px;}
 
 /* Round 6: storyboard panel frame, matching Steps 3/5 — warm paper,
    ink-toned border, quiet corner marks. "large" (the practice-section
@@ -940,6 +941,8 @@ button{font-family:inherit;}
 <script src="../../../../core/badge-catalog.js"></script>
 <script src="../../../../core/scene-drawing-app.js"></script>
 <script src="lesson-data.js"></script>
+<!-- Written "Tips" under the Quick Sketch panel (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
+<script src="../../shared/shot-size-tips.js"></script>
 
 <script>
 /* ============================================================
@@ -2142,11 +2145,23 @@ function renderReferenceStrip(){
   const thumbs = REF_STAGE_INDICES.map(() => `<div class="qs-ref-thumb">${drawingSvg()}</div>`).join('');
   return `
     <div class="qs-reference" id="storyReferenceStrip">
-      <div class="qs-reference-label">Reference — how the sketch builds up</div>
       <div class="qs-reference-strip">${thumbs}</div>
-      <div class="qs-reference-note">This is just a reference — you can always sketch it your own way.</div>
     </div>
   `;
+}
+// "This is just a reference" caption — sits directly under the Quick Sketch
+// video/demo itself (it used to hang off the thumbnail strip). Same
+// position in Lessons 01-03 so the panel reads the same everywhere.
+function renderQuickSketchCaption(){
+  return `<div class="qs-reference-note qs-caption">This is just a reference — you can always sketch it your own way.</div>`;
+}
+// Written "Tips" (the reference videos are silent, so the shot-size idea is
+// explained here) with the existing 3-thumbnail strip kept underneath it.
+// Degrades to just the strip if the shared script ever fails to load.
+function renderQuickSketchTips(afterHtml){
+  return typeof ShotSizeTips !== 'undefined'
+    ? ShotSizeTips.html({ current: 'ews', after: afterHtml || '' })
+    : (afterHtml || '');
 }
 function paintReferenceStrip(){
   const container = document.getElementById('storyReferenceStrip');
@@ -2184,8 +2199,8 @@ function renderTwoPanelMarkup(story, i){
   // its drawingSvg() is already the same 4:3 ratio as the canvas next
   // to it, so the two panels are already close in height.
   const teacherPanelInner = hasVideo
-    ? renderVideoStage(story.demoVideoStreamId, 'Quick Sketch', 'storyTeacherVideoFrame', null, null) + renderReferenceStrip()
-    : `<div class="draw-canvas-wrap large">${drawingSvg()}</div>`;
+    ? renderVideoStage(story.demoVideoStreamId, 'Quick Sketch', 'storyTeacherVideoFrame', null, null) + renderQuickSketchCaption() + renderQuickSketchTips(renderReferenceStrip())
+    : `<div class="draw-canvas-wrap large">${drawingSvg()}</div>` + renderQuickSketchCaption() + renderQuickSketchTips('');
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
     const t = PRACTICE_TOOLS[key];

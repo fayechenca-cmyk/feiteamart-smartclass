@@ -888,6 +888,8 @@ button{font-family:inherit;}
 <script src="../../../../core/badge-catalog.js"></script>
 <script src="../../../../core/scene-drawing-app.js"></script>
 <script src="lesson-data.js"></script>
+<!-- Written "Tips" under the Quick Sketch panel (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
+<script src="../../shared/shot-size-tips.js"></script>
 
 <script>
 /* ============================================================
@@ -3091,6 +3093,7 @@ function renderStoryDraw(story, i){
           <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
           ${refInner}
           <div class="practice-ref-note">This is just one reference — there are many possible ways to draw this scene.</div>
+          ${typeof ShotSizeTips !== 'undefined' ? ShotSizeTips.html({ current: 'ws' }) : ''}
         </div>
         <div class="practice-panel practice-panel-student" id="practiceStudentPanel">
           <div class="practice-panel-label">Your Turn</div>
