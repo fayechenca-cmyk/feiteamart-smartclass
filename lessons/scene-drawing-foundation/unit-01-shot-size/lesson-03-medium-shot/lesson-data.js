@@ -1,187 +1,172 @@
 /* ============================================================
- * Scene Drawing Foundation · Unit 01 · Lesson 03 — Medium Shot
- * Lesson content data — all 13 stages, per the real "Scene Drawing
- * Foundation · Unit 01 · Lesson 03 / Medium Shot: Show the Action —
- * Spec v1.0" pasted in full in the build prompt itself (no missing-
- * content gap this time, unlike Lessons 01/02).
+ * Scene Drawing Foundation · Unit 01 · Lesson 03 — LIVE
+ * Medium Shot — Show the Action
  *
- * ASSET NOTE: every image is still an inline placeholder SVG (via
- * svgPlaceholder()), not real art — same as Lessons 01/02.
+ * The "Learning Canvas" build, built DIRECTLY on this real path (no
+ * -v2 staging — the standing simplification for this course from
+ * Lesson 02 onward). Replaces the original 13-stage/CameraZoomSlider
+ * build, which is archived (not deleted) at
+ * ../_archive/lesson-03-medium-shot-original/.
  *
- * connect_you is copied VERBATIM from Lesson 01's lesson-data.js per
- * the spec's explicit "reuse as-is, don't rewrite" instruction.
- * demo_video's disclaimer (added next commit) is the same reuse.
+ * Follows Lesson 02's shape and field names directly (see
+ * ../lesson-02-wide-full-shot/lesson-data.js), per the brief's "follows
+ * that pattern very closely". Differences, each flagged inline:
+ *   - concept_moment (Step 1) replaces Lesson 02's 3D classroom reveal
+ *     + concept card: a full-screen, video-like explanation moment
+ *     driven by the shared ShotSizeCompare component
+ *     (../_shared/shot-size-compare.js).
+ *   - story_scenes carry `tip` + `framing` (shown BEFORE each scene) and
+ *     the last one is `optional: true` — 5 required + 1 optional is the
+ *     pattern going forward (Faye, from testing: by the 5th of six
+ *     rounds many students are tired).
+ *   - no choose_scene / guided-drawing steps. Faye's brief specifies
+ *     Steps 1-2 only (concept + six stories); the old shared
+ *     progressive illustration teaches WIDE shot construction, which
+ *     would be wrong content here. The lesson closes with the
+ *     community + complete steps so completion/badge still work.
+ *
+ * id/courseId are UNCHANGED from the archived original on purpose —
+ * core/course-badge-registry.js's scene_drawing_unit_01 badge already
+ * keys off 'medium-shot'.
  * ============================================================ */
 (function (global) {
   'use strict';
-
-  // Same inline SVG placeholder helper as Lessons 01/02's lesson-data.js.
-  function svgPlaceholder(bg, emoji, w, h) {
-    w = w || 300; h = h || 220;
-    const fontSize = Math.round(Math.min(w, h) * 0.36);
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<rect width="' + w + '" height="' + h + '" rx="18" fill="' + bg + '"/>'
-      + '<text x="50%" y="54%" font-size="' + fontSize + '" text-anchor="middle" dominant-baseline="middle">' + emoji + '</text>'
-      + '</svg>';
-    return 'data:image/svg+xml,' + encodeURIComponent(svg);
-  }
 
   const LESSON_DATA = {
     id: 'medium-shot',
     unit: 'unit-01-shot-size',
     courseId: 'medium-shot',
+    title: 'Medium Shot',
+    subtitle: 'Show the Action',
 
-    welcome: {
-      title: 'Medium Shot',
-      subtitle: 'Show the Action',
-      heroImage: svgPlaceholder('#dbe4ee', '🧍‍♂️✋', 500, 300),
-      startLabel: 'Start →'
-    },
-
-    video_intro: {
-      title: 'What is a Medium Shot?',
-      keySentence: "A medium shot shows enough of the character to see what they're doing — their action, gesture, and a bit of what's around them.",
-      videoStreamId: null,
-      videoTitle: 'What is a Medium Shot? — concept intro'
-    },
-
-    // Reused VERBATIM from Lesson 01's lesson-data.js, per the spec's
-    // explicit "same 3 options, don't rewrite" instruction.
-    connect_you: {
-      title: "It's About You!",
-      options: [
-        { key: 'people', icon: '🧑', label: 'I usually draw people', response: "Great! Today we'll practice showing the world around your characters too." },
-        { key: 'places', icon: '🏞️', label: 'I usually draw places', response: "Nice! You already think about scenes — let's give them names and rules." },
-        { key: 'both', icon: '✨', label: 'I draw both', response: "Perfect mix! You'll love learning how far the camera can pull back." }
-      ]
-    },
-
-    transition_question: {
-      title: 'What Should We Show?',
-      options: [
-        { key: 'whole_scene', label: 'The Whole Scene?' },
-        { key: 'just_action', label: 'Just the Action?' }
-      ],
-      transitionLine: "Let's zoom in close enough to see clearly..."
-    },
-
-    // Stage 5 — first ABChoiceCard instance. Wide/Full framing (A)
-    // shows the whole kitchen with the flip hard to make out; Medium
-    // framing (B) shows the flip itself clearly.
-    story_a: {
-      kicker: 'Story',
-      prompt: 'The chef flipped the pancake just in time.',
-      question: 'Which one lets you see exactly what’s happening?',
-      optionA: {
-        image: svgPlaceholder('#7b5ea8', '🏠🍳'),
-        label: 'The Whole Kitchen',
-        description: 'Shows the whole kitchen, but the flip is hard to see.',
-        feedback: 'A shows the whole kitchen, but we can barely see what the chef is doing. Let’s get closer.'
+    // Step 1 — full-screen, video-like explanation moment (NOT a
+    // video). Very little text, per the platform's "let visuals carry
+    // it" convention. Key point: with a person in frame they're no
+    // longer shown full-body (Wide Shot) — the background now supports
+    // the person instead of sharing equal weight. The captions below
+    // override ShotSizeCompare.DEFAULT_STOPS's own wording so the copy
+    // lives with the lesson.
+    concept_moment: {
+      stopCaptions: {
+        ews: 'Extreme Wide: the world fills the frame.',
+        ws: 'Wide: the whole person — and the place around them.',
+        ms: 'Medium: the person leads. The background supports them.'
       },
-      optionB: {
-        image: svgPlaceholder('#2d5fa8', '🍳✋'),
-        label: 'The Flip',
-        description: 'Shows the action clearly.',
-        feedback: 'B gets us close enough to see the flip in action!'
-      }
+      closingLine: 'Drag the slider to compare.'
     },
-    // Stage 6 — second ABChoiceCard instance, different story.
-    story_b: {
-      kicker: 'Story',
-      prompt: 'The goalkeeper dove to block the ball.',
-      question: 'Which one makes the action feel exciting?',
-      optionA: {
-        image: svgPlaceholder('#3fa8a0', '🏟️⚽'),
-        label: 'The Whole Field',
-        description: 'Shows the whole field.',
-        feedback: 'A shows a lot of the field, but the save itself gets lost. Let’s zoom in.'
+
+    // Two-card intro before Situation 1. Copy is Claude Code's own
+    // wording (flagged — none was supplied verbatim).
+    scenes_intro: {
+      titleCard: 'Medium Shot Practice',
+      explainerCard: "Six short stories — five to draw, and a sixth that's optional. Each one starts with a tip about what to think about first."
+    },
+
+    // Step 2 — six Medium Shot stories, in the order of Faye's WRITTEN
+    // story list. Her storyboard sheet
+    // (reference-images/lesson03-medium-shot-storyboard-reference.jpg)
+    // draws them in a different panel order — reading order is Theater,
+    // Lunch, Playground, Shop Window, Hike, Art Project — so each 3D
+    // scene follows the panel that DEPICTS it, not the panel at the same
+    // reading position. Reorder this list if she wants the sheet's order.
+    //   tip      — Faye's own tip text, shown before the scene appears.
+    //   framing  — one short line telling the student how the shot is
+    //              framed (Medium Shot jumps straight into a partial
+    //              view, unlike Extreme Wide/Wide's full figure).
+    //              Derived from Faye's per-story framing descriptions;
+    //              the wording is Claude Code's.
+    //   situationLine — the typed "Situation N: ..." sentence; Claude
+    //              Code's own one-line summary of each written story.
+    story_scenes: [
+      {
+        id: 'theater', sceneKey: 'theater', setting: 'indoor',
+        title: 'At the Theater',
+        situationLine: 'A kid sits in a theater seat, watching the show.',
+        framing: 'Frame her waist-up.',
+        tip: "Use eye direction and head angle to tell us where the stage is — you don't need to actually draw the stage."
       },
-      optionB: {
-        image: svgPlaceholder('#e8862e', '🧤⚽'),
-        label: 'The Save',
-        description: 'Shows the dive and the ball together.',
-        feedback: 'B puts us right in the moment of the save!'
+      {
+        id: 'playground', sceneKey: 'playground', setting: 'outdoor',
+        title: 'Talking at the Playground',
+        situationLine: 'Two friends stand at the edge of the playground, talking.',
+        framing: 'Frame both friends to the waist.',
+        tip: 'This one is about interaction. Practice the eye-line — the look passing between the two characters.'
+      },
+      {
+        id: 'hike', sceneKey: 'hike', setting: 'outdoor',
+        title: 'Taking a Break on a Hike',
+        situationLine: 'A girl on a hike stops to drink some water.',
+        framing: 'Frame her from the head to about the waist.',
+        tip: "She's the clear main subject, right up front. Let the framing alone tell us where she is."
+      },
+      {
+        id: 'lunch', sceneKey: 'lunch', setting: 'indoor',
+        title: 'Lunch with a Friend',
+        situationLine: 'Two friends sit face to face at a restaurant table, having lunch.',
+        framing: 'Show only their upper bodies, the table, and the food.',
+        tip: 'Practice hand props and how the two characters interact.'
+      },
+      {
+        id: 'shop_window', sceneKey: 'shopWindow', setting: 'outdoor',
+        title: 'The Shop Window',
+        situationLine: 'A girl stops in front of a shop window, looking at something she loves.',
+        framing: 'Show her upper body from the side, with the window.',
+        tip: 'Practice drawing the character together with the glass and the objects behind it.'
+      },
+      {
+        id: 'art_project', sceneKey: 'artProject', setting: 'indoor',
+        // optional: true — the pattern going forward is 5 required + 1
+        // optional. index.html shows a "try it / skip" gate before this
+        // scene's reveal.
+        optional: true,
+        title: 'Working on an Art Project',
+        situationLine: 'A girl draws at a table while her teacher stands beside her, helping.',
+        framing: 'Show both from the waist up, plus part of the table.',
+        tip: "Practice overlap. Don't line the two characters up side by side like a photo — let one overlap the other."
       }
+    ],
+
+    audio: {
+      narrationAvailable: false
     },
 
-    // Stages 7+8 — Medium Shot = 0.5 on the shared Unit 01 slider
-    // position table, which is exactly the slider's own neutral
-    // default — nothing to auto-animate from/to, unlike Lessons 01/02.
-    // Spec's own touch instead: a brief scale pulse on the handle when
-    // this stage is entered (page-level CSS/JS in index.html — no
-    // shared-component change, see afterRenderBigIdea), paired with a
-    // caption line inviting the student to drag and feel the midpoint.
-    big_idea: {
-      title: "A medium shot gets close enough to see the action — without losing where it's happening.",
-      settlePosition: 0.5,
-      pulseCaption: 'This is the middle ground — close enough to see, wide enough to place.'
-    },
-    meet_term: {
-      term: 'MEDIUM SHOT',
-      subtitle: 'Show the Action',
-      labels: ['ACTION', 'GESTURE', 'MOMENT']
+    // "Quick Sketch Reference" overlay (same corrected format as
+    // Lesson 02 — NOT the old "Teacher's Guide"). No videos supplied
+    // yet, so every scene is placeholder:true — the lightbox shows the
+    // "coming soon" state until a demoVideoStreamId (and optionally
+    // posterTimeSecs) is added per scene, which needs no index.html
+    // change.
+    teacher_references: [
+      { sceneId: 'theater', label: 'Quick Sketch Reference — At the Theater', placeholder: true },
+      { sceneId: 'playground', label: 'Quick Sketch Reference — Talking at the Playground', placeholder: true },
+      { sceneId: 'hike', label: 'Quick Sketch Reference — Taking a Break on a Hike', placeholder: true },
+      { sceneId: 'lunch', label: 'Quick Sketch Reference — Lunch with a Friend', placeholder: true },
+      { sceneId: 'shop_window', label: 'Quick Sketch Reference — The Shop Window', placeholder: true },
+      { sceneId: 'art_project', label: 'Quick Sketch Reference — Working on an Art Project', placeholder: true }
+    ],
+
+    // No real student photos for this lesson yet — dashed placeholders
+    // until Faye shares some (same data-driven branch as Lessons 01/02).
+    community_gallery: {
+      title: 'From Other Students',
+      subtitle: 'Real student photos will appear here once Faye shares them.',
+      placeholderCount: 4
     },
 
-    // Stage 9 — same 3 category names as Lessons 01/02 (don't rename).
-    // New placeholder art depicting an action mid-moment, per the spec.
-    real_examples: {
-      title: 'Real Examples',
-      examples: [
-        { key: 'nature', label: 'Nature', image: svgPlaceholder('#3fa8a0', '🥾🪨', 400, 300) },
-        { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '🧑‍🍳🔥', 400, 300) },
-        { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '🧙‍♂️✨', 400, 300) }
-      ]
+    // Chains into Lesson 04 (Close-Up). Title/subtitle copied from that
+    // lesson's own welcome.title/subtitle so the card matches what it
+    // calls itself (same convention Lesson 02 used for this lesson).
+    next_lesson: {
+      href: '../lesson-04-close-up/',
+      title: 'Close-Up',
+      subtitle: 'Show Emotion'
     },
 
-    // Stage 10 — disclaimer reused VERBATIM from Lessons 01/02's
-    // confirmed version, per the spec's explicit instruction.
-    demo_video: {
-      title: "Let's Draw Together",
-      // Claude Code's own line — not spec'd verbatim, same flag as the
-      // equivalent subtitle lines in Lessons 01/02.
-      subtitle: 'How I capture the action',
-      disclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.",
-      videoStreamId: null,
-      videoTitle: "Let's Draw Together — thinking sketch"
-    },
-
-    // Stage 11 — 3 new tasks. `label` is the full on-screen prompt
-    // sentence; `reflectLabel` is the separate short form the spec
-    // gives for Stage 13's reflect chips.
-    draw_task: {
-      title: 'Your Turn: Draw 3 Scenes',
-      tasks: [
-        { key: 'baker_bread', label: 'The baker pulled a fresh loaf out of the oven.', reflectLabel: 'Fresh Bread' },
-        { key: 'scientist_mix', label: 'The scientist mixed two glowing liquids together.', reflectLabel: 'Glowing Mix' },
-        { key: 'drummer_beat', label: 'The drummer hit the final beat of the song.', reflectLabel: 'Final Beat' }
-      ],
-      xpPerScene: 20
-    },
-
-    // Stage 12 — same tab names as Lessons 01/02 (don't rename), new
-    // placeholder images for this lesson's 3 tasks.
-    see_ideas: {
-      title: 'See Other Ideas',
-      tabs: [
-        { key: 'teacher', label: "Teacher's Idea", image: svgPlaceholder('#2d5fa8', '🍞🔥', 400, 300) },
-        { key: 'jojo', label: "Jojo's Idea", image: svgPlaceholder('#e8862e', '🧪✨', 400, 300) }
-      ]
-    },
-
-    // Stage 13 — ReflectionJournal config, reusing both of Lesson 02's
-    // upstream options as-is: the corrected sentenceTemplate and a
-    // freeText "something else" reasonOptions entry. No component
-    // changes needed.
-    reflect: {
-      title: 'My Choice',
-      sentenceTemplate: 'I chose my {a} drawing because I wanted to show {b}.',
-      viewOptions: ['Fresh Bread', 'Glowing Mix', 'Final Beat'],
-      reasonOptions: [
-        'the action clearly',
-        "my character's gesture",
-        'the exact moment it happened',
-        { label: 'something else', freeText: true }
-      ]
+    // Claude Code's own wording (flagged) — same multi-select chip
+    // mechanic as Lesson 02's check, no right/wrong answer.
+    completion_check: {
+      question: 'What does a Medium Shot help us show?',
+      options: ['The Person', 'The Action', 'How They Interact', 'A Bit of Where They Are']
     }
   };
 
