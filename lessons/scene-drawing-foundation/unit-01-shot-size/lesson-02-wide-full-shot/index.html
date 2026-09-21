@@ -276,6 +276,20 @@ button{font-family:inherit;}
   opacity:1;transition:opacity .5s ease;pointer-events:none;
 }
 .scene-reveal.hide{opacity:0;}
+/* Optional-scene gate (Scene 6): shown BEFORE the reveal chain starts,
+   so a tired student can skip cleanly instead of sitting through the
+   typewriter/countdown/3D sequence for a scene they don't want. The
+   .scene-reveal scrim is pointer-events:none, so the gate re-enables
+   them for its own buttons. */
+.scene-reveal.gated .scene-reveal-title,.scene-reveal.gated .scene-reveal-line,.scene-reveal.gated .scene-reveal-countdown{display:none;}
+.scene-gate{display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:auto;max-width:460px;}
+.scene-gate[hidden]{display:none;}
+.scene-gate-kicker{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);padding:5px 14px;border-radius:999px;}
+.scene-gate-text{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(1.1rem,3.4vw,1.5rem);color:#fff;line-height:1.4;}
+.scene-gate-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
+.scene-gate-btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;cursor:pointer;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;}
+.scene-gate-btn.primary{background:var(--accent);border-color:var(--accent);}
+.scene-gate-btn:active{transform:scale(.96);}
 .scene-reveal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,4.5vw,2rem);color:#fff;letter-spacing:.5px;min-height:1.2em;}
 .scene-reveal-line{font-size:clamp(13px,2.6vw,16px);color:rgba(255,255,255,.86);max-width:560px;line-height:1.5;min-height:1.5em;}
 .scene-reveal-countdown{
@@ -452,6 +466,7 @@ button{font-family:inherit;}
   border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
 }
 .story-choose-btn:active{transform:scale(.95);}
+.story-card-optional{display:inline-block;vertical-align:middle;margin-left:6px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sb-accent);border:1.5px solid var(--sb-accent);border-radius:999px;padding:2px 8px;}
 .story-card.picked{border-color:var(--sb-accent);}
 .story-card.picked .story-choose-btn{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
 
@@ -1906,6 +1921,14 @@ function renderStoryScene(sceneData, sceneIndex) {
           <div class="scene-reveal-title" id="sceneRevealTitle"></div>
           <div class="scene-reveal-line" id="sceneRevealLine"></div>
           <div class="scene-reveal-countdown" id="sceneRevealCountdown"></div>
+          ${sceneData.optional ? `<div class="scene-gate" id="sceneGate">
+            <div class="scene-gate-kicker">Situation ${sceneIndex + 1} · Optional</div>
+            <div class="scene-gate-text">Feeling tired? This one is optional — try it if you'd like one more.</div>
+            <div class="scene-gate-buttons">
+              <button class="scene-gate-btn primary" id="sceneGateGo">Let's try it</button>
+              <button class="scene-gate-btn" id="sceneGateSkip">Skip this one →</button>
+            </div>
+          </div>` : ''}
         </div>
         <div class="scene-question" id="sceneQuestion">
           <div class="scene-question-title">${sceneData.title}</div>
@@ -1928,18 +1951,34 @@ async function afterRenderStoryScene(sceneData, sceneIndex) {
   _sceneRevealTimers = []; // fresh set for this scene; cleanupStoryScene clears whatever's pending on the way out
 
   const situationNum = sceneIndex + 1;
-  typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
-    _sceneRevealTimers.push(setTimeout(() => {
-      playSuspenseSound(2400);
-      typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
-        _sceneRevealTimers.push(setTimeout(() => {
-          runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
-            _sceneRevealTimers.push(setTimeout(mountScene, 300));
-          });
-        }, 450));
-      });
-    }, 350));
-  });
+  function startReveal() {
+    revealEl.classList.remove('gated');
+    typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
+      _sceneRevealTimers.push(setTimeout(() => {
+        playSuspenseSound(2400);
+        typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
+          _sceneRevealTimers.push(setTimeout(() => {
+            runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
+              _sceneRevealTimers.push(setTimeout(mountScene, 300));
+            });
+          }, 450));
+        });
+      }, 350));
+    });
+  }
+  if (sceneData.optional) {
+    // Optional scene: wait for an explicit choice before starting the
+    // reveal chain. Skip goes straight to the next step (nextStep's own
+    // cleanup handles the not-yet-started chain — nothing is pending).
+    revealEl.classList.add('gated');
+    document.getElementById('sceneGateGo').onclick = () => {
+      document.getElementById('sceneGate').hidden = true;
+      startReveal();
+    };
+    document.getElementById('sceneGateSkip').onclick = () => nextStep();
+  } else {
+    startReveal();
+  }
 
   async function mountScene() {
     revealEl.classList.add('hide');
@@ -2838,7 +2877,7 @@ function renderChooseScene() {
     <div class="story-card${STATE.sceneChoiceId === c.id ? ' picked' : ''}" id="sceneCard-${c.id}">
       <div class="story-thumb">${SCENE_THUMB_ICON[c.thumbSceneKey] || ''}</div>
       <div class="story-card-body">
-        <div class="story-card-title">${c.title}</div>
+        <div class="story-card-title">${c.title}${c.optional ? ' <span class="story-card-optional">Optional</span>' : ''}</div>
         <button class="story-choose-btn" onclick="pickScene('${c.id}')">Choose This Scene</button>
       </div>
     </div>

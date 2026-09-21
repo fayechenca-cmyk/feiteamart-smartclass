@@ -102,7 +102,7 @@
     // that instruction, not silently written as if it were given.
     scenes_intro: {
       titleCard: 'Scene Drawing Practice',
-      explainerCard: "You'll walk through six short story situations, one at a time. Just watch and think for now — you'll pick one to draw after."
+      explainerCard: "You'll walk through six short story situations, one at a time — the last one is optional. Just watch and think for now — you'll pick one to draw after."
     },
 
     // Step 3 — six demonstration scenes (own 3D build + a short
@@ -157,6 +157,11 @@
       },
       {
         id: 'sleepover', sceneKey: 'sleepover', setting: 'indoor',
+        // optional: true — Faye's retroactive fix (found in testing: by
+        // the 5th of six drawing rounds many students are tired). The
+        // pattern going forward is 5 required + 1 optional. index.html
+        // shows a "try it / skip" gate before this scene's reveal.
+        optional: true,
         title: 'The Sleepover',
         situationLine: 'Two best friends build a blanket fort at a sleepover.',
         question: 'What are they building together?',
@@ -177,7 +182,7 @@
       { id: 'after_school', title: 'See You After School', thumbSceneKey: 'afterSchool' },
       { id: 'lost_ball', title: 'The Lost Ball', thumbSceneKey: 'lostBall' },
       { id: 'rainy_day', title: 'Rainy Day Surprise', thumbSceneKey: 'rainyDay' },
-      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover' }
+      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover', optional: true }
     ],
 
     // Step 5 — guided drawing. SCOPE FLAG, same simplification Lesson
