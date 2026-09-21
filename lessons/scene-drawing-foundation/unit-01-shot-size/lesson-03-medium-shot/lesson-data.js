@@ -14,7 +14,7 @@
  *   - concept_moment (Step 1) replaces Lesson 02's 3D classroom reveal
  *     + concept card: a full-screen, video-like explanation moment
  *     driven by the shared ShotSizeCompare component
- *     (../_shared/shot-size-compare.js).
+ *     (../../shared/shot-size-compare.js).
  *   - story_scenes carry `tip` + `framing` (shown BEFORE each scene) and
  *     the last one is `optional: true` — 5 required + 1 optional is the
  *     pattern going forward (Faye, from testing: by the 5th of six

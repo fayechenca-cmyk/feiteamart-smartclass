@@ -22,7 +22,7 @@
   (full-screen, low-chrome, data-driven off lesson-data.js's
   LESSON_DATA). Top-level STEPS: (1) "What is a Medium Shot?" — a
   full-screen, video-like explanation moment driven by the shared
-  ShotSizeCompare component (../../_shared/shot-size-compare.js), NOT a
+  ShotSizeCompare component (../../shared/shot-size-compare.js), NOT a
   video; (2) a two-card intro, then six stories (5 required + 1
   optional), each TWO flat top-level steps: its scene (tip ->
   "Situation N" reveal -> 3D scene -> Quick Sketch Reference overlay)
@@ -259,6 +259,9 @@ button{font-family:inherit;}
 .concept-moment{align-items:center;justify-content:flex-start;gap:0;padding-top:10px;}
 .concept-moment .step-title{margin-bottom:12px;}
 .concept-moment-stage{width:min(100%, calc((100vh - 330px) * 16 / 9));min-width:min(100%,320px);margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(28,26,34,.22);}
+.concept-moment-fallback{display:flex;flex-direction:column;gap:10px;padding:8px 4px;}
+.concept-moment-fallback-row{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:14px 16px;font-size:15px;color:var(--accent-deep);line-height:1.45;}
+.concept-moment-fallback-row span{display:block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);margin-bottom:4px;}
 .concept-moment-hint{margin-top:12px;font-size:13px;color:var(--ink-soft);text-align:center;opacity:0;transition:opacity .5s ease;}
 .concept-moment-hint.show{opacity:1;}
 
@@ -885,7 +888,9 @@ button{font-family:inherit;}
 <script src="../../../../core/badge-catalog.js"></script>
 <script src="../../../../core/scene-drawing-app.js"></script>
 <script src="lesson-data.js"></script>
-<script src="../../_shared/shot-size-compare.js"></script>
+<!-- NOT under _shared/: GitHub Pages (Jekyll) does not publish underscore-prefixed
+     directories, so a file there 404s on the live site (Step 1 rendered blank). -->
+<script src="../../shared/shot-size-compare.js"></script>
 
 <script>
 /* ============================================================
@@ -1528,7 +1533,7 @@ function dropIn3(stage, obj, delayMs, durationMs) {
 /* ============================================================
    STEP 1 — WHAT IS A MEDIUM SHOT? A full-screen, video-like
    explanation moment — NOT a video. The shared ShotSizeCompare
-   component (../../_shared/shot-size-compare.js) drives it: one scene,
+   component (../../shared/shot-size-compare.js) drives it: one scene,
    a "camera" frame that tightens Extreme Wide -> Wide -> Medium, and a
    WORLD-vs-PERSON see-saw that tips as the person takes over the
    picture. Very little text; the picture carries the idea (with a
@@ -1557,7 +1562,6 @@ function renderMediumConcept(){
 function afterRenderMediumConcept(){
   const d = LESSON_DATA.concept_moment;
   const caps = d.stopCaptions || {};
-  const stops = ShotSizeCompare.DEFAULT_STOPS.map(s => Object.assign({}, s, { caption: caps[s.id] || s.caption }));
   const hint = document.getElementById('cmpHint');
   let unlocked = false;
   function unlock(){
@@ -1566,12 +1570,36 @@ function afterRenderMediumConcept(){
     if (hint) hint.classList.add('show');
     showContinue('Next →', nextStep);
   }
-  _mediumCmp = ShotSizeCompare.mount('cmpMount', {
-    stops: stops,
-    autoplay: { startDelayMs: 2600, holdMs: 2600, moveMs: 1500 }
-  }, { onDone: unlock });
-  const controls = document.querySelector('#cmpMount .ssc-controls');
-  if (controls) controls.addEventListener('pointerdown', unlock);
+  // A way forward exists from the very first paint (ghost until the
+  // sequence finishes): Step 1 must never strand a student, whatever the
+  // animation does. (Round 3 bug: the component script 404'd on the live
+  // site, this function threw, and Continue was only ever shown from the
+  // sequence's onDone — blank screen, no way forward.) Nothing that can
+  // throw runs before this line.
+  showContinue('Next →', nextStep, { ghost: true });
+  try {
+    if (typeof ShotSizeCompare === 'undefined') throw new Error('ShotSizeCompare component did not load');
+    const stops = ShotSizeCompare.DEFAULT_STOPS.map(s => Object.assign({}, s, { caption: caps[s.id] || s.caption }));
+    _mediumCmp = ShotSizeCompare.mount('cmpMount', {
+      stops: stops,
+      autoplay: { startDelayMs: 2600, holdMs: 2600, moveMs: 1500 }
+    }, { onDone: unlock });
+    if (!_mediumCmp) throw new Error('ShotSizeCompare.mount returned nothing');
+    const controls = document.querySelector('#cmpMount .ssc-controls');
+    if (controls) controls.addEventListener('pointerdown', unlock);
+  } catch (e) {
+    // Static fallback: the same three ideas as plain text, so the concept
+    // still lands without the animation.
+    console.warn('[medium_concept] comparison device unavailable, showing static fallback', e);
+    const mount = document.getElementById('cmpMount');
+    if (mount) {
+      const rows = [['Extreme Wide Shot', caps.ews], ['Wide Shot', caps.ws], ['Medium Shot', caps.ms]];
+      mount.innerHTML = '<div class="concept-moment-fallback">' + rows.map(r =>
+        `<div class="concept-moment-fallback-row"><span>${r[0]}</span>${r[1] || ''}</div>`).join('') + '</div>';
+    }
+    if (hint) hint.remove(); // "drag the slider" makes no sense without the slider
+    unlock();
+  }
 }
 
 /* ============================================================
