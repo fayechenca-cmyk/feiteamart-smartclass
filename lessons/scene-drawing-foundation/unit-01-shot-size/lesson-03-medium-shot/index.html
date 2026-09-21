@@ -1662,8 +1662,11 @@ function typewriterInto(el, text, speed, timers, onDone){
   }
   tick();
 }
+// Same 5-4-3-2-1 at 1000ms as Lesson 01's runPracticeCountdown — Faye found
+// 3 seconds wasn't enough time to actually read the storyline there, and
+// the same applies here; one countdown feel across the lessons.
 function runRevealCountdown(el, timers, onDone){
-  const seq = ['3', '2', '1'];
+  const seq = ['5', '4', '3', '2', '1'];
   let i = 0;
   function tick(){
     if (i >= seq.length) { onDone(); return; }
@@ -1672,7 +1675,7 @@ function runRevealCountdown(el, timers, onDone){
     void el.offsetWidth; // restart the CSS animation
     el.classList.add('pulse');
     i++;
-    timers.push(setTimeout(tick, 700));
+    timers.push(setTimeout(tick, 1000));
   }
   tick();
 }

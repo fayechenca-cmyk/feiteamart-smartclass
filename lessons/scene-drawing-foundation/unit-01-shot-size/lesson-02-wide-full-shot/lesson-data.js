@@ -26,13 +26,17 @@
  *     top-level STEPS entries in index.html (not nested sub-stages)
  *     specifically to avoid reproducing Lesson 01 round 5's
  *     Previous-navigation bug (see index.html's own note).
- *   - story_choices (Step 4) — six items instead of three, same
- *     shape otherwise.
+ *   - (retired) story_choices / drawing_steps — the pick-one-of-six
+ *     step and the shared step-by-step guided drawing were removed
+ *     when every scene got its own drawing round (two-panel: that
+ *     scene's teacher_references video + the student's canvas, Lesson
+ *     01's practice format applied course-wide, per Faye).
  *   - teacher_references — NEW shape vs. Lesson 01's student_examples:
  *     one item PER SCENE (6 slots, keyed by sceneId). Round 2: now
  *     shown as a small expandable overlay DURING each of the six
- *     scenes in Step 3 (not just once, for whichever scene the
- *     student eventually picks) — see index.html's renderTeacherOverlay.
+ *     scenes in Step 3, AND enlarged as the left panel of each
+ *     scene's own drawing round — see index.html's
+ *     renderTeacherOverlay / renderStoryDraw.
  *     The final community step (old Step 6) no longer shows a teacher
  *     reference at all, per Faye's round-2 instruction — it now shows
  *     only the student's own saved work + the community gallery.
@@ -166,54 +170,6 @@
         situationLine: 'Two best friends build a blanket fort at a sleepover.',
         question: 'What are they building together?',
         altQuestion: null
-      }
-    ],
-
-    // Step 4 — Choose Your Scene. Same card mechanism as Lesson 01's
-    // Choose Your Story (index.html's story-grid/story-card CSS,
-    // reused as scene-grid/scene-card), six choices instead of three.
-    // `thumbSceneKey` reuses the SAME SCENE3D_BUILDERS key as Step 3 —
-    // no separate thumbnail art needed, a still frame's worth of the
-    // same scene the student already watched is rendered small as an
-    // SVG-free static preview (see index.html's sceneThumbSvg()).
-    story_choices: [
-      { id: 'late_for_class', title: 'Late for Class', thumbSceneKey: 'lateForClass' },
-      { id: 'art_project', title: 'The Art Project', thumbSceneKey: 'artProject' },
-      { id: 'after_school', title: 'See You After School', thumbSceneKey: 'afterSchool' },
-      { id: 'lost_ball', title: 'The Lost Ball', thumbSceneKey: 'lostBall' },
-      { id: 'rainy_day', title: 'Rainy Day Surprise', thumbSceneKey: 'rainyDay' },
-      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover', optional: true }
-    ],
-
-    // Step 5 — guided drawing. SCOPE FLAG, same simplification Lesson
-    // 01 made and flagged in its own file: ONE shared progressive
-    // drawing sequence, not six bespoke ones per scene (no real
-    // per-scene drawing-stage art exists yet) — the chosen scene only
-    // changes the context line shown alongside the same 5 stages.
-    // Content here teaches WIDE SHOT construction specifically
-    // (character placed full-body + environment built around them),
-    // not Lesson 01's Extreme-Wide "tiny character in a huge world"
-    // sequence — genuinely different teaching content, not a reskin.
-    drawing_steps: [
-      {
-        instruction: 'Decide where your character stands.',
-        teachingNote: "Leave room above their head and below their feet — a Wide Shot needs the character's full body inside the frame, not touching the edges."
-      },
-      {
-        instruction: 'Block in the character, full body.',
-        teachingNote: "Head to toe should already read clearly at this stage, even as a simple shape — that's what makes it a Wide Shot instead of a close-up."
-      },
-      {
-        instruction: 'Build the space around them.',
-        teachingNote: 'Add the floor, walls, or ground line the character is standing on — this is what tells us WHERE they are.'
-      },
-      {
-        instruction: 'Add one or two props that explain the action.',
-        teachingNote: "A desk, a ball, an umbrella — one clear object nearby is what tells us WHAT is happening, without needing any words."
-      },
-      {
-        instruction: 'Finish the character’s pose and expression.',
-        teachingNote: 'Because the whole body is visible, the pose itself can tell the story — a lean, a reach, a turned head all read clearly at this size.'
       }
     ],
 
