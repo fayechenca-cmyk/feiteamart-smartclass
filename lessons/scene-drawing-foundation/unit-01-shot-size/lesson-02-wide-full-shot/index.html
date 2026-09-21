@@ -559,6 +559,10 @@ button{font-family:inherit;}
 .own-work-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.92rem;color:var(--sb-ink);margin-bottom:12px;}
 .own-work-img{max-width:220px;width:100%;border-radius:2px;border:1.5px solid var(--sb-ink-faint);display:block;margin:0 auto;}
 .upload-dropzone{
+  /* <label> is inline by default — its dashed border fragmented into a
+     stray strip cutting through the text instead of boxing the whole
+     card. Block fixes it. */
+  display:block;
   border:1.5px dashed var(--sb-ink-faint);border-radius:4px;padding:22px 16px;cursor:pointer;
   transition:border-color .15s ease;position:relative;background:var(--sb-paper);
 }
@@ -585,6 +589,8 @@ button{font-family:inherit;}
   aspect-ratio:4/3;border-radius:4px;border:1.5px solid var(--sb-ink);overflow:hidden;background:var(--sb-paper);
 }
 .gallery-photo-card img{width:100%;height:100%;object-fit:contain;display:block;}
+.gallery-photo-item{margin:0;}
+.gallery-credit{font-size:12px;font-weight:700;color:var(--sb-ink-soft);text-align:center;margin-top:6px;}
 
 /* ============================================================
    STEP 7 — Complete
@@ -3220,7 +3226,7 @@ function renderTeacherCommunity(){
   // Real photos (gallery.items) when supplied, dashed placeholders only
   // when there are none — same data-driven branch as Lesson 01.
   const galleryCards = (gallery.items && gallery.items.length)
-    ? gallery.items.map(item => `<div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>`).join('')
+    ? gallery.items.map(item => `<figure class="gallery-photo-item"><div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>${item.credit ? `<figcaption class="gallery-credit">${item.credit}</figcaption>` : ''}</figure>`).join('')
     : Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
