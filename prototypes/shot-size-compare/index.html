@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shot Size Compare — proposal prototype</title>
+<!--
+  PROPOSAL PROTOTYPE, not wired into any lesson. Built to give Faye
+  something concrete to react to for the "which is bigger" Extreme Wide
+  -> Wide -> Medium comparison device (Lesson 02 brief, item 3).
+
+  IDEA: ONE scene, drawn once, never re-drawn. The "camera" is just a
+  frame (an SVG viewBox) moving over it. So the SCENE stays the star and
+  the person is just one small figure inside it — the opposite of the
+  figure-centered chart references. Three things update together as the
+  frame tightens:
+    1. the crop itself (the big preview),
+    2. a see-saw of two circles — WORLD vs PERSON — whose AREAS are the
+       balance (so "who's bigger than what" is literal, not a caption),
+    3. a one-line plain-language caption.
+  Below: the same three crops side by side at identical size (the
+  storyboard-strip move), each with the person circled.
+
+  REUSE: everything lesson-specific lives in one config object at the
+  bottom (scene SVG markup, figure anchor, stops). A real version would
+  be _shared/shot-size-compare.js next to camera-zoom-slider.js; Lesson
+  03 highlights Medium, later lessons append Close-up / Extreme Close-up
+  stops — no new component.
+-->
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Work Sans',system-ui,sans-serif;background:#faf8f5;color:#1c1a22;padding:24px 16px 60px;}
+.wrap{max-width:980px;margin:0 auto;}
+h1{font-size:1.3rem;margin:0 0 4px;text-align:center;}
+.sub{text-align:center;color:rgba(28,26,34,.6);font-size:13px;margin:0 0 18px;}
+.stage{display:grid;grid-template-columns:1fr 260px;gap:18px;align-items:start;}
+@media(max-width:760px){.stage{grid-template-columns:1fr;}}
+.view{position:relative;border:2.5px solid #1c1a22;border-radius:6px;overflow:hidden;background:#000;aspect-ratio:16/9;box-shadow:0 10px 26px rgba(28,26,34,.2);}
+.view svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.badge{position:absolute;left:10px;top:10px;background:#1c1a22;color:#fff;font-weight:800;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;padding:5px 11px;border-radius:999px;}
+.side{display:flex;flex-direction:column;gap:12px;}
+.mini{position:relative;border:1.5px solid rgba(28,26,34,.35);border-radius:5px;overflow:hidden;aspect-ratio:16/9;background:#fff;}
+.mini svg{position:absolute;inset:0;width:100%;height:100%;}
+.mini-label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;color:rgba(28,26,34,.5);margin-bottom:4px;}
+.balance{background:#fff;border:1.5px solid rgba(28,26,34,.18);border-radius:10px;padding:8px 10px 6px;}
+.balance svg{width:100%;height:auto;display:block;}
+.caption{text-align:center;font-weight:700;font-size:15px;min-height:22px;margin:14px 0 4px;color:#1f4076;}
+.controls{margin:10px auto 0;max-width:560px;}
+input[type=range]{width:100%;accent-color:#2d5fa8;}
+.chips{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+.chip{border:2px solid #1c1a22;background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:12.5px;cursor:pointer;}
+.chip.on{background:#2d5fa8;border-color:#1f4076;color:#fff;}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px;}
+.card{background:#fff;border:1.5px solid #1c1a22;border-radius:6px;padding:8px;cursor:pointer;}
+.card .mini{border:none;}
+.card b{display:block;text-align:center;font-size:12px;margin-top:6px;}
+.card .mb{display:flex;height:9px;border-radius:5px;overflow:hidden;margin-top:6px;background:#eee;}
+.card .mb i{display:block;height:100%;}
+.note{margin-top:28px;font-size:12.5px;line-height:1.6;color:rgba(28,26,34,.7);background:#fff;border:1px dashed rgba(28,26,34,.3);border-radius:8px;padding:12px 14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Which is bigger — the world or the person?</h1>
+  <p class="sub">Drag the slider. The scene never changes — only the camera frame does.</p>
+
+  <div class="stage">
+    <div>
+      <div class="view"><svg id="viewSvg" preserveAspectRatio="xMidYMid slice"></svg><div class="badge" id="badge"></div></div>
+      <div class="caption" id="caption"></div>
+      <div class="controls">
+        <input type="range" id="slider" min="0" max="1000" value="0" step="1" aria-label="Camera frame">
+        <div class="chips" id="chips"></div>
+      </div>
+    </div>
+    <div class="side">
+      <div>
+        <div class="mini-label">The whole scene &amp; your camera frame</div>
+        <div class="mini"><svg id="miniSvg" preserveAspectRatio="xMidYMid slice"></svg></div>
+      </div>
+      <div class="balance">
+        <div class="mini-label" style="margin-bottom:0">Balance</div>
+        <svg id="balSvg" viewBox="0 0 240 142"></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip" id="strip"></div>
+
+  <div class="note">
+    <b>How to read the balance:</b> each circle's <i>area</i> is how much of the picture that thing takes up. Extreme Wide: the world circle is huge, the person circle is a speck. Wide: about even. Medium: the person circle is bigger and the world shrinks behind them.
+  </div>
+</div>
+
+<script>
+/* ===== LESSON CONFIG (the only per-lesson part) ===== */
+const W = 2400, H = 1350;
+// figure: feet position + height in world units
+const FIG = { x:1100, feetY:1000, h:72 };
+// balance = share of the picture that is "person" (0-100); rest is world
+const STOPS = [
+  { id:'ews', short:'Extreme Wide', label:'Extreme Wide Shot', cx:W/2,  cy:H/2, w:W,   person:4,  caption:'The world is the star. Can you even find the person?' },
+  { id:'ws',  short:'Wide',         label:'Wide Shot',         cx:1100, cy:958, w:213, person:50, caption:'Person and place, together — about an even balance.' },
+  { id:'ms',  short:'Medium',       label:'Medium Shot',       cx:1100, cy:949.5, w:101, person:78, caption:'The person takes over. The world steps back.' }
+];
+
+/* ===== SCENE (one drawing, reused for every crop via <use>) ===== */
+const sceneMarkup = `
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ec5ec"/><stop offset="1" stop-color="#e6f1f5"/></linearGradient>
+  <g id="world">
+    <rect width="${W}" height="800" fill="url(#sky)"/>
+    <path d="M0,780 L280,640 L560,730 L900,600 L1300,740 L1700,620 L2100,720 L2400,650 L2400,800 L0,800Z" fill="#b8d3b0"/>
+    <rect y="760" width="${W}" height="${H-760}" fill="#a7d18a"/>
+    <!-- school building -->
+    <rect x="1550" y="470" width="640" height="300" fill="#e2c59a"/>
+    <rect x="1520" y="440" width="700" height="46" fill="#a4553f"/>
+    <rect x="1830" y="600" width="70" height="170" fill="#7a4e33"/>
+    <rect x="1600" y="540" width="70" height="70" fill="#9ec7e3"/><rect x="1980" y="540" width="70" height="70" fill="#9ec7e3"/>
+    <rect x="1600" y="650" width="70" height="70" fill="#9ec7e3"/><rect x="1980" y="650" width="70" height="70" fill="#9ec7e3"/>
+    <!-- trees left -->
+    <rect x="300" y="560" width="46" height="230" fill="#7a5233"/><circle cx="323" cy="520" r="150" fill="#5fae5b"/>
+    <rect x="620" y="620" width="34" height="170" fill="#7a5233"/><circle cx="637" cy="590" r="105" fill="#6bbd66"/>
+    <!-- path (perspective) -->
+    <polygon points="900,${H} 1500,${H} 1170,760 1130,760" fill="#e4e0d8"/>
+    <!-- fence along the path -->
+    <rect x="1215" y="790" width="6" height="40" fill="#8a6a4a"/><rect x="1265" y="815" width="8" height="55" fill="#8a6a4a"/>
+    <rect x="1215" y="805" width="470" height="5" fill="#8a6a4a" opacity=".0"/>
+    <!-- props right beside the figure (drawn to figure scale) -->
+    <rect x="1178" y="895" width="6" height="110" fill="#555"/><circle cx="1181" cy="890" r="9" fill="#f5e29a"/>
+    <rect x="1006" y="985" width="50" height="5" fill="#8a6a4a"/><rect x="1010" y="990" width="4" height="12" fill="#8a6a4a"/><rect x="1048" y="990" width="4" height="12" fill="#8a6a4a"/>
+    <circle cx="1040" cy="1004" r="14" fill="#5fae5b"/><circle cx="1054" cy="1000" r="10" fill="#6bbd66"/>
+    <!-- the person (simple, but with a face so a waist-up crop still reads) -->
+    <g id="person">
+      <ellipse cx="${FIG.x}" cy="${FIG.feetY+1}" rx="14" ry="3" fill="#000" opacity=".15"/>
+      <rect x="${FIG.x-6}" y="${FIG.feetY-30}" width="5" height="30" fill="#3d5a80"/><rect x="${FIG.x+1}" y="${FIG.feetY-30}" width="5" height="30" fill="#3d5a80"/>
+      <rect x="${FIG.x-9}" y="${FIG.feetY-56}" width="18" height="28" rx="4" fill="#e85c6e"/>
+      <rect x="${FIG.x-13}" y="${FIG.feetY-54}" width="5" height="24" rx="2.5" fill="#e85c6e"/><rect x="${FIG.x+8}" y="${FIG.feetY-54}" width="5" height="24" rx="2.5" fill="#e85c6e"/>
+      <circle cx="${FIG.x}" cy="${FIG.feetY-64}" r="8.5" fill="#f0c49a"/>
+      <path d="M${FIG.x-9},${FIG.feetY-66} q9,-11 18,0 q-3,-4 -9,-4 q-6,0 -9,4z" fill="#3a2a20"/>
+      <circle cx="${FIG.x-3}" cy="${FIG.feetY-63}" r="1" fill="#1c1a22"/><circle cx="${FIG.x+3}" cy="${FIG.feetY-63}" r="1" fill="#1c1a22"/>
+      <path d="M${FIG.x-2.5},${FIG.feetY-59.5} q2.5,2 5,0" stroke="#1c1a22" stroke-width=".8" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</defs>`;
+
+/* ===== helpers ===== */
+const $ = id => document.getElementById(id);
+const lerp = (a,b,t) => a + (b-a)*t;
+// position t in 0..1 spans the stops evenly; zoom (width) interpolates in log space so it feels like a real zoom
+function frameAt(t){
+  const n = STOPS.length - 1, f = Math.min(n - 1e-9, t * n), i = Math.floor(f), u = f - i;
+  const a = STOPS[i], b = STOPS[i+1] || STOPS[i];
+  const w = Math.exp(lerp(Math.log(a.w), Math.log(b.w), u));
+  return { cx: lerp(a.cx,b.cx,u), cy: lerp(a.cy,b.cy,u), w, h: w*9/16, person: lerp(a.person,b.person,u), stop: STOPS[Math.round(t*n)] };
+}
+const vb = fr => `${fr.cx-fr.w/2} ${fr.cy-fr.h/2} ${fr.w} ${fr.h}`;
+const scene = () => `<use href="#world"/>`;
+// find-the-person halo: only really visible when the person is tiny
+const halo = fr => { const r = Math.max(FIG.h*0.9, fr.w*0.012); return `<circle cx="${FIG.x}" cy="${FIG.feetY-FIG.h/2}" r="${r}" fill="none" stroke="#e8862e" stroke-width="${Math.max(1.2, fr.w*0.0035)}" opacity="${Math.max(0, 1 - (FIG.h/fr.h)*2.2)}"/>`; };
+
+/* ===== build ===== */
+$('viewSvg').innerHTML = sceneMarkup + scene() + '<g id="viewHalo"></g>';
+$('miniSvg').innerHTML = `<use href="#world"/><g id="miniOverlay"></g>`;
+$('viewSvg').setAttribute('viewBox', vb(frameAt(0)));
+$('miniSvg').setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+STOPS.forEach((s, i) => {
+  const c = document.createElement('button'); c.className = 'chip'; c.textContent = s.short; c.dataset.i = i;
+  c.onclick = () => animateTo(i/(STOPS.length-1)); $('chips').appendChild(c);
+});
+$('strip').innerHTML = STOPS.map(s => {
+  const fr = frameAt(STOPS.indexOf(s)/(STOPS.length-1));
+  return `<div class="card" data-i="${STOPS.indexOf(s)}"><div class="mini"><svg viewBox="${vb(fr)}" preserveAspectRatio="xMidYMid slice"><use href="#world"/>${halo(fr)}</svg></div><b>${s.label}</b><div class="mb"><i style="width:${100-s.person}%;background:#7fb069"></i><i style="width:${s.person}%;background:#e85c6e"></i></div></div>`;
+}).join('');
+document.querySelectorAll('.card').forEach(c => c.onclick = () => animateTo(+c.dataset.i/(STOPS.length-1)));
+
+function drawBalance(person){
+  const world = 100 - person, tilt = (person - world) / 100 * 10; // deg; person side sinks
+  const rW = 5 + Math.sqrt(world) * 2.9, rP = 5 + Math.sqrt(person) * 2.9; // circle AREA tracks share
+  $('balSvg').innerHTML = `
+    <polygon points="120,92 110,108 130,108" fill="#1c1a22"/>
+    <g transform="rotate(${tilt} 120 90)">
+      <rect x="20" y="88" width="200" height="4" rx="2" fill="#1c1a22"/>
+      <circle cx="46" cy="${88-rW}" r="${rW}" fill="#7fb069" stroke="#1c1a22" stroke-width="1.5"/>
+      <circle cx="194" cy="${88-rP}" r="${rP}" fill="#e85c6e" stroke="#1c1a22" stroke-width="1.5"/>
+    </g>
+    <text x="46" y="134" font-size="10" font-weight="800" text-anchor="middle" fill="#1c1a22" letter-spacing="1">WORLD</text>
+    <text x="194" y="134" font-size="10" font-weight="800" text-anchor="middle" fill="#1c1a22" letter-spacing="1">PERSON</text>`;
+}
+
+function render(t){
+  const fr = frameAt(t);
+  $('viewSvg').setAttribute('viewBox', vb(fr));
+  $('viewHalo').innerHTML = halo(fr);
+  $('badge').textContent = fr.stop.label;
+  $('caption').textContent = fr.stop.caption;
+  const bw = Math.max(fr.w, 10);
+  $('miniOverlay').innerHTML = `<path fill-rule="evenodd" d="M0,0H${W}V${H}H0Z M${fr.cx-fr.w/2},${fr.cy-fr.h/2}h${fr.w}v${fr.h}h${-fr.w}Z" fill="#1c1a22" opacity=".45"/><rect x="${fr.cx-fr.w/2}" y="${fr.cy-fr.h/2}" width="${fr.w}" height="${fr.h}" fill="none" stroke="#e8862e" stroke-width="${Math.max(4, W*0.004)}"/><circle cx="${fr.cx}" cy="${fr.cy}" r="${Math.max(0, 40 - (fr.w/W)*40)*0}" fill="none"/>` + (fr.w < W*0.5 ? `<circle cx="${FIG.x}" cy="${FIG.feetY-30}" r="46" fill="none" stroke="#e8862e" stroke-width="10"/>` : '');
+  drawBalance(fr.person);
+  document.querySelectorAll('.chip').forEach((c,i) => c.classList.toggle('on', STOPS[i] === fr.stop));
+  $('slider').value = Math.round(t*1000);
+}
+let raf;
+function animateTo(target){
+  cancelAnimationFrame(raf);
+  const from = +$('slider').value/1000, t0 = performance.now(), dur = 1100;
+  (function step(now){
+    const u = Math.min(1,(now-t0)/dur), e = u<.5 ? 4*u*u*u : 1-Math.pow(-2*u+2,3)/2;
+    render(lerp(from, target, e));
+    if (u < 1) raf = requestAnimationFrame(step);
+  })(t0);
+}
+$('slider').addEventListener('input', e => { cancelAnimationFrame(raf); render(+e.target.value/1000); });
+render(0);
+</script>
+</body>
+</html>

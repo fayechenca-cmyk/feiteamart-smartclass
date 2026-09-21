@@ -41,15 +41,17 @@
   - The four Step 2 reference images are still placeholders. Of the six
     per-scene Quick Sketch Reference overlays (renamed from "Teacher
     Reference" — round 3, same correction already applied to Lesson
-    01), Scenes 1-2 now have real Faye-produced videos; Scenes 3-6 stay
-    placeholder until she supplies theirs too (same process as Lesson
+    01), Scenes 1-5 now have real Faye-produced videos; Scene 6 stays
+    placeholder until she supplies its video (same process as Lesson
     01's own story videos).
   - The guided-drawing sequence is ONE shared progressive illustration
     across all six scenes, not six bespoke ones — same simplification
     Lesson 01 made for its own three story choices; no real per-scene
     drawing-stage art exists yet.
-  - The community gallery is the same placeholder-grid pattern Lesson
-    01 already uses (real student photos come later, not yet sent).
+  - The community gallery started as the same placeholder-grid pattern Lesson
+    01 already uses; two real student drawings are now wired in via
+    lesson-data.js's community_gallery.items (same data-driven branch
+    as Lesson 01), placeholders only render if items is empty.
   - Full production-detail polish (lighting/finishing pass) was only
     done for the classroom reveal and Scene 1 ("Late for Class") —
     Scenes 2-6 have real geometry/correct props/correct posing per
@@ -274,6 +276,20 @@ button{font-family:inherit;}
   opacity:1;transition:opacity .5s ease;pointer-events:none;
 }
 .scene-reveal.hide{opacity:0;}
+/* Optional-scene gate (Scene 6): shown BEFORE the reveal chain starts,
+   so a tired student can skip cleanly instead of sitting through the
+   typewriter/countdown/3D sequence for a scene they don't want. The
+   .scene-reveal scrim is pointer-events:none, so the gate re-enables
+   them for its own buttons. */
+.scene-reveal.gated .scene-reveal-title,.scene-reveal.gated .scene-reveal-line,.scene-reveal.gated .scene-reveal-countdown{display:none;}
+.scene-gate{display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:auto;max-width:460px;}
+.scene-gate[hidden]{display:none;}
+.scene-gate-kicker{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);padding:5px 14px;border-radius:999px;}
+.scene-gate-text{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(1.1rem,3.4vw,1.5rem);color:#fff;line-height:1.4;}
+.scene-gate-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
+.scene-gate-btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;cursor:pointer;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;}
+.scene-gate-btn.primary{background:var(--accent);border-color:var(--accent);}
+.scene-gate-btn:active{transform:scale(.96);}
 .scene-reveal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,4.5vw,2rem);color:#fff;letter-spacing:.5px;min-height:1.2em;}
 .scene-reveal-line{font-size:clamp(13px,2.6vw,16px);color:rgba(255,255,255,.86);max-width:560px;line-height:1.5;min-height:1.5em;}
 .scene-reveal-countdown{
@@ -295,7 +311,7 @@ button{font-family:inherit;}
    which reads better for a "reference in the corner" than dead center
    on the scene's tallest axis. */
 .teacher-overlay{
-  position:absolute;bottom:16px;width:170px;
+  position:absolute;bottom:16px;width:clamp(210px,26vw,380px);
   display:flex;flex-direction:column;align-items:center;gap:5px;
   background:none;border:none;padding:0;cursor:pointer;
   opacity:0;transition:opacity .6s ease,transform .6s ease;pointer-events:none;z-index:4;
@@ -316,8 +332,8 @@ button{font-family:inherit;}
 .teacher-overlay-frame.has-video::after{content:'▶';border:none;bottom:auto;right:auto;top:50%;left:50%;
   transform:translate(-50%,-50%);width:auto;height:auto;font-size:1.6rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);}
 .teacher-overlay-icon{font-size:1.7rem;filter:grayscale(1) contrast(.9);opacity:.7;}
-.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.4px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:center;line-height:1.3;}
-@media(max-width:600px){.teacher-overlay{width:128px;bottom:12px;}.teacher-overlay-label{font-size:9.5px;}}
+.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.4px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:center;line-height:1.3;}
+@media(max-width:600px){.teacher-overlay{width:clamp(150px,44vw,220px);bottom:12px;}.teacher-overlay-label{font-size:11px;}}
 
 /* Round 2 layout, round 3 sizing/content — the lightbox itself now
    actually plays video (was always a static painted-icon placeholder,
@@ -326,7 +342,7 @@ button{font-family:inherit;}
    postage stamp. */
 .teacher-lightbox-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
 .teacher-lightbox-backdrop.show{display:flex;}
-.teacher-lightbox{background:var(--sb-panel);border-radius:var(--radius-lg);max-width:560px;width:100%;padding:26px 22px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
+.teacher-lightbox{background:var(--sb-panel);border-radius:var(--radius-lg);max-width:min(1120px,96vw);width:100%;padding:24px 20px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center;}
 .teacher-lightbox-frame{
   aspect-ratio:4/3;background:var(--sb-paper);border:1.5px solid var(--sb-ink);border-radius:4px;
   display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;position:relative;
@@ -335,7 +351,16 @@ button{font-family:inherit;}
    icon box — same override reasoning as Lesson 01's
    .practice-panel-video .video-stage (a fixed aspect-ratio box, no
    competing sizing rules). */
-.teacher-lightbox-frame.has-video{aspect-ratio:16/9;background:#000;}
+/* Round 4: video width is the smaller of "fill the card" and "whatever
+   16:9 width still fits the viewport HEIGHT" (210px reserved for the
+   card's own padding/label/disclaimer/backdrop) — so it's as big as
+   possible on any screen without the card ever overflowing vertically.
+   The 4:3 placeholder frame (Scene 6, no video yet) is capped
+   separately below so it doesn't balloon to fill the wider card. */
+.teacher-lightbox-frame.has-video{aspect-ratio:16/9;background:#000;width:min(100%,calc((100vh - 210px) * 1.7778));margin-left:auto;margin-right:auto;}
+.teacher-lightbox-frame:not(.has-video){max-width:560px;margin-left:auto;margin-right:auto;}
+/* phones: give the video every pixel — tighter backdrop + card padding (the Stream player has its own fullscreen button for more) */
+@media(max-width:600px){.teacher-lightbox-backdrop{padding:8px;}.teacher-lightbox{padding:14px 10px;}}
 .teacher-lightbox-frame.has-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 .teacher-lightbox-video-tap{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -441,6 +466,7 @@ button{font-family:inherit;}
   border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
 }
 .story-choose-btn:active{transform:scale(.95);}
+.story-card-optional{display:inline-block;vertical-align:middle;margin-left:6px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sb-accent);border:1.5px solid var(--sb-accent);border-radius:999px;padding:2px 8px;}
 .story-card.picked{border-color:var(--sb-accent);}
 .story-card.picked .story-choose-btn{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
 
@@ -548,6 +574,10 @@ button{font-family:inherit;}
 .own-work-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.92rem;color:var(--sb-ink);margin-bottom:12px;}
 .own-work-img{max-width:220px;width:100%;border-radius:2px;border:1.5px solid var(--sb-ink-faint);display:block;margin:0 auto;}
 .upload-dropzone{
+  /* <label> is inline by default — its dashed border fragmented into a
+     stray strip cutting through the text instead of boxing the whole
+     card. Block fixes it. */
+  display:block;
   border:1.5px dashed var(--sb-ink-faint);border-radius:4px;padding:22px 16px;cursor:pointer;
   transition:border-color .15s ease;position:relative;background:var(--sb-paper);
 }
@@ -558,13 +588,24 @@ button{font-family:inherit;}
 .gallery-section{margin-top:22px;}
 .gallery-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--sb-ink);text-align:center;margin-bottom:4px;}
 .gallery-subtitle{font-size:12px;color:var(--sb-ink-faint);text-align:center;margin-bottom:16px;}
-.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
 @media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}}
 .gallery-card{
   aspect-ratio:1;background:repeating-linear-gradient(135deg,var(--sb-panel),var(--sb-panel) 8px,var(--sb-paper) 8px,var(--sb-paper) 16px);
   border-radius:4px;border:1.5px dashed var(--sb-ink-faint);display:flex;align-items:center;justify-content:center;
   font-size:1.3rem;color:var(--sb-ink-faint);filter:grayscale(1);opacity:.85;
 }
+/* Real student work (gallery.items) — same thin-ink-border framing as
+   Lesson 01's .gallery-photo-card, but 4:3 + object-fit:contain instead
+   of a square crop: these are landscape sketchbook pages (about 1.75:1
+   and 1.3:1), and a square cover-crop would cut off whole panels of the
+   drawing. Contain shows the full page on the paper-colored card. */
+.gallery-photo-card{
+  aspect-ratio:4/3;border-radius:4px;border:1.5px solid var(--sb-ink);overflow:hidden;background:var(--sb-paper);
+}
+.gallery-photo-card img{width:100%;height:100%;object-fit:contain;display:block;}
+.gallery-photo-item{margin:0;}
+.gallery-credit{font-size:12px;font-weight:700;color:var(--sb-ink-soft);text-align:center;margin-top:6px;}
 
 /* ============================================================
    STEP 7 — Complete
@@ -1770,14 +1811,14 @@ function playSuspenseSound(durationMs){
 // a remaining scene only needs that data field edited, not this
 // function.
 const TEACHER_REF_CF_CUSTOMER = 'customer-a78os4oj56dr67ab.cloudflarestream.com';
-function teacherRefPosterUrl(streamId){
-  return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=&height=600`;
+function teacherRefPosterUrl(streamId, timeSecs){
+  return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/thumbnails/thumbnail.jpg?time=${timeSecs ? timeSecs + 's' : ''}&height=600`;
 }
 function renderTeacherOverlay(sceneData, side) {
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneData.id);
   if (!ref) return '';
   const hasVideo = !!ref.demoVideoStreamId;
-  const frameStyle = hasVideo ? ` style="background-image:url('${teacherRefPosterUrl(ref.demoVideoStreamId)}')"` : '';
+  const frameStyle = hasVideo ? ` style="background-image:url('${teacherRefPosterUrl(ref.demoVideoStreamId, ref.posterTimeSecs)}')"` : '';
   const inner = hasVideo ? '' : `<div class="teacher-overlay-icon">🎨</div>`;
   return `
     <button class="teacher-overlay teacher-overlay-${side}" id="teacherOverlay" onclick="openTeacherLightbox('${sceneData.id}')" aria-label="Open Quick Sketch Reference for ${sceneData.title}">
@@ -1798,8 +1839,8 @@ function renderTeacherOverlay(sceneData, side) {
 // actually stops — this is a repeatedly open/closed modal, unlike
 // Lesson 01's always-mounted practice panel, so leaving it playing
 // in the background on close would be a real bug, not just untidy.
-function teacherRefVideoSrc(streamId){
-  const poster = encodeURIComponent(teacherRefPosterUrl(streamId));
+function teacherRefVideoSrc(streamId, posterTimeSecs){
+  const poster = encodeURIComponent(teacherRefPosterUrl(streamId, posterTimeSecs));
   return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
 }
 function attachTeacherRefVideo(streamId){
@@ -1844,7 +1885,7 @@ function openTeacherLightbox(sceneId) {
   if (ref.demoVideoStreamId) {
     frame.className = 'teacher-lightbox-frame has-video';
     frame.innerHTML = `
-      <iframe id="teacherLightboxVideoFrame" src="${teacherRefVideoSrc(ref.demoVideoStreamId)}" loading="lazy" title="${ref.label}"
+      <iframe id="teacherLightboxVideoFrame" src="${teacherRefVideoSrc(ref.demoVideoStreamId, ref.posterTimeSecs)}" loading="lazy" title="${ref.label}"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
       <button class="teacher-lightbox-video-tap" id="teacherLightboxVideoTap" hidden>🔊 Tap to Play</button>
     `;
@@ -1880,6 +1921,14 @@ function renderStoryScene(sceneData, sceneIndex) {
           <div class="scene-reveal-title" id="sceneRevealTitle"></div>
           <div class="scene-reveal-line" id="sceneRevealLine"></div>
           <div class="scene-reveal-countdown" id="sceneRevealCountdown"></div>
+          ${sceneData.optional ? `<div class="scene-gate" id="sceneGate">
+            <div class="scene-gate-kicker">Situation ${sceneIndex + 1} · Optional</div>
+            <div class="scene-gate-text">Feeling tired? This one is optional — try it if you'd like one more.</div>
+            <div class="scene-gate-buttons">
+              <button class="scene-gate-btn primary" id="sceneGateGo">Let's try it</button>
+              <button class="scene-gate-btn" id="sceneGateSkip">Skip this one →</button>
+            </div>
+          </div>` : ''}
         </div>
         <div class="scene-question" id="sceneQuestion">
           <div class="scene-question-title">${sceneData.title}</div>
@@ -1902,18 +1951,34 @@ async function afterRenderStoryScene(sceneData, sceneIndex) {
   _sceneRevealTimers = []; // fresh set for this scene; cleanupStoryScene clears whatever's pending on the way out
 
   const situationNum = sceneIndex + 1;
-  typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
-    _sceneRevealTimers.push(setTimeout(() => {
-      playSuspenseSound(2400);
-      typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
-        _sceneRevealTimers.push(setTimeout(() => {
-          runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
-            _sceneRevealTimers.push(setTimeout(mountScene, 300));
-          });
-        }, 450));
-      });
-    }, 350));
-  });
+  function startReveal() {
+    revealEl.classList.remove('gated');
+    typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
+      _sceneRevealTimers.push(setTimeout(() => {
+        playSuspenseSound(2400);
+        typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
+          _sceneRevealTimers.push(setTimeout(() => {
+            runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
+              _sceneRevealTimers.push(setTimeout(mountScene, 300));
+            });
+          }, 450));
+        });
+      }, 350));
+    });
+  }
+  if (sceneData.optional) {
+    // Optional scene: wait for an explicit choice before starting the
+    // reveal chain. Skip goes straight to the next step (nextStep's own
+    // cleanup handles the not-yet-started chain — nothing is pending).
+    revealEl.classList.add('gated');
+    document.getElementById('sceneGateGo').onclick = () => {
+      document.getElementById('sceneGate').hidden = true;
+      startReveal();
+    };
+    document.getElementById('sceneGateSkip').onclick = () => nextStep();
+  } else {
+    startReveal();
+  }
 
   async function mountScene() {
     revealEl.classList.add('hide');
@@ -2812,7 +2877,7 @@ function renderChooseScene() {
     <div class="story-card${STATE.sceneChoiceId === c.id ? ' picked' : ''}" id="sceneCard-${c.id}">
       <div class="story-thumb">${SCENE_THUMB_ICON[c.thumbSceneKey] || ''}</div>
       <div class="story-card-body">
-        <div class="story-card-title">${c.title}</div>
+        <div class="story-card-title">${c.title}${c.optional ? ' <span class="story-card-optional">Optional</span>' : ''}</div>
         <button class="story-choose-btn" onclick="pickScene('${c.id}')">Choose This Scene</button>
       </div>
     </div>
@@ -3197,7 +3262,11 @@ async function savePracticeDrawing(){
 ============================================================ */
 function renderTeacherCommunity(){
   const gallery = LESSON_DATA.community_gallery;
-  const galleryCards = Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
+  // Real photos (gallery.items) when supplied, dashed placeholders only
+  // when there are none — same data-driven branch as Lesson 01.
+  const galleryCards = (gallery.items && gallery.items.length)
+    ? gallery.items.map(item => `<figure class="gallery-photo-item"><div class="gallery-photo-card"><img src="${item.src}" alt="${item.alt}" loading="lazy"></div>${item.credit ? `<figcaption class="gallery-credit">${item.credit}</figcaption>` : ''}</figure>`).join('')
+    : Array.from({ length: gallery.placeholderCount }, () => `<div class="gallery-card">🖼️</div>`).join('');
   return `
     <div class="step-inner">
       <div class="step-kicker">Our Community</div>

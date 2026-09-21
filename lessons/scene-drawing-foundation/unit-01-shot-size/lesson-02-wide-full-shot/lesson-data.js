@@ -102,7 +102,7 @@
     // that instruction, not silently written as if it were given.
     scenes_intro: {
       titleCard: 'Scene Drawing Practice',
-      explainerCard: "You'll walk through six short story situations, one at a time. Just watch and think for now — you'll pick one to draw after."
+      explainerCard: "You'll walk through six short story situations, one at a time — the last one is optional. Just watch and think for now — you'll pick one to draw after."
     },
 
     // Step 3 — six demonstration scenes (own 3D build + a short
@@ -157,6 +157,11 @@
       },
       {
         id: 'sleepover', sceneKey: 'sleepover', setting: 'indoor',
+        // optional: true — Faye's retroactive fix (found in testing: by
+        // the 5th of six drawing rounds many students are tired). The
+        // pattern going forward is 5 required + 1 optional. index.html
+        // shows a "try it / skip" gate before this scene's reveal.
+        optional: true,
         title: 'The Sleepover',
         situationLine: 'Two best friends build a blanket fort at a sleepover.',
         question: 'What are they building together?',
@@ -177,7 +182,7 @@
       { id: 'after_school', title: 'See You After School', thumbSceneKey: 'afterSchool' },
       { id: 'lost_ball', title: 'The Lost Ball', thumbSceneKey: 'lostBall' },
       { id: 'rainy_day', title: 'Rainy Day Surprise', thumbSceneKey: 'rainyDay' },
-      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover' }
+      { id: 'sleepover', title: 'The Sleepover', thumbSceneKey: 'sleepover', optional: true }
     ],
 
     // Step 5 — guided drawing. SCOPE FLAG, same simplification Lesson
@@ -220,17 +225,22 @@
     // "Teacher Reference" -> "Quick Sketch Reference" throughout — the
     // old name implied one authoritative correct answer, same fix
     // already applied to Lesson 01's practice videos. Real videos for
-    // Scenes 1-2 (Faye-produced, Cloudflare Stream) via demoVideoStreamId
+    // Scenes 1-5 (Faye-produced, Cloudflare Stream) via demoVideoStreamId
     // — same field name/meaning as Lesson 01's story_choices, and the
     // same data-driven fallback: null/absent means the placeholder
-    // "coming soon" lightbox state, not an error. Scenes 3-6 stay
-    // placeholder:true until Faye supplies their videos too.
+    // "coming soon" lightbox state, not an error. Scene 6
+    // stays placeholder:true until Faye supplies its video.
+    // posterTimeSecs (optional): which second of the video to use as the
+    // corner-preview/poster frame — the default first frame of these
+    // timelapse sketches is a blank white page, so the overlay showed
+    // nothing recognizable. Set ~85-90% through each video (durations
+    // 27-71s) so the preview shows a near-finished sketch.
     teacher_references: [
-      { sceneId: 'late_for_class', label: 'Quick Sketch Reference — Late for Class', demoVideoStreamId: '5aef7587f314a6b478802d14639408b3' },
-      { sceneId: 'art_project', label: 'Quick Sketch Reference — The Art Project', demoVideoStreamId: '2ddecd6ee5218854539cbeeae06ea139' },
-      { sceneId: 'after_school', label: 'Quick Sketch Reference — See You After School', placeholder: true },
-      { sceneId: 'lost_ball', label: 'Quick Sketch Reference — The Lost Ball', placeholder: true },
-      { sceneId: 'rainy_day', label: 'Quick Sketch Reference — Rainy Day Surprise', placeholder: true },
+      { sceneId: 'late_for_class', label: 'Quick Sketch Reference — Late for Class', demoVideoStreamId: '5aef7587f314a6b478802d14639408b3', posterTimeSecs: 24 },
+      { sceneId: 'art_project', label: 'Quick Sketch Reference — The Art Project', demoVideoStreamId: '2ddecd6ee5218854539cbeeae06ea139', posterTimeSecs: 51 },
+      { sceneId: 'after_school', label: 'Quick Sketch Reference — See You After School', demoVideoStreamId: '21083caaff84263e5c4de320a53516fc', posterTimeSecs: 64 },
+      { sceneId: 'lost_ball', label: 'Quick Sketch Reference — The Lost Ball', demoVideoStreamId: 'caf012455c1a95a9bbe668912b48e3cf', posterTimeSecs: 42 },
+      { sceneId: 'rainy_day', label: 'Quick Sketch Reference — Rainy Day Surprise', demoVideoStreamId: '6ab180787a491ed62b1e6a8410513b55', posterTimeSecs: 30 },
       { sceneId: 'sleepover', label: 'Quick Sketch Reference — The Sleepover', placeholder: true }
     ],
 
@@ -243,7 +253,19 @@
     // pattern as Step 3's reference images.
     community_gallery: {
       title: 'From Other Students',
-      subtitle: "Real student photos will appear here once Faye shares them.",
+      subtitle: 'Real work from students who took this lesson.',
+      // Same shape as Lesson 01's community_gallery.items (src + alt),
+      // plus `credit` — shown as a visible caption under each drawing
+      // (index.html's renderTeacherCommunity). Faye confirmed: full name
+      // "Amy Huang" (not a first-name/initial form), both drawings hers.
+      // Faye also confirmed the second drawing's visible "Selena" in its
+      // speech bubble stays as-is, uncropped.
+      items: [
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f1ce61b6-9a71-4c09-de55-705314f4c000/public', credit: 'Amy Huang', alt: 'Student artwork from the Wide Shot lesson: four wide-shot scenes (school gate, rainy day, lost ball, sleepover), by Amy Huang' },
+        { src: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f4cf5e1f-1cc1-4e83-b4b0-143f8b2e7d00/public', credit: 'Amy Huang', alt: 'Student artwork from the Wide Shot lesson: a two-panel wide-shot sketch of a school hallway and art classroom, by Amy Huang' }
+      ],
+      // Only used when items is empty (same data-driven fallback as
+      // Lesson 01).
       placeholderCount: 4
     },
 
