@@ -19,11 +19,15 @@
  *     the last one is `optional: true` — 5 required + 1 optional is the
  *     pattern going forward (Faye, from testing: by the 5th of six
  *     rounds many students are tired).
- *   - no choose_scene / guided-drawing steps. Faye's brief specifies
- *     Steps 1-2 only (concept + six stories); the old shared
- *     progressive illustration teaches WIDE shot construction, which
- *     would be wrong content here. The lesson closes with the
- *     community + complete steps so completion/badge still work.
+ *   - every story gets its own two-panel drawing round after its 3D
+ *     scene (the reference video enlarged + the student's canvas, with
+ *     a paper opt-out — Lesson 01's practice format); skipping the
+ *     optional story skips both. No choose_scene / step-by-step
+ *     guided-drawing steps: the old shared progressive illustration
+ *     teaches WIDE shot construction, which would be wrong content
+ *     here (a story with no reference video shows a placeholder).
+ *     The lesson closes with the community + complete steps so
+ *     completion/badge still work.
  *
  * id/courseId are UNCHANGED from the archived original on purpose —
  * core/course-badge-registry.js's scene_drawing_unit_01 badge already
@@ -59,7 +63,7 @@
     // wording (flagged — none was supplied verbatim).
     scenes_intro: {
       titleCard: 'Medium Shot Practice',
-      explainerCard: "Six short stories — five to draw, and a sixth that's optional. Each one starts with a tip about what to think about first."
+      explainerCard: "Six short stories — five to draw, and a sixth that's optional. Each one starts with a tip, then you'll see the scene and sketch it yourself."
     },
 
     // Step 2 — six Medium Shot stories, in the order of Faye's WRITTEN

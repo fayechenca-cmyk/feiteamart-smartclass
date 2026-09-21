@@ -23,10 +23,14 @@
   LESSON_DATA). Top-level STEPS: (1) "What is a Medium Shot?" — a
   full-screen, video-like explanation moment driven by the shared
   ShotSizeCompare component (../../_shared/shot-size-compare.js), NOT a
-  video; (2) a two-card intro, then six story scenes (5 required + 1
-  optional — each its own flat top-level step, see the STEPS comment),
-  each running tip -> "Situation N" reveal -> 3D scene -> Quick Sketch
-  Reference overlay; then the community + complete steps.
+  video; (2) a two-card intro, then six stories (5 required + 1
+  optional), each TWO flat top-level steps: its scene (tip ->
+  "Situation N" reveal -> 3D scene -> Quick Sketch Reference overlay)
+  and its own drawing round (two-panel: the reference video enlarged +
+  the student's canvas, with an "I would prefer to work on paper"
+  opt-out — same format as Lesson 01's practice restructure); then the
+  community + complete steps. Skipping the optional story skips both of
+  its steps.
 
   The six 3D scenes follow Faye's hand-drawn storyboard sheet
   (reference-images/lesson03-medium-shot-storyboard-reference.jpg) —
@@ -36,10 +40,12 @@
   matched to the panel that DEPICTS it, not by reading position.
 
   SCOPE NOTES (flagged, not silently assumed):
-  - No choose-your-scene / guided-drawing / Try-It-Yourself steps — the
-    brief specifies Steps 1-2 only, and the shared progressive
-    illustration teaches WIDE-shot construction, which would be wrong
-    content here.
+  - No choose-your-scene / step-by-step guided-drawing steps — every
+    story gets its own drawing round instead. Lesson 01's fallback
+    (a shared step-by-step illustration when a story has no video)
+    is NOT reused: it teaches WIDE-shot construction, which would be
+    wrong content here, so a story without a video shows a "coming
+    soon" placeholder in the reference panel.
   - All six Quick Sketch Reference videos are placeholders until Faye
     supplies them (data-only change in lesson-data.js).
   - The community gallery is placeholder-only until real student
@@ -255,6 +261,41 @@ button{font-family:inherit;}
 .concept-moment-stage{width:min(100%, calc((100vh - 330px) * 16 / 9));min-width:min(100%,320px);margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(28,26,34,.22);}
 .concept-moment-hint{margin-top:12px;font-size:13px;color:var(--ink-soft);text-align:center;opacity:0;transition:opacity .5s ease;}
 .concept-moment-hint.show{opacity:1;}
+
+
+/* Story drawing round — Quick Sketch Reference (LEFT, its own full
+   panel) + the student's canvas (RIGHT), side by side on desktop, stacked
+   on narrow viewports. Same format as Lesson 01's practice restructure. */
+.step-inner.practice-round{max-width:1180px;justify-content:flex-start;padding-top:2px;}
+.practice-story-label{text-align:center;font-size:13px;color:var(--ink-faint);margin-bottom:14px;}
+.practice-two-panel{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+@media(max-width:820px){.practice-two-panel{grid-template-columns:1fr;}}
+.practice-panel{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:18px 16px 20px;position:relative;}
+.practice-panel-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);text-align:center;margin-bottom:10px;}
+.practice-panel-hint{font-size:11.5px;color:var(--sb-ink-soft);text-align:center;line-height:1.5;margin:-2px 0 14px;}
+.practice-panel-teacher{padding:14px;}
+.practice-two-panel .practice-canvas-wrap{max-width:100%;}
+.practice-ref-video{position:relative;aspect-ratio:16/9;background:#000;border-radius:3px;overflow:hidden;}
+.practice-ref-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.practice-ref-placeholder{background:var(--sb-paper);border:1.5px dashed var(--sb-ink-faint);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--sb-ink-soft);font-size:13px;text-align:center;padding:0 16px;}
+.practice-ref-placeholder-icon{font-size:2rem;filter:grayscale(1) contrast(.9);opacity:.7;}
+.practice-ref-note{text-align:center;font-size:11.5px;font-style:italic;color:var(--sb-ink-faint);line-height:1.45;margin-top:12px;}
+.video-tap-overlay{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+  padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.video-tap-overlay[hidden]{display:none;}
+.prefer-paper-btn{display:block;margin:14px auto 0;background:none;border:none;font-size:12.5px;font-weight:700;color:var(--sb-ink-soft);text-decoration:underline;cursor:pointer;}
+.prefer-paper-btn.picked{color:var(--sb-accent);}
+.own-work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+@media(max-width:600px){.own-work-grid{grid-template-columns:1fr;}}
+.own-work-grid .own-work-card{margin-bottom:0;padding:16px 12px;}
+.own-work-grid .own-work-img{max-width:100%;}
+.own-work-note-card{border-style:dashed;}
+.own-work-note{font-size:12px;color:var(--sb-ink-faint);}
 
 /* Round 2 — two-card intro before Situation 1. */
 .intro-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:56vh;gap:6px;}
@@ -856,23 +897,29 @@ button{font-family:inherit;}
    baked in, so Lessons 02-26 can reuse it with a different STEPS
    array and a different lesson-data.js.
 ============================================================ */
-// The six story scenes are SIX SEPARATE top-level entries here
-// (scene_theater ... scene_art_project), not one step with internal
-// sub-stage state — a deliberate architecture choice carried over from
-// Lesson 02 to avoid the Previous-navigation bug class Lesson 01's
-// round 5 hit (a step tracking its own sub-stages in STATE needs
-// prevStep/nextStep to special-case it). Flat entries mean the plain
-// stepIndex++/-- below is correct for all six with zero special-casing.
-// STORY_SCENE_STEPS builds them from LESSON_DATA.story_scenes +
-// SCENE3D_BUILDERS so the two stay in sync automatically.
-// cleanupStoryScene (not just cleanupActive3DStage) also cancels the
-// pre-reveal typewriter/countdown timers — see that function's comment.
-const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.map((s, i) => ({
-  id: 'scene_' + s.id,
-  render: () => renderStoryScene(s, i),
-  afterRender: () => afterRenderStoryScene(s, i),
-  cleanup: cleanupStoryScene
-}));
+// Each story is TWO flat top-level entries: its scene (tip -> reveal ->
+// 3D -> Quick Sketch Reference overlay) and then its own drawing round
+// (scene_<id>, draw_<id>). Flat entries — not sub-stage state — keep the
+// plain stepIndex++/-- correct everywhere (the Previous-navigation bug
+// class Lesson 01's round 5 hit needs a step tracking its own sub-stages;
+// this never does). STORY_SCENE_STEPS builds them from
+// LESSON_DATA.story_scenes + SCENE3D_BUILDERS so the two stay in sync.
+// `hiddenWhen` lets the optional story's drawing round drop out of the
+// path when the student skipped that story (see isStepHidden).
+const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.flatMap((s, i) => [
+  {
+    id: 'scene_' + s.id,
+    render: () => renderStoryScene(s, i),
+    afterRender: () => afterRenderStoryScene(s, i),
+    cleanup: cleanupStoryScene
+  },
+  {
+    id: 'draw_' + s.id,
+    render: () => renderStoryDraw(s, i),
+    afterRender: () => afterRenderStoryDraw(s, i),
+    hiddenWhen: () => !!(s.optional && STATE.optionalSkipped[s.id])
+  }
+]);
 const STEPS = [
   { id:'medium_concept',     render:renderMediumConcept,        afterRender:afterRenderMediumConcept, cleanup:cleanupMediumConcept },
   { id:'scenes_intro_title', render:renderScenesIntroTitle,     afterRender:afterRenderScenesIntroTitle },
@@ -884,6 +931,8 @@ const STEPS = [
 
 let STATE = {
   stepIndex: 0,
+  storyResults: [],        // per story index: 'digital' | 'paper' | undefined (not resolved)
+  optionalSkipped: {},     // story id -> true when the student skipped that optional story
   checkedConcepts: [],
   lessonSaved: false
 };
@@ -1686,23 +1735,25 @@ function teacherRefVideoSrc(streamId, posterTimeSecs){
   const poster = encodeURIComponent(teacherRefPosterUrl(streamId, posterTimeSecs));
   return `https://${TEACHER_REF_CF_CUSTOMER}/${streamId}/iframe?poster=${poster}&autoplay=true&muted=false&preload=auto`;
 }
-function attachTeacherRefVideo(streamId){
+function attachTeacherRefVideo(streamId, frameId, tapId){
+  frameId = frameId || 'teacherLightboxVideoFrame';
+  tapId = tapId || 'teacherLightboxVideoTap';
   const sdk = document.createElement('script');
   sdk.src = 'https://embed.cloudflarestream.com/embed/sdk.latest.js';
   sdk.onload = () => {
     try {
-      const iframe = document.getElementById('teacherLightboxVideoFrame');
+      const iframe = document.getElementById(frameId);
       const player = window.Stream && iframe ? window.Stream(iframe) : null;
       if (!player) return;
       let started = false;
       player.addEventListener('play', () => {
         started = true;
-        const overlay = document.getElementById('teacherLightboxVideoTap');
+        const overlay = document.getElementById(tapId);
         if (overlay) overlay.hidden = true;
       });
       setTimeout(() => {
         if (started) return;
-        const overlay = document.getElementById('teacherLightboxVideoTap');
+        const overlay = document.getElementById(tapId);
         if (!overlay) return;
         overlay.hidden = false;
         overlay.onclick = () => {
@@ -1833,10 +1884,16 @@ async function afterRenderStoryScene(sceneData, sceneIndex) {
   if (sceneData.optional) {
     revealEl.classList.add('gated');
     document.getElementById('sceneGateGo').onclick = () => {
+      delete STATE.optionalSkipped[sceneData.id];
       document.getElementById('sceneGate').hidden = true;
       showTip();
     };
-    document.getElementById('sceneGateSkip').onclick = () => nextStep();
+    // Skip drops BOTH this story's scene and its drawing round: flag it,
+    // then nextStep() steps over the now-hidden draw_<id> entry.
+    document.getElementById('sceneGateSkip').onclick = () => {
+      STATE.optionalSkipped[sceneData.id] = true;
+      nextStep();
+    };
   } else {
     showTip();
   }
@@ -2362,10 +2419,11 @@ function buildSceneLunch(stage) {
   };
 }
 
-// PANEL 4 — The Shop Window. A girl in profile facing right, arm out and
-// open hand near the glass; a friend's head cropped at the left edge; the
-// window has vertical mullions, and behind the glass a doll stands beside a
-// little flower. The glass is a real translucent pane between them.
+// PANEL 4 — The Shop Window. ONE girl alone, in profile facing right, arm
+// out and open hand near the glass; the window has vertical mullions, and
+// behind the glass a doll stands beside a little flower. The glass is a
+// real translucent pane between them. (The panel's second, cropped head
+// at the left edge was NOT built — Faye confirmed the story is one girl.)
 function buildSceneShopWindow(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
@@ -2430,17 +2488,11 @@ function buildSceneShopWindow(stage) {
     armR: { shoulder: -1.5, shoulderZ: 0, elbow: -0.15 }, armL: { shoulder: -0.2 },
     legL: { thigh: -0.05 }, legR: { thigh: 0.05 } });
   world.add(girl);
-  const friend = buildKid({ skin: 0xc9895c, hair: 0x1c1410, shirt: 0x5cb85c, pants: 0x3a3a34, shoe: 0x222222 });
-  longHair3(friend, 0x1c1410, 0.3);
-  friend.position.set(-0.95, 0, 0.3);
-  friend.rotation.y = 1.3;
-  poseKid(friend, { headTilt: 0.02, lean: 0.06, armR: { shoulder: -0.2 }, armL: { shoulder: -0.2 } });
-  world.add(friend);
 
   return {
     start: { pos: { x: -3.2, y: 1.9, z: 3.0 }, look: { x: 0.6, y: 0.9, z: 0.0 } },
-    settle: { pos: { x: -0.35, y: 1.02, z: 1.9 }, look: { x: 0.5, y: 0.98, z: 0.15 } },
-    focusX: 0.35
+    settle: { pos: { x: -0.1, y: 1.02, z: 1.9 }, look: { x: 0.72, y: 0.98, z: 0.15 } },
+    focusX: 0.45
   };
 }
 
@@ -2532,6 +2584,260 @@ const SCENE3D_BUILDERS = {
 };
 
 /* ============================================================
+   STORY DRAWING ROUND — one after EVERY story (5 required + the
+   optional 6th when tried), same two-panel format as Lesson 01's
+   practice restructure: LEFT = that story's Quick Sketch Reference
+   video, enlarged into its own full panel (the small 3D-scene corner
+   overlay stays as-is); RIGHT = the student's own canvas, same size.
+   "I would prefer to work on paper" is the opt-out. Either saving or
+   choosing paper resolves the story (STATE.storyResults[i]) and turns
+   Continue from ghost to solid — the canvas is open from the moment
+   the round mounts, so a student can sketch along with the video.
+   The reference panel keeps the established "just one reference"
+   framing (same line as the lightbox). Stories without a video yet
+   show a "coming soon" placeholder in the same panel.
+
+   Canvas/IndexedDB code is Lesson 01's (same in-browser sketch canvas +
+   per-story IndexedDB record pattern), reused rather than reinvented.
+   One record PER STORY (practiceKeyForStory); a story done on paper has
+   nothing to save.
+============================================================ */
+const PRACTICE_DB_NAME = 'fei_scene_drawing_medium_shot_storage';
+const PRACTICE_DB_VERSION = 1;
+const PRACTICE_STORE_NAME = 'artworks';
+const PRACTICE_MAX_EDGE = 1200;
+const PRACTICE_JPEG_QUALITY = 0.85;
+let _practiceDbPromise = null;
+function practiceOpenDB(){
+  if (_practiceDbPromise) return _practiceDbPromise;
+  _practiceDbPromise = new Promise((resolve, reject) => {
+    if (!window.indexedDB) { reject(new Error('IndexedDB not available')); return; }
+    let req;
+    try { req = window.indexedDB.open(PRACTICE_DB_NAME, PRACTICE_DB_VERSION); } catch (e) { reject(e); return; }
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(PRACTICE_STORE_NAME)) {
+        db.createObjectStore(PRACTICE_STORE_NAME, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error('Failed to open IndexedDB'));
+  });
+  return _practiceDbPromise;
+}
+function practiceCompressCanvas(canvas){
+  return new Promise((resolve, reject) => {
+    let width = canvas.width, height = canvas.height;
+    const longestEdge = Math.max(width, height);
+    let source = canvas;
+    if (longestEdge > PRACTICE_MAX_EDGE) {
+      const scale = PRACTICE_MAX_EDGE / longestEdge;
+      const small = document.createElement('canvas');
+      small.width = Math.round(width * scale);
+      small.height = Math.round(height * scale);
+      small.getContext('2d').drawImage(canvas, 0, 0, small.width, small.height);
+      source = small;
+    }
+    source.toBlob((blob) => { if (blob) resolve(blob); else reject(new Error('Compression failed')); }, 'image/jpeg', PRACTICE_JPEG_QUALITY);
+  });
+}
+function practiceKeyForStory(storyId){
+  return LESSON_DATA.courseId + '_' + storyId;
+}
+async function practiceSaveArtwork(canvas, key){
+  const compressed = await practiceCompressCanvas(canvas);
+  const db = await practiceOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PRACTICE_STORE_NAME, 'readwrite');
+    const record = { id: key, blob: compressed, savedAt: Date.now() };
+    const req = tx.objectStore(PRACTICE_STORE_NAME).put(record);
+    req.onsuccess = () => resolve(record);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function practiceGetArtwork(key){
+  const db = await practiceOpenDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(PRACTICE_STORE_NAME, 'readonly');
+    const req = tx.objectStore(PRACTICE_STORE_NAME).get(key);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+const PRACTICE_COLORS = ['#4b473d', '#2d5fa8', '#8a6a4a', '#5b7a96', '#3a3a34'];
+const PRACTICE_PAPER = '#faf8f5';
+// Eraser paints the paper colour (not destination-out): the canvas is
+// compressed to JPEG for storage, which has no alpha channel.
+const PRACTICE_TOOLS = {
+  fineliner: { label: 'Fineliner', icon: '✒️', width: 2, alpha: 1 },
+  marker: { label: 'Marker', icon: '🖊️', width: 8, alpha: 0.88 },
+  watercolor: { label: 'Watercolor', icon: '🖌️', width: 20, alpha: 0.24 },
+  fill: { label: 'Fill', icon: '🧱', width: 46, alpha: 0.5 },
+  eraser: { label: 'Eraser', icon: '🧽', width: 30, alpha: 1, isEraser: true }
+};
+let practiceColor = PRACTICE_COLORS[0];
+let practiceTool = 'fineliner';
+let practiceDrawing = false;
+let practiceLast = null;
+let _currentStory = null;
+let _currentStoryIndex = -1;
+
+function practicePos(canvas, e){
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / r.width, scaleY = canvas.height / r.height;
+  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+}
+function pickPracticeColor(color){
+  practiceColor = color;
+  document.querySelectorAll('.practice-color-dot').forEach(el => el.classList.toggle('picked', el.dataset.color === color));
+}
+function pickPracticeTool(tool){
+  practiceTool = tool;
+  document.querySelectorAll('.practice-style-btn').forEach(el => el.classList.toggle('picked', el.dataset.tool === tool));
+}
+function clearPracticeCanvas(){
+  const canvas = document.getElementById('practiceCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = PRACTICE_PAPER;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+function initPracticeCanvas(){
+  const canvas = document.getElementById('practiceCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 300, h = canvas.clientHeight || 225;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = PRACTICE_PAPER;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  canvas.onpointerdown = (e) => {
+    practiceDrawing = true;
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+    practiceLast = practicePos(canvas, e);
+  };
+  canvas.onpointermove = (e) => {
+    if (!practiceDrawing) return;
+    const p = practicePos(canvas, e);
+    const tool = PRACTICE_TOOLS[practiceTool] || PRACTICE_TOOLS.fineliner;
+    ctx.strokeStyle = tool.isEraser ? PRACTICE_PAPER : practiceColor;
+    ctx.globalAlpha = tool.alpha;
+    ctx.lineWidth = tool.width * dpr;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(practiceLast.x, practiceLast.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    practiceLast = p;
+  };
+  canvas.onpointerup = () => { practiceDrawing = false; };
+  canvas.onpointercancel = () => { practiceDrawing = false; };
+}
+
+function renderStoryDraw(story, i){
+  const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === story.id);
+  const hasVideo = !!(ref && ref.demoVideoStreamId);
+  const refInner = hasVideo
+    ? `<div class="practice-ref-video">
+         <iframe id="storyRefVideoFrame" src="${teacherRefVideoSrc(ref.demoVideoStreamId, ref.posterTimeSecs)}" loading="lazy" title="${ref.label}"
+           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
+         <button class="video-tap-overlay" id="storyRefVideoTap" hidden>🔊 Tap to Play</button>
+       </div>`
+    : `<div class="practice-ref-video practice-ref-placeholder"><div class="practice-ref-placeholder-icon">🎨</div><div>Quick Sketch Reference video coming soon.</div></div>`;
+  const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
+  const tools = Object.keys(PRACTICE_TOOLS).map(key => {
+    const t = PRACTICE_TOOLS[key];
+    return `<button class="practice-style-btn${practiceTool === key ? ' picked' : ''}" data-tool="${key}" onclick="pickPracticeTool('${key}')">${t.icon} ${t.label}</button>`;
+  }).join('');
+  return `
+    <div class="step-inner practice-round">
+      <div class="practice-story-label">Situation ${i + 1}: ${story.title} — ${story.framing}</div>
+      <div class="practice-two-panel">
+        <div class="practice-panel practice-panel-teacher">
+          <div class="practice-panel-label">Quick Sketch Reference</div>
+          <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
+          ${refInner}
+          <div class="practice-ref-note">This is just one reference — there are many possible ways to draw this scene.</div>
+        </div>
+        <div class="practice-panel practice-panel-student" id="practiceStudentPanel">
+          <div class="practice-panel-label">Your Turn</div>
+          <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
+          <div class="practice-tool-row">${tools}</div>
+          <div class="practice-tool-row">${colors}</div>
+          <div class="draw-controls">
+            <button class="draw-btn" onclick="clearPracticeCanvas()">Clear</button>
+            <button class="draw-btn primary" id="practiceSaveBtn" onclick="savePracticeDrawingForStory()">Save My Drawing</button>
+          </div>
+          <button class="prefer-paper-btn" id="preferPaperBtn" onclick="choosePreferPaper()">I would prefer to work on paper</button>
+          <div class="practice-saved-note" id="practiceSavedNote"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function afterRenderStoryDraw(story, i){
+  _currentStory = story;
+  _currentStoryIndex = i;
+  practiceColor = PRACTICE_COLORS[0];
+  practiceTool = 'fineliner';
+  const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === story.id);
+  if (ref && ref.demoVideoStreamId) attachTeacherRefVideo(ref.demoVideoStreamId, 'storyRefVideoFrame', 'storyRefVideoTap');
+  initPracticeCanvas();
+  const result = STATE.storyResults[i];
+  if (result === 'digital') {
+    // Returning via Previous: put the saved drawing back so it isn't lost from view.
+    practiceGetArtwork(practiceKeyForStory(story.id)).then(rec => {
+      if (!rec || !rec.blob) return;
+      const img = new Image();
+      img.onload = () => {
+        const c = document.getElementById('practiceCanvas');
+        if (c) c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(img.src);
+      };
+      img.src = URL.createObjectURL(rec.blob);
+      const note = document.getElementById('practiceSavedNote');
+      if (note) note.textContent = '✓ Saved — you can keep drawing or continue.';
+    }).catch(e => console.warn('[afterRenderStoryDraw] restore failed', e));
+  } else if (result === 'paper') {
+    const btn = document.getElementById('preferPaperBtn');
+    if (btn) btn.classList.add('picked');
+    document.getElementById('practiceSavedNote').textContent = 'No problem — grab a pencil and draw this one on paper.';
+  }
+  showContinue('Continue →', nextStep, { ghost: result == null });
+}
+async function savePracticeDrawingForStory(){
+  const canvas = document.getElementById('practiceCanvas');
+  const btn = document.getElementById('practiceSaveBtn');
+  if (!canvas || !_currentStory) return;
+  btn.disabled = true;
+  try {
+    await practiceSaveArtwork(canvas, practiceKeyForStory(_currentStory.id));
+    STATE.storyResults[_currentStoryIndex] = 'digital';
+    document.getElementById('practiceSavedNote').textContent = '✓ Saved — you can keep drawing or continue.';
+    const paperBtn = document.getElementById('preferPaperBtn');
+    if (paperBtn) paperBtn.classList.remove('picked');
+    showContinue('Continue →', nextStep);
+  } catch (e) {
+    console.warn('[savePracticeDrawingForStory] failed', e);
+    document.getElementById('practiceSavedNote').textContent = "Couldn't save — you can still continue without saving.";
+  }
+  btn.disabled = false;
+}
+function choosePreferPaper(){
+  if (_currentStoryIndex < 0) return;
+  STATE.storyResults[_currentStoryIndex] = 'paper';
+  const btn = document.getElementById('preferPaperBtn');
+  if (btn) btn.classList.add('picked');
+  document.getElementById('practiceSavedNote').textContent = 'No problem — grab a pencil and draw this one on paper.';
+  showContinue('Continue →', nextStep);
+}
+
+/* ============================================================
    ARTWORK COMMUNITY. Student-work-only step: an upload card for a
    photo of their own drawings, then the shared community gallery.
    (Lessons 01/02 also pulled a saved Try-It-Yourself drawing from
@@ -2549,10 +2855,10 @@ function renderTeacherCommunity(){
     <div class="step-inner">
       <div class="step-kicker">Our Community</div>
       <h2 class="step-title">Your Drawing, Together With Everyone Else's</h2>
-      <p class="compare-message">Upload a photo of your drawings — they join the gallery below, alongside work from students like you.</p>
+      <p class="compare-message">Here's what you drew in this lesson — shown together with work from students like you.</p>
 
       <div class="community-section">
-        <div class="own-work-card" id="ownWorkCard"><!-- filled by afterRenderTeacherCommunity --></div>
+        <div id="ownWorkArea"><!-- filled by afterRenderTeacherCommunity --></div>
         <div class="gallery-section">
           <div class="gallery-title">${gallery.title}</div>
           <div class="gallery-subtitle">${gallery.subtitle}</div>
@@ -2562,14 +2868,42 @@ function renderTeacherCommunity(){
     </div>
   `;
 }
-function afterRenderTeacherCommunity(){
-  document.getElementById('ownWorkCard').innerHTML = `
-    <div class="own-work-title">Add Your Own Reference</div>
-    <label class="upload-dropzone" id="uploadDropzone">
-      <input type="file" accept="image/*" onchange="previewUpload(event)">
-      <div class="upload-dropzone-icon">📤</div>
-      <div class="upload-dropzone-label">Upload a photo of your drawing</div>
-    </label>
+// One card per story: the saved drawing (digital), a plain note for a
+// story done on paper / not completed / skipped (the optional one), and
+// the upload card for anyone who drew on paper and wants to add a photo.
+async function afterRenderTeacherCommunity(){
+  const host = document.getElementById('ownWorkArea');
+  const cards = [];
+  for (let i = 0; i < LESSON_DATA.story_scenes.length; i++) {
+    const story = LESSON_DATA.story_scenes[i];
+    const label = 'Situation ' + (i + 1);
+    const result = STATE.storyResults[i];
+    if (story.optional && STATE.optionalSkipped[story.id]) {
+      cards.push(`<div class="own-work-card own-work-note-card"><div class="own-work-title">${label}</div><div class="own-work-note">Skipped (optional)</div></div>`);
+      continue;
+    }
+    if (result === 'digital') {
+      let record = null;
+      try { record = await practiceGetArtwork(practiceKeyForStory(story.id)); } catch (e) { console.warn('[afterRenderTeacherCommunity] practiceGetArtwork failed', e); }
+      if (record && record.blob) {
+        const url = URL.createObjectURL(record.blob);
+        cards.push(`<div class="own-work-card"><div class="own-work-title">${label}</div><img class="own-work-img" src="${url}" alt="Your drawing for ${label}: ${story.title}"></div>`);
+        continue;
+      }
+    }
+    const note = result === 'paper' ? '📝 Drawn on paper' : 'Not completed';
+    cards.push(`<div class="own-work-card own-work-note-card"><div class="own-work-title">${label}</div><div class="own-work-note">${note}</div></div>`);
+  }
+  host.innerHTML = `
+    <div class="own-work-grid">${cards.join('')}</div>
+    <div class="own-work-card" id="ownWorkUpload">
+      <div class="own-work-title">Drew on paper? Add a photo</div>
+      <label class="upload-dropzone" id="uploadDropzone">
+        <input type="file" accept="image/*" onchange="previewUpload(event)">
+        <div class="upload-dropzone-icon">📤</div>
+        <div class="upload-dropzone-label">Upload a photo of your drawing</div>
+      </label>
+    </div>
   `;
   showContinue('Continue →', nextStep);
 }
@@ -2648,6 +2982,8 @@ function finishLesson(){
       courseId: LESSON_DATA.courseId,
       lessonId: LESSON_DATA.courseId,
       momentKey: 'lesson_complete',
+      storyResults: STATE.storyResults.slice(),
+      skippedOptional: Object.keys(STATE.optionalSkipped),
       checkedConcepts: STATE.checkedConcepts.slice()
     });
   } catch (e) { console.warn('[finishLesson] JournalStorage.save failed', e); }
@@ -2811,15 +3147,23 @@ function renderCurrentStep(){
 function playStepAdvanceTone(){
   if (typeof artchiPlayTone === 'function') artchiPlayTone(880, 0.12);
 }
-function nextStep(){
-  if (STATE.stepIndex < STEPS.length - 1) { playStepAdvanceTone(); STATE.stepIndex++; renderCurrentStep(); }
+function isStepHidden(i){
+  const st = STEPS[i];
+  return !!(st && st.hiddenWhen && st.hiddenWhen());
 }
-// Global Previous. Every step here is a flat top-level STEPS entry (the
-// six story scenes included — see STORY_SCENE_STEPS's comment), so a
-// plain stepIndex-- is correct everywhere with no sub-stage special
-// cases.
+function nextStep(){
+  let t = STATE.stepIndex + 1;
+  while (t < STEPS.length - 1 && isStepHidden(t)) t++;
+  if (t <= STEPS.length - 1 && STATE.stepIndex < STEPS.length - 1) { playStepAdvanceTone(); STATE.stepIndex = t; renderCurrentStep(); }
+}
+// Global Previous. Every step is a flat top-level STEPS entry (see
+// STORY_SCENE_STEPS's comment), so this is a plain decrement — except it
+// steps over a hidden entry (a skipped optional story's drawing round),
+// landing back on that story's try-it/skip gate instead.
 function prevStep(){
-  if (STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex--; renderCurrentStep(); }
+  let t = STATE.stepIndex - 1;
+  while (t > 0 && isStepHidden(t)) t--;
+  if (t >= 0 && STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex = t; renderCurrentStep(); }
 }
 function goToStep(i){
   playStepAdvanceTone();
