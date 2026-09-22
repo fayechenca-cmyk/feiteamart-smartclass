@@ -40,7 +40,10 @@
  * units: (cx,cy) is the frame centre, w its width (height = w*9/16),
  * `person` is the person's share of the picture (0-100) for the
  * see-saw. Zoom is interpolated in log space so it feels like a real
- * zoom. Later lessons append Close-up / Extreme Close-up stops.
+ * zoom. DEFAULT_STOPS now runs ews -> ws -> ms -> cu (Lesson 04 appended
+ * cu); a lesson that wants fewer stops passes its own `stops` (e.g.
+ * Lesson 03 passes DEFAULT_STOPS.slice(0, 3) so its own Step 1 still ends
+ * on Medium). Later lessons append Extreme Close-Up the same way.
  * ============================================================ */
 (function (global) {
   'use strict';
@@ -92,7 +95,14 @@
     { id: 'ws', short: 'Wide', label: 'Wide Shot', cx: 1100, cy: 958, w: 213, person: 50,
       caption: 'Wide: the whole person — and the place around them.' },
     { id: 'ms', short: 'Medium', label: 'Medium Shot', cx: 1100, cy: 946, w: 89, person: 80,
-      caption: 'Medium: the person leads. The background supports them.' }
+      caption: 'Medium: the person leads. The background supports them.' },
+    // Lesson 04 (Close-Up) — appended, not inserted: earlier lessons that
+    // request DEFAULT_STOPS explicitly slice to their own prefix (see
+    // Lesson 03's Step 1), so adding a stop here never changes their
+    // slider. cy sits a touch below the wide/medium stops' cy so the crop
+    // holds a sliver of shoulder, not just a floating head.
+    { id: 'cu', short: 'Close-Up', label: 'Close-Up', cx: 1100, cy: 938, w: 46, person: 92,
+      caption: 'Close-Up: a single detail fills the frame.' }
   ];
 
   const STYLE_ID = 'ssc-styles';

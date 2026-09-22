@@ -21,7 +21,8 @@
   const TIPS = [
     { id: 'ews', label: 'Extreme Wide Shot', text: 'the scene fills the frame and the character is small — the environment tells the story.' },
     { id: 'ws', label: 'Wide Shot', text: 'character and scene share the frame together, and you can see the character’s full body.' },
-    { id: 'ms', label: 'Medium Shot', text: 'the camera moves closer — the character becomes waist-up and the main focus, while the scene now supports and frames them rather than sharing equal weight.' }
+    { id: 'ms', label: 'Medium Shot', text: 'the camera moves closer — the character becomes waist-up and the main focus, while the scene now supports and frames them rather than sharing equal weight.' },
+    { id: 'cu', label: 'Close-Up', text: 'the camera moves in close — a face, a hand, or an object fills the frame, and a single detail carries the meaning.' }
   ];
 
   const BULB = '<svg class="sst-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2v.5h5v-.5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg>';
