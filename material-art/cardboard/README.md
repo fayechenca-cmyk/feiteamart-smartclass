@@ -44,3 +44,11 @@ The existing Webflow Leather Craft course was inspected as reference only: https
 - Final PROJECT COMPLETE heading appears after all six lessons are marked complete.
 - The retained Webflow link was compared against the original homepage diff.
 - Global authenticated Journey / Supabase synchronization is outside this framework; iframe embedding on the live Webflow site has not been tested.
+
+## Photo-led update — September 22
+
+Teacher photos now replace the cardboard overview/preparation image and six groups of tool images (pencils, scissors, UHU glue, capped knife, glue gun, gridded board). Preparation and Lesson 1 share the same photo checklist and existing preparation response keys. The hot glue gun is optional with adult-supervision labeling. Overview copy, lesson descriptions, teacher-video placeholders and optional tools use progressive disclosure; previous course content remains available. Navigation names the next action. Asset origins and imagegen prompts are in `assets/README.md`. Original HEIC files were not modified.
+
+## Today’s Gothic example
+
+See `GOTHIC-PROJECT.md` for the optional project, 26 supplied-image making steps, image viewport coordinates, progress keys and upcoming assembly/video slots. Entry: `#project/gothic`.

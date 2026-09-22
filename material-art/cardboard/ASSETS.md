@@ -1,13 +1,19 @@
 # Course assets and content needed
 
-All slots are intentionally empty. Add media URLs in `data.js`; teacher-owned assets only.
+Supplied teacher photos are now connected. Remaining unchecked assets still need content. Add media URLs in `data.js`.
 
 ## Course cover
 - [ ] Cardboard final project hero image (`course-cover`)
 
+## Photos supplied September 22
+
+- [x] Household cardboard: horizontal, brighter version used on overview, preparation and Lesson 1
+- [x] Separate hot glue gun image, optional / adult supervision
+- [x] Complete original tool setup, in an expandable reference
+
 ## Lesson 1 — MEET CARDBOARD
 - [ ] Intro video (video; `intro-video`)
-- [ ] Materials flat-lay (image; `materials-flatlay`)
+- [x] Materials flat-lay (image; `materials-flatlay`)
 - [ ] Corrugated cardboard close-up (image; `cardboard-closeup`)
 - [ ] Outer paper → corrugated / fluted middle layer → outer paper (diagram; `cardboard-layers`)
 - [ ] FOLD test image / video (image; `test-fold`)
@@ -19,16 +25,16 @@ All slots are intentionally empty. Add media URLs in `data.js`; teacher-owned as
 - [ ] Recycled corrugated cardboard (image; `material-corrugated`)
 - [ ] Thin cardboard / chipboard (image; `material-thin`)
 - [ ] Cardstock (image; `material-cardstock`)
-- [ ] Pencil (image; `material-pencil`)
+- [x] Pencil (image; `material-pencil`)
 - [ ] Eraser (image; `material-eraser`)
 - [ ] Ruler (image; `material-ruler`)
-- [ ] Scissors (image; `material-scissors`)
-- [ ] White glue or tacky glue (image; `material-glue`)
+- [x] Scissors (image; `material-scissors`)
+- [x] Craft glue — photographed UHU tube (image; `material-glue`)
 - [ ] Masking tape (image; `material-tape`)
 - [ ] Tracing paper (image; `material-tracing`)
 - [ ] Colored translucent paper (image; `material-translucent`)
-- [ ] Cutting mat (image; `material-mat`)
-- [ ] Craft knife (image; `material-knife`)
+- [x] Cutting mat (image; `material-mat`)
+- [x] Craft knife (image; `material-knife`)
 - [ ] Teacher instructions, discussion prompts, notes and estimated times reviewed
 - [ ] Three quick-check answers and feedback rubric
 
