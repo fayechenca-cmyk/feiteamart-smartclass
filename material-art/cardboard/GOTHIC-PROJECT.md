@@ -45,3 +45,13 @@ All 26 source rectangles fit within their images, and all four copied PNGs match
 ## Latest validation
 
 All 46 diagram viewports are within their source image bounds. The three new source images are byte-identical copies. All 15 new sequential screens passed 390px overflow checks; decoration choice completion and the six assembly completion actions were tested, including saved choice completion after reload. Source diagrams are now explicitly clipped so neighboring panels cannot bleed into wide display areas. Videos are still pending; the supplied assembly sheet is a visual overview, with detailed joints/base demonstrations to record.
+
+## Focused learning flow
+
+The course entry opens a numbered seven-section learning path. New learners use a
+separate introduction, then cardboard and tools screens. Making screens show one
+picture, one instruction, and a completion action; reference sheets live on the
+path instead of every step. Unavailable teacher videos are hidden until supplied.
+Continue selects the first unfinished step, preserving existing `gothic:done`
+keys. Optional decoration skips are recorded separately from completed work.
+The shared Smart Class lavender/cyan shell surrounds the original warm imagery.
