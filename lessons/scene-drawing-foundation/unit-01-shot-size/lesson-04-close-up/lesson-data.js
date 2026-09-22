@@ -1,188 +1,215 @@
 /* ============================================================
- * Scene Drawing Foundation · Unit 01 · Lesson 04 — Close-Up
- * Lesson content data — all 13 stages, per the real "Scene Drawing
- * Foundation · Unit 01 · Lesson 04 / Close-Up: Show Emotion — Spec
- * v1.0" pasted in full in the build prompt itself (no missing-content
- * gap).
+ * Scene Drawing Foundation · Unit 01 · Lesson 04 — LIVE
+ * Close-Up — Look Closer
  *
- * ASSET NOTE: every image is still an inline placeholder SVG (via
- * svgPlaceholder()), not real art — same as Lessons 01-03.
+ * The "Learning Canvas" build, built DIRECTLY on this real path (same
+ * standing simplification Lessons 02-03 use — no -v2 staging). Replaces
+ * the original 13-stage/CameraZoomSlider build, which is archived (not
+ * deleted) at ../_archive/lesson-04-close-up-original/.
  *
- * connect_you is copied VERBATIM from Lesson 01's lesson-data.js per
- * the spec's explicit "reuse as-is, don't rewrite" instruction.
- * demo_video's disclaimer (added next commit) is the same reuse.
+ * Follows Lesson 03's shape directly (see
+ * ../lesson-03-medium-shot/lesson-data.js) — same concept_moment /
+ * scenes_intro / story_scenes / teacher_references / community_gallery /
+ * next_lesson / completion_check fields, same per-story pattern (tip ->
+ * "Situation N" reveal -> 3D scene -> Quick Sketch Reference -> two-panel
+ * drawing round). Differences, each flagged inline:
+ *   - concept_moment (Step 1) pushes ShotSizeCompare one stop further
+ *     than Lesson 03's (Extreme Wide -> Wide -> Medium -> Close-Up,
+ *     using the shared component's new 'cu' stop — see
+ *     ../../shared/shot-size-compare.js), then reveals a short written
+ *     block once the slider rests on Close-Up: the two framing lines
+ *     Faye gave close to verbatim, the four categories (Emotion/Action/
+ *     Detail/Clue), the "not just faces" line, and the "background gets
+ *     quiet, not gone" principle. All Claude Code's own copy EXCEPT the
+ *     three lines flagged inline in concept_moment below, which are
+ *     Faye's own wording (near-verbatim per her instruction).
+ *   - story_scenes carry `category` (one of Emotion/Action/Detail/Clue,
+ *     or the bonus "Relationship" on the optional 6th story) alongside
+ *     `tip` + `framing`, shown on both the pre-scene tip card and the
+ *     post-scene question card. Faye's storyboard sheet
+ *     (reference-images/lesson04-close-up-storyboard-reference.png)
+ *     already labels all 6 panels with their exact story title/category
+ *     in written order — no mapping ambiguity, unlike Lesson 03's sheet.
+ *   - every 3D scene keeps a faint trace of its environment behind the
+ *     close-up subject (fog + a few simple background props), never a
+ *     blank backdrop — Faye's explicit "quieter, not gone" rule. See
+ *     each scene builder's own comment in index.html for what that
+ *     trace is.
+ *
+ * id/courseId are UNCHANGED from the archived original on purpose —
+ * core/course-badge-registry.js's scene_drawing_unit_01 badge already
+ * keys off 'close-up'.
  * ============================================================ */
 (function (global) {
   'use strict';
-
-  // Same inline SVG placeholder helper as Lessons 01-03's lesson-data.js.
-  function svgPlaceholder(bg, emoji, w, h) {
-    w = w || 300; h = h || 220;
-    const fontSize = Math.round(Math.min(w, h) * 0.36);
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
-      + '<rect width="' + w + '" height="' + h + '" rx="18" fill="' + bg + '"/>'
-      + '<text x="50%" y="54%" font-size="' + fontSize + '" text-anchor="middle" dominant-baseline="middle">' + emoji + '</text>'
-      + '</svg>';
-    return 'data:image/svg+xml,' + encodeURIComponent(svg);
-  }
 
   const LESSON_DATA = {
     id: 'close-up',
     unit: 'unit-01-shot-size',
     courseId: 'close-up',
+    title: 'Close-Up',
+    // Short "Show X" form, matching Lessons 02/03's subtitle convention
+    // (and Lesson 05's own 'Show the Detail') — picked to echo the
+    // "close-up = look closer at what matters" line below, since "Show
+    // Emotion" (the pre-rebuild subtitle) undersold a lesson that's
+    // explicitly about 4 categories, not just faces.
+    subtitle: 'Look Closer',
 
-    welcome: {
-      title: 'Close-Up',
-      subtitle: 'Show Emotion',
-      heroImage: svgPlaceholder('#dbe4ee', '😲', 500, 300),
-      startLabel: 'Start →'
-    },
-
-    video_intro: {
-      title: 'What is a Close-Up?',
-      keySentence: "A close-up shows the character's face up close, so we can see exactly how they feel.",
-      videoStreamId: null,
-      videoTitle: 'What is a Close-Up? — concept intro'
-    },
-
-    // Reused VERBATIM from Lesson 01's lesson-data.js, per the spec's
-    // explicit "same 3 options, don't rewrite" instruction.
-    connect_you: {
-      title: "It's About You!",
-      options: [
-        { key: 'people', icon: '🧑', label: 'I usually draw people', response: "Great! Today we'll practice showing the world around your characters too." },
-        { key: 'places', icon: '🏞️', label: 'I usually draw places', response: "Nice! You already think about scenes — let's give them names and rules." },
-        { key: 'both', icon: '✨', label: 'I draw both', response: "Perfect mix! You'll love learning how far the camera can pull back." }
-      ]
-    },
-
-    transition_question: {
-      title: 'What Should We Show?',
-      options: [
-        { key: 'action', label: 'The Action?' },
-        { key: 'feeling', label: 'The Feeling?' }
-      ],
-      transitionLine: "Let's get close enough to see it on their face..."
-    },
-
-    // Stage 5 — first ABChoiceCard instance. Medium framing (A) shows
-    // her holding the letter but her face is small; Close-Up (B) shows
-    // her expression clearly. Continues the "prior lesson vs. this
-    // lesson" progression (Medium vs. Close-Up) per the spec's own note.
-    story_a: {
-      kicker: 'Story',
-      prompt: 'The girl opened her acceptance letter.',
-      question: 'Which one lets you feel what she’s feeling?',
-      optionA: {
-        image: svgPlaceholder('#7b5ea8', '✉️🧍'),
-        label: 'The Letter',
-        description: 'Shows her holding the letter, but her face is small.',
-        feedback: 'A shows the letter, but her expression gets lost. Let’s get closer.'
+    // Step 1 — full-screen, video-like explanation moment (NOT a video),
+    // same ShotSizeCompare device as Lesson 03's Step 1, pushed one stop
+    // further to the shared component's new 'cu' (Close-Up) stop. The
+    // slider autoplays through all 4 stops; once it rests on Close-Up,
+    // a short written block reveals below it (see index.html's
+    // renderCloseupConcept/afterRenderCloseupConcept).
+    concept_moment: {
+      stopCaptions: {
+        ews: 'Extreme Wide: the world fills the frame.',
+        ws: 'Wide: the whole person — and the place around them.',
+        ms: 'Medium: the person leads. The background supports them.',
+        // The storyboard sheet's own tagline, used verbatim per Faye's
+        // instruction, doubling as this stop's caption.
+        cu: 'The world gets smaller. The important details get bigger.'
       },
-      optionB: {
-        image: svgPlaceholder('#2d5fa8', '🥹'),
-        label: 'Her Reaction',
-        description: 'Shows exactly how she feels.',
-        feedback: 'B brings us right up to her expression!'
-      }
-    },
-    // Stage 6 — second ABChoiceCard instance, different story.
-    story_b: {
-      kicker: 'Story',
-      prompt: 'The boy realized he forgot his lines on stage.',
-      question: 'Which one makes us feel his nervousness?',
-      optionA: {
-        image: svgPlaceholder('#3fa8a0', '🎤🧍'),
-        label: 'On Stage',
-        description: 'Shows him standing there, but not his panic.',
-        feedback: 'A shows him on stage, but we can’t read his face. Let’s zoom in.'
-      },
-      optionB: {
-        image: svgPlaceholder('#e8862e', '😰'),
-        label: 'The Panic',
-        description: 'Shows the worry on his face.',
-        feedback: 'B shows us the panic in his eyes!'
-      }
-    },
-
-    // Stages 7+8 — Close-Up = 0.25 on the shared Unit 01 slider
-    // position table. Auto-animates from the shared neutral midpoint
-    // (0.5), same mechanism as Lessons 01/02 — not Lesson 03's special
-    // "target equals the midpoint" pulse case.
-    big_idea: {
-      title: "A close-up gets so close we can read the character's feelings on their face.",
-      autoAnimateFrom: 0.5,
-      autoAnimateTo: 0.25,
-      autoAnimateDurationMs: 1800
-    },
-    meet_term: {
-      term: 'CLOSE-UP',
-      subtitle: 'Show Emotion',
-      labels: ['EMOTION', 'EXPRESSION', 'FACE']
-    },
-
-    // Stage 9 — same 3 category names as Lessons 01-03 (don't rename).
-    // New placeholder art, each a facial-expression close-up per the
-    // spec — face-focused rather than character+environment, since
-    // that's the whole point of a close-up example here.
-    real_examples: {
-      title: 'Real Examples',
-      examples: [
-        { key: 'nature', label: 'Nature', image: svgPlaceholder('#3fa8a0', '😲', 400, 300) },
-        { key: 'city', label: 'City', image: svgPlaceholder('#7b5ea8', '😂', 400, 300) },
-        { key: 'fantasy', label: 'Fantasy World', image: svgPlaceholder('#e85c6e', '😤', 400, 300) }
-      ]
-    },
-
-    // Stage 10 — disclaimer reused VERBATIM from prior lessons'
-    // confirmed version, per the spec's explicit instruction.
-    demo_video: {
-      title: "Let's Draw Together",
-      // Claude Code's own line — not spec'd verbatim, same flag as the
-      // equivalent subtitle lines in Lessons 01-03.
-      subtitle: 'How I capture the emotion',
-      disclaimer: "This is one way to think through the scene — not the only right answer. Follow along, or explore your own ideas.",
-      videoStreamId: null,
-      videoTitle: "Let's Draw Together — thinking sketch"
-    },
-
-    // Stage 11 — 3 new tasks. `label` is the full on-screen prompt
-    // sentence; `reflectLabel` is the separate short form the spec
-    // gives for Stage 13's reflect chips.
-    draw_task: {
-      title: 'Your Turn: Draw 3 Scenes',
-      tasks: [
-        { key: 'kid_fireworks', label: 'The kid saw the fireworks for the first time.', reflectLabel: 'First Fireworks' },
-        { key: 'found_puppy', label: 'The dog owner found their lost puppy.', reflectLabel: 'Found Puppy' },
-        { key: 'finish_line', label: 'The runner crossed the finish line.', reflectLabel: 'Finish Line' }
+      // Faye's own wording, near-verbatim (her instruction: "use this
+      // close to verbatim").
+      lines: [
+        'Close-up = look closer at what matters.',
+        'Close-up is not simply drawing something bigger. We move closer because something has become important.'
       ],
-      xpPerScene: 20
+      // The four categories the six practice stories are built around.
+      // Wording (labels + one-line glosses) is Claude Code's own —
+      // flagged, kept short per the brief's "not a wall of text".
+      categories: [
+        { label: 'Emotion', desc: 'a face, tense or surprised' },
+        { label: 'Action', desc: 'a hand doing something' },
+        { label: 'Detail', desc: 'one object that matters' },
+        { label: 'Clue', desc: 'a hint about the story' }
+      ],
+      notJustFaces: 'A close-up can be a face — or hands, an object, or a single action.',
+      backgroundNote: "The background doesn't disappear — it just gets quiet: a blurred wall, a table edge, a hallway line."
     },
 
-    // Stage 12 — same tab names as Lessons 01-03 (don't rename), new
-    // placeholder images for this lesson's 3 tasks.
-    see_ideas: {
-      title: 'See Other Ideas',
-      tabs: [
-        { key: 'teacher', label: "Teacher's Idea", image: svgPlaceholder('#2d5fa8', '🎆😲', 400, 300) },
-        { key: 'jojo', label: "Jojo's Idea", image: svgPlaceholder('#e8862e', '🐶🥹', 400, 300) }
-      ]
+    // Two-card intro before Situation 1. Copy is Claude Code's own
+    // wording (flagged — none was supplied verbatim), same pattern as
+    // Lesson 03's scenes_intro.
+    scenes_intro: {
+      titleCard: 'Close-Up Practice',
+      explainerCard: "Six short stories — five to draw, and a sixth that's optional. Each one starts with a tip, then you'll see the scene and sketch it yourself."
     },
 
-    // Stage 13 — ReflectionJournal config, reusing both of Lesson 02's
-    // upstream options as-is: the corrected sentenceTemplate and a
-    // freeText "something else" reasonOptions entry. No component
-    // changes needed.
-    reflect: {
-      title: 'My Choice',
-      sentenceTemplate: 'I chose my {a} drawing because I wanted to show {b}.',
-      viewOptions: ['First Fireworks', 'Found Puppy', 'Finish Line'],
-      reasonOptions: [
-        'how my character felt',
-        'the expression on their face',
-        'the emotion of the moment',
-        { label: 'something else', freeText: true }
-      ]
+    // Step 2 — six Close-Up stories, in Faye's written order (which
+    // matches her storyboard sheet's own labeled panel order this
+    // time — no mapping ambiguity, unlike Lesson 03).
+    //   category — one of Emotion / Action / Detail / Clue (the four
+    //              taught in Step 1), or the bonus "Relationship" on
+    //              the optional 6th story. Shown as a kicker on both
+    //              the pre-scene tip card and the post-scene question
+    //              card.
+    //   tip      — Faye's own tip text, shown before the scene appears.
+    //   framing  — one short line telling the student how the shot is
+    //              framed. Claude Code's own wording, derived from
+    //              Faye's per-story framing descriptions.
+    //   situationLine — the typed "Situation N: ..." sentence; Claude
+    //              Code's own one-line summary of each written story.
+    story_scenes: [
+      {
+        id: 'unlocking_door', sceneKey: 'unlockingDoor', setting: 'indoor',
+        category: 'Action',
+        title: 'Unlocking the Door',
+        situationLine: 'At midnight, a hand turns a key — the door opens just a crack.',
+        framing: 'Frame in tight on the hand, the key, and the lock.',
+        tip: "What exactly is happening? It's not about what the room looks like — focus on the key, fingers, lock, and that tiny opening."
+      },
+      {
+        id: 'frightened_face', sceneKey: 'frightenedFace', setting: 'indoor',
+        category: 'Emotion',
+        title: 'A Frightened Face',
+        situationLine: 'A girl freezes — she just heard or saw something scary.',
+        framing: 'Frame just her head — and maybe a little shoulder.',
+        // Faye's own instruction folded into the tip text: let the
+        // student invent their own backstory, don't give a specific
+        // answer.
+        tip: "What did they just see? There's no right answer — decide it yourself."
+      },
+      {
+        id: 'glass_of_water', sceneKey: 'glassOfWater', setting: 'indoor',
+        category: 'Detail / Action',
+        title: 'The Glass of Water',
+        situationLine: "A hand reaches for a glass of water, fingers about to close around it.",
+        framing: 'Fill most of the frame with the glass — show only part of the table.',
+        tip: "What's the story behind this glass of water? Pick a couple of small details nearby — not everything."
+      },
+      {
+        id: 'walking_feet', sceneKey: 'walkingFeet', setting: 'outdoor',
+        category: 'Movement',
+        title: 'Walking Feet',
+        situationLine: 'One pair of feet walks forward down a school hallway.',
+        framing: 'Get down low, close to the ground — feet only.',
+        tip: "You don't need to draw a whole person to let the viewer know someone is walking."
+      },
+      {
+        id: 'crumpled_paper', sceneKey: 'crumpledPaper', setting: 'indoor',
+        category: 'Clue',
+        title: 'The Crumpled Paper',
+        situationLine: 'A hand grips a crumpled paper tightly — a grade peeks through.',
+        framing: 'Frame in tight on the hand gripping the paper — no face needed.',
+        tip: 'How can my hand show a feeling?'
+      },
+      {
+        id: 'secret_note', sceneKey: 'secretNote', setting: 'indoor',
+        // optional: true — same 5 required + 1 optional pattern as
+        // Lessons 02-03. index.html shows a "try it / skip" gate before
+        // this scene's reveal.
+        optional: true,
+        category: 'Relationship',
+        title: 'Passing a Secret Note',
+        situationLine: 'Under a table, one hand passes a secret note to another.',
+        framing: 'Frame in tight under the table — just the two hands and the note.',
+        tip: "What's written on the note? You decide the story."
+      }
+    ],
+
+    audio: {
+      narrationAvailable: false
+    },
+
+    // "Quick Sketch Reference" — no videos supplied yet for this lesson,
+    // so every scene is placeholder:true, same workflow as Lessons 02/03
+    // (the lightbox/drawing-round reference panel shows the "coming
+    // soon" state until a demoVideoStreamId is added, no index.html
+    // change needed).
+    teacher_references: [
+      { sceneId: 'unlocking_door', label: 'Quick Sketch Reference — Unlocking the Door', placeholder: true },
+      { sceneId: 'frightened_face', label: 'Quick Sketch Reference — A Frightened Face', placeholder: true },
+      { sceneId: 'glass_of_water', label: 'Quick Sketch Reference — The Glass of Water', placeholder: true },
+      { sceneId: 'walking_feet', label: 'Quick Sketch Reference — Walking Feet', placeholder: true },
+      { sceneId: 'crumpled_paper', label: 'Quick Sketch Reference — The Crumpled Paper', placeholder: true },
+      { sceneId: 'secret_note', label: 'Quick Sketch Reference — Passing a Secret Note', placeholder: true }
+    ],
+
+    // No real student photos for this lesson yet — dashed placeholders
+    // until Faye shares some (same data-driven branch as Lessons 01-03).
+    community_gallery: {
+      title: 'From Other Students',
+      subtitle: 'Real student photos will appear here once Faye shares them.',
+      placeholderCount: 4
+    },
+
+    // Chains into Lesson 05 (Extreme Close-Up). Title/subtitle copied
+    // verbatim from that lesson's own welcome.title/subtitle, same
+    // convention Lessons 02/03 used.
+    next_lesson: {
+      href: '../lesson-05-extreme-close-up/',
+      title: 'Extreme Close-Up',
+      subtitle: 'Show the Detail'
+    },
+
+    // Claude Code's own wording (flagged) — same multi-select chip
+    // mechanic as Lessons 02/03's check, no right/wrong answer. Options
+    // mirror the four Step 1 categories directly.
+    completion_check: {
+      question: 'What can a Close-Up help us show?',
+      options: ['Emotion', 'Action', 'A Detail', 'A Clue']
     }
   };
 

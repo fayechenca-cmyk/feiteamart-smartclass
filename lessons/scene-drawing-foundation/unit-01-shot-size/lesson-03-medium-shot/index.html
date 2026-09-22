@@ -1581,7 +1581,10 @@ function afterRenderMediumConcept(){
   showContinue('Next →', nextStep, { ghost: true });
   try {
     if (typeof ShotSizeCompare === 'undefined') throw new Error('ShotSizeCompare component did not load');
-    const stops = ShotSizeCompare.DEFAULT_STOPS.map(s => Object.assign({}, s, { caption: caps[s.id] || s.caption }));
+    // Sliced to the first 3 (ews/ws/ms): Lesson 04 appended a 4th ('cu')
+    // stop to the shared DEFAULT_STOPS list, and this lesson's own Step 1
+    // should still end on Medium, not push through to Close-Up.
+    const stops = ShotSizeCompare.DEFAULT_STOPS.slice(0, 3).map(s => Object.assign({}, s, { caption: caps[s.id] || s.caption }));
     _mediumCmp = ShotSizeCompare.mount('cmpMount', {
       stops: stops,
       autoplay: { startDelayMs: 2600, holdMs: 2600, moveMs: 1500 }

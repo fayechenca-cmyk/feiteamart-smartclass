@@ -163,7 +163,7 @@
     next_lesson: {
       href: '../lesson-04-close-up/',
       title: 'Close-Up',
-      subtitle: 'Show Emotion'
+      subtitle: 'Look Closer'
     },
 
     // Claude Code's own wording (flagged) — same multi-select chip
