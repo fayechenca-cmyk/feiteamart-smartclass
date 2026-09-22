@@ -1629,7 +1629,7 @@
     <div class="subtrack-emoji">🧵</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Material Arts</div>
-      <div class="subtrack-meta">Leather Craft &amp; more</div>
+      <div class="subtrack-meta">Material Craft &amp; Material Design</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -1726,15 +1726,29 @@
   <button class="back-btn" onclick="showSkills();">← Back to Skills</button>
 
   <div class="section-heading" style="text-align:center; margin-top: 8px;">
-    <div class="section-title" style="font-size:22px;">Material Arts</div>
-    <div class="section-sub">Choose a course to start or continue.</div>
+    <div class="section-title" style="font-size:22px;">Material Art</div>
+    <div class="section-sub">Explore materials through craft, art, and design.</div>
   </div>
 
+  <h2 class="section-title" style="font-size:18px;margin-top:24px;">Material Craft</h2>
+  <p class="section-sub" style="margin-bottom:16px;">Learn how to work with a material.</p>
   <a href="https://www.feiteamart.com/leathercraft-for-beginners" target="_blank" rel="noopener" class="subtrack">
     <div class="subtrack-emoji">🧵</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Leather Craft for Beginners <span class="subtrack-hot-badge">🔥 Best Seller</span></div>
       <div class="subtrack-meta">Hands-on leather craft techniques</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
+  <h2 class="section-title" style="font-size:18px;margin-top:28px;">Material Design</h2>
+  <p class="section-sub" style="margin-bottom:16px;">Discover what a material can become.</p>
+  <a href="material-art/cardboard/" class="subtrack">
+    <div class="subtrack-emoji" aria-hidden="true">▱</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">RE:MAKE 01 — CARDBOARD</div>
+      <div class="subtrack-meta">From Waste Material to Creative Structure</div>
+      <div class="subtrack-meta">Ages 10–15 · Project-Based Smart Class · 6 lessons</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -2127,6 +2141,13 @@
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
     renderHome();
+    if (new URLSearchParams(location.search).get("view") === "material-art") {
+      const returnUrl = new URL(location.href);
+      returnUrl.searchParams.delete("view");
+      history.replaceState(null, "", returnUrl.pathname + returnUrl.search + returnUrl.hash);
+      showMaterialArtsCourses();
+      return;
+    }
     window.scrollTo(0, 0);
   }
   window.showHome = showHome;
