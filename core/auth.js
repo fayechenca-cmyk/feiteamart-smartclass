@@ -296,11 +296,15 @@
   //                    itself fails.
   function attachParentBridge(onUser, onError) {
     if (!isEmbedded()) return;
+    let resolved = false;
+    let retryTimer = null;
     global.addEventListener('message', async function (event) {
       if (WEBFLOW_ALLOWED_ORIGINS.indexOf(event.origin) === -1) return;
       if (event.source !== global.parent) return;
       const msg = event.data || {};
       if (msg.type === 'fei:auth:session') {
+        resolved = true;
+        if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
         try {
           const user = await setSessionFromTokens(msg.access_token, msg.refresh_token);
           if (user && onUser) onUser(user);
@@ -310,12 +314,32 @@
           if (onError) onError('Could not complete Google sign-in. Please try again.');
         }
       } else if (msg.type === 'fei:auth:error') {
+        resolved = true;
+        if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
         if (onError) onError(typeof msg.message === 'string' && msg.message ? msg.message : 'Google sign-in failed. Please try again.');
       }
     });
-    try {
-      global.parent.postMessage({ type: 'fei:iframe:ready' }, webflowOrigin());
-    } catch (e) { /* standalone-only fallback already handled by the isEmbedded() guard above */ }
+    function postReady() {
+      try {
+        global.parent.postMessage({ type: 'fei:iframe:ready' }, webflowOrigin());
+      } catch (e) { /* standalone-only fallback already handled by the isEmbedded() guard above */ }
+    }
+    postReady();
+    // Repost every 500ms for up to ~10s in case this first ping races
+    // ahead of the Webflow parent's own message listener being
+    // registered yet (e.g. this iframe's response was cached and it
+    // ran first). Harmless once the parent does catch one — `resolved`
+    // stops the retries as soon as a real session/error reply arrives.
+    let elapsedMs = 0;
+    retryTimer = setInterval(function () {
+      elapsedMs += 500;
+      if (resolved || elapsedMs >= 10000) {
+        clearInterval(retryTimer);
+        retryTimer = null;
+        return;
+      }
+      postReady();
+    }, 500);
   }
 
   async function signOut() {
