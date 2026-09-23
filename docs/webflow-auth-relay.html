@@ -1,0 +1,215 @@
+<!--
+  FEI TeamArt · Smart Class — Webflow auth relay snippet
+  Foundation of Sketch / Smart Class login fix, Option A (Sept 2026)
+
+  WHAT THIS IS: the Webflow-side half of the Google-login fix. Paste the
+  <script> block below into the guided-practice-studio Webflow page's
+  own Page Settings -> Custom code -> "Before </body>" field (that page
+  ONLY — not the whole site; this is also the page Supabase's own Site
+  URL already points to, confirmed by Faye). Nothing else on this file
+  is meant to be pasted; the surrounding HTML here is just so this file
+  previews sensibly if opened directly. The script also checks its own
+  PAGE_PATH at runtime (see CONFIG below) and does nothing at all if it
+  somehow ends up loaded on a different page — belt and suspenders on
+  top of only being pasted into this one page's own Custom Code panel.
+
+  WHY THIS EXISTS: the embedded Smart Class app (an iframe pointed at
+  fayechenca-cmyk.github.io) is on Supabase's implicit OAuth flow, so a
+  completed Google login returns as a URL FRAGMENT
+  (#access_token=...&refresh_token=...) on whatever page the browser
+  actually lands on. Only JS running on that exact page can ever read a
+  fragment. This snippet is that page-specific JS: it owns the actual
+  Google round trip (this whole top-level Webflow page navigates to
+  Google and back — NOT the iframe, NOT a popup), reads the returned
+  fragment ONCE, immediately scrubs it from the address bar, and relays
+  the tokens into the iframe over postMessage so the iframe app can sign
+  itself in exactly the way email/password already does today. See
+  core/auth.js's header comment (in the app repo) for the full flow and
+  the reasoning for each step.
+
+  SECURITY NOTES (please don't loosen these when editing):
+    - Every postMessage send uses an exact targetOrigin, never "*".
+    - Every postMessage receive checks event.origin against an
+      allowlist AND event.source against the specific iframe element
+      (or vice versa for messages FROM the iframe) — never trusts data
+      from an unexpected frame.
+    - The fei:auth:start message's URL is only ever navigated to if its
+      host is Google's or this project's own Supabase auth host —
+      never any arbitrary URL an iframe (or, if this ever gets
+      compromised, anything else) might ask to navigate to.
+    - Tokens are held in a plain JS variable, in memory, for at most
+      ~15 seconds, then discarded. They are never logged, never
+      written to any storage, and the URL fragment they arrived in is
+      cleared before this script does anything else.
+
+  CONFIRMED (Faye, Sept 2026): page is https://www.feiteamart.com/
+  guided-practice-studio, served on www with no redirect to the apex
+  domain, and this is the one page the snippet gets pasted into. The
+  real embed markup (from DevTools) is:
+    <iframe class="gps-app-frame"
+      src="https://fayechenca-cmyk.github.io/feiteamart-smartclass/"
+      title="Guided Practice Studio"
+      allow="clipboard-write; fullscreen; payment"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-popups
+               allow-popups-to-escape-sandbox
+               allow-top-navigation-by-user-activation"
+      loading="eager">
+  IFRAME_SELECTOR_PRIMARY below matches its class; IFRAME_SELECTOR_FALLBACK
+  (the old src-based guess) is tried only if the class selector finds
+  nothing, e.g. if Webflow's class naming ever changes.
+
+  SANDBOX COMPATIBILITY — checked against the exact sandbox tokens above,
+  none of this design's requirements are blocked:
+    - postMessage (both directions) is never restricted by `sandbox` —
+      no token is needed for it at all.
+    - This snippet's own top-level navigation (window.location.href =
+      startUrl, in step 3 below) runs in the PARENT page, which isn't
+      sandboxed — the iframe's sandbox attribute has no effect on it.
+      This is also exactly why the design has the parent navigate
+      itself instead of the iframe navigating window.top: it sidesteps
+      `allow-top-navigation-by-user-activation`'s user-activation
+      requirement entirely, even though that token happens to be
+      present here too.
+    - `allow-same-origin` is present, so the iframe keeps its real
+      https://fayechenca-cmyk.github.io origin (not an opaque one) —
+      required both for isFromOurIframe()'s event.origin check below
+      and for the iframe's own localStorage (Supabase's setSession)
+      to work normally.
+    - `allow-popups` + `allow-popups-to-escape-sandbox` are both
+      present, so the pre-existing window.open(...) fallback still
+      works exactly as it does in production today, and the popup tab
+      itself opens unsandboxed.
+-->
+<script>
+(function () {
+  'use strict';
+
+  // ── CONFIG — the only section that should ever need editing ──────
+  var PAGE_PATH = '/guided-practice-studio';
+  var IFRAME_ORIGIN = 'https://fayechenca-cmyk.github.io';
+  // Primary: matches the real embed markup Faye sent (class="gps-app-frame").
+  var IFRAME_SELECTOR_PRIMARY = 'iframe.gps-app-frame';
+  // Fallback only: tried if the primary selector finds nothing.
+  var IFRAME_SELECTOR_FALLBACK = 'iframe[src*="fayechenca-cmyk.github.io/feiteamart-smartclass"]';
+  // Hosts fei:auth:start is allowed to ask this page to navigate to.
+  var ALLOWED_START_HOSTS = ['accounts.google.com', 'rudztwseatwayhztbarj.supabase.co'];
+  var PENDING_EXPIRY_MS = 15000;
+  // ───────────────────────────────────────────────────────────────
+
+  // Defensive page-scoping: this only ever gets PASTED into the one
+  // guided-practice-studio page's own Custom Code panel, but check at
+  // runtime too — e.g. if it's ever copied into site-wide custom code
+  // by mistake later, it should still do nothing anywhere else.
+  if (window.location.pathname.indexOf(PAGE_PATH) === -1) return;
+
+  function findIframe() {
+    return document.querySelector(IFRAME_SELECTOR_PRIMARY) || document.querySelector(IFRAME_SELECTOR_FALLBACK);
+  }
+
+  // True only if `event` genuinely came from OUR iframe: right origin
+  // AND right window object (not just "some frame that happens to
+  // share that origin," which origin-only checking would allow).
+  function isFromOurIframe(event) {
+    if (event.origin !== IFRAME_ORIGIN) return false;
+    var el = findIframe();
+    if (!el || !el.contentWindow) return false;
+    return event.source === el.contentWindow;
+  }
+
+  function isAllowedStartUrl(urlString) {
+    var url;
+    try { url = new URL(urlString); } catch (e) { return false; }
+    if (url.protocol !== 'https:') return false;
+    for (var i = 0; i < ALLOWED_START_HOSTS.length; i++) {
+      if (url.host === ALLOWED_START_HOSTS[i]) return true;
+    }
+    return false;
+  }
+
+  // ── 1. Parse + immediately scrub any OAuth fragment on THIS load ──
+  // Tokens live only in these two variables, only for this page's
+  // lifetime (or until PENDING_EXPIRY_MS), never anywhere else.
+  var pendingSession = null;   // { access_token, refresh_token }
+  var pendingError = null;     // string
+  var pendingExpiryTimer = null;
+
+  (function consumeHashOnce() {
+    var hash = window.location.hash || '';
+    if (hash.indexOf('access_token=') === -1 && hash.indexOf('error=') === -1) return;
+
+    var params = new URLSearchParams(hash.replace(/^#/, ''));
+    var accessToken = params.get('access_token');
+    var refreshToken = params.get('refresh_token');
+    var oauthError = params.get('error_description') || params.get('error');
+
+    if (accessToken && refreshToken) {
+      pendingSession = { access_token: accessToken, refresh_token: refreshToken };
+    } else if (oauthError) {
+      // English-only, short — the raw Supabase/Google error string may
+      // not be, so this is a fixed fallback string, not the raw value.
+      pendingError = 'Google sign-in did not complete. Please try again.';
+    }
+
+    // Scrub immediately — never let the token sit in the address bar
+    // or browser history, even for one paint.
+    var cleanUrl = window.location.pathname + window.location.search;
+    window.history.replaceState({}, document.title, cleanUrl);
+
+    if (pendingSession || pendingError) {
+      pendingExpiryTimer = setTimeout(function () {
+        pendingSession = null;
+        pendingError = null;
+      }, PENDING_EXPIRY_MS);
+    }
+  })();
+
+  // ── 2. Send pending tokens/error to a ready iframe, once ──────────
+  function trySendPending(targetWindow) {
+    if (pendingSession) {
+      var toSend = pendingSession;
+      pendingSession = null;
+      if (pendingExpiryTimer) { clearTimeout(pendingExpiryTimer); pendingExpiryTimer = null; }
+      targetWindow.postMessage({
+        type: 'fei:auth:session',
+        access_token: toSend.access_token,
+        refresh_token: toSend.refresh_token
+      }, IFRAME_ORIGIN);
+    } else if (pendingError) {
+      var msg = pendingError;
+      pendingError = null;
+      if (pendingExpiryTimer) { clearTimeout(pendingExpiryTimer); pendingExpiryTimer = null; }
+      targetWindow.postMessage({ type: 'fei:auth:error', message: msg }, IFRAME_ORIGIN);
+    }
+  }
+
+  // ── 3. Listen for the iframe ─────────────────────────────────────
+  window.addEventListener('message', function (event) {
+    if (!isFromOurIframe(event)) return;
+    var data = event.data || {};
+
+    if (data.type === 'fei:auth:start') {
+      if (typeof data.url !== 'string' || !isAllowedStartUrl(data.url)) return;
+      var startUrl = data.url;
+      // Ack first, THEN navigate — this page is about to leave for
+      // Google, so the ack must actually be dispatched before that
+      // happens (a same-tick postMessage send is not guaranteed to be
+      // delivered before an immediate navigation).
+      event.source.postMessage({ type: 'fei:auth:started' }, IFRAME_ORIGIN);
+      setTimeout(function () { window.location.href = startUrl; }, 0);
+      return;
+    }
+
+    if (data.type === 'fei:iframe:ready') {
+      trySendPending(event.source);
+      return;
+    }
+  });
+
+  // In case the iframe was already ready and waiting before this
+  // script's hash-parsing above finished (shouldn't happen — hash
+  // parsing is synchronous and runs first — but costs nothing to
+  // cover): nothing to do here proactively, since we don't retain a
+  // reference to the iframe's window until it actually messages us.
+  // The 15s expiry above is the backstop if it never does.
+})();
+</script>
