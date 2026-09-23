@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEI TeamArt · Foundation of Sketch · Step 2 · Still Life and Texture</title>
+
+<!--
+  Foundation of Sketch v1.1 §4 — Step 2 landing page (component C).
+  Lists the 5 paintings x 2 lessons (10 total), each lesson showing the
+  platform's existing lock/done/coming states — same states, same
+  meaning as Step 1's own path screen (index.html's renderDrawingPath) —
+  just a standalone page rather than an in-app SPA screen, since Step 2
+  lives at its own URL like Perspective Drawing / Scene Drawing
+  Foundation already do. Reads FOUNDATION_STILL_LIFE_PATH /
+  FOUNDATION_STILL_LIFE_PAINTINGS from core/still-life-lesson.js — the
+  SAME list the Map (index.html) reads, not a second copy.
+
+  ACCESS (v1.1 §3a): all 10 lessons share ONE gate — none are in
+  core/access.js's FREE_SKILLS, so canOpenLesson('skills', anyId) is
+  the same allow/deny for all 10 for a given student. Checked ONCE here
+  (not per-lesson) to decide lock icons; each lesson page ALSO self-
+  gates on its own load via FEIAccess.gateLessonPage (see
+  core/still-life-lesson.js's init()), so a locked lesson can't be
+  reached by a direct/bookmarked URL either.
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Open Sans', sans-serif; background: #faf9f7; color: #1a1d2b;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --ink-soft: rgba(26,29,43,.65); --ink-faint: rgba(26,29,43,.45); --ink-veryfaint: rgba(26,29,43,.15);
+    --gold: #c8a96e; --green: #1d9e75; --purple: #a78bfa; --paper-soft: #f5f5f7;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 18px 18px 60px; }
+  .back-btn { background:none; border:none; cursor:pointer; font-family:'Montserrat',sans-serif; font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color: var(--ink-soft); padding:6px 0; margin-bottom:16px; }
+  .sl-header { text-align:center; margin-bottom: 22px; }
+  .sl-header-kicker { font-family:'Montserrat',sans-serif; font-size:10px; font-weight:900; letter-spacing:2px; text-transform:uppercase; color: var(--purple); margin-bottom:6px; }
+  .sl-header-title { font-family:'Montserrat',sans-serif; font-size:22px; font-weight:900; margin-bottom:8px; }
+  .sl-header-sub { font-size:13px; color: var(--ink-soft); line-height:1.55; max-width: 380px; margin: 0 auto; }
+
+  .sl-painting { margin-bottom: 18px; border-radius:16px; border:1.5px solid var(--ink-veryfaint); overflow:hidden; background:#fff; }
+  .sl-painting.sl-painting-done { border-color: rgba(29,158,117,.35); background: linear-gradient(135deg,#f0fdf4 0%,#ecfeff 100%); }
+  .sl-painting-head { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 10px; }
+  .sl-painting-title { font-family:'Montserrat',sans-serif; font-weight:800; font-size:14.5px; }
+  .sl-painting-material { font-size:11px; color: var(--ink-faint); margin-top:2px; }
+  .sl-painting-badge { font-family:'Montserrat',sans-serif; font-size:9.5px; font-weight:900; letter-spacing:.6px; text-transform:uppercase; padding:3px 9px; border-radius:999px; background: var(--ink-veryfaint); color: var(--ink-faint); white-space:nowrap; }
+  .sl-painting-done .sl-painting-badge { background: var(--green); color:#fff; }
+
+  .sl-lesson { display:flex; align-items:center; gap:12px; padding:10px 16px; border-top:1px solid var(--ink-veryfaint); text-decoration:none; color:inherit; }
+  .sl-lesson-icon { width:38px; height:38px; border-radius:50%; background: var(--paper-soft); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .sl-lesson.done .sl-lesson-icon { background: var(--green); color:#fff; }
+  .sl-lesson.locked .sl-lesson-icon, .sl-lesson.coming .sl-lesson-icon { background: var(--ink-veryfaint); color: var(--ink-faint); }
+  .sl-lesson-info { flex:1; min-width:0; }
+  .sl-lesson-part { font-family:'Montserrat',sans-serif; font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; color: var(--ink-faint); margin-bottom:1px; }
+  .sl-lesson.done .sl-lesson-part { color: var(--green); }
+  .sl-lesson-title { font-size:12.5px; font-weight:700; }
+  .sl-lesson-tag { font-size:10.5px; color: var(--ink-faint); margin-top:1px; }
+  .sl-lesson-arrow { color: var(--ink-faint); font-size:15px; flex-shrink:0; }
+  .sl-lesson.current .sl-lesson-arrow { color: var(--purple); }
+  .sl-lesson.locked, .sl-lesson.coming { cursor: not-allowed; opacity:.6; }
+  .sl-lesson.coming { border-style: dashed; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <button class="back-btn" onclick="location.href='../../index.html'">← Back to Drawing</button>
+
+  <div class="sl-header">
+    <div class="sl-header-kicker">Foundation of Sketch</div>
+    <div class="sl-header-title">Step 2 · Still Life and Texture</div>
+    <div class="sl-header-sub">Observe real objects and learn how to express different materials through drawing.</div>
+  </div>
+
+  <div id="sl-paintings"><!-- filled by renderStillLifeLanding() --></div>
+</div>
+
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
+<script src="../../core/still-life-lesson.js"></script>
+<script>
+async function renderStillLifeLanding() {
+  let profile = null;
+  try { const raw = sessionStorage.getItem('fei_user_profile'); profile = raw ? JSON.parse(raw) : null; } catch (e) {}
+  const completed = (profile && profile.completedLessons) || [];
+
+  // All 10 Step 2 ids share one gate (none are in FREE_SKILLS) — one
+  // check tells us access for the whole catalog, not per lesson.
+  let hasAccess = true;
+  if (window.FEIAccess) {
+    try {
+      if (window.FEIAuth && typeof window.FEIAuth.init === 'function') await window.FEIAuth.init();
+      const anyId = FOUNDATION_STILL_LIFE_PATH[0].id;
+      const check = await window.FEIAccess.canOpenLesson('skills', anyId);
+      hasAccess = !!check.allowed;
+    } catch (e) {
+      console.warn('[still-life landing] access check failed, allowing through', e);
+      hasAccess = true;
+    }
+  }
+
+  const html = FOUNDATION_STILL_LIFE_PAINTINGS.map(painting => {
+    const lessons = painting.lessonIds.map(id => FOUNDATION_STILL_LIFE_PATH.find(l => l.id === id));
+    const paintingDone = lessons.every(l => completed.includes(l.id));
+    const partLabels = ['Part 1 · Structure & Composition', 'Part 2 · Texture & Finish'];
+
+    const lessonsHTML = lessons.map((lesson, i) => {
+      let state = 'current', icon = i === 0 ? '①' : '②', tag = 'Ready to start', clickable = true;
+      if (!lesson.ready) { state = 'coming'; icon = '⏳'; tag = 'Coming soon'; clickable = false; }
+      else if (completed.includes(lesson.id)) { state = 'done'; icon = '✓'; tag = 'Complete ✓'; clickable = true; }
+      else if (!hasAccess) { state = 'locked'; icon = '🔒'; tag = 'Unlock Foundation of Sketch to open'; clickable = false; }
+      const tagEl = clickable ? 'a' : 'div';
+      const hrefAttr = clickable ? `href="${lesson.href}"` : '';
+      return `
+        <${tagEl} class="sl-lesson ${state}" ${hrefAttr}>
+          <div class="sl-lesson-icon">${icon}</div>
+          <div class="sl-lesson-info">
+            <div class="sl-lesson-part">${partLabels[i]}</div>
+            <div class="sl-lesson-title">${lesson.title.split(' · ')[0]}</div>
+            <div class="sl-lesson-tag">${tag}</div>
+          </div>
+          <div class="sl-lesson-arrow">${clickable ? '→' : ''}</div>
+        </${tagEl}>
+      `;
+    }).join('');
+
+    return `
+      <div class="sl-painting${paintingDone ? ' sl-painting-done' : ''}">
+        <div class="sl-painting-head">
+          <div>
+            <div class="sl-painting-title">${painting.title}</div>
+            <div class="sl-painting-material">${painting.materialFocus}</div>
+          </div>
+          <div class="sl-painting-badge">${paintingDone ? 'Both parts done' : '2 lessons'}</div>
+        </div>
+        ${lessonsHTML}
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('sl-paintings').innerHTML = html;
+}
+renderStillLifeLanding();
+</script>
+</body>
+</html>

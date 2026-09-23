@@ -13,6 +13,21 @@
  *                     lessons-free limit is left in place, unused, for a
  *                     later subscription-model pass, not this one again).
  *
+ * Foundation of Sketch v1.1 §3a (Sept 2026) — Step 2 ("Still Life and
+ * Texture") is part of this SAME 'skills' branch/entitlement, not a
+ * separate paid scope. Its 10 lesson ids (still-life-1a-... through
+ * still-life-5b-..., see core/still-life-lesson.js) are intentionally
+ * NOT added to FREE_SKILLS below, which is the only "registration" this
+ * branch needs: canOpenLesson('skills', id) is already default-deny —
+ * any id not in FREE_SKILLS falls through to `paywall_skills` — so a
+ * Step 2 id is automatically gated the exact same way Step 1's sphere-
+ * onward lessons already are, with zero code change here. The legacy/
+ * admin/paid bypass a few lines down in canOpenLesson() is also
+ * unconditional on lessonId, so Faye's own code and the 4 live-class
+ * codes already reach every Step 2 id too, for the same reason. Future
+ * Steps 3-4 lesson ids work the same way — nothing to add here when
+ * they ship either.
+ *
  * Public API (window.FEIAccess):
  *   FEIAccess.init()                      → Promise<void>
  *   FEIAccess.getStatus()                 → Promise<{membership, openedCreationLessons, openedSkillLessons, isLegacy, isLiveClass, isAdmin, hasFullAccess}>

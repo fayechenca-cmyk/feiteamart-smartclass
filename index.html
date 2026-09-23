@@ -1942,6 +1942,11 @@
 <script src="core/badge-catalog.js"></script>
 <script src="core/course-badge-registry.js"></script>
 <script src="core/live-class-schedule.js"></script>
+<!-- Foundation of Sketch v1.1 §4-5 — shared Step 2 lesson engine. Loaded
+     here too (not just by the lesson pages themselves) purely for its
+     FOUNDATION_STILL_LIFE_PATH export, which the Map (renderFoundationMap)
+     reads — single source of truth, no second copy of the 10-lesson list. -->
+<script src="core/still-life-lesson.js"></script>
 <script>
   // ═══════════════════════════════════════════════════════════
   // CONFIG
@@ -2061,26 +2066,11 @@
     }
   ];
 
-  // Step 2 · Still Life and Texture (Foundation of Sketch v1.1 §4). Defined
-  // here — same shape/spirit as FOUNDATION_A_PATH — so the Map's Step 2
-  // progress ring (§3) and the Step 2 landing page (built next) read the
-  // SAME single list; no parallel tracker. `ready:false` entries render
-  // with the video "coming soon" fallback (component D) but ARE real,
-  // gated, completable lesson ids from the moment their files exist —
-  // not placeholders in the progress-tracking sense.
-  const FOUNDATION_STILL_LIFE_PATH = [
-    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: false },
-    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: false },
-    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: false },
-    { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: false },
-    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
-    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
-    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: false },
-    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: false },
-    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
-    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
-  ];
-  const FOUNDATION_STILL_LIFE_LANDING_HREF = 'lessons/still-life/';
+  // FOUNDATION_STILL_LIFE_PATH / FOUNDATION_STILL_LIFE_LANDING_HREF (Step 2
+  // · Still Life and Texture) now come from core/still-life-lesson.js,
+  // included in <head> — that file is the single source of truth (the
+  // Step 2 landing page and each of its 10 lesson pages read the exact
+  // same list). Nothing below needed to change.
   
   // ═══════════════════════════════════════════════════════════
   // STATE
