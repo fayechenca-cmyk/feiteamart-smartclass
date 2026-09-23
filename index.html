@@ -1002,6 +1002,44 @@
     background: var(--ink-veryfaint);
     color: var(--ink-faint);
   }
+
+  /* ═══ STEP PROGRESS RING (Foundation of Sketch Map, v1.1) ═══
+     Cheap on iPad — a single conic-gradient background, no SVG/JS
+     animation. --pct is set inline per node (0-100). Reuses .path-node's
+     existing done/current/coming palette for the ring fill color, so a
+     step visually matches the same states its own lessons use. */
+  .step-ring {
+    width: 56px; height: 56px; border-radius: 50%;
+    flex-shrink: 0; position: relative; z-index: 1;
+    background: conic-gradient(var(--ink-veryfaint) 0 100%);
+  }
+  .path-node.current .step-ring {
+    background: conic-gradient(var(--gold) calc(var(--pct, 0) * 1%), var(--ink-veryfaint) 0);
+  }
+  .path-node.done .step-ring {
+    background: conic-gradient(var(--green) 0 100%);
+  }
+  .step-ring-inner {
+    position: absolute; inset: 3px; border-radius: 50%;
+    background: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 17px;
+    color: var(--ink-soft);
+  }
+  .path-node.current .step-ring-inner { color: var(--gold); }
+  .path-node.done .step-ring-inner { color: var(--green); }
+  .path-node.coming .step-ring-inner { color: var(--ink-faint); }
+  /* Persistent "lit" state for a fully-completed step — CSS only, per
+     spec §5. Layered on top of .done (which already lights the
+     connector to the next node via the existing ::after rule above). */
+  .path-node.done.map-step-lit {
+    box-shadow: 0 0 0 2px rgba(200,169,110,.45), 0 0 16px 3px rgba(200,169,110,.4);
+  }
+  .node-coming-tag {
+    display: inline-block; font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--ink-faint); background: var(--ink-veryfaint);
+    padding: 2px 8px; border-radius: 999px; margin-top: 2px;
+  }
   
   /* Node info */
   .node-info { flex: 1; min-width: 0; }
@@ -1807,6 +1845,37 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
+     FOUNDATION OF SKETCH — 4-STEP MAP (v1.1)
+     Entry point for the "Foundation of Sketch" card (replaces jumping
+     straight into showDrawing()/Step 1). Steps 1-2 open and tappable;
+     Steps 3-4 "Coming Soon" — greyed, visible, not tappable, so
+     students see the whole journey (spec §3). Progress rings read
+     FOUNDATION_A_PATH / FOUNDATION_STILL_LIFE_PATH + completedLessons
+     directly — no parallel tracker. Reuses the existing .path-node
+     states verbatim (done/current/coming — see the "PATH NODE" CSS
+     block) rather than inventing new ones: a step reuses `done` (green,
+     lit connector to the next node) once ALL its lessons are complete,
+     `current` (gold, tappable) while open with lessons remaining,
+     `coming` (dashed, grey) for Steps 3-4 — same visual language as
+     Step 1's own lesson list, just one level up.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="container" id="foundation-map-screen" style="display:none;">
+
+  <button class="back-btn" onclick="showDrawingCourses();">← Back to Drawing</button>
+
+  <div class="path-header">
+    <div class="path-header-kicker">Drawing</div>
+    <div class="path-header-title">Foundation of Sketch</div>
+    <div class="path-header-sub">
+      A Structured Sketch Training Program designed to build strong drawing foundations from basic forms to portrait study.
+    </div>
+  </div>
+
+  <div class="path-nodes" id="foundation-map-nodes"></div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
      DRAWING SCREEN — Foundation A unlock path (Duolingo style)
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="drawing-screen" style="display:none;">
@@ -1991,6 +2060,27 @@
       ready: true
     }
   ];
+
+  // Step 2 · Still Life and Texture (Foundation of Sketch v1.1 §4). Defined
+  // here — same shape/spirit as FOUNDATION_A_PATH — so the Map's Step 2
+  // progress ring (§3) and the Step 2 landing page (built next) read the
+  // SAME single list; no parallel tracker. `ready:false` entries render
+  // with the video "coming soon" fallback (component D) but ARE real,
+  // gated, completable lesson ids from the moment their files exist —
+  // not placeholders in the progress-tracking sense.
+  const FOUNDATION_STILL_LIFE_PATH = [
+    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: false },
+    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: false },
+    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: false },
+    { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: false },
+    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
+    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
+    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: false },
+    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: false },
+    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
+    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
+  ];
+  const FOUNDATION_STILL_LIFE_LANDING_HREF = 'lessons/still-life/';
   
   // ═══════════════════════════════════════════════════════════
   // STATE
@@ -2121,6 +2211,7 @@
     document.getElementById('skills-screen').style.display = 'none';
     document.getElementById('drawing-courses-screen').style.display = 'none';
     document.getElementById('drawing-screen').style.display = 'none';
+    document.getElementById('foundation-map-screen').style.display = 'none';
     document.getElementById('material-arts-courses-screen').style.display = 'none';
     document.getElementById('painting-courses-screen').style.display = 'none';
     document.getElementById('ink-painting-courses-screen').style.display = 'none';
@@ -2209,6 +2300,17 @@
     window.scrollTo(0, 0);
   }
   window.showDrawing = showDrawing;
+
+  // Foundation of Sketch v1.1 §3 — the new top-level entry point for the
+  // whole program. showDrawing() above is unchanged and still IS Step 1's
+  // own screen; this just sits one level above it now.
+  function showFoundationMap() {
+    hideAllScreens();
+    document.getElementById('foundation-map-screen').style.display = 'block';
+    renderFoundationMap();
+    window.scrollTo(0, 0);
+  }
+  window.showFoundationMap = showFoundationMap;
 
   // ═══════════════════════════════════════════════════════════
   // RENDER HOME
@@ -3114,6 +3216,77 @@
       const remaining = totalCount - doneCount;
       badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? "session" : "sessions"} to earn your Basic Sketch badge.`;
     }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // RENDER FOUNDATION OF SKETCH MAP (v1.1 §3)
+  // 4 step nodes. Reuses the exact .path-node done/current/coming
+  // states (see "PATH NODE" + "STEP PROGRESS RING" CSS) — a step is
+  // `done` once ALL its lessons are complete (lights its connector to
+  // the next node automatically, via the existing CSS rule), `current`
+  // while open with lessons left, `coming` for Steps 3-4. No "free" or
+  // "fully open" copy anywhere here, per §3a — access is enforced where
+  // it always was (per-lesson, inside Step 1's path / the Step 2
+  // landing page), not claimed or promised at this level.
+  // ═══════════════════════════════════════════════════════════
+  function stepProgress(list, completed) {
+    // Same shape as renderHome's own Skills-track math: totalCount is
+    // always the FULL list length (so an in-development lesson still
+    // counts toward "out of"); doneCount only counts completed AND
+    // ready lessons — never a parallel tracker, just this one read two
+    // different ways.
+    const doneCount = list.filter(l => l.ready).filter(l => completed.includes(l.id)).length;
+    const totalCount = list.length;
+    return { doneCount, totalCount, pct: totalCount ? Math.round((doneCount / totalCount) * 100) : 0 };
+  }
+  function renderFoundationMap() {
+    const completed = userProfile.completedLessons || [];
+    const step1 = stepProgress(FOUNDATION_A_PATH, completed);
+    const step2 = stepProgress(FOUNDATION_STILL_LIFE_PATH, completed);
+
+    const OPEN_STEPS = [
+      { n: 1, title: 'Form and Structure', line: 'Build objects from basic forms.', progress: step1 },
+      { n: 2, title: 'Still Life and Texture', line: 'Draw real objects and their materials.', progress: step2 }
+    ];
+    const COMING_STEPS = [
+      { n: 3, title: 'Light and Shadow', line: 'Use light to shape volume and depth.' },
+      { n: 4, title: 'Portrait and Facial Structure', line: 'Draw the face with structure.' }
+    ];
+
+    const openHTML = OPEN_STEPS.map(step => {
+      const { doneCount, totalCount, pct } = step.progress;
+      const stepDone = totalCount > 0 && doneCount === totalCount;
+      const state = stepDone ? 'done' : 'current';
+      const litClass = stepDone ? ' map-step-lit' : '';
+      const tag = stepDone ? `All ${totalCount} lessons complete ✓` : `${step.line} · ${doneCount}/${totalCount} done`;
+      const isStep1 = step.n === 1;
+      const hrefAttr = isStep1 ? `href="#" onclick="event.preventDefault(); showDrawing();"` : `href="${FOUNDATION_STILL_LIFE_LANDING_HREF}"`;
+      return `
+        <a class="path-node ${state}${litClass}" ${hrefAttr}>
+          <div class="step-ring" style="--pct:${pct}"><div class="step-ring-inner">${step.n}</div></div>
+          <div class="node-info">
+            <div class="node-kicker">Step ${step.n}</div>
+            <div class="node-title">${step.title}</div>
+            <div class="node-tag">${tag}</div>
+          </div>
+          <div class="node-arrow">→</div>
+        </a>
+      `;
+    }).join('');
+
+    const comingHTML = COMING_STEPS.map(step => `
+      <div class="path-node coming">
+        <div class="step-ring"><div class="step-ring-inner">${step.n}</div></div>
+        <div class="node-info">
+          <div class="node-kicker">Step ${step.n}</div>
+          <div class="node-title">${step.title}</div>
+          <div class="node-tag">${step.line}</div>
+          <span class="node-coming-tag">Coming Soon</span>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('foundation-map-nodes').innerHTML = openHTML + comingHTML;
   }
   
   // ═══════════════════════════════════════════════════════════
