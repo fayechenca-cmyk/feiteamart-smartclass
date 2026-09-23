@@ -3004,6 +3004,18 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
+<!-- Foundation of Sketch v1.1 pilot (this lesson ONLY — see spec §5): the
+     new shared glow+chime celebration, layered on top of this page's own
+     existing confetti celebrate() below, not replacing it. Kept as its
+     own tiny script block, isolated from the main inline script, so it's
+     easy to find and remove if Faye's iPad review doesn't approve it. -->
+<script src="../../core/celebrate.js"></script>
+<script>
+  // Named FoundationGlow, never `celebrate` — a top-level `const celebrate`
+  // here would collide with (and throw against) this file's own existing
+  // `function celebrate(){}` declared further down in the main script.
+  const FoundationGlow = FEICelebrate.create({ namespace: 'foundation' });
+</script>
 </head>
 <body>
 
@@ -8777,9 +8789,26 @@ function nextStep() {
         steps_completed: state.completedSteps.length,
         thought_count_this_course: JournalStorage.count(AccessControl.currentCourseId)
       });
+      // This branch re-runs every time Continue is clicked at the last
+      // step, including on revisit (see the BUG FIX comment above this
+      // function for why that's intentional — advance must always run).
+      // The confetti/playTone below already re-fire on revisit; that's
+      // existing behavior, left untouched. The NEW glow must NOT — the
+      // spec requires first-time-only — so check completedLessons
+      // before marking complete, same "already done?" shape as
+      // alreadyCompletedStep above.
+      const wasAlreadyLessonComplete = (UserProfile.current()?.completedLessons || []).includes(LESSON.id);
       // Mark lesson as complete in profile (survives across devices when Supabase enabled)
       UserProfile.completeLesson(LESSON.id);
       celebrate();
+      // Foundation of Sketch v1.1 pilot — additive, same completion
+      // moment as the confetti above (see the script-include comment in
+      // <head> for why this instance is named FoundationGlow). Anchored
+      // to Artchi, who's already the "celebration character" on this
+      // screen (gets .excited just below).
+      if (!wasAlreadyLessonComplete) {
+        FoundationGlow.celebrate('lesson', document.getElementById('artchi'));
+      }
       playTone(660, 0.15);
       setTimeout(() => playTone(880, 0.15), 120);
       setTimeout(() => playTone(1320, 0.3), 280);
