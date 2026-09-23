@@ -1395,7 +1395,7 @@
     <div class="badge-unlock-icon">🏆</div>
     <div class="badge-unlock-text">
       <div class="badge-unlock-title">Basic Sketch Badge Unlocked!</div>
-      <div class="badge-unlock-sub">You've completed all 11 Foundation A lessons.</div>
+      <div class="badge-unlock-sub">You've completed all 11 Step 1 lessons.</div>
     </div>
     <button class="badge-unlock-view-btn" onclick="viewBasicSketchBadge()">View Badge</button>
   </div>
@@ -1516,7 +1516,7 @@
         <div class="studio-card-title">Progress</div>
       </div>
       <div class="studio-stat-row">
-        <span>Foundation A</span>
+        <span>Foundation of Sketch · Step 1</span>
         <span class="studio-stat-value" id="studio-progress-value">0 / 11</span>
       </div>
       <div class="track-bar"><div class="track-fill" id="studio-progress-bar" style="width:0%"></div></div>
@@ -1585,7 +1585,7 @@
     <div class="subtrack-emoji">✏️</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Drawing</div>
-      <div class="subtrack-meta" id="drawing-meta">Foundation A · in progress</div>
+      <div class="subtrack-meta" id="drawing-meta">Foundation of Sketch · in progress</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -1769,11 +1769,15 @@
     <div class="section-sub">Choose a course to start or continue.</div>
   </div>
 
-  <a href="#" class="subtrack" onclick="event.preventDefault(); showDrawing();">
+  <!-- Renamed from "Foundation A" (Foundation of Sketch v1.1 §1) — now
+       opens the 4-step Map instead of going straight into what's now
+       Step 1's own path (showDrawing(), still used, just entered one
+       level deeper now — see showFoundationMap()). -->
+  <a href="#" class="subtrack" onclick="event.preventDefault(); showFoundationMap();">
     <div class="subtrack-emoji">✏️</div>
     <div class="subtrack-info">
-      <div class="subtrack-name">Foundation A</div>
-      <div class="subtrack-meta">Form &amp; Structure</div>
+      <div class="subtrack-name">Foundation of Sketch</div>
+      <div class="subtrack-meta">A Structured Sketch Training Program designed to build strong drawing foundations from basic forms to portrait study.</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -1810,8 +1814,8 @@
   <button class="back-btn" onclick="showDrawingCourses();">← Back to Drawing</button>
   
   <div class="path-header">
-    <div class="path-header-kicker">Drawing · Foundation A</div>
-    <div class="path-header-title">Form &amp; Structure</div>
+    <div class="path-header-kicker">Foundation of Sketch</div>
+    <div class="path-header-title">Step 1 · Form &amp; Structure</div>
     <div class="path-header-sub">
       Learn to see and construct objects through guided practice sessions. Each one builds on the last.
     </div>
@@ -1856,7 +1860,7 @@
     <div class="badge-detail-icon">🏆</div>
     <div class="badge-detail-title">Basic Sketch Badge</div>
     <div class="badge-detail-body">
-      Awarded for completing all 11 Foundation A lessons — Preparation through Paper Crane. You've built the full foundation: geometric form, perspective, light and shadow, and real-world observation.
+      Awarded for completing all 11 Step 1 lessons — Preparation through Paper Crane. You've built the full foundation: geometric form, perspective, light and shadow, and real-world observation.
     </div>
     <div class="badge-detail-date" id="badge-detail-date"></div>
     <button class="paywall-dismiss" onclick="closeBadgeDetail()">Close</button>
@@ -2260,8 +2264,8 @@
 
     // My Studio · My Courses
     document.getElementById('studio-courses-body').innerHTML = next
-      ? `Foundation A · Drawing<br>Next up: <strong>${next.title}</strong>`
-      : `Foundation A · Drawing<br>All current practice sessions complete — nice work!`;
+      ? `Foundation of Sketch · Step 1<br>Next up: <strong>${next.title}</strong>`
+      : `Foundation of Sketch · Step 1<br>All current practice sessions complete — nice work!`;
 
     // My Studio · Progress
     document.getElementById('studio-progress-value').textContent = `${doneCount} / ${totalCount}`;
@@ -2273,8 +2277,8 @@
     // Drawing sub-track meta
     document.getElementById('drawing-meta').textContent =
       doneCount === 0
-        ? `Foundation A · practice path`
-        : `Foundation A · ${doneCount}/${totalCount} done`;
+        ? `Foundation of Sketch · practice path`
+        : `Foundation of Sketch · ${doneCount}/${totalCount} done`;
     
     // Creation track: static "Masters open" message + count of completed Creation lessons.
     // Currently 4 available courses (lfc054 Surrealism + lfc017 Basquiat + lfc018 Pop Art + lfc019 Rousseau).
@@ -2296,7 +2300,7 @@
     renderLiveClassSection().catch(e => console.warn('[LiveClass]', e));
 
     // Basic Sketch badge — runs every dashboard load, unlocks once
-    // all 11 Foundation A lessons are complete.
+    // all 11 Step 1 lessons are complete.
     checkAndUnlockBadge();
   }
 
@@ -3529,7 +3533,7 @@
     if (branch === 'skills') {
       icon.textContent = '📐';
       title.textContent = "You've finished your free practice sessions.";
-      body.textContent = "The first two practice sessions are on the house. Unlock the full Foundation A practice path — plus access to our Collections studio.";
+      body.textContent = "The first two practice sessions are on the house. Unlock the full Foundation of Sketch practice path — plus access to our Collections studio.";
     } else {
       icon.textContent = '🖼';
       title.textContent = "You've explored two Collections.";
