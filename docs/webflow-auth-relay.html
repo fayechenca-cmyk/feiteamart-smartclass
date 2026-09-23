@@ -176,11 +176,25 @@
       }, IFRAME_ORIGIN);
     } else if (pendingError) {
       var msg = pendingError;
+      if (msg.length > 200) msg = msg.slice(0, 200);
       pendingError = null;
       if (pendingExpiryTimer) { clearTimeout(pendingExpiryTimer); pendingExpiryTimer = null; }
       targetWindow.postMessage({ type: 'fei:auth:error', message: msg }, IFRAME_ORIGIN);
     }
   }
+
+  // NOTE on the fei:iframe:ready race: a version of this file briefly
+  // also tried resending on the iframe's native `load` event as a
+  // second safety net. Dropped — `trySendPending` is one-shot (it
+  // nulls pendingSession/pendingError the moment it's called), and
+  // `load` can fire before the iframe's own script has actually
+  // registered ITS message listener (confirmed locally: it silently
+  // ate the payload before the real ready ping arrived, which is
+  // worse than the original race). The fix now lives entirely on the
+  // iframe side instead (core/auth.js's attachParentBridge reposts
+  // fei:iframe:ready every 500ms for ~10s) — safe because it only
+  // repeats the ASK; nothing is consumed here until a ready ping this
+  // listener actually receives triggers a real send.
 
   // ── 3. Listen for the iframe ─────────────────────────────────────
   window.addEventListener('message', function (event) {
