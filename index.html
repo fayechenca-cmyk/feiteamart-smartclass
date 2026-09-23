@@ -3583,8 +3583,12 @@
     btn.disabled = true;
     try {
       await window.FEIAuth.signInWithGoogle();
-      // auth.js computes the correct app-base URL automatically
-      // Redirect happens; nothing to do here
+      // auth.js now handles standalone vs. embedded (Webflow iframe)
+      // internally — see core/auth.js's header comment for the full
+      // Option A flow. Nothing else to do here either way: standalone
+      // opens a popup as before; embedded asks the Webflow parent to
+      // navigate, and the RETURN trip is handled by attachParentBridge,
+      // wired up separately at the top of this file's init().
     } catch (e) {
       console.error(e);
       showAuthError('Could not start Google sign-in. Please try again.');
@@ -3836,6 +3840,20 @@
   // ═══════════════════════════════════════════════════════════
 
   (async function init() {
+    // Option A (embedded Google login, Sept 2026) — wired FIRST, before
+    // anything else, so {type:'fei:iframe:ready'} reaches the Webflow
+    // parent as early as possible on every fresh load. No-op in
+    // standalone mode (see core/auth.js's isEmbedded()). On a real
+    // session hand-off this runs the SAME onAuthSuccess() the
+    // email/password path already uses — nothing else about that path
+    // changes. See core/auth.js's header comment for the full flow.
+    if (window.FEIAuth && window.FEIAuth.attachParentBridge) {
+      window.FEIAuth.attachParentBridge(
+        async function (user) { try { await onAuthSuccess(user); } catch (e) { console.warn('[init] onAuthSuccess (parent bridge) failed', e); } },
+        function (msg) { showAuthError(msg); }
+      );
+    }
+
     await loadRoster();
     await loadStudentRecords();
     loadProfile();
