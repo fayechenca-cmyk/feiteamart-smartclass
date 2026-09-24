@@ -341,21 +341,24 @@
       } catch (e) { /* standalone-only fallback already handled by the isEmbedded() guard above */ }
     }
     postReady();
-    // Repost every 500ms for up to ~10s in case this first ping races
-    // ahead of the Webflow parent's own message listener being
-    // registered yet (e.g. this iframe's response was cached and it
-    // ran first). Harmless once the parent does catch one — `resolved`
-    // stops the retries as soon as a real session/error reply arrives.
+    // Repost every ~150ms (was 500ms — login-smoothness item 3, Sept
+    // 2026: shortens the worst-case cost of losing the first ping to
+    // ~150ms instead of ~500ms) for up to the same ~10s window in case
+    // this first ping races ahead of the Webflow parent's own message
+    // listener being registered yet (e.g. this iframe's response was
+    // cached and it ran first). Harmless once the parent does catch
+    // one — `resolved` stops the retries as soon as a real
+    // session/error/none reply arrives.
     let elapsedMs = 0;
     retryTimer = setInterval(function () {
-      elapsedMs += 500;
+      elapsedMs += 150;
       if (resolved || elapsedMs >= 10000) {
         clearInterval(retryTimer);
         retryTimer = null;
         return;
       }
       postReady();
-    }, 500);
+    }, 150);
   }
 
   async function signOut() {
