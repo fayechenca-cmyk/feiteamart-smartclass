@@ -1,5 +1,5 @@
 import {mountStream} from './stream-player.js';
-import {gothicProject as P} from './gothic-data.js';
+import {gothicProject as P} from './gothic-data.js?v=arch-stream-2';
 export function createGothicProject({main,state,save,esc,link,materialBoard}){
  const path=(id='',step='')=>'#project/gothic'+(id?'/'+id:'')+(step?'/'+step:'');
  const done=()=>Array.isArray(state.responses['gothic:done'])?state.responses['gothic:done']:[];
