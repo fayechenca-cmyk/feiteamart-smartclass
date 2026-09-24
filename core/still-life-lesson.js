@@ -49,16 +49,16 @@
   // read the exact same array — one list, not three. index.html now
   // includes this file and uses these same global names unchanged.
   const FOUNDATION_STILL_LIFE_PATH = [
-    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: false },
-    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: false },
-    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: false },
-    { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: false },
-    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
-    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
-    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: false },
-    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: false },
-    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
-    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
+    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
+    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: true },
+    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: true },
+    { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: true },
+    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: true },
+    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: true },
+    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: true },
+    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: true },
+    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: true },
+    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: true }
   ];
   // The 5 paintings, each pairing its A/B lesson ids — used for the
   // "painting complete" celebration tier and the landing page's grouping.
@@ -196,7 +196,28 @@ ${_teacherUploadCssFallback()}
 
   const SCREENS = ['look', 'watch', 'draw', 'done'];
 
+  // FOUNDATION_STILL_LIFE_PATH's href entries are root-relative (e.g.
+  // 'lessons/still-life-2a-glass-structure/'), correct for the root
+  // Map (index.html) but not for a page that already lives one level
+  // under lessons/ itself (the landing page, or any of these 10 lesson
+  // pages linking to a SIBLING lesson) — those need '../' + the part
+  // after 'lessons/'. One helper, reused by renderDone()'s next-lesson
+  // link below and exposed for the landing page (which loads this same
+  // script) to use for its own lesson links, instead of two separate
+  // copies of this adjustment.
+  function siblingHref(rootRelativeHref) {
+    return '../' + String(rootRelativeHref).replace(/^lessons\//, '');
+  }
+
   async function init(config) {
+    // core/teacher-submission.js (loaded by every lesson page that
+    // calls this) requires a LESSON global with at least {id, title} —
+    // set here instead of duplicating it into all 10 thin page configs.
+    // Title is looked up from FOUNDATION_STILL_LIFE_PATH, the one place
+    // it's already written (see file header: "one list, not three").
+    const pathEntry = FOUNDATION_STILL_LIFE_PATH.find(l => l.id === config.lessonId);
+    global.LESSON = { id: config.lessonId, title: (pathEntry && pathEntry.title) || config.paintingTitle || config.lessonId };
+
     // Self-gate at startup, same real check the landing page uses to
     // decide what's clickable — closes the "direct/bookmarked URL to a
     // gated lesson" gap (Step 1 pages don't do this; see file header).
@@ -279,6 +300,19 @@ ${_teacherUploadCssFallback()}
       return !completed.includes(id);
     }
 
+    // config.nextHref stays a valid override (kept for flexibility) but
+    // the 10 real lesson pages don't need to set it — computed from
+    // FOUNDATION_STILL_LIFE_PATH's own order so there's one place this
+    // sequence is defined, not 10 hand-maintained hrefs. Last lesson
+    // (nothing after it) goes back to the Step 2 landing page.
+    function nextLessonHref() {
+      if (config.nextHref) return config.nextHref;
+      const list = FOUNDATION_STILL_LIFE_PATH;
+      const idx = list.findIndex(l => l.id === config.lessonId);
+      const nextEntry = idx !== -1 ? list[idx + 1] : null;
+      return nextEntry ? siblingHref(nextEntry.href) : (config.landingHref || '../still-life/');
+    }
+
     function renderDone() {
       const wasFirstLesson = firstTime(config.lessonId);
       UserProfile.completeLesson(config.lessonId);
@@ -293,7 +327,7 @@ ${_teacherUploadCssFallback()}
         <div class="sll-done-icon">✨</div>
         <div class="sll-title">Lesson Complete</div>
         <div class="sll-line">${escapeHtml(config.paintingTitle)} — ${escapeHtml(config.partLabel)}</div>
-        <a class="sll-btn" id="sll-next-lesson" href="${config.nextHref}">Next lesson →</a>
+        <a class="sll-btn" id="sll-next-lesson" href="${nextLessonHref()}">Next lesson →</a>
       `);
 
       if (typeof global.FEICelebrate === 'undefined') return; // visual is non-essential; never block Done
@@ -330,7 +364,8 @@ ${_teacherUploadCssFallback()}
     UserProfile: UserProfile,
     escapeHtml: escapeHtml,
     Analytics: Analytics,
-    showBubble: showBubble
+    showBubble: showBubble,
+    siblingHref: siblingHref
   };
   // Also exposed as bare globals — core/teacher-submission.js expects
   // UserProfile/Analytics/showBubble/escapeHtml as top-level globals
