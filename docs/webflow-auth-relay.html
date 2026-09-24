@@ -164,6 +164,13 @@
   })();
 
   // ── 2. Send pending tokens/error to a ready iframe, once ──────────
+  // The `else` (fei:auth:none) branch matters, not just the other two:
+  // it's how a genuine fresh visitor (no Google return in flight) tells
+  // the iframe "stop waiting, nothing is coming" right away, instead of
+  // the iframe having to guess or sit on a loading splash until a fixed
+  // timeout. Safe to send on every call (stateless, nothing consumed) —
+  // in practice it only fires once, since the iframe stops asking once
+  // it gets any reply at all.
   function trySendPending(targetWindow) {
     if (pendingSession) {
       var toSend = pendingSession;
@@ -180,6 +187,8 @@
       pendingError = null;
       if (pendingExpiryTimer) { clearTimeout(pendingExpiryTimer); pendingExpiryTimer = null; }
       targetWindow.postMessage({ type: 'fei:auth:error', message: msg }, IFRAME_ORIGIN);
+    } else {
+      targetWindow.postMessage({ type: 'fei:auth:none' }, IFRAME_ORIGIN);
     }
   }
 
