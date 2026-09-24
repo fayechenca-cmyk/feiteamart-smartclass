@@ -1,19 +1,21 @@
 // Original teacher-supplied sheets are preserved byte-for-byte.
-// Rectangles select a viewport in the source sheet; no generated replacement images.
+// Original sheet crops remain for unchanged steps; corrected arch assets follow teacher guidance.
 const step=(id,title,instruction,rect,extra={})=>({screenId:id,title,instruction,rect,teacherNote:'',estimatedTime:null,activityType:'make',video:{src:'',poster:'',captions:'',transcript:''},...extra});
 export const gothicProject={
  id:'gothic-example',title:'Build a Gothic-inspired Cathedral',
  map:{src:'assets/gothic/project-map.png',width:1226,height:1283},
  elements:[
  {id:'arch',title:'Pointed arch',sheet:'assets/gothic/pointed-arch.png',width:1312,height:1199,mapRect:[17,301,228,250],resultRect:[1002,598,269,275],steps:[
- step('rectangle','Cut a rectangle','8 cm wide × 14 cm tall.',[34,222,191,254]),
+ step('rectangle','Cut your cardboard','8 cm wide × 14 cm tall. Keep enough card for three layers.',[34,222,191,254]),
  step('center','Find the centre','Mark 4 cm from either side. Draw a light centre line.',[298,214,194,257]),
  step('side-points','Mark both sides','Measure 7 cm up from the bottom.',[549,215,232,258]),
  step('draw','Draw the arch','Curve from each side mark to the top centre.',[835,220,202,257]),
- step('outside','Cut the outside','Follow the outer line. Keep the centre for the next steps.',[1090,215,218,259],{cutting:true,teacherNote:'The supplied illustration already shows an open centre. Demonstrate the outer cut first; retain the centre until step 7.'}),
- step('inside-line','Draw a smaller arch','Leave a border about 1.2 cm wide.',[24,603,218,243]),
- step('inside-cut','Open the centre','Cut out the inner shape.',[280,603,250,235],{cutting:true}),
- step('layer','Layer it · optional','Trace another arch. Cut and glue the two together.',[550,596,422,243],{cutting:true})]},
+ step('inside-line','Draw the inner arch','Draw inside the outer arch. Keep the cardboard uncut.',[24,603,218,243],{teacherNote:'In the recorded demonstration, draw the inner outline before cutting. Border measurements are in centimetres, not inches; the vertical gap at the pointed apex is larger than the side border.'}),
+ step('outside','Cut the outer arch','Follow the outside line. Keep the inner shape for now.',[1090,215,218,259],{cutting:true,teacherNote:'Only cut the outside silhouette here. The inner doorway is still solid, with a pencil outline.'}),
+ step('inside-cut','Open the first arch','Cut out the centre. Keep one single frame.',[280,603,250,235],{cutting:true}),
+ step('layer-2','Make the second arch','Trace the same outside on a new piece. Draw and cut a wider frame.',[550,596,422,243],{cutting:true,teacherNote:'The teacher makes progressively smaller openings, not identical copies. Measurements refer to the border width along the sides.'}),
+ step('layer-3','Make the third arch','Make one more frame. Keep the outside the same; widen the sides to 2 cm.',[550,596,422,243],{cutting:true}),
+ step('layer','Test, then glue','Stack 1.2 cm, 1.5 cm and 2 cm borders from front to back. Align the outer edges.',[550,596,422,243],{teacherNote:'Dry-fit all three pieces before gluing. The widest border goes behind; each inner edge should remain visible. This replaces the earlier identical-layer extension.'})]},
  {id:'window',title:'Gothic window',sheet:'assets/gothic/window.png',width:1312,height:1199,mapRect:[267,300,221,252],resultRect:[1000,599,248,264],steps:[
  step('rectangle','Cut a rectangle','10 cm wide × 16 cm tall.',[19,216,205,260]),
  step('draw','Draw a pointed arch','Keep the two sides balanced.',[299,215,220,260],{teacherNote:'Confirm the border measurements in the source drawing during the live demonstration.'}),
@@ -60,3 +62,65 @@ export const gothicProject={
  step('present','Your building is ready','Show your design. What did you change to make it yours?',[991,642,252,286]) ]}
  ]
 };
+
+// Silent teacher demonstrations hosted in Cloudflare Stream.
+const archStreams={
+ "rectangle": {
+  "motion": "dc315ef8dd0488cd6015ae26bda9b2b5",
+  "src": "d2f061a889d8df07e5950cb7833d3fcc"
+ },
+ "center": {
+  "motion": "23a9309cb33f5eac217fe0b1a7e1f605",
+  "src": "33c3b48feee0a388944eb35e0e8897a2"
+ },
+ "side-points": {
+  "motion": "0c17dbc5e0766b88cc10d7620ad532b9",
+  "src": "664cdebf12d482f65d1c93283713fe68"
+ },
+ "draw": {
+  "motion": "1a48323664c803fcdf8586e0827bb6a6",
+  "src": "cba3be8b0f6def6b7139e99daa208880"
+ },
+ "inside-line": {
+  "motion": "b709aac03ea38b129316aa3810a6465d",
+  "src": "48c546c0dc7992c5528579753dbf0c10"
+ },
+ "outside": {
+  "motion": "2ef4431c2fb2ca4dbefef789179df5f8",
+  "src": "b67ac2e2ebbc97d1c057c457a62ed8cf"
+ },
+ "inside-cut": {
+  "motion": "f3de0f06f1aeee51c8a87a3fae421a56",
+  "src": "1d8dc88d10033ece9a2816531e23fb07"
+ },
+ "layer-2": {
+  "motion": "1c7ccb5fa9850eb456a2d0c326d99285",
+  "src": "3f3c08d8149f0c5728157f9cad58f718"
+ },
+ "layer-3": {
+  "motion": "60c8c84772d16cba1e49d105b50e6ad8",
+  "src": "e36f4821254c796bb2ca37a4a14bee5a"
+ },
+ "layer": {
+  "motion": "7f1cbde7b8cb0e803eef5fc5b00ac3d0",
+  "src": "72fd00e016d3788fcc068ff6c5eb7e6d"
+ }
+};
+for(const s of gothicProject.elements[0].steps){
+ s.video={...archStreams[s.screenId],captions:"",transcript:""};
+}
+
+// Teacher correction: side width differs from the vertical tip-to-tip gap.
+const correctedArch={
+ 'inside-line':{image:'inner-line',goalLabel:'Piece 1 · draw only',sideWidth:'1.2',topGap:'1.5'},
+ 'outside':{image:'outer-cut',goalLabel:'Piece 1 · centre still solid',sideWidth:'1.2',topGap:'1.5'},
+ 'inside-cut':{image:'first-frame',goalLabel:'Piece 1 · single frame',sideWidth:'1.2',topGap:'1.5'},
+ 'layer-2':{image:'second-frame',goalLabel:'Piece 2 · single frame',sideWidth:'1.5',topGap:'2'},
+ 'layer-3':{image:'third-frame',goalLabel:'Piece 3 · single frame',sideWidth:'2'},
+ 'layer':{image:'stacked',goalLabel:'Now stack all 3 pieces'}
+};
+for(const s of gothicProject.elements[0].steps){
+ const correction=correctedArch[s.screenId];
+ if(correction)Object.assign(s,correction,{image:'assets/gothic/arch-corrected/'+correction.image+'.webp'});
+}
+gothicProject.elements[0].resultImage='assets/gothic/arch-corrected/stacked.webp';
