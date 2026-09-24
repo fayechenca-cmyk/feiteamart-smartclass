@@ -1,0 +1,164 @@
+{
+  "unitId": "figure",
+  "id": "teacher-lesson-id",
+  "title": "填写课节标题",
+  "introduction": "一句话介绍学生要画什么",
+  "estimatedMinutes": 25,
+  "status": "awaiting-teacher",
+  "confirmation": {
+    "approved": false,
+    "label": "待教师确认",
+    "note": "列明尚未确认的比例、路径或提示"
+  },
+  "objectives": [
+    "填写学习目标"
+  ],
+  "materials": [
+    "纸、铅笔、橡皮"
+  ],
+  "canvas": {
+    "width": 400,
+    "height": 700
+  },
+  "centerLine": {
+    "x": 200,
+    "label": "中心线",
+    "explanation": "填写该姿势下的中心与重心说明"
+  },
+  "guides": [
+    {
+      "id": "waist",
+      "label": "腰",
+      "y": null,
+      "explanation": "填写定位依据；null 必须替换成确认过的数值"
+    }
+  ],
+  "points": [
+    {
+      "id": "left-shoulder",
+      "label": "左肩",
+      "x": null,
+      "y": null
+    }
+  ],
+  "steps": [
+    {
+      "id": "stroke-01",
+      "phase": "结构定位",
+      "title": "填写这一笔名称",
+      "path": "",
+      "guideIds": [
+        "waist"
+      ],
+      "startRegion": {
+        "radius": 25
+      },
+      "endRegion": {
+        "radius": 29
+      },
+      "direction": "填写从哪里起笔、经过哪里、在哪里结束；路径命令顺序须一致",
+      "animation": {
+        "duration": 2400
+      },
+      "prompt": "面向学生的一句讲解",
+      "audio": null,
+      "teacherNote": "教师备注、比例依据及常见错误",
+      "tolerance": {
+        "mouse": 22,
+        "pen": 26,
+        "touch": 32,
+        "coverage": 0.65,
+        "order": 0.68
+      },
+      "feedback": {
+        "success": "具体肯定画对的关系",
+        "retry": "指出下一次应观察的位置"
+      },
+      "confirmed": false,
+      "kind": "stroke",
+      "groupId": "head",
+      "tip": {
+        "title": "Teacher tip",
+        "body": "Explain the key proportion or directional relationship."
+      },
+      "video": {
+        "src": null,
+        "start": null,
+        "end": null,
+        "poster": null
+      },
+      "confirmation": {
+        "sequence": "awaiting-teacher",
+        "geometry": "awaiting-teacher"
+      }
+    }
+  ],
+  "sound": {
+    "volume": 0.11,
+    "strokeNotes": [
+      784,
+      1046.5
+    ],
+    "phaseNotes": [
+      659.25,
+      783.99,
+      1046.5
+    ],
+    "duration": 0.28,
+    "noteGap": 0.12
+  },
+  "assets": {
+    "svg": null,
+    "demonstrationImage": null,
+    "finalImage": null,
+    "video": null,
+    "audio": null,
+    "source": "素材作者及来源",
+    "rights": "授权使用范围"
+  },
+  "paper": {
+    "levels": [
+      "完整步骤与框架",
+      "框架、关节点与简短提示",
+      "空白画区与旁侧参考"
+    ],
+    "prompts": [
+      "填写纸上练习提示"
+    ]
+  },
+  "phases": [
+    {
+      "id": "结构定位",
+      "review": "填写阶段回顾提示"
+    }
+  ],
+  "revision": 2,
+  "groups": [
+    {
+      "id": "head",
+      "title": "Build the head",
+      "number": 1
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "head",
+      "title": "Head and chin",
+      "pointIds": [
+        "head-top",
+        "chin"
+      ],
+      "guideIds": [
+        "head-top",
+        "chin"
+      ],
+      "tip": "Locate both points before drawing.",
+      "widthNote": "Insert teacher-approved proportions."
+    }
+  ],
+  "teacherVideo": {
+    "src": null,
+    "poster": null,
+    "rights": null
+  }
+}

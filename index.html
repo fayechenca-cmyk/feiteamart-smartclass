@@ -1628,6 +1628,15 @@
     <div class="subtrack-arrow">→</div>
   </a>
 
+  <a href="fashion-design/" class="subtrack">
+    <div class="subtrack-emoji">✎</div>
+    <div class="subtrack-info">
+      <div class="subtrack-name">Fashion Design</div>
+      <div class="subtrack-meta">Figure → Clothing → Your design · Interactive standing-pose demo</div>
+    </div>
+    <div class="subtrack-arrow">→</div>
+  </a>
+
   <!-- Color Practice is a modular, interaction-first Skill. The former
        color-theory prototype remains available at its original URL. -->
   <a href="color-lab/" class="subtrack">
@@ -2226,6 +2235,13 @@
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
     renderHome();
+    if (new URLSearchParams(location.search).get("view") === "skills") {
+      const returnUrl = new URL(location.href);
+      returnUrl.searchParams.delete("view");
+      history.replaceState(null, "", returnUrl.pathname + returnUrl.search + returnUrl.hash);
+      showSkills();
+      return;
+    }
     if (new URLSearchParams(location.search).get("view") === "material-art") {
       const returnUrl = new URL(location.href);
       returnUrl.searchParams.delete("view");
