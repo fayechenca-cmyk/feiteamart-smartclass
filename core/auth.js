@@ -294,7 +294,15 @@
   //   onError(msg)   — called with a short English string, either from
   //                    a {type:'fei:auth:error'} message or if setSession
   //                    itself fails.
-  function attachParentBridge(onUser, onError) {
+  //   onNone()       — called when the parent replies {type:'fei:auth:none'},
+  //                    i.e. it has definitely checked and nothing is
+  //                    pending for this load (not "hasn't answered yet").
+  //                    Lets a genuine fresh visitor (no Google return in
+  //                    flight) leave an "auth loading" splash quickly
+  //                    instead of waiting out a fixed timeout — see
+  //                    index.html's init() and docs/webflow-auth-relay.html's
+  //                    trySendPending(). Optional; only called if given.
+  function attachParentBridge(onUser, onError, onNone) {
     if (!isEmbedded()) return;
     let resolved = false;
     let retryTimer = null;
@@ -317,6 +325,14 @@
         resolved = true;
         if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
         if (onError) onError(typeof msg.message === 'string' && msg.message ? msg.message : 'Google sign-in failed. Please try again.');
+      } else if (msg.type === 'fei:auth:none') {
+        // A session/error (or an earlier none) already settled this via
+        // this same bridge instance — never let a late/duplicate none
+        // undo that.
+        if (resolved) return;
+        resolved = true;
+        if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
+        if (onNone) onNone();
       }
     });
     function postReady() {
@@ -325,21 +341,24 @@
       } catch (e) { /* standalone-only fallback already handled by the isEmbedded() guard above */ }
     }
     postReady();
-    // Repost every 500ms for up to ~10s in case this first ping races
-    // ahead of the Webflow parent's own message listener being
-    // registered yet (e.g. this iframe's response was cached and it
-    // ran first). Harmless once the parent does catch one — `resolved`
-    // stops the retries as soon as a real session/error reply arrives.
+    // Repost every ~150ms (was 500ms — login-smoothness item 3, Sept
+    // 2026: shortens the worst-case cost of losing the first ping to
+    // ~150ms instead of ~500ms) for up to the same ~10s window in case
+    // this first ping races ahead of the Webflow parent's own message
+    // listener being registered yet (e.g. this iframe's response was
+    // cached and it ran first). Harmless once the parent does catch
+    // one — `resolved` stops the retries as soon as a real
+    // session/error/none reply arrives.
     let elapsedMs = 0;
     retryTimer = setInterval(function () {
-      elapsedMs += 500;
+      elapsedMs += 150;
       if (resolved || elapsedMs >= 10000) {
         clearInterval(retryTimer);
         retryTimer = null;
         return;
       }
       postReady();
-    }, 500);
+    }, 150);
   }
 
   async function signOut() {

@@ -115,7 +115,12 @@ async function renderStillLifeLanding() {
       else if (completed.includes(lesson.id)) { state = 'done'; icon = '✓'; tag = 'Complete ✓'; clickable = true; }
       else if (!hasAccess) { state = 'locked'; icon = '🔒'; tag = 'Unlock Foundation of Sketch to open'; clickable = false; }
       const tagEl = clickable ? 'a' : 'div';
-      const hrefAttr = clickable ? `href="${lesson.href}"` : '';
+      // lesson.href is root-relative (e.g. 'lessons/still-life-2a-.../'),
+      // correct for the root Map but not from here (this page already
+      // lives one level under lessons/) — StillLifeLesson.siblingHref
+      // does the same '../' adjustment renderDone()'s next-lesson link
+      // uses, so there's one place this logic lives, not two.
+      const hrefAttr = clickable ? `href="${window.StillLifeLesson.siblingHref(lesson.href)}"` : '';
       return `
         <${tagEl} class="sl-lesson ${state}" ${hrefAttr}>
           <div class="sl-lesson-icon">${icon}</div>

@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Art GPS · FEI TeamArt</title>
+<!-- Login-smoothness item 1 (Sept 2026): every Supabase Auth/REST call
+     onAuthSuccess makes (setSession, getUser, table reads) goes to this
+     one host — warm the DNS+TLS connection as early as possible so the
+     first real call after Google sign-in doesn't pay that cost cold. -->
+<link rel="preconnect" href="https://rudztwseatwayhztbarj.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://rudztwseatwayhztbarj.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -1340,6 +1346,22 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
+     AUTH-LOADING SPLASH
+     Default-visible screen (see hideAllScreens/showAuthLoading below):
+     first paint shows this instead of a blank page, and — the actual
+     fix for the post-Google-login flash — an embedded fresh load stays
+     here (not on signin-screen) until we know for sure whether a
+     parent-relayed session is coming. See init()'s use of
+     FEIAuth.isEmbedded() and the ~4s fallback timer.
+     ═══════════════════════════════════════════════════════════ -->
+<div class="signin-screen" id="auth-loading-screen" style="display:flex;">
+  <div class="signin-card" style="text-align:center;">
+    <div class="signin-kicker">Art GPS</div>
+    <h1 class="signin-title" style="font-size:20px;">Loading…</h1>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
      SIGN-IN SCREEN
      ═══════════════════════════════════════════════════════════ -->
 <div class="signin-screen" id="signin-screen" style="display:none;">
@@ -2203,8 +2225,18 @@
   // ═══════════════════════════════════════════════════════════
   // SCREEN SWITCHING
   // ═══════════════════════════════════════════════════════════
-  
+
+  // ~4s safety-net timer for the auth-loading splash (see init()): if
+  // nothing has told us the real outcome by then, fall back to the
+  // sign-in screen rather than leaving the splash up forever. Any real
+  // outcome (showSignIn/showHome, from ANY path) clears this itself.
+  let authLoadingTimer = null;
+  function clearAuthLoadingTimer() {
+    if (authLoadingTimer) { clearTimeout(authLoadingTimer); authLoadingTimer = null; }
+  }
+
   function hideAllScreens() {
+    document.getElementById('auth-loading-screen').style.display = 'none';
     document.getElementById('signin-screen').style.display = 'none';
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('skills-screen').style.display = 'none';
@@ -2217,7 +2249,13 @@
     document.getElementById('zodiac-beast-courses-screen').style.display = 'none';
   }
   
+  function showAuthLoading() {
+    hideAllScreens();
+    document.getElementById('auth-loading-screen').style.display = 'flex';
+  }
+
   function showSignIn() {
+    clearAuthLoadingTimer();
     hideAllScreens();
     document.getElementById('signin-screen').style.display = 'flex';
     document.getElementById('topbar-right').innerHTML = `
@@ -2232,6 +2270,7 @@
   }
   
   function showHome() {
+    clearAuthLoadingTimer();
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
     renderHome();
@@ -3661,43 +3700,71 @@
     // picks up the real step position even with no `existing` at all.
     // Best-effort — a failed/slow lookup just leaves `profile` as built
     // above, same as before this fix existed.
-    if (window.FEIProgress) {
-      try {
-        profile = await window.FEIProgress.loadForProfile(profile);
-      } catch (e) { console.warn('[onAuthSuccess] FEIProgress restore failed (non-fatal)', e); }
-    }
+    //
+    // Login-smoothness item 2 (Sept 2026): this progress fetch and the
+    // access-status fetch below are independent network calls (neither
+    // needs the other's result — getStatus() only needs user.id, known
+    // from the very top of this function), so they now run concurrently
+    // via Promise.all instead of one after another. Each branch below
+    // keeps its EXACT original try/catch/warn/skip behavior — only the
+    // network round trips overlap; the order profile/userProfile gets
+    // written in (progress merge first, then membership merge, reading
+    // the already-updated userProfile) is unchanged, and showHome()
+    // still waits for both, same as before.
+    const [progressResult, accessResult] = await Promise.all([
+      (async () => {
+        if (!window.FEIProgress) return { profile };
+        try {
+          const merged = await window.FEIProgress.loadForProfile(profile);
+          return { profile: merged };
+        } catch (e) {
+          console.warn('[onAuthSuccess] FEIProgress restore failed (non-fatal)', e);
+          return { profile };
+        }
+      })(),
+      (async () => {
+        if (!window.FEIAccess) return null;
+        try {
+          await window.FEIAccess.init();
 
-    saveProfile(profile);
+          // If they paid before creating/signing into an account, the
+          // plan was stashed in localStorage (see init() "no profile"
+          // branch). Apply it now that we have a real Supabase user.
+          let pendingPlan = null;
+          try { pendingPlan = localStorage.getItem('fei_pending_stripe_plan'); } catch (e) {}
+          if (pendingPlan) {
+            try {
+              await window.FEIAccess.markPaid(pendingPlan);
+              localStorage.removeItem('fei_pending_stripe_plan');
+            } catch (e) { console.warn('[onAuthSuccess] markPaid (pending plan) failed', e); }
+          }
+
+          const status = await window.FEIAccess.getStatus();
+          return { status, pendingPlan };
+        } catch (e) {
+          console.warn('[onAuthSuccess] FEIAccess init failed', e);
+          return null;
+        }
+      })()
+    ]);
 
     // Pre-load access status (creates row if needed) and sync membership
     // tier (membershipType/isLiveClass) so it survives across devices —
     // not just at the moment of payment.
-    try {
-      if (window.FEIAccess) {
-        await window.FEIAccess.init();
+    profile = progressResult.profile;
+    saveProfile(profile);
 
-        // If they paid before creating/signing into an account, the plan
-        // was stashed in localStorage (see init() "no profile" branch).
-        // Apply it now that we have a real Supabase user.
-        let pendingPlan = null;
-        try { pendingPlan = localStorage.getItem('fei_pending_stripe_plan'); } catch (e) {}
-        if (pendingPlan) {
-          try {
-            await window.FEIAccess.markPaid(pendingPlan);
-            localStorage.removeItem('fei_pending_stripe_plan');
-          } catch (e) { console.warn('[onAuthSuccess] markPaid (pending plan) failed', e); }
-        }
-
-        const status = await window.FEIAccess.getStatus();
-        if (status && status.membershipType) {
-          saveProfile(Object.assign({}, userProfile, {
-            membershipType: status.membershipType,
-            isLiveClass: !!status.isLiveClass
-          }));
-        }
-        if (pendingPlan) showPaidWelcome(pendingPlan);
+    if (accessResult) {
+      const status = accessResult.status;
+      const pendingPlan = accessResult.pendingPlan;
+      if (status && status.membershipType) {
+        saveProfile(Object.assign({}, userProfile, {
+          membershipType: status.membershipType,
+          isLiveClass: !!status.isLiveClass
+        }));
       }
-    } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
+      if (pendingPlan) showPaidWelcome(pendingPlan);
+    }
 
     showHome();
     checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
@@ -3863,10 +3930,35 @@
     // session hand-off this runs the SAME onAuthSuccess() the
     // email/password path already uses — nothing else about that path
     // changes. See core/auth.js's header comment for the full flow.
+    //
+    // Anti-flash note (Sept 2026): auth-loading-screen is the default-
+    // visible screen (see its markup + showAuthLoading()). An embedded
+    // fresh load (step 2 below) stays there instead of jumping straight
+    // to showSignIn(), because a parent-relayed session may still be in
+    // flight after a Google return. The 3rd callback here (fei:auth:none)
+    // is the parent telling us definitively "nothing is pending" — that's
+    // what lets a genuine first-time visitor reach the real sign-in
+    // screen quickly instead of always waiting out the timer below.
+    // This timer is the only fallback if nothing answers at all.
+    authLoadingTimer = setTimeout(function () {
+      authLoadingTimer = null;
+      showSignIn();
+    }, 4000);
+
     if (window.FEIAuth && window.FEIAuth.attachParentBridge) {
       window.FEIAuth.attachParentBridge(
-        async function (user) { try { await onAuthSuccess(user); } catch (e) { console.warn('[init] onAuthSuccess (parent bridge) failed', e); } },
-        function (msg) { showAuthError(msg); }
+        async function (user) { try { await onAuthSuccess(user); } catch (e) { console.warn('[init] onAuthSuccess (parent bridge) failed', e); showSignIn(); } },
+        function (msg) { showSignIn(); showAuthError(msg); },
+        function () {
+          // A late/duplicate fei:auth:none must never revert an already-
+          // authenticated visitor back to the sign-in screen — e.g. step
+          // 1 below (getUser() finding a local session) can resolve this
+          // before the parent even replies. userProfile is set the
+          // moment ANY sign-in path succeeds (see saveProfile()), so it's
+          // the right app-wide "already authenticated" check here.
+          if (userProfile) return;
+          showSignIn();
+        }
       );
     }
 
@@ -3978,6 +4070,13 @@
         setTimeout(() => {
           showAuthInfo('Sign in or create an account to continue with that lesson.');
         }, 100);
+      } else if (window.FEIAuth && window.FEIAuth.isEmbedded && window.FEIAuth.isEmbedded()) {
+        // Embedded, no local session, no special redirect param: stay on
+        // the auth-loading splash (already showing by default) — a
+        // Google-return relay may still be in flight. attachParentBridge's
+        // callbacks above (or the ~4s fallback timer) decide the real
+        // outcome. This is the fix for the post-Google-login sign-in-
+        // screen flash. Standalone mode is untouched below.
       } else {
         showSignIn();
       }
