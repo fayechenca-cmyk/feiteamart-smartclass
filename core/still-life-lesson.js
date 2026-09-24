@@ -49,16 +49,16 @@
   // read the exact same array — one list, not three. index.html now
   // includes this file and uses these same global names unchanged.
   const FOUNDATION_STILL_LIFE_PATH = [
-    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
-    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: true },
+    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: false },
+    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: false },
     { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: true },
     { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: true },
-    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: true },
-    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: true },
-    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: true },
-    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: true },
-    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: true },
-    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: true }
+    { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
+    { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
+    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: false },
+    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: false },
+    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
+    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
   ];
   // The 5 paintings, each pairing its A/B lesson ids — used for the
   // "painting complete" celebration tier and the landing page's grouping.
