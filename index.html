@@ -3684,43 +3684,71 @@
     // picks up the real step position even with no `existing` at all.
     // Best-effort — a failed/slow lookup just leaves `profile` as built
     // above, same as before this fix existed.
-    if (window.FEIProgress) {
-      try {
-        profile = await window.FEIProgress.loadForProfile(profile);
-      } catch (e) { console.warn('[onAuthSuccess] FEIProgress restore failed (non-fatal)', e); }
-    }
+    //
+    // Login-smoothness item 2 (Sept 2026): this progress fetch and the
+    // access-status fetch below are independent network calls (neither
+    // needs the other's result — getStatus() only needs user.id, known
+    // from the very top of this function), so they now run concurrently
+    // via Promise.all instead of one after another. Each branch below
+    // keeps its EXACT original try/catch/warn/skip behavior — only the
+    // network round trips overlap; the order profile/userProfile gets
+    // written in (progress merge first, then membership merge, reading
+    // the already-updated userProfile) is unchanged, and showHome()
+    // still waits for both, same as before.
+    const [progressResult, accessResult] = await Promise.all([
+      (async () => {
+        if (!window.FEIProgress) return { profile };
+        try {
+          const merged = await window.FEIProgress.loadForProfile(profile);
+          return { profile: merged };
+        } catch (e) {
+          console.warn('[onAuthSuccess] FEIProgress restore failed (non-fatal)', e);
+          return { profile };
+        }
+      })(),
+      (async () => {
+        if (!window.FEIAccess) return null;
+        try {
+          await window.FEIAccess.init();
 
-    saveProfile(profile);
+          // If they paid before creating/signing into an account, the
+          // plan was stashed in localStorage (see init() "no profile"
+          // branch). Apply it now that we have a real Supabase user.
+          let pendingPlan = null;
+          try { pendingPlan = localStorage.getItem('fei_pending_stripe_plan'); } catch (e) {}
+          if (pendingPlan) {
+            try {
+              await window.FEIAccess.markPaid(pendingPlan);
+              localStorage.removeItem('fei_pending_stripe_plan');
+            } catch (e) { console.warn('[onAuthSuccess] markPaid (pending plan) failed', e); }
+          }
+
+          const status = await window.FEIAccess.getStatus();
+          return { status, pendingPlan };
+        } catch (e) {
+          console.warn('[onAuthSuccess] FEIAccess init failed', e);
+          return null;
+        }
+      })()
+    ]);
 
     // Pre-load access status (creates row if needed) and sync membership
     // tier (membershipType/isLiveClass) so it survives across devices —
     // not just at the moment of payment.
-    try {
-      if (window.FEIAccess) {
-        await window.FEIAccess.init();
+    profile = progressResult.profile;
+    saveProfile(profile);
 
-        // If they paid before creating/signing into an account, the plan
-        // was stashed in localStorage (see init() "no profile" branch).
-        // Apply it now that we have a real Supabase user.
-        let pendingPlan = null;
-        try { pendingPlan = localStorage.getItem('fei_pending_stripe_plan'); } catch (e) {}
-        if (pendingPlan) {
-          try {
-            await window.FEIAccess.markPaid(pendingPlan);
-            localStorage.removeItem('fei_pending_stripe_plan');
-          } catch (e) { console.warn('[onAuthSuccess] markPaid (pending plan) failed', e); }
-        }
-
-        const status = await window.FEIAccess.getStatus();
-        if (status && status.membershipType) {
-          saveProfile(Object.assign({}, userProfile, {
-            membershipType: status.membershipType,
-            isLiveClass: !!status.isLiveClass
-          }));
-        }
-        if (pendingPlan) showPaidWelcome(pendingPlan);
+    if (accessResult) {
+      const status = accessResult.status;
+      const pendingPlan = accessResult.pendingPlan;
+      if (status && status.membershipType) {
+        saveProfile(Object.assign({}, userProfile, {
+          membershipType: status.membershipType,
+          isLiveClass: !!status.isLiveClass
+        }));
       }
-    } catch (e) { console.warn('[onAuthSuccess] FEIAccess init failed', e); }
+      if (pendingPlan) showPaidWelcome(pendingPlan);
+    }
 
     showHome();
     checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
