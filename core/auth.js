@@ -294,7 +294,15 @@
   //   onError(msg)   — called with a short English string, either from
   //                    a {type:'fei:auth:error'} message or if setSession
   //                    itself fails.
-  function attachParentBridge(onUser, onError) {
+  //   onNone()       — called when the parent replies {type:'fei:auth:none'},
+  //                    i.e. it has definitely checked and nothing is
+  //                    pending for this load (not "hasn't answered yet").
+  //                    Lets a genuine fresh visitor (no Google return in
+  //                    flight) leave an "auth loading" splash quickly
+  //                    instead of waiting out a fixed timeout — see
+  //                    index.html's init() and docs/webflow-auth-relay.html's
+  //                    trySendPending(). Optional; only called if given.
+  function attachParentBridge(onUser, onError, onNone) {
     if (!isEmbedded()) return;
     let resolved = false;
     let retryTimer = null;
@@ -317,6 +325,14 @@
         resolved = true;
         if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
         if (onError) onError(typeof msg.message === 'string' && msg.message ? msg.message : 'Google sign-in failed. Please try again.');
+      } else if (msg.type === 'fei:auth:none') {
+        // A session/error (or an earlier none) already settled this via
+        // this same bridge instance — never let a late/duplicate none
+        // undo that.
+        if (resolved) return;
+        resolved = true;
+        if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
+        if (onNone) onNone();
       }
     });
     function postReady() {
