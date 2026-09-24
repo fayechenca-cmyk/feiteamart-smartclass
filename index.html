@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Art GPS · FEI TeamArt</title>
+<!-- Login-smoothness item 1 (Sept 2026): every Supabase Auth/REST call
+     onAuthSuccess makes (setSession, getUser, table reads) goes to this
+     one host — warm the DNS+TLS connection as early as possible so the
+     first real call after Google sign-in doesn't pay that cost cold. -->
+<link rel="preconnect" href="https://rudztwseatwayhztbarj.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://rudztwseatwayhztbarj.supabase.co">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
