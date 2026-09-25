@@ -135,18 +135,20 @@
     },
 
     // "Quick Sketch Reference" overlay (same corrected format as
-    // Lesson 02 — NOT the old "Teacher's Guide"). No videos supplied
-    // yet, so every scene is placeholder:true — the lightbox shows the
-    // "coming soon" state until a demoVideoStreamId (and optionally
-    // posterTimeSecs) is added per scene, which needs no index.html
-    // change.
+    // Lesson 02 — NOT the old "Teacher's Guide"). All six real videos
+    // are now wired (Sept 2026) — mapped by story content, not by the
+    // order Faye happened to describe them in, since that order didn't
+    // match this array. Aspect ratio is 100/77.13068181818183 (not the
+    // usual 16/9) — see .teacher-lightbox-frame.has-video in
+    // index.html, updated to match these videos' real encoded ratio
+    // instead of forcing the old one.
     teacher_references: [
-      { sceneId: 'theater', label: 'Quick Sketch Reference — At the Theater', placeholder: true },
-      { sceneId: 'playground', label: 'Quick Sketch Reference — Talking at the Playground', placeholder: true },
-      { sceneId: 'hike', label: 'Quick Sketch Reference — Taking a Break on a Hike', placeholder: true },
-      { sceneId: 'lunch', label: 'Quick Sketch Reference — Lunch with a Friend', placeholder: true },
-      { sceneId: 'shop_window', label: 'Quick Sketch Reference — The Shop Window', placeholder: true },
-      { sceneId: 'art_project', label: 'Quick Sketch Reference — Working on an Art Project', placeholder: true }
+      { sceneId: 'theater', label: 'Quick Sketch Reference — At the Theater', demoVideoStreamId: '6efe57833972596f9f81550b149de3b1' },
+      { sceneId: 'playground', label: 'Quick Sketch Reference — Talking at the Playground', demoVideoStreamId: '545d9f03841954ae0381c4104f123bc6' },
+      { sceneId: 'hike', label: 'Quick Sketch Reference — Taking a Break on a Hike', demoVideoStreamId: '1b54ed40ed362fa0e9eb2b380bb8fa49' },
+      { sceneId: 'lunch', label: 'Quick Sketch Reference — Lunch with a Friend', demoVideoStreamId: 'fa7f592781be911587015fed9745de45' },
+      { sceneId: 'shop_window', label: 'Quick Sketch Reference — The Shop Window', demoVideoStreamId: '336dfc3d7fa5773a90667c8fdffa205c' },
+      { sceneId: 'art_project', label: 'Quick Sketch Reference — Working on an Art Project', demoVideoStreamId: '5ebbdb6af0cdcb3ac8b17491dc7fc2bf' }
     ],
 
     // No real student photos for this lesson yet — dashed placeholders

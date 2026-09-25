@@ -278,7 +278,7 @@ button{font-family:inherit;}
 .practice-panel-hint{font-size:11.5px;color:var(--sb-ink-soft);text-align:center;line-height:1.5;margin:-2px 0 14px;}
 .practice-panel-teacher{padding:14px;}
 .practice-two-panel .practice-canvas-wrap{max-width:100%;}
-.practice-ref-video{position:relative;aspect-ratio:16/9;background:#000;border-radius:3px;overflow:hidden;}
+.practice-ref-video{position:relative;aspect-ratio:100/77.13068181818183;background:#000;border-radius:3px;overflow:hidden;}
 .practice-ref-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
 .practice-ref-placeholder{background:var(--sb-paper);border:1.5px dashed var(--sb-ink-faint);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--sb-ink-soft);font-size:13px;text-align:center;padding:0 16px;}
 .practice-ref-placeholder-icon{font-size:2rem;filter:grayscale(1) contrast(.9);opacity:.7;}
@@ -387,17 +387,22 @@ button{font-family:inherit;}
   aspect-ratio:4/3;background:var(--sb-paper);border:1.5px solid var(--sb-ink);border-radius:4px;
   display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;position:relative;
 }
-/* Video mode: the frame becomes a plain 16:9 video stage, not the 4:3
+/* Video mode: the frame becomes a plain video stage, not the 4:3
    icon box — same override reasoning as Lesson 01's
    .practice-panel-video .video-stage (a fixed aspect-ratio box, no
-   competing sizing rules). */
+   competing sizing rules). Ratio is 100/77.13068181818183 (~1.2965:1),
+   the real encoded ratio of these six videos — narrower than 16/9, not
+   forced to match earlier lessons' videos. */
 /* Round 4: video width is the smaller of "fill the card" and "whatever
-   16:9 width still fits the viewport HEIGHT" (210px reserved for the
-   card's own padding/label/disclaimer/backdrop) — so it's as big as
-   possible on any screen without the card ever overflowing vertically.
-   The 4:3 placeholder frame (Scene 6, no video yet) is capped
-   separately below so it doesn't balloon to fill the wider card. */
-.teacher-lightbox-frame.has-video{aspect-ratio:16/9;background:#000;width:min(100%,calc((100vh - 210px) * 1.7778));margin-left:auto;margin-right:auto;}
+   width still fits the viewport HEIGHT at this aspect ratio" (210px
+   reserved for the card's own padding/label/disclaimer/backdrop) — so
+   it's as big as possible on any screen without the card ever
+   overflowing vertically. The multiplier (1.2965...) is this same
+   ratio as a single number, so the two stay in sync. The 4:3
+   placeholder frame (:not(.has-video) below, for any future scene
+   without a video yet — all six of this lesson's scenes have one now)
+   is capped separately so it doesn't balloon to fill the wider card. */
+.teacher-lightbox-frame.has-video{aspect-ratio:100/77.13068181818183;background:#000;width:min(100%,calc((100vh - 210px) * 1.2965009208103129));margin-left:auto;margin-right:auto;}
 .teacher-lightbox-frame:not(.has-video){max-width:560px;margin-left:auto;margin-right:auto;}
 /* phones: give the video every pixel — tighter backdrop + card padding (the Stream player has its own fullscreen button for more) */
 @media(max-width:600px){.teacher-lightbox-backdrop{padding:8px;}.teacher-lightbox{padding:14px 10px;}}
