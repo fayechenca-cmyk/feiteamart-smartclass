@@ -57,6 +57,57 @@ window.COURSE_BADGE_REGISTRY = {
   // future Ox entry gets its own 'zodiac_ox' badge id here.
   zodiac_rat: {
     requiredIds: ['zodiac-rat']
+  },
+
+  // Foundation of Sketch, Step 1 — "Form and Structure" badge
+  // (basic_sketch, renamed from "Basic Sketch" — see core/badge-catalog.js).
+  // Had its own separate hardcoded unlock system (FOUNDATION_A_PATH /
+  // checkAndUnlockBadge() in index.html) but was never added here, so it
+  // never showed progress in the badge grid itself. requiredIds is a
+  // function (not a plain array) that derives the 11 ids from
+  // window.FOUNDATION_A_PATH at read time, instead of a second
+  // hand-typed copy that could drift out of sync with index.html's real
+  // list — see getCourseBadgeProgress() below for how function-valued
+  // requiredIds gets resolved. window.FOUNDATION_A_PATH is only assigned
+  // partway through index.html's own inline script (a plain `const`
+  // doesn't attach to window on its own), which loads AFTER this file,
+  // so this can't be a plain array evaluated at this script's load time
+  // — it has to stay lazy.
+  basic_sketch: {
+    requiredIds: () => (window.FOUNDATION_A_PATH || []).map((l) => l.id)
+  },
+
+  // Foundation of Sketch, Step 2 — "Still Life and Texture" badge
+  // (still_life, renamed from "Still Life"). Only the lessons currently
+  // marked ready:true in core/still-life-lesson.js's
+  // FOUNDATION_STILL_LIFE_PATH count for now (as of this writing, only
+  // the two glass lessons are live — the other 8 are ready:false, not
+  // yet built). Unlike basic_sketch above, this stays a plain static
+  // list on purpose (per Faye) — append ids here by hand as more Step 2
+  // lessons go live, same incremental pattern as scene_drawing_unit_01;
+  // don't restructure this entry when that happens.
+  still_life: {
+    requiredIds: ['still-life-2a-glass-structure', 'still-life-2b-glass-texture']
+  },
+
+  // Fashion Design (costume_design badge, retitled — see
+  // core/badge-catalog.js). fashion-design/app.js has no completion-
+  // tracking write yet and its one built lesson explicitly says in its
+  // own UI copy that it does not count toward formal course
+  // certification, so this starts empty/locked on purpose. Expand
+  // requiredIds once real (non-demo) completion tracking exists.
+  costume_design: {
+    requiredIds: []
+  },
+
+  // Ink Painting (new ink_painting badge) — whole "Painting -> Ink
+  // Painting" category badge, distinct from the per-animal zodiac_rat
+  // badge just above. lessons/zodiac-skill/index.html's
+  // markAnimalComplete() already writes 'zodiac-rat' into
+  // completedLessons, so no new tracking code is needed for this one —
+  // just this registry entry. Expand as more zodiac animals go live.
+  ink_painting: {
+    requiredIds: ['zodiac-rat']
   }
 
 };
@@ -74,12 +125,20 @@ window.getCourseBadgeProgress = function () {
     const completed = (profile && profile.completedLessons) || [];
 
     Object.keys(window.COURSE_BADGE_REGISTRY).forEach((badgeId) => {
-      const required = window.COURSE_BADGE_REGISTRY[badgeId].requiredIds;
+      // requiredIds is usually a plain array, but can be a function that
+      // derives the list at read time instead (see basic_sketch above) —
+      // resolve it here so every other badge is unaffected.
+      const rawRequired = window.COURSE_BADGE_REGISTRY[badgeId].requiredIds;
+      const required = typeof rawRequired === 'function' ? rawRequired() : rawRequired;
       const doneCount = required.filter((id) => completed.includes(id)).length;
       result[badgeId] = {
         doneCount,
         totalCount: required.length,
-        isComplete: doneCount === required.length,
+        // required.length > 0 guard: an empty requiredIds (e.g.
+        // costume_design below, deliberately [] until real completion
+        // tracking exists) must never read as "complete" — 0 === 0
+        // would otherwise vacuously auto-unlock it for every student.
+        isComplete: required.length > 0 && doneCount === required.length,
         pct: required.length > 0 ? Math.round((doneCount / required.length) * 100) : 0
       };
     });

@@ -2096,6 +2096,13 @@
       ready: true
     }
   ];
+  // Exposed on window so core/course-badge-registry.js (a separate
+  // script, loaded earlier in <head>) can derive basic_sketch's
+  // requiredIds from this same array at badge-progress-read time,
+  // instead of hand-typing a second copy of these 11 ids that could
+  // drift out of sync. const bindings don't attach to window on their
+  // own, hence this explicit assignment.
+  window.FOUNDATION_A_PATH = FOUNDATION_A_PATH;
 
   // FOUNDATION_STILL_LIFE_PATH / FOUNDATION_STILL_LIFE_LANDING_HREF (Step 2
   // · Still Life and Texture) now come from core/still-life-lesson.js,
