@@ -1244,6 +1244,30 @@
     animation: studioPulse 2s infinite;
     background: #fffbeb; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
   }
+  /* In-progress: sits between locked (grayscale) and unlocked (gold
+     glow) — real progress exists but the course isn't finished yet.
+     Dashed border like .recommended, but no pulse/glow (glow is
+     reserved for the completed state per the existing design intent),
+     and no scale change. Color is the badge's own page.color, at
+     reduced opacity/saturation rather than full strength — set at
+     render time via the --badge-color custom property (a JS data
+     value, not something CSS can hardcode per badge); this rule only
+     defines the shape/opacity, never a literal color. */
+  .map-node.in-progress .node-visual {
+    border: 3px dashed var(--badge-color, #94a3b8);
+    background: color-mix(in srgb, var(--badge-color, #94a3b8) 12%, #fff);
+    opacity: 0.8;
+    filter: saturate(65%);
+  }
+  .map-node.in-progress .node-label { color: var(--ink); font-weight: 700; }
+  .badge-mini-progress {
+    width: 100%; height: 4px; border-radius: 999px;
+    background: rgba(0,0,0,0.08); margin-top: 4px; overflow: hidden;
+  }
+  .badge-mini-progress-fill {
+    height: 100%; border-radius: 999px;
+    background: var(--badge-color, #94a3b8);
+  }
   .check-mark {
     position: absolute; top: -4px; right: 6px;
     background: #10b981; color: white; border: 2px solid white;
@@ -1601,7 +1625,7 @@
       </div>
       <div class="studio-badge-progress">
         <div class="studio-badge-progress-row">
-          <span id="studio-badges-count">0 / 29 Badges</span>
+          <span id="studio-badges-count">0 / 35 Badges</span>
           <span id="studio-badges-pct">0%</span>
         </div>
         <div class="track-bar"><div class="track-fill" id="studio-badges-bar" style="width:0%"></div></div>
@@ -3083,25 +3107,42 @@
     catalog.forEach((page, index) => {
       const pageId = String(page.id).toLowerCase();
       const isUnlocked = earnedIds.includes(pageId);
-      const isRecommended = !isUnlocked && recommendedIds.includes(pageId);
+      // "X / Y lessons" progress line + mini bar for badges tied to a
+      // real course (see core/course-badge-registry.js) that aren't
+      // earned yet.
+      const progress = autoProgress[pageId];
+      const isInProgress = !isUnlocked && !!progress && progress.doneCount > 0;
+      const isRecommended = !isUnlocked && !isInProgress && recommendedIds.includes(pageId);
 
       const node = document.createElement('div');
+      // State priority (first match wins): unlocked -> in-progress ->
+      // recommended -> locked.
       let statusClass = 'locked';
       if (isUnlocked) statusClass = 'unlocked';
+      else if (isInProgress) statusClass = 'in-progress';
       else if (isRecommended) statusClass = 'recommended';
       node.className = `map-node ${statusClass}`;
       node.style.animationDelay = `${index * 0.04}s`;
+      // Badge's own accent color, only meaningful for the in-progress
+      // state (see the .map-node.in-progress CSS rule) — a JS data
+      // value from the catalog, so it's set here as a custom property
+      // rather than hardcoded per badge in CSS.
+      if (isInProgress && page.color) {
+        node.style.setProperty('--badge-color', page.color);
+      }
 
       const hasImage = page.imgUrl && page.imgUrl.length > 5;
       const imageHTML = hasImage
         ? `<img src="${page.imgUrl}" class="node-img">`
         : `<div class="node-icon-fallback">${page.emoji}</div>`;
 
-      // "X / Y lessons" progress line for badges tied to a real course
-      // (see core/course-badge-registry.js) that aren't earned yet.
-      const progress = autoProgress[pageId];
       const progressHTML = (!isUnlocked && progress && progress.totalCount > 0)
         ? `<div class="badge-progress">${progress.doneCount}/${progress.totalCount}</div>`
+        : '';
+      // Mini fill bar — only for in-progress (locked has no progress to
+      // show yet, unlocked is already full/irrelevant).
+      const progressBarHTML = isInProgress
+        ? `<div class="badge-mini-progress"><div class="badge-mini-progress-fill" style="width:${progress.pct}%"></div></div>`
         : '';
 
       node.innerHTML = `
@@ -3113,6 +3154,7 @@
         <div class="node-label">${page.title}</div>
         <div class="badge-credit">${page.artist || ''}</div>
         ${progressHTML}
+        ${progressBarHTML}
       `;
       grid.appendChild(node);
     });
