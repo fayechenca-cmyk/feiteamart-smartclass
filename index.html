@@ -1478,7 +1478,7 @@
   <div class="badge-unlock-banner" id="badge-unlock-banner" style="display:none;">
     <div class="badge-unlock-icon">🏆</div>
     <div class="badge-unlock-text">
-      <div class="badge-unlock-title">Basic Sketch Badge Unlocked!</div>
+      <div class="badge-unlock-title">Form and Structure Badge Unlocked!</div>
       <div class="badge-unlock-sub">You've completed all 11 Step 1 lessons.</div>
     </div>
     <button class="badge-unlock-view-btn" onclick="viewBasicSketchBadge()">View Badge</button>
@@ -1955,9 +1955,9 @@
   <!-- Foundation A certificate footer -->
   <div class="badge-footer" id="badge-footer">
     <div class="badge-footer-icon">🏆</div>
-    <div class="badge-footer-title">Basic Sketch</div>
+    <div class="badge-footer-title">Form and Structure</div>
     <div class="badge-footer-sub" id="badge-footer-sub">
-      Complete all 11 practice sessions to earn your Basic Sketch badge.
+      Complete all 11 practice sessions to earn your Form and Structure badge.
     </div>
   </div>
 
@@ -1982,7 +1982,7 @@
 <div class="badge-detail-modal" id="badge-detail-modal" onclick="if(event.target===this) closeBadgeDetail()">
   <div class="badge-detail-card">
     <div class="badge-detail-icon">🏆</div>
-    <div class="badge-detail-title">Basic Sketch Badge</div>
+    <div class="badge-detail-title">Form and Structure Badge</div>
     <div class="badge-detail-body">
       Awarded for completing all 11 Step 1 lessons — Preparation through Paper Crane. You've built the full foundation: geometric form, perspective, light and shadow, and real-world observation.
     </div>
@@ -2677,7 +2677,7 @@
         icon = document.createElement('span');
         icon.id = 'header-badge-icon';
         icon.className = 'header-badge-icon';
-        icon.title = 'Basic Sketch Badge — earned';
+        icon.title = 'Form and Structure Badge — earned';
         icon.textContent = '🏅';
         topbarRight.insertBefore(icon, topbarRight.firstChild);
       }
@@ -3304,11 +3304,11 @@
     const badgeSub = document.getElementById('badge-footer-sub');
     if (doneCount === totalCount) {
       badgeFooter.classList.add('unlocked');
-      badgeSub.textContent = "Earned. Welcome to your Basic Sketch badge.";
+      badgeSub.textContent = "Earned. Welcome to your Form and Structure badge.";
     } else {
       badgeFooter.classList.remove('unlocked');
       const remaining = totalCount - doneCount;
-      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? "session" : "sessions"} to earn your Basic Sketch badge.`;
+      badgeSub.textContent = `${remaining} more practice ${remaining === 1 ? "session" : "sessions"} to earn your Form and Structure badge.`;
     }
   }
 
