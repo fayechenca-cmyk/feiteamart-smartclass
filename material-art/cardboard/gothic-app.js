@@ -12,6 +12,27 @@ export function createGothicProject({main,state,save,esc,link,materialBoard}){
  const skipped=e=>e.mode==='choices'&&state.responses['gothic:skip-decoration']===true;
  const resume=e=>e.mode==='choices'?path(e.id):path(e.id,(e.steps.find(s=>!done().includes(e.id+':'+s.screenId))||e.steps[0]).screenId);
  const nextElement=()=>P.elements.find(e=>!completed(e)&&!skipped(e));
+ // Bridges this course's own local progress (state.responses['gothic:done'],
+ // via the injected save() above) into the platform-wide badge system,
+ // which only ever reads fei_user_profile.completedLessons (see
+ // core/course-badge-registry.js's hand_crafter entry) and never touches
+ // this course's own state. Same sessionStorage + completedLessons.push
+ // convention as every other course (color-theory/index.html's
+ // markCourseComplete(), lessons/zodiac-skill/index.html's
+ // markAnimalComplete()) -- never localStorage, per the platform's
+ // Safari-iframe fix. Safe to call more than once: dedups via includes().
+ function markCourseComplete(){
+  try{
+   const raw=sessionStorage.getItem('fei_user_profile');
+   if(!raw)return;
+   const profile=JSON.parse(raw);
+   profile.completedLessons=Array.isArray(profile.completedLessons)?profile.completedLessons:[];
+   if(!profile.completedLessons.includes('material-art-cardboard')){
+    profile.completedLessons.push('material-art-cardboard');
+    sessionStorage.setItem('fei_user_profile',JSON.stringify(profile));
+   }
+  }catch{/* best-effort -- local gothic:done progress above is unaffected either way */}
+ }
  function render(parts){
   stopMotion();
   document.title='Gothic cardboard project · FEI TeamArt';
@@ -85,7 +106,15 @@ export function createGothicProject({main,state,save,esc,link,materialBoard}){
   if(b.hasAttribute('data-gothic-skip')){state.responses['gothic:skip-decoration']=true;save();location.hash=resume(P.elements[5]);}
   if(b.hasAttribute('data-gothic-zoom'))main.querySelector('dialog').showModal();
   if(b.hasAttribute('data-gothic-close'))main.querySelector('dialog').close();
-  if(b.dataset.gothicDone){const [id,stepId]=b.dataset.gothicDone.split(':'),e=P.elements.find(x=>x.id===id);if(!e)return;const i=e.steps.findIndex(x=>x.screenId===stepId);if(i<0)return;state.responses['gothic:done']=[...new Set([...done(),b.dataset.gothicDone])];save();location.hash=path(id,e.mode==='choices'?'finished':e.steps[i+1]?.screenId||'finished');}
+  if(b.dataset.gothicDone){const [id,stepId]=b.dataset.gothicDone.split(':'),e=P.elements.find(x=>x.id===id);if(!e)return;const i=e.steps.findIndex(x=>x.screenId===stepId);if(i<0)return;state.responses['gothic:done']=[...new Set([...done(),b.dataset.gothicDone])];save();
+   // Whole-project finished: nextElement() is the same "is there
+   // anything left to do" check the map screen and path-start link
+   // already use (completed OR explicitly skipped, for every one of
+   // the 7 elements) -- reuse it rather than a separate id==='build'
+   // check, so this correctly fires whichever element happens to be
+   // the last one finished, decoration-skipped or not.
+   if(!nextElement())markCourseComplete();
+   location.hash=path(id,e.mode==='choices'?'finished':e.steps[i+1]?.screenId||'finished');}
  }
  return {render,handleClick};
 }

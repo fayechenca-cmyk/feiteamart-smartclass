@@ -4,6 +4,18 @@ window.COURSE_BADGE_REGISTRY = {
     requiredIds: ['one-point-street', 'two-point-bedroom']
   },
 
+  // Material Art -> Material Design -> material-art/cardboard/
+  // (RE:MAKE 01 -- CARDBOARD, the Gothic cathedral project). Single-id
+  // pattern like collage_creator/fridge_curator below: gothic-app.js's
+  // markCourseComplete() writes 'material-art-cardboard' into
+  // completedLessons once every one of the 7 learning-path sections is
+  // either completed or explicitly skipped (the same "nextElement()"
+  // check that course's own map screen already uses to decide there's
+  // nothing left to do).
+  hand_crafter: {
+    requiredIds: ['material-art-cardboard']
+  },
+
   // Art Theory badge unlocks on the Western track alone (36 lessons).
   // Other nation tracks (Chinese, etc.) are optional bonus content per
   // Faye — students can explore them, but they don't gate this badge.
