@@ -2046,9 +2046,20 @@ function glassPane3(w, h, color, opacity) {
 // "gripping," "reaching," "open," at this scale.
 function buildHandProp(skin) {
   const g = new THREE.Group();
-  const palm = box3(0.1, 0.032, 0.11, skin, { roughness: 0.55 });
+  // Round 5 (Sept 2026, per Faye): the flat box palm + uniform-radius
+  // finger cylinders read as blocky/geometric at close-up range across
+  // three stories (Unlocking the Door, Glass of Water, and by extension
+  // every other scene sharing this rig). Fixed here once, component-
+  // level, instead of patching each scene: a domed palm mound for real
+  // volume instead of a flat card, a visible knuckle bump at each
+  // finger's base pivot, and a clearer base-to-tip taper.
+  const palm = box3(0.1, 0.034, 0.11, skin, { roughness: 0.55 });
   palm.position.set(0, 0, 0.055);
   g.add(palm);
+  const palmMound = sphere3(0.052, skin, 14, 10, { roughness: 0.55 });
+  palmMound.scale.set(1, 0.42, 0.92);
+  palmMound.position.set(0, 0.016, 0.05);
+  g.add(palmMound);
   const backRidge = box3(0.09, 0.014, 0.09, skin, { roughness: 0.55 });
   backRidge.position.set(0, 0.021, 0.05);
   g.add(backRidge);
@@ -2061,34 +2072,53 @@ function buildHandProp(skin) {
   const fingers = fingerDefs.map(fd => {
     const knuckle = new THREE.Group();
     knuckle.position.set(fd.x, 0.006, 0.108);
-    const seg1 = cyl3(0.0105, 0.0105, fd.len * 0.55, skin, 8);
+    const knuckleBump = sphere3(0.0115, skin, 8, 6);
+    knuckle.add(knuckleBump);
+    const seg1 = cyl3(0.0115, 0.0095, fd.len * 0.55, skin, 8);
     seg1.position.z = fd.len * 0.55 / 2;
     seg1.rotation.x = Math.PI / 2;
     knuckle.add(seg1);
     const mid = new THREE.Group();
     mid.position.z = fd.len * 0.55;
-    const seg2 = cyl3(0.009, 0.009, fd.len * 0.45, skin, 8);
+    const midBump = sphere3(0.0088, skin, 8, 6);
+    mid.add(midBump);
+    const seg2 = cyl3(0.0088, 0.007, fd.len * 0.45, skin, 8);
     seg2.position.z = fd.len * 0.45 / 2;
     seg2.rotation.x = Math.PI / 2;
     mid.add(seg2);
-    const tip = sphere3(0.0095, skin, 8, 6);
+    const tip = sphere3(0.0075, skin, 8, 6);
     tip.position.z = fd.len * 0.45;
     mid.add(tip);
     knuckle.add(mid);
     g.add(knuckle);
     return { pivot: knuckle, midPivot: mid };
   });
+  // Thumb now has two segments + its own mid-joint, matching the
+  // fingers' articulation — previously a single rigid cylinder, which
+  // read noticeably stiffer/blockier than the fingers next to it,
+  // especially when curled for a grip.
   const thumbPivot = new THREE.Group();
-  thumbPivot.position.set(0.052, -0.004, 0.038);
+  thumbPivot.position.set(0.05, -0.006, 0.036);
   thumbPivot.rotation.y = -0.9;
   thumbPivot.rotation.z = 0.4;
-  const thumbSeg = cyl3(0.0125, 0.0125, 0.048, skin, 8);
-  thumbSeg.position.z = 0.024;
-  thumbSeg.rotation.x = Math.PI / 2;
-  thumbPivot.add(thumbSeg);
-  const thumbTip = sphere3(0.012, skin, 8, 6);
-  thumbTip.position.z = 0.048;
-  thumbPivot.add(thumbTip);
+  const thumbBump = sphere3(0.013, skin, 8, 6);
+  thumbPivot.add(thumbBump);
+  const thumbSeg1 = cyl3(0.0125, 0.0105, 0.026, skin, 8);
+  thumbSeg1.position.z = 0.013;
+  thumbSeg1.rotation.x = Math.PI / 2;
+  thumbPivot.add(thumbSeg1);
+  const thumbMid = new THREE.Group();
+  thumbMid.position.z = 0.026;
+  const thumbMidBump = sphere3(0.0098, skin, 8, 6);
+  thumbMid.add(thumbMidBump);
+  const thumbSeg2 = cyl3(0.0098, 0.008, 0.024, skin, 8);
+  thumbSeg2.position.z = 0.012;
+  thumbSeg2.rotation.x = Math.PI / 2;
+  thumbMid.add(thumbSeg2);
+  const thumbTip = sphere3(0.0085, skin, 8, 6);
+  thumbTip.position.z = 0.024;
+  thumbMid.add(thumbTip);
+  thumbPivot.add(thumbMid);
   g.add(thumbPivot);
   const wrist = cyl3(0.032, 0.036, 0.09, skin, 10);
   wrist.position.set(0, 0, -0.04);
@@ -2096,14 +2126,26 @@ function buildHandProp(skin) {
   g.add(wrist);
   g.userData.fingers = fingers;
   g.userData.thumbPivot = thumbPivot;
+  g.userData.thumbMid = thumbMid;
   return g;
 }
+// curl is usually one number applied to all four fingers (unchanged
+// behavior for every existing call site), but can be an array of 4
+// per-finger values instead — needed for poses like "thumb and index
+// grip something, the other two fingers stay loose," which a single
+// shared curl can't express. thumbCurl now also drives the thumb's new
+// mid-joint (see buildHandProp), at a slightly steeper angle so it
+// doesn't uncurl stiffly straight the way a single joint would.
 function poseHand(hand, curl, thumbCurl) {
-  hand.userData.fingers.forEach(f => {
-    f.pivot.rotation.x = curl;
-    f.midPivot.rotation.x = curl * 1.15;
+  hand.userData.fingers.forEach((f, i) => {
+    const c = Array.isArray(curl) ? curl[i] : curl;
+    f.pivot.rotation.x = c;
+    f.midPivot.rotation.x = c * 1.15;
   });
-  if (thumbCurl != null) hand.userData.thumbPivot.rotation.x = thumbCurl;
+  if (thumbCurl != null) {
+    hand.userData.thumbPivot.rotation.x = thumbCurl;
+    if (hand.userData.thumbMid) hand.userData.thumbMid.rotation.x = thumbCurl * 1.1;
+  }
 }
 // Orients a hand by two DIRECTION VECTORS instead of Euler angles (which
 // fought each other badly here — a Y rotation alone can't change which
@@ -2136,20 +2178,46 @@ function attachForearm(hand, color, len) {
 
 // A simple stylized sneaker — sole, upper, toe cap, laces, heel — for
 // the Walking Feet scene, where the standard rig's tiny shoe box isn't
-// enough presence at this range.
-function buildShoe3(color, scale) {
+// enough presence at this range. toeColor is optional (per Faye, Round
+// 5): when omitted, behaves exactly as before (toe cap same color as
+// the body) for every existing call site (background shoes here, and
+// the small background pair in the Secret Note scene). Only the
+// foreground shoe below passes a contrasting toeColor — without one,
+// body+toe+heel were all the same solid color with no seam between
+// them, so the whole shoe read as one undifferentiated blob rather
+// than a shoe with visible parts.
+function buildShoe3(color, scale, toeColor) {
   scale = scale || 1;
+  toeColor = toeColor != null ? toeColor : color;
   const g = new THREE.Group();
   const sole = box3(0.13, 0.03, 0.27, 0xf0ece0, { roughness: 0.75 });
   sole.position.y = 0.015;
   g.add(sole);
-  const body = box3(0.125, 0.078, 0.2, color);
-  body.position.set(0, 0.068, -0.02);
+  const body = box3(0.125, 0.08, 0.18, color);
+  body.position.set(0, 0.07, -0.035);
   g.add(body);
-  const toe = sphere3(0.05, color, 10, 8);
-  toe.scale.set(1.1, 0.62, 1.15);
-  toe.position.set(0, 0.045, 0.115);
-  g.add(toe);
+  // Round 5 (per Faye): a sphere toe cap, at any angle/size tried,
+  // read as a separate ball glued onto the body rather than part of
+  // the shoe. This whole lesson's other props (lockers, table, desk)
+  // are all flat-shaded boxes, so a toeColor BOX flush against the
+  // body's own cross-section — same width/height, just a different
+  // color, no shape mismatch to reconcile — reads immediately as a
+  // two-tone sneaker toe instead. A small, mostly-embedded sphere at
+  // the very front adds just a hint of rounding without becoming its
+  // own dominant shape again.
+  const toeCap = box3(0.127, 0.079, 0.095, toeColor);
+  toeCap.position.set(0, 0.07, 0.095);
+  g.add(toeCap);
+  const toeRound = sphere3(0.046, toeColor, 12, 8);
+  toeRound.scale.set(1.0, 0.5, 0.4);
+  toeRound.position.set(0, 0.05, 0.135);
+  g.add(toeRound);
+  // A thin seam between body and toe cap — visible even when the two
+  // are the same color, but especially useful now that they can differ.
+  const seam = box3(0.129, 0.082, 0.01, 0x000000, { roughness: 0.9 });
+  seam.material.transparent = true; seam.material.opacity = 0.35;
+  seam.position.set(0, 0.07, 0.048);
+  g.add(seam);
   for (let i = 0; i < 3; i++) {
     const lace = box3(0.086, 0.009, 0.013, 0xffffff);
     lace.position.set(0, 0.105, -0.02 + i * 0.035);
@@ -2200,13 +2268,38 @@ function buildSceneUnlockingDoor(stage) {
   const warm = new THREE.PointLight(0xffdca0, 0.9, 3.5);
   warm.position.set(0.85, 0.05, 0.15);
   stage.scene.add(warm);
+  // Round 5 (per Faye): the door existed in the scene but was reading
+  // as empty black — near-identical in value to the backdrop, and with
+  // nothing catching light close enough to the lock to reveal it as a
+  // surface. A dedicated close light (warm, tight falloff) plus a
+  // lighter/warmer door color and a raised panel edge right at the
+  // lock give it something to actually show.
+  const doorLight = new THREE.PointLight(0xffdca0, 0.55, 1.1);
+  doorLight.position.set(0.12, 0.08, 0.3);
+  stage.scene.add(doorLight);
 
-  const door = box3(2.4, 3.0, 0.07, 0x120e0b, { roughness: 0.85 });
+  const door = box3(2.4, 3.0, 0.07, 0x2a1f15, { roughness: 0.8 });
   door.position.set(0, 0, -0.03);
   world.add(door);
   const doorEdge = box3(2.44, 3.02, 0.02, 0x1c150f, { roughness: 0.8 });
   doorEdge.position.set(0, 0, -0.065);
   world.add(doorEdge);
+  // Raised panel frame right around the lock — a real door has some
+  // molding/panel break near hardware like this; without it the visible
+  // patch of door around the lock was just a flat, featureless plane
+  // that didn't read as a surface at all at this crop. Round 5 (per
+  // Faye, after the first pass at this still didn't show any door):
+  // at the settle camera's actual distance the visible window is only
+  // about 0.31 x 0.23 world units — a 0.9 x 1.5 panel filled the ENTIRE
+  // frame with no edge in sight, so it looked identical to a plain
+  // background fill. Sized to fit inside that window instead, so the
+  // molding's raised edge actually appears around the lock.
+  const panelFrame = box3(0.27, 0.23, 0.018, 0x342518, { roughness: 0.75 });
+  panelFrame.position.set(-0.04, -0.03, 0.01);
+  world.add(panelFrame);
+  const panelInset = box3(0.21, 0.17, 0.014, 0x241a10, { roughness: 0.8 });
+  panelInset.position.set(-0.04, -0.03, 0.014);
+  world.add(panelInset);
   // sliver of light through the crack, at the door's edge
   const sliver = glowBox3(0.035, 2.8, 0.02, 0xfff0c0);
   sliver.position.set(1.15, 0, -0.02);
@@ -2256,7 +2349,14 @@ function buildSceneUnlockingDoor(stage) {
   hand.position.copy(handPos);
   // fingers wrap up and over the key's bow; palm faces the lock plate
   orientHand(hand, new THREE.Vector3(0.4, 0.85, -0.1), new THREE.Vector3(0.85, -0.1, 0.4));
-  poseHand(hand, 1.05, 0.85);
+  // Round 5 (per Faye): a uniform curl on all four fingers read as a
+  // generic "hand near lock" pose, not a specific grip. Fingers are
+  // [pinky, ring, middle, index] by build order (thumbPivot sits on the
+  // same side as the last entry, confirming it's the index) — index
+  // curls tightest, right alongside the thumb, to pinch the key's bow
+  // and guide it; middle/ring/pinky curl loosely into more of a
+  // supporting fist instead of matching the grip exactly.
+  poseHand(hand, [0.75, 0.8, 0.9, 1.2], 1.0);
   attachForearm(hand, 0xf0c04a, 0.34);
   world.add(hand);
 
@@ -2290,10 +2390,21 @@ function buildSceneFrightenedFace(stage) {
   const skin = 0xf0c49a, hair = 0x3a281c;
   const head = sphere3(0.52, skin, 24, 18);
   world.add(head);
+  // Round 5 (per Faye): hairCap was centered 0.09 above the head
+  // sphere's own center, so its lower edge cut across well above the
+  // head's true equator — leaving a visible gap/seam between hair and
+  // scalp instead of the cap sitting flush. Centering it on the same
+  // point as the head (just a hair larger in radius, for thickness)
+  // fixes the seam. NOTE: thetaLength briefly went to 0.62 here, which
+  // (once centered/flush instead of offset) put the cap's lower rim
+  // BELOW the eye line (eyes sit at ~0.463*PI from the top pole) —
+  // hair buried the whole face down to the mouth. 0.34 stops the rim
+  // just above the brows (~0.361*PI), so hair reads as a normal
+  // hairline/fringe with the whole face visible below it.
   const hairCap = new THREE.Mesh(
-    new THREE.SphereGeometry(0.535, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.58),
+    new THREE.SphereGeometry(0.545, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.34),
     new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 }));
-  hairCap.position.y = 0.09;
+  hairCap.position.y = 0.015;
   world.add(hairCap);
   // a couple of loose strands framing the face, per the storyboard's messy hair
   [[-0.42, 0.05, 0.32, -0.3], [0.4, 0.02, 0.3, 0.3], [-0.28, -0.1, 0.44, -0.15]].forEach(s => {
@@ -2303,6 +2414,27 @@ function buildSceneFrightenedFace(stage) {
     strand.rotation.x = 0.3;
     world.add(strand);
   });
+  // Round 5 (per Faye): eyes/brows/mouth alone on a bare sphere read as
+  // decals on a ball, not a formed face. A nose bridge + tip and a
+  // subtle chin/jaw break up the silhouette and give the face the
+  // structure it was missing.
+  const noseBridge = box3(0.052, 0.11, 0.06, skin, { roughness: 0.55 });
+  noseBridge.position.set(0, -0.01, 0.5);
+  noseBridge.rotation.x = -0.15;
+  world.add(noseBridge);
+  const noseTip = sphere3(0.04, skin, 10, 8);
+  noseTip.scale.set(1, 0.85, 0.9);
+  noseTip.position.set(0, -0.075, 0.535);
+  world.add(noseTip);
+  [-1, 1].forEach(side => {
+    const nostril = sphere3(0.012, 0x8a5a3a, 6, 6);
+    nostril.position.set(side * 0.022, -0.085, 0.545);
+    world.add(nostril);
+  });
+  const chin = sphere3(0.14, skin, 12, 10);
+  chin.scale.set(1, 0.75, 0.85);
+  chin.position.set(0, -0.32, 0.42);
+  world.add(chin);
 
   // wide eyes: sclera + iris, angled tense eyebrows above
   [-0.19, 0.19].forEach(x => {
@@ -2438,7 +2570,11 @@ function buildSceneGlassOfWater(stage) {
 
   return {
     start: { pos: { x: 0.35, y: 0.55, z: 1.05 }, look: { x: 0, y: 0.02, z: -0.15 } },
-    settle: { pos: { x: 0.11, y: 0.18, z: 0.42 }, look: { x: 0.02, y: 0.07, z: 0 } },
+    // Round 5 (per Faye): the previous settle cropped the hand off at
+    // the frame's right edge (wrist/forearm cut out of shot). Pulled
+    // back and panned further right so the whole hand and forearm are
+    // in frame alongside the glass.
+    settle: { pos: { x: 0.3, y: 0.22, z: 0.62 }, look: { x: 0.12, y: 0.09, z: 0 } },
     focusX: 0.02
   };
 }
@@ -2461,6 +2597,32 @@ function buildSceneWalkingFeet(stage) {
   floorSheen.material.transparent = true; floorSheen.material.opacity = 0.15;
   floorSheen.position.set(0, 0.0006, -6);
   world.add(floorSheen);
+  // Round 5 (per Faye): at the low, close settle camera the ceiling
+  // lights and most of the locker banks fall outside the frame, so the
+  // hallway read was resting entirely on props that aren't reliably
+  // visible at this crop. Floor tile seams are always in frame (the
+  // floor fills the lower half of the shot) and read as a hallway/
+  // institutional floor immediately, receding toward the vanishing
+  // point the same way the lockers do.
+  for (let i = -6; i < 10; i++) {
+    const seamZ = box3(3.4, 0.002, 0.012, 0xc7cdd2);
+    seamZ.position.set(0, 0.0012, -i * 1.0);
+    world.add(seamZ);
+  }
+  [-1.13, 1.13].forEach(x => {
+    const seamX = box3(0.012, 0.002, 16, 0xc7cdd2);
+    seamX.position.set(x, 0.0012, -6);
+    world.add(seamX);
+  });
+  // A visible kickplate strip along the base of each locker bank —
+  // still in frame at ankle height even when the lockers' upper body
+  // isn't, so the "this is a hallway with lockers" cue survives the
+  // tight low crop, not just the floor.
+  [-1, 1].forEach(side => {
+    const kick = box3(0.5, 0.09, 15.5, 0x5c7592, { roughness: 0.5, metalness: 0.1 });
+    kick.position.set(side * 1.75, 0.045, -6.2);
+    world.add(kick);
+  });
 
   function lockerBank(side) {
     for (let i = 0; i < 10; i++) {
@@ -2488,15 +2650,24 @@ function buildSceneWalkingFeet(stage) {
     world.add(win);
   });
 
+  // Round 5 (per Faye): toeColor now contrasts against the body/heel
+  // (a neutral rubber-cap tone) instead of all three being the exact
+  // same red — that flat single color was why the whole shoe read as
+  // one blob rather than a sneaker with visible parts.
   const shoeColor = 0xe0574a;
-  const foreShoe = buildShoe3(shoeColor, 1.3);
+  const foreShoe = buildShoe3(shoeColor, 1.3, 0x2b2b2e);
   foreShoe.rotation.y = 0.12;
   foreShoe.rotation.x = -0.05;
   foreShoe.position.set(0.02, 0.04, 0.0);
   world.add(foreShoe);
-  const forePant = cyl3(0.09, 0.08, 0.2, 0x2d5fa8, 10);
-  forePant.position.set(0.02, 0.14, -0.09);
-  forePant.rotation.x = 0.12;
+  // Round 5 (per Faye): a cylinder here read as a hollow blue cup/vase
+  // from this angle (its open top rim facing the camera) no matter how
+  // it was resized or angled. A box, like the shoe's own body/toe-cap
+  // above, has no rim to reveal and reads immediately as a pant leg
+  // ending at the ankle instead.
+  const forePant = box3(0.16, 0.13, 0.15, 0x2d5fa8);
+  forePant.position.set(0.02, 0.12, -0.1);
+  forePant.rotation.x = 0.05;
   world.add(forePant);
 
   const bgShoeA = buildShoe3(0x5a9dd6, 0.55);
@@ -2512,12 +2683,44 @@ function buildSceneWalkingFeet(stage) {
     shin.position.set(p[0], 0.16, p[1]);
     world.add(shin);
   });
+  // Round 5 (per Faye): the background figure was two bare shins and
+  // nothing else — no thighs, hips, or torso, which broke the scene's
+  // logic (legs floating with no body above them). Adds a simple,
+  // deliberately soft/low-detail upper body — thighs bridging shin to
+  // hip, then a single torso block for chest/shoulders — kept plain on
+  // purpose since it's a small background figure already softened by
+  // distance and fog, not a second fully-detailed character.
+  [[-0.18, -5.2], [0.1, -5.55]].forEach(p => {
+    const thigh = cyl3(0.05, 0.045, 0.3, 0x35404a, 8);
+    thigh.position.set(p[0], 0.42, p[1] + 0.02);
+    thigh.rotation.x = -0.06;
+    world.add(thigh);
+  });
+  const hip = cyl3(0.11, 0.1, 0.16, 0x2f3942, 10);
+  hip.position.set(-0.04, 0.58, -5.35);
+  world.add(hip);
+  const torso = box3(0.32, 0.5, 0.2, 0x8a2f2f, { roughness: 0.7 });
+  torso.position.set(-0.04, 0.95, -5.37);
+  world.add(torso);
+  const shoulders = cyl3(0.19, 0.16, 0.1, 0x8a2f2f, 10);
+  shoulders.rotation.z = Math.PI / 2;
+  shoulders.position.set(-0.04, 1.18, -5.37);
+  world.add(shoulders);
+  // A soft head suggestion — no face at this distance/blur, just
+  // enough silhouette to read as a person, not a headless torso.
+  const bgHead = sphere3(0.14, 0xd9a06c, 12, 10);
+  bgHead.position.set(-0.04, 1.42, -5.35);
+  world.add(bgHead);
 
   return {
     start: { pos: { x: 0.15, y: 0.34, z: 1.9 }, look: { x: 0, y: 0.06, z: -4 } },
-    // 3/4 angle, not straight-on — face-on, the toe sphere occluded the
-    // sole/laces/heel entirely and just read as a pink blob.
-    settle: { pos: { x: 0.34, y: 0.17, z: 0.5 }, look: { x: -0.05, y: 0.04, z: -1.6 } }
+    // Round 5 (per Faye): the previous settle framing looked straight
+    // down the hallway with the shoe pushed into a corner, where it
+    // read as a small unrecognizable blob. This is a closer 3/4
+    // side-front view centered ON the shoe (the toe/body two-tone
+    // split, laces, and sole are all in frame), with the hallway still
+    // visible receding behind it via the lockers + floor seams.
+    settle: { pos: { x: 0.42, y: 0.19, z: 0.32 }, look: { x: 0, y: 0.05, z: -0.1 } }
   };
 }
 
