@@ -1,6 +1,6 @@
 window.BADGE_CATALOG = [
-  { id:'basic_sketch', title:'Basic Sketch', artist:'Des. by Alex', imgUrl:'', emoji:'✏️', color:'#f59e0b' },
-  { id:'still_life', title:'Still Life', artist:'Des. by Sara', imgUrl:'', emoji:'🍎', color:'#ef4444' },
+  { id:'basic_sketch', title:'Form and Structure', artist:'Des. by Alex', imgUrl:'', emoji:'✏️', color:'#f59e0b' },
+  { id:'still_life', title:'Still Life and Texture', artist:'Des. by Sara', imgUrl:'', emoji:'🍎', color:'#ef4444' },
   { id:'landscape', title:'Landscape', artist:'Des. by Xinyue', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/696544b4fa92c8867e1c6d5c_Screenshot%202026-01-12%20at%2010.59.57%E2%80%AFAM.png', emoji:'⛰️', color:'#10b981' },
   { id:'material_explore', title:'Material Explore', artist:'Des. by Xinyue', imgUrl:'', emoji:'🧱', color:'#78716c' },
   { id:'observation_detective', title:'Observation Detective', artist:'Des. by Faye', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6930817dc2b2e1062da9b98c_IMG_0186.jpg', emoji:'👀', color:'#06b6d4' },
@@ -9,7 +9,7 @@ window.BADGE_CATALOG = [
   { id:'figure_sketch', title:'Figure Sketch', artist:'Des. by Mia', imgUrl:'', emoji:'🧍', color:'#f43f5e' },
   { id:'portrait_master', title:'Portrait Master', artist:'Des. by Regina', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6980e96299ba4edfc375f693_506d6e9e0733a890480cbd0d1d8b84f1.JPG', emoji:'👤', color:'#be185d' },
   { id:'interior_design', title:'Interior Design', artist:'Des. by Serena', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69406958b761df83827f9dd5_524d9a710bb12ade81c4881230ad64f8.jpg', emoji:'🛋️', color:'#d97706' },
-  { id:'costume_design', title:'Costume Design', artist:'Des. by Max', imgUrl:'', emoji:'👗', color:'#db2777' },
+  { id:'costume_design', title:'Fashion Design', artist:'Des. by Max', imgUrl:'', emoji:'👗', color:'#db2777' },
   { id:'hand_crafter', title:'Hand Crafter', artist:'Des. by Alissie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693081a5795fc4e17b5952f6_Screenshot%202025-12-03%20at%2010.29.44%E2%80%AFAM.png', emoji:'🧵', color:'#ec4899' },
   { id:'little_architect', title:'Little Architect', artist:'Des. by Cameron', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/692617dac227fa894b1b16cd_feiteamart%20achitect.PNG', emoji:'🏛️', color:'#0ea5e9' },
   { id:'idea_inventor', title:'Idea Inventor', artist:'Des. by Natalie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69ced4ef7068f80595cfd07e_15CCA2B1-5146-4602-9B9B-02F5D74536A1.JPG', emoji:'💡', color:'#8b5cf6' },
@@ -39,6 +39,13 @@ window.BADGE_CATALOG = [
   // once they're built, per Faye's explicit "don't restructure this one"
   // instruction.
   { id:'scene_drawing_unit_01', title:'Unit 01 · Shot Size', artist:'', imgUrl:'', emoji:'🎥', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' },
+
+  // Ink Painting — the whole "Painting → Ink Painting" category badge
+  // (十二生肖兽图 · Zodiac Brush Technique is the course currently living
+  // under this category). Distinct from zodiac_rat just below, which is
+  // the per-animal badge for Rat specifically — this one is the
+  // category-level badge and will keep counting as more animals launch.
+  { id:'ink_painting', title:'Ink Painting', artist:'', imgUrl:'', emoji:'🖌️', color:'#8a2e22', earnedMessage:'you completed your first ink painting course.' },
 
   // Zodiac Brush Technique (internal review build) — placeholder
   // artwork/icon per Faye's addendum ("actual artwork can be a
