@@ -24,12 +24,23 @@
  *     three lines flagged inline in concept_moment below, which are
  *     Faye's own wording (near-verbatim per her instruction).
  *   - story_scenes carry `category` (one of Emotion/Action/Detail/Clue,
- *     or the bonus "Relationship" on the optional 6th story) alongside
- *     `tip` + `framing`, shown on both the pre-scene tip card and the
- *     post-scene question card. Faye's storyboard sheet
- *     (reference-images/lesson04-close-up-storyboard-reference.png)
- *     already labels all 6 panels with their exact story title/category
- *     in written order — no mapping ambiguity, unlike Lesson 03's sheet.
+ *     or "Relationship" on the closing story) alongside `tip` +
+ *     `framing`, shown on both the pre-scene tip card and the post-scene
+ *     question card.
+ *   - Round 2 (Sept 2026, per Faye): dropped to 5 required situations,
+ *     no optional/skip story anymore. "The Crumpled Paper" was cut
+ *     entirely (not hidden) per Faye's own storyboard v2 — she didn't
+ *     carry it forward when she redrew this lesson's scenes by hand.
+ *     "Passing a Secret Note" (the old optional 6th) is now the closing
+ *     5th story, required like the rest, and rebuilt to match her v2
+ *     drawing (see index.html's buildSceneSecretNote). The other four
+ *     kept stories were also rebuilt from that same drawing — Unlocking
+ *     the Door (now a door handle + a face peeking around the door, not
+ *     a key/lock), A Frightened Face (now a hair-covered face holding a
+ *     cushion up, curtains behind), and The Glass of Water (now a mug +
+ *     a plate of food) all changed composition; Walking Feet kept its
+ *     concept (foreground foot + a receding hallway) with a door now
+ *     visible at the far end, matching her drawing exactly.
  *   - every 3D scene keeps a faint trace of its environment behind the
  *     close-up subject (fog + a few simple background props), never a
  *     blank backdrop — Faye's explicit "quieter, not gone" rule. See
@@ -76,7 +87,7 @@
         'Close-up = look closer at what matters.',
         'Close-up is not simply drawing something bigger. We move closer because something has become important.'
       ],
-      // The four categories the six practice stories are built around.
+      // The four categories the five practice stories are built around.
       // Wording (labels + one-line glosses) is Claude Code's own —
       // flagged, kept short per the brief's "not a wall of text".
       categories: [
@@ -94,17 +105,14 @@
     // Lesson 03's scenes_intro.
     scenes_intro: {
       titleCard: 'Close-Up Practice',
-      explainerCard: "Six short stories — five to draw, and a sixth that's optional. Each one starts with a tip, then you'll see the scene and sketch it yourself."
+      explainerCard: "Five short stories, all yours to draw. Each one starts with a tip, then you'll see the scene and sketch it yourself."
     },
 
-    // Step 2 — six Close-Up stories, in Faye's written order (which
-    // matches her storyboard sheet's own labeled panel order this
-    // time — no mapping ambiguity, unlike Lesson 03).
+    // Step 2 — five Close-Up stories, in Faye's storyboard v2 order.
     //   category — one of Emotion / Action / Detail / Clue (the four
-    //              taught in Step 1), or the bonus "Relationship" on
-    //              the optional 6th story. Shown as a kicker on both
-    //              the pre-scene tip card and the post-scene question
-    //              card.
+    //              taught in Step 1), or "Relationship" on the closing
+    //              story. Shown as a kicker on both the pre-scene tip
+    //              card and the post-scene question card.
     //   tip      — Faye's own tip text, shown before the scene appears.
     //   framing  — one short line telling the student how the shot is
     //              framed. Claude Code's own wording, derived from
@@ -116,16 +124,21 @@
         id: 'unlocking_door', sceneKey: 'unlockingDoor', setting: 'indoor',
         category: 'Action',
         title: 'Unlocking the Door',
-        situationLine: 'At midnight, a hand turns a key — the door opens just a crack.',
-        framing: 'Frame in tight on the hand, the key, and the lock.',
-        tip: "What exactly is happening? It's not about what the room looks like — focus on the key, fingers, lock, and that tiny opening."
+        // Round 2 (per Faye's storyboard v2): a hand on a round door
+        // handle, not a key turning in a lock — and now a face peeking
+        // around the door's edge, watching.
+        situationLine: 'At midnight, a hand turns the door handle — someone is peeking around the edge.',
+        framing: 'Frame in tight on the hand, the handle, and the face peeking around the door.',
+        tip: "What exactly is happening? It's not about what the room looks like — focus on the hand, the handle, and that face watching from the edge."
       },
       {
         id: 'frightened_face', sceneKey: 'frightenedFace', setting: 'indoor',
         category: 'Emotion',
         title: 'A Frightened Face',
-        situationLine: 'A girl freezes — she just heard or saw something scary.',
-        framing: 'Frame just her head — and maybe a little shoulder.',
+        // Round 2: she's holding a cushion up over the lower half of
+        // her face now, peeking over the top — not just a bare face.
+        situationLine: 'A girl freezes, hiding behind a cushion — she just heard or saw something scary.',
+        framing: 'Frame just her head and the cushion she is holding up.',
         // Faye's own instruction folded into the tip text: let the
         // student invent their own backstory, don't give a specific
         // answer.
@@ -134,37 +147,34 @@
       {
         id: 'glass_of_water', sceneKey: 'glassOfWater', setting: 'indoor',
         category: 'Detail / Action',
+        // Round 2 (per Faye's storyboard v2): a mug of tea/coffee at a
+        // table with food, not a plain glass of water — title/id/
+        // category kept exactly as-is per Faye's instruction, only the
+        // composition changed.
         title: 'The Glass of Water',
-        situationLine: "A hand reaches for a glass of water, fingers about to close around it.",
-        framing: 'Fill most of the frame with the glass — show only part of the table.',
-        tip: "What's the story behind this glass of water? Pick a couple of small details nearby — not everything."
+        situationLine: 'A hand holds a warm mug at the table, next to a plate of food.',
+        framing: 'Fill most of the frame with the mug and the plate — show only part of the table.',
+        tip: "What's the story behind this meal? Pick a couple of small details nearby — not everything."
       },
       {
         id: 'walking_feet', sceneKey: 'walkingFeet', setting: 'outdoor',
         category: 'Movement',
         title: 'Walking Feet',
-        situationLine: 'One pair of feet walks forward down a school hallway.',
+        situationLine: 'One pair of feet walks forward down a school hallway, a door waiting at the far end.',
         framing: 'Get down low, close to the ground — feet only.',
         tip: "You don't need to draw a whole person to let the viewer know someone is walking."
       },
       {
-        id: 'crumpled_paper', sceneKey: 'crumpledPaper', setting: 'indoor',
-        category: 'Clue',
-        title: 'The Crumpled Paper',
-        situationLine: 'A hand grips a crumpled paper tightly — a grade peeks through.',
-        framing: 'Frame in tight on the hand gripping the paper — no face needed.',
-        tip: 'How can my hand show a feeling?'
-      },
-      {
         id: 'secret_note', sceneKey: 'secretNote', setting: 'indoor',
-        // optional: true — same 5 required + 1 optional pattern as
-        // Lessons 02-03. index.html shows a "try it / skip" gate before
-        // this scene's reveal.
-        optional: true,
+        // Round 2 (per Faye): was the optional 6th story; now the
+        // closing 5th, required like the rest — no more skip gate.
+        // Composition also rebuilt from her storyboard v2: a low
+        // angle under the table, book + pencil on the table, hands
+        // reaching in from both sides, feet visible by each chair.
         category: 'Relationship',
         title: 'Passing a Secret Note',
-        situationLine: 'Under a table, one hand passes a secret note to another.',
-        framing: 'Frame in tight under the table — just the two hands and the note.',
+        situationLine: 'Under the table, one hand passes a secret note to another.',
+        framing: 'Frame in low, under the table — the book, the hands, and the note.',
         tip: "What's written on the note? You decide the story."
       }
     ],
@@ -183,7 +193,6 @@
       { sceneId: 'frightened_face', label: 'Quick Sketch Reference — A Frightened Face', placeholder: true },
       { sceneId: 'glass_of_water', label: 'Quick Sketch Reference — The Glass of Water', placeholder: true },
       { sceneId: 'walking_feet', label: 'Quick Sketch Reference — Walking Feet', placeholder: true },
-      { sceneId: 'crumpled_paper', label: 'Quick Sketch Reference — The Crumpled Paper', placeholder: true },
       { sceneId: 'secret_note', label: 'Quick Sketch Reference — Passing a Secret Note', placeholder: true }
     ],
 

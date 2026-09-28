@@ -26,20 +26,25 @@
   new 'cu' (Close-Up) stop, then a short written block (the two framing
   lines, the four categories, "not just faces," and the "background
   gets quiet, not gone" principle — see renderCloseupConcept /
-  afterRenderCloseupConcept); (2) a two-card intro, then six stories
-  (5 required + 1 optional), each TWO flat top-level steps: its 3D
-  scene (tip -> "Situation N" reveal -> 3D scene -> Quick Sketch
-  Reference overlay) and its own drawing round (two-panel: the
-  reference video enlarged + the student's canvas, with an "I would
-  prefer to work on paper" opt-out — Lessons 01-03's practice format);
-  then the community + complete steps. Skipping the optional 6th story
-  skips both of its steps.
+  afterRenderCloseupConcept); (2) a two-card intro, then five stories,
+  ALL required (no optional/skip story — see Round 2 note below), each
+  TWO flat top-level steps: its 3D scene (tip -> "Situation N" reveal ->
+  3D scene -> Quick Sketch Reference overlay) and its own drawing round
+  (two-panel: the reference video enlarged + the student's canvas, with
+  an "I would prefer to work on paper" opt-out — Lessons 01-03's
+  practice format); then the community + complete steps.
 
-  Faye's hand-drawn storyboard sheet
-  (reference-images/lesson04-close-up-storyboard-reference.png)
-  already labels all 6 panels with their exact story title/category in
-  written order — each 3D scene below follows its matching panel's
-  staging directly, no mapping ambiguity this time.
+  Round 2 (Sept 2026, per Faye): she wasn't happy with the 3D scenes'
+  visual quality and redrew this lesson's storyboard by hand
+  (reference-images/lesson04-close-up-storyboard-reference.png is the
+  ORIGINAL v1 sheet these scenes were first built from — kept for
+  history, no longer the live reference). Structural change alongside
+  the rebuild: "The Crumpled Paper" is cut entirely (she didn't carry it
+  forward into her new storyboard), and "Passing a Secret Note" — the
+  old optional 6th story — is now the closing 5th, required like every
+  other story. The old scene-gate/skip UI and STATE.optionalSkipped
+  bookkeeping are removed along with it; nothing in this lesson is
+  skippable anymore.
 
   Every 3D scene keeps a faint trace of its environment (fog + a few
   simple background props — a door panel, a blurred wall, a hallway,
@@ -48,7 +53,7 @@
   that trace is.
 
   SCOPE NOTES (flagged, not silently assumed):
-  - All six Quick Sketch Reference videos are placeholders until Faye
+  - All five Quick Sketch Reference videos are placeholders until Faye
     supplies them (data-only change in lesson-data.js).
   - The community gallery is placeholder-only until real student
     photos are supplied (same data-driven branch as Lessons 01-03).
@@ -205,7 +210,7 @@ button{font-family:inherit;}
 .continue-btn.ghost{background:transparent;color:var(--ink-faint);box-shadow:none;font-weight:600;font-size:12.5px;}
 
 /* ============================================================
-   3D story-scene stage (used by the six Close-Up stories). Ported/
+   3D story-scene stage (used by the five Close-Up stories). Ported/
    extended from Lesson 01's equivalent "Discover" 3D stage — same
    full-bleed shell.
 ============================================================ */
@@ -922,8 +927,6 @@ button{font-family:inherit;}
 // class Lesson 01's round 5 hit needs a step tracking its own sub-stages;
 // this never does). STORY_SCENE_STEPS builds them from
 // LESSON_DATA.story_scenes + SCENE3D_BUILDERS so the two stay in sync.
-// `hiddenWhen` lets the optional story's drawing round drop out of the
-// path when the student skipped that story (see isStepHidden).
 const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.flatMap((s, i) => [
   {
     id: 'scene_' + s.id,
@@ -934,8 +937,7 @@ const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.flatMap((s, i) => [
   {
     id: 'draw_' + s.id,
     render: () => renderStoryDraw(s, i),
-    afterRender: () => afterRenderStoryDraw(s, i),
-    hiddenWhen: () => !!(s.optional && STATE.optionalSkipped[s.id])
+    afterRender: () => afterRenderStoryDraw(s, i)
   }
 ]);
 const STEPS = [
@@ -950,7 +952,6 @@ const STEPS = [
 let STATE = {
   stepIndex: 0,
   storyResults: [],        // per story index: 'digital' | 'paper' | undefined (not resolved)
-  optionalSkipped: {},     // story id -> true when the student skipped that optional story
   checkedConcepts: [],
   lessonSaved: false
 };
@@ -1006,7 +1007,7 @@ function markLessonComplete(){
 }
 
 /* ============================================================
-   3D — shared loader + toolkit, used by all six story scenes below
+   3D — shared loader + toolkit, used by all five story scenes below
    (SCENE3D_BUILDERS). Renders
    into a BOXED container (.camera3d-stage) per step, not a full-
    viewport fixed canvas — same "Learning Canvas keeps every step
@@ -1016,7 +1017,7 @@ let _active3DStage = null; // set on mount by createThreeStage(); one stage live
 function cleanupActive3DStage(){
   if (_active3DStage) { _active3DStage.cleanup(); _active3DStage = null; }
 }
-// Round 2 — Step 3's six scenes now run a typewriter/countdown reveal
+// Round 2 — Step 3's five scenes now run a typewriter/countdown reveal
 // BEFORE the 3D stage even mounts (see renderStoryScene/
 // afterRenderStoryScene). If Previous/Next navigates away mid-reveal,
 // those pending setTimeout chains would otherwise keep firing after
@@ -1049,9 +1050,9 @@ function loadThreeJs(){
    (head/torso/2-segment posed limbs — a real step up from Lesson 01's
    abstract cloak-silhouette character, per this lesson's brief), a
    generic mount/cleanup stage helper, and common classroom/outdoor
-   props. Used by all six story scene builds (SCENE3D_BUILDERS, further
+   props. Used by all five story scene builds (SCENE3D_BUILDERS, further
    down) — written once here so the scenes share one consistent toolkit
-   and visual language instead of six bespoke ad-hoc ones.
+   and visual language instead of five bespoke ad-hoc ones.
 ============================================================ */
 function box3(w, h, d, color, opts) {
   opts = opts || {};
@@ -1664,7 +1665,7 @@ function afterRenderScenesIntroExplain(){
    (see STORY_SCENE_STEPS's own comment for why that matters).
 
    Round 2 — three additions to the original camera-sweep-straight-in
-   flow, applied UNIFORMLY to all six (including Situation 1 — no
+   flow, applied UNIFORMLY to all five (including Situation 1 — no
    special-casing the first one):
      1. A pre-reveal sequence: "Situation N" typed out, then the
         scene's one-line situationLine typed out (prefixed "Situation
@@ -1872,15 +1873,6 @@ function renderStoryScene(sceneData, sceneIndex) {
           <div class="scene-reveal-title" id="sceneRevealTitle"></div>
           <div class="scene-reveal-line" id="sceneRevealLine"></div>
           <div class="scene-reveal-countdown" id="sceneRevealCountdown"></div>
-          ${sceneData.optional ? `<div class="scene-gate" id="sceneGate">
-<div class="scene-gate-kicker">Situation ${sceneIndex + 1} · Optional${sceneData.category ? ' · ' + sceneData.category : ''}</div>
-            <div class="scene-gate-text">Feeling tired? This one is optional — try it if you'd like one more.</div>
-            <div class="scene-gate-category">${sceneData.category ? sceneData.category + ' — the bonus category' : ''}</div>
-            <div class="scene-gate-buttons">
-              <button class="scene-gate-btn primary" id="sceneGateGo">Let's try it</button>
-              <button class="scene-gate-btn" id="sceneGateSkip">Skip this one →</button>
-            </div>
-          </div>` : ''}
           <div class="scene-gate" id="sceneTip" hidden>
   <div class="scene-gate-kicker">Tip for Situation ${sceneIndex + 1}${sceneData.category ? ' · ' + sceneData.category : ''}</div>
             <div class="scene-gate-text">${sceneData.tip}</div>
@@ -1925,11 +1917,10 @@ async function afterRenderStoryScene(sceneData, sceneIndex) {
       }, 350));
     });
   }
-  // Flow: [optional try/skip gate] -> TIP card -> "Situation N" reveal
-  // chain -> 3D scene -> Quick Sketch Reference overlay. The tip waits
-  // for the student (no auto-advance) so they can read it at their own
-  // pace before the story appears. Skip (optional scene only) goes
-  // straight to the next step — nothing is pending to clean up yet.
+  // Flow: TIP card -> "Situation N" reveal chain -> 3D scene -> Quick
+  // Sketch Reference overlay. The tip waits for the student (no
+  // auto-advance) so they can read it at their own pace before the
+  // story appears.
   const tipEl = document.getElementById('sceneTip');
   function showTip() {
     revealEl.classList.add('gated');
@@ -1939,22 +1930,7 @@ async function afterRenderStoryScene(sceneData, sceneIndex) {
       startReveal();
     };
   }
-  if (sceneData.optional) {
-    revealEl.classList.add('gated');
-    document.getElementById('sceneGateGo').onclick = () => {
-      delete STATE.optionalSkipped[sceneData.id];
-      document.getElementById('sceneGate').hidden = true;
-      showTip();
-    };
-    // Skip drops BOTH this story's scene and its drawing round: flag it,
-    // then nextStep() steps over the now-hidden draw_<id> entry.
-    document.getElementById('sceneGateSkip').onclick = () => {
-      STATE.optionalSkipped[sceneData.id] = true;
-      nextStep();
-    };
-  } else {
-    showTip();
-  }
+  showTip();
 
   async function mountScene() {
     revealEl.classList.add('hide');
@@ -2256,121 +2232,161 @@ function buildGlassCup3(r, h, fillPct) {
   return g;
 }
 
-// PANEL 1 — Unlocking the Door. A key mid-turn in a round door lock, a
-// hand gripping the key's bow; background nearly disappears — a dark
-// door panel and a sliver of warm light through the crack (kept faint
-// per the "quieter, not gone" rule, not literally blank).
+// PANEL 1 — Unlocking the Door. Round 2 (per Faye's storyboard v2):
+// completely rebuilt — a hand on a round ring-pull door handle (not a
+// key in a lock), with a girl's face peeking around the door's edge on
+// the right, wearing a fuzzy-collared coat with a bag strap crossing
+// her shoulder. Dark interior; a sliver of warm light through the door
+// crack (kept faint per the "quieter, not gone" rule, not literally
+// blank).
 function buildSceneUnlockingDoor(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
   setBackdrop(stage, 0x0a0e17, 1.8, 6);
   dimSceneLights(stage, 0.3, 0.28, 0.18);
-  const warm = new THREE.PointLight(0xffdca0, 0.9, 3.5);
-  warm.position.set(0.85, 0.05, 0.15);
+  const warm = new THREE.PointLight(0xffdca0, 0.22, 2.5);
+  warm.position.set(-0.3, 0.15, 0.3);
   stage.scene.add(warm);
-  // Round 5 (per Faye): the door existed in the scene but was reading
-  // as empty black — near-identical in value to the backdrop, and with
-  // nothing catching light close enough to the lock to reveal it as a
-  // surface. A dedicated close light (warm, tight falloff) plus a
-  // lighter/warmer door color and a raised panel edge right at the
-  // lock give it something to actually show.
-  const doorLight = new THREE.PointLight(0xffdca0, 0.55, 1.1);
-  doorLight.position.set(0.12, 0.08, 0.3);
+  // A close light on the handle (kept from the previous round's fix —
+  // without it the door read as empty black, near-identical in value
+  // to the backdrop).
+  const doorLight = new THREE.PointLight(0xffdca0, 0.28, 1.0);
+  doorLight.position.set(-0.16, 0.06, 0.28);
   stage.scene.add(doorLight);
+  // A second, cooler fill on the girl's side so her face reads as a
+  // separate, slightly lit "peeking into the light" area rather than
+  // vanishing into the same shadow as the door. Round 2 fix: pixel-
+  // sampled the render to find the true cause here — the hairCap WAS
+  // rendering, at the right color, but three warm point lights all
+  // overlapping this small area pushed skin, hair, coat, and collar all
+  // toward the same washed warm-tan value once tone-mapped, crushing
+  // the contrast between them (confirmed by sampling: hair and skin
+  // pixels landed within ~25/255 of each other). Dimmer lights plus a
+  // darker base hair color (below) restores the separation.
+  const girlLight = new THREE.PointLight(0xcdd8ea, 0.12, 1.0);
+  girlLight.position.set(0.55, 0.32, 0.5);
+  stage.scene.add(girlLight);
 
-  const door = box3(2.4, 3.0, 0.07, 0x2a1f15, { roughness: 0.8 });
-  door.position.set(0, 0, -0.03);
+  // The door fills the left ~2/3 of the frame; its right edge (a
+  // visible vertical molding strip) is what the girl peeks around.
+  const door = box3(1.5, 3.0, 0.07, 0x2a1f15, { roughness: 0.8 });
+  door.position.set(-0.35, 0, -0.03);
   world.add(door);
-  const doorEdge = box3(2.44, 3.02, 0.02, 0x1c150f, { roughness: 0.8 });
-  doorEdge.position.set(0, 0, -0.065);
+  const doorEdge = box3(0.035, 3.02, 0.09, 0x1c150f, { roughness: 0.8 });
+  doorEdge.position.set(0.13, 0, 0.0);
   world.add(doorEdge);
-  // Raised panel frame right around the lock — a real door has some
-  // molding/panel break near hardware like this; without it the visible
-  // patch of door around the lock was just a flat, featureless plane
-  // that didn't read as a surface at all at this crop. Round 5 (per
-  // Faye, after the first pass at this still didn't show any door):
-  // at the settle camera's actual distance the visible window is only
-  // about 0.31 x 0.23 world units — a 0.9 x 1.5 panel filled the ENTIRE
-  // frame with no edge in sight, so it looked identical to a plain
-  // background fill. Sized to fit inside that window instead, so the
-  // molding's raised edge actually appears around the lock.
+  // Raised panel frame around the handle — sized to actually fit the
+  // settle camera's tight visible window (see the settle comment below)
+  // so its molding edge shows instead of filling the whole frame.
   const panelFrame = box3(0.27, 0.23, 0.018, 0x342518, { roughness: 0.75 });
-  panelFrame.position.set(-0.04, -0.03, 0.01);
+  panelFrame.position.set(-0.35, -0.02, 0.01);
   world.add(panelFrame);
   const panelInset = box3(0.21, 0.17, 0.014, 0x241a10, { roughness: 0.8 });
-  panelInset.position.set(-0.04, -0.03, 0.014);
+  panelInset.position.set(-0.35, -0.02, 0.014);
   world.add(panelInset);
-  // sliver of light through the crack, at the door's edge
-  const sliver = glowBox3(0.035, 2.8, 0.02, 0xfff0c0);
-  sliver.position.set(1.15, 0, -0.02);
+  // sliver of light through the crack, at the door's far edge
+  const sliver = glowBox3(0.03, 2.8, 0.02, 0xfff0c0);
+  sliver.position.set(-1.08, 0, -0.02);
   world.add(sliver);
-  const sliverGlow = new THREE.PointLight(0xffdca0, 0.5, 2.2);
-  sliverGlow.position.set(1.1, 0, 0.1);
+  const sliverGlow = new THREE.PointLight(0xffdca0, 0.4, 2.0);
+  sliverGlow.position.set(-1.03, 0, 0.1);
   stage.scene.add(sliverGlow);
-  // a faint moon, barely visible top corner
-  const moon = glow3(0.045, 0xe8e6d8);
-  moon.position.set(1.0, 1.3, -2.4);
-  world.add(moon);
 
-  // round lock plate + keyhole
-  const plate = cyl3(0.058, 0.058, 0.026, 0xb08d46, 20);
-  plate.material.roughness = 0.35; plate.material.metalness = 0.4;
-  plate.rotation.x = Math.PI / 2;
-  plate.position.set(0, 0, 0.02);
-  world.add(plate);
-  const plateRing = cyl3(0.062, 0.062, 0.01, 0x8a6d34, 20);
-  plateRing.rotation.x = Math.PI / 2;
-  plateRing.position.set(0, 0, 0.005);
-  world.add(plateRing);
-  const keyhole = box3(0.018, 0.008, 0.01, 0x0a0806);
-  keyhole.position.set(0, -0.005, 0.036);
-  world.add(keyhole);
-
-  // key, mid-turn: shaft into the hole, bow sticking out where the hand grips
-  const key = new THREE.Group();
-  const shaft = box3(0.095, 0.013, 0.006, 0xc7ccd1, { roughness: 0.3, metalness: 0.5 });
-  shaft.position.set(-0.05, 0, 0);
-  key.add(shaft);
-  const bow = new THREE.Mesh(new THREE.TorusGeometry(0.026, 0.007, 8, 16),
+  // Round ring-pull handle (per Faye's drawing: a circular loop on a
+  // backplate, not a traditional round knob) — backplate + a torus
+  // ring mounted flush, protruding enough for the hand to wrap through.
+  const backplate = cyl3(0.062, 0.062, 0.016, 0x9a7d46, 20);
+  backplate.material.roughness = 0.35; backplate.material.metalness = 0.45;
+  backplate.rotation.x = Math.PI / 2;
+  backplate.position.set(-0.35, -0.02, 0.02);
+  world.add(backplate);
+  const handleRing = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.012, 10, 20),
     new THREE.MeshStandardMaterial({ color: 0xc7ccd1, roughness: 0.3, metalness: 0.5 }));
-  bow.position.set(-0.11, 0, 0);
-  key.add(bow);
-  for (let i = 0; i < 3; i++) {
-    const tooth = box3(0.012, 0.01, 0.006, 0xc7ccd1, { roughness: 0.3, metalness: 0.5 });
-    tooth.position.set(-0.01 - i * 0.018, -0.012, 0);
-    key.add(tooth);
-  }
-  key.position.set(0, 0, 0.033);
-  key.rotation.z = -0.4;
-  world.add(key);
+  handleRing.position.set(-0.35, -0.02, 0.05);
+  world.add(handleRing);
 
   const hand = buildHandProp(0xf0c49a);
-  const handPos = new THREE.Vector3(-0.15, -0.05, 0.04);
+  const handPos = new THREE.Vector3(-0.42, -0.08, 0.06);
   hand.position.copy(handPos);
-  // fingers wrap up and over the key's bow; palm faces the lock plate
-  orientHand(hand, new THREE.Vector3(0.4, 0.85, -0.1), new THREE.Vector3(0.85, -0.1, 0.4));
-  // Round 5 (per Faye): a uniform curl on all four fingers read as a
-  // generic "hand near lock" pose, not a specific grip. Fingers are
-  // [pinky, ring, middle, index] by build order (thumbPivot sits on the
-  // same side as the last entry, confirming it's the index) — index
-  // curls tightest, right alongside the thumb, to pinch the key's bow
-  // and guide it; middle/ring/pinky curl loosely into more of a
-  // supporting fist instead of matching the grip exactly.
-  poseHand(hand, [0.75, 0.8, 0.9, 1.2], 1.0);
-  attachForearm(hand, 0xf0c04a, 0.34);
+  // fingers wrap through the ring from the left; palm faces the door
+  orientHand(hand, new THREE.Vector3(0.75, 0.55, 0.1), new THREE.Vector3(0.3, -0.3, 0.9));
+  poseHand(hand, [0.85, 1.0, 1.05, 1.1], 0.9);
+  attachForearm(hand, 0xf0c04a, 0.36);
   world.add(hand);
 
+  // The girl, peeking around the door's edge on the right — a simple
+  // standalone head (not the full buildKid rig, same approach as
+  // buildSceneFrightenedFace) turned toward the handle, one eye/brow
+  // visible on her near (camera/handle-facing) side, hair falling over
+  // the far side of her face. Fuzzy-collared coat + a bag strap, per
+  // Faye's drawing.
+  const skin = 0xf0c49a, hair = 0x2e1f12;
+  const head = sphere3(0.135, skin, 18, 14);
+  head.position.set(0.32, 0.12, 0.18);
+  head.rotation.y = -0.5; // turned to look toward the handle/door
+  world.add(head);
+  const hairCap = new THREE.Mesh(
+    new THREE.SphereGeometry(0.14, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.62),
+    new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 }));
+  hairCap.position.copy(head.position);
+  hairCap.rotation.y = 0.55; // hair's fuller side falls over her FAR (+x, away-from-handle) cheek
+  world.add(hairCap);
+  const visEye = sphere3(0.014, 0x2a2018, 8, 6);
+  visEye.position.set(0.245, 0.125, 0.285);
+  world.add(visEye);
+  const visBrow = box3(0.036, 0.007, 0.012, hair, { roughness: 0.9 });
+  visBrow.position.set(0.245, 0.152, 0.285);
+  visBrow.rotation.y = -0.5;
+  world.add(visBrow);
+  const nose = sphere3(0.014, skin, 8, 6);
+  nose.scale.set(0.8, 1, 0.9);
+  nose.position.set(0.215, 0.095, 0.295);
+  world.add(nose);
+
+  // Fuzzy-collared coat: a rounded torso block + a ring of small puffs
+  // at the neckline standing in for texture (this lesson's established
+  // low-poly way to fake fur/fuzz, same trick as buildShoe3's laces).
+  const coat = box3(0.24, 0.3, 0.16, 0x8a5a3c, { roughness: 0.85 });
+  coat.position.set(0.32, -0.16, 0.14);
+  coat.rotation.y = -0.35;
+  world.add(coat);
+  const collarPuffColor = 0xb8a488;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 5) * Math.PI - Math.PI * 0.15;
+    const puff = sphere3(0.024, collarPuffColor, 8, 6);
+    puff.position.set(
+      0.32 + Math.cos(a) * 0.12 - 0.03,
+      -0.01 + (i % 2 === 0 ? 0.012 : -0.008),
+      0.14 + Math.sin(a) * 0.1 + 0.04
+    );
+    world.add(puff);
+  }
+  // bag + diagonal strap crossing her shoulder
+  const strap = box3(0.035, 0.32, 0.012, 0x5a3f28, { roughness: 0.8 });
+  strap.position.set(0.34, -0.08, 0.22);
+  strap.rotation.z = 0.55;
+  world.add(strap);
+  const bag = sphere3(0.07, 0x6b4530, 12, 8);
+  bag.scale.set(1.2, 0.85, 0.6);
+  bag.position.set(0.4, -0.28, 0.2);
+  world.add(bag);
+
   return {
-    start: { pos: { x: 0.1, y: 0.08, z: 0.95 }, look: { x: -0.02, y: -0.01, z: 0 } },
-    settle: { pos: { x: -0.03, y: 0.005, z: 0.27 }, look: { x: -0.05, y: -0.005, z: 0.02 } },
-    focusX: -0.05
+    start: { pos: { x: 0.1, y: 0.08, z: 1.05 }, look: { x: -0.05, y: 0, z: 0.1 } },
+    // Close enough that the handle + hand read clearly on the left,
+    // with the girl's peeking face + coat/bag in frame on the right —
+    // matches Faye's panel putting both subjects in one shot.
+    settle: { pos: { x: -0.03, y: 0.04, z: 0.88 }, look: { x: -0.02, y: 0.02, z: 0.12 } },
+    focusX: -0.1
   };
 }
 
-// PANEL 2 — A Frightened Face. Head fills the frame, wide eyes, tense
-// brows, an open frightened mouth, a sweat drop; hands drawn up near
-// the chin. Background stays a faint blurred vertical shape (a door/
-// wall edge) inside heavy fog — never a flat blank fill.
+// PANEL 2 — A Frightened Face. Round 2 (per Faye's storyboard v2):
+// rebuilt — hair mostly covers her face (jagged, messy bangs), and she
+// holds a cushion up in front of the lower half of her face with both
+// hands, peeking over the top with wide, worried eyes. Curtains (a row
+// of vertical fabric folds) fill the background on both sides, per her
+// drawing — replaces the previous vague wall-edge hint.
 function buildSceneFrightenedFace(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
@@ -2379,34 +2395,38 @@ function buildSceneFrightenedFace(stage) {
   const rim = new THREE.PointLight(0x8fa6c2, 0.5, 3);
   rim.position.set(-0.6, 0.3, 0.4);
   stage.scene.add(rim);
-  // faint background hint: a vague wall/door edge, mostly lost in fog
-  const wallHint = box3(0.7, 3, 0.06, 0x3a3d43, { roughness: 0.9 });
-  wallHint.position.set(-1.0, 0, -1.35);
-  world.add(wallHint);
-  const wallHint2 = box3(1.4, 3, 0.06, 0x33363b, { roughness: 0.9 });
-  wallHint2.position.set(0.9, 0, -1.7);
-  world.add(wallHint2);
+  // Curtains: a row of vertical fabric folds spanning the background,
+  // alternating depth/shade so each fold catches light differently —
+  // reads as gathered fabric rather than a flat striped wall.
+  const curtainColors = [0x3d4148, 0x363a40, 0x42464d];
+  for (let i = -8; i <= 8; i++) {
+    const x = i * 0.16;
+    if (Math.abs(x) < 0.5) continue; // keep the curtain clear of the head itself
+    const fold = box3(0.1, 3.2, 0.05, curtainColors[Math.abs(i) % 3], { roughness: 0.92 });
+    fold.position.set(x, 0, -1.2 - (i % 2 === 0 ? 0.08 : 0));
+    world.add(fold);
+  }
 
   const skin = 0xf0c49a, hair = 0x3a281c;
   const head = sphere3(0.52, skin, 24, 18);
   world.add(head);
-  // Round 5 (per Faye): hairCap was centered 0.09 above the head
-  // sphere's own center, so its lower edge cut across well above the
-  // head's true equator — leaving a visible gap/seam between hair and
-  // scalp instead of the cap sitting flush. Centering it on the same
-  // point as the head (just a hair larger in radius, for thickness)
-  // fixes the seam. NOTE: thetaLength briefly went to 0.62 here, which
-  // (once centered/flush instead of offset) put the cap's lower rim
-  // BELOW the eye line (eyes sit at ~0.463*PI from the top pole) —
-  // hair buried the whole face down to the mouth. 0.34 stops the rim
-  // just above the brows (~0.361*PI), so hair reads as a normal
-  // hairline/fringe with the whole face visible below it.
+  // Fuller, messier bangs than before — thetaLength pushed back down
+  // toward the brow line (per her drawing's jagged, face-covering
+  // hair), with a jagged fringe of small cones along the hairline for
+  // the "spiky bangs" silhouette instead of a smooth cap edge.
   const hairCap = new THREE.Mesh(
-    new THREE.SphereGeometry(0.545, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.34),
+    new THREE.SphereGeometry(0.545, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.4),
     new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 }));
   hairCap.position.y = 0.015;
   world.add(hairCap);
-  // a couple of loose strands framing the face, per the storyboard's messy hair
+  for (let i = -3; i <= 3; i++) {
+    const spike = cone3(0.055, 0.16, hair, 6);
+    spike.position.set(i * 0.13, 0.24 - Math.abs(i) * 0.015, 0.33);
+    spike.rotation.x = Math.PI + 0.15;
+    spike.rotation.z = i * 0.06;
+    world.add(spike);
+  }
+  // loose strands framing the sides of the face, falling past the jaw
   [[-0.42, 0.05, 0.32, -0.3], [0.4, 0.02, 0.3, 0.3], [-0.28, -0.1, 0.44, -0.15]].forEach(s => {
     const strand = cone3(0.05, 0.32, hair, 6);
     strand.position.set(s[0], s[1], s[2]);
@@ -2414,29 +2434,9 @@ function buildSceneFrightenedFace(stage) {
     strand.rotation.x = 0.3;
     world.add(strand);
   });
-  // Round 5 (per Faye): eyes/brows/mouth alone on a bare sphere read as
-  // decals on a ball, not a formed face. A nose bridge + tip and a
-  // subtle chin/jaw break up the silhouette and give the face the
-  // structure it was missing.
-  const noseBridge = box3(0.052, 0.11, 0.06, skin, { roughness: 0.55 });
-  noseBridge.position.set(0, -0.01, 0.5);
-  noseBridge.rotation.x = -0.15;
-  world.add(noseBridge);
-  const noseTip = sphere3(0.04, skin, 10, 8);
-  noseTip.scale.set(1, 0.85, 0.9);
-  noseTip.position.set(0, -0.075, 0.535);
-  world.add(noseTip);
-  [-1, 1].forEach(side => {
-    const nostril = sphere3(0.012, 0x8a5a3a, 6, 6);
-    nostril.position.set(side * 0.022, -0.085, 0.545);
-    world.add(nostril);
-  });
-  const chin = sphere3(0.14, skin, 12, 10);
-  chin.scale.set(1, 0.75, 0.85);
-  chin.position.set(0, -0.32, 0.42);
-  world.add(chin);
 
-  // wide eyes: sclera + iris, angled tense eyebrows above
+  // wide, worried eyes: sclera + iris, angled tense eyebrows above —
+  // the only part of her face left uncovered once the cushion is up.
   [-0.19, 0.19].forEach(x => {
     const sclera = sphere3(0.1, 0xfaf8f5, 14, 10);
     sclera.scale.set(1, 1.15, 0.6);
@@ -2453,31 +2453,40 @@ function buildSceneFrightenedFace(stage) {
     brow.rotation.z = x < 0 ? 0.32 : -0.32;
     world.add(brow);
   });
-  // open, frightened mouth
-  const mouthOuter = new THREE.Mesh(new THREE.CircleGeometry(0.1, 20),
-    new THREE.MeshStandardMaterial({ color: 0x7a3a30, roughness: 0.6 }));
-  mouthOuter.scale.set(1, 1.3, 1);
-  mouthOuter.position.set(0, -0.22, 0.5);
-  world.add(mouthOuter);
-  const mouthInner = new THREE.Mesh(new THREE.CircleGeometry(0.055, 16),
-    new THREE.MeshStandardMaterial({ color: 0x2a1410, roughness: 0.7 }));
-  mouthInner.position.set(0, -0.23, 0.505);
-  world.add(mouthInner);
-  // sweat drop near the temple
-  const drop = new THREE.Group();
-  const dTop = cone3(0.03, 0.05, 0x9ec7e3, 8); dTop.position.y = 0.03; drop.add(dTop);
-  const dBot = sphere3(0.03, 0x9ec7e3, 8, 6); drop.add(dBot);
-  drop.position.set(0.44, 0.12, 0.28);
-  world.add(drop);
 
-  // hands drawn up near the chin/mouth, fingers curled in fright
+  // The cushion, held up over the lower face — a rounded, soft-edged
+  // block (stacked boxes narrowing toward the top corners stand in for
+  // a rounded pillow silhouette) with both hands' fingers curling over
+  // its top edge.
+  // Round 2 fix: at this settle camera, objects held this close to the
+  // lens (z~0.44) get magnified and pushed toward the bottom edge far
+  // more than their world-space Y offset suggests — the cushion at
+  // y=-0.32 was almost entirely below frame. Raised (and pulled back
+  // slightly in Z) so its top edge sits just under the eyes instead.
+  // Also given a clearly distinct (cool, muted) color — the original
+  // warm salmon tone was too close to the skin tone to read as a
+  // separate object once lit, the same under-contrast problem found
+  // and fixed in buildSceneUnlockingDoor's hair.
+  const cushionColor = 0x5c8299;
+  const cushionCore = box3(0.42, 0.34, 0.12, cushionColor, { roughness: 0.75 });
+  cushionCore.position.set(0, -0.18, 0.4);
+  world.add(cushionCore);
+  const cushionTopBevel = box3(0.34, 0.06, 0.12, cushionColor, { roughness: 0.75 });
+  cushionTopBevel.position.set(0, 0.01, 0.39);
+  world.add(cushionTopBevel);
+  const cushionSeam = box3(0.42, 0.012, 0.13, 0x3f5f70, { roughness: 0.8 });
+  cushionSeam.position.set(0, -0.02, 0.4);
+  world.add(cushionSeam);
+
+  // hands gripping the cushion's top edge, fingers curling down over
+  // its front face — kept slightly in FRONT of the cushion (larger Z)
+  // so they aren't occluded by it from the camera's side.
   [-1, 1].forEach(side => {
     const hand = buildHandProp(skin);
-    hand.scale.setScalar(0.9);
-    hand.position.set(side * 0.24, -0.42, 0.36);
-    // fingers reach up toward the chin/mouth; palm faces inward/back at the face
-    orientHand(hand, new THREE.Vector3(-side * 0.35, 0.75, 0.35), new THREE.Vector3(side * 0.3, 0.1, -0.9));
-    poseHand(hand, 0.8, 0.55);
+    hand.scale.setScalar(0.85);
+    hand.position.set(side * 0.23, -0.03, 0.44);
+    orientHand(hand, new THREE.Vector3(-side * 0.15, -0.8, 0.35), new THREE.Vector3(side * 0.3, 0.2, -0.9));
+    poseHand(hand, [1.1, 1.15, 1.15, 1.1], 0.9);
     world.add(hand);
   });
 
@@ -2487,103 +2496,151 @@ function buildSceneFrightenedFace(stage) {
   };
 }
 
-// PANEL 3 — The Glass of Water. A glass fills most of the frame, a hand
-// reaching in from the side about to grip it; tabletop only partly
-// visible. A couple of small clue-props nearby (pill + pencil, per the
-// tip's "pick a couple, not everything"), background books/pencil-cup
-// kept soft in heavy fog rather than removed.
+// PANEL 3 — The Glass of Water. Round 2 (per Faye's storyboard v2):
+// rebuilt — a hand holds a mug (with a handle) at a table set with a
+// plate of food (a wedge of sandwich/toast, two dumplings, chopsticks
+// resting across the plate), a kitchen counter with jars and a hanging
+// utensil behind. Title/id/category kept exactly as Faye asked — only
+// the composition changed.
 function buildSceneGlassOfWater(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
   setBackdrop(stage, 0xe9ddc4, 0.9, 3.2);
   dimSceneLights(stage, 0.95, 0.9, 0.85);
 
-  const table = box3(2.4, 0.06, 2.0, 0xd9b98a, { roughness: 0.65 });
+  // Round 2 fix: the mug/plate/table/food were all clustered in the
+  // same pale cream range and, under this scene's bright lighting,
+  // blended into a nearly single-tone wash. Table darkened to a richer
+  // wood tone; mug given a saturated color below — same under-contrast
+  // fix as the door/cushion scenes.
+  const table = box3(2.4, 0.06, 2.0, 0xa8734a, { roughness: 0.65 });
   table.position.set(0, -0.03, -0.3);
   world.add(table);
-  const grain = box3(2.4, 0.003, 2.0, 0xc9a476);
+  const grain = box3(2.4, 0.003, 2.0, 0x96633e);
   grain.position.set(0, 0.0035, -0.3);
   world.add(grain);
 
-  // background clutter, soft/out-of-focus in the fog
-  const cup = cyl3(0.055, 0.05, 0.12, 0xa15ce0, 12);
-  cup.position.set(-0.55, 0.06, -1.0);
-  world.add(cup);
-  [0, 1, 2].forEach(i => {
-    const pencil = cyl3(0.008, 0.008, 0.16, [0xe0574a, 0x5a9dd6, 0xf0c04a][i], 6);
-    pencil.position.set(-0.58 + i * 0.03, 0.14, -1.0);
-    pencil.rotation.z = 0.1 * i;
-    world.add(pencil);
+  // kitchen counter behind: a shelf, a couple of jars, a hanging
+  // whisk/utensil — the "counter with jars" from Faye's drawing.
+  const counterTop = box3(2.4, 0.05, 0.4, 0xc9a476, { roughness: 0.6 });
+  counterTop.position.set(0.55, 0.62, -1.35);
+  world.add(counterTop);
+  [[0.15, 0x5a9dd6], [0.42, 0xe0e0d8]].forEach(j => {
+    const jar = cyl3(0.055, 0.05, 0.12, j[1], 10);
+    jar.material.transparent = true; jar.material.opacity = 0.85;
+    jar.position.set(0.7 + j[0], 0.71, -1.35);
+    world.add(jar);
   });
-  [0, 1].forEach(i => {
-    const book = box3(0.22, 0.035, 0.16, i ? 0x5a9dd6 : 0xe0574a);
-    book.position.set(0.5, 0.02 + i * 0.04, -1.1);
-    book.rotation.y = 0.15;
-    world.add(book);
-  });
+  const utensilHandle = cyl3(0.008, 0.008, 0.14, 0x8a6a4a, 6);
+  utensilHandle.position.set(0.5, 0.55, -1.33);
+  world.add(utensilHandle);
+  const utensilHead = sphere3(0.03, 0x9a9a9a, 8, 6);
+  utensilHead.scale.set(1, 0.5, 0.7);
+  utensilHead.position.set(0.5, 0.62, -1.33);
+  world.add(utensilHead);
   const wallHint = box3(2.4, 1.4, 0.05, 0xf0e5cc);
-  wallHint.position.set(0, 0.75, -1.3);
+  wallHint.position.set(0, 0.75, -1.5);
   world.add(wallHint);
 
-  const glass = buildGlassCup3(0.11, 0.24, 0.68);
-  glass.position.set(0, 0, 0);
-  world.add(glass);
-  // condensation droplets on the glass + a couple on the table
-  [[0.06, 0.11, 0.104], [-0.08, 0.06, 0.1], [0.09, 0.03, 0.1], [0.03, -0.02, 0.108]].forEach(d => {
-    const drop = sphere3(0.006, 0xdff3fa, 8, 6);
-    drop.material.transparent = true; drop.material.opacity = 0.75;
-    drop.position.set(d[0], d[1], d[2]);
-    world.add(drop);
+  // The mug — a cylinder body + a C-shaped handle (half a torus) on
+  // its near side, plus two soft steam wisps above.
+  const mug = new THREE.Group();
+  const mugColor = 0x4d7ea3;
+  const mugBody = cyl3(0.075, 0.065, 0.16, mugColor, 16);
+  mugBody.material.roughness = 0.4;
+  mug.add(mugBody);
+  const mugRim = cyl3(0.078, 0.078, 0.012, 0xf5f2ea, 16);
+  mugRim.position.y = 0.08;
+  mug.add(mugRim);
+  const mugFill = cyl3(0.068, 0.06, 0.02, 0x6b4530, 16);
+  mugFill.position.y = 0.075;
+  mug.add(mugFill);
+  const mugHandle = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.011, 8, 14, Math.PI * 1.3),
+    new THREE.MeshStandardMaterial({ color: mugColor, roughness: 0.4 }));
+  mugHandle.rotation.y = Math.PI / 2;
+  mugHandle.rotation.z = -Math.PI * 0.15;
+  mugHandle.position.set(0.078, 0.0, 0);
+  mug.add(mugHandle);
+  [[-0.02, 0.1], [0.025, 0.16]].forEach(s => {
+    const wisp = cone3(0.012, 0.09, 0xf5f2ea, 6);
+    wisp.material.transparent = true; wisp.material.opacity = 0.4;
+    wisp.position.set(s[0], 0.17 + s[1], 0);
+    wisp.rotation.z = s[0] * 2;
+    mug.add(wisp);
   });
-  [[0.16, -0.026, 0.02], [-0.15, -0.026, 0.08]].forEach(d => {
-    const drop = sphere3(0.009, 0xdff3fa, 8, 6);
-    drop.scale.set(1.3, 0.4, 1.3);
-    drop.material = new THREE.MeshStandardMaterial({ color: 0xdff3fa, transparent: true, opacity: 0.6, roughness: 0.2 });
-    drop.position.set(d[0], d[1], d[2]);
-    world.add(drop);
-  });
+  mug.position.set(0.08, 0.03, 0.1);
+  world.add(mug);
 
-  // two small clue-props, per the tip: pick a couple, not everything
-  const pill = new THREE.Group();
-  const pillA = sphere3(0.018, 0xe888b0, 10, 8); pillA.scale.set(1, 1, 1.6); pillA.position.x = -0.012;
-  const pillB = sphere3(0.018, 0xffffff, 10, 8); pillB.scale.set(1, 1, 1.6); pillB.position.x = 0.012;
-  pill.add(pillA, pillB);
-  pill.rotation.z = 0.5;
-  pill.position.set(0.26, -0.026, -0.1);
-  world.add(pill);
-  const pencilNear = cyl3(0.009, 0.009, 0.2, 0xf0c04a, 8);
-  pencilNear.rotation.z = Math.PI / 2;
-  pencilNear.rotation.y = 0.3;
-  pencilNear.position.set(-0.25, -0.026, -0.06);
-  world.add(pencilNear);
+  // The plate: a shallow disc with a sandwich wedge (a 3-sided prism —
+  // a flat triangular cross-section, the same low-poly trick used for
+  // this lesson's other food-adjacent props), two dumplings, and
+  // chopsticks resting across it. Round 2 fix: the plate's rim cylinder
+  // was centered BELOW the table's own top surface (y=0), so most of
+  // it was embedded inside the opaque table box and invisible — raised
+  // clear of the table, and given a whiter tone against the now-darker
+  // wood so it actually reads as a plate.
+  const plateRimPlate = cyl3(0.22, 0.22, 0.022, 0xf7f3ea, 28);
+  plateRimPlate.position.set(-0.28, 0.011, -0.15);
+  world.add(plateRimPlate);
+  const plate = new THREE.Mesh(new THREE.CircleGeometry(0.2, 28),
+    new THREE.MeshStandardMaterial({ color: 0xfffdf7, roughness: 0.5 }));
+  plate.rotation.x = -Math.PI / 2;
+  plate.position.set(-0.28, 0.023, -0.15);
+  world.add(plate);
+
+  const wedge = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.09, 3),
+    new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: 0.7 }));
+  wedge.rotation.x = Math.PI / 2;
+  wedge.rotation.z = Math.PI * 0.62;
+  wedge.position.set(-0.32, 0.068, -0.12);
+  world.add(wedge);
+  const wedgeCrust = new THREE.Mesh(new THREE.CylinderGeometry(0.114, 0.114, 0.02, 3),
+    new THREE.MeshStandardMaterial({ color: 0x8a5a2c, roughness: 0.8 }));
+  wedgeCrust.rotation.copy(wedge.rotation);
+  wedgeCrust.position.set(-0.32, 0.028, -0.12);
+  world.add(wedgeCrust);
+  const skewer = cyl3(0.006, 0.006, 0.14, 0xb8b8b8, 6);
+  skewer.position.set(-0.3, 0.15, -0.1);
+  skewer.rotation.x = 0.12;
+  world.add(skewer);
+  [[-0.16, -0.24], [-0.1, -0.28]].forEach(d => {
+    const dumpling = sphere3(0.032, 0xe8c888, 10, 8);
+    dumpling.scale.set(1.1, 0.75, 0.95);
+    dumpling.position.set(d[0], 0.046, d[1]);
+    world.add(dumpling);
+  });
+  [0, 1].forEach(i => {
+    const stick = cyl3(0.006, 0.005, 0.32, 0x8a5a2c, 6);
+    stick.rotation.z = Math.PI / 2;
+    stick.rotation.y = 0.3 + i * 0.08;
+    stick.position.set(-0.22 + i * 0.02, 0.03, -0.02 - i * 0.02);
+    world.add(stick);
+  });
 
   const hand = buildHandProp(0xc9895c);
-  const handPos = new THREE.Vector3(0.3, 0.14, -0.02);
+  const handPos = new THREE.Vector3(0.24, 0.08, 0.12);
   hand.position.copy(handPos);
-  const gripPoint = new THREE.Vector3(0.09, 0.16, 0.03);
-  // fingers reach toward the glass's near-top edge; palm/back faces up
-  // toward the camera, which looks down slightly at the tabletop
-  orientHand(hand, gripPoint.clone().sub(handPos), new THREE.Vector3(0, -1, 0.25));
-  poseHand(hand, 0.3, 0.15);
+  const gripPoint = new THREE.Vector3(0.13, 0.03, 0.1);
+  // fingers wrap around the mug's body from the near side; palm faces
+  // the mug, thumb resting near the handle
+  orientHand(hand, gripPoint.clone().sub(handPos), new THREE.Vector3(-1, 0.1, 0.1));
+  poseHand(hand, [0.55, 0.65, 0.7, 0.5], 0.4);
   attachForearm(hand, 0x5cb85c, 0.42);
   world.add(hand);
 
   return {
-    start: { pos: { x: 0.35, y: 0.55, z: 1.05 }, look: { x: 0, y: 0.02, z: -0.15 } },
-    // Round 5 (per Faye): the previous settle cropped the hand off at
-    // the frame's right edge (wrist/forearm cut out of shot). Pulled
-    // back and panned further right so the whole hand and forearm are
-    // in frame alongside the glass.
-    settle: { pos: { x: 0.3, y: 0.22, z: 0.62 }, look: { x: 0.12, y: 0.09, z: 0 } },
-    focusX: 0.02
+    start: { pos: { x: 0.15, y: 0.55, z: 1.15 }, look: { x: -0.05, y: 0.05, z: -0.15 } },
+    settle: { pos: { x: 0.15, y: 0.23, z: 0.62 }, look: { x: -0.06, y: 0.06, z: -0.05 } },
+    focusX: -0.02
   };
 }
 
 // PANEL 4 — Walking Feet. Camera low and close to the ground: one shoe
-// large in the foreground, mid-stride; a second, smaller pair of feet
-// approaches from the far end of a school hallway — the foreground/
-// background size difference quietly carries the scale idea. Lockers +
-// ceiling lights recede into the hallway as the background trace.
+// large in the foreground, mid-stride, in a school hallway that recedes
+// to a doorway at the far end (per Faye's storyboard v2 — her drawing
+// shows the hallway/doorway depth composition directly, not the
+// side-view alternative she also offered). Lockers + ceiling lights
+// recede into the hallway as the background trace.
 function buildSceneWalkingFeet(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
@@ -2670,47 +2727,22 @@ function buildSceneWalkingFeet(stage) {
   forePant.rotation.x = 0.05;
   world.add(forePant);
 
-  const bgShoeA = buildShoe3(0x5a9dd6, 0.55);
-  bgShoeA.rotation.y = Math.PI + 0.15;
-  bgShoeA.position.set(-0.18, 0.006, -5.2);
-  world.add(bgShoeA);
-  const bgShoeB = buildShoe3(0x5a9dd6, 0.55);
-  bgShoeB.rotation.y = Math.PI - 0.1;
-  bgShoeB.position.set(0.1, 0.006, -5.55);
-  world.add(bgShoeB);
-  [[-0.18, -5.2], [0.1, -5.55]].forEach(p => {
-    const shin = cyl3(0.045, 0.04, 0.26, 0xf0c04a, 8);
-    shin.position.set(p[0], 0.16, p[1]);
-    world.add(shin);
+  // Round 2 (per Faye's storyboard v2): her drawing shows the hallway
+  // ending in a doorway — a door frame with two round handles — not a
+  // second walking figure. Replaces the previous background walker
+  // with a door closing off the far end of the hallway, matching her
+  // panel directly.
+  const doorFrame = box3(2.3, 1.85, 0.08, 0xb8ae9c, { roughness: 0.7 });
+  doorFrame.position.set(0, 0.92, -6.7);
+  world.add(doorFrame);
+  [-1, 1].forEach(side => {
+    const leaf = box3(1.05, 1.7, 0.05, 0xd9cdb4, { roughness: 0.6 });
+    leaf.position.set(side * 0.56, 0.9, -6.66);
+    world.add(leaf);
+    const handle = sphere3(0.03, 0x8a8478, 8, 6);
+    handle.position.set(side * 0.16, 0.7, -6.6);
+    world.add(handle);
   });
-  // Round 5 (per Faye): the background figure was two bare shins and
-  // nothing else — no thighs, hips, or torso, which broke the scene's
-  // logic (legs floating with no body above them). Adds a simple,
-  // deliberately soft/low-detail upper body — thighs bridging shin to
-  // hip, then a single torso block for chest/shoulders — kept plain on
-  // purpose since it's a small background figure already softened by
-  // distance and fog, not a second fully-detailed character.
-  [[-0.18, -5.2], [0.1, -5.55]].forEach(p => {
-    const thigh = cyl3(0.05, 0.045, 0.3, 0x35404a, 8);
-    thigh.position.set(p[0], 0.42, p[1] + 0.02);
-    thigh.rotation.x = -0.06;
-    world.add(thigh);
-  });
-  const hip = cyl3(0.11, 0.1, 0.16, 0x2f3942, 10);
-  hip.position.set(-0.04, 0.58, -5.35);
-  world.add(hip);
-  const torso = box3(0.32, 0.5, 0.2, 0x8a2f2f, { roughness: 0.7 });
-  torso.position.set(-0.04, 0.95, -5.37);
-  world.add(torso);
-  const shoulders = cyl3(0.19, 0.16, 0.1, 0x8a2f2f, 10);
-  shoulders.rotation.z = Math.PI / 2;
-  shoulders.position.set(-0.04, 1.18, -5.37);
-  world.add(shoulders);
-  // A soft head suggestion — no face at this distance/blur, just
-  // enough silhouette to read as a person, not a headless torso.
-  const bgHead = sphere3(0.14, 0xd9a06c, 12, 10);
-  bgHead.position.set(-0.04, 1.42, -5.35);
-  world.add(bgHead);
 
   return {
     start: { pos: { x: 0.15, y: 0.34, z: 1.9 }, look: { x: 0, y: 0.06, z: -4 } },
@@ -2724,73 +2756,15 @@ function buildSceneWalkingFeet(stage) {
   };
 }
 
-// PANEL 5 — The Crumpled Paper. A hand gripped tightly around a
-// crumpled paper ball; a facet shows a grade ("42%") through the
-// creases. No face — the hand alone carries the emotion. Background
-// kept to a soft neutral gradient with a faint floor/wall seam, never a
-// flat empty fill.
-function buildSceneCrumpledPaper(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0xcfc7ba, 0.9, 3.0);
-  dimSceneLights(stage, 0.9, 0.85, 0.8);
-  const wall = box3(3, 1.6, 0.05, 0xd8d1c4);
-  wall.position.set(0, 0.35, -1.1);
-  world.add(wall);
-  const floorSeam = box3(3, 0.008, 0.05, 0xb8ae9c);
-  floorSeam.position.set(0, -0.42, -1.08);
-  world.add(floorSeam);
-  const floor = box3(3, 0.8, 0.05, 0xc4baa8);
-  floor.position.set(0, -0.82, -1.1);
-  world.add(floor);
-
-  // the crumpled paper: a cluster of small irregular facets around a
-  // core, plus one flatter facet carrying the "42%" texture, angled so
-  // it peeks through the creases toward the camera.
-  const paper = new THREE.Group();
-  const core = sphere3(0.075, 0xf3f0e8, 10, 8);
-  core.scale.set(1, 0.92, 1.05);
-  paper.add(core);
-  const facetPositions = [
-    [0.05, 0.04, 0.05, 0.3, -0.2, 0.1], [-0.05, 0.03, 0.04, -0.4, 0.3, -0.15],
-    [0.02, -0.05, 0.05, 0.6, 0.1, 0.4], [-0.04, -0.04, -0.03, -0.2, -0.5, 0.2],
-    [0.055, -0.01, -0.04, 0.1, 0.7, -0.3], [-0.02, 0.055, -0.03, -0.5, -0.1, 0.5]
-  ];
-  facetPositions.forEach(f => {
-    const facet = box3(0.052, 0.052, 0.006, 0xece7db, { roughness: 0.85 });
-    facet.position.set(f[0], f[1], f[2]);
-    facet.rotation.set(f[3], f[4], f[5]);
-    paper.add(facet);
-  });
-  const grade = buildTextSign('42%', 0.075, 0.06, { bg: '#f6f3ea', border: '#c9c2b2', color: '#c0392b' });
-  grade.position.set(0.01, 0.0, 0.085);
-  grade.rotation.set(-0.08, 0.12, 0.03);
-  paper.add(grade);
-  paper.position.set(0, 0, 0.06);
-  world.add(paper);
-
-  const hand = buildHandProp(0xd9a06c);
-  hand.scale.setScalar(1.35);
-  const handPos = new THREE.Vector3(0.01, -0.05, -0.13);
-  hand.position.copy(handPos);
-  const paperCenter = new THREE.Vector3(0, 0, 0.06);
-  // knuckles point up and slightly toward camera, then curl (poseHand)
-  // wraps the fingers forward and down over the paper; palm faces it
-  orientHand(hand, new THREE.Vector3(0, 0.85, 0.3), paperCenter.clone().sub(handPos));
-  poseHand(hand, 1.3, 1.0);
-  attachForearm(hand, 0xf0c04a, 0.5);
-  world.add(hand);
-
-  return {
-    start: { pos: { x: 0.06, y: 0.08, z: 0.85 }, look: { x: 0, y: 0, z: 0 } },
-    settle: { pos: { x: 0.0, y: 0.0, z: 0.32 }, look: { x: 0, y: -0.01, z: 0.02 } }
-  };
-}
-
-// PANEL 6 (OPTIONAL) — Passing a Secret Note. Under a table: one hand
-// passes a small folded note (with a heart doodle) to another. Only
-// table legs, a chair and a bit of shoes make up the background — kept
-// visible but dim, per the "quieter, not gone" rule.
+// PANEL 5 — Passing a Secret Note. Round 2 (per Faye's storyboard v2):
+// completely rebuilt from her drawing — a lower, wider under-the-table
+// view showing two chairs (slatted backs) flanking the shot, the table
+// surface with a book and pencil on top, two hands reaching in from
+// left and right meeting near the middle (passing the note — no
+// visible note object, per Faye's "student decides what's on it"), and
+// a pair of feet/shoes near the base of each chair. Floor tiles ground
+// the low angle. Previously a much tighter two-hands-only crop; this is
+// a fuller scene matching her new composition.
 function buildSceneSecretNote(stage) {
   const world = new THREE.Group();
   stage.scene.add(world);
@@ -2800,68 +2774,132 @@ function buildSceneSecretNote(stage) {
   spill.position.set(0, 0.9, 0.6);
   stage.scene.add(spill);
 
-  const tableUnderside = box3(2.6, 0.08, 2.2, 0x3a2a1c, { roughness: 0.8 });
-  tableUnderside.position.set(0, 0.82, -0.5);
-  world.add(tableUnderside);
-  const tableEdge = box3(2.6, 0.1, 0.06, 0x2c1f14);
-  tableEdge.position.set(0, 0.8, 0.6);
+  // Floor tiles grounding the low angle.
+  for (let i = -3; i <= 3; i++) {
+    const seam = box3(0.01, 0.001, 2.4, 0x3a2c1e);
+    seam.position.set(i * 0.35, -0.62, -0.4);
+    world.add(seam);
+  }
+
+  // The table: surface + front edge lip (the note passes just beneath
+  // this edge), a book and a pencil resting on top.
+  const tableTop = box3(1.9, 0.05, 1.3, 0x8a5a3c, { roughness: 0.65 });
+  tableTop.position.set(0, 0.62, -0.6);
+  world.add(tableTop);
+  const tableEdge = box3(1.9, 0.09, 0.06, 0x6b4530, { roughness: 0.65 });
+  tableEdge.position.set(0, 0.58, 0.03);
   world.add(tableEdge);
-  [-0.95, 0.95].forEach(x => {
-    const leg = box3(0.07, 1.6, 0.07, 0x3a2a1c, { roughness: 0.8 });
-    leg.position.set(x, 0.0, -1.1);
-    world.add(leg);
-  });
-  const nearLeg = box3(0.08, 1.6, 0.08, 0x2c1f14, { roughness: 0.8 });
-  nearLeg.position.set(0.55, 0.0, 0.15);
-  world.add(nearLeg);
-  const chairLeg = box3(0.05, 1.1, 0.05, 0x33261a);
-  chairLeg.position.set(-1.3, -0.25, -0.3);
-  world.add(chairLeg);
-  const chairSeat = box3(0.35, 0.04, 0.32, 0x3a2a1c);
-  chairSeat.position.set(-1.3, 0.28, -0.3);
-  world.add(chairSeat);
-  [[-0.7, -1.6, 0x5a9dd6], [0.85, -1.7, 0x2d5fa8]].forEach(sh => {
-    const shoe = buildShoe3(sh[2], 0.6);
-    shoe.rotation.y = Math.PI * 0.6;
-    shoe.position.set(sh[0], -0.42, sh[1]);
-    world.add(shoe);
-  });
+  const book = new THREE.Group();
+  const pageL = box3(0.16, 0.01, 0.13, 0xf7f3e8, { roughness: 0.7 });
+  pageL.position.set(-0.08, 0, 0);
+  pageL.rotation.z = 0.06;
+  book.add(pageL);
+  const pageR = box3(0.16, 0.01, 0.13, 0xf2ede0, { roughness: 0.7 });
+  pageR.position.set(0.08, 0, 0);
+  pageR.rotation.z = -0.06;
+  book.add(pageR);
+  book.position.set(-0.05, 0.665, -0.02);
+  world.add(book);
+  const pencil = cyl3(0.008, 0.008, 0.22, 0xf0c04a, 6);
+  pencil.rotation.z = Math.PI / 2;
+  pencil.rotation.y = 0.25;
+  pencil.position.set(0.2, 0.666, -0.03);
+  world.add(pencil);
 
-  // the note: a small folded paper wedge with a heart doodle on its face
-  const noteWorldPos = new THREE.Vector3(-0.14, 0.24, -0.11);
-  const note = new THREE.Group();
-  const noteBody = box3(0.09, 0.008, 0.06, 0xfaf7ee, { roughness: 0.8 });
-  note.add(noteBody);
-  const heart = buildTextSign('♥', 0.05, 0.05, { bg: '#faf7ee', border: '#c9c2b2', color: '#e0574a' });
-  heart.rotation.x = -Math.PI / 2;
-  heart.position.y = 0.006;
-  note.add(heart);
-  note.position.copy(noteWorldPos);
-  note.rotation.set(0, 0.25, 0.06);
-  world.add(note);
+  // Two chairs (slatted, rounded-top backs) framing the shot, close and
+  // large in the foreground on either side — matches Faye's low-angle
+  // drawing looking between the two chair backs at the table.
+  function buildChairBack(color) {
+    const g = new THREE.Group();
+    const seat = box3(0.5, 0.05, 0.46, color, { roughness: 0.6 });
+    seat.position.y = 0.42;
+    g.add(seat);
+    [-1, 1].forEach(fx => {
+      const leg = box3(0.05, 0.84, 0.05, color, { roughness: 0.6 });
+      leg.position.set(fx * 0.2, 0, 0.19);
+      g.add(leg);
+    });
+    [-1, 1].forEach(bx => {
+      const leg = box3(0.05, 1.5, 0.05, color, { roughness: 0.6 });
+      leg.position.set(bx * 0.2, 0.15, -0.19);
+      g.add(leg);
+    });
+    // domed top rail (a flattened sphere cap) + vertical slats beneath
+    const topRail = new THREE.Mesh(
+      new THREE.SphereGeometry(0.24, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.5),
+      new THREE.MeshStandardMaterial({ color: color, roughness: 0.6 }));
+    topRail.scale.set(1, 0.6, 0.35);
+    topRail.position.set(0, 1.34, -0.19);
+    g.add(topRail);
+    const bottomRail = box3(0.46, 0.05, 0.05, color, { roughness: 0.6 });
+    bottomRail.position.set(0, 0.9, -0.19);
+    g.add(bottomRail);
+    for (let i = -1; i <= 1; i++) {
+      const slat = box3(0.045, 0.5, 0.045, color, { roughness: 0.6 });
+      slat.position.set(i * 0.16, 1.12, -0.19);
+      g.add(slat);
+    }
+    return g;
+  }
+  // Round 2 fix: at x=+-0.85 with the settle camera only ~0.3 units
+  // away in Z, the chairs' angular offset from the view axis was far
+  // outside the camera's ~33 degree horizontal half-FOV — entirely
+  // off-frame, which is why nothing but the two hands showed up.
+  // Scaled down and pulled in closer to center so they land at the
+  // frame's edges (partially cropped, same as her drawing) instead of
+  // off it entirely.
+  // Lightened from a near-black brown — against this scene's dark
+  // fogged background the chair tops were blending straight into it.
+  const chairColor = 0x6b4a32;
+  const chairL = buildChairBack(chairColor);
+  chairL.scale.setScalar(0.46);
+  chairL.position.set(-0.5, -0.34, 0.2);
+  chairL.rotation.y = 0.15;
+  world.add(chairL);
+  const chairR = buildChairBack(0x5c3f2a);
+  chairR.scale.setScalar(0.46);
+  chairR.position.set(0.5, -0.34, 0.2);
+  chairR.rotation.y = -0.15;
+  world.add(chairR);
 
-  const handAPos = new THREE.Vector3(-0.26, 0.3, -0.13);
-  const handBPos = new THREE.Vector3(0.22, 0.19, -0.09);
+  // Feet/shoes near the base of each chair.
+  const shoeL = buildShoe3(0x5a9dd6, 0.5);
+  shoeL.rotation.y = Math.PI * 0.55;
+  shoeL.position.set(-0.4, -0.5, 0.25);
+  world.add(shoeL);
+  const shoeR = buildShoe3(0x2d5fa8, 0.5);
+  shoeR.rotation.y = -Math.PI * 0.55;
+  shoeR.position.set(0.38, -0.5, 0.25);
+  world.add(shoeR);
+
+  // Two hands reaching in from either side, meeting just below the
+  // table's front edge — passing the note there, out of sight of
+  // anyone looking down at the tabletop (where only the book shows).
+  const handAPos = new THREE.Vector3(-0.32, 0.42, 0.1);
+  const handBPos = new THREE.Vector3(0.3, 0.4, 0.12);
+  const meetPoint = new THREE.Vector3(0, 0.4, 0.14);
 
   const handA = buildHandProp(0xf0c49a);
   handA.position.copy(handAPos);
-  // A: fingers reach toward the note/B; palm faces down, holding the note
-  orientHand(handA, noteWorldPos.clone().sub(handAPos), new THREE.Vector3(0, -1, 0.15));
-  poseHand(handA, 0.5, 0.35);
+  orientHand(handA, meetPoint.clone().sub(handAPos), new THREE.Vector3(0, -1, 0.15));
+  poseHand(handA, 0.45, 0.3);
   attachForearm(handA, 0xe888b0, 0.4);
   world.add(handA);
 
   const handB = buildHandProp(0xc9895c);
   handB.position.copy(handBPos);
-  // B: fingers reach back toward the note/A; palm faces up, cupped to receive
-  orientHand(handB, noteWorldPos.clone().sub(handBPos), new THREE.Vector3(0, 1, 0.15));
-  poseHand(handB, 0.35, 0.5);
+  orientHand(handB, meetPoint.clone().sub(handBPos), new THREE.Vector3(0, 1, 0.15));
+  poseHand(handB, 0.4, 0.35);
   attachForearm(handB, 0x5cb85c, 0.4);
   world.add(handB);
 
   return {
-    start: { pos: { x: 0.02, y: 0.42, z: 0.95 }, look: { x: 0, y: 0.18, z: -0.3 } },
-    settle: { pos: { x: -0.02, y: 0.16, z: 0.4 }, look: { x: -0.02, y: 0.2, z: -0.08 } }
+    start: { pos: { x: 0.02, y: 0.1, z: 1.5 }, look: { x: 0, y: 0.3, z: -0.5 } },
+    // Framed to fit both (now correctly-scaled) chairs at the edges,
+    // the table + book behind, and the hands meeting in the middle —
+    // the fuller composition from her drawing, vs. the previous
+    // version's much tighter two-hands-only crop.
+    settle: { pos: { x: 0, y: 0.4, z: 1.15 }, look: { x: 0, y: 0.55, z: -0.15 } }
   };
 }
 
@@ -2870,13 +2908,12 @@ const SCENE3D_BUILDERS = {
   frightenedFace: buildSceneFrightenedFace,
   glassOfWater: buildSceneGlassOfWater,
   walkingFeet: buildSceneWalkingFeet,
-  crumpledPaper: buildSceneCrumpledPaper,
   secretNote: buildSceneSecretNote
 };
 
 /* ============================================================
-   STORY DRAWING ROUND — one after EVERY story (5 required + the
-   optional 6th when tried), same two-panel format as Lesson 01's
+   STORY DRAWING ROUND — one after every story, all five required, same
+   two-panel format as Lesson 01's
    practice restructure: LEFT = that story's Quick Sketch Reference
    video, enlarged into its own full panel (the small 3D-scene corner
    overlay stays as-is); RIGHT = the student's own canvas, same size.
@@ -3161,8 +3198,8 @@ function renderTeacherCommunity(){
   `;
 }
 // One card per story: the saved drawing (digital), a plain note for a
-// story done on paper / not completed / skipped (the optional one), and
-// the upload card for anyone who drew on paper and wants to add a photo.
+// story done on paper / not completed, and the upload card for anyone
+// who drew on paper and wants to add a photo.
 async function afterRenderTeacherCommunity(){
   const host = document.getElementById('ownWorkArea');
   const cards = [];
@@ -3170,10 +3207,6 @@ async function afterRenderTeacherCommunity(){
     const story = LESSON_DATA.story_scenes[i];
     const label = 'Situation ' + (i + 1);
     const result = STATE.storyResults[i];
-    if (story.optional && STATE.optionalSkipped[story.id]) {
-      cards.push(`<div class="own-work-card own-work-note-card"><div class="own-work-title">${label}</div><div class="own-work-note">Skipped (optional)</div></div>`);
-      continue;
-    }
     if (result === 'digital') {
       let record = null;
       try { record = await practiceGetArtwork(practiceKeyForStory(story.id)); } catch (e) { console.warn('[afterRenderTeacherCommunity] practiceGetArtwork failed', e); }
@@ -3275,7 +3308,6 @@ function finishLesson(){
       lessonId: LESSON_DATA.courseId,
       momentKey: 'lesson_complete',
       storyResults: STATE.storyResults.slice(),
-      skippedOptional: Object.keys(STATE.optionalSkipped),
       checkedConcepts: STATE.checkedConcepts.slice()
     });
   } catch (e) { console.warn('[finishLesson] JournalStorage.save failed', e); }
@@ -3449,9 +3481,10 @@ function nextStep(){
   if (t <= STEPS.length - 1 && STATE.stepIndex < STEPS.length - 1) { playStepAdvanceTone(); STATE.stepIndex = t; renderCurrentStep(); }
 }
 // Global Previous. Every step is a flat top-level STEPS entry (see
-// STORY_SCENE_STEPS's comment), so this is a plain decrement — except it
-// steps over a hidden entry (a skipped optional story's drawing round),
-// landing back on that story's try-it/skip gate instead.
+// STORY_SCENE_STEPS's comment), so this is a plain decrement. The
+// isStepHidden skip-loop is generic shell infra (shared shape with
+// other lessons' STEPS arrays) — nothing in this lesson sets
+// hiddenWhen anymore since Round 2 removed the optional story.
 function prevStep(){
   let t = STATE.stepIndex - 1;
   while (t > 0 && isStepHidden(t)) t--;
