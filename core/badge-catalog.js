@@ -10,7 +10,7 @@ window.BADGE_CATALOG = [
   { id:'portrait_master', title:'Portrait Master', artist:'Des. by Regina', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6980e96299ba4edfc375f693_506d6e9e0733a890480cbd0d1d8b84f1.JPG', emoji:'👤', color:'#be185d' },
   { id:'interior_design', title:'Interior Design', artist:'Des. by Serena', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69406958b761df83827f9dd5_524d9a710bb12ade81c4881230ad64f8.jpg', emoji:'🛋️', color:'#d97706' },
   { id:'costume_design', title:'Fashion Design', artist:'Des. by Max', imgUrl:'', emoji:'👗', color:'#db2777' },
-  { id:'hand_crafter', title:'Hand Crafter', artist:'Des. by Alissie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693081a5795fc4e17b5952f6_Screenshot%202025-12-03%20at%2010.29.44%E2%80%AFAM.png', emoji:'🧵', color:'#ec4899' },
+  { id:'hand_crafter', title:'Handcrafter', artist:'Des. by Alissie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693081a5795fc4e17b5952f6_Screenshot%202025-12-03%20at%2010.29.44%E2%80%AFAM.png', emoji:'🧵', color:'#ec4899' },
   { id:'little_architect', title:'Little Architect', artist:'Des. by Cameron', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/692617dac227fa894b1b16cd_feiteamart%20achitect.PNG', emoji:'🏛️', color:'#0ea5e9' },
   { id:'idea_inventor', title:'Idea Inventor', artist:'Des. by Natalie', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69ced4ef7068f80595cfd07e_15CCA2B1-5146-4602-9B9B-02F5D74536A1.JPG', emoji:'💡', color:'#8b5cf6' },
   { id:'student_led', title:'Student-Led', artist:'Des. by Judy', imgUrl:'', emoji:'🚀', color:'#8b5cf6' },

@@ -1357,6 +1357,10 @@
     font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
   }
 
+
+  #student-learning-map{background:linear-gradient(135deg,#eee7ff,#e0faff);border:1px solid #ddd8f1;border-radius:24px;padding:26px;margin:24px 0 32px}.journey-heading{display:flex;justify-content:space-between;gap:20px}.journey-heading h2{font:800 26px Montserrat,sans-serif;margin:8px 0}.journey-heading p,.journey-caption{font-size:13px;color:var(--ink-soft)}.journey-heading small,.journey-next small{font-size:10px;font-weight:800;letter-spacing:1px;color:#715c95}.journey-prize{display:grid;gap:6px;text-align:center;min-width:150px;font-size:12px}.journey-prize>span{font-size:36px}.journey-path{display:flex;overflow:auto;gap:10px;padding:18px 3px;scroll-snap-type:x proximity}.journey-stop{position:relative;flex:0 0 112px;border:1px solid #ddd8ef;border-radius:18px;background:#ffffffa8;padding:12px 8px;cursor:pointer;color:var(--ink);scroll-snap-align:start}.journey-stop span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#ebe5f6;margin:0 auto 10px;font-weight:800}.journey-stop b,.journey-stop small{display:block;font-size:11px;line-height:1.5}.journey-stop small{font-size:9px;margin-top:8px}.journey-stop.current{border:2px solid #29b0c8;background:white;box-shadow:0 5px 15px #3badc51a}.journey-stop.current span{background:#67e8f9}.journey-stop.complete span{background:#cff5e4;color:#17644a}.journey-next{display:grid;grid-template-columns:1fr 1fr;gap:16px}.journey-next>div{display:grid;align-content:start;gap:9px;background:#ffffffaa;padding:18px;border-radius:16px;font-size:12px}.journey-next a,.journey-next button{display:inline-flex;align-items:center;min-height:44px;font-family:inherit;font-size:12px;font-weight:700;color:#475183;background:none;border:0;cursor:pointer;text-align:left}.map-node.locked .node-visual{opacity:.85;filter:saturate(.5);background:color-mix(in srgb,var(--badge-color,#a78bfa) 12%,white);border-color:color-mix(in srgb,var(--badge-color,#a78bfa) 40%,white);box-shadow:0 4px 12px #68568a12}.badge-progress{opacity:1;line-height:1.5}.studio-card{background:linear-gradient(150deg,#fff,#f7f3ff)}
+  @media(max-width:600px){#student-learning-map{padding:18px}.journey-heading{display:block}.journey-prize{display:flex;text-align:left;align-items:center;flex-wrap:wrap;margin-top:16px}.journey-next{grid-template-columns:1fr}.journey-heading h2{font-size:22px}}
+  @media(prefers-reduced-motion:reduce){.map-node,.map-node.recommended .node-visual{animation:none;transition:none}}
 </style>
 </head>
 <body>
@@ -1515,6 +1519,8 @@
     </div>
     <a href="#" class="resume-btn" id="resume-btn">Resume →</a>
   </div>
+
+  <section id="student-learning-map" aria-label="Your learning map"></section>
 
   <!-- ═══ LIVE CLASS VIP SECTION — only for isLiveClass students ═══
        Hidden by default (inline style), unhidden by renderLiveClassSection()
@@ -1994,8 +2000,8 @@
 <script src="core/auth.js"></script>
 <script src="core/access.js"></script>
 <script src="core/progress.js"></script>
-<script src="core/badge-catalog.js"></script>
-<script src="core/course-badge-registry.js"></script>
+<script src="core/badge-catalog.js?v=learning-journey-1"></script>
+<script src="core/course-badge-registry.js?v=learning-journey-1"></script>
 <script src="core/live-class-schedule.js"></script>
 <!-- Foundation of Sketch v1.1 §4-5 — shared Step 2 lesson engine. Loaded
      here too (not just by the lesson pages themselves) purely for its
@@ -2392,6 +2398,23 @@
   // RENDER HOME
   // ═══════════════════════════════════════════════════════════
   
+  function renderLearningJourney() {
+    const completed = userProfile.completedLessons || [];
+    const done = FOUNDATION_A_PATH.filter(l => completed.includes(l.id)).length;
+    const current = FOUNDATION_A_PATH.findIndex(l => !completed.includes(l.id));
+    const host = document.getElementById('student-learning-map');
+    const identity = userProfile.supabaseUserId || userProfile.studentCode || userProfile.learnerId || 'guest';
+    let fashion = null;
+    try { fashion = JSON.parse(localStorage.getItem(`fei_fashion_v2:${identity}:standing-demo`) || 'null'); } catch {}
+    const practice = fashion?.runs?.[fashion.mode];
+    const fashionDone = Object.values(practice?.strokes || {}).filter(s => s.status === 'passed').length;
+    host.innerHTML = `<div class="journey-heading"><div><small>YOUR LEARNING MAP</small><h2>Small steps. Real progress.</h2><p>Start with a shape. Build your skills. Make something yours.</p></div><div class="journey-prize"><span>✏️</span><b>Form and Structure</b><small>${done === FOUNDATION_A_PATH.length ? '✓ Badge earned — you did it!' : `${FOUNDATION_A_PATH.length-done} sessions to your badge`}</small></div></div><div class="journey-path" aria-label="Foundation A lesson path">${FOUNDATION_A_PATH.map((l,i)=>`<button data-journey-lesson="${i}" class="journey-stop ${completed.includes(l.id)?'complete':i===current?'current':''}" ${i===current?'aria-current="step"':''}><span>${completed.includes(l.id)?'✓':i+1}</span><b>${l.title}</b><small>${completed.includes(l.id)?'Practised · Revisit':i===current?'YOU ARE HERE':'Up next'}</small></button>`).join('')}</div><p class="journey-caption">Foundation A · ${done}/${FOUNDATION_A_PATH.length} sessions complete · Repeat any lesson. Practice is never lost.</p><div class="journey-next"><div><small>YOUR NEXT CHAPTER</small><strong>Foundation B · Still Life and Texture</strong><span>Apply your drawing skills to objects and surfaces.</span><button onclick="showFoundationMap()">Explore the foundation map →</button></div><div><small>CHOOSE ANOTHER PATH</small><strong>Fashion Design</strong><span>${fashionDone ? `${fashionDone} activities practised · Your figure is saved on this device.` : 'Build a figure → Explore clothing → Create your design.'}</span><a href="fashion-design/#${fashion ? 'lesson' : 'course'}">${fashion ? 'Continue your figure' : 'Explore the 6-unit map'} →</a><small>First lesson: demo practice · Further units in development</small></div></div>`;
+    host.querySelectorAll('[data-journey-lesson]').forEach(button => button.onclick = e => {
+      const l = FOUNDATION_A_PATH[Number(button.dataset.journeyLesson)];
+      handleResumeClick(e, l.id, l.href);
+    });
+  }
+
   function renderHome() {
     // Topbar
     const tier = userProfile.tier === 'trial' ? '· Trial' : '';
@@ -2430,6 +2453,8 @@
     } else {
       document.getElementById('resume-card').classList.add('hidden');
     }
+
+    renderLearningJourney();
 
     // Skills track progress
     const readyLessons = FOUNDATION_A_PATH.filter(l => l.ready);
@@ -3127,7 +3152,7 @@
       // state (see the .map-node.in-progress CSS rule) — a JS data
       // value from the catalog, so it's set here as a custom property
       // rather than hardcoded per badge in CSS.
-      if (isInProgress && page.color) {
+      if (page.color) {
         node.style.setProperty('--badge-color', page.color);
       }
 
@@ -3137,11 +3162,11 @@
         : `<div class="node-icon-fallback">${page.emoji}</div>`;
 
       const progressHTML = (!isUnlocked && progress && progress.totalCount > 0)
-        ? `<div class="badge-progress">${progress.doneCount}/${progress.totalCount}</div>`
+        ? `<div class="badge-progress">${progress.doneCount}/${progress.totalCount} complete · ${progress.totalCount-progress.doneCount} to go</div>`
         : '';
       // Mini fill bar — only for in-progress (locked has no progress to
       // show yet, unlocked is already full/irrelevant).
-      const progressBarHTML = isInProgress
+      const progressBarHTML = progress && progress.totalCount > 0
         ? `<div class="badge-mini-progress"><div class="badge-mini-progress-fill" style="width:${progress.pct}%"></div></div>`
         : '';
 
@@ -3153,6 +3178,7 @@
         </div>
         <div class="node-label">${page.title}</div>
         <div class="badge-credit">${page.artist || ''}</div>
+        ${isUnlocked ? '<div class="badge-progress">✓ Earned</div>' : pageId === 'costume_design' ? '<div class="badge-progress">Demo practice available</div>' : ''}
         ${progressHTML}
         ${progressBarHTML}
       `;
