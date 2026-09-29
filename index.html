@@ -1437,6 +1437,7 @@
     .alp-legend{ grid-template-columns:1fr 1fr; }
   }
 </style>
+<link rel="stylesheet" href="core/student-dashboard.css?v=workspace-1">
 </head>
 <body>
 
@@ -1784,7 +1785,7 @@
      ═══════════════════════════════════════════════════════════ -->
 <div class="container" id="skills-screen" style="display:none;">
   
-  <button class="back-btn" onclick="showHome()">← Back to Art GPS</button>
+  <button class="back-btn" onclick="location.hash='#dashboard/courses'">← Back to Self-paced Classes</button>
   
   <div class="section-heading" style="text-align:center; margin-top: 8px;">
     <div class="section-title" style="font-size:22px;">Skills &middot; Step-by-Step Practice</div>
@@ -2146,6 +2147,7 @@
      FOUNDATION_STILL_LIFE_PATH export, which the Map (renderFoundationMap)
      reads — single source of truth, no second copy of the 10-lesson list. -->
 <script src="core/still-life-lesson.js"></script>
+<script src="core/student-dashboard.js?v=workspace-1"></script>
 <script>
   // ═══════════════════════════════════════════════════════════
   // CONFIG
@@ -2411,6 +2413,7 @@
   }
 
   function hideAllScreens() {
+    window.FEIStudentDashboard.hide();
     document.getElementById('auth-loading-screen').style.display = 'none';
     document.getElementById('signin-screen').style.display = 'none';
     document.getElementById('home-screen').style.display = 'none';
@@ -2444,11 +2447,12 @@
     }
   }
   
-  function showHome() {
+  function showHome(refresh = true) {
     clearAuthLoadingTimer();
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
-    renderHome();
+    if (refresh) renderHome();
+    window.FEIStudentDashboard.showHome();
     if (new URLSearchParams(location.search).get("view") === "skills") {
       const returnUrl = new URL(location.href);
       returnUrl.searchParams.delete("view");
@@ -2470,6 +2474,7 @@
   function showSkills() {
     hideAllScreens();
     document.getElementById('skills-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('skills');
     window.scrollTo(0, 0);
   }
   window.showSkills = showSkills;
@@ -2477,6 +2482,7 @@
   function showDrawingCourses() {
     hideAllScreens();
     document.getElementById('drawing-courses-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('drawing-courses');
     window.scrollTo(0, 0);
   }
   window.showDrawingCourses = showDrawingCourses;
@@ -2484,6 +2490,7 @@
   function showMaterialArtsCourses() {
     hideAllScreens();
     document.getElementById('material-arts-courses-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('material-art');
     window.scrollTo(0, 0);
   }
   window.showMaterialArtsCourses = showMaterialArtsCourses;
@@ -2495,6 +2502,7 @@
   function showPaintingCourses() {
     hideAllScreens();
     document.getElementById('painting-courses-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('painting');
     window.scrollTo(0, 0);
   }
   window.showPaintingCourses = showPaintingCourses;
@@ -2502,6 +2510,7 @@
   function showInkPaintingCourses() {
     hideAllScreens();
     document.getElementById('ink-painting-courses-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('ink-painting');
     window.scrollTo(0, 0);
   }
   window.showInkPaintingCourses = showInkPaintingCourses;
@@ -2509,6 +2518,7 @@
   function showZodiacBeastCourses() {
     hideAllScreens();
     document.getElementById('zodiac-beast-courses-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('zodiac');
     window.scrollTo(0, 0);
   }
   window.showZodiacBeastCourses = showZodiacBeastCourses;
@@ -2516,6 +2526,7 @@
   function showDrawing() {
     hideAllScreens();
     document.getElementById('drawing-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('foundation-a');
     renderDrawingPath();
     window.scrollTo(0, 0);
   }
@@ -2527,6 +2538,7 @@
   function showFoundationMap() {
     hideAllScreens();
     document.getElementById('foundation-map-screen').style.display = 'block';
+    window.FEIStudentDashboard.showCourse('foundation-map');
     renderFoundationMap();
     window.scrollTo(0, 0);
   }
@@ -2712,7 +2724,7 @@
     const tier = userProfile.tier === 'trial' ? '· Trial' : '';
     document.getElementById('topbar-right').innerHTML = `
       <span style="font-size:12px; color:var(--ink-soft);">
-        ${userProfile.name} ${tier}
+        ${feedbackEscapeHtml(userProfile.name)} ${tier}
       </span>
       <button class="sign-out-btn" onclick="signOut()">Sign out</button>
     `;
@@ -2720,7 +2732,7 @@
     // Hero
     const completed = userProfile.completedLessons || [];
     document.getElementById('hero-greeting').textContent = 
-      completed.length > 0 ? 'Welcome back to the studio' : 'Welcome to the studio';
+      'Welcome to the studio';
     document.getElementById('hero-name').textContent = userProfile.name;
 
     renderArtLearningProfile();
@@ -2794,11 +2806,12 @@
     // Live Class VIP section — no-op (hides itself) for non-live-class students.
     // Now async (fetches live_class_sessions from Supabase before falling
     // back to the static schedule), so the call site needs a .catch().
-    renderLiveClassSection().catch(e => console.warn('[LiveClass]', e));
+    renderLiveClassSection().then(() => window.FEIStudentDashboard.updateLiveState()).catch(e => { console.warn('[LiveClass]', e); window.FEIStudentDashboard.updateLiveState('error'); });
 
     // Basic Sketch badge — runs every dashboard load, unlocks once
     // all 11 Step 1 lessons are complete.
     checkAndUnlockBadge();
+    window.FEIStudentDashboard.render();
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -4290,6 +4303,8 @@
   // ═══════════════════════════════════════════════════════════
   // INIT
   // ═══════════════════════════════════════════════════════════
+
+  window.FEIStudentDashboard.mount({ getProfile: () => userProfile, getRecord: findStudentRecord });
 
   (async function init() {
     // Option A (embedded Google login, Sept 2026) — wired FIRST, before
