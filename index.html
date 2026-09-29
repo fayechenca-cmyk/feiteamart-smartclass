@@ -1361,6 +1361,81 @@
   #student-learning-map{background:linear-gradient(135deg,#eee7ff,#e0faff);border:1px solid #ddd8f1;border-radius:24px;padding:26px;margin:24px 0 32px}.journey-heading{display:flex;justify-content:space-between;gap:20px}.journey-heading h2{font:800 26px Montserrat,sans-serif;margin:8px 0}.journey-heading p,.journey-caption{font-size:13px;color:var(--ink-soft)}.journey-heading small,.journey-next small{font-size:10px;font-weight:800;letter-spacing:1px;color:#715c95}.journey-prize{display:grid;gap:6px;text-align:center;min-width:150px;font-size:12px}.journey-prize>span{font-size:36px}.journey-path{display:flex;overflow:auto;gap:10px;padding:18px 3px;scroll-snap-type:x proximity}.journey-stop{position:relative;flex:0 0 112px;border:1px solid #ddd8ef;border-radius:18px;background:#ffffffa8;padding:12px 8px;cursor:pointer;color:var(--ink);scroll-snap-align:start}.journey-stop span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#ebe5f6;margin:0 auto 10px;font-weight:800}.journey-stop b,.journey-stop small{display:block;font-size:11px;line-height:1.5}.journey-stop small{font-size:9px;margin-top:8px}.journey-stop.current{border:2px solid #29b0c8;background:white;box-shadow:0 5px 15px #3badc51a}.journey-stop.current span{background:#67e8f9}.journey-stop.complete span{background:#cff5e4;color:#17644a}.journey-next{display:grid;grid-template-columns:1fr 1fr;gap:16px}.journey-next>div{display:grid;align-content:start;gap:9px;background:#ffffffaa;padding:18px;border-radius:16px;font-size:12px}.journey-next a,.journey-next button{display:inline-flex;align-items:center;min-height:44px;font-family:inherit;font-size:12px;font-weight:700;color:#475183;background:none;border:0;cursor:pointer;text-align:left}.map-node.locked .node-visual{opacity:.85;filter:saturate(.5);background:color-mix(in srgb,var(--badge-color,#a78bfa) 12%,white);border-color:color-mix(in srgb,var(--badge-color,#a78bfa) 40%,white);box-shadow:0 4px 12px #68568a12}.badge-progress{opacity:1;line-height:1.5}.studio-card{background:linear-gradient(150deg,#fff,#f7f3ff)}
   @media(max-width:600px){#student-learning-map{padding:18px}.journey-heading{display:block}.journey-prize{display:flex;text-align:left;align-items:center;flex-wrap:wrap;margin-top:16px}.journey-next{grid-template-columns:1fr}.journey-heading h2{font-size:22px}}
   @media(prefers-reduced-motion:reduce){.map-node,.map-node.recommended .node-visual{animation:none;transition:none}}
+
+  /* ═══ ART LEARNING PROFILE ═══
+     Brand gradient per the build spec (#9b87f5 → #48c9b0) — a slightly
+     different purple than --purple (#a78bfa) used elsewhere on this
+     dashboard; kept as literal values here since the spec calls these
+     out by hex as fixed brand tokens for this module specifically,
+     rather than reusing --purple. */
+  .alp-card{
+    display:flex; flex-wrap:wrap; align-items:center; gap:22px;
+    background:linear-gradient(135deg,#f6f3ff 0%,#eefbf8 100%);
+    border:1px solid #e3ddf7; border-radius:24px;
+    padding:28px; margin:24px 0 32px;
+    box-shadow:var(--shadow-md);
+  }
+  /* Basis kept deliberately tight (280+260+22 gap = 562px) so the
+     two-column layout still fits inside .container's tablet width
+     (max-width:760px, see MAIN CONTAINER above) minus this card's own
+     padding — spec §5's "two-column if it fits, otherwise stack" was
+     missing by ~6px at common iPad-portrait widths before this. */
+  .alp-shape-col{ flex:1 1 280px; max-width:320px; display:flex; flex-direction:column; align-items:center; gap:12px; margin:0 auto; }
+  .alp-svg{ width:100%; max-width:280px; height:auto; overflow:visible; }
+  .alp-caption{
+    font-family:'Open Sans',sans-serif; font-size:12px; color:var(--ink-soft);
+    text-align:center; min-height:32px; max-width:280px; transition:color .2s ease;
+  }
+  .alp-text-col{ flex:1 1 260px; min-width:240px; }
+  .alp-kicker{
+    font-family:'Montserrat',sans-serif; font-weight:800; font-size:11px;
+    letter-spacing:1.6px; color:#6b4fd6; margin-bottom:6px;
+  }
+  .alp-title{ font-family:'Montserrat',sans-serif; font-weight:800; font-size:26px; color:var(--ink); margin:0 0 10px; }
+  .alp-sub{ font-family:'Open Sans',sans-serif; font-size:14px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; max-width:420px; }
+  .alp-legend{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; margin:0 0 20px; padding:0; }
+  .alp-legend li{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Open Sans',sans-serif; font-size:12px; font-weight:600; color:var(--ink-soft);
+    cursor:pointer; border-radius:8px; padding:4px 6px; margin:-4px -6px; transition:background .15s ease,color .15s ease;
+  }
+  .alp-legend li:hover, .alp-legend li:focus-visible, .alp-legend li.active{ background:#ffffffb0; color:var(--ink); }
+  .alp-legend-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; box-shadow:0 0 6px 1px currentColor; }
+  .alp-legend-label{ display:flex; flex-direction:column; line-height:1.3; }
+  .alp-legend-label small{ font-size:9px; font-weight:800; letter-spacing:0.8px; color:var(--ink-faint); }
+  .alp-cta{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px;
+    color:#fff; background:linear-gradient(120deg,#9b87f5,#48c9b0);
+    border:0; border-radius:999px; padding:11px 22px; cursor:pointer;
+    box-shadow:0 6px 18px rgba(155,135,245,0.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .alp-cta:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(72,201,176,0.35); }
+  .alp-disclaimer{ font-family:'Open Sans',sans-serif; font-size:11px; color:var(--ink-faint); margin:12px 0 0; max-width:420px; }
+
+  .alp-node{ cursor:pointer; transition:opacity .2s ease; }
+  .alp-node-core{ transition:r .25s ease, filter .2s ease; }
+  .alp-node.active .alp-node-core, .alp-node:hover .alp-node-core, .alp-node:focus-visible .alp-node-core{ filter:brightness(1.25); }
+  .alp-node:focus-visible{ outline:2px solid #48c9b0; outline-offset:4px; border-radius:50%; }
+  .alp-edge-main{ transition:opacity .2s ease, stroke-width .2s ease; }
+  .alp-node-label{
+    font-family:'Montserrat',sans-serif; font-weight:700; font-size:9.5px;
+    fill:var(--ink-soft); text-anchor:middle; pointer-events:none;
+  }
+  .alp-node-descriptor{
+    font-family:'Open Sans',sans-serif; font-weight:600; font-size:7.5px;
+    letter-spacing:0.6px; fill:var(--ink-faint); text-anchor:middle; pointer-events:none;
+  }
+  .alp-pulse{ animation:alpPulse 3.4s ease-in-out infinite; }
+  @keyframes alpPulse{ 0%,100%{ opacity:.9; } 50%{ opacity:.55; } }
+  @media(prefers-reduced-motion:reduce){ .alp-pulse{ animation:none; } }
+
+  @media(max-width:680px){
+    .alp-card{ flex-direction:column; padding:24px 20px; text-align:center; }
+    .alp-text-col{ text-align:left; width:100%; }
+    .alp-legend{ grid-template-columns:1fr 1fr; }
+  }
 </style>
 <link rel="stylesheet" href="core/student-dashboard.css?v=workspace-1">
 </head>
@@ -1494,6 +1569,51 @@
     <h1 class="hero-title">Hi <span class="name" id="hero-name">Friend</span></h1>
     <p class="hero-subtitle">What kind of practice today?</p>
   </div>
+
+  <!-- ═══ ART LEARNING PROFILE ═══
+       New dashboard module (see core/art-learning-profile.js for the
+       dimension config + scoring). Markup for the shape is built by
+       renderArtLearningProfile() (called from renderHome()); the
+       static shell here is just the card frame + text/CTA column,
+       present in the DOM before JS runs so there's no layout jump. -->
+  <section class="alp-card" id="alp-card" aria-label="Your Art Learning Profile">
+    <div class="alp-shape-col">
+      <svg class="alp-svg" id="alp-svg" viewBox="0 0 340 340" role="img" aria-labelledby="alp-svg-title">
+        <title id="alp-svg-title">A shape showing your learning balance across four art learning dimensions</title>
+        <defs>
+          <radialGradient id="alpFillGradient" cx="50%" cy="50%" r="65%">
+            <stop offset="0%" stop-color="#c9bdfb" stop-opacity="0.55"/>
+            <stop offset="55%" stop-color="#9b87f5" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="#48c9b0" stop-opacity="0.14"/>
+          </radialGradient>
+          <filter id="alpGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="alpNodeGlow" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <g id="alp-shape-layers"><!-- populated by renderArtLearningProfile() --></g>
+      </svg>
+      <div class="alp-caption" id="alp-caption">Hover or tap a point to see how it's built.</div>
+    </div>
+    <div class="alp-text-col">
+      <div class="alp-kicker">YOUR ART LEARNING PROFILE</div>
+      <h2 class="alp-title">A More Complete You</h2>
+      <p class="alp-sub">Art learning grows in many directions. Your learning shape shows where you've explored — and where you might go next.</p>
+      <ul class="alp-legend" id="alp-legend"><!-- populated by renderArtLearningProfile() --></ul>
+      <button class="alp-cta" id="alp-cta" onclick="openArtLearningProfileModal()">Explore My Profile →</button>
+      <p class="alp-disclaimer">This reflects your practice activity and completion — not a judgment of talent.</p>
+    </div>
+  </section>
 
   <!-- ═══ TEACHER FEEDBACK NOTIFICATION ═══
        Hidden by default, populated + shown by renderFeedbackNotification()
@@ -1998,11 +2118,29 @@
   </div>
 </div>
 
+<!-- ═══ ART LEARNING PROFILE — placeholder detail modal ═══
+     No dedicated profile detail page exists in the repo yet (flagged
+     in the build spec, §7/§8) — this is a lightweight placeholder
+     using the same modal shell as the badge detail modal above, not a
+     new full page. Swap this for a real destination once Faye decides
+     where the full profile view should live. -->
+<div class="badge-detail-modal" id="alp-modal" onclick="if(event.target===this) closeArtLearningProfileModal()">
+  <div class="badge-detail-card">
+    <div class="badge-detail-icon">✦</div>
+    <div class="badge-detail-title">A More Complete You</div>
+    <div class="badge-detail-body">
+      A full breakdown of your Art Learning Profile — with more detail per dimension and where to explore next — is coming soon. For now, hover or tap a point on the shape to see how each dimension is built.
+    </div>
+    <button class="paywall-dismiss" onclick="closeArtLearningProfileModal()">Close</button>
+  </div>
+</div>
+
 <script src="core/auth.js"></script>
 <script src="core/access.js"></script>
 <script src="core/progress.js"></script>
 <script src="core/badge-catalog.js?v=learning-journey-1"></script>
 <script src="core/course-badge-registry.js?v=learning-journey-1"></script>
+<script src="core/art-learning-profile.js"></script>
 <script src="core/live-class-schedule.js"></script>
 <!-- Foundation of Sketch v1.1 §4-5 — shared Step 2 lesson engine. Loaded
      here too (not just by the lesson pages themselves) purely for its
@@ -2427,6 +2565,160 @@
     });
   }
 
+  /* ============================================================
+     ART LEARNING PROFILE — bespoke glow-shape renderer.
+     Dimension config + scores come from core/art-learning-profile.js
+     (window.ART_LEARNING_DIMENSIONS / window.getArtLearningProfileScores);
+     everything here is purely presentational, N-dimension-generic (no
+     "4" hardcoded — see the geometry loop below), so a 5th+ dimension
+     is a config change, not a rewrite.
+  ============================================================ */
+  function alpPolar(cx, cy, r, angleDeg) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+  // Catmull-Rom -> cubic-bezier conversion for a smooth CLOSED curve
+  // through an arbitrary list of points — this is what keeps the shape
+  // "airy, layered" (spec §4) instead of a hard-edged polygon. Returns
+  // per-EDGE path fragments (point i -> point i+1) so each edge can be
+  // targeted individually for the hover highlight (spec §6), plus the
+  // combined closed `d` string for the single filled shape underneath.
+  function alpSmoothClosedSegments(pts) {
+    const n = pts.length;
+    const segs = [];
+    for (let i = 0; i < n; i++) {
+      const p0 = pts[(i - 1 + n) % n];
+      const p1 = pts[i];
+      const p2 = pts[(i + 1) % n];
+      const p3 = pts[(i + 2) % n];
+      const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
+      const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
+      segs.push({ from: p1, to: p2, c1: c1, c2: c2,
+        d: `M ${p1.x.toFixed(2)},${p1.y.toFixed(2)} C ${c1.x.toFixed(2)},${c1.y.toFixed(2)} ${c2.x.toFixed(2)},${c2.y.toFixed(2)} ${p2.x.toFixed(2)},${p2.y.toFixed(2)}` });
+    }
+    return segs;
+  }
+  function alpClosedPathD(segs) {
+    return segs.map((s, i) => (i === 0 ? `M ${s.from.x.toFixed(2)},${s.from.y.toFixed(2)} ` : '') +
+      `C ${s.c1.x.toFixed(2)},${s.c1.y.toFixed(2)} ${s.c2.x.toFixed(2)},${s.c2.y.toFixed(2)} ${s.to.x.toFixed(2)},${s.to.y.toFixed(2)}`).join(' ') + ' Z';
+  }
+  const ALP_SVG_NS = 'http://www.w3.org/2000/svg';
+  function alpEl(tag, attrs) {
+    const el = document.createElementNS(ALP_SVG_NS, tag);
+    Object.keys(attrs || {}).forEach(k => el.setAttribute(k, attrs[k]));
+    return el;
+  }
+  let alpActiveIndex = -1;
+  function alpSetActive(i) {
+    alpActiveIndex = i;
+    const layer = document.getElementById('alp-shape-layers');
+    const caption = document.getElementById('alp-caption');
+    const legend = document.getElementById('alp-legend');
+    const dims = window.ART_LEARNING_DIMENSIONS || [];
+    if (!layer) return;
+    layer.querySelectorAll('.alp-node').forEach((el, idx) => el.classList.toggle('active', idx === i));
+    layer.querySelectorAll('.alp-edge-main').forEach(el => {
+      const a = Number(el.dataset.a), b = Number(el.dataset.b);
+      const on = i !== -1 && (a === i || b === i);
+      el.style.opacity = on ? '1' : '.55';
+      el.style.strokeWidth = on ? '3.4' : '2.2';
+    });
+    if (legend) legend.querySelectorAll('li').forEach((el, idx) => el.classList.toggle('active', idx === i));
+    if (caption) caption.textContent = i !== -1 && dims[i] ? dims[i].hoverLine : "Hover or tap a point to see how it's built.";
+  }
+  function renderArtLearningProfile() {
+    const svg = document.getElementById('alp-svg');
+    const layer = document.getElementById('alp-shape-layers');
+    const legendEl = document.getElementById('alp-legend');
+    if (!svg || !layer || !window.ART_LEARNING_DIMENSIONS || !window.getArtLearningProfileScores) return;
+    const dims = window.ART_LEARNING_DIMENSIONS;
+    const n = dims.length;
+    const scores = window.getArtLearningProfileScores(userProfile || {});
+    const CX = 170, CY = 170, BASE_R = 82, MIN_R = 48, MAX_R = 112, LABEL_R = 140;
+    const palette = ['#9b87f5', '#48c9b0', '#7aa8f0', '#f5b8d0'];
+
+    layer.innerHTML = '';
+    alpActiveIndex = -1;
+
+    // 1) faint balanced baseline shape — every side at BASE_R, sitting
+    // behind the active shape as the "even/regular" reference (spec §4).
+    const basePts = dims.map((d, i) => alpPolar(CX, CY, BASE_R, i * 360 / n));
+    const baseSegs = alpSmoothClosedSegments(basePts);
+    layer.appendChild(alpEl('path', { d: alpClosedPathD(baseSegs), fill: 'none', stroke: '#c9c2e8', 'stroke-width': '1.4', 'stroke-dasharray': '2 5', opacity: '.55' }));
+
+    // The active shape's own points, radius scaled by each dimension's score.
+    const pts = dims.map((d, i) => alpPolar(CX, CY, MIN_R + (scores[d.key] ? scores[d.key].score : 0) * (MAX_R - MIN_R), i * 360 / n));
+    const segs = alpSmoothClosedSegments(pts);
+    const closedD = alpClosedPathD(segs);
+
+    // 2) faint secondary echo contours (growth/motion hint, spec §4) —
+    // two scaled-up duplicates of the actual shape, very low opacity.
+    [1.09, 1.18].forEach((scale, idx) => {
+      const echoPts = pts.map(p => ({ x: CX + (p.x - CX) * scale, y: CY + (p.y - CY) * scale }));
+      const echoSegs = alpSmoothClosedSegments(echoPts);
+      layer.appendChild(alpEl('path', { d: alpClosedPathD(echoSegs), fill: 'none', stroke: '#9b87f5', 'stroke-width': '1', opacity: String(0.14 - idx * 0.05) }));
+    });
+
+    // 3) the main glowing shape — one filled path (gradient) + per-edge
+    // stroke paths on top so individual edges can be hover-highlighted.
+    layer.appendChild(alpEl('path', { d: closedD, fill: 'url(#alpFillGradient)', stroke: 'none', filter: 'url(#alpGlow)', class: 'alp-pulse' }));
+    segs.forEach((s, i) => {
+      layer.appendChild(alpEl('path', {
+        d: s.d, fill: 'none', stroke: palette[i % palette.length], 'stroke-width': '2.2',
+        'stroke-linecap': 'round', opacity: '.55', class: 'alp-edge-main'
+      }));
+      layer.lastChild.dataset.a = String(i);
+      layer.lastChild.dataset.b = String((i + 1) % n);
+    });
+
+    // 4) nodes + labels
+    dims.forEach((d, i) => {
+      const p = pts[i];
+      const g = alpEl('g', { class: 'alp-node', tabindex: '0', role: 'button', 'aria-label': d.label + ': ' + d.hoverLine });
+      g.appendChild(alpEl('circle', { cx: p.x, cy: p.y, r: '15', fill: palette[i % palette.length], opacity: '.28', filter: 'url(#alpNodeGlow)' }));
+      g.appendChild(alpEl('circle', { cx: p.x, cy: p.y, r: '6.5', fill: palette[i % palette.length], class: 'alp-node-core' }));
+      const lp = alpPolar(CX, CY, LABEL_R, i * 360 / n);
+      const label = alpEl('text', { x: lp.x, y: lp.y, class: 'alp-node-label' });
+      label.textContent = d.label.replace(' (LFC)', '');
+      const descriptor = alpEl('text', { x: lp.x, y: lp.y + 11, class: 'alp-node-descriptor' });
+      descriptor.textContent = d.descriptor;
+      layer.appendChild(g);
+      layer.appendChild(label);
+      layer.appendChild(descriptor);
+      g.addEventListener('mouseenter', () => alpSetActive(i));
+      g.addEventListener('focus', () => alpSetActive(i));
+      g.addEventListener('mouseleave', () => alpSetActive(-1));
+      g.addEventListener('blur', () => alpSetActive(-1));
+      g.addEventListener('click', () => alpSetActive(alpActiveIndex === i ? -1 : i));
+    });
+
+    // Legend (HTML, in the text column) — same dimension order, wired
+    // to the same alpSetActive so hovering either side highlights both.
+    if (legendEl) {
+      legendEl.innerHTML = dims.map((d, i) => `
+        <li data-dim="${d.key}" tabindex="0">
+          <span class="alp-legend-dot" style="color:${palette[i % palette.length]}"></span>
+          <span class="alp-legend-label">${d.label}<small>${d.descriptor}</small></span>
+        </li>`).join('');
+      Array.from(legendEl.querySelectorAll('li')).forEach((li, i) => {
+        li.addEventListener('mouseenter', () => alpSetActive(i));
+        li.addEventListener('focus', () => alpSetActive(i));
+        li.addEventListener('mouseleave', () => alpSetActive(-1));
+        li.addEventListener('blur', () => alpSetActive(-1));
+      });
+    }
+  }
+  window.renderArtLearningProfile = renderArtLearningProfile;
+
+  function openArtLearningProfileModal() {
+    document.getElementById('alp-modal').classList.add('visible');
+  }
+  window.openArtLearningProfileModal = openArtLearningProfileModal;
+  function closeArtLearningProfileModal() {
+    document.getElementById('alp-modal').classList.remove('visible');
+  }
+  window.closeArtLearningProfileModal = closeArtLearningProfileModal;
+
   function renderHome() {
     // Topbar
     const tier = userProfile.tier === 'trial' ? '· Trial' : '';
@@ -2442,7 +2734,9 @@
     document.getElementById('hero-greeting').textContent = 
       'Welcome to the studio';
     document.getElementById('hero-name').textContent = userProfile.name;
-    
+
+    renderArtLearningProfile();
+
     // Resume card / Continue Learning — always shown, even for new students
     const next = pickNextLesson();
     if (completed.length > 0 && next) {
