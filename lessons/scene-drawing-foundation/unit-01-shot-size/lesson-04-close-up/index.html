@@ -53,8 +53,9 @@
   that trace is.
 
   SCOPE NOTES (flagged, not silently assumed):
-  - All five Quick Sketch Reference videos are placeholders until Faye
-    supplies them (data-only change in lesson-data.js).
+  - All five Quick Sketch Reference videos are wired (Sept 2026, see
+    lesson-data.js's teacher_references — data-only change, no
+    index.html rendering-logic change needed).
   - The community gallery is placeholder-only until real student
     photos are supplied (same data-driven branch as Lessons 01-03).
   - Access control is deliberately NOT gated, matching every other
@@ -294,7 +295,7 @@ button{font-family:inherit;}
 .practice-panel-hint{font-size:11.5px;color:var(--sb-ink-soft);text-align:center;line-height:1.5;margin:-2px 0 14px;}
 .practice-panel-teacher{padding:14px;}
 .practice-two-panel .practice-canvas-wrap{max-width:100%;}
-.practice-ref-video{position:relative;aspect-ratio:16/9;background:#000;border-radius:3px;overflow:hidden;}
+.practice-ref-video{position:relative;aspect-ratio:100/77.13068181818183;background:#000;border-radius:3px;overflow:hidden;}
 .practice-ref-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
 .practice-ref-placeholder{background:var(--sb-paper);border:1.5px dashed var(--sb-ink-faint);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--sb-ink-soft);font-size:13px;text-align:center;padding:0 16px;}
 .practice-ref-placeholder-icon{font-size:2rem;filter:grayscale(1) contrast(.9);opacity:.7;}
@@ -408,12 +409,16 @@ button{font-family:inherit;}
    .practice-panel-video .video-stage (a fixed aspect-ratio box, no
    competing sizing rules). */
 /* Round 4: video width is the smaller of "fill the card" and "whatever
-   16:9 width still fits the viewport HEIGHT" (210px reserved for the
-   card's own padding/label/disclaimer/backdrop) — so it's as big as
-   possible on any screen without the card ever overflowing vertically.
-   The 4:3 placeholder frame (Scene 6, no video yet) is capped
-   separately below so it doesn't balloon to fill the wider card. */
-.teacher-lightbox-frame.has-video{aspect-ratio:16/9;background:#000;width:min(100%,calc((100vh - 210px) * 1.7778));margin-left:auto;margin-right:auto;}
+   the real video's width still fits the viewport HEIGHT" (210px
+   reserved for the card's own padding/label/disclaimer/backdrop) — so
+   it's as big as possible on any screen without the card ever
+   overflowing vertically. The 4:3 placeholder frame (used only if a
+   video ever fails to load) is capped separately below so it doesn't
+   balloon to fill the wider card.
+   Sept 2026: aspect ratio + the width-calc multiplier updated from
+   16:9 (1.7778) to these videos' real encoded ratio,
+   100/77.13068181818183 (=1.2965009208103129) — same fix as Lesson 03. */
+.teacher-lightbox-frame.has-video{aspect-ratio:100/77.13068181818183;background:#000;width:min(100%,calc((100vh - 210px) * 1.2965009208103129));margin-left:auto;margin-right:auto;}
 .teacher-lightbox-frame:not(.has-video){max-width:560px;margin-left:auto;margin-right:auto;}
 /* phones: give the video every pixel — tighter backdrop + card padding (the Stream player has its own fullscreen button for more) */
 @media(max-width:600px){.teacher-lightbox-backdrop{padding:8px;}.teacher-lightbox{padding:14px 10px;}}

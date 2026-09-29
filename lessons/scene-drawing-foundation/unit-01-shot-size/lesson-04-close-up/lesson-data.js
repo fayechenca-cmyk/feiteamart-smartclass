@@ -183,17 +183,19 @@
       narrationAvailable: false
     },
 
-    // "Quick Sketch Reference" — no videos supplied yet for this lesson,
-    // so every scene is placeholder:true, same workflow as Lessons 02/03
-    // (the lightbox/drawing-round reference panel shows the "coming
-    // soon" state until a demoVideoStreamId is added, no index.html
-    // change needed).
+    // "Quick Sketch Reference" — all five real videos wired (Sept 2026),
+    // mapped by story content per Faye's explicit labeling, matching
+    // this lesson's current 5-situation order exactly (no reordering
+    // needed, unlike Lesson 03's sheet). Aspect ratio is
+    // 100/77.13068181818183 (not the usual 16/9) — same real encoded
+    // ratio as Lesson 03's videos; see .practice-ref-video and
+    // .teacher-lightbox-frame.has-video in index.html, updated to match.
     teacher_references: [
-      { sceneId: 'unlocking_door', label: 'Quick Sketch Reference — Unlocking the Door', placeholder: true },
-      { sceneId: 'frightened_face', label: 'Quick Sketch Reference — A Frightened Face', placeholder: true },
-      { sceneId: 'glass_of_water', label: 'Quick Sketch Reference — The Glass of Water', placeholder: true },
-      { sceneId: 'walking_feet', label: 'Quick Sketch Reference — Walking Feet', placeholder: true },
-      { sceneId: 'secret_note', label: 'Quick Sketch Reference — Passing a Secret Note', placeholder: true }
+      { sceneId: 'unlocking_door', label: 'Quick Sketch Reference — Unlocking the Door', demoVideoStreamId: '04916a7d6708f96bbf4457e0f3b194a8' },
+      { sceneId: 'frightened_face', label: 'Quick Sketch Reference — A Frightened Face', demoVideoStreamId: 'd7cbd80bd2ff2160a5693350255e0199' },
+      { sceneId: 'glass_of_water', label: 'Quick Sketch Reference — The Glass of Water', demoVideoStreamId: 'b7505c319e31593c5120ae94d2ca33f5' },
+      { sceneId: 'walking_feet', label: 'Quick Sketch Reference — Walking Feet', demoVideoStreamId: '554cce8388e1572b85885e02ebe42e8b' },
+      { sceneId: 'secret_note', label: 'Quick Sketch Reference — Passing a Secret Note', demoVideoStreamId: 'bcdcd774cf96705f7fa05452c7b5c81e' }
     ],
 
     // No real student photos for this lesson yet — dashed placeholders
