@@ -29,6 +29,10 @@
   function learningActivity(profile, foundationIds) {
     const completed = [...new Set((profile?.completedLessons || []).filter(id=>typeof id==='string'))];
     const foundation = new Set(foundationIds || []);
+    if (global.getArtLearningProfileScores) {
+      const scores = global.getArtLearningProfileScores({completedLessons:completed});
+      return dimensions.map(d => { const signal=scores[d.id]; const count=signal?.done||0; return {...d,count,value:d.unconnected?null:1-Math.exp(-count*d.weight/6)}; });
+    }
     return dimensions.map(d=>{const count=completed.filter(id=>d.match(id,foundation)).length;return {...d,count,value:d.unconnected?null:1-Math.exp(-count*d.weight/6)};});
   }
   function icon(name) {
@@ -85,6 +89,9 @@
   function mount(adapter) {
     bridge=adapter;
     const home=$('home-screen');
+    // The earlier single-page profile card is superseded by the Journey view.
+    // Keep its shared signal calculator as the source of course-to-dimension mappings.
+    $('alp-card')?.remove();
     // Move the original nodes, preserving IDs, event handlers and async render targets.
     const hero=home.querySelector('.hero');
     const resume=$('resume-card'), resumeHeading=resume.previousElementSibling;

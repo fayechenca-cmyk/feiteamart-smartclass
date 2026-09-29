@@ -75,7 +75,7 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  assert.equal(await page.locator('#dashboard-avatar').innerText(),'🐰');
  assert.match(await page.locator('#dashboard-dimension-description').innerText(),/11 completed activities/);
  assert.match(await page.locator('#dashboard-featured-badges').innerText(),/Earned/);
- const activity=await page.evaluate(()=>window.FEIStudentDashboard.learningActivity({completedLessons:['cube','cube','unknown','art-history-western-1','lfc054']},['cube']).map(x=>({id:x.id,count:x.count,value:x.value})));
+ const activity=await page.evaluate(()=>window.FEIStudentDashboard.learningActivity({completedLessons:['cube','cube','unknown','art-history-western-1','carle-colorful-chameleon']},['cube']).map(x=>({id:x.id,count:x.count,value:x.value})));
  assert.deepEqual(activity.map(x=>x.count),[1,1,1,0]);assert.equal(activity[3].value,null);
  await page.locator('[data-page=live]').click();await page.locator('#live-class-section').waitFor({state:'visible'});
  assert.equal(await page.locator('#dashboard-live-empty').isVisible(),false);
