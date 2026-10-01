@@ -67,7 +67,25 @@
     title: 'Wide Shot',
     subtitle: 'Character + World, Together',
 
-    // Step 1 — 3D classroom reveal, no video (per the brief). See
+    // Step 1 (round 6, new) — the push-in opening moment Medium Shot
+    // and Close-Up both already open with, extended to this lesson per
+    // Faye: "Wide Shot currently has no equivalent, and it should."
+    // Same shared ShotSizeCompare component (../../shared/shot-size-
+    // compare.js), sliced to its first TWO stops (ews/ws) so it ends on
+    // Wide Shot — see index.html's renderWideConcept/afterRenderWideConcept,
+    // which mirror Lesson 03's renderMediumConcept pattern exactly
+    // (same component, same mount, just a shorter stop list).
+    // stopCaptions override DEFAULT_STOPS' own wording so the copy
+    // lives with this lesson, same convention as Lessons 03/04.
+    concept_moment: {
+      stopCaptions: {
+        ews: 'Extreme Wide: the world fills the frame.',
+        ws: 'Wide: the whole person — and the place around them.'
+      },
+      closingLine: 'Drag the slider to compare.'
+    },
+
+    // Step 2 — 3D classroom reveal, no video (per the brief). See
     // index.html's renderClassroomReveal — built from the same
     // primitive-based Three.js toolkit as Lesson 01's Step 2, with an
     // articulated (head/torso/2-segment limbs) character builder
@@ -79,7 +97,7 @@
       termLabel: 'WIDE SHOT'
     },
 
-    // Step 2 — concept explainer, contrasting directly against
+    // Step 3 — concept explainer, contrasting directly against
     // Extreme Wide Shot (Lesson 01), copy close to verbatim from the
     // brief. `references` are curated by Faye herself later (her own
     // illustrations, same process as Lesson 01's Step 4 "See It in
@@ -109,7 +127,7 @@
       explainerCard: "You'll walk through six short story situations, one at a time — the last one is optional. Just watch and think for now — you'll pick one to draw after."
     },
 
-    // Step 3 — six demonstration scenes (own 3D build + a short
+    // Step 4 — six demonstration scenes (own 3D build + a short
     // comprehension question each), exploration only, no drawing yet.
     // Each maps to its own top-level STEPS entry in index.html
     // (STORY_SCENE_STEPS) — see that file's own note on why this is
@@ -225,7 +243,40 @@
       placeholderCount: 4
     },
 
-    // Step 7 — chains into Lesson 03 (Medium Shot). Title/subtitle
+    // Bonus appendix (round 6, new) — "See This Idea in Real Art & Film"
+    // moved OUT of Lesson 01 per Faye (it used to live inside that
+    // lesson's "When Might We Step Back" step — see that lesson-data.js's
+    // own note). Replaced here with new, different, simpler content:
+    // not the 4-item real-art/film gallery (that stays removed, not
+    // ported), just a short explainer specifically about Extreme Wide
+    // Shot itself — what/when/how it looks — matching the course's
+    // minimal-text convention. Lives on the completion screen as a
+    // closed-by-default collapsible card (confirmed with Faye: never
+    // gates or reorders anything — completion/XP/badge already fired
+    // before a student ever opens it), same collapsible mechanism as
+    // the resource callout that used to live in Lesson 01
+    // (renderResourceCallout/toggleResourceCallout — ported here as
+    // renderBonusCallout/toggleBonusCallout since that original pair
+    // no longer exists in Lesson 01). Copy is Claude Code's own
+    // wording (flagged, nothing given verbatim), reusing Lesson 01's
+    // existing small scene illustrations (card1/card5) rather than
+    // commissioning new art for what's explicitly a lightweight bonus.
+    bonus_extreme_wide: {
+      title: 'Also Get to Know: Extreme Wide Shot',
+      intro: "Before Wide Shot, there's Extreme Wide Shot — the whole world, with the character tiny inside it.",
+      points: [
+        { label: 'WHAT IT IS', text: 'The place fills almost the whole frame — the character is just a small part of it.' },
+        { label: 'WHEN IT IS USED', text: 'Opening a story, showing a big journey, or making a character feel small, alone, or far from home.' },
+        { label: 'WHAT IT LOOKS LIKE', text: 'Mountains, cities, oceans, forests — with one tiny figure somewhere inside.' }
+      ],
+      images: [
+        { src: '../lesson-01-extreme-wide-shot/card1-storm-valley-illustration-only.png', alt: 'A storm moving across a wide valley, with a tiny figure below' },
+        { src: '../lesson-01-extreme-wide-shot/card5-new-world-illustration-only.png', alt: 'A tiny figure arriving in a huge, unfamiliar world' }
+      ],
+      sketchPrompt: 'Want to try it? Sketch a huge place with one tiny character somewhere inside it — digitally or on paper, just for fun.'
+    },
+
+    // Step 8 — chains into Lesson 03 (Medium Shot). Title/subtitle
     // copied from lesson-03-medium-shot/lesson-data.js's own
     // welcome.title/subtitle so this card matches what that lesson
     // actually calls itself.

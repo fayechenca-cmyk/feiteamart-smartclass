@@ -384,6 +384,22 @@ button{font-family:inherit;}
   box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 .video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
+/* Round 6 mute-bug fix — see afterRenderIntroVideo's own comment for
+   why this exists unconditionally rather than trying to detect the
+   silent-mute state. Small + corner-positioned + auto-dismissing on
+   purpose: unlike .video-tap-overlay (shown only when the video is
+   genuinely stuck), this shows every time, so it must never read as a
+   blocking error state — just a quiet, ignorable offer. */
+.video-sound-chip{
+  position:absolute;right:16px;bottom:16px;z-index:2;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+  padding:10px 18px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.78);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;
+}
+.video-sound-chip.show{opacity:1;transform:translateY(0);}
+.video-sound-chip:active{transform:scale(.96);}
 
 /* ============================================================
    STEP 2 — Discover: real 3D scene (Three.js), ported from
@@ -505,37 +521,10 @@ button{font-family:inherit;}
 }
 .big-idea-line.show{opacity:1;transform:translateY(0);}
 
-/* ============================================================
-   REAL-WORLD REFERENCE FOLD-IN — was its own image-led "Look Closer"
-   step (2x2 card grid, --sb-* storyboard tokens). Now a single
-   collapsed resource callout at the bottom of Step 3, text/link only
-   — no images, not even the original FEI-inspired preview
-   illustrations the old step used (see index.html's
-   renderResourceCallout for why: a derivative illustration is still
-   a derivative, so the same copyright caution now extends to those).
-============================================================ */
-.resource-callout{margin:30px auto 0;max-width:640px;}
-.resource-callout-toggle{
-  display:block;width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
-  padding:13px 20px;border-radius:12px;border:1.5px solid var(--sb-ink);background:var(--sb-panel);
-  color:var(--sb-ink);cursor:pointer;text-align:center;transition:border-color .15s ease,background .15s ease;
-}
-.resource-callout-toggle:hover{border-color:var(--sb-accent);}
-.resource-callout-toggle:active{transform:scale(.98);}
-.resource-callout-panel{margin-top:14px;}
-.resource-callout-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 16px;text-align:center;}
-.resource-list{display:flex;flex-direction:column;gap:14px;}
-.resource-row{background:var(--sb-panel);border:1.5px solid var(--sb-line);border-radius:8px;padding:14px 16px;}
-.resource-row-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-bottom:6px;}
-.resource-row-cat{font-size:9px;font-weight:800;letter-spacing:1.4px;color:var(--sb-accent);}
-.resource-row-title{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:var(--sb-ink);}
-.resource-row-creator{font-size:11px;color:var(--sb-ink-faint);}
-.resource-row-observation{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;margin:0 0 8px;}
-.resource-row-link{
-  display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.4px;
-  color:var(--sb-panel);background:var(--sb-ink);padding:5px 12px;border-radius:2px;text-decoration:none;
-}
-.resource-row-link:hover{background:var(--sb-accent);}
+/* REAL-WORLD REFERENCE FOLD-IN — REMOVED (round 6, per Faye). See the
+   matching removal note further down this file (search
+   "REAL-WORLD REFERENCE FOLD-IN — REMOVED") for the full story; this
+   was that resource callout's CSS. */
 
 /* ============================================================
    STEP 4 — Practice Intro (two-card intro before Story A). Renumbered
@@ -1038,6 +1027,7 @@ function renderVideoStage(streamId, title, iframeId, posterUrl, disclaimer){
       <div class="video-title-overlay">${title}</div>
       ${disclaimerHtml}
       <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
+      <button class="video-sound-chip" id="videoSoundChip" hidden>🔊 Tap for sound</button>
     </div>`;
   }
   return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
@@ -1164,6 +1154,50 @@ function afterRenderIntroVideo(){
           overlay.hidden = true;
         };
       }, 1200);
+
+      // Round 6 — MUTE BUG FIX. The comment above only covers the case
+      // where autoplay-with-sound is BLOCKED OUTRIGHT (video stays
+      // paused). Live-tested (not assumed) and found a second, more
+      // common failure mode the old code never handled: the browser
+      // lets autoplay proceed but SILENTLY force-mutes it — the 'play'
+      // event still fires normally, so `started` flips true, the
+      // overlay above never shows, and the video plays through its
+      // entire runtime with no sound and no way to fix it. Confirmed
+      // via direct inspection of the real <video> element inside the
+      // Stream iframe: muted===true, paused===false, with the tap-to-
+      // play overlay's own `hidden` staying true the whole time.
+      //
+      // This can't be detected reliably from here: the Stream SDK's own
+      // `player.muted` getter was tested across 6 timing samples (100ms
+      // to 2.5s after play) and consistently reported `false` — it just
+      // echoes the originally-requested value over postMessage, not the
+      // browser's real (forced) state, and no 'volumechange' event is
+      // forwarded through the SDK either. Programmatically setting
+      // `player.muted = false` without a fresh click was also tested —
+      // it's silently ignored by the browser's autoplay policy (real
+      // click confirmed required; same conclusion the overlay above
+      // already relies on).
+      //
+      // Given detection isn't reliable, the fix doesn't try to detect —
+      // it guarantees a recovery path unconditionally: a small,
+      // non-blocking "Tap for sound" chip (same pattern YouTube itself
+      // uses for this exact class of bug), shown a beat after playback
+      // starts and auto-dismissing if unused. Costs nothing when sound
+      // is already on; guarantees a fix when it silently isn't.
+      setTimeout(() => {
+        const chip = document.getElementById('videoSoundChip');
+        if (!chip || !started) return;
+        chip.hidden = false;
+        requestAnimationFrame(() => chip.classList.add('show'));
+        const dismiss = () => { chip.classList.remove('show'); setTimeout(() => { chip.hidden = true; }, 300); };
+        chip.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[intro_video] play() failed', e));
+          dismiss();
+        };
+        setTimeout(dismiss, 6000);
+      }, 1500);
     } catch (e) {
       console.warn('[intro_video] Stream SDK attach failed', e);
       showVideoFailureContinue();
@@ -1844,7 +1878,6 @@ function renderWhenUse(){
       ${listenBtn}
       <div class="prompt-grid">${cards}</div>
       <div class="big-idea-line" id="bigIdeaLine">${d.bigIdea}</div>
-      ${renderResourceCallout()}
     </div>
   `;
 }
@@ -1868,52 +1901,22 @@ function revealPrompt(i){
 }
 
 /* ============================================================
-   REAL-WORLD REFERENCE FOLD-IN (was its own step, "Look Closer" /
-   "See It in Art") — now a single collapsed resource callout inside
-   Step 3 instead of a dedicated step with embedded images.
-   COPYRIGHT RULE, extended: even the original FEI-inspired preview
-   illustrations this used to show are dropped here — a derivative
-   illustration is still a derivative, so the copyright caution now
-   extends to those too. Text/link only: each of the four references
-   explains in words what to look for and why it demonstrates
-   stepping back to reveal the world, then links out (new tab) to its
-   real, verified source — same four legitimate sources already
-   established, just presented as a resource callout rather than a
-   dedicated image-led step.
+   REAL-WORLD REFERENCE FOLD-IN — REMOVED (round 6, per Faye). Used to
+   live here as "📚 See This Idea in Real Art & Film" (a collapsed
+   resource callout inside Step 3 — "When Might We Step Back" — with 4
+   rights-checked real art/film references: Spirited Away, Star Wars,
+   Cleveland Museum of Art's "Streams and Mountains without End," and
+   Bosch's "The Garden of Earthly Delights"). Faye asked for it to move
+   out of this lesson entirely — the Step 3 content above this comment
+   is otherwise unchanged. It was NOT ported verbatim to its new home;
+   lesson-02-wide-full-shot's end-of-lesson bonus appendix
+   (bonus_extreme_wide, that file's own renderBonusCallout) is new,
+   simpler, Extreme-Wide-Shot-specific content instead. The rights
+   research behind the 4 removed references (sourceUrl/rightsStatus
+   per item) is recoverable from this file's git history if ever
+   needed again — see lesson-data.js's own former reference_resources
+   block, also removed.
 ============================================================ */
-function renderResourceCallout(){
-  const items = LESSON_DATA.reference_resources.items;
-  const rows = items.map(item => `
-    <div class="resource-row">
-      <div class="resource-row-head">
-        <span class="resource-row-cat">${item.category}</span>
-        <span class="resource-row-title">${item.title}</span>
-        ${item.creator ? `<span class="resource-row-creator">${item.creator}${item.year ? ', ' + item.year : ''}</span>` : ''}
-      </div>
-      <p class="resource-row-observation">${item.observation}</p>
-      <a class="resource-row-link" href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer">View Original ↗</a>
-    </div>
-  `).join('');
-  return `
-    <div class="resource-callout">
-      <button class="resource-callout-toggle" id="resourceCalloutToggle" onclick="toggleResourceCallout()" aria-expanded="false" aria-controls="resourceCalloutPanel">
-        📚 See This Idea in Real Art &amp; Film
-      </button>
-      <div class="resource-callout-panel" id="resourceCalloutPanel" hidden>
-        <p class="resource-callout-intro">Extreme Wide Shots show up across very different kinds of storytelling — here's what to look for in each, and where to see the real thing:</p>
-        <div class="resource-list">${rows}</div>
-      </div>
-    </div>
-  `;
-}
-function toggleResourceCallout(){
-  const panel = document.getElementById('resourceCalloutPanel');
-  const btn = document.getElementById('resourceCalloutToggle');
-  if (!panel || !btn) return;
-  const willShow = panel.hidden;
-  panel.hidden = !willShow;
-  btn.setAttribute('aria-expanded', String(willShow));
-}
 
 
 /* ============================================================

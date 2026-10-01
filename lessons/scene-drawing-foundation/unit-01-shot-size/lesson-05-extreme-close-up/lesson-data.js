@@ -1,9 +1,15 @@
 /* ============================================================
  * Scene Drawing Foundation · Unit 01 · Lesson 05 — Extreme Close-Up
- * Lesson content data — all 13 stages, per the real "Scene Drawing
- * Foundation · Unit 01 · Lesson 05 / Extreme Close-Up: Show the
- * Detail — Spec v1.0" pasted in full in the build prompt itself (no
- * missing-content gap). Last lesson in Unit 01.
+ * Lesson content data — originally 13 stages, per the real "Scene
+ * Drawing Foundation · Unit 01 · Lesson 05 / Extreme Close-Up: Show
+ * the Detail — Spec v1.0" pasted in full in the build prompt itself
+ * (no missing-content gap). Last lesson in Unit 01.
+ *
+ * Round 6 (per Faye, course-wide review): simplified — draw_task cut
+ * from 3 practice tasks to 2 (this lesson doesn't need the same
+ * practice depth as earlier lessons), and a new Stage 14 `summary`
+ * added as a short closing recap (the lesson had no closing moment at
+ * all before — see that field's own comment). 14 stages now.
  *
  * ASSET NOTE: every image is still an inline placeholder SVG (via
  * svgPlaceholder()), not real art — same as Lessons 01-04.
@@ -145,15 +151,20 @@
       videoTitle: "Let's Draw Together — thinking sketch"
     },
 
-    // Stage 11 — 3 new tasks. `label` is the full on-screen prompt
-    // sentence; `reflectLabel` is the separate short form the spec
-    // gives for Stage 13's reflect chips.
+    // Stage 11 — round 6 (per Faye): reduced from 3 tasks to 2 —
+    // Extreme Close-Up doesn't need the same practice depth as the
+    // earlier lessons. Kept key_lock + seed_sprout (dropped
+    // puzzle_piece): those two already had matching see_ideas tabs
+    // below (teacher's idea / Jojo's idea) and puzzle_piece never did
+    // — removing it is also a pre-existing data gap fix, not just a
+    // trim. `label` is the full on-screen prompt sentence;
+    // `reflectLabel` is the separate short form Stage 13's reflect
+    // chips use.
     draw_task: {
-      title: 'Your Turn: Draw 3 Scenes',
+      title: 'Your Turn: Draw 2 Scenes',
       tasks: [
         { key: 'key_lock', label: 'The key finally fit into the old lock.', reflectLabel: 'The Old Lock' },
-        { key: 'seed_sprout', label: 'A single seed began to sprout.', reflectLabel: 'The Sprout' },
-        { key: 'puzzle_piece', label: 'The last puzzle piece clicked into place.', reflectLabel: 'The Last Piece' }
+        { key: 'seed_sprout', label: 'A single seed began to sprout.', reflectLabel: 'The Sprout' }
       ],
       xpPerScene: 20
     },
@@ -175,13 +186,26 @@
     reflect: {
       title: 'My Choice',
       sentenceTemplate: 'I chose my {a} drawing because I wanted to show {b}.',
-      viewOptions: ['The Old Lock', 'The Sprout', 'The Last Piece'],
+      // Trimmed to match draw_task's 2 tasks (was 3) — see that
+      // field's own comment.
+      viewOptions: ['The Old Lock', 'The Sprout'],
       reasonOptions: [
         'the one detail that mattered',
         'how small and important it felt',
         'the exact moment it happened',
         { label: 'something else', freeText: true }
       ]
+    },
+
+    // Stage 14 (round 6, new) — a short closing recap, per Faye: "add a
+    // short ending/summary... keep it brief, matching the course's
+    // minimal-text convention." The lesson had no closing/summary
+    // moment at all before this — reflect (Stage 13) was the literal
+    // last stage. Copy is Claude Code's own wording (flagged, nothing
+    // given verbatim).
+    summary: {
+      title: 'Extreme Close-Up, in Short',
+      recap: "Use it when one tiny detail carries the whole story — a key fitting a lock, hands trembling, a single tear. The detail becomes the whole picture."
     }
   };
 

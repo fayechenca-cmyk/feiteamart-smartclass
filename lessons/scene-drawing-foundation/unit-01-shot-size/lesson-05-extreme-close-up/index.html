@@ -201,6 +201,12 @@ body{
 }
 .term-subtitle.show{opacity:1;}
 
+/* ---------- Stage 14 (round 6, new): closing summary recap ---------- */
+.summary-recap{
+  text-align:center;font-size:14px;line-height:1.6;color:var(--ink-soft);
+  max-width:440px;margin:14px auto 0;
+}
+
 /* ---------- Stage 9: Real examples ---------- */
 .examples-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
 @media(max-width:480px){.examples-grid{grid-template-columns:1fr;}}
@@ -315,7 +321,8 @@ const STAGES = [
   { id:'demo_video',          title:"Let's Draw Together",    zone:'make',    render:renderDemoVideo },
   { id:'draw_task',           title:'Draw It',                zone:'make',    render:renderDrawTask, afterRender:afterRenderDrawTask },
   { id:'see_ideas',           title:"See Other Ideas",        zone:'make',    render:renderSeeIdeas, afterRender:afterRenderSeeIdeas },
-  { id:'reflect',             title:'Reflect',                zone:'reflect', render:renderReflect, afterRender:afterRenderReflect }
+  { id:'reflect',             title:'Reflect',                zone:'reflect', render:renderReflect, afterRender:afterRenderReflect },
+  { id:'summary',             title:'In Short',               zone:'reflect', render:renderSummary }
 ];
 
 let STATE = {
@@ -899,6 +906,21 @@ async function afterRenderReflect(){
   }, {
     onSaved(){ markLessonComplete(); }
   });
+}
+
+/* ============================================================
+   STAGE 14 (round 6, new) — short closing recap. This lesson had no
+   closing/summary moment before — reflect (Stage 13) was the literal
+   last stage. Per Faye: brief, matching the course's minimal-text
+   convention — a kicker + title + one short recap line, nothing more.
+============================================================ */
+function renderSummary(){
+  const d = LESSON_DATA.summary;
+  return `
+    <div class="kicker">Reflect</div>
+    <h2 class="s-title">${d.title}</h2>
+    <p class="summary-recap">${d.recap}</p>
+  `;
 }
 
 /* ============================================================
