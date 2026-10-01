@@ -193,6 +193,30 @@ button{font-family:inherit;}
 .step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
 .step-sub{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 auto 22px;line-height:1.6;max-width:520px;}
 
+/* Bonus appendix (round 6, new) — closed-by-default collapsible card
+   on the completion screen, see lesson-data.js's bonus_extreme_wide
+   comment. Ported from Lesson 01's old resource-callout styling
+   (that lesson no longer has this card at all — see its own notes)
+   plus a small image-row addition this version needs that the old
+   text/link-only version didn't. */
+.bonus-callout{margin:30px auto 0;max-width:640px;text-align:left;}
+.bonus-callout-toggle{
+  display:block;width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
+  padding:13px 20px;border-radius:12px;border:1.5px solid var(--sb-ink);background:var(--sb-panel);
+  color:var(--sb-ink);cursor:pointer;text-align:center;transition:border-color .15s ease,background .15s ease;
+}
+.bonus-callout-toggle:hover{border-color:var(--sb-accent);}
+.bonus-callout-toggle:active{transform:scale(.98);}
+.bonus-callout-panel{margin-top:14px;}
+.bonus-callout-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 16px;text-align:center;}
+.bonus-callout-images{display:flex;gap:10px;margin:0 0 16px;}
+.bonus-callout-images img{width:50%;border-radius:8px;border:1.5px solid var(--sb-line);display:block;}
+.bonus-callout-points{display:flex;flex-direction:column;gap:12px;margin:0 0 18px;}
+.bonus-callout-point{background:var(--sb-panel);border:1.5px solid var(--sb-line);border-radius:8px;padding:12px 14px;}
+.bonus-callout-point-label{display:block;font-family:'Space Grotesk',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:1.4px;color:var(--sb-accent);margin-bottom:4px;}
+.bonus-callout-point-text{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;}
+.bonus-callout-sketch{font-size:12.5px;color:var(--sb-ink);line-height:1.55;text-align:center;padding:12px 14px;border:1.5px dashed var(--sb-line);border-radius:8px;}
+
 /* ---- Continue dock (quiet, floats in only once a step is "done").
    The scrim behind it keeps the button from visually cutting into
    card text on content-dense steps (e.g. Look Closer's 6-card grid)
@@ -3250,6 +3274,47 @@ function previewUpload(e){
 /* ============================================================
    STEP 8 — COMPLETE
 ============================================================ */
+// Bonus appendix (round 6, new) — see lesson-data.js's
+// bonus_extreme_wide comment for the full backstory (moved out of
+// Lesson 01, rebuilt simpler, lives here as a closed-by-default
+// collapsible card). Mirrors the old Lesson 01
+// renderResourceCallout/toggleResourceCallout shape/naming, just with
+// `.bonus-*` classes and this lesson's own content fields.
+function renderBonusCallout(){
+  const d = LESSON_DATA.bonus_extreme_wide;
+  if (!d) return '';
+  const imagesHtml = (d.images || []).length
+    ? `<div class="bonus-callout-images">${d.images.map(img => `<img src="${img.src}" alt="${img.alt}" loading="lazy">`).join('')}</div>`
+    : '';
+  const pointsHtml = (d.points || []).map(p => `
+    <div class="bonus-callout-point">
+      <span class="bonus-callout-point-label">${p.label}</span>
+      <div class="bonus-callout-point-text">${p.text}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="bonus-callout">
+      <button class="bonus-callout-toggle" id="bonusCalloutToggle" onclick="toggleBonusCallout()" aria-expanded="false" aria-controls="bonusCalloutPanel">
+        📚 ${d.title}
+      </button>
+      <div class="bonus-callout-panel" id="bonusCalloutPanel" hidden>
+        <p class="bonus-callout-intro">${d.intro}</p>
+        ${imagesHtml}
+        <div class="bonus-callout-points">${pointsHtml}</div>
+        ${d.sketchPrompt ? `<p class="bonus-callout-sketch">${d.sketchPrompt}</p>` : ''}
+      </div>
+    </div>
+  `;
+}
+function toggleBonusCallout(){
+  const panel = document.getElementById('bonusCalloutPanel');
+  const btn = document.getElementById('bonusCalloutToggle');
+  if (!panel || !btn) return;
+  const willShow = panel.hidden;
+  panel.hidden = !willShow;
+  btn.setAttribute('aria-expanded', String(willShow));
+}
+
 function renderComplete(){
   if (STATE.lessonSaved) return renderCompleteDone();
   const d = LESSON_DATA.completion_check;
@@ -3294,6 +3359,7 @@ function renderCompleteDone(){
         <p class="step-sub">${LESSON_DATA.title} — ${LESSON_DATA.subtitle}</p>
         ${nextLessonHtml}
         ${badgeHtml}
+        ${renderBonusCallout()}
         <a class="complete-exit" href="../../">← Back to Scene Drawing Foundation</a>
       </div>
     </div>

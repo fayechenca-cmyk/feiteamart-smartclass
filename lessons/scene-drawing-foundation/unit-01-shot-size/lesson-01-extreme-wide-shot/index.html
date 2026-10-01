@@ -521,37 +521,10 @@ button{font-family:inherit;}
 }
 .big-idea-line.show{opacity:1;transform:translateY(0);}
 
-/* ============================================================
-   REAL-WORLD REFERENCE FOLD-IN — was its own image-led "Look Closer"
-   step (2x2 card grid, --sb-* storyboard tokens). Now a single
-   collapsed resource callout at the bottom of Step 3, text/link only
-   — no images, not even the original FEI-inspired preview
-   illustrations the old step used (see index.html's
-   renderResourceCallout for why: a derivative illustration is still
-   a derivative, so the same copyright caution now extends to those).
-============================================================ */
-.resource-callout{margin:30px auto 0;max-width:640px;}
-.resource-callout-toggle{
-  display:block;width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;
-  padding:13px 20px;border-radius:12px;border:1.5px solid var(--sb-ink);background:var(--sb-panel);
-  color:var(--sb-ink);cursor:pointer;text-align:center;transition:border-color .15s ease,background .15s ease;
-}
-.resource-callout-toggle:hover{border-color:var(--sb-accent);}
-.resource-callout-toggle:active{transform:scale(.98);}
-.resource-callout-panel{margin-top:14px;}
-.resource-callout-intro{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 16px;text-align:center;}
-.resource-list{display:flex;flex-direction:column;gap:14px;}
-.resource-row{background:var(--sb-panel);border:1.5px solid var(--sb-line);border-radius:8px;padding:14px 16px;}
-.resource-row-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-bottom:6px;}
-.resource-row-cat{font-size:9px;font-weight:800;letter-spacing:1.4px;color:var(--sb-accent);}
-.resource-row-title{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;color:var(--sb-ink);}
-.resource-row-creator{font-size:11px;color:var(--sb-ink-faint);}
-.resource-row-observation{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;margin:0 0 8px;}
-.resource-row-link{
-  display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.4px;
-  color:var(--sb-panel);background:var(--sb-ink);padding:5px 12px;border-radius:2px;text-decoration:none;
-}
-.resource-row-link:hover{background:var(--sb-accent);}
+/* REAL-WORLD REFERENCE FOLD-IN — REMOVED (round 6, per Faye). See the
+   matching removal note further down this file (search
+   "REAL-WORLD REFERENCE FOLD-IN — REMOVED") for the full story; this
+   was that resource callout's CSS. */
 
 /* ============================================================
    STEP 4 — Practice Intro (two-card intro before Story A). Renumbered
@@ -1905,7 +1878,6 @@ function renderWhenUse(){
       ${listenBtn}
       <div class="prompt-grid">${cards}</div>
       <div class="big-idea-line" id="bigIdeaLine">${d.bigIdea}</div>
-      ${renderResourceCallout()}
     </div>
   `;
 }
@@ -1929,52 +1901,22 @@ function revealPrompt(i){
 }
 
 /* ============================================================
-   REAL-WORLD REFERENCE FOLD-IN (was its own step, "Look Closer" /
-   "See It in Art") — now a single collapsed resource callout inside
-   Step 3 instead of a dedicated step with embedded images.
-   COPYRIGHT RULE, extended: even the original FEI-inspired preview
-   illustrations this used to show are dropped here — a derivative
-   illustration is still a derivative, so the copyright caution now
-   extends to those too. Text/link only: each of the four references
-   explains in words what to look for and why it demonstrates
-   stepping back to reveal the world, then links out (new tab) to its
-   real, verified source — same four legitimate sources already
-   established, just presented as a resource callout rather than a
-   dedicated image-led step.
+   REAL-WORLD REFERENCE FOLD-IN — REMOVED (round 6, per Faye). Used to
+   live here as "📚 See This Idea in Real Art & Film" (a collapsed
+   resource callout inside Step 3 — "When Might We Step Back" — with 4
+   rights-checked real art/film references: Spirited Away, Star Wars,
+   Cleveland Museum of Art's "Streams and Mountains without End," and
+   Bosch's "The Garden of Earthly Delights"). Faye asked for it to move
+   out of this lesson entirely — the Step 3 content above this comment
+   is otherwise unchanged. It was NOT ported verbatim to its new home;
+   lesson-02-wide-full-shot's end-of-lesson bonus appendix
+   (bonus_extreme_wide, that file's own renderBonusCallout) is new,
+   simpler, Extreme-Wide-Shot-specific content instead. The rights
+   research behind the 4 removed references (sourceUrl/rightsStatus
+   per item) is recoverable from this file's git history if ever
+   needed again — see lesson-data.js's own former reference_resources
+   block, also removed.
 ============================================================ */
-function renderResourceCallout(){
-  const items = LESSON_DATA.reference_resources.items;
-  const rows = items.map(item => `
-    <div class="resource-row">
-      <div class="resource-row-head">
-        <span class="resource-row-cat">${item.category}</span>
-        <span class="resource-row-title">${item.title}</span>
-        ${item.creator ? `<span class="resource-row-creator">${item.creator}${item.year ? ', ' + item.year : ''}</span>` : ''}
-      </div>
-      <p class="resource-row-observation">${item.observation}</p>
-      <a class="resource-row-link" href="${item.sourceUrl}" target="_blank" rel="noopener noreferrer">View Original ↗</a>
-    </div>
-  `).join('');
-  return `
-    <div class="resource-callout">
-      <button class="resource-callout-toggle" id="resourceCalloutToggle" onclick="toggleResourceCallout()" aria-expanded="false" aria-controls="resourceCalloutPanel">
-        📚 See This Idea in Real Art &amp; Film
-      </button>
-      <div class="resource-callout-panel" id="resourceCalloutPanel" hidden>
-        <p class="resource-callout-intro">Extreme Wide Shots show up across very different kinds of storytelling — here's what to look for in each, and where to see the real thing:</p>
-        <div class="resource-list">${rows}</div>
-      </div>
-    </div>
-  `;
-}
-function toggleResourceCallout(){
-  const panel = document.getElementById('resourceCalloutPanel');
-  const btn = document.getElementById('resourceCalloutToggle');
-  if (!panel || !btn) return;
-  const willShow = panel.hidden;
-  panel.hidden = !willShow;
-  btn.setAttribute('aria-expanded', String(willShow));
-}
 
 
 /* ============================================================

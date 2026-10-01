@@ -225,6 +225,39 @@
       placeholderCount: 4
     },
 
+    // Bonus appendix (round 6, new) — "See This Idea in Real Art & Film"
+    // moved OUT of Lesson 01 per Faye (it used to live inside that
+    // lesson's "When Might We Step Back" step — see that lesson-data.js's
+    // own note). Replaced here with new, different, simpler content:
+    // not the 4-item real-art/film gallery (that stays removed, not
+    // ported), just a short explainer specifically about Extreme Wide
+    // Shot itself — what/when/how it looks — matching the course's
+    // minimal-text convention. Lives on the completion screen as a
+    // closed-by-default collapsible card (confirmed with Faye: never
+    // gates or reorders anything — completion/XP/badge already fired
+    // before a student ever opens it), same collapsible mechanism as
+    // the resource callout that used to live in Lesson 01
+    // (renderResourceCallout/toggleResourceCallout — ported here as
+    // renderBonusCallout/toggleBonusCallout since that original pair
+    // no longer exists in Lesson 01). Copy is Claude Code's own
+    // wording (flagged, nothing given verbatim), reusing Lesson 01's
+    // existing small scene illustrations (card1/card5) rather than
+    // commissioning new art for what's explicitly a lightweight bonus.
+    bonus_extreme_wide: {
+      title: 'Also Get to Know: Extreme Wide Shot',
+      intro: "Before Wide Shot, there's Extreme Wide Shot — the whole world, with the character tiny inside it.",
+      points: [
+        { label: 'WHAT IT IS', text: 'The place fills almost the whole frame — the character is just a small part of it.' },
+        { label: 'WHEN IT IS USED', text: 'Opening a story, showing a big journey, or making a character feel small, alone, or far from home.' },
+        { label: 'WHAT IT LOOKS LIKE', text: 'Mountains, cities, oceans, forests — with one tiny figure somewhere inside.' }
+      ],
+      images: [
+        { src: '../lesson-01-extreme-wide-shot/card1-storm-valley-illustration-only.png', alt: 'A storm moving across a wide valley, with a tiny figure below' },
+        { src: '../lesson-01-extreme-wide-shot/card5-new-world-illustration-only.png', alt: 'A tiny figure arriving in a huge, unfamiliar world' }
+      ],
+      sketchPrompt: 'Want to try it? Sketch a huge place with one tiny character somewhere inside it — digitally or on paper, just for fun.'
+    },
+
     // Step 7 — chains into Lesson 03 (Medium Shot). Title/subtitle
     // copied from lesson-03-medium-shot/lesson-data.js's own
     // welcome.title/subtitle so this card matches what that lesson
