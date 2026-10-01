@@ -384,6 +384,22 @@ button{font-family:inherit;}
   box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 .video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
+/* Round 6 mute-bug fix — see afterRenderIntroVideo's own comment for
+   why this exists unconditionally rather than trying to detect the
+   silent-mute state. Small + corner-positioned + auto-dismissing on
+   purpose: unlike .video-tap-overlay (shown only when the video is
+   genuinely stuck), this shows every time, so it must never read as a
+   blocking error state — just a quiet, ignorable offer. */
+.video-sound-chip{
+  position:absolute;right:16px;bottom:16px;z-index:2;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+  padding:10px 18px;border-radius:999px;border:none;cursor:pointer;
+  background:rgba(28,26,34,.78);color:#fff;backdrop-filter:blur(6px);
+  box-shadow:0 6px 18px rgba(0,0,0,.3);
+  opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;
+}
+.video-sound-chip.show{opacity:1;transform:translateY(0);}
+.video-sound-chip:active{transform:scale(.96);}
 
 /* ============================================================
    STEP 2 — Discover: real 3D scene (Three.js), ported from
@@ -1038,6 +1054,7 @@ function renderVideoStage(streamId, title, iframeId, posterUrl, disclaimer){
       <div class="video-title-overlay">${title}</div>
       ${disclaimerHtml}
       <button class="video-tap-overlay" id="videoTapOverlay" hidden>🔊 Tap to Play</button>
+      <button class="video-sound-chip" id="videoSoundChip" hidden>🔊 Tap for sound</button>
     </div>`;
   }
   return `<div class="video-stage" style="background:linear-gradient(135deg,var(--accent),var(--accent-deep));">
@@ -1164,6 +1181,50 @@ function afterRenderIntroVideo(){
           overlay.hidden = true;
         };
       }, 1200);
+
+      // Round 6 — MUTE BUG FIX. The comment above only covers the case
+      // where autoplay-with-sound is BLOCKED OUTRIGHT (video stays
+      // paused). Live-tested (not assumed) and found a second, more
+      // common failure mode the old code never handled: the browser
+      // lets autoplay proceed but SILENTLY force-mutes it — the 'play'
+      // event still fires normally, so `started` flips true, the
+      // overlay above never shows, and the video plays through its
+      // entire runtime with no sound and no way to fix it. Confirmed
+      // via direct inspection of the real <video> element inside the
+      // Stream iframe: muted===true, paused===false, with the tap-to-
+      // play overlay's own `hidden` staying true the whole time.
+      //
+      // This can't be detected reliably from here: the Stream SDK's own
+      // `player.muted` getter was tested across 6 timing samples (100ms
+      // to 2.5s after play) and consistently reported `false` — it just
+      // echoes the originally-requested value over postMessage, not the
+      // browser's real (forced) state, and no 'volumechange' event is
+      // forwarded through the SDK either. Programmatically setting
+      // `player.muted = false` without a fresh click was also tested —
+      // it's silently ignored by the browser's autoplay policy (real
+      // click confirmed required; same conclusion the overlay above
+      // already relies on).
+      //
+      // Given detection isn't reliable, the fix doesn't try to detect —
+      // it guarantees a recovery path unconditionally: a small,
+      // non-blocking "Tap for sound" chip (same pattern YouTube itself
+      // uses for this exact class of bug), shown a beat after playback
+      // starts and auto-dismissing if unused. Costs nothing when sound
+      // is already on; guarantees a fix when it silently isn't.
+      setTimeout(() => {
+        const chip = document.getElementById('videoSoundChip');
+        if (!chip || !started) return;
+        chip.hidden = false;
+        requestAnimationFrame(() => chip.classList.add('show'));
+        const dismiss = () => { chip.classList.remove('show'); setTimeout(() => { chip.hidden = true; }, 300); };
+        chip.onclick = () => {
+          try { player.muted = false; } catch (e) { /* best-effort */ }
+          const playResult = player.play();
+          if (playResult && playResult.catch) playResult.catch((e) => console.warn('[intro_video] play() failed', e));
+          dismiss();
+        };
+        setTimeout(dismiss, 6000);
+      }, 1500);
     } catch (e) {
       console.warn('[intro_video] Stream SDK attach failed', e);
       showVideoFailureContinue();
