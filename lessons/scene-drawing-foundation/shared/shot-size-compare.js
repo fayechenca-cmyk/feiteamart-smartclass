@@ -80,7 +80,16 @@
       <rect x="${fx - 9}" y="${fy - 56}" width="18" height="28" rx="4" fill="#e85c6e"/>
       <rect x="${fx - 13}" y="${fy - 54}" width="5" height="24" rx="2.5" fill="#e85c6e"/><rect x="${fx + 8}" y="${fy - 54}" width="5" height="24" rx="2.5" fill="#e85c6e"/>
       <circle cx="${fx}" cy="${fy - 64}" r="8.5" fill="#f0c49a"/>
-      <path d="M${fx - 9},${fy - 66} q9,-11 18,0 q-3,-4 -9,-4 q-6,0 -9,4z" fill="#3a2a20"/>
+      <!-- Round 6 fix (per Faye, found during Medium Shot testing — "the
+           character is bald"): the old hair path floated mostly ABOVE
+           the head circle (only a razor-thin sliver actually overlapped
+           it), invisible at this figure's small scale. This one follows
+           the head circle's own curvature for its outer edge (an arc
+           with the SAME cx/cy/r as the head, so it sits flush with no
+           gap) and closes with a simple hairline curve — a real cap
+           covering the top ~35% of the head, same fix verified in
+           isolation before applying here (see the build notes). -->
+      <path d="M${fx - 8},${fy - 66.9} A8.5,8.5 0 0,1 ${fx + 8},${fy - 66.9} Q${fx},${fy - 68.5} ${fx - 8},${fy - 66.9} Z" fill="#3a2a20"/>
       <circle cx="${fx - 3}" cy="${fy - 63}" r="1" fill="#1c1a22"/><circle cx="${fx + 3}" cy="${fy - 63}" r="1" fill="#1c1a22"/>
       <path d="M${fx - 2.5},${fy - 59.5} q2.5,2 5,0" stroke="#1c1a22" stroke-width=".8" fill="none" stroke-linecap="round"/>
     </g>
