@@ -384,6 +384,9 @@ function renderCourseBadgeCard(badgeId) {
   const progress = getCourseBadgeProgress()[badgeId] || { doneCount: 0, totalCount: 0, isComplete: false, pct: 0 };
   const catalogEntry = (window.BADGE_CATALOG || []).find(b => b.id === badgeId) || {};
   const emoji = catalogEntry.emoji || '🏅';
+  const badgeVisual = catalogEntry.imgUrl
+    ? `<img class="course-badge-image" src="${catalogEntry.imgUrl}" alt="${catalogEntry.title || badgeId} badge">`
+    : emoji;
   const title = catalogEntry.title || badgeId;
   // earnedMessage lets each badge have its own "you did it" line;
   // scene_designer's catalog entry carries the exact original hardcoded
@@ -397,7 +400,7 @@ function renderCourseBadgeCard(badgeId) {
   return `
     <div class="course-badge-card">
       <div class="course-badge-row">
-        <div class="course-badge-emoji ${unlockedClass}">${emoji}</div>
+        <div class="course-badge-emoji ${unlockedClass}">${badgeVisual}</div>
         <div class="course-badge-info">
           <div class="course-badge-name">${title} ${progress.isComplete ? '· Earned' : '· Locked'}</div>
           <div class="course-badge-meta">${metaText}</div>

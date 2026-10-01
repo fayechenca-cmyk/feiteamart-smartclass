@@ -38,7 +38,7 @@ window.BADGE_CATALOG = [
   // one Unit at a time. Unit 02+ get their own entries here the same way
   // once they're built, per Faye's explicit "don't restructure this one"
   // instruction.
-  { id:'scene_drawing_unit_01', title:'Unit 01 · Shot Size', artist:'', imgUrl:'', emoji:'🎥', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' },
+  { id:'scene_drawing_unit_01', title:'Scene Drawing', artist:'Des. by Adrian', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/693081850b75764ec5a2d2dc_Screenshot%202025-12-03%20at%2010.28.28%E2%80%AFAM.png', emoji:'📖', color:'#2d5fa8', earnedMessage:'you completed Unit 01 — Shot Size.' },
 
   // Ink Painting — the whole "Painting → Ink Painting" category badge
   // (十二生肖兽图 · Zodiac Brush Technique is the course currently living

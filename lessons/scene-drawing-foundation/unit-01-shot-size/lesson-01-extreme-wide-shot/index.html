@@ -968,7 +968,6 @@ const STORY_PRACTICE_STEPS = LESSON_DATA.story_choices.map((s, i) => ({
 // on the very first step) is index-0-relative, not count-relative —
 // checked, not assumed.
 const STEPS = [
-  { id:'intro_video',     render:renderIntroVideo,     afterRender:afterRenderIntroVideo },
   { id:'discover',        render:renderDiscover,        afterRender:afterRenderDiscover, cleanup:cleanupDiscover },
   { id:'when_use',        render:renderWhenUse },
   { id:'practice_intro',  render:renderPracticeIntro,   afterRender:afterRenderPracticeIntro },

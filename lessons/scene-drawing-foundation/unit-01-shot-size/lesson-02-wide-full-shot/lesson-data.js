@@ -99,21 +99,17 @@
 
     // Step 3 — concept explainer, contrasting directly against
     // Extreme Wide Shot (Lesson 01), copy close to verbatim from the
-    // brief. `references` are curated by Faye herself later (her own
-    // illustrations, same process as Lesson 01's Step 4 "See It in
-    // Art") — every item below is placeholder:true and clearly
-    // flagged in index.html's rendering, same established convention
-    // as every other placeholder asset in this project (e.g. the old
-    // lesson-02's svgPlaceholder cards). Swapping in real images later
-    // needs no index.html change — only this array.
+    // brief. These four references are curated by Faye and delivered
+    // through Cloudflare Images. Keep the order intentional: learners
+    // read them as four visual examples of the same shot-size idea.
     concept_contrast: {
       extremeWideLine: 'Extreme Wide Shot: the environment dominates over the character.',
       wideLine: "Wide Shot: the character's full body is basically visible — you can tell WHERE the character is and WHAT is happening.",
       references: [
-        { title: 'Reference coming soon', category: 'PAINTING', placeholder: true },
-        { title: 'Reference coming soon', category: 'ILLUSTRATION', placeholder: true },
-        { title: 'Reference coming soon', category: 'ANIMATION', placeholder: true },
-        { title: 'Reference coming soon', category: 'FILM', placeholder: true }
+        { title: 'The whole character and the setting share the frame', category: 'WIDE SHOT · REFERENCE 01', image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/56430090-498c-483a-c54c-58ccdaf68700/public', alt: 'Wide shot reference showing a full character within a surrounding scene' },
+        { title: 'Body language remains easy to read', category: 'WIDE SHOT · REFERENCE 02', image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/305be1b3-31e9-4361-090c-7b66104c9500/public', alt: 'Wide shot reference showing readable character action and environment' },
+        { title: 'The environment explains where the action happens', category: 'WIDE SHOT · REFERENCE 03', image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2207d4ef-6062-491d-3962-907d917ff700/public', alt: 'Wide shot reference balancing the character with the place around them' },
+        { title: 'Character and story action appear together', category: 'WIDE SHOT · REFERENCE 04', image: 'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2c429b72-5f40-4b64-f77f-612ef24b4100/public', alt: 'Wide shot reference showing a full figure and visible story action' }
       ]
     },
 
