@@ -193,6 +193,18 @@ button{font-family:inherit;}
 .step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
 .step-sub{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 auto 22px;line-height:1.6;max-width:520px;}
 
+/* Push-in intro (round 6, new) — ported verbatim from Lesson 03/04's
+   own ShotSizeCompare mount styling, so the opening moment looks
+   identical across all three lessons that use it. */
+.concept-moment{align-items:center;justify-content:flex-start;gap:0;padding-top:10px;}
+.concept-moment .step-title{margin-bottom:12px;}
+.concept-moment-stage{width:min(100%, calc((100vh - 330px) * 16 / 9));min-width:min(100%,320px);margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(28,26,34,.22);}
+.concept-moment-fallback{display:flex;flex-direction:column;gap:10px;padding:8px 4px;}
+.concept-moment-fallback-row{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:14px 16px;font-size:15px;color:var(--accent-deep);line-height:1.45;}
+.concept-moment-fallback-row span{display:block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);margin-bottom:4px;}
+.concept-moment-hint{margin-top:12px;font-size:13px;color:var(--ink-soft);text-align:center;opacity:0;transition:opacity .5s ease;}
+.concept-moment-hint.show{opacity:1;}
+
 /* Bonus appendix (round 6, new) — closed-by-default collapsible card
    on the completion screen, see lesson-data.js's bonus_extreme_wide
    comment. Ported from Lesson 01's old resource-callout styling
@@ -914,6 +926,8 @@ button{font-family:inherit;}
 <script src="lesson-data.js"></script>
 <!-- Written "Tips" under the Quick Sketch panel (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
 <script src="../../shared/shot-size-tips.js"></script>
+<!-- Round 6 — the push-in opening moment, same shared component Lessons 03/04 use (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
+<script src="../../shared/shot-size-compare.js"></script>
 
 <script>
 /* ============================================================
@@ -970,6 +984,7 @@ const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.flatMap((s, i) => [
   }
 ]);
 const STEPS = [
+  { id:'wide_concept',       render:renderWideConcept,          afterRender:afterRenderWideConcept, cleanup:cleanupWideConcept },
   { id:'classroom_reveal',   render:renderClassroomReveal,      afterRender:afterRenderClassroomReveal, cleanup:cleanupActive3DStage },
   { id:'concept',            render:renderConcept },
   // Round 2 — two-card intro before Situation 1 (LESSON_DATA.scenes_intro).
@@ -1578,8 +1593,75 @@ function dropIn3(stage, obj, delayMs, durationMs) {
 }
 
 /* ============================================================
-   STEP 1 — 3D CLASSROOM REVEAL. No video (see file header) — the
-   lesson opens straight into this scene. Colorful/detailed on
+   STEP 1 (round 6, new) — WHAT IS A WIDE SHOT? The same push-in
+   opening moment Lessons 03/04 use — the shared ShotSizeCompare
+   component (../../shared/shot-size-compare.js) — sliced to its first
+   TWO stops (ews/ws) so it ends on Wide Shot instead of pushing
+   further. Mirrors renderMediumConcept/afterRenderMediumConcept in
+   lesson-03-medium-shot/index.html line for line; see that file's own
+   comment for the full behavior (autoplay, then hands the slider to
+   the student; Continue unlocks on done OR first slider interaction;
+   a static fallback if the component fails to load, so Step 1 can
+   never strand a student).
+============================================================ */
+let _wideCmp = null;
+function cleanupWideConcept(){
+  if (_wideCmp) { _wideCmp.destroy(); _wideCmp = null; }
+}
+function renderWideConcept(){
+  const d = LESSON_DATA.concept_moment;
+  return `
+    <div class="step-inner bleed concept-moment">
+      <div class="step-kicker">The Idea</div>
+      <h2 class="step-title">What Is a Wide Shot?</h2>
+      <div class="concept-moment-stage" id="cmpMount"></div>
+      <div class="concept-moment-hint" id="cmpHint">${d.closingLine || ''}</div>
+    </div>
+  `;
+}
+function afterRenderWideConcept(){
+  const d = LESSON_DATA.concept_moment;
+  const caps = d.stopCaptions || {};
+  const hint = document.getElementById('cmpHint');
+  let unlocked = false;
+  function unlock(){
+    if (unlocked) return;
+    unlocked = true;
+    if (hint) hint.classList.add('show');
+    showContinue('Next →', nextStep);
+  }
+  // Same "never strand a student" guard as Lesson 03's Step 1 — a way
+  // forward exists from the very first paint, before anything below
+  // (which can throw if the shared script 404s) ever runs.
+  showContinue('Next →', nextStep, { ghost: true });
+  try {
+    if (typeof ShotSizeCompare === 'undefined') throw new Error('ShotSizeCompare component did not load');
+    // Sliced to the first 2 (ews/ws) — this lesson's opening should end
+    // on Wide Shot, not push through to Medium/Close-Up.
+    const stops = ShotSizeCompare.DEFAULT_STOPS.slice(0, 2).map(s => Object.assign({}, s, { caption: caps[s.id] || s.caption }));
+    _wideCmp = ShotSizeCompare.mount('cmpMount', {
+      stops: stops,
+      autoplay: { startDelayMs: 2600, holdMs: 2600, moveMs: 1500 }
+    }, { onDone: unlock });
+    if (!_wideCmp) throw new Error('ShotSizeCompare.mount returned nothing');
+    const controls = document.querySelector('#cmpMount .ssc-controls');
+    if (controls) controls.addEventListener('pointerdown', unlock);
+  } catch (e) {
+    console.warn('[wide_concept] comparison device unavailable, showing static fallback', e);
+    const mount = document.getElementById('cmpMount');
+    if (mount) {
+      const rows = [['Extreme Wide Shot', caps.ews], ['Wide Shot', caps.ws]];
+      mount.innerHTML = '<div class="concept-moment-fallback">' + rows.map(r =>
+        `<div class="concept-moment-fallback-row"><span>${r[0]}</span>${r[1] || ''}</div>`).join('') + '</div>';
+    }
+    if (hint) hint.remove();
+    unlock();
+  }
+}
+
+/* ============================================================
+   STEP 2 — 3D CLASSROOM REVEAL. No video (see file header) — follows
+   straight on from the push-in moment above. Colorful/detailed on
    purpose: the brief explicitly asks this to read as a step up in
    visual polish from Lesson 01's Step 2, which needed several rounds
    of correction before it stopped reading as plain/grey — this scene

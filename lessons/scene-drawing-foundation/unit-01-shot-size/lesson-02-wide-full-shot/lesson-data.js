@@ -67,7 +67,25 @@
     title: 'Wide Shot',
     subtitle: 'Character + World, Together',
 
-    // Step 1 — 3D classroom reveal, no video (per the brief). See
+    // Step 1 (round 6, new) — the push-in opening moment Medium Shot
+    // and Close-Up both already open with, extended to this lesson per
+    // Faye: "Wide Shot currently has no equivalent, and it should."
+    // Same shared ShotSizeCompare component (../../shared/shot-size-
+    // compare.js), sliced to its first TWO stops (ews/ws) so it ends on
+    // Wide Shot — see index.html's renderWideConcept/afterRenderWideConcept,
+    // which mirror Lesson 03's renderMediumConcept pattern exactly
+    // (same component, same mount, just a shorter stop list).
+    // stopCaptions override DEFAULT_STOPS' own wording so the copy
+    // lives with this lesson, same convention as Lessons 03/04.
+    concept_moment: {
+      stopCaptions: {
+        ews: 'Extreme Wide: the world fills the frame.',
+        ws: 'Wide: the whole person — and the place around them.'
+      },
+      closingLine: 'Drag the slider to compare.'
+    },
+
+    // Step 2 — 3D classroom reveal, no video (per the brief). See
     // index.html's renderClassroomReveal — built from the same
     // primitive-based Three.js toolkit as Lesson 01's Step 2, with an
     // articulated (head/torso/2-segment limbs) character builder
@@ -79,7 +97,7 @@
       termLabel: 'WIDE SHOT'
     },
 
-    // Step 2 — concept explainer, contrasting directly against
+    // Step 3 — concept explainer, contrasting directly against
     // Extreme Wide Shot (Lesson 01), copy close to verbatim from the
     // brief. `references` are curated by Faye herself later (her own
     // illustrations, same process as Lesson 01's Step 4 "See It in
@@ -109,7 +127,7 @@
       explainerCard: "You'll walk through six short story situations, one at a time — the last one is optional. Just watch and think for now — you'll pick one to draw after."
     },
 
-    // Step 3 — six demonstration scenes (own 3D build + a short
+    // Step 4 — six demonstration scenes (own 3D build + a short
     // comprehension question each), exploration only, no drawing yet.
     // Each maps to its own top-level STEPS entry in index.html
     // (STORY_SCENE_STEPS) — see that file's own note on why this is
@@ -258,7 +276,7 @@
       sketchPrompt: 'Want to try it? Sketch a huge place with one tiny character somewhere inside it — digitally or on paper, just for fun.'
     },
 
-    // Step 7 — chains into Lesson 03 (Medium Shot). Title/subtitle
+    // Step 8 — chains into Lesson 03 (Medium Shot). Title/subtitle
     // copied from lesson-03-medium-shot/lesson-data.js's own
     // welcome.title/subtitle so this card matches what that lesson
     // actually calls itself.
