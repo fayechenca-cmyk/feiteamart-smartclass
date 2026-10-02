@@ -1,5 +1,5 @@
 window.BADGE_CATALOG = [
-  { id:'basic_sketch', title:'Form and Structure', artist:'Des. by Alex', imgUrl:'', emoji:'✏️', color:'#f59e0b' },
+  { id:'basic_sketch', title:'Basic Sketch', artist:'Des. by Alex', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/69a9027ed32a09ff93e5c944_Screenshot%202026-03-04%20at%208.11.30%E2%80%AFPM.png', emoji:'✏️', color:'#f59e0b' },
   { id:'still_life', title:'Still Life and Texture', artist:'Des. by Sara', imgUrl:'', emoji:'🍎', color:'#ef4444' },
   { id:'landscape', title:'Landscape', artist:'Des. by Xinyue', imgUrl:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/696544b4fa92c8867e1c6d5c_Screenshot%202026-01-12%20at%2010.59.57%E2%80%AFAM.png', emoji:'⛰️', color:'#10b981' },
   { id:'material_explore', title:'Material Explore', artist:'Des. by Xinyue', imgUrl:'', emoji:'🧱', color:'#78716c' },

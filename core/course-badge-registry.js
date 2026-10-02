@@ -98,6 +98,12 @@ window.COURSE_BADGE_REGISTRY = {
   // list on purpose (per Faye) — append ids here by hand as more Step 2
   // lessons go live, same incremental pattern as scene_drawing_unit_01;
   // don't restructure this entry when that happens.
+  // Current visual badge for the texture branch; retain still_life below
+  // so previously issued badges and saved student records remain valid.
+  realism_expert: {
+    requiredIds: ['still-life-2a-glass-structure', 'still-life-2b-glass-texture']
+  },
+
   still_life: {
     requiredIds: ['still-life-2a-glass-structure', 'still-life-2b-glass-texture']
   },

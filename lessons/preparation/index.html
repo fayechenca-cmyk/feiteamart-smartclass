@@ -382,13 +382,18 @@
     .step-card { padding: 22px 18px; }
     .btn-primary { font-size: 12.5px; padding: 13px 18px; }
   }
+
+  .container{max-width:1160px;padding:16px 24px 24px}.step-dots{gap:8px;margin-bottom:14px}.step-dot,.step-dot.current{width:44px;height:44px;border-radius:50%;border:0;color:#514163;font-weight:700;font-size:12px}.step-dot.current{background:#d5c4f3;outline:2px solid #7854af}.step-dot.done{background:#deeee7}.prep-studio{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(0,1.4fr);gap:30px;padding:26px;background:#fff;border:1px solid #e5deed;border-radius:24px;min-height:400px}.prep-copy{align-self:center}.prep-copy .step-kicker,.prep-copy .step-title{text-align:left}.prep-copy .step-title{font-size:32px;margin:12px 0}.prep-intro{font-size:15px;line-height:1.6;color:#655b70}.prep-cues{padding-left:18px;margin:20px 0;font-size:14px;line-height:1.6}.prep-cues li{padding:5px 0}.prep-media{min-width:0;align-self:center}.prep-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}.prep-tabs button{background:#f5f1fa;border:1px solid #dfd3ec;border-radius:12px;min-height:44px;padding:8px 12px;cursor:pointer;font:inherit;font-size:11px}.prep-tabs button[aria-pressed=true]{background:#e5daf6;border-color:#8563b2}.prep-reference .hand-card,.prep-reference .video-card{margin:0;box-shadow:none}.prep-reference .hand-card-img{height:clamp(220px,40vh,380px);object-fit:contain;background:#faf9f7}.prep-reference .hand-card-caption,.prep-reference .video-caption,.prep-reference .hand-card-tag{display:none}.prep-reference .hand-card-label,.prep-reference .video-label{background:#eee8f7;color:#514163;font-size:10px}.step-nav{margin-top:14px}.btn,.back-home{min-height:44px}.step-dot{min-width:36px}.step-title:focus{outline:none}:focus-visible{outline:3px solid #7854af;outline-offset:3px}
+  @media(max-width:650px){.container{padding:14px}.prep-studio{grid-template-columns:1fr;gap:16px;padding:20px;min-height:0}.prep-copy .step-title{font-size:26px}.prep-cues{margin:12px 0}.prep-reference .hand-card-img{height:260px}.step-dots{gap:5px}.step-dots{display:grid;grid-template-columns:repeat(5,44px);justify-content:center}.step-dot,.step-dot.current{width:44px;min-width:44px;height:44px}.step-nav{position:sticky;bottom:0;background:#fafaf8ee;padding:10px 0}.btn-primary{padding:12px 16px}.topbar{padding:10px 14px}.progress-bar{position:static}.prep-tabs button{flex:1}.prep-intro{font-size:14px}}
+  @media(min-width:651px) and (max-height:850px){.prep-studio{min-height:320px;padding:20px}.prep-reference .hand-card-img{height:300px}.prep-copy .step-title{font-size:28px}.prep-cues{margin:12px 0}.prep-cues li{padding:3px 0}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <a href="../../" class="brand"><span class="brand-mark">●</span> FEI · Art GPS</a>
-  <a href="../../" class="back-home">← Back to map</a>
+  <a href="../../index.html#dashboard/courses/foundation-a" class="back-home">← Back to map</a>
 </div>
 
 <div class="progress-bar">
@@ -762,6 +767,34 @@
     }
   ];
 
+  const VISUAL_PROMPTS = [
+    ['Before you draw','Set up your tools, find a comfortable grip, and try a few marks.',['Gather your materials','Set up your space','Warm up before The Cube']],
+    ['Your drawing kit','Have these within reach before you begin.',['Pencils: 2H, HB, 2B, 3B, 4B, 6B','A4 or letter sketch paper','Required: blending stump or tissue','Kneaded and regular erasers','Optional: easel and artist tape']],
+    ['Make room to draw','Watch the teacher, then arrange your own space.',['Place your paper where you can see it clearly','Keep pencils and erasers within reach']],
+    ['Keep your paper still','Optional: secure the edges with artist tape.',['Use gentle pressure','Skip this if your paper stays in place']],
+    ['Sit comfortably','Leave room for your arm to move.',['Relax your shoulders','Keep a balanced, comfortable position']],
+    ['Find your grip','Choose the position that feels natural.',['Farther from the tip → loose, sweeping lines','Closer to the tip → smaller details','Try a light touch, without squeezing']],
+    ['Warm up your shading','Watch first. Then try the patterns on scrap paper.',['Fill the area with steady, controlled marks','Keep lines flowing in one direction','Build tone in layers, from light to dark']],
+    ['See depth','Farther objects look smaller. Receding lines appear to meet.',['Compare the near and far edges','Find lines that converge in each reference']],
+    ['Loosen your hand','Follow the short demonstration.',['Open and close your fist 10 times','Wiggle your fingers and gently roll your wrist','Draw 10 relaxed squiggles']],
+    ['You’re ready to draw','Your tools, space and hand are ready.',['Next: The Cube','Look for three planes and one light source']]
+  ];
+  function renderVisualStep(step) {
+    const source=document.createElement('div');source.innerHTML=step.render();
+    const prompt=VISUAL_PROMPTS[currentStep-1];
+    let media=[...source.querySelectorAll('.hand-card,.video-card')].map(el=>el.outerHTML);
+    if(!media.length){
+      const materials=document.createElement('div');materials.innerHTML=STEPS[1].render();
+      media=[materials.querySelector('.hand-card').outerHTML];
+    }
+    const labels=media.map((html,i)=>{const el=document.createElement('div');el.innerHTML=html;return el.querySelector('.hand-card-label span,.video-label')?.textContent||'Reference '+(i+1)});
+    return `<section class="prep-studio"><div class="prep-copy"><span class="step-kicker">Preparation · ${currentStep} / ${TOTAL_STEPS}</span><h1 class="step-title" tabindex="-1">${prompt[0]}</h1><p class="prep-intro">${prompt[1]}</p><ul class="prep-cues">${prompt[2].map(t=>`<li>${t}</li>`).join('')}</ul>${currentStep===10?'<a class="btn btn-primary" href="../lesson-3-cube/">Draw The Cube →</a>':''}</div><div class="prep-media"><div class="prep-tabs" role="group" aria-label="Teacher references">${media.length>1?labels.map((label,i)=>`<button type="button" aria-pressed="${i===0}" onclick="selectPrepMedia(${i})">${label}</button>`).join(''):''}</div>${media.map((html,i)=>`<div class="prep-reference" ${i?'hidden':''}>${html}</div>`).join('')}</div></section>`;
+  }
+  function selectPrepMedia(index){
+    document.querySelectorAll('.prep-reference').forEach((el,i)=>{el.hidden=i!==index; if(i!==index){const frame=el.querySelector('iframe');if(frame)frame.src=frame.src;}});
+    document.querySelectorAll('.prep-tabs button').forEach((el,i)=>el.setAttribute('aria-pressed',String(i===index)));
+  }
+
   function renderStepDots() {
     const dotsEl = document.getElementById('step-dots');
     let html = '';
@@ -769,7 +802,7 @@
       let cls = '';
       if (i < currentStep) cls = 'done';
       else if (i === currentStep) cls = 'current';
-      html += '<div class="step-dot ' + cls + '" title="Step ' + i + '" onclick="jumpToStep(' + i + ')"></div>';
+      html += '<button class="step-dot ' + cls + '" aria-label="Step ' + i + ': ' + STEPS[i-1].id.replaceAll('-', ' ') + '" ' + (i===currentStep?'aria-current="step"':'') + ' onclick="jumpToStep(' + i + ')">' + i + '</button>';
     }
     dotsEl.innerHTML = html;
   }
@@ -784,7 +817,8 @@
 
     const contentEl = document.getElementById('step-content');
     const navHTML = renderNavButtons();
-    contentEl.innerHTML = step.render() + navHTML;
+    contentEl.innerHTML = renderVisualStep(step) + navHTML;
+    contentEl.querySelector('.step-title')?.focus({preventScroll:true});
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -864,14 +898,14 @@
 
   function markPreparationComplete() {
     try {
-      const raw = localStorage.getItem(PROFILE_KEY);
+      const raw = sessionStorage.getItem(PROFILE_KEY);
       if (!raw) return;
       const profile = JSON.parse(raw);
       if (!profile.completedLessons) profile.completedLessons = [];
       if (!profile.completedLessons.includes('preparation')) {
         profile.completedLessons.push('preparation');
         profile.lastSeenAt = Date.now();
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+        sessionStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
         console.log('[Preparation] Marked as completed.');
       }
     } catch (e) {

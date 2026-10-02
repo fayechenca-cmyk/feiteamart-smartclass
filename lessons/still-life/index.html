@@ -65,13 +65,13 @@
   .sl-lesson.locked, .sl-lesson.coming { cursor: not-allowed; opacity:.6; }
   .sl-lesson.coming { border-style: dashed; }
 </style>
-</head>
+<link rel="stylesheet" href="../../core/sketch-map.css"><style>.wrap{max-width:1080px;padding:24px}.sl-header{display:none}#sl-paintings{border-left:3px dashed #ded2ee;padding-left:24px}.sl-painting{margin-bottom:22px}.sl-lesson{min-height:72px}.sl-painting-title{font-size:18px}.sl-lesson-title{font-size:14px}.sl-painting-head{padding:20px}.sl-lesson.locked,.sl-lesson.coming{opacity:1}.sl-lesson-tag{color:#71677c}@media(max-width:600px){.wrap{padding:16px}#sl-paintings{padding-left:12px}}</style></head>
 <body>
 
 <div class="wrap">
-  <button class="back-btn" onclick="location.href='../../index.html'">← Back to Drawing</button>
+  <button class="back-btn" onclick="location.href='../../index.html#dashboard/courses/foundation-map'">← Foundation of Sketch</button>
 
-  <div class="sl-header">
+  <div id="sketch-still-hero"></div><div class="sl-header">
     <div class="sl-header-kicker">Foundation of Sketch</div>
     <div class="sl-header-title">Step 2 · Still Life and Texture</div>
     <div class="sl-header-sub">Observe real objects and learn how to express different materials through drawing.</div>
@@ -80,11 +80,13 @@
   <div id="sl-paintings"><!-- filled by renderStillLifeLanding() --></div>
 </div>
 
+<script src="../../core/badge-catalog.js"></script><script src="../../core/sketch-map.js"></script>
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
 <script src="../../core/still-life-lesson.js"></script>
 <script>
 async function renderStillLifeLanding() {
+  document.getElementById('sketch-still-hero').innerHTML=SketchMap.hero('Still Life and Texture','Five studies. Look closely, build the form, then bring each surface to life.','realism_expert');
   let profile = null;
   try { const raw = sessionStorage.getItem('fei_user_profile'); profile = raw ? JSON.parse(raw) : null; } catch (e) {}
   const completed = (profile && profile.completedLessons) || [];
