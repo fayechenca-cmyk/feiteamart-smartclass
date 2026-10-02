@@ -1,4 +1,4 @@
-import { createGothicProject } from './gothic-app.js?v=arch-stream-2';
+import { createGothicProject } from './gothic-app.js?v=window-part1-1';
 import { course, materials, preparation } from './data.js';
 const main = document.querySelector('main');
 const status = document.querySelector('#save-status');
