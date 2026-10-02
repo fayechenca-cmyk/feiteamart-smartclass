@@ -5122,15 +5122,28 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 1',
+      partLabel: 'Part b · teacher demo · video 1 of 2',
       type: 'videoSegment',
-      videoId: '996b341c737b48b241bfc930b389c1d1',
+      videoId: '7a16d51aea7a8c0fe366e76807085fdc',
       videoNumber: 1,
-      videoTitle: "Let's Draw Together",
-      stepName: "Let's Draw Together",
+      videoTitle: 'Painting the Overall Tone',
+      stepName: 'Painting the Overall Tone',
       teacher: 'Mrs. Dawn',
-      title: "Let's Draw Together",
+      title: 'Painting the Overall Tone',
       intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 2 of 2',
+      type: 'videoSegment',
+      videoId: '788587447ded8766c25eaedae4268c2d',
+      videoNumber: 2,
+      videoTitle: 'Blending Texture with a Fingertip',
+      stepName: 'Blending Texture with a Fingertip',
+      teacher: 'Mrs. Dawn',
+      title: 'Blending Texture with a Fingertip',
+      intro: 'Now blend the tone with your fingertip to bring out the glass\'s texture.',
       isCoreEnd: true,
       xp: 5
     },
@@ -6968,7 +6981,7 @@ function demoPauseInLocalMode() {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 function renderVideoSegment(step) {
-  const partOf = `${step.videoNumber} of 1`;
+  const partOf = `${step.videoNumber} of 2`;
   const pauses = VIDEO_PAUSES[step.videoId] || [];
   const hasPauses = pauses.length > 0;
   
@@ -7138,7 +7151,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-text">${
           hasPauses
             ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
-            : 'Pause anytime if you need to catch up. The whole 5-video sequence runs about 20 minutes — go at your own pace.'
+            : 'Pause anytime if you need to catch up. This is a 2-video sequence — go at your own pace.'
         }</div>
       </div>
 
@@ -8582,14 +8595,10 @@ function toggleCheck(row) {
 // Future: Faye + Mrs. Dawn to spec pause points for cube 2-5.
 // ─────────────────────────────────────────────────────────────────────
 
-const VIDEO_PAUSES = {
-  '996b341c737b48b241bfc930b389c1d1': [
-    { time: 24, title: 'Same straight base as before', text: '', image: 'images/2B_cue1_t24.jpg' },
-    { time: 132, title: 'Now curve the straight edges', text: '', image: 'images/2B_cue2_t132.jpg' },
-    { time: 208, duration: 90, title: 'Take extra care on the rim', text: '', image: 'images/2B_cue3_t208.jpg' },
-    { time: 300, title: 'Clean curved outline, ready to shade', text: '', image: 'images/2B_cue4_t300.jpg' }
-  ]
-};
+// Retired: the old single video and its 4 timestamped cues no longer
+// apply to the new 2-video sequence above. Neither new video has pause
+// points for now.
+const VIDEO_PAUSES = {};
 
 // Legacy variable name retained for backward compatibility
 // (some demo/preview functions still reference it)
