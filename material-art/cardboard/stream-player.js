@@ -19,7 +19,9 @@ export async function mountStream(host,uid,{full=false,title='',onEnded,onError,
  frame.title=title+' — silent demonstration';
  frame.allow='autoplay; fullscreen; picture-in-picture';
  frame.allowFullscreen=true;
- frame.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${uid}/iframe?muted=true&autoplay=true&controls=${full}&letterboxColor=%23e9f4f7`;
+ const base=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${uid}`;
+ const poster=encodeURIComponent(`${base}/thumbnails/thumbnail.jpg?time=1s`);
+ frame.src=`${base}/iframe?muted=true&autoplay=true&controls=${full}&letterboxColor=%23e9f4f7&poster=${poster}`;
  host.replaceChildren(frame);
  const player=Stream(frame);
  player.muted=true;player.controls=full;player.loop=false;

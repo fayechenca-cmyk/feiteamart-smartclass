@@ -18,9 +18,9 @@ export const gothicProject={
  step('layer','Test, then glue','Stack 1.2 cm, 1.5 cm and 2 cm borders from front to back. Align the outer edges.',[550,596,422,243],{teacherNote:'Dry-fit all three pieces before gluing. The widest border goes behind; each inner edge should remain visible. This replaces the earlier identical-layer extension.'})]},
  {id:'window',title:'Gothic window · Part 1',sheet:'assets/gothic/window.png',width:1312,height:1199,mapRect:[267,300,221,252],resultRect:[1000,599,248,264],steps:[
  step('prepare-card','Prepare the panel','Cut one piece: 25 cm tall × 10–11 cm wide.',[19,216,205,260],{image:'assets/gothic/window-video/01-prepare-card.jpg',goalLabel:'Start with this panel',measurements:['↕ 25 cm','↔ 10–11 cm']}),
- step('draw-window','Draw the window','Draw the pointed frame, circle and 8 petals. Keep the frame 1.5 cm and each petal border 1 cm.',[299,215,220,260],{image:'assets/gothic/window-video/02-draw-window.jpg',goalLabel:'Draw all lines before cutting',measurements:['Frame · 1.5 cm','Petals · 1 cm','8 petals'],teacherNote:'These measurements follow the teacher demonstration and replace the earlier AI guide.'}),
+ step('draw-window','Draw the complete window','Draw the pointed frame, the circle and all 8 petals before cutting. Keep the side frame 1.5 cm, the tip gap 2.5 cm and each petal border about 1 cm.',[299,215,220,260],{image:'assets/gothic/window-video/02-draw-window.png',referenceImage:'assets/gothic/window-video/02-draw-window-measure.png',goalLabel:'Finish the whole drawing first',measurements:['Sides · 1.5 cm','Tip · 2.5 cm','Petals · about 1 cm','8 petals'],teacherNote:'These measurements and photographs come from the teacher demonstration and replace the earlier AI guide.'}),
  step('cut-point','Cut the pointed top','Cut away only the two outside top corners.',[557,215,209,264],{image:'assets/gothic/window-video/03-cut-point.jpg',goalLabel:'Keep every inside line',measurements:['Cut 2 corners'],cutting:true}),
- step('open-rose','Open the rose window','Cut out the 8 petal centres. Keep the 1 cm borders connected.',[45,590,191,244],{image:'assets/gothic/window-video/04-open-rose.jpg',goalLabel:'Part 1 finished',measurements:['Open 8 petals','Keep 1 cm borders'],cutting:true,teacherNote:'This lesson stops halfway through the window. Keep this piece for Part 2.'})]},
+ step('open-rose','Open the rose window','Cut out the 8 petal centres. Keep the 1 cm borders connected.',[45,590,191,244],{image:'assets/gothic/window-video/04-open-rose.png',goalLabel:'Part 1 finished',measurements:['Open 8 petals','Keep 1 cm borders'],cutting:true,teacherNote:'This lesson stops halfway through the window. Keep this piece for Part 2.'})]},
  {id:'tower',title:'Tower + spire',sheet:'assets/gothic/tower.png',width:1226,height:1283,mapRect:[520,294,203,261],resultRect:[924,737,170,370],steps:[
  step('rectangle','Cut the tower piece','18 cm wide × 12 cm tall.',[15,347,163,222],{part:'A · Tower'}),
  step('fold-lines','Mark four panels','Mark a fold every 4.5 cm.',[190,323,178,225],{part:'A · Tower'}),
@@ -122,12 +122,12 @@ gothicProject.elements[0].resultImage='assets/gothic/arch-corrected/stacked.webp
 
 // Silent, tightly cropped teacher demonstrations for Gothic window · Part 1.
 const windowStreams={
- 'prepare-card':{motion:'9cf350d3ef413a450e8e799629ec2955',src:'c950a1da49b8072361271aab1c1bb4db'},
- 'draw-window':{motion:'e126eb9ef5a42bb77ef0f8429d3db06a',src:'f9b6d07c11a8dde3ba3c990ad0b551aa'},
- 'cut-point':{motion:'59b850aa0ae765569606edd4d5e1e460',src:'cc9fee85c152567bba041f2edcb4fdb9'},
- 'open-rose':{motion:'cce1ad6c27abe41bf506bb4da33fc2b0',src:'4ceab911dd09569fdf75099c171ca133'}
+ 'prepare-card':{motion:'e6d476e0adba9601bf339cc4a0276e41',src:'e6d476e0adba9601bf339cc4a0276e41',complete:true},
+ 'draw-window':{motion:'2b8a069ac45463274adb821376eb1e71',src:'2b8a069ac45463274adb821376eb1e71',complete:true},
+ 'cut-point':{motion:'f8ef11b4a04afe1f1c1cfea66b4554cb',src:'f8ef11b4a04afe1f1c1cfea66b4554cb',complete:true},
+ 'open-rose':{motion:'01fa1122c2135d110c85962a72984760',src:'01fa1122c2135d110c85962a72984760',complete:true}
 };
 for(const s of gothicProject.elements[1].steps){
  s.video={...windowStreams[s.screenId],captions:'',transcript:''};
 }
-gothicProject.elements[1].resultImage='assets/gothic/window-video/04-open-rose.jpg';
+gothicProject.elements[1].resultImage='assets/gothic/window-video/04-open-rose.png';
