@@ -30,3 +30,17 @@ Source inventory (all from the existing FEI TeamArt system):
 - 25.8–31.8: Preparation materials photo `6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png`.
 
 The landscape and portrait scenes are labeled course-library studies, not released Foundation lesson footage. Existing branch availability remains unchanged. No student dashboards, names, progress or personal records were captured.
+
+## Second visual edit
+
+The current `intro-film-v2.mp4` (1280×720) and `intro-film-mobile-v2.mp4` (720×960) contain all titles, animated arrows, glow rings and teaching highlights in the actual video, including direct-link and fullscreen playback. Small screens select the portrait file on initial load. Both retain the approved narration/music and optional English VTT. Versioned URLs avoid stale video caches.
+
+The twelve beats are: course preview, materials, hand control (shown once), cube structure, ice cream, glass edges, cup light/shadow, landscape, portrait, paper crane, gift box and closing invitation. The colored annotations identify concrete learning points.
+
+Additional source frames are existing Cloudflare course-video thumbnails:
+- Ice cream: `38837e97c0c435214adc35b0cc3b8fb2`, 80 seconds.
+- Cup: `01cb2719246c22e4509ca54ed0c01c88`, 60 seconds.
+- Paper crane: `7e43378fd346f73ec130e46a98c8fede`, 60 seconds.
+- Gift box: `7c6090590f645d78bd35033ffcd9ec25`, 60 seconds.
+
+Render with `scripts/render-sketch-intro-film.py --media-dir <selected-media-directory>` using Pillow, numpy and imageio-ffmpeg. Input names are listed in the script; preserve the downloaded course frames and short excerpts in the authoring media directory. Source images are not synthetic substitutes.

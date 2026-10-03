@@ -5,22 +5,33 @@
     const host = document.getElementById('sketch-intro');
     if (!host) return;
     const video = host.querySelector('video');
+    // Select once before playback; resizing never interrupts a learner's film.
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      video.src = 'assets/sketch-intro/intro-film-mobile-v2.mp4';
+      video.poster = 'assets/sketch-intro/poster-mobile-v2.jpg';
+      host.classList.add('intro-portrait');
+    }
     const button = host.querySelector('[data-intro-play]');
     const cc = host.querySelector('[data-intro-captions]');
     const label = host.querySelector('[data-intro-scene-label]');
     const status = host.querySelector('[data-intro-status]');
     const scenes = [
-      {at:0,label:'A steady hand'}, {at:6.667,label:'Form & structure'},
-      {at:12.967,label:'Texture · Light & shadow'},
-      {at:19.367,label:'Landscapes · Course-library study'},
+      {at:0,label:'Welcome · Foundation of Sketch'},
+      {at:3.335,label:'Start from zero'},
+      {at:6.672,label:'Hand control'},
+      {at:9.7,label:'Form & structure'},
+      {at:12.974,label:'Ice cream · Everyday objects'},
+      {at:15.229,label:'Glass · Texture & edges'},
+      {at:17.2,label:'The cup · Light & shadow'},
+      {at:19.365,label:'Landscapes · Course-library study'},
       {at:22.4,label:'Portraits · Course-library study'},
-      {at:25.8,label:'A pencil. A little curiosity.'}, {at:31.8,label:'Let’s draw. Have fun.'}
+      {at:25.783,label:'Paper crane · Put it all together'},
+      {at:28,label:'Gift box · Make it your own'},
+      {at:31.788,label:'Let’s draw. Have fun.'}
     ];
     function sync() {
       const time = video.currentTime;
       label.textContent = [...scenes].reverse().find(s => time >= s.at)?.label || scenes[0].label;
-      host.querySelector('[data-analysis="form"]').classList.toggle('active',time >= 8 && time < 12.4);
-      host.querySelector('[data-analysis="value"]').classList.toggle('active',time >= 15.2 && time < 19.1);
       const playing = !video.paused && !video.ended;
       host.classList.toggle('is-playing', playing);
       button.textContent = playing ? 'Ⅱ Pause intro' : video.ended ? '↻ Replay intro' : time > 0 ? '▶ Continue intro' : '▶ Play course intro';
