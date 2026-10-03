@@ -44,3 +44,7 @@ Additional source frames are existing Cloudflare course-video thumbnails:
 - Gift box: `7c6090590f645d78bd35033ffcd9ec25`, 60 seconds.
 
 Render with `scripts/render-sketch-intro-film.py --media-dir <selected-media-directory>` using Pillow, numpy and imageio-ffmpeg. Input names are listed in the script; preserve the downloaded course frames and short excerpts in the authoring media directory. Source images are not synthetic substitutes.
+
+## Swan correction (v3)
+
+The active wide and portrait videos are now `intro-film-v3.mp4` and `intro-film-mobile-v3.mp4`. The 19.365–22.4 second scene uses the teacher’s graphite swan supplied by Faye, preserved unchanged as `swan-teacher-study.jpg`. It replaces the colored-pencil landscape entirely in both current exports. The title and annotations now teach light/dark contrast and reflection. The swan source is part of the repository and is read directly by the render script. The other scenes, approved narration and timing remain the same.

@@ -44,7 +44,8 @@ def glow(im,box,color,t):
 def label(im,x,y,text,color=LILAC):
  d=ImageDraw.Draw(im);width=int(d.textlength(text,font=B[22]))+30;d.rounded_rectangle((x,y,x+width,y+42),14,fill=color);txt(im,(x+15,y+8),text,22,'#fff',True)
 
-images={name:Image.open(R/file).convert('RGB') for name,file in [('icecream','icecream.jpg'),('cup','cup.jpg'),('crane','crane.jpg'),('giftbox','giftbox.jpg'),('materials','materials.png'),('landscape','landscape.jpg'),('portrait','portrait.png')]}
+images={name:Image.open(R/file).convert('RGB') for name,file in [('icecream','icecream.jpg'),('cup','cup.jpg'),('crane','crane.jpg'),('giftbox','giftbox.jpg'),('materials','materials.png'),('portrait','portrait.png')]}
+images['landscape']=Image.open(OUT/'swan-teacher-study.jpg').convert('RGB')
 images['portrait']=images['portrait'].crop((582,0,1502,1166))
 # Decode only the short excerpts, not full teacher lessons.
 clips={}
@@ -62,7 +63,7 @@ scenes=[
  (12.974,15.229,'icecream','Make something real','A scoop. A cone. Your drawing.',PEACH),
  (15.229,17.2,'glass','Explore texture','Edges make glass feel real.',LILAC),
  (17.2,19.365,'cup','Bring form to life','Follow the light.',MINT),
- (19.365,22.4,'landscape','Create space & depth','Near. Far. A whole scene.',MINT),
+ (19.365,22.4,'landscape','Create space & depth','Light. Contrast. Reflection.',MINT),
  (22.4,25.783,'portrait','Discover the face','Observe form and proportion.',PEACH),
  (25.783,28,'crane','Put it all together','From simple shapes to paper folds.',LILAC),
  (28,31.788,'giftbox','Make it your own','A pencil. A little curiosity.',MINT),
@@ -85,7 +86,7 @@ def render(t):
    label(im,50,585,'Begin with Form & Structure',LILAC);arrow(im,[(470,604),(620,585),(755,604)],MINT,reveal)
   else:txt(im,(50,590),'No experience needed. Just a willingness to try.',24,MUTED)
  else:
-  label(im,44,110,{'materials':'YOUR START','hatching':'HAND CONTROL','cube':'FORM & STRUCTURE','icecream':'EVERYDAY OBJECTS','glass':'STILL LIFE & TEXTURE','cup':'LIGHT & SHADOW','landscape':'COURSE-LIBRARY STUDY','portrait':'COURSE-LIBRARY STUDY','crane':'BRING IT TOGETHER','giftbox':'YOUR OWN DRAWING'}[kind],color)
+  label(im,44,110,{'materials':'YOUR START','hatching':'HAND CONTROL','cube':'FORM & STRUCTURE','icecream':'EVERYDAY OBJECTS','glass':'STILL LIFE & TEXTURE','cup':'LIGHT & SHADOW','landscape':'TEACHER’S SWAN STUDY','portrait':'COURSE-LIBRARY STUDY','crane':'BRING IT TOGETHER','giftbox':'YOUR OWN DRAWING'}[kind],color)
   y=wrapped(im,title,(44,180),340,48)
   # Short supporting lines, deliberately fewer than a full subtitle.
   words=sub.split();line='';sy=y+18
@@ -119,8 +120,8 @@ def render(t):
    for j in range(7):
     if local>.1*j:ImageDraw.Draw(im).line((65+j*30,sy+112,88+j*30,sy+66),fill=color,width=3)
   elif kind=='landscape':
-   label(im,456,138,'Far',MINT);arrow(im,[(517,180),(665,215),(829,290)],MINT,reveal)
-   label(im,1054,532,'Near',PEACH);arrow(im,[(1052,540),(975,537),(913,541)],PEACH,reveal)
+   label(im,455,125,'Light against dark',MINT);arrow(im,[(651,168),(752,163),(950,230)],MINT,reveal)
+   label(im,1030,545,'Reflection',PEACH);arrow(im,[(1057,545),(990,525),(885,507)],PEACH,reveal)
   elif kind=='portrait':
    label(im,458,544,'Look. Compare. Draw.',PEACH)
   elif kind=='crane':
@@ -154,7 +155,7 @@ def render_mobile(t,desktop):
 
 def encoder(name,size):
  return subprocess.Popen([FF,'-y','-loglevel','error','-f','rawvideo','-pix_fmt','rgb24','-s',size,'-r',str(FPS),'-i','-','-i',str(OUT/'intro.mp3'),'-map','0:v','-map','1:a','-c:v','libx264','-preset','fast','-crf','22','-pix_fmt','yuv420p','-c:a','aac','-b:a','160k','-movflags','+faststart','-t','35.22',str(OUT/name)],stdin=subprocess.PIPE)
-wide=encoder('intro-film-v2.mp4','1280x720');mobile=encoder('intro-film-mobile-v2.mp4','720x960')
+wide=encoder('intro-film-v3.mp4','1280x720');mobile=encoder('intro-film-mobile-v3.mp4','720x960')
 for n in range(math.ceil(35.23*FPS)):
  t=n/FPS;frame=render(t);wide.stdin.write(frame.tobytes());mobile.stdin.write(render_mobile(t,frame).tobytes())
  if n%120==0:print(f'Rendered {n}/{math.ceil(35.23*FPS)} frames',flush=True)

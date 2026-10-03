@@ -7,7 +7,7 @@
     const video = host.querySelector('video');
     // Select once before playback; resizing never interrupts a learner's film.
     if (window.matchMedia('(max-width: 600px)').matches) {
-      video.src = 'assets/sketch-intro/intro-film-mobile-v2.mp4';
+      video.src = 'assets/sketch-intro/intro-film-mobile-v3.mp4';
       video.poster = 'assets/sketch-intro/poster-mobile-v2.jpg';
       host.classList.add('intro-portrait');
     }
@@ -23,7 +23,7 @@
       {at:12.974,label:'Ice cream · Everyday objects'},
       {at:15.229,label:'Glass · Texture & edges'},
       {at:17.2,label:'The cup · Light & shadow'},
-      {at:19.365,label:'Landscapes · Course-library study'},
+      {at:19.365,label:'Swan · Teacher’s scene study'},
       {at:22.4,label:'Portraits · Course-library study'},
       {at:25.783,label:'Paper crane · Put it all together'},
       {at:28,label:'Gift box · Make it your own'},
