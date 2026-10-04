@@ -1,68 +1,68 @@
 1
-00:00:00,100 --> 00:00:02,669
+00:00:00,050 --> 00:00:02,071
 Welcome to Color Practice!
 
 2
-00:00:02,619 --> 00:00:06,297
+00:00:02,071 --> 00:00:05,098
 Let's play with paint and see what we can discover.
 
 3
-00:00:06,297 --> 00:00:10,952
+00:00:05,098 --> 00:00:08,970
 Start with red, yellow, blue, black, and white.
 
 4
-00:00:10,952 --> 00:00:13,976
+00:00:08,970 --> 00:00:11,323
 A little paint can take you a long way!
 
 5
-00:00:13,976 --> 00:00:16,726
+00:00:11,323 --> 00:00:13,431
 Watch how real paint behaves.
 
 6
-00:00:16,726 --> 00:00:20,547
+00:00:13,431 --> 00:00:16,151
 Try a little more water, or a little more color.
 
 7
-00:00:20,547 --> 00:00:23,583
+00:00:16,151 --> 00:00:18,224
 Mix, paint, and compare.
 
 8
-00:00:23,583 --> 00:00:27,809
+00:00:18,224 --> 00:00:21,813
 Change the amounts, and watch a whole new color appear!
 
 9
-00:00:27,809 --> 00:00:31,083
+00:00:21,813 --> 00:00:24,399
 Save your discoveries in your own palette.
 
 10
-00:00:31,083 --> 00:00:34,428
+00:00:24,399 --> 00:00:26,899
 You're learning to notice tiny differences.
 
 11
-00:00:34,428 --> 00:00:37,654
+00:00:26,899 --> 00:00:29,106
 Next, explore Color Neighbors.
 
 12
-00:00:37,654 --> 00:00:43,083
+00:00:29,106 --> 00:00:33,823
 Use lighter and darker colors to make simple shapes feel round and solid.
 
 13
-00:00:43,083 --> 00:00:46,023
+00:00:33,823 --> 00:00:36,102
 Then try Complementary Colors.
 
 14
-00:00:46,023 --> 00:00:51,011
+00:00:36,102 --> 00:00:40,465
 Discover how opposite colors help you paint shadows and reflected light.
 
 15
-00:00:51,011 --> 00:00:53,535
+00:00:40,465 --> 00:00:42,046
 No need to get it perfect.
 
 16
-00:00:53,535 --> 00:00:57,511
+00:00:42,046 --> 00:00:45,232
 Try something, be curious, and have fun!
 
 17
-00:00:57,511 --> 00:00:59,607
+00:00:45,232 --> 00:00:46,495
 Let's start mixing.
 

@@ -1,10 +1,10 @@
 window.mountColorIntro = function(root) {
   const audio=root.querySelector('[data-color-audio]'),story=root.querySelector('#story');
   const slides=[...story.querySelectorAll('.story-slide')],play=root.querySelector('[data-color-play]'),caption=root.querySelector('.color-intro-caption'),status=root.querySelector('[data-color-status]');
-  const starts=[0,6.797,14.476,21.047,28.309,34.928,43.583,51.511];
+  const starts=[0, 5.598, 11.823, 16.651, 22.313, 27.399, 34.323, 40.965];
   let cues=[],active=-1,frame;
   story.classList.add('narrated','paused');
-  fetch('../assets/color-intro/captions.json').then(r=>r.json()).then(data=>{cues=data;update()}).catch(()=>{});
+  fetch('../assets/color-intro/captions.json?v=2').then(r=>r.json()).then(data=>{cues=data;update()}).catch(()=>{});
   function update(){
     const index=starts.reduce((n,t,i)=>audio.currentTime>=t?i:n,0);
     if(index!==active){active=index;slides.forEach((s,i)=>{s.classList.toggle('story-active',i===index);s.setAttribute('aria-hidden',String(i!==index));s.inert=i!==index;});}

@@ -1,8 +1,7 @@
 # Color Practice narrated introduction
 
-English synthetic narration: en-US-AnaNeural (+5%), matching the approved
-Creation child-style voice. Original generated keyboard/bell music mixed
-under speech. Duration about 61 seconds. Rebuild audio and caption timings
+English synthetic narration: en-US-AvaMultilingualNeural (+2%), warm adult teacher style. Original bright major-key plucks, bell melody and light shaker at 114 BPM mixed
+under speech. Duration about 48 seconds. Rebuild audio and caption timings
 with scripts/build-color-intro-audio.py (numpy, imageio-ffmpeg).
 
 Mounted on the existing Why Color introduction in color-lab. Eight scenes
