@@ -9100,20 +9100,19 @@ function renderLessonComplete(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Lesson 4 invitation (placeholder until Lesson 4 exists) -->
+      <!-- Cone → Ice Cream (Round 43: ice cream moved to directly after cone) -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 6</div>
-        <div class="lesson2-teaser-title">Cylinder in the Real World</div>
+        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 8</div>
+        <div class="lesson2-teaser-title">The Ice Cream</div>
         <div class="lesson2-teaser-sub">
-          You've now drawn the three core forms — sphere, cube, cylinder. Lesson 4 will combine them.
+          You've drawn the cone. Next: the ice cream — the cone's real-world cousin.
         </div>
-        <div class="lesson2-teaser-status">Members area · 5 lessons remaining</div>
+        <div class="lesson2-teaser-status">→ Cone applied to the real world</div>
       </div>
-      
+
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <a href="../../" class="btn btn-primary" style="text-decoration:none;">
-          <span class="glyph">◈</span> ← Back to Art GPS home
-        </a>
+        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('icecream', '../lesson-8-icecream/')"><span class="glyph">→</span> Continue to Lesson 8: Ice Cream →</button>
+        <a href="../../" class="btn btn-secondary" style="text-decoration:none; text-align:center;">← Back to Art GPS home</a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>

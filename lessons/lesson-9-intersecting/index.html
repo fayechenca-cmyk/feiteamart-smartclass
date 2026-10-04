@@ -8982,20 +8982,19 @@ function renderLessonComplete(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Paper Crane invitation (Intersecting's real-world application) -->
+      <!-- Intersecting → Gift Box -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 10</div>
-        <div class="lesson2-teaser-title">Paper Crane</div>
+        <div class="lesson2-teaser-title">Gift Box</div>
         <div class="lesson2-teaser-sub">
-          You've learned how forms intersect. Next: the paper crane — a real object made entirely of intersecting planes.
+          You've learned how forms intersect. Next: the gift box — making cube knowledge real.
         </div>
-        <div class="lesson2-teaser-status">Coming soon · the finale of Foundation A</div>
+        <div class="lesson2-teaser-status">→ Cube applied to the real world</div>
       </div>
-      
+
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <a href="../../" class="btn btn-primary" style="text-decoration:none;">
-          <span class="glyph">◈</span> ← Back to Art GPS home
-        </a>
+        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('box', '../lesson-4-giftbox/')"><span class="glyph">→</span> Continue to Lesson 10: Gift Box →</button>
+        <a href="../../" class="btn btn-secondary" style="text-decoration:none; text-align:center;">← Back to Art GPS home</a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
