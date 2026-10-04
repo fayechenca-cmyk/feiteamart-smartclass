@@ -49,8 +49,11 @@
   // read the exact same array — one list, not three. index.html now
   // includes this file and uses these same global names unchanged.
   const FOUNDATION_STILL_LIFE_PATH = [
-    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon · Structure & Composition', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
-    { id: 'still-life-1b-star-balloon-texture', title: 'Foil Star Balloon · Texture & Finish', href: 'lessons/still-life-1b-star-balloon-texture/', ready: false },
+    // Foil Star Balloon was originally planned as a Structure/Texture
+    // A+B split (like glass below), but the teacher delivered the real
+    // footage as one 5-video sequence instead — the still-life-1b-*
+    // id/page was retired, this is now a single unified lesson.
+    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
     { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: true },
     { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: true },
     { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
@@ -63,7 +66,7 @@
   // The 5 paintings, each pairing its A/B lesson ids — used for the
   // "painting complete" celebration tier and the landing page's grouping.
   const FOUNDATION_STILL_LIFE_PAINTINGS = [
-    { id: 'star-balloon', title: 'Foil Star Balloon', materialFocus: 'Glossy, reflective', lessonIds: ['still-life-1a-star-balloon-structure', 'still-life-1b-star-balloon-texture'] },
+    { id: 'star-balloon', title: 'Foil Star Balloon', materialFocus: 'Glossy, reflective', lessonIds: ['still-life-1a-star-balloon-structure'] },
     { id: 'glass', title: 'Glass Cup and Bottle', materialFocus: 'Transparency, glass', lessonIds: ['still-life-2a-glass-structure', 'still-life-2b-glass-texture'] },
     { id: 'pillow', title: 'Pillow', materialFocus: 'Fabric, soft folds', lessonIds: ['still-life-3a-pillow-structure', 'still-life-3b-pillow-texture'] },
     { id: 'plush', title: 'Plush Toy', materialFocus: 'Fur, soft fuzz', lessonIds: ['still-life-4a-plush-structure', 'still-life-4b-plush-texture'] },
