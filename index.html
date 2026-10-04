@@ -1440,6 +1440,8 @@
 <link rel="stylesheet" href="core/student-dashboard.css?v=workspace-1">
 <link rel="stylesheet" href="core/sketch-map.css">
 <script src="core/sketch-map.js"></script>
+<link rel="stylesheet" href="core/sketch-intro.css?v=2">
+<script src="core/sketch-intro.js?v=3" defer></script>
 </head>
 <body>
 
@@ -2044,6 +2046,32 @@
       One drawing foundation. Four branches to explore — from your first form to a face.
     </div>
   </div>
+
+  <section class="sketch-intro" id="sketch-intro" aria-labelledby="sketch-intro-title">
+    <div class="sketch-intro-heading">
+      <div><span class="sketch-eyebrow">A glimpse inside the studio · 35 seconds</span><h2 id="sketch-intro-title">Your drawing journey starts here.</h2></div>
+      <button class="sketch-intro-play" type="button" data-intro-play>▶ Play course intro</button>
+    </div>
+    <div class="intro-film-frame">
+      <video controls playsinline preload="metadata" aria-label="Foundation of Sketch course introduction" poster="assets/sketch-intro/poster-v2.jpg" src="assets/sketch-intro/intro-film-v3.mp4">
+        <track kind="captions" src="assets/sketch-intro/captions.vtt" srclang="en" label="English">
+        <a href="assets/sketch-intro/intro-film-v3.mp4">Watch the introduction</a>
+      </video>
+
+    </div>
+    <div class="sketch-intro-footer">
+      <span class="sketch-intro-scene-label" data-intro-scene-label>A steady hand</span>
+      <button class="intro-cc" type="button" data-intro-captions aria-pressed="false" aria-label="Show English captions">CC <span>Captions</span></button>
+      <p class="sketch-intro-status" data-intro-status role="status"></p>
+      <details><summary>Read the introduction</summary><p>Welcome to Foundation of Sketch.
+Not sure where to start? You're in the right place.
+We'll begin with simple lines and shapes, building a steady hand and a strong drawing foundation.
+Explore form and texture. Discover how light and shadow bring everyday objects to life.
+Step by step, you'll work toward landscapes and portraits, with more control and confidence.
+You don't need experience. Just a pencil, a little curiosity, and a willingness to try.
+Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note">Scenes from FEI TeamArt lessons and course-library studies · AI-generated narration · Original music</span></details>
+    </div>
+  </section>
 
   <div class="sketch-grid" id="foundation-map-nodes"></div>
 

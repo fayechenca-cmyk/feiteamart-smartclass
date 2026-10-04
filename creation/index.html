@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../core/creation-intro.css?v=1">
 <title>Creation · Art Creation Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -906,11 +908,18 @@
 <body>
 
 <!-- ============ INTRO ============ -->
-<div class="intro" id="intro">
-  <div class="intro-title">Art Creation Studio</div>
-  <div class="intro-sub">step inside an artist's working room.<br>every corner is a different way of making.</div>
-  <button class="intro-enter" onclick="enterStudio()">push the door open</button>
-</div>
+<dialog id="creation-tour" aria-labelledby="tour-title">
+  <div class="tour-shell">
+    <header class="tour-top"><span>FEI TEAMART · CREATION</span><button id="tour-close" aria-label="Close introduction">✕</button></header>
+    <div class="tour-copy"><span id="tour-kicker">A little tour. A big imagination.</span><h1 id="tour-title">Your Creation playground!</h1><p id="tour-hint">Watch, explore, then make it your way.</p></div>
+    <div class="tour-picture"><img id="tour-image" src="../assets/creation-intro/map.jpg" alt="The Creation studio with five creative corners"><div id="tour-pointer" aria-hidden="true"></div><span id="tour-label">Your ideas belong here!</span><div class="tour-spark" aria-hidden="true">✦</div></div>
+    <p id="tour-caption" aria-live="off"></p>
+    <div class="tour-dots" aria-hidden="true"></div>
+    <footer class="tour-actions"><button id="tour-play">▶ Watch the tour</button><button id="tour-explore">Let’s explore →</button><button id="tour-cc" aria-pressed="false">CC</button></footer>
+    <p class="tour-note">About 50 seconds · sound on · replay anytime</p>
+    <audio id="tour-audio" preload="none" src="../assets/creation-intro/intro.mp3"></audio>
+  </div>
+</dialog>
 
 <!-- ============ STAGE ============ -->
 <div class="stage" id="stage">
@@ -918,6 +927,7 @@
   <div class="header">
     <div class="breadcrumb"><a href="../">Smart Class</a> · Manual · <strong>Creation</strong></div>
     <div class="header-tools">
+      <button class="tool-btn" id="tour-replay">▶ Studio tour</button>
       <button class="tool-btn" onclick="recenterRoom()">Recenter</button>
     </div>
   </div>
@@ -2057,8 +2067,7 @@
   }
 
   function enterStudio() {
-    document.getElementById('intro').classList.add('hidden');
-    setTimeout(() => document.getElementById('intro').remove(), 1000);
+    window.openCreationTour?.();
   }
 
   // ============ STATION DETAIL RENDERERS ============
@@ -2401,5 +2410,6 @@
   });
 </script>
 
+<script src="../core/creation-intro.js?v=1"></script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+1
+00:00:00,100 --> 00:00:03,073
+Welcome to your Creation playground!
+
+2
+00:00:03,023 --> 00:00:09,404
+Big ideas, little ideas, wonderfully silly ideas — they all belong here.
+
+3
+00:00:09,404 --> 00:00:12,750
+Tap a corner of the studio to explore.
+
+4
+00:00:12,750 --> 00:00:16,559
+Try the Material workbench for hands-on making.
+
+5
+00:00:16,559 --> 00:00:20,142
+Pick a project, like Dream Art Studio.
+
+6
+00:00:20,142 --> 00:00:24,357
+Cut, build, and create a tiny room of your own!
+
+7
+00:00:24,357 --> 00:00:27,797
+Or visit Color for playful experiments.
+
+8
+00:00:27,797 --> 00:00:31,630
+Drag two colors together and see what happens!
+
+9
+00:00:31,630 --> 00:00:35,047
+Inside a course, start with step one.
+
+10
+00:00:35,047 --> 00:00:39,857
+Follow the little steps, try things out, and make it your way.
+
+11
+00:00:39,857 --> 00:00:41,773
+See Coming soon?
+
+12
+00:00:41,773 --> 00:00:44,738
+That adventure is still getting ready.
+
+13
+00:00:44,738 --> 00:00:46,416
+Ready to play?
+
+14
+00:00:46,416 --> 00:00:48,119
+Pick a corner.
+
+15
+00:00:48,119 --> 00:00:49,821
+Let's create!
+
