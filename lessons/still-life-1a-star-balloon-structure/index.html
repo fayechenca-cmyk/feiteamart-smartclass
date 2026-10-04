@@ -5079,7 +5079,7 @@ const LFC_HOOKS = {
 const LESSON = {
   id: 'still-life-1a-star-balloon-structure',
   title: 'Foil Star Balloon · Structure & Composition',
-  totalXP: 40,
+  totalXP: 55,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
@@ -5119,7 +5119,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 2',
+      partLabel: 'Part b · teacher demo · video 1 of 5',
       type: 'videoSegment',
       videoId: '6bb909b0169fb6e58f666c8e2abb6ad2',
       videoNumber: 1,
@@ -5132,7 +5132,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 2',
+      partLabel: 'Part b · teacher demo · video 2 of 5',
       type: 'videoSegment',
       videoId: '62c44412628bc716886ffcef6c89af2c',
       videoNumber: 2,
@@ -5141,6 +5141,45 @@ const LESSON = {
       teacher: 'Mrs. Dawn',
       title: 'Emphasizing Light and Dark on the Structure',
       intro: 'Now bring out the structure with light and dark — no tone yet, that comes in Part 2.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 3 of 5',
+      type: 'videoSegment',
+      videoId: 'f89c61f01b4a82b84da097d32fc8c2df',
+      videoNumber: 3,
+      videoTitle: 'Painting the Tone Along the Form',
+      stepName: 'Painting the Tone Along the Form',
+      teacher: 'Mrs. Dawn',
+      title: 'Painting the Tone Along the Form',
+      intro: 'Now add tone along the form, building on the light and dark structure from before.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 5',
+      type: 'videoSegment',
+      videoId: '262207c274235c4eb3e73df8ece30a92',
+      videoNumber: 4,
+      videoTitle: 'Blending with a Tissue',
+      stepName: 'Blending with a Tissue',
+      teacher: 'Mrs. Dawn',
+      title: 'Blending with a Tissue',
+      intro: 'Blend the tone with a tissue for a smoother, more realistic finish.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 5 of 5',
+      type: 'videoSegment',
+      videoId: '6c3dd3cd1d35439b765cd903c0c3b0d2',
+      videoNumber: 5,
+      videoTitle: 'Painting the Details',
+      stepName: 'Painting the Details',
+      teacher: 'Mrs. Dawn',
+      title: 'Painting the Details',
+      intro: 'Finish with the fine details that bring the drawing to life.',
       isCoreEnd: true,
       xp: 5
     },
@@ -6978,7 +7017,7 @@ function demoPauseInLocalMode() {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 function renderVideoSegment(step) {
-  const partOf = `${step.videoNumber} of 2`;
+  const partOf = `${step.videoNumber} of 5`;
   const pauses = VIDEO_PAUSES[step.videoId] || [];
   const hasPauses = pauses.length > 0;
   
@@ -7148,7 +7187,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-text">${
           hasPauses
             ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
-            : 'Pause anytime if you need to catch up. This is a 2-video sequence — go at your own pace.'
+            : 'Pause anytime if you need to catch up. This is a 5-video sequence — go at your own pace.'
         }</div>
       </div>
 
