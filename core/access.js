@@ -66,7 +66,7 @@
   'use strict';
 
   const FREE_SKILLS = ['preparation', 'cube'];
-  const FREE_CREATION_LIMIT = 2;
+  const FREE_CREATION_LIMIT = 3;
 
   // Oct 2026 — Faye: two specific student codes (Coraline-12,
   // Alicia-11) need narrower rules than the normal "legacy code = full
@@ -304,11 +304,36 @@
     // Oct 2026: RESTRICTED_LEGACY_CODES (Coraline-12, Alicia-11) must
     // NOT hit the blanket "legacy code = everything open" bypass below
     // — that is correct for every other legacy code (including
-    // DAWN-16/FAYE-00), but these two need the narrower per-branch
-    // rules further down instead. Falling through here is what lets
-    // their Foundation Step 1 exception (below) and the Creation cap
-    // actually apply to them.
+    // DAWN-16/FAYE-00) on Skills, but these two need the narrower
+    // Foundation Step 1 preview rule further down instead.
     const isRestrictedLegacy = status.isLegacy && RESTRICTED_LEGACY_CODES.includes(status.studentCode);
+
+    // Oct 2026 — Creation 3-lesson cap, permanent platform policy,
+    // replaces the old "Creation fully open" rule below. Deliberately
+    // checked BEFORE the general bypass and with its own exemption
+    // test, NOT isRestrictedLegacy — that list only matters for Skills.
+    // This cap is meant to apply to every legacy code, old and new
+    // alike (the 4 existing codes included, not just Coraline-12/
+    // Alicia-11) — closing the bigger loophole where ANY access code
+    // got unlimited free Creation forever via the bypass. Exempt: true
+    // admin-tier accounts, and genuinely paid Supabase members.
+    // status.membership is hardcoded to 'paid' for every legacy login
+    // regardless of real tier, so !status.isLegacy is required in the
+    // exemption test too — otherwise every legacy code would read as
+    // "paid" and dodge the cap, exactly the loophole being closed.
+    if (branch === 'creation') {
+      const creationCapExempt = status.isAdmin || (!status.isLegacy && status.membership === 'paid');
+      if (!creationCapExempt) {
+        const opened = status.openedCreationLessons || [];
+        if (opened.includes(lessonId) || opened.length < FREE_CREATION_LIMIT) {
+          return { allowed: true, reason: 'creation_within_limit' };
+        }
+        return { allowed: false, reason: 'paywall_creation' };
+      }
+      // Exempt — falls through to the general bypass below, which
+      // grants full_access to admin and genuinely paid users the same
+      // way it already does for Skills.
+    }
 
     // Legacy code OR paid → everything open. !isRestrictedLegacy gates
     // the WHOLE condition, not just the isLegacy half — status.membership
@@ -328,18 +353,6 @@
         return { allowed: true, reason: 'extended_preview' };
       }
       return { allowed: false, reason: 'paywall_skills' };
-    }
-
-    if (branch === 'creation') {
-      // Sept 2026 — per Faye's platform-wide access clarification: Creation
-      // is fully open to everyone for now ("functioning like a playground
-      // while the library is small"), no paywall. FREE_CREATION_LIMIT and
-      // the opened-lessons tracking above are left in place, unused by
-      // this branch, deliberately — she's planning a subscription model
-      // once the library grows, not this per-course free-limit again, but
-      // wants the option to flip this single early-return back off in the
-      // meantime without rebuilding the tracking machinery.
-      return { allowed: true, reason: 'creation_open_for_now' };
     }
 
     return { allowed: false, reason: 'unknown_branch' };
