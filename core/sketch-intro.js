@@ -61,6 +61,9 @@
     new MutationObserver(() => { if (screen.style.display === 'none' || screen.hidden) video.pause(); }).observe(screen,{attributes:true,attributeFilter:['style','hidden']});
     document.addEventListener('visibilitychange', () => { if (document.hidden) video.pause(); });
     window.addEventListener('pagehide', () => video.pause());
+    const dialog = document.getElementById('foundation-intro-dialog');
+    dialog.addEventListener('close',()=>video.pause());
+    video.addEventListener('ended',()=>{window.completeFoundationIntro?.();dialog.close();document.querySelector('#foundation-map-nodes a')?.focus();});
     sync(); syncCaptions();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();

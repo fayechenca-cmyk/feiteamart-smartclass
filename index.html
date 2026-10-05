@@ -1438,10 +1438,10 @@
   }
 </style>
 <link rel="stylesheet" href="core/student-dashboard.css?v=workspace-1">
-<link rel="stylesheet" href="core/sketch-map.css">
-<script src="core/sketch-map.js"></script>
+<link rel="stylesheet" href="core/sketch-map.css?v=2">
+<script src="core/sketch-map.js?v=2"></script>
 <link rel="stylesheet" href="core/sketch-intro.css?v=2">
-<script src="core/sketch-intro.js?v=3" defer></script>
+<script src="core/sketch-intro.js?v=4" defer></script>
 </head>
 <body>
 
@@ -2001,7 +2001,7 @@
     <div class="subtrack-emoji">✏️</div>
     <div class="subtrack-info">
       <div class="subtrack-name">Foundation of Sketch</div>
-      <div class="subtrack-meta">One drawing foundation. Four branches to explore — from your first form to a face.</div>
+      <div class="subtrack-meta">Start with the introduction. Then follow four steps, from simple forms to portraits.</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -2043,11 +2043,11 @@
     <div class="path-header-kicker">Drawing</div>
     <div class="path-header-title">Foundation of Sketch</div>
     <div class="path-header-sub">
-      One drawing foundation. Four branches to explore — from your first form to a face.
+      Start with the introduction. Then follow four steps, from simple forms to portraits.
     </div>
   </div>
 
-  <section class="sketch-intro" id="sketch-intro" aria-labelledby="sketch-intro-title">
+  <dialog id="foundation-intro-dialog"><button class="back-btn" onclick="document.getElementById('foundation-intro-dialog').close()">← Back to your path</button><section class="sketch-intro" id="sketch-intro" aria-labelledby="sketch-intro-title">
     <div class="sketch-intro-heading">
       <div><span class="sketch-eyebrow">A glimpse inside the studio · 35 seconds</span><h2 id="sketch-intro-title">Your drawing journey starts here.</h2></div>
       <button class="sketch-intro-play" type="button" data-intro-play>▶ Play course intro</button>
@@ -2073,7 +2073,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     </div>
   </section>
 
-  <div class="sketch-grid" id="foundation-map-nodes"></div>
+  </dialog><div class="sketch-grid" id="foundation-map-nodes"></div>
 
 </div>
 
@@ -3595,55 +3595,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     const completed = userProfile.completedLessons || [];
     const container = document.getElementById('path-nodes');
     
-    // Determine state for each node
-    let foundCurrent = false;
-    const nodesHTML = FOUNDATION_A_PATH.map((lesson, idx) => {
-      let state = 'locked';
-      let icon = lesson.emoji;
-      let kicker = `Practice ${idx + 1} · Locked`;
-      let arrow = '🔒';
-      let clickable = false;
-      
-      if (!lesson.ready) {
-        state = 'coming';
-        kicker = `Practice ${idx + 1} · In development`;
-        arrow = '⏳';
-      } else if (completed.includes(lesson.id)) {
-        state = 'done';
-        icon = '✓';
-        kicker = `Practice ${idx + 1} · Complete ✓`;
-        arrow = '↻';
-        clickable = true;
-      } else if (!foundCurrent) {
-        state = 'current';
-        kicker = `Practice ${idx + 1} · Start now`;
-        arrow = '→';
-        clickable = true;
-        foundCurrent = true;
-      }
-      
-      const tag = state === 'done' ? 'Practice complete · +1 Practice Point'
-                : state === 'current' ? lesson.subtitle
-                : state === 'coming' ? 'In development with our teaching team'
-                : `Complete previous to unlock`;
-      
-      const tagEl = clickable ? 'a' : 'div';
-      const hrefAttr = clickable ? `href="${lesson.href}"` : '';
-      
-      return `
-        <${tagEl} class="path-node ${state}" ${hrefAttr}>
-          <div class="node-icon">${icon}</div>
-          <div class="node-info">
-            <div class="node-kicker">${kicker}</div>
-            <div class="node-title">${lesson.title}</div>
-            <div class="node-tag">${tag}</div>
-          </div>
-          <div class="node-arrow">${arrow}</div>
-        </${tagEl}>
-      `;
-    }).join('');
-    
-    container.innerHTML = nodesHTML;
+    container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed);
     const next = pickNextLesson();
     document.getElementById('sketch-form-hero').innerHTML = SketchMap.hero('Form and Structure','Start with a shape. Build your skills. Make something yours.','basic_sketch') + `<section class="sketch-current"><span class="sketch-eyebrow">${next?'Your next practice':'All sessions complete'}</span><h2>${next?next.title:'Your foundation is taking shape'}</h2><p>${completed.filter(id=>FOUNDATION_A_PATH.some(l=>l.id===id)).length}/${FOUNDATION_A_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?`<a class="sketch-action" href="${next.href}" onclick="handleResumeClick(event, '${next.id}', '${next.href}')">Continue practice →</a>`:''}</section>`;
 
@@ -3692,11 +3644,27 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       {n:3,title:'Light and Shadow',line:'Explore light, volume and depth.',badge:'landscape',href:'lessons/sketch-branches/?branch=light'},
       {n:4,title:'Portrait and Facial Structure',line:'Find the forms and proportions of a face.',badge:'portrait_master',href:'lessons/sketch-branches/?branch=portrait'}
     ];
-    document.getElementById('foundation-map-nodes').innerHTML=branches.map(b=>{
-      const badge=SketchMap.badge(b.badge),p=b.progress;
-      return `<a class="sketch-branch" href="${b.href}" ${b.n===1?'onclick="event.preventDefault();showDrawing()"':''}><img src="${badge.imgUrl}" alt="${badge.title} badge by ${badge.artist.replace('Des. by ','')}"><div><span class="sketch-eyebrow">Branch 0${b.n}</span><h2>${b.title}</h2><p>${b.line}</p><small>${badge.title} · ${badge.artist}</small>${p?`<progress value="${p.doneCount}" max="${p.totalCount}" aria-label="${b.title} completed lessons"></progress><small>${p.doneCount}/${p.totalCount} sessions complete</small>`:'<p><small>Lessons in development</small></p>'}<p><b>${p?'Explore your map':'Preview the branch'} →</b></p></div></a>`;
+    const introIdentity=userProfile.supabaseUserId||userProfile.studentCode||userProfile.learnerId;
+    let introDone=!!userProfile.foundationIntroComplete;
+    try{if(introIdentity)introDone ||= localStorage.getItem('fei.sketch.intro:'+introIdentity)==='complete'}catch{}
+
+    const activeStep = !introDone ? 0 : step1.doneCount < step1.totalCount ? 1 : step2.doneCount < step2.totalCount ? 2 : 3;
+    document.getElementById('foundation-map-nodes').innerHTML = `<button class="sketch-branch foundation-intro-stop ${introDone?'done':'current'}" onclick="document.getElementById('foundation-intro-dialog').showModal()"><span class="foundation-step">${introDone?'✓':'▶'}</span><div><span class="sketch-eyebrow">START HERE · INTRO</span><h2>Your drawing journey starts here</h2><p>${introDone?'✓ Introduction complete · Replay anytime':'Watch the 35-second introduction to begin your learning path.'}</p><b>${introDone?'Replay introduction':'Watch introduction →'}</b></div></button>` + branches.map(b=>{
+      const badge=SketchMap.badge(b.badge),p=b.progress,done=p&&p.doneCount===p.totalCount;
+      // Existing learners may revisit a package containing their saved practice.
+      const available=!!p&&(b.n<=activeStep||p.doneCount>0);
+      const tag=available?'a':'div';
+      return `<${tag} class="sketch-branch ${done?'done':b.n===activeStep?'current':'upcoming'}" ${available?`href="${b.href}"`:''} ${available&&b.n===1?'onclick="event.preventDefault();showDrawing()"':''} ${b.n===activeStep?'aria-current="step"':''}><span class="foundation-step">${done?'✓':b.n}</span><div><span class="sketch-eyebrow">STEP ${b.n} · ${done?'COMPLETE':b.n===activeStep?'YOU ARE HERE':'UP NEXT'}</span><h2>${b.title}</h2><p>${b.line}</p>${p?`<progress value="${p.doneCount}" max="${p.totalCount}"></progress><small>${p.doneCount}/${p.totalCount} sessions complete</small>`:'<small>Teacher lessons in development</small>'}<p><b>${available?(done?'Revisit this step':'Continue this step →'):p?(b.n===1?'Complete the introduction first':`Complete Step ${b.n-1} to continue`):'Coming soon'}</b></p></div><img class="foundation-reward" src="${badge.imgUrl}" alt="${badge.title} badge goal"></${tag}>`;
     }).join('');
   }
+  window.completeFoundationIntro = function(){
+    if(!userProfile)return;
+    userProfile.foundationIntroComplete=true;
+    const identity=userProfile.supabaseUserId||userProfile.studentCode||userProfile.learnerId;
+    try{if(identity)localStorage.setItem('fei.sketch.intro:'+identity,'complete')}catch{}
+    saveProfile(userProfile);
+    renderFoundationMap();
+  };
   
   // ═══════════════════════════════════════════════════════════
   // SIGN-IN FLOW

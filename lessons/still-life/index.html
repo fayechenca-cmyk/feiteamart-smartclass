@@ -65,10 +65,10 @@
   .sl-lesson.locked, .sl-lesson.coming { cursor: not-allowed; opacity:.6; }
   .sl-lesson.coming { border-style: dashed; }
 </style>
-<link rel="stylesheet" href="../../core/sketch-map.css"><style>.wrap{max-width:1080px;padding:24px}.sl-header{display:none}#sl-paintings{border-left:3px dashed #ded2ee;padding-left:24px}.sl-painting{margin-bottom:22px}.sl-lesson{min-height:72px}.sl-painting-title{font-size:18px}.sl-lesson-title{font-size:14px}.sl-painting-head{padding:20px}.sl-lesson.locked,.sl-lesson.coming{opacity:1}.sl-lesson-tag{color:#71677c}@media(max-width:600px){.wrap{padding:16px}#sl-paintings{padding-left:12px}}</style></head>
+<link rel="stylesheet" href="../../core/sketch-map.css?v=2"><style>.wrap{max-width:1080px;padding:24px}.sl-header{display:none}#sl-paintings{border-left:3px dashed #ded2ee;padding-left:24px}.sl-painting{margin-bottom:22px}.sl-lesson{min-height:72px}.sl-painting-title{font-size:18px}.sl-lesson-title{font-size:14px}.sl-painting-head{padding:20px}.sl-lesson.locked,.sl-lesson.coming{opacity:1}.sl-lesson-tag{color:#71677c}@media(max-width:600px){.wrap{padding:16px}#sl-paintings{padding-left:12px}}</style></head>
 <body>
 
-<div class="wrap">
+<div class="wrap sketch-package">
   <button class="back-btn" onclick="location.href='../../index.html#dashboard/courses/foundation-map'">← Foundation of Sketch</button>
 
   <div id="sketch-still-hero"></div><div class="sl-header">
@@ -77,10 +77,10 @@
     <div class="sl-header-sub">Observe real objects and learn how to express different materials through drawing.</div>
   </div>
 
-  <div id="sl-paintings"><!-- filled by renderStillLifeLanding() --></div>
+  <div class="path-nodes" id="sl-paintings"><!-- filled by renderStillLifeLanding() --></div>
 </div>
 
-<script src="../../core/badge-catalog.js"></script><script src="../../core/sketch-map.js"></script>
+<script src="../../core/badge-catalog.js"></script><script src="../../core/sketch-map.js?v=2"></script>
 <script src="../../core/auth.js"></script>
 <script src="../../core/access.js"></script>
 <script src="../../core/still-life-lesson.js"></script>
@@ -106,63 +106,11 @@ async function renderStillLifeLanding() {
     }
   }
 
-  const html = FOUNDATION_STILL_LIFE_PAINTINGS.map(painting => {
-    const lessons = painting.lessonIds.map(id => FOUNDATION_STILL_LIFE_PATH.find(l => l.id === id));
-    const paintingDone = lessons.every(l => completed.includes(l.id));
-    // Most paintings are a Structure/Texture A+B pair (2 lessons); a
-    // painting delivered as one unified lesson (e.g. the balloon, once
-    // its real footage replaced the placeholder 2-part split) has just
-    // 1 — driven by lessons.length rather than assuming every painting
-    // is a pair, so this doesn't need touching again per-painting.
-    const partLabels = lessons.length === 2
-      ? ['Part 1 · Structure & Composition', 'Part 2 · Texture & Finish']
-      : [];
-
-    const lessonsHTML = lessons.map((lesson, i) => {
-      let state = 'current', icon = i === 0 ? '①' : '②', tag = 'Ready to start', clickable = true;
-      if (!lesson.ready) { state = 'coming'; icon = '⏳'; tag = 'Coming soon'; clickable = false; }
-      else if (completed.includes(lesson.id)) { state = 'done'; icon = '✓'; tag = 'Complete ✓'; clickable = true; }
-      else if (!hasAccess) { state = 'locked'; icon = '🔒'; tag = 'Unlock Foundation of Sketch to open'; clickable = false; }
-      const tagEl = clickable ? 'a' : 'div';
-      // lesson.href is root-relative (e.g. 'lessons/still-life-2a-.../'),
-      // correct for the root Map but not from here (this page already
-      // lives one level under lessons/) — StillLifeLesson.siblingHref
-      // does the same '../' adjustment renderDone()'s next-lesson link
-      // uses, so there's one place this logic lives, not two.
-      const hrefAttr = clickable ? `href="${window.StillLifeLesson.siblingHref(lesson.href)}"` : '';
-      const partHTML = partLabels[i] ? `<div class="sl-lesson-part">${partLabels[i]}</div>` : '';
-      return `
-        <${tagEl} class="sl-lesson ${state}" ${hrefAttr}>
-          <div class="sl-lesson-icon">${icon}</div>
-          <div class="sl-lesson-info">
-            ${partHTML}
-            <div class="sl-lesson-title">${lesson.title.split(' · ')[0]}</div>
-            <div class="sl-lesson-tag">${tag}</div>
-          </div>
-          <div class="sl-lesson-arrow">${clickable ? '→' : ''}</div>
-        </${tagEl}>
-      `;
-    }).join('');
-
-    const badgeText = paintingDone
-      ? (lessons.length === 1 ? 'Done' : 'Both parts done')
-      : `${lessons.length} lesson${lessons.length !== 1 ? 's' : ''}`;
-
-    return `
-      <div class="sl-painting${paintingDone ? ' sl-painting-done' : ''}">
-        <div class="sl-painting-head">
-          <div>
-            <div class="sl-painting-title">${painting.title}</div>
-            <div class="sl-painting-material">${painting.materialFocus}</div>
-          </div>
-          <div class="sl-painting-badge">${badgeText}</div>
-        </div>
-        ${lessonsHTML}
-      </div>
-    `;
-  }).join('');
-
-  document.getElementById('sl-paintings').innerHTML = html;
+  const done = FOUNDATION_STILL_LIFE_PATH.filter(l=>l.ready&&completed.includes(l.id)).length;
+  const next = FOUNDATION_STILL_LIFE_PATH.find(l=>!completed.includes(l.id));
+  const title = next?.ready ? next.title : 'More teacher studies are being prepared';
+  document.getElementById('sketch-still-hero').innerHTML=SketchMap.hero('Still Life and Texture','Look closely. Build the form. Bring each surface to life.','realism_expert')+`<section class="sketch-current"><span class="sketch-eyebrow">${next?.ready?'Your next practice':'Next chapter in preparation'}</span><h2>${title}</h2><p>${done}/${FOUNDATION_STILL_LIFE_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?.ready&&hasAccess?`<a class="sketch-action" href="../../${next.href}">Continue practice →</a>`:''}</section>`;
+  document.getElementById('sl-paintings').innerHTML=SketchMap.lessonRows(FOUNDATION_STILL_LIFE_PATH,completed,'../../',hasAccess);
 }
 renderStillLifeLanding();
 </script>
