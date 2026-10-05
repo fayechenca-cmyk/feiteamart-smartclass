@@ -26,4 +26,16 @@ export const studentAccessCodes = [
   { id: "RAINIE-08", displayName: "Rainie" },
   { id: "SELENA-23", displayName: "Selena", isLiveClass: true },
   { id: "XIDA-25", displayName: "Xida", isLiveClass: true },
+  // Oct 2026 — same full-access tier as FAYE-00 (isAdmin:true), not a
+  // new flag. See core/access.js's isAdmin handling for what this
+  // grants: unrestricted on every course, including the Creation
+  // 3-lesson cap.
+  { id: "DAWN-16", displayName: "Dawn", isLiveClass: true, isAdmin: true },
+  // Plain student codes, no isAdmin/isLiveClass. Their Foundation Step 1
+  // 5-lesson preview lives in core/access.js (RESTRICTED_LEGACY_CODES /
+  // EXTENDED_PREVIEW_SKILLS) — not here, this file only says who they
+  // are, not what they can open. They are NOT exempt from the new
+  // Creation 3-lesson cap; that applies to them like any other student.
+  { id: "Coraline-12", displayName: "Coraline" },
+  { id: "Alicia-11", displayName: "Alicia" },
 ];
