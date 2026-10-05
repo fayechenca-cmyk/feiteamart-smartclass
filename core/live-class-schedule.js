@@ -201,9 +201,9 @@ const LIVE_CLASS_SCHEDULE = {
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68e1eb232748dccce7a0d396_spherical%20sketch.pptx'
       },
       homework: {
-        description: 'Draw the ladybug reference — apply sphere structure to a real object.',
-        downloadUrl: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68e1edc45da29047d6af38f9_ladybug_homework.pdf',
-        downloadLabel: 'Download Homework Reference'
+        description: 'Watch Sphere Lesson in the Smart Class. Draw the Sphere, that is your homework for this week.',
+        downloadUrl: null,
+        downloadLabel: null
       }
     },
     {
