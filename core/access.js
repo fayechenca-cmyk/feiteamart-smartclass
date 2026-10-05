@@ -77,6 +77,14 @@
   // .trim().toUpperCase() before saving the profile), so this must be
   // uppercase to match at runtime.
   const RESTRICTED_LEGACY_CODES = ['CORALINE-12', 'ALICIA-11'];
+  // Their one widened exception: Foundation of Sketch Step 1's first 5
+  // lessons instead of the default first 2 (FREE_SKILLS) — Step 2-4
+  // still require the normal upgrade, same as everyone else.
+  // FOUNDATION_A_PATH's first 5 ids, in order (confirmed directly
+  // against index.html: preparation, cube, sphere, cylinder, cup).
+  // core/access.js has no access to that array itself — index.html
+  // owns it — so this is a plain copy, not a derived reference.
+  const EXTENDED_PREVIEW_SKILLS = [...FREE_SKILLS, 'sphere', 'cylinder', 'cup'];
 
   // Cache the access row so we don't hit Supabase on every nav.
   let _cache = null;
@@ -269,6 +277,9 @@
     if (branch === 'skills') {
       if (FREE_SKILLS.includes(lessonId)) {
         return { allowed: true, reason: 'free_skills' };
+      }
+      if (isRestrictedLegacy && EXTENDED_PREVIEW_SKILLS.includes(lessonId)) {
+        return { allowed: true, reason: 'extended_preview' };
       }
       return { allowed: false, reason: 'paywall_skills' };
     }
