@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 2 · Glass Cup and Bottle · Structure & Composition</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 2 · Glass Cup and Bottle</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3051,7 +3051,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <div class="content">
   <div class="crumb">Foundation of Sketch <span class="sep">·</span> Step 2 <span class="sep">·</span> Still Life and Texture</div>
   <div class="lesson-title">Glass Cup and Bottle</div>
-  <div class="lesson-sub">Structure & Composition</div>
+  <div class="lesson-sub">Structure, composition, texture, and finish</div>
 
   <div class="progress-rail">
     <div class="rail-top">
@@ -3313,7 +3313,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Glass Cup and Bottle — Part 1</div>
+    <div class="welcome-lesson-label">Glass Cup and Bottle</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
@@ -3826,7 +3826,7 @@ const LFC = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'Glass Cup and Bottle — Part 1',
+  title: 'Glass Cup and Bottle',
   audioUrl: null,
   sections: [],
   cta: "I'm ready to begin →"
@@ -3842,8 +3842,8 @@ const HONEST_WELCOME = {
 const CLOSING_LFC = {
   kicker: '✨ TAKE THIS WITH YOU',
   paragraphs: [
-    'You drew your first straight lines to find the shape of a glass bottle.',
-    'Straight lines are fast — they help you find the big shape before you worry about the small details.'
+    'You started with straight lines to find the shape of a glass bottle, then built it up through composition, texture, and a finished surface.',
+    'That is the idea: find the big shape fast, then build up the details in stages.'
   ],
   invitations: {
     label: 'When you get a chance, look at:',
@@ -3853,10 +3853,10 @@ const CLOSING_LFC = {
     ]
   },
   reflection: [
-    'You\'ll start noticing straight lines inside curved things.'
+    'You\'ll start noticing straight lines inside curved things, and how light and texture play across glass.'
   ],
   // Cross-lesson echo: graceful "nothing to echo yet" path for now (per
-  // Faye, Sept 2026). Nothing to echo yet — this is the first Step 2 lesson live.
+  // Faye, Sept 2026).
   crossLesson: {
     enabled: false,
     label: '',
@@ -3864,7 +3864,7 @@ const CLOSING_LFC = {
   },
   openQuestion: {
     intro: 'And one question to keep:',
-    question: 'What was it like to start with straight lines instead of curves?',
+    question: 'What was it like to go from simple straight lines all the way to a finished glass surface?',
     afterthought: "There's no wrong answer — every artist starts differently."
   },
   cta: 'Mark lesson complete →'
@@ -5098,7 +5098,7 @@ const LESSON = {
       partLabel: 'Part a · look closely',
       type: 'reference',
       title: 'Straight lines first',
-      intro: 'The teacher blocks in the bottle with straight lines, not curves. Straight lines help find the angles and the overall shape fast.',
+      intro: 'The teacher blocks in the bottle with straight lines, not curves, then builds it up step by step — composition, texture, and finish.',
       xp: 0
     },
     {
@@ -6019,7 +6019,7 @@ function renderOpeningLFC(step) {
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0;">
-          Today we start with straight lines — they help us find the shape fast.
+          Today we build it up step by step — straight lines first, then composition, texture, and finish.
         </p>
       </div>
       
@@ -8117,17 +8117,17 @@ function renderBadgeUnlocked(profileOrLead) {
       
       <!-- Next lesson teaser -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
-        <div class="lesson2-teaser-title">Part 2: Texture & Finish</div>
+        <div class="lesson2-teaser-kicker">✨ MORE COMING SOON</div>
+        <div class="lesson2-teaser-title">More Still Life lessons</div>
         <div class="lesson2-teaser-sub">
-          You blocked in the bottle with straight lines. Next, you’ll turn those lines into curves and finish the outline.
+          You built a glass bottle from structure through finish. More Still Life lessons are on the way.
         </div>
         <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
-      
+
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('still-life-2b-glass-texture', '../still-life-2b-glass-texture/')">
-          <span class="glyph">◈</span> Continue to Part 2 →
+        <button class="btn btn-primary" onclick="window.location.href='../still-life/';">
+          <span class="glyph">◈</span> Back to Step 2
         </button>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">
           ← Back to Art GPS home
@@ -9302,7 +9302,7 @@ function sendChat() {
     body: JSON.stringify({
       email: studentEmail,
       message: text,
-      lessonContext: 'Foundation of Sketch · Step 2 · Glass Cup and Bottle · Structure & Composition'
+      lessonContext: 'Foundation of Sketch · Step 2 · Glass Cup and Bottle'
     })
   })
     .then(res => res.json())
