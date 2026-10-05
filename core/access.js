@@ -135,13 +135,21 @@
     } catch (e) { return { isLiveClass: false, isAdmin: false, studentCode: null }; }
   }
 
-  async function _fetchOrCreateRow(userId) {
-    if (_cacheUserId === userId && _cache) return _cache;
+  // Oct 2026 — generalized to a (column, value) lookup so the same
+  // fetch-or-create logic serves both identities this table now keys
+  // on: user_id (Supabase accounts) and student_code (legacy /
+  // access-code logins — see
+  // supabase/smartclass_access_student_code_migration.sql). Only one
+  // of the two is ever set on a given row. _fetchOrCreateRow(userId)
+  // below is unchanged in behavior/signature for every existing
+  // caller; _fetchOrCreateRowByCode is the new legacy-student path.
+  async function _fetchOrCreateRowByKey(column, value) {
+    if (_cacheUserId === value && _cache) return _cache;
     const sb = _supabase();
     const { data, error } = await sb
       .from('smartclass_access')
       .select('*')
-      .eq('user_id', userId)
+      .eq(column, value)
       .maybeSingle();
 
     if (error && error.code !== 'PGRST116') {
@@ -150,14 +158,17 @@
 
     if (data) {
       _cache = data;
-      _cacheUserId = userId;
+      _cacheUserId = value;
       return data;
     }
 
-    // Create initial row
+    // Create initial row. A legacy/student_code row is already a paid
+    // identity by this platform's original design (access code =
+    // paid) — unlike a fresh Supabase signup, which starts free.
     const initial = {
-      user_id: userId,
-      membership: 'free',
+      user_id: column === 'user_id' ? value : null,
+      student_code: column === 'student_code' ? value : null,
+      membership: column === 'student_code' ? 'paid' : 'free',
       opened_creation_lessons: [],
       opened_skill_lessons: [],
       paid_at: null
@@ -172,12 +183,20 @@
       console.warn('[FEIAccess] insert error', insErr);
       // Fall back to in-memory only
       _cache = initial;
-      _cacheUserId = userId;
+      _cacheUserId = value;
       return initial;
     }
     _cache = inserted;
-    _cacheUserId = userId;
+    _cacheUserId = value;
     return inserted;
+  }
+
+  function _fetchOrCreateRow(userId) {
+    return _fetchOrCreateRowByKey('user_id', userId);
+  }
+
+  function _fetchOrCreateRowByCode(studentCode) {
+    return _fetchOrCreateRowByKey('student_code', studentCode);
   }
 
   async function init() {
@@ -190,6 +209,33 @@
     if (_isLegacyAccessCode()) {
       const flags = _legacyProfileFlags();
       const isRestricted = RESTRICTED_LEGACY_CODES.includes(flags.studentCode);
+
+      // Oct 2026: admin-tier codes (FAYE-00, DAWN-16) bypass the
+      // Creation cap unconditionally regardless of count (see
+      // canOpenLesson), so they never need a real smartclass_access
+      // row — skip the Supabase round trip for them. Every other
+      // legacy code (the 4 existing ones, plus Coraline-12/Alicia-11)
+      // is now subject to the cap, so this reads their real row,
+      // keyed by student_code (see
+      // supabase/smartclass_access_student_code_migration.sql)
+      // instead of the hardcoded empty arrays this used to return for
+      // every legacy login.
+      let openedCreationLessons = [];
+      let openedSkillLessons = [];
+      if (!flags.isAdmin && flags.studentCode) {
+        try {
+          const row = await _fetchOrCreateRowByCode(flags.studentCode);
+          openedCreationLessons = Array.isArray(row.opened_creation_lessons) ? row.opened_creation_lessons : [];
+          openedSkillLessons = Array.isArray(row.opened_skill_lessons) ? row.opened_skill_lessons : [];
+        } catch (e) {
+          // Fail open on the count itself (matches this file's general
+          // philosophy — see gateLessonPage's own fail-open comment):
+          // a lookup failure should not block a student from a lesson
+          // they could otherwise open, just under-count for now.
+          console.warn('[FEIAccess] legacy row fetch failed, defaulting to empty', e);
+        }
+      }
+
       return {
         membership: 'paid',
         membershipType: null,
@@ -211,8 +257,8 @@
         // that they see Zodiac's normal default paywall like any other
         // student.
         hasFullAccess: flags.isAdmin || (!flags.isLiveClass && !isRestricted),
-        openedCreationLessons: [],
-        openedSkillLessons: [],
+        openedCreationLessons: openedCreationLessons,
+        openedSkillLessons: openedSkillLessons,
         isLegacy: true,
         user: null
       };
@@ -300,12 +346,29 @@
   }
 
   async function recordLessonOpened(branch, lessonId) {
-    // Legacy or no user → no-op
-    if (_isLegacyAccessCode()) return;
-    const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
-    if (!user) return;
+    let row, matchColumn, matchValue;
 
-    const row = await _fetchOrCreateRow(user.id);
+    if (_isLegacyAccessCode()) {
+      // Oct 2026: admin-tier codes never hit the Creation cap, so
+      // there is nothing to record for them — skip the write (and
+      // avoid creating a spurious smartclass_access row for FAYE-00/
+      // DAWN-16, which would be a confusing thing to find in a table
+      // meant for cap usage). Every other legacy code now gets a real
+      // row, keyed by student_code, same as the Supabase-user path
+      // below keys by user_id.
+      const flags = _legacyProfileFlags();
+      if (flags.isAdmin || !flags.studentCode) return;
+      row = await _fetchOrCreateRowByCode(flags.studentCode);
+      matchColumn = 'student_code';
+      matchValue = flags.studentCode;
+    } else {
+      const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
+      if (!user) return;
+      row = await _fetchOrCreateRow(user.id);
+      matchColumn = 'user_id';
+      matchValue = user.id;
+    }
+
     const col = branch === 'creation' ? 'opened_creation_lessons' : 'opened_skill_lessons';
     const list = Array.isArray(row[col]) ? row[col].slice() : [];
     if (list.includes(lessonId)) return;
@@ -317,7 +380,7 @@
     const { data, error } = await sb
       .from('smartclass_access')
       .update(patch)
-      .eq('user_id', user.id)
+      .eq(matchColumn, matchValue)
       .select()
       .single();
     if (error) {
