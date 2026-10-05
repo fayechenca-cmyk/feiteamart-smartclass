@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 2 · Foil Star Balloon · Structure & Composition</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 2 · Foil Star Balloon</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3051,7 +3051,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <div class="content">
   <div class="crumb">Foundation of Sketch <span class="sep">·</span> Step 2 <span class="sep">·</span> Still Life and Texture</div>
   <div class="lesson-title">Foil Star Balloon</div>
-  <div class="lesson-sub">Structure & Composition</div>
+  <div class="lesson-sub">Outline, light and dark, tone, and texture</div>
 
   <div class="progress-rail">
     <div class="rail-top">
@@ -3313,7 +3313,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Foil Star Balloon — Part 1</div>
+    <div class="welcome-lesson-label">Foil Star Balloon</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
@@ -3826,14 +3826,14 @@ const LFC = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'Foil Star Balloon — Part 1',
+  title: 'Foil Star Balloon',
   audioUrl: null,
   sections: [],
   cta: "I'm ready to begin →"
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
-// CLOSING LFC — Foil Star Balloon Part 1 Take It Home
+// CLOSING LFC — Foil Star Balloon Take It Home
 //
 // Adds a quiet cross-lesson moment: looking back at Lesson 1.
 // If the student drew a sphere on this device, we acknowledge that.
@@ -3842,8 +3842,8 @@ const HONEST_WELCOME = {
 const CLOSING_LFC = {
   kicker: '✨ TAKE THIS WITH YOU',
   paragraphs: [
-    'You outlined the shape of a foil star balloon, then used light and dark to bring out its structure.',
-    'That\'s the idea: find the shape first, then use light and dark — tone comes later.'
+    'You outlined the shape of a foil star balloon, then built it up step by step — light and dark structure, tone, tissue-blended texture, and fine detail.',
+    'That\'s the idea: find the shape first, then build up value and texture in stages.'
   ],
   invitations: {
     label: 'When you get a chance, look at:',
@@ -3853,7 +3853,7 @@ const CLOSING_LFC = {
     ]
   },
   reflection: [
-    'You\'ll start noticing light and dark shapes on shiny surfaces.'
+    'You\'ll start noticing how light, shadow, and texture work together on shiny surfaces.'
   ],
   // Cross-lesson echo: graceful "nothing to echo yet" path for now (per
   // Faye, Sept 2026).
@@ -3864,7 +3864,7 @@ const CLOSING_LFC = {
   },
   openQuestion: {
     intro: 'And one question to keep:',
-    question: 'What was it like to find the light and dark areas before adding any tone?',
+    question: 'What was it like to go from a simple outline all the way to a finished, textured drawing?',
     afterthought: "There's no wrong answer — every artist starts differently."
   },
   cta: 'Mark lesson complete →'
@@ -5079,11 +5079,11 @@ const LFC_HOOKS = {
 const LESSON = {
   id: 'still-life-1a-star-balloon-structure',
   title: 'Foil Star Balloon · Structure & Composition',
-  totalXP: 40,
+  totalXP: 55,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
-  badge: { name: 'Light & Dark Starter', emoji: '⭐', desc: 'You outlined a foil star balloon and used light and dark to begin showing its structure.' },
+  badge: { name: 'Foil Star Balloon Artist', emoji: '⭐', desc: 'You outlined a foil star balloon and built it up with light, dark, tone, and texture to a finished drawing.' },
   steps: [
     {
       part: 'OPEN',
@@ -5098,12 +5098,17 @@ const LESSON = {
       partLabel: 'Part a · look closely',
       type: 'reference',
       title: 'Outline first',
-      intro: 'The teacher outlines the star balloon\'s shape, then uses light and dark to show its structure. No tone yet — that comes in Part 2.',
+      intro: 'The teacher outlines the star balloon\'s shape, then builds it up step by step — light and dark structure first, then tone and texture.',
       xp: 0
     },
-    // Materials step intentionally omitted for now — the pencil grade for
-    // this painting hasn't been given yet. Faye will send a one-line
-    // follow-up; add the 'tools' step back in then (see 2A/2B for shape).
+    {
+      part: 'A',
+      partLabel: 'Part a · materials',
+      type: 'tools',
+      title: 'What you need',
+      intro: 'Pencils: HB, 2B, 2H, and 6B — pick by value. Use 2H and HB for the brighter areas, 2B for the mid-tones, and 6B for the darkest areas.',
+      xp: 0
+    },
     {
       part: 'A',
       partLabel: 'Part a · ready',
@@ -5114,7 +5119,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 2',
+      partLabel: 'Part b · teacher demo · video 1 of 5',
       type: 'videoSegment',
       videoId: '6bb909b0169fb6e58f666c8e2abb6ad2',
       videoNumber: 1,
@@ -5127,7 +5132,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 2',
+      partLabel: 'Part b · teacher demo · video 2 of 5',
       type: 'videoSegment',
       videoId: '62c44412628bc716886ffcef6c89af2c',
       videoNumber: 2,
@@ -5135,7 +5140,46 @@ const LESSON = {
       stepName: 'Emphasizing Light and Dark on the Structure',
       teacher: 'Mrs. Dawn',
       title: 'Emphasizing Light and Dark on the Structure',
-      intro: 'Now bring out the structure with light and dark — no tone yet, that comes in Part 2.',
+      intro: 'Now bring out the structure with light and dark — tone comes next.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 3 of 5',
+      type: 'videoSegment',
+      videoId: 'f89c61f01b4a82b84da097d32fc8c2df',
+      videoNumber: 3,
+      videoTitle: 'Painting the Tone Along the Form',
+      stepName: 'Painting the Tone Along the Form',
+      teacher: 'Mrs. Dawn',
+      title: 'Painting the Tone Along the Form',
+      intro: 'Now add tone along the form, building on the light and dark structure from before.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 5',
+      type: 'videoSegment',
+      videoId: '262207c274235c4eb3e73df8ece30a92',
+      videoNumber: 4,
+      videoTitle: 'Blending with a Tissue',
+      stepName: 'Blending with a Tissue',
+      teacher: 'Mrs. Dawn',
+      title: 'Blending with a Tissue',
+      intro: 'Blend the tone with a tissue for a smoother, more realistic finish.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 5 of 5',
+      type: 'videoSegment',
+      videoId: '6c3dd3cd1d35439b765cd903c0c3b0d2',
+      videoNumber: 5,
+      videoTitle: 'Painting the Details',
+      stepName: 'Painting the Details',
+      teacher: 'Mrs. Dawn',
+      title: 'Painting the Details',
+      intro: 'Finish with the fine details that bring the drawing to life.',
       isCoreEnd: true,
       xp: 5
     },
@@ -5988,7 +6032,7 @@ function renderOpeningLFC(step) {
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0;">
-          Today we outline the shape first, then use light and dark to show its structure — no tone yet.
+          Today we build it up step by step — outline first, then light and dark structure, then tone and texture.
         </p>
       </div>
       
@@ -6973,7 +7017,7 @@ function demoPauseInLocalMode() {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 function renderVideoSegment(step) {
-  const partOf = `${step.videoNumber} of 2`;
+  const partOf = `${step.videoNumber} of 5`;
   const pauses = VIDEO_PAUSES[step.videoId] || [];
   const hasPauses = pauses.length > 0;
   
@@ -7143,7 +7187,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-text">${
           hasPauses
             ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
-            : 'Pause anytime if you need to catch up. This is a 2-video sequence — go at your own pace.'
+            : 'Pause anytime if you need to catch up. This is a 5-video sequence — go at your own pace.'
         }</div>
       </div>
 
@@ -8087,16 +8131,16 @@ function renderBadgeUnlocked(profileOrLead) {
       <!-- Next lesson teaser -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
-        <div class="lesson2-teaser-title">Part 2: Texture & Finish</div>
+        <div class="lesson2-teaser-title">Glass Cup and Bottle</div>
         <div class="lesson2-teaser-sub">
-          You outlined the balloon and found its light and dark structure. Next, you’ll add tone, blend with a tissue, and paint in the details.
+          You outlined the balloon and built it up with light, dark, tone, and texture to a finished drawing. Next: a new still life, starting with straight lines.
         </div>
         <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
 
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('still-life-1b-star-balloon-texture', '../still-life-1b-star-balloon-texture/')">
-          <span class="glyph">◈</span> Continue to Part 2 →
+        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('still-life-2a-glass-structure', '../still-life-2a-glass-structure/')">
+          <span class="glyph">◈</span> Continue to Glass Cup and Bottle →
         </button>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">
           ← Back to Art GPS home
