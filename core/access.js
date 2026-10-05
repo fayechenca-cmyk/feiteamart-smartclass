@@ -68,6 +68,16 @@
   const FREE_SKILLS = ['preparation', 'cube'];
   const FREE_CREATION_LIMIT = 2;
 
+  // Oct 2026 — Faye: two specific student codes (Coraline-12,
+  // Alicia-11) need narrower rules than the normal "legacy code = full
+  // access" bypass below gives every other code. This is a targeted
+  // per-user exception, NOT a general custom-permission framework —
+  // kept to this one short list, not a new account-tier concept.
+  // studentCode is stored uppercase (index.html's login flow does
+  // .trim().toUpperCase() before saving the profile), so this must be
+  // uppercase to match at runtime.
+  const RESTRICTED_LEGACY_CODES = ['CORALINE-12', 'ALICIA-11'];
+
   // Cache the access row so we don't hit Supabase on every nav.
   let _cache = null;
   let _cacheUserId = null;
@@ -107,10 +117,14 @@
   function _legacyProfileFlags() {
     try {
       const raw = global.sessionStorage.getItem('fei_user_profile');
-      if (!raw) return { isLiveClass: false, isAdmin: false };
+      if (!raw) return { isLiveClass: false, isAdmin: false, studentCode: null };
       const p = JSON.parse(raw);
-      return { isLiveClass: !!(p && p.isLiveClass), isAdmin: !!(p && p.isAdmin) };
-    } catch (e) { return { isLiveClass: false, isAdmin: false }; }
+      return {
+        isLiveClass: !!(p && p.isLiveClass),
+        isAdmin: !!(p && p.isAdmin),
+        studentCode: (p && p.studentCode) || null
+      };
+    } catch (e) { return { isLiveClass: false, isAdmin: false, studentCode: null }; }
   }
 
   async function _fetchOrCreateRow(userId) {
@@ -167,11 +181,13 @@
     // Legacy access-code students bypass everything
     if (_isLegacyAccessCode()) {
       const flags = _legacyProfileFlags();
+      const isRestricted = RESTRICTED_LEGACY_CODES.includes(flags.studentCode);
       return {
         membership: 'paid',
         membershipType: null,
         isLiveClass: flags.isLiveClass,
         isAdmin: flags.isAdmin,
+        studentCode: flags.studentCode,
         // True blanket "open every course, including new paid ones" —
         // admin always; a plain legacy code (no isLiveClass) always,
         // matching this platform's original "access code = paid" design;
@@ -179,8 +195,14 @@
         // live course instead (see canOpenLesson/attachSkillsLessonGuard's
         // separate isLiveClassStudent() override for that course) — NOT
         // a blanket pass on every other course a course file may check
-        // this field for (e.g. Zodiac).
-        hasFullAccess: flags.isAdmin || !flags.isLiveClass,
+        // this field for (e.g. Zodiac). Oct 2026: RESTRICTED_LEGACY_CODES
+        // (Coraline-12, Alicia-11) are the one exception to the "plain
+        // legacy code always" half of that rule — without this they'd
+        // get full Zodiac access as an accidental side effect of having
+        // no isLiveClass flag, contradicting the explicit requirement
+        // that they see Zodiac's normal default paywall like any other
+        // student.
+        hasFullAccess: flags.isAdmin || (!flags.isLiveClass && !isRestricted),
         openedCreationLessons: [],
         openedSkillLessons: [],
         isLegacy: true,
@@ -225,12 +247,25 @@
       return { allowed: false, reason: 'not_signed_in' };
     }
 
-    // Legacy code OR paid → everything open
-    if (status.isLegacy || status.membership === 'paid') {
+    // Oct 2026: RESTRICTED_LEGACY_CODES (Coraline-12, Alicia-11) must
+    // NOT hit the blanket "legacy code = everything open" bypass below
+    // — that is correct for every other legacy code (including
+    // DAWN-16/FAYE-00), but these two need the narrower per-branch
+    // rules further down instead. Falling through here is what lets
+    // their Foundation Step 1 exception (below) and the Creation cap
+    // actually apply to them.
+    const isRestrictedLegacy = status.isLegacy && RESTRICTED_LEGACY_CODES.includes(status.studentCode);
+
+    // Legacy code OR paid → everything open. !isRestrictedLegacy gates
+    // the WHOLE condition, not just the isLegacy half — status.membership
+    // is unconditionally 'paid' for every legacy profile regardless of
+    // which code it is, so without this a restricted code would still
+    // slip through via that second half of the OR.
+    if (!isRestrictedLegacy && (status.isLegacy || status.membership === 'paid')) {
       return { allowed: true, reason: 'full_access' };
     }
 
-    // Free user — apply branch rules
+    // Free user (or a restricted legacy code, above) — apply branch rules
     if (branch === 'skills') {
       if (FREE_SKILLS.includes(lessonId)) {
         return { allowed: true, reason: 'free_skills' };
