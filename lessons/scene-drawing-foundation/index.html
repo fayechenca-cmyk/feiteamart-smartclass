@@ -71,8 +71,7 @@ const SCENE_DRAWING_FOUNDATION_COURSE = {
     { title: 'Extreme Wide Shot', subtitle: 'Sometimes, the story is bigger than the character.', href: 'unit-01-shot-size/lesson-01-extreme-wide-shot/', courseId: 'extreme-wide-shot', stageCount: 8 },
     { title: 'Wide Shot', subtitle: 'Character + World, Together', href: 'unit-01-shot-size/lesson-02-wide-full-shot/', courseId: 'wide-full-shot', stageCount: 18 },
     { title: 'Medium Shot', subtitle: 'Show the Action', href: 'unit-01-shot-size/lesson-03-medium-shot/', courseId: 'medium-shot', stageCount: 17 },
-    { title: 'Close-Up', subtitle: 'The world gets smaller. The important details get bigger.', href: 'unit-01-shot-size/lesson-04-close-up/', courseId: 'close-up', stageCount: 13 },
-    { title: 'Extreme Close-Up', subtitle: 'An extreme close-up gets so close, one small detail fills the whole frame — and that makes it feel important.', href: 'unit-01-shot-size/lesson-05-extreme-close-up/', courseId: 'extreme-close-up', stageCount: 13 }
+    { title: 'Close-Up and Extreme Close-Up', subtitle: 'Five close-up stories. Three ways to move closer and reveal a detail.', href: 'unit-01-shot-size/lesson-04-close-up/', courseId: 'close-up-and-extreme-close-up', stageCount: 21 }
   ]
 };
 
@@ -85,7 +84,9 @@ function scdrLoadCompletedLessons() {
   try {
     const raw = sessionStorage.getItem('fei_user_profile');
     const profile = raw ? JSON.parse(raw) : null;
-    return (profile && profile.completedLessons) || [];
+    const done=[...((profile && profile.completedLessons) || [])];
+    if(done.includes('close-up')&&done.includes('extreme-close-up')&&!done.includes('close-up-and-extreme-close-up'))done.push('close-up-and-extreme-close-up');
+    return done;
   } catch (e) {
     return [];
   }
@@ -117,7 +118,7 @@ function renderSceneDrawingFoundationOverview(course) {
   }).join('');
   return `
     <section class="scene-journey-hero"><div><div class="scene-eyebrow">Your creative journey · Skill</div><h1>Scene Drawing Foundation</h1><p>${course.description}</p>${doneCount?`<a class="scene-start" href="${activeLesson.href}">Continue learning →</a>`:`<button class="scene-start" data-scene-intro>Start with the Intro →</button>`}</div><div class="scene-badge-goal">${badge.imgUrl?`<img src="${badge.imgUrl}" alt="Scene Drawing badge">`:`<span>${badge.emoji||'📖'}</span>`}<strong>Shot Sizes &amp; Framing</strong><small>Your Unit 01 badge goal<br>${doneCount}/${course.lessons.length} lessons completed</small></div></section>
-    <nav aria-label="Scene Drawing units" class="unit-map"><a href="#shot-sizes"><b>01 · Shot Sizes &amp; Framing</b><small>Choose what fits in the frame · 5 lessons</small></a><a href="#viewpoints"><b>02 · Viewpoints &amp; Perspective</b><small>Choose where to look from · 4 lessons</small></a><a href="#construction"><b>03 · Perspective Construction</b><small>Build the space · 2 lessons</small></a></nav>
+    <nav aria-label="Scene Drawing units" class="unit-map"><a href="#shot-sizes"><b>01 · Shot Sizes &amp; Framing</b><small>Choose what fits in the frame · 4 lessons</small></a><a href="#viewpoints"><b>02 · Viewpoints &amp; Perspective</b><small>Choose where to look from · 4 lessons</small></a><a href="#construction"><b>03 · Perspective Construction</b><small>Build the space · 2 lessons</small></a></nav>
     <section class="scene-current" id="shot-sizes"><div><div class="scene-eyebrow">UNIT 01 · SHOT SIZES &amp; FRAMING</div><h2>${doneCount===course.lessons.length?'Shot Size Complete':activeLesson.title}</h2><p>Intro → Shot size → Story action → Reflection</p></div><div class="scene-progress-copy"><b>${doneCount}/${course.lessons.length}</b><span>lessons completed</span></div><progress value="${doneCount}" max="${course.lessons.length}"></progress></section>
     <nav class="scene-road" aria-label="Scene Drawing course map"><button class="scene-stop intro-stop ${introSeen?'done':!introSeen?'current':''}" data-scene-intro><span class="scene-stop-icon">▶</span><span><em>${introSeen?'✓ WATCHED':'START HERE'}</em><b>Intro · What Is a Scene?</b><small>Begin with the course video before exploring shot size.</small></span></button>${lessonRoad}</nav>
     <section class="scene-current" id="viewpoints"><div><div class="scene-eyebrow">UNIT 02 · 4 LESSONS · CONCEPT PREVIEW</div><h2>Viewpoints &amp; Perspective</h2><p>Where is the camera? Build a simple story from eye level, below and above.</p><small id="viewpoints-practice-progress"></small><small>Intro · Point of View &amp; Perspective — teacher video coming later.</small></div><a class="scene-start" href="unit-02-viewpoints-perspective/">Explore the concept →</a></section>

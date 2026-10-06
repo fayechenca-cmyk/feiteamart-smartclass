@@ -57,7 +57,7 @@ window.COURSE_BADGE_REGISTRY = {
   // per whole course" instruction — Unit 02+ get their own badge entries
   // here later, this one doesn't get restructured when they're added.
   scene_drawing_unit_01: {
-    requiredIds: ['extreme-wide-shot', 'wide-full-shot', 'medium-shot', 'close-up', 'extreme-close-up']
+    requiredIds: ['extreme-wide-shot', 'wide-full-shot', 'medium-shot', 'close-up-and-extreme-close-up']
   },
 
   // Zodiac Brush Technique (Skill, internal review build) — badged per
@@ -140,7 +140,9 @@ window.getCourseBadgeProgress = function () {
     // and every badge here (not just this one) never auto-unlocked.
     const raw = sessionStorage.getItem('fei_user_profile');
     const profile = raw ? JSON.parse(raw) : null;
-    const completed = (profile && profile.completedLessons) || [];
+    const completed = [...((profile && profile.completedLessons) || [])];
+    // Preserve students who completed both original lessons before the merge.
+    if(completed.includes('close-up')&&completed.includes('extreme-close-up')&&!completed.includes('close-up-and-extreme-close-up'))completed.push('close-up-and-extreme-close-up');
 
     Object.keys(window.COURSE_BADGE_REGISTRY).forEach((badgeId) => {
       // requiredIds is usually a plain array, but can be a function that

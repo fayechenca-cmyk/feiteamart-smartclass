@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Close-Up</title>
+<title>Close-Up and Extreme Close-Up</title>
 <meta name="description" content="Scene Drawing Foundation, Unit 01 (Shot Size), Lesson 04: Close-Up.">
 
 <!--
@@ -63,7 +63,7 @@
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#1c1a22;
@@ -95,10 +95,10 @@
 *{box-sizing:border-box;}
 html,body{height:100%;}
 body{
-  margin:0;font-family:'Work Sans',sans-serif;background:var(--paper);color:var(--ink);
+  margin:0;font-family:'Open Sans',sans-serif;background:var(--paper);color:var(--ink);
   -webkit-tap-highlight-color:transparent;overflow-x:hidden;
 }
-.display{font-family:'Space Grotesk',sans-serif;}
+.display{font-family:'Montserrat',sans-serif;}
 button{font-family:inherit;}
 
 /* ============================================================
@@ -185,7 +185,7 @@ button{font-family:inherit;}
 .step-inner.dense{justify-content:flex-start;}
 
 .step-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:10px;}
-.step-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
+.step-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);text-align:center;margin:0 0 10px;color:var(--accent-deep);}
 .step-sub{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 auto 22px;line-height:1.6;max-width:520px;}
 
 /* ---- Continue dock (quiet, floats in only once a step is "done").
@@ -202,7 +202,7 @@ button{font-family:inherit;}
 .continue-btn{
   pointer-events:none;opacity:0;transform:translateY(10px);
   transition:opacity .35s ease,transform .35s ease;
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;
   padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
   box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
 }
@@ -237,7 +237,7 @@ button{font-family:inherit;}
    full height instead of clustering everything near the top. */
 .camera3d-term{
   position:absolute;left:50%;bottom:9%;transform:translate(-50%,8px);
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.35rem;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.35rem;
   color:var(--accent-deep);background:rgba(250,248,245,.92);padding:9px 22px;border-radius:999px;
   opacity:0;transition:opacity .6s ease,transform .6s ease;letter-spacing:.4px;white-space:nowrap;
   box-shadow:0 8px 20px rgba(28,26,34,.12);
@@ -255,7 +255,7 @@ button{font-family:inherit;}
   box-shadow:0 8px 20px rgba(28,26,34,.14);
 }
 .scene-question.show{opacity:1;transform:translate(-50%,0);}
-.scene-question-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.scene-question-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
 .scene-question-text{font-size:15px;font-weight:600;color:var(--accent-deep);line-height:1.4;}
 .scene-question-alt{font-size:12px;color:var(--ink-soft);margin-top:4px;}
 .scene-question-category{font-weight:600;color:var(--ink-soft);text-transform:none;letter-spacing:0;}
@@ -271,14 +271,14 @@ button{font-family:inherit;}
 .concept-moment-stage{width:min(100%, calc((100vh - 330px) * 16 / 9));min-width:min(100%,320px);margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(28,26,34,.22);}
 .concept-moment-fallback{display:flex;flex-direction:column;gap:10px;padding:8px 4px;}
 .concept-moment-fallback-row{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:14px 16px;font-size:15px;color:var(--accent-deep);line-height:1.45;}
-.concept-moment-fallback-row span{display:block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);margin-bottom:4px;}
+.concept-moment-fallback-row span{display:block;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);margin-bottom:4px;}
 .concept-moment-extra{max-width:640px;margin:16px auto 0;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;}
 .concept-moment-extra.show{opacity:1;transform:translateY(0);}
 .cu-line{font-size:14.5px;color:var(--accent-deep);text-align:center;line-height:1.55;margin-bottom:9px;}
 .cu-line-strong{font-weight:700;font-size:16.5px;}
 .cu-cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0;}
 .cu-cat-chip{background:var(--sb-panel,#faf7ee);border:1.5px solid var(--sb-ink,#3a352c);border-radius:10px;padding:8px 13px;text-align:center;min-width:88px;}
-.cu-cat-label{display:block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--sb-accent,#8a6a4a);margin-bottom:3px;}
+.cu-cat-label{display:block;font-family:'Montserrat',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--sb-accent,#8a6a4a);margin-bottom:3px;}
 .cu-cat-desc{font-size:10.5px;color:var(--sb-ink-soft,rgba(58,53,44,.62));line-height:1.35;}
 .cu-note{font-size:12px;color:var(--ink-soft);text-align:center;line-height:1.5;max-width:520px;margin:0 auto 6px;}
 
@@ -291,7 +291,7 @@ button{font-family:inherit;}
 .practice-two-panel{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
 @media(max-width:820px){.practice-two-panel{grid-template-columns:1fr;}}
 .practice-panel{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:18px 16px 20px;position:relative;}
-.practice-panel-label{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);text-align:center;margin-bottom:10px;}
+.practice-panel-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--sb-accent);text-align:center;margin-bottom:10px;}
 .practice-panel-hint{font-size:11.5px;color:var(--sb-ink-soft);text-align:center;line-height:1.5;margin:-2px 0 14px;}
 .practice-panel-teacher{padding:14px;}
 .practice-two-panel .practice-canvas-wrap{max-width:100%;}
@@ -302,7 +302,7 @@ button{font-family:inherit;}
 .practice-ref-note{text-align:center;font-size:11.5px;font-style:italic;color:var(--sb-ink-faint);line-height:1.45;margin-top:12px;}
 .video-tap-overlay{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;
   padding:16px 30px;border-radius:999px;border:none;cursor:pointer;
   background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
   box-shadow:0 10px 30px rgba(0,0,0,.35);
@@ -319,7 +319,7 @@ button{font-family:inherit;}
 
 /* Round 2 — two-card intro before Situation 1. */
 .intro-card{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:56vh;gap:6px;}
-.intro-card-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,2.9rem);color:var(--accent-deep);}
+.intro-card-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:clamp(1.9rem,6vw,2.9rem);color:var(--accent-deep);}
 .intro-card-line{font-size:16px;color:var(--ink-soft);max-width:480px;line-height:1.65;margin:0;}
 
 /* Round 2 — pre-scene reveal: "Situation N" + the situation line,
@@ -341,16 +341,16 @@ button{font-family:inherit;}
 .scene-reveal.gated .scene-reveal-title,.scene-reveal.gated .scene-reveal-line,.scene-reveal.gated .scene-reveal-countdown{display:none;}
 .scene-gate{display:flex;flex-direction:column;align-items:center;gap:14px;pointer-events:auto;max-width:460px;}
 .scene-gate[hidden]{display:none;}
-.scene-gate-kicker{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);padding:5px 14px;border-radius:999px;}
-.scene-gate-text{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(1.1rem,3.4vw,1.5rem);color:#fff;line-height:1.4;}
+.scene-gate-kicker{font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);padding:5px 14px;border-radius:999px;}
+.scene-gate-text{font-family:'Montserrat',sans-serif;font-weight:600;font-size:clamp(1.1rem,3.4vw,1.5rem);color:#fff;line-height:1.4;}
 .scene-gate-buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
-.scene-gate-btn{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;cursor:pointer;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;}
+.scene-gate-btn{font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:999px;cursor:pointer;border:2px solid rgba(255,255,255,.7);background:transparent;color:#fff;}
 .scene-gate-btn.primary{background:var(--accent);border-color:var(--accent);}
 .scene-gate-btn:active{transform:scale(.96);}
-.scene-reveal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,4.5vw,2rem);color:#fff;letter-spacing:.5px;min-height:1.2em;}
+.scene-reveal-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:clamp(1.3rem,4.5vw,2rem);color:#fff;letter-spacing:.5px;min-height:1.2em;}
 .scene-reveal-line{font-size:clamp(13px,2.6vw,16px);color:rgba(255,255,255,.86);max-width:560px;line-height:1.5;min-height:1.5em;}
 .scene-reveal-countdown{
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:3.2rem;color:var(--accent);
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:3.2rem;color:var(--accent);
   min-height:1.3em;
 }
 .scene-reveal-countdown.pulse{animation:sceneCountdownPulse .7s ease;}
@@ -389,7 +389,7 @@ button{font-family:inherit;}
 .teacher-overlay-frame.has-video::after{content:'▶';border:none;bottom:auto;right:auto;top:50%;left:50%;
   transform:translate(-50%,-50%);width:auto;height:auto;font-size:1.6rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);}
 .teacher-overlay-icon{font-size:1.7rem;filter:grayscale(1) contrast(.9);opacity:.7;}
-.teacher-overlay-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:.4px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:center;line-height:1.3;}
+.teacher-overlay-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;letter-spacing:.4px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);text-align:center;line-height:1.3;}
 @media(max-width:600px){.teacher-overlay{width:clamp(150px,44vw,220px);bottom:12px;}.teacher-overlay-label{font-size:11px;}}
 
 /* Round 2 layout, round 3 sizing/content — the lightbox itself now
@@ -425,13 +425,13 @@ button{font-family:inherit;}
 .teacher-lightbox-frame.has-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 .teacher-lightbox-video-tap{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;
   padding:14px 26px;border-radius:999px;border:none;cursor:pointer;
   background:rgba(28,26,34,.72);color:#fff;backdrop-filter:blur(6px);
   box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:2;
 }
 .teacher-lightbox-icon{font-size:2.6rem;filter:grayscale(1) contrast(.9);opacity:.6;}
-.teacher-lightbox-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--sb-ink);}
+.teacher-lightbox-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;color:var(--sb-ink);}
 .teacher-lightbox-disclaimer{font-size:12.5px;color:var(--sb-ink-soft);line-height:1.5;margin-top:8px;max-width:420px;margin-left:auto;margin-right:auto;}
 .teacher-lightbox-note{font-size:12px;color:var(--sb-ink-faint);margin-top:6px;font-style:italic;}
 
@@ -444,12 +444,12 @@ button{font-family:inherit;}
 ============================================================ */
 .concept-contrast{max-width:640px;margin:0 auto 26px;display:flex;flex-direction:column;gap:10px;}
 .concept-line{font-size:14px;line-height:1.55;padding:12px 16px;border-radius:10px;border:1.5px solid var(--line);}
-.concept-line-label{display:block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:3px;}
+.concept-line-label{display:block;font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:3px;}
 .concept-line-extreme{color:var(--ink-soft);background:rgba(28,26,34,.03);}
 .concept-line-extreme .concept-line-label{color:var(--ink-faint);}
 .concept-line-wide{color:var(--accent-deep);background:rgba(45,95,168,.06);border-color:rgba(45,95,168,.3);font-weight:600;}
 .concept-line-wide .concept-line-label{color:var(--accent);}
-.concept-refs-label{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;}
+.concept-refs-label{text-align:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px;}
 .lc-media-placeholder{display:flex;align-items:center;justify-content:center;background:var(--sb-paper);}
 .lc-placeholder-icon{font-size:1.8rem;opacity:.35;filter:grayscale(1);}
 .lc-card-placeholder{cursor:default;}
@@ -470,12 +470,12 @@ button{font-family:inherit;}
 .lc-media svg,.lc-img{width:100%;height:100%;display:block;object-fit:cover;}
 .lc-body{padding:12px 15px 15px;}
 .lc-cat{font-size:9.5px;font-weight:800;letter-spacing:1.6px;color:var(--sb-accent);margin-bottom:3px;}
-.lc-title{font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;color:var(--sb-ink);line-height:1.3;}
+.lc-title{font-family:'Montserrat',sans-serif;font-size:14.5px;font-weight:700;color:var(--sb-ink);line-height:1.3;}
 .lc-reveal{max-height:0;opacity:0;overflow:hidden;transition:max-height .28s ease,opacity .22s ease,margin-top .28s ease;}
 .lc-card:hover .lc-reveal,.lc-card:focus-within .lc-reveal,.lc-card.revealed .lc-reveal{max-height:96px;opacity:1;margin-top:9px;}
 .lc-observation{font-size:12px;color:var(--sb-ink-soft);line-height:1.5;margin-bottom:9px;}
 .lc-view-btn{
-  display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  display:inline-block;font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.4px;
   color:var(--sb-panel);background:var(--sb-ink);padding:6px 13px;border-radius:2px;text-decoration:none;
 }
 .lc-view-btn:hover{background:var(--sb-accent);}
@@ -489,7 +489,7 @@ button{font-family:inherit;}
    anything, at any viewport height. Confirmed by measuring the real
    gap after this change (not just eyeballing a screenshot). */
 .step-continue-inline{
-  display:block;margin:34px auto 30px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  display:block;margin:34px auto 30px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;
   padding:13px 28px;border-radius:999px;border:none;background:var(--accent);color:#fff;
   box-shadow:0 10px 28px rgba(28,26,34,.24);cursor:pointer;
 }
@@ -521,13 +521,13 @@ button{font-family:inherit;}
 .story-thumb::before{top:7px;left:7px;border-width:1.3px 0 0 1.3px;}
 .story-thumb::after{bottom:7px;right:7px;border-width:0 1.3px 1.3px 0;}
 .story-card-body{padding:18px 20px;display:flex;flex-direction:column;flex:1;}
-.story-card-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.02rem;line-height:1.4;color:var(--ink);margin-bottom:16px;flex:1;}
+.story-card-title{font-family:'Montserrat',sans-serif;font-weight:600;font-size:1.02rem;line-height:1.4;color:var(--ink);margin-bottom:16px;flex:1;}
 .story-choose-btn{
   align-self:flex-start;font-weight:700;font-size:12.5px;padding:9px 18px;border-radius:999px;
   border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
 }
 .story-choose-btn:active{transform:scale(.95);}
-.story-card-optional{display:inline-block;vertical-align:middle;margin-left:6px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sb-accent);border:1.5px solid var(--sb-accent);border-radius:999px;padding:2px 8px;}
+.story-card-optional{display:inline-block;vertical-align:middle;margin-left:6px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sb-accent);border:1.5px solid var(--sb-accent);border-radius:999px;padding:2px 8px;}
 .story-card.picked{border-color:var(--sb-accent);}
 .story-card.picked .story-choose-btn{background:var(--accent);border-color:var(--accent-deep);color:#fff;}
 
@@ -548,7 +548,7 @@ button{font-family:inherit;}
 .draw-canvas-wrap::after{bottom:9px;right:9px;border-width:0 1.5px 1.5px 0;}
 .dstage{transition:opacity .5s ease;}
 .draw-caption{
-  text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;
+  text-align:center;font-family:'Montserrat',sans-serif;font-weight:600;font-size:1.05rem;
   color:var(--accent-deep);margin:18px auto 2px;min-height:1.6em;
 }
 /* Round 2 addition — a short second line explaining the actual
@@ -616,9 +616,9 @@ button{font-family:inherit;}
 .compare-grid-single{grid-template-columns:1fr;max-width:280px;margin-left:auto;margin-right:auto;}
 .compare-card{background:var(--sb-panel);border:1.5px dashed var(--sb-ink-faint);border-radius:4px;padding:26px 16px;text-align:center;}
 .compare-card-icon{font-size:1.8rem;filter:grayscale(1) contrast(.9);opacity:.75;}
-.compare-card-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.95rem;color:var(--sb-ink);margin-top:8px;}
+.compare-card-label{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.95rem;color:var(--sb-ink);margin-top:8px;}
 .compare-card-note{font-size:11px;color:var(--sb-ink-faint);margin-top:4px;}
-.compare-message{text-align:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-deep);margin:26px auto 32px;max-width:420px;line-height:1.5;}
+.compare-message{text-align:center;font-family:'Montserrat',sans-serif;font-weight:600;font-size:1.05rem;color:var(--accent-deep);margin:26px auto 32px;max-width:420px;line-height:1.5;}
 
 /* ---- Round 2 addition: "your own reference" card (shows the saved
    Step 6 practice drawing if there is one, otherwise an upload
@@ -632,7 +632,7 @@ button{font-family:inherit;}
 .community-kicker{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);text-align:center;font-weight:700;margin-bottom:8px;}
 .community-lead{font-size:12.5px;color:var(--ink-soft);text-align:center;line-height:1.55;max-width:420px;margin:0 auto 18px;}
 .own-work-card{background:var(--sb-panel);border:1.5px solid var(--sb-ink);border-radius:4px;padding:20px 16px;text-align:center;margin-bottom:8px;}
-.own-work-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.92rem;color:var(--sb-ink);margin-bottom:12px;}
+.own-work-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.92rem;color:var(--sb-ink);margin-bottom:12px;}
 .own-work-img{max-width:220px;width:100%;border-radius:2px;border:1.5px solid var(--sb-ink-faint);display:block;margin:0 auto;}
 .upload-dropzone{
   /* <label> is inline by default — its dashed border fragmented into a
@@ -647,7 +647,7 @@ button{font-family:inherit;}
 .upload-dropzone-icon{font-size:1.6rem;filter:grayscale(1);opacity:.7;}
 .upload-dropzone-label{font-size:12px;color:var(--sb-ink-soft);margin-top:6px;}
 .gallery-section{margin-top:22px;}
-.gallery-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--sb-ink);text-align:center;margin-bottom:4px;}
+.gallery-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.05rem;color:var(--sb-ink);text-align:center;margin-bottom:4px;}
 .gallery-subtitle{font-size:12px;color:var(--sb-ink-faint);text-align:center;margin-bottom:16px;}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
 @media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}}
@@ -678,7 +678,7 @@ button{font-family:inherit;}
 }
 .check-chip.picked{border-color:var(--accent);background:rgba(45,95,168,.08);color:var(--accent-deep);}
 .complete-btn{
-  display:block;margin:26px auto 0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
+  display:block;margin:26px auto 0;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;
   padding:14px 30px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;
   box-shadow:0 10px 26px rgba(28,26,34,.2);
 }
@@ -697,7 +697,7 @@ button{font-family:inherit;}
 }
 .next-lesson-card:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(28,26,34,.12);}
 .next-lesson-kicker{font-size:10px;font-weight:800;letter-spacing:1.6px;color:var(--accent);text-transform:uppercase;}
-.next-lesson-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-deep);margin-top:4px;}
+.next-lesson-title{font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.05rem;color:var(--accent-deep);margin-top:4px;}
 .next-lesson-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
 /* Badge card — adapted from core/scene-drawing-style.css's own
    .course-badge-card (same class names, same real renderCourseBadgeCard()
@@ -710,7 +710,7 @@ button{font-family:inherit;}
 .course-badge-emoji{font-size:32px;flex-shrink:0;opacity:.5;}
 .course-badge-emoji.unlocked{opacity:1;}
 .course-badge-info{flex:1;text-align:left;}
-.course-badge-name{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px;}
+.course-badge-name{font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:800;color:var(--ink);margin-bottom:2px;}
 .course-badge-meta{font-size:11px;color:var(--ink-muted);}
 .course-badge-progress-bar{height:5px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden;}
 .course-badge-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--accent));border-radius:3px;}
@@ -726,7 +726,7 @@ button{font-family:inherit;}
 .artchi-mascot.awake{animation:artchiBreathe 3s ease-in-out infinite;}
 .artchi-mascot.excited{animation:artchiBounce .6s ease-in-out 3;}
 .artchi-mascot.sleep .artchi-eye{transform:scaleY(.1);transform-origin:center;}
-.artchi-mascot.sleep::after{content:'z';position:absolute;top:-4px;right:-6px;font-size:16px;color:var(--ink-muted);font-weight:900;animation:artchiZzz 2s ease-in-out infinite;font-style:italic;font-family:'Space Grotesk',sans-serif;}
+.artchi-mascot.sleep::after{content:'z';position:absolute;top:-4px;right:-6px;font-size:16px;color:var(--ink-muted);font-weight:900;animation:artchiZzz 2s ease-in-out infinite;font-style:italic;font-family:'Montserrat',sans-serif;}
 .artchi-mascot.hidden{display:none;}
 .artchi-mascot.awake::before{content:'';position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.18) 0%,transparent 70%);z-index:-1;animation:artchiHalo 2.8s ease-in-out infinite;pointer-events:none;}
 @keyframes artchiHalo{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.85;transform:scale(1.1);}}
@@ -748,31 +748,31 @@ button{font-family:inherit;}
 .artchi-bubble.show{display:block;animation:artchiBubblePop .3s ease;}
 .artchi-bubble-close{position:absolute;top:3px;right:7px;color:var(--ink-muted);font-size:12px;cursor:pointer;font-weight:800;pointer-events:auto;}
 @keyframes artchiBubblePop{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
-.artchi-label{position:fixed;right:20px;bottom:2px;background:var(--purple);color:#fff;padding:4px 10px;border-radius:11px;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:.5px;z-index:61;pointer-events:none;box-shadow:0 4px 14px rgba(167,139,250,.4);white-space:nowrap;transition:opacity .3s ease;}
+.artchi-label{position:fixed;right:20px;bottom:2px;background:var(--purple);color:#fff;padding:4px 10px;border-radius:11px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:800;letter-spacing:.5px;z-index:61;pointer-events:none;box-shadow:0 4px 14px rgba(167,139,250,.4);white-space:nowrap;transition:opacity .3s ease;}
 .artchi-label.hidden{display:none;}
 .artchi-label.muted{opacity:0;visibility:hidden;}
 .artchi-onboard-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
 .artchi-onboard-backdrop.show{display:flex;animation:artchiFadeIn .35s ease;}
 .artchi-onboard-card{background:#fff;border-radius:var(--radius-lg);padding:26px 22px;max-width:280px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:artchiSlideUp .4s ease;}
 .artchi-onboard-svg-wrap{margin:0 auto 12px;width:76px;}
-.artchi-onboard-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.artchi-onboard-title{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .artchi-onboard-sub{font-size:12px;color:var(--ink-soft);margin-bottom:4px;}
 @keyframes artchiFadeIn{from{opacity:0;}to{opacity:1;}}
 @keyframes artchiSlideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .artchi-chat{display:none;position:fixed;bottom:18px;right:18px;width:calc(100vw - 36px);max-width:300px;background:#fff;border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,.18);z-index:200;overflow:hidden;border:.5px solid var(--border);}
 .artchi-chat.show{display:block;animation:artchiSlideUp .35s ease;}
 .artchi-chat-head{padding:13px 15px;background:linear-gradient(135deg,var(--ink) 0%,#374151 100%);color:#fff;display:flex;justify-content:space-between;align-items:center;}
-.artchi-chat-head-info b{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;}
-.artchi-chat-head-info span{font-family:'Space Grotesk',sans-serif;font-size:9px;color:#67e8f9;letter-spacing:1px;text-transform:uppercase;display:block;margin-top:2px;}
+.artchi-chat-head-info b{font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:700;}
+.artchi-chat-head-info span{font-family:'Montserrat',sans-serif;font-size:9px;color:#67e8f9;letter-spacing:1px;text-transform:uppercase;display:block;margin-top:2px;}
 .artchi-chat-close{color:rgba(255,255,255,.7);font-size:19px;font-weight:700;cursor:pointer;padding:2px 8px;}
 .artchi-chat-body{padding:13px;max-height:200px;overflow-y:auto;background:var(--paper);}
 .artchi-msg{padding:9px 11px;border-radius:var(--radius-sm);font-size:11.5px;line-height:1.5;margin-bottom:7px;max-width:85%;}
 .artchi-msg.bot{background:#fff;color:var(--ink);border-left:3px solid var(--accent);}
 .artchi-msg.user{background:var(--ink);color:#fff;margin-left:auto;}
 .artchi-chat-input-wrap{display:flex;gap:6px;padding:9px 11px;border-top:.5px solid var(--border);background:#fff;}
-.artchi-chat-input{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'Work Sans',sans-serif;font-size:11.5px;outline:none;}
+.artchi-chat-input{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'Open Sans',sans-serif;font-size:11.5px;outline:none;}
 .artchi-chat-input:focus{border-color:var(--ink);}
-.artchi-chat-send{padding:8px 11px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;letter-spacing:.6px;text-transform:uppercase;}
+.artchi-chat-send{padding:8px 11px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--ink);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;cursor:pointer;letter-spacing:.6px;text-transform:uppercase;}
 @media(min-width:640px){
   .artchi-mascot{width:76px;height:76px;right:24px;bottom:24px;}
   .artchi-bubble{right:26px;bottom:112px;max-width:220px;}
@@ -794,12 +794,12 @@ button{font-family:inherit;}
 .journey-close{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--paper);border:.5px solid var(--line);color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:2;}
 .journey-close:hover{background:var(--ink);color:#fff;transform:rotate(90deg);}
 .journey-hero{text-align:center;margin-bottom:18px;padding:0 4px;}
-.journey-kicker{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:5px 12px;border-radius:20px;margin-bottom:12px;}
-.journey-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.journey-kicker{display:inline-block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent-deep);background:rgba(45,95,168,.08);padding:5px 12px;border-radius:20px;margin-bottom:12px;}
+.journey-title{font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:6px;}
 .journey-subtitle{font-size:12px;color:var(--ink-soft);line-height:1.5;font-style:italic;}
 .journey-stats{display:flex;gap:10px;justify-content:center;margin-bottom:20px;padding:14px 12px;background:linear-gradient(135deg,#e7f4ec 0%,#fbf0c7 100%);border-radius:var(--radius-md);}
 .journey-stat{text-align:center;flex:1;}
-.journey-stat-number{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
+.journey-stat-number{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:2px;}
 .journey-stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);}
 .journey-timeline{display:flex;flex-direction:column;gap:12px;}
 .journey-empty{text-align:center;padding:28px 16px;color:var(--ink-faint);font-size:13px;font-style:italic;line-height:1.6;}
@@ -817,6 +817,8 @@ button{font-family:inherit;}
 .journey-entry-delete:hover{opacity:1;color:#c0392b;background:#fee;}
 @media(max-width:520px){.journey-modal{padding:22px 16px 18px;}.journey-title{font-size:1.15rem;}.journey-stat-number{font-size:20px;}}
 </style>
+<link rel="stylesheet" href="closeup-visuals.css">
+<script src="closeup-visuals.js"></script>
 </head>
 <body>
 
@@ -945,11 +947,16 @@ const STORY_SCENE_STEPS = LESSON_DATA.story_scenes.flatMap((s, i) => [
     afterRender: () => afterRenderStoryDraw(s, i)
   }
 ]);
+const EXTREME_STEPS = CloseupVisuals.comparisons.flatMap((story, i) => [
+ { id:'compare_'+story.id, render:()=>CloseupVisuals.compare(i), afterRender:()=>{CloseupVisuals.mountComparison(i);showContinue('Draw this detail →',nextStep)} },
+ { id:'draw_'+story.id, render:()=>renderStoryDraw(story,i+5), afterRender:()=>afterRenderStoryDraw(story,i+5) }
+]);
 const STEPS = [
   { id:'closeup_concept',    render:renderCloseupConcept,       afterRender:afterRenderCloseupConcept, cleanup:cleanupCloseupConcept },
   { id:'scenes_intro_title', render:renderScenesIntroTitle,     afterRender:afterRenderScenesIntroTitle },
   { id:'scenes_intro_explain', render:renderScenesIntroExplain, afterRender:afterRenderScenesIntroExplain },
   ...STORY_SCENE_STEPS,
+  ...EXTREME_STEPS,
   { id:'artwork_community',  render:renderTeacherCommunity,     afterRender:afterRenderTeacherCommunity },
   { id:'complete',           render:renderComplete }
 ];
@@ -1007,6 +1014,7 @@ function markLessonComplete(){
     if (!profile.completedLessons.includes(LESSON_DATA.courseId)) {
       profile.completedLessons.push(LESSON_DATA.courseId);
     }
+    ['close-up-and-extreme-close-up','close-up','extreme-close-up'].forEach(id=>{if(!profile.completedLessons.includes(id))profile.completedLessons.push(id)});
     sessionStorage.setItem('fei_user_profile', JSON.stringify(profile));
   } catch (e) { console.warn('[markLessonComplete] failed', e); }
 }
@@ -1378,7 +1386,7 @@ function buildTextSign(text, w, h, opts) {
   ctx.lineWidth = 10;
   ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
   ctx.fillStyle = opts.color || '#3a352c';
-  ctx.font = `bold ${Math.round(canvas.height * 0.34)}px 'Space Grotesk', sans-serif`;
+  ctx.font = `bold ${Math.round(canvas.height * 0.34)}px 'Montserrat', sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -1870,1051 +1878,12 @@ function closeTeacherLightbox() {
 }
 
 function renderStoryScene(sceneData, sceneIndex) {
-  const side = 'right'; // Close-Up: the Quick Sketch Reference is always bottom-right, per the brief
-  return `
-    <div class="step-inner bleed">
-      <div class="camera3d-stage" id="camera3dStage">
-        <div class="scene-reveal" id="sceneReveal">
-          <div class="scene-reveal-title" id="sceneRevealTitle"></div>
-          <div class="scene-reveal-line" id="sceneRevealLine"></div>
-          <div class="scene-reveal-countdown" id="sceneRevealCountdown"></div>
-          <div class="scene-gate" id="sceneTip" hidden>
-  <div class="scene-gate-kicker">Tip for Situation ${sceneIndex + 1}${sceneData.category ? ' · ' + sceneData.category : ''}</div>
-            <div class="scene-gate-text">${sceneData.tip}</div>
-            <div class="scene-gate-buttons">
-              <button class="scene-gate-btn primary" id="sceneTipGo">Show me the story →</button>
-            </div>
-          </div>
-        </div>
-        <div class="scene-question" id="sceneQuestion">
-          <div class="scene-question-title">${sceneData.title}${sceneData.category ? ' <span class="scene-question-category">— ' + sceneData.category + '</span>' : ''}</div>
-          <div class="scene-question-text">${sceneData.framing}</div>
-          <div class="scene-question-alt">Tip: ${sceneData.tip}</div>
-        </div>
-        ${renderTeacherOverlay(sceneData, side)}
-      </div>
-    </div>
-  `;
+  return CloseupVisuals.scene(sceneData, sceneIndex);
 }
-async function afterRenderStoryScene(sceneData, sceneIndex) {
-  const stageEl = document.getElementById('camera3dStage');
-  const questionEl = document.getElementById('sceneQuestion');
-  const teacherOverlayEl = document.getElementById('teacherOverlay');
-  const revealEl = document.getElementById('sceneReveal');
-  const revealTitleEl = document.getElementById('sceneRevealTitle');
-  const revealLineEl = document.getElementById('sceneRevealLine');
-  const countdownEl = document.getElementById('sceneRevealCountdown');
-  _sceneRevealTimers = []; // fresh set for this scene; cleanupStoryScene clears whatever's pending on the way out
-
-  const situationNum = sceneIndex + 1;
-  function startReveal() {
-    revealEl.classList.remove('gated');
-    typewriterInto(revealTitleEl, 'Situation ' + situationNum, 55, _sceneRevealTimers, () => {
-      _sceneRevealTimers.push(setTimeout(() => {
-        playSuspenseSound(2400);
-        typewriterInto(revealLineEl, 'Situation ' + situationNum + ': ' + sceneData.situationLine, 24, _sceneRevealTimers, () => {
-          _sceneRevealTimers.push(setTimeout(() => {
-            runRevealCountdown(countdownEl, _sceneRevealTimers, () => {
-              _sceneRevealTimers.push(setTimeout(mountScene, 300));
-            });
-          }, 450));
-        });
-      }, 350));
-    });
-  }
-  // Flow: TIP card -> "Situation N" reveal chain -> 3D scene -> Quick
-  // Sketch Reference overlay. The tip waits for the student (no
-  // auto-advance) so they can read it at their own pace before the
-  // story appears.
-  const tipEl = document.getElementById('sceneTip');
-  function showTip() {
-    revealEl.classList.add('gated');
-    tipEl.hidden = false;
-    document.getElementById('sceneTipGo').onclick = () => {
-      tipEl.hidden = true;
-      startReveal();
-    };
-  }
-  showTip();
-
-  async function mountScene() {
-    revealEl.classList.add('hide');
-    try {
-      await loadThreeJs();
-    } catch (e) {
-      console.warn('[story_scene] Three.js failed to load', e);
-      if (!document.getElementById('camera3dStage')) return;
-      stageEl.insertAdjacentHTML('beforeend', `<div class="camera3d-fallback">This scene couldn't load (a required script failed — check your connection and reload). ${sceneData.title}: ${sceneData.framing}</div>`);
-      questionEl.classList.add('show');
-      showContinue('Continue →', nextStep);
-      return;
-    }
-    if (!document.getElementById('camera3dStage')) return; // step already left mid-reveal
-
-    const stage = createThreeStage(stageEl);
-    const build = SCENE3D_BUILDERS[sceneData.sceneKey];
-    const camCfg = build ? build(stage) : null;
-    const start = (camCfg && camCfg.start) || { pos: { x: 0, y: 4, z: 8 }, look: { x: 0, y: 1, z: 0 } };
-    let settle = (camCfg && camCfg.settle) || { pos: { x: 0, y: 2.6, z: 5 }, look: { x: 0, y: 1, z: 0 } };
-    if (camCfg && camCfg.focusX != null && stage.camera.aspect < 1) {
-      // Portrait: the storyboard's off-centre framing would crop the person out — re-centre on them.
-      const dx = camCfg.focusX - settle.look.x;
-      settle = { pos: { x: settle.pos.x + dx, y: settle.pos.y, z: settle.pos.z }, look: { x: settle.look.x + dx, y: settle.look.y, z: settle.look.z } };
-    }
-    stage.camera.position.set(start.pos.x, start.pos.y, start.pos.z);
-    stage.camera.lookAt(start.look.x, start.look.y, start.look.z);
-
-    requestAnimationFrame(() => {
-      _sceneRevealTimers.push(setTimeout(() => {
-        if (!stage.state.alive) return;
-        animateCameraTo(stage, start.pos, settle.pos, start.look, settle.look, 3200, () => {
-          questionEl.classList.add('show');
-          if (teacherOverlayEl) teacherOverlayEl.classList.add('show');
-          ensureArtchiMounted();
-          showContinue('Continue →', nextStep);
-        });
-      }, 300));
-    });
-
-    _active3DStage = stage;
-  }
+function afterRenderStoryScene() {
+  ensureArtchiMounted();
+  showContinue('Now sketch this Close-Up →', nextStep);
 }
-
-
-// ---- Close-Up scene builders --------------------------------------------
-// Each builder populates stage.scene and returns {start,settle}: `start` is
-// a somewhat-wider pull-back and `settle` is the actual close-up framing
-// the camera pushes into. Composition follows Faye's hand-drawn six-panel
-// storyboard sheet (reference-images/lesson04-close-up-storyboard-
-// reference.png) — its panels are already labeled with each story's exact
-// title/category in written order, so each builder below follows its
-// matching panel directly, no mapping ambiguity. Every scene keeps a
-// faint trace of its environment (fog + a couple of simple background
-// props) behind the close-up subject — never a blank backdrop, per
-// Faye's "quieter, not gone" rule — see each builder's own comment for
-// what that trace is.
-
-function dimSceneLights(stage, ambient, sun, fill) {
-  stage.scene.traverse(o => {
-    if (!o.isLight) return;
-    if (o.isAmbientLight) o.intensity *= ambient;
-    else if (o.isDirectionalLight && o.position.x < 0) o.intensity *= sun;
-    else if (o.isDirectionalLight) o.intensity *= fill;
-  });
-}
-function setBackdrop(stage, colorHex, fogNear, fogFar) {
-  stage.scene.background = new THREE.Color(colorHex);
-  stage.scene.fog = new THREE.Fog(colorHex, fogNear, fogFar);
-}
-function glow3(r, color) {
-  return new THREE.Mesh(new THREE.SphereGeometry(r, 12, 10), new THREE.MeshBasicMaterial({ color: color, fog: false }));
-}
-function glowBox3(w, h, d, color) {
-  return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshBasicMaterial({ color: color, fog: false }));
-}
-function glassPane3(w, h, color, opacity) {
-  return new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.02),
-    new THREE.MeshStandardMaterial({ color: color, transparent: true, opacity: opacity, roughness: 0.08, metalness: 0.1, depthWrite: false }));
-}
-
-// ---- A close-up hand/finger rig -------------------------------------
-// The standard buildKid() rig's hand is a single sphere — fine at Wide/
-// Medium distance, but every story this lesson frames is close enough
-// that a bare sphere would read as wrong. This is a small stand-alone
-// hand (wrist at local origin, palm/fingers extending along +Z) built
-// from the same primitive toolkit, reused across four of the six
-// scenes. curl/thumbCurl (poseHand) are the only pose knobs — plenty for
-// "gripping," "reaching," "open," at this scale.
-function buildHandProp(skin) {
-  const g = new THREE.Group();
-  // Round 5 (Sept 2026, per Faye): the flat box palm + uniform-radius
-  // finger cylinders read as blocky/geometric at close-up range across
-  // three stories (Unlocking the Door, Glass of Water, and by extension
-  // every other scene sharing this rig). Fixed here once, component-
-  // level, instead of patching each scene: a domed palm mound for real
-  // volume instead of a flat card, a visible knuckle bump at each
-  // finger's base pivot, and a clearer base-to-tip taper.
-  const palm = box3(0.1, 0.034, 0.11, skin, { roughness: 0.55 });
-  palm.position.set(0, 0, 0.055);
-  g.add(palm);
-  const palmMound = sphere3(0.052, skin, 14, 10, { roughness: 0.55 });
-  palmMound.scale.set(1, 0.42, 0.92);
-  palmMound.position.set(0, 0.016, 0.05);
-  g.add(palmMound);
-  const backRidge = box3(0.09, 0.014, 0.09, skin, { roughness: 0.55 });
-  backRidge.position.set(0, 0.021, 0.05);
-  g.add(backRidge);
-  const fingerDefs = [
-    { x: -0.038, len: 0.05 },
-    { x: -0.013, len: 0.06 },
-    { x: 0.013, len: 0.064 },
-    { x: 0.038, len: 0.056 }
-  ];
-  const fingers = fingerDefs.map(fd => {
-    const knuckle = new THREE.Group();
-    knuckle.position.set(fd.x, 0.006, 0.108);
-    const knuckleBump = sphere3(0.0115, skin, 8, 6);
-    knuckle.add(knuckleBump);
-    const seg1 = cyl3(0.0115, 0.0095, fd.len * 0.55, skin, 8);
-    seg1.position.z = fd.len * 0.55 / 2;
-    seg1.rotation.x = Math.PI / 2;
-    knuckle.add(seg1);
-    const mid = new THREE.Group();
-    mid.position.z = fd.len * 0.55;
-    const midBump = sphere3(0.0088, skin, 8, 6);
-    mid.add(midBump);
-    const seg2 = cyl3(0.0088, 0.007, fd.len * 0.45, skin, 8);
-    seg2.position.z = fd.len * 0.45 / 2;
-    seg2.rotation.x = Math.PI / 2;
-    mid.add(seg2);
-    const tip = sphere3(0.0075, skin, 8, 6);
-    tip.position.z = fd.len * 0.45;
-    mid.add(tip);
-    knuckle.add(mid);
-    g.add(knuckle);
-    return { pivot: knuckle, midPivot: mid };
-  });
-  // Thumb now has two segments + its own mid-joint, matching the
-  // fingers' articulation — previously a single rigid cylinder, which
-  // read noticeably stiffer/blockier than the fingers next to it,
-  // especially when curled for a grip.
-  const thumbPivot = new THREE.Group();
-  thumbPivot.position.set(0.05, -0.006, 0.036);
-  thumbPivot.rotation.y = -0.9;
-  thumbPivot.rotation.z = 0.4;
-  const thumbBump = sphere3(0.013, skin, 8, 6);
-  thumbPivot.add(thumbBump);
-  const thumbSeg1 = cyl3(0.0125, 0.0105, 0.026, skin, 8);
-  thumbSeg1.position.z = 0.013;
-  thumbSeg1.rotation.x = Math.PI / 2;
-  thumbPivot.add(thumbSeg1);
-  const thumbMid = new THREE.Group();
-  thumbMid.position.z = 0.026;
-  const thumbMidBump = sphere3(0.0098, skin, 8, 6);
-  thumbMid.add(thumbMidBump);
-  const thumbSeg2 = cyl3(0.0098, 0.008, 0.024, skin, 8);
-  thumbSeg2.position.z = 0.012;
-  thumbSeg2.rotation.x = Math.PI / 2;
-  thumbMid.add(thumbSeg2);
-  const thumbTip = sphere3(0.0085, skin, 8, 6);
-  thumbTip.position.z = 0.024;
-  thumbMid.add(thumbTip);
-  thumbPivot.add(thumbMid);
-  g.add(thumbPivot);
-  const wrist = cyl3(0.032, 0.036, 0.09, skin, 10);
-  wrist.position.set(0, 0, -0.04);
-  wrist.rotation.x = Math.PI / 2;
-  g.add(wrist);
-  g.userData.fingers = fingers;
-  g.userData.thumbPivot = thumbPivot;
-  g.userData.thumbMid = thumbMid;
-  return g;
-}
-// curl is usually one number applied to all four fingers (unchanged
-// behavior for every existing call site), but can be an array of 4
-// per-finger values instead — needed for poses like "thumb and index
-// grip something, the other two fingers stay loose," which a single
-// shared curl can't express. thumbCurl now also drives the thumb's new
-// mid-joint (see buildHandProp), at a slightly steeper angle so it
-// doesn't uncurl stiffly straight the way a single joint would.
-function poseHand(hand, curl, thumbCurl) {
-  hand.userData.fingers.forEach((f, i) => {
-    const c = Array.isArray(curl) ? curl[i] : curl;
-    f.pivot.rotation.x = c;
-    f.midPivot.rotation.x = c * 1.15;
-  });
-  if (thumbCurl != null) {
-    hand.userData.thumbPivot.rotation.x = thumbCurl;
-    if (hand.userData.thumbMid) hand.userData.thumbMid.rotation.x = thumbCurl * 1.1;
-  }
-}
-// Orients a hand by two DIRECTION VECTORS instead of Euler angles (which
-// fought each other badly here — a Y rotation alone can't change which
-// side faces the camera). reachDir is where the fingers point (the
-// rig's local +Z); palmDir is where the palm/grip side faces (the rig's
-// local -Y). The two need only be roughly perpendicular; this
-// orthonormalizes palmDir against reachDir and derives the third axis,
-// then builds a rotation matrix from that basis — exact, no guessing.
-function orientHand(hand, reachDir, palmDir) {
-  const z = reachDir.clone().normalize();
-  let negY = palmDir.clone().normalize();
-  negY = negY.sub(z.clone().multiplyScalar(negY.dot(z)));
-  if (negY.lengthSq() < 1e-6) negY.set(0, 1, 0).sub(z.clone().multiplyScalar(z.y));
-  negY.normalize();
-  const y = negY.clone().negate();
-  const x = new THREE.Vector3().crossVectors(y, z).normalize();
-  hand.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, y, z));
-}
-// A forearm sleeve, added as a CHILD of the hand so it always follows
-// the hand's orientHand()-derived rotation instead of needing its own
-// independently-matched Euler angles.
-function attachForearm(hand, color, len) {
-  len = len || 0.4;
-  const arm = cyl3(0.038, 0.045, len, color, 10);
-  arm.rotation.x = Math.PI / 2;
-  arm.position.z = -len / 2 - 0.05;
-  hand.add(arm);
-  return arm;
-}
-
-// A simple stylized sneaker — sole, upper, toe cap, laces, heel — for
-// the Walking Feet scene, where the standard rig's tiny shoe box isn't
-// enough presence at this range. toeColor is optional (per Faye, Round
-// 5): when omitted, behaves exactly as before (toe cap same color as
-// the body) for every existing call site (background shoes here, and
-// the small background pair in the Secret Note scene). Only the
-// foreground shoe below passes a contrasting toeColor — without one,
-// body+toe+heel were all the same solid color with no seam between
-// them, so the whole shoe read as one undifferentiated blob rather
-// than a shoe with visible parts.
-function buildShoe3(color, scale, toeColor) {
-  scale = scale || 1;
-  toeColor = toeColor != null ? toeColor : color;
-  const g = new THREE.Group();
-  const sole = box3(0.13, 0.03, 0.27, 0xf0ece0, { roughness: 0.75 });
-  sole.position.y = 0.015;
-  g.add(sole);
-  const body = box3(0.125, 0.08, 0.18, color);
-  body.position.set(0, 0.07, -0.035);
-  g.add(body);
-  // Round 5 (per Faye): a sphere toe cap, at any angle/size tried,
-  // read as a separate ball glued onto the body rather than part of
-  // the shoe. This whole lesson's other props (lockers, table, desk)
-  // are all flat-shaded boxes, so a toeColor BOX flush against the
-  // body's own cross-section — same width/height, just a different
-  // color, no shape mismatch to reconcile — reads immediately as a
-  // two-tone sneaker toe instead. A small, mostly-embedded sphere at
-  // the very front adds just a hint of rounding without becoming its
-  // own dominant shape again.
-  const toeCap = box3(0.127, 0.079, 0.095, toeColor);
-  toeCap.position.set(0, 0.07, 0.095);
-  g.add(toeCap);
-  const toeRound = sphere3(0.046, toeColor, 12, 8);
-  toeRound.scale.set(1.0, 0.5, 0.4);
-  toeRound.position.set(0, 0.05, 0.135);
-  g.add(toeRound);
-  // A thin seam between body and toe cap — visible even when the two
-  // are the same color, but especially useful now that they can differ.
-  const seam = box3(0.129, 0.082, 0.01, 0x000000, { roughness: 0.9 });
-  seam.material.transparent = true; seam.material.opacity = 0.35;
-  seam.position.set(0, 0.07, 0.048);
-  g.add(seam);
-  for (let i = 0; i < 3; i++) {
-    const lace = box3(0.086, 0.009, 0.013, 0xffffff);
-    lace.position.set(0, 0.105, -0.02 + i * 0.035);
-    g.add(lace);
-  }
-  const heel = box3(0.1, 0.055, 0.07, color);
-  heel.position.set(0, 0.05, -0.1);
-  g.add(heel);
-  g.scale.setScalar(scale);
-  return g;
-}
-
-// A glass of water with a translucent shell + a shorter "water" fill,
-// plus a couple of highlight strips so it reads as glass, not plastic.
-function buildGlassCup3(r, h, fillPct) {
-  const g = new THREE.Group();
-  const glass = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.9, h, 20, 1, true),
-    new THREE.MeshStandardMaterial({ color: 0xeaf6fa, transparent: true, opacity: 0.22, roughness: 0.06, metalness: 0.05, side: THREE.DoubleSide, depthWrite: false }));
-  glass.position.y = h / 2;
-  g.add(glass);
-  const water = cyl3(r * 0.92, r * 0.85, h * fillPct, 0x7fc9e0, 16);
-  water.material.transparent = true; water.material.opacity = 0.62;
-  water.position.y = h * fillPct / 2;
-  g.add(water);
-  [-0.55, 0.2].forEach(a => {
-    const hl = box3(0.006, h * 0.5, 0.001, 0xffffff, { roughness: 0.2 });
-    hl.material.transparent = true; hl.material.opacity = 0.5;
-    hl.position.set(Math.cos(a) * r * 0.97, h * 0.5, Math.sin(a) * r * 0.97);
-    hl.rotation.y = -a;
-    g.add(hl);
-  });
-  const rimBase = cyl3(r, r, 0.006, 0xffffff, 20);
-  rimBase.material.transparent = true; rimBase.material.opacity = 0.35;
-  rimBase.position.y = h;
-  g.add(rimBase);
-  return g;
-}
-
-// PANEL 1 — Unlocking the Door. Round 2 (per Faye's storyboard v2):
-// completely rebuilt — a hand on a round ring-pull door handle (not a
-// key in a lock), with a girl's face peeking around the door's edge on
-// the right, wearing a fuzzy-collared coat with a bag strap crossing
-// her shoulder. Dark interior; a sliver of warm light through the door
-// crack (kept faint per the "quieter, not gone" rule, not literally
-// blank).
-function buildSceneUnlockingDoor(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0x0a0e17, 1.8, 6);
-  dimSceneLights(stage, 0.3, 0.28, 0.18);
-  const warm = new THREE.PointLight(0xffdca0, 0.22, 2.5);
-  warm.position.set(-0.3, 0.15, 0.3);
-  stage.scene.add(warm);
-  // A close light on the handle (kept from the previous round's fix —
-  // without it the door read as empty black, near-identical in value
-  // to the backdrop).
-  const doorLight = new THREE.PointLight(0xffdca0, 0.28, 1.0);
-  doorLight.position.set(-0.16, 0.06, 0.28);
-  stage.scene.add(doorLight);
-  // A second, cooler fill on the girl's side so her face reads as a
-  // separate, slightly lit "peeking into the light" area rather than
-  // vanishing into the same shadow as the door. Round 2 fix: pixel-
-  // sampled the render to find the true cause here — the hairCap WAS
-  // rendering, at the right color, but three warm point lights all
-  // overlapping this small area pushed skin, hair, coat, and collar all
-  // toward the same washed warm-tan value once tone-mapped, crushing
-  // the contrast between them (confirmed by sampling: hair and skin
-  // pixels landed within ~25/255 of each other). Dimmer lights plus a
-  // darker base hair color (below) restores the separation.
-  const girlLight = new THREE.PointLight(0xcdd8ea, 0.12, 1.0);
-  girlLight.position.set(0.55, 0.32, 0.5);
-  stage.scene.add(girlLight);
-
-  // The door fills the left ~2/3 of the frame; its right edge (a
-  // visible vertical molding strip) is what the girl peeks around.
-  const door = box3(1.5, 3.0, 0.07, 0x2a1f15, { roughness: 0.8 });
-  door.position.set(-0.35, 0, -0.03);
-  world.add(door);
-  const doorEdge = box3(0.035, 3.02, 0.09, 0x1c150f, { roughness: 0.8 });
-  doorEdge.position.set(0.13, 0, 0.0);
-  world.add(doorEdge);
-  // Raised panel frame around the handle — sized to actually fit the
-  // settle camera's tight visible window (see the settle comment below)
-  // so its molding edge shows instead of filling the whole frame.
-  const panelFrame = box3(0.27, 0.23, 0.018, 0x342518, { roughness: 0.75 });
-  panelFrame.position.set(-0.35, -0.02, 0.01);
-  world.add(panelFrame);
-  const panelInset = box3(0.21, 0.17, 0.014, 0x241a10, { roughness: 0.8 });
-  panelInset.position.set(-0.35, -0.02, 0.014);
-  world.add(panelInset);
-  // sliver of light through the crack, at the door's far edge
-  const sliver = glowBox3(0.03, 2.8, 0.02, 0xfff0c0);
-  sliver.position.set(-1.08, 0, -0.02);
-  world.add(sliver);
-  const sliverGlow = new THREE.PointLight(0xffdca0, 0.4, 2.0);
-  sliverGlow.position.set(-1.03, 0, 0.1);
-  stage.scene.add(sliverGlow);
-
-  // Round ring-pull handle (per Faye's drawing: a circular loop on a
-  // backplate, not a traditional round knob) — backplate + a torus
-  // ring mounted flush, protruding enough for the hand to wrap through.
-  const backplate = cyl3(0.062, 0.062, 0.016, 0x9a7d46, 20);
-  backplate.material.roughness = 0.35; backplate.material.metalness = 0.45;
-  backplate.rotation.x = Math.PI / 2;
-  backplate.position.set(-0.35, -0.02, 0.02);
-  world.add(backplate);
-  const handleRing = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.012, 10, 20),
-    new THREE.MeshStandardMaterial({ color: 0xc7ccd1, roughness: 0.3, metalness: 0.5 }));
-  handleRing.position.set(-0.35, -0.02, 0.05);
-  world.add(handleRing);
-
-  const hand = buildHandProp(0xf0c49a);
-  const handPos = new THREE.Vector3(-0.42, -0.08, 0.06);
-  hand.position.copy(handPos);
-  // fingers wrap through the ring from the left; palm faces the door
-  orientHand(hand, new THREE.Vector3(0.75, 0.55, 0.1), new THREE.Vector3(0.3, -0.3, 0.9));
-  poseHand(hand, [0.85, 1.0, 1.05, 1.1], 0.9);
-  attachForearm(hand, 0xf0c04a, 0.36);
-  world.add(hand);
-
-  // The girl, peeking around the door's edge on the right — a simple
-  // standalone head (not the full buildKid rig, same approach as
-  // buildSceneFrightenedFace) turned toward the handle, one eye/brow
-  // visible on her near (camera/handle-facing) side, hair falling over
-  // the far side of her face. Fuzzy-collared coat + a bag strap, per
-  // Faye's drawing.
-  const skin = 0xf0c49a, hair = 0x2e1f12;
-  const head = sphere3(0.135, skin, 18, 14);
-  head.position.set(0.32, 0.12, 0.18);
-  head.rotation.y = -0.5; // turned to look toward the handle/door
-  world.add(head);
-  const hairCap = new THREE.Mesh(
-    new THREE.SphereGeometry(0.14, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.62),
-    new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 }));
-  hairCap.position.copy(head.position);
-  hairCap.rotation.y = 0.55; // hair's fuller side falls over her FAR (+x, away-from-handle) cheek
-  world.add(hairCap);
-  const visEye = sphere3(0.014, 0x2a2018, 8, 6);
-  visEye.position.set(0.245, 0.125, 0.285);
-  world.add(visEye);
-  const visBrow = box3(0.036, 0.007, 0.012, hair, { roughness: 0.9 });
-  visBrow.position.set(0.245, 0.152, 0.285);
-  visBrow.rotation.y = -0.5;
-  world.add(visBrow);
-  const nose = sphere3(0.014, skin, 8, 6);
-  nose.scale.set(0.8, 1, 0.9);
-  nose.position.set(0.215, 0.095, 0.295);
-  world.add(nose);
-
-  // Fuzzy-collared coat: a rounded torso block + a ring of small puffs
-  // at the neckline standing in for texture (this lesson's established
-  // low-poly way to fake fur/fuzz, same trick as buildShoe3's laces).
-  const coat = box3(0.24, 0.3, 0.16, 0x8a5a3c, { roughness: 0.85 });
-  coat.position.set(0.32, -0.16, 0.14);
-  coat.rotation.y = -0.35;
-  world.add(coat);
-  const collarPuffColor = 0xb8a488;
-  for (let i = 0; i < 6; i++) {
-    const a = (i / 5) * Math.PI - Math.PI * 0.15;
-    const puff = sphere3(0.024, collarPuffColor, 8, 6);
-    puff.position.set(
-      0.32 + Math.cos(a) * 0.12 - 0.03,
-      -0.01 + (i % 2 === 0 ? 0.012 : -0.008),
-      0.14 + Math.sin(a) * 0.1 + 0.04
-    );
-    world.add(puff);
-  }
-  // bag + diagonal strap crossing her shoulder
-  const strap = box3(0.035, 0.32, 0.012, 0x5a3f28, { roughness: 0.8 });
-  strap.position.set(0.34, -0.08, 0.22);
-  strap.rotation.z = 0.55;
-  world.add(strap);
-  const bag = sphere3(0.07, 0x6b4530, 12, 8);
-  bag.scale.set(1.2, 0.85, 0.6);
-  bag.position.set(0.4, -0.28, 0.2);
-  world.add(bag);
-
-  return {
-    start: { pos: { x: 0.1, y: 0.08, z: 1.05 }, look: { x: -0.05, y: 0, z: 0.1 } },
-    // Close enough that the handle + hand read clearly on the left,
-    // with the girl's peeking face + coat/bag in frame on the right —
-    // matches Faye's panel putting both subjects in one shot.
-    settle: { pos: { x: -0.03, y: 0.04, z: 0.88 }, look: { x: -0.02, y: 0.02, z: 0.12 } },
-    focusX: -0.1
-  };
-}
-
-// PANEL 2 — A Frightened Face. Round 2 (per Faye's storyboard v2):
-// rebuilt — hair mostly covers her face (jagged, messy bangs), and she
-// holds a cushion up in front of the lower half of her face with both
-// hands, peeking over the top with wide, worried eyes. Curtains (a row
-// of vertical fabric folds) fill the background on both sides, per her
-// drawing — replaces the previous vague wall-edge hint.
-function buildSceneFrightenedFace(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0x2b2d31, 1.1, 3.4);
-  dimSceneLights(stage, 0.55, 0.4, 0.4);
-  const rim = new THREE.PointLight(0x8fa6c2, 0.5, 3);
-  rim.position.set(-0.6, 0.3, 0.4);
-  stage.scene.add(rim);
-  // Curtains: a row of vertical fabric folds spanning the background,
-  // alternating depth/shade so each fold catches light differently —
-  // reads as gathered fabric rather than a flat striped wall.
-  const curtainColors = [0x3d4148, 0x363a40, 0x42464d];
-  for (let i = -8; i <= 8; i++) {
-    const x = i * 0.16;
-    if (Math.abs(x) < 0.5) continue; // keep the curtain clear of the head itself
-    const fold = box3(0.1, 3.2, 0.05, curtainColors[Math.abs(i) % 3], { roughness: 0.92 });
-    fold.position.set(x, 0, -1.2 - (i % 2 === 0 ? 0.08 : 0));
-    world.add(fold);
-  }
-
-  const skin = 0xf0c49a, hair = 0x3a281c;
-  const head = sphere3(0.52, skin, 24, 18);
-  world.add(head);
-  // Fuller, messier bangs than before — thetaLength pushed back down
-  // toward the brow line (per her drawing's jagged, face-covering
-  // hair), with a jagged fringe of small cones along the hairline for
-  // the "spiky bangs" silhouette instead of a smooth cap edge.
-  const hairCap = new THREE.Mesh(
-    new THREE.SphereGeometry(0.545, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.4),
-    new THREE.MeshStandardMaterial({ color: hair, roughness: 0.9 }));
-  hairCap.position.y = 0.015;
-  world.add(hairCap);
-  for (let i = -3; i <= 3; i++) {
-    const spike = cone3(0.055, 0.16, hair, 6);
-    spike.position.set(i * 0.13, 0.24 - Math.abs(i) * 0.015, 0.33);
-    spike.rotation.x = Math.PI + 0.15;
-    spike.rotation.z = i * 0.06;
-    world.add(spike);
-  }
-  // loose strands framing the sides of the face, falling past the jaw
-  [[-0.42, 0.05, 0.32, -0.3], [0.4, 0.02, 0.3, 0.3], [-0.28, -0.1, 0.44, -0.15]].forEach(s => {
-    const strand = cone3(0.05, 0.32, hair, 6);
-    strand.position.set(s[0], s[1], s[2]);
-    strand.rotation.z = s[3];
-    strand.rotation.x = 0.3;
-    world.add(strand);
-  });
-
-  // wide, worried eyes: sclera + iris, angled tense eyebrows above —
-  // the only part of her face left uncovered once the cushion is up.
-  [-0.19, 0.19].forEach(x => {
-    const sclera = sphere3(0.1, 0xfaf8f5, 14, 10);
-    sclera.scale.set(1, 1.15, 0.6);
-    sclera.position.set(x, 0.06, 0.42);
-    world.add(sclera);
-    const iris = sphere3(0.052, 0x3a2a20, 10, 8);
-    iris.position.set(x, 0.05, 0.49);
-    world.add(iris);
-    const pupil = sphere3(0.024, 0x140f0c, 8, 6);
-    pupil.position.set(x, 0.05, 0.53);
-    world.add(pupil);
-    const brow = box3(0.16, 0.028, 0.02, hair, { roughness: 0.9 });
-    brow.position.set(x, 0.22, 0.44);
-    brow.rotation.z = x < 0 ? 0.32 : -0.32;
-    world.add(brow);
-  });
-
-  // The cushion, held up over the lower face — a rounded, soft-edged
-  // block (stacked boxes narrowing toward the top corners stand in for
-  // a rounded pillow silhouette) with both hands' fingers curling over
-  // its top edge.
-  // Round 2 fix: at this settle camera, objects held this close to the
-  // lens (z~0.44) get magnified and pushed toward the bottom edge far
-  // more than their world-space Y offset suggests — the cushion at
-  // y=-0.32 was almost entirely below frame. Raised (and pulled back
-  // slightly in Z) so its top edge sits just under the eyes instead.
-  // Also given a clearly distinct (cool, muted) color — the original
-  // warm salmon tone was too close to the skin tone to read as a
-  // separate object once lit, the same under-contrast problem found
-  // and fixed in buildSceneUnlockingDoor's hair.
-  const cushionColor = 0x5c8299;
-  const cushionCore = box3(0.42, 0.34, 0.12, cushionColor, { roughness: 0.75 });
-  cushionCore.position.set(0, -0.18, 0.4);
-  world.add(cushionCore);
-  const cushionTopBevel = box3(0.34, 0.06, 0.12, cushionColor, { roughness: 0.75 });
-  cushionTopBevel.position.set(0, 0.01, 0.39);
-  world.add(cushionTopBevel);
-  const cushionSeam = box3(0.42, 0.012, 0.13, 0x3f5f70, { roughness: 0.8 });
-  cushionSeam.position.set(0, -0.02, 0.4);
-  world.add(cushionSeam);
-
-  // hands gripping the cushion's top edge, fingers curling down over
-  // its front face — kept slightly in FRONT of the cushion (larger Z)
-  // so they aren't occluded by it from the camera's side.
-  [-1, 1].forEach(side => {
-    const hand = buildHandProp(skin);
-    hand.scale.setScalar(0.85);
-    hand.position.set(side * 0.23, -0.03, 0.44);
-    orientHand(hand, new THREE.Vector3(-side * 0.15, -0.8, 0.35), new THREE.Vector3(side * 0.3, 0.2, -0.9));
-    poseHand(hand, [1.1, 1.15, 1.15, 1.1], 0.9);
-    world.add(hand);
-  });
-
-  return {
-    start: { pos: { x: 0, y: 0.08, z: 2.6 }, look: { x: 0, y: 0.05, z: 0 } },
-    settle: { pos: { x: 0, y: 0.06, z: 1.45 }, look: { x: 0, y: 0.05, z: 0 } }
-  };
-}
-
-// PANEL 3 — The Glass of Water. Round 2 (per Faye's storyboard v2):
-// rebuilt — a hand holds a mug (with a handle) at a table set with a
-// plate of food (a wedge of sandwich/toast, two dumplings, chopsticks
-// resting across the plate), a kitchen counter with jars and a hanging
-// utensil behind. Title/id/category kept exactly as Faye asked — only
-// the composition changed.
-function buildSceneGlassOfWater(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0xe9ddc4, 0.9, 3.2);
-  dimSceneLights(stage, 0.95, 0.9, 0.85);
-
-  // Round 2 fix: the mug/plate/table/food were all clustered in the
-  // same pale cream range and, under this scene's bright lighting,
-  // blended into a nearly single-tone wash. Table darkened to a richer
-  // wood tone; mug given a saturated color below — same under-contrast
-  // fix as the door/cushion scenes.
-  const table = box3(2.4, 0.06, 2.0, 0xa8734a, { roughness: 0.65 });
-  table.position.set(0, -0.03, -0.3);
-  world.add(table);
-  const grain = box3(2.4, 0.003, 2.0, 0x96633e);
-  grain.position.set(0, 0.0035, -0.3);
-  world.add(grain);
-
-  // kitchen counter behind: a shelf, a couple of jars, a hanging
-  // whisk/utensil — the "counter with jars" from Faye's drawing.
-  const counterTop = box3(2.4, 0.05, 0.4, 0xc9a476, { roughness: 0.6 });
-  counterTop.position.set(0.55, 0.62, -1.35);
-  world.add(counterTop);
-  [[0.15, 0x5a9dd6], [0.42, 0xe0e0d8]].forEach(j => {
-    const jar = cyl3(0.055, 0.05, 0.12, j[1], 10);
-    jar.material.transparent = true; jar.material.opacity = 0.85;
-    jar.position.set(0.7 + j[0], 0.71, -1.35);
-    world.add(jar);
-  });
-  const utensilHandle = cyl3(0.008, 0.008, 0.14, 0x8a6a4a, 6);
-  utensilHandle.position.set(0.5, 0.55, -1.33);
-  world.add(utensilHandle);
-  const utensilHead = sphere3(0.03, 0x9a9a9a, 8, 6);
-  utensilHead.scale.set(1, 0.5, 0.7);
-  utensilHead.position.set(0.5, 0.62, -1.33);
-  world.add(utensilHead);
-  const wallHint = box3(2.4, 1.4, 0.05, 0xf0e5cc);
-  wallHint.position.set(0, 0.75, -1.5);
-  world.add(wallHint);
-
-  // The mug — a cylinder body + a C-shaped handle (half a torus) on
-  // its near side, plus two soft steam wisps above.
-  const mug = new THREE.Group();
-  const mugColor = 0x4d7ea3;
-  const mugBody = cyl3(0.075, 0.065, 0.16, mugColor, 16);
-  mugBody.material.roughness = 0.4;
-  mug.add(mugBody);
-  const mugRim = cyl3(0.078, 0.078, 0.012, 0xf5f2ea, 16);
-  mugRim.position.y = 0.08;
-  mug.add(mugRim);
-  const mugFill = cyl3(0.068, 0.06, 0.02, 0x6b4530, 16);
-  mugFill.position.y = 0.075;
-  mug.add(mugFill);
-  const mugHandle = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.011, 8, 14, Math.PI * 1.3),
-    new THREE.MeshStandardMaterial({ color: mugColor, roughness: 0.4 }));
-  mugHandle.rotation.y = Math.PI / 2;
-  mugHandle.rotation.z = -Math.PI * 0.15;
-  mugHandle.position.set(0.078, 0.0, 0);
-  mug.add(mugHandle);
-  [[-0.02, 0.1], [0.025, 0.16]].forEach(s => {
-    const wisp = cone3(0.012, 0.09, 0xf5f2ea, 6);
-    wisp.material.transparent = true; wisp.material.opacity = 0.4;
-    wisp.position.set(s[0], 0.17 + s[1], 0);
-    wisp.rotation.z = s[0] * 2;
-    mug.add(wisp);
-  });
-  mug.position.set(0.08, 0.03, 0.1);
-  world.add(mug);
-
-  // The plate: a shallow disc with a sandwich wedge (a 3-sided prism —
-  // a flat triangular cross-section, the same low-poly trick used for
-  // this lesson's other food-adjacent props), two dumplings, and
-  // chopsticks resting across it. Round 2 fix: the plate's rim cylinder
-  // was centered BELOW the table's own top surface (y=0), so most of
-  // it was embedded inside the opaque table box and invisible — raised
-  // clear of the table, and given a whiter tone against the now-darker
-  // wood so it actually reads as a plate.
-  const plateRimPlate = cyl3(0.22, 0.22, 0.022, 0xf7f3ea, 28);
-  plateRimPlate.position.set(-0.28, 0.011, -0.15);
-  world.add(plateRimPlate);
-  const plate = new THREE.Mesh(new THREE.CircleGeometry(0.2, 28),
-    new THREE.MeshStandardMaterial({ color: 0xfffdf7, roughness: 0.5 }));
-  plate.rotation.x = -Math.PI / 2;
-  plate.position.set(-0.28, 0.023, -0.15);
-  world.add(plate);
-
-  const wedge = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.09, 3),
-    new THREE.MeshStandardMaterial({ color: 0xd9a441, roughness: 0.7 }));
-  wedge.rotation.x = Math.PI / 2;
-  wedge.rotation.z = Math.PI * 0.62;
-  wedge.position.set(-0.32, 0.068, -0.12);
-  world.add(wedge);
-  const wedgeCrust = new THREE.Mesh(new THREE.CylinderGeometry(0.114, 0.114, 0.02, 3),
-    new THREE.MeshStandardMaterial({ color: 0x8a5a2c, roughness: 0.8 }));
-  wedgeCrust.rotation.copy(wedge.rotation);
-  wedgeCrust.position.set(-0.32, 0.028, -0.12);
-  world.add(wedgeCrust);
-  const skewer = cyl3(0.006, 0.006, 0.14, 0xb8b8b8, 6);
-  skewer.position.set(-0.3, 0.15, -0.1);
-  skewer.rotation.x = 0.12;
-  world.add(skewer);
-  [[-0.16, -0.24], [-0.1, -0.28]].forEach(d => {
-    const dumpling = sphere3(0.032, 0xe8c888, 10, 8);
-    dumpling.scale.set(1.1, 0.75, 0.95);
-    dumpling.position.set(d[0], 0.046, d[1]);
-    world.add(dumpling);
-  });
-  [0, 1].forEach(i => {
-    const stick = cyl3(0.006, 0.005, 0.32, 0x8a5a2c, 6);
-    stick.rotation.z = Math.PI / 2;
-    stick.rotation.y = 0.3 + i * 0.08;
-    stick.position.set(-0.22 + i * 0.02, 0.03, -0.02 - i * 0.02);
-    world.add(stick);
-  });
-
-  const hand = buildHandProp(0xc9895c);
-  const handPos = new THREE.Vector3(0.24, 0.08, 0.12);
-  hand.position.copy(handPos);
-  const gripPoint = new THREE.Vector3(0.13, 0.03, 0.1);
-  // fingers wrap around the mug's body from the near side; palm faces
-  // the mug, thumb resting near the handle
-  orientHand(hand, gripPoint.clone().sub(handPos), new THREE.Vector3(-1, 0.1, 0.1));
-  poseHand(hand, [0.55, 0.65, 0.7, 0.5], 0.4);
-  attachForearm(hand, 0x5cb85c, 0.42);
-  world.add(hand);
-
-  return {
-    start: { pos: { x: 0.15, y: 0.55, z: 1.15 }, look: { x: -0.05, y: 0.05, z: -0.15 } },
-    settle: { pos: { x: 0.15, y: 0.23, z: 0.62 }, look: { x: -0.06, y: 0.06, z: -0.05 } },
-    focusX: -0.02
-  };
-}
-
-// PANEL 4 — Walking Feet. Camera low and close to the ground: one shoe
-// large in the foreground, mid-stride, in a school hallway that recedes
-// to a doorway at the far end (per Faye's storyboard v2 — her drawing
-// shows the hallway/doorway depth composition directly, not the
-// side-view alternative she also offered). Lockers + ceiling lights
-// recede into the hallway as the background trace.
-function buildSceneWalkingFeet(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0xdfe6ea, 3.5, 15);
-  dimSceneLights(stage, 1.0, 0.95, 0.9);
-
-  const floor = box3(3.4, 0.1, 16, 0xe4e9ec, { roughness: 0.25, metalness: 0.05 });
-  floor.position.set(0, -0.05, -6);
-  world.add(floor);
-  const floorSheen = box3(3.4, 0.001, 16, 0xffffff);
-  floorSheen.material.transparent = true; floorSheen.material.opacity = 0.15;
-  floorSheen.position.set(0, 0.0006, -6);
-  world.add(floorSheen);
-  // Round 5 (per Faye): at the low, close settle camera the ceiling
-  // lights and most of the locker banks fall outside the frame, so the
-  // hallway read was resting entirely on props that aren't reliably
-  // visible at this crop. Floor tile seams are always in frame (the
-  // floor fills the lower half of the shot) and read as a hallway/
-  // institutional floor immediately, receding toward the vanishing
-  // point the same way the lockers do.
-  for (let i = -6; i < 10; i++) {
-    const seamZ = box3(3.4, 0.002, 0.012, 0xc7cdd2);
-    seamZ.position.set(0, 0.0012, -i * 1.0);
-    world.add(seamZ);
-  }
-  [-1.13, 1.13].forEach(x => {
-    const seamX = box3(0.012, 0.002, 16, 0xc7cdd2);
-    seamX.position.set(x, 0.0012, -6);
-    world.add(seamX);
-  });
-  // A visible kickplate strip along the base of each locker bank —
-  // still in frame at ankle height even when the lockers' upper body
-  // isn't, so the "this is a hallway with lockers" cue survives the
-  // tight low crop, not just the floor.
-  [-1, 1].forEach(side => {
-    const kick = box3(0.5, 0.09, 15.5, 0x5c7592, { roughness: 0.5, metalness: 0.1 });
-    kick.position.set(side * 1.75, 0.045, -6.2);
-    world.add(kick);
-  });
-
-  function lockerBank(side) {
-    for (let i = 0; i < 10; i++) {
-      const locker = box3(0.42, 1.0, 0.5, i % 2 ? 0x8fa9c4 : 0x9db4cc, { roughness: 0.55, metalness: 0.15 });
-      locker.position.set(side * 1.75, 0.55, -0.5 - i * 0.52);
-      world.add(locker);
-      const seam = box3(0.015, 1.0, 0.51, 0x5c7592);
-      seam.position.set(side * (1.75 - 0.21), 0.55, -0.5 - i * 0.52);
-      world.add(seam);
-      const handle = sphere3(0.018, 0x33363b, 8, 6);
-      handle.position.set(side * (1.75 - 0.15), 0.5, -0.5 - i * 0.52 + 0.23);
-      world.add(handle);
-    }
-  }
-  lockerBank(-1); lockerBank(1);
-  for (let i = 0; i < 5; i++) {
-    const light = glowBox3(1.2, 0.06, 0.3, 0xfaf6e8);
-    light.position.set(0, 1.85, -0.5 - i * 1.9);
-    world.add(light);
-  }
-  [0.6, 3.4, 6.2].forEach(z => {
-    const win = box3(0.55, 0.55, 0.04, 0xbfe0ec, { roughness: 0.2 });
-    win.material.transparent = true; win.material.opacity = 0.7;
-    win.position.set(-1.76, 1.1, -z);
-    world.add(win);
-  });
-
-  // Round 5 (per Faye): toeColor now contrasts against the body/heel
-  // (a neutral rubber-cap tone) instead of all three being the exact
-  // same red — that flat single color was why the whole shoe read as
-  // one blob rather than a sneaker with visible parts.
-  const shoeColor = 0xe0574a;
-  const foreShoe = buildShoe3(shoeColor, 1.3, 0x2b2b2e);
-  foreShoe.rotation.y = 0.12;
-  foreShoe.rotation.x = -0.05;
-  foreShoe.position.set(0.02, 0.04, 0.0);
-  world.add(foreShoe);
-  // Round 5 (per Faye): a cylinder here read as a hollow blue cup/vase
-  // from this angle (its open top rim facing the camera) no matter how
-  // it was resized or angled. A box, like the shoe's own body/toe-cap
-  // above, has no rim to reveal and reads immediately as a pant leg
-  // ending at the ankle instead.
-  const forePant = box3(0.16, 0.13, 0.15, 0x2d5fa8);
-  forePant.position.set(0.02, 0.12, -0.1);
-  forePant.rotation.x = 0.05;
-  world.add(forePant);
-
-  // Round 2 (per Faye's storyboard v2): her drawing shows the hallway
-  // ending in a doorway — a door frame with two round handles — not a
-  // second walking figure. Replaces the previous background walker
-  // with a door closing off the far end of the hallway, matching her
-  // panel directly.
-  const doorFrame = box3(2.3, 1.85, 0.08, 0xb8ae9c, { roughness: 0.7 });
-  doorFrame.position.set(0, 0.92, -6.7);
-  world.add(doorFrame);
-  [-1, 1].forEach(side => {
-    const leaf = box3(1.05, 1.7, 0.05, 0xd9cdb4, { roughness: 0.6 });
-    leaf.position.set(side * 0.56, 0.9, -6.66);
-    world.add(leaf);
-    const handle = sphere3(0.03, 0x8a8478, 8, 6);
-    handle.position.set(side * 0.16, 0.7, -6.6);
-    world.add(handle);
-  });
-
-  return {
-    start: { pos: { x: 0.15, y: 0.34, z: 1.9 }, look: { x: 0, y: 0.06, z: -4 } },
-    // Round 5 (per Faye): the previous settle framing looked straight
-    // down the hallway with the shoe pushed into a corner, where it
-    // read as a small unrecognizable blob. This is a closer 3/4
-    // side-front view centered ON the shoe (the toe/body two-tone
-    // split, laces, and sole are all in frame), with the hallway still
-    // visible receding behind it via the lockers + floor seams.
-    settle: { pos: { x: 0.42, y: 0.19, z: 0.32 }, look: { x: 0, y: 0.05, z: -0.1 } }
-  };
-}
-
-// PANEL 5 — Passing a Secret Note. Round 2 (per Faye's storyboard v2):
-// completely rebuilt from her drawing — a lower, wider under-the-table
-// view showing two chairs (slatted backs) flanking the shot, the table
-// surface with a book and pencil on top, two hands reaching in from
-// left and right meeting near the middle (passing the note — no
-// visible note object, per Faye's "student decides what's on it"), and
-// a pair of feet/shoes near the base of each chair. Floor tiles ground
-// the low angle. Previously a much tighter two-hands-only crop; this is
-// a fuller scene matching her new composition.
-function buildSceneSecretNote(stage) {
-  const world = new THREE.Group();
-  stage.scene.add(world);
-  setBackdrop(stage, 0x241d17, 1.0, 3.4);
-  dimSceneLights(stage, 0.4, 0.35, 0.3);
-  const spill = new THREE.PointLight(0xfff0c8, 0.55, 2.6);
-  spill.position.set(0, 0.9, 0.6);
-  stage.scene.add(spill);
-
-  // Floor tiles grounding the low angle.
-  for (let i = -3; i <= 3; i++) {
-    const seam = box3(0.01, 0.001, 2.4, 0x3a2c1e);
-    seam.position.set(i * 0.35, -0.62, -0.4);
-    world.add(seam);
-  }
-
-  // The table: surface + front edge lip (the note passes just beneath
-  // this edge), a book and a pencil resting on top.
-  const tableTop = box3(1.9, 0.05, 1.3, 0x8a5a3c, { roughness: 0.65 });
-  tableTop.position.set(0, 0.62, -0.6);
-  world.add(tableTop);
-  const tableEdge = box3(1.9, 0.09, 0.06, 0x6b4530, { roughness: 0.65 });
-  tableEdge.position.set(0, 0.58, 0.03);
-  world.add(tableEdge);
-  const book = new THREE.Group();
-  const pageL = box3(0.16, 0.01, 0.13, 0xf7f3e8, { roughness: 0.7 });
-  pageL.position.set(-0.08, 0, 0);
-  pageL.rotation.z = 0.06;
-  book.add(pageL);
-  const pageR = box3(0.16, 0.01, 0.13, 0xf2ede0, { roughness: 0.7 });
-  pageR.position.set(0.08, 0, 0);
-  pageR.rotation.z = -0.06;
-  book.add(pageR);
-  book.position.set(-0.05, 0.665, -0.02);
-  world.add(book);
-  const pencil = cyl3(0.008, 0.008, 0.22, 0xf0c04a, 6);
-  pencil.rotation.z = Math.PI / 2;
-  pencil.rotation.y = 0.25;
-  pencil.position.set(0.2, 0.666, -0.03);
-  world.add(pencil);
-
-  // Two chairs (slatted, rounded-top backs) framing the shot, close and
-  // large in the foreground on either side — matches Faye's low-angle
-  // drawing looking between the two chair backs at the table.
-  function buildChairBack(color) {
-    const g = new THREE.Group();
-    const seat = box3(0.5, 0.05, 0.46, color, { roughness: 0.6 });
-    seat.position.y = 0.42;
-    g.add(seat);
-    [-1, 1].forEach(fx => {
-      const leg = box3(0.05, 0.84, 0.05, color, { roughness: 0.6 });
-      leg.position.set(fx * 0.2, 0, 0.19);
-      g.add(leg);
-    });
-    [-1, 1].forEach(bx => {
-      const leg = box3(0.05, 1.5, 0.05, color, { roughness: 0.6 });
-      leg.position.set(bx * 0.2, 0.15, -0.19);
-      g.add(leg);
-    });
-    // domed top rail (a flattened sphere cap) + vertical slats beneath
-    const topRail = new THREE.Mesh(
-      new THREE.SphereGeometry(0.24, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.5),
-      new THREE.MeshStandardMaterial({ color: color, roughness: 0.6 }));
-    topRail.scale.set(1, 0.6, 0.35);
-    topRail.position.set(0, 1.34, -0.19);
-    g.add(topRail);
-    const bottomRail = box3(0.46, 0.05, 0.05, color, { roughness: 0.6 });
-    bottomRail.position.set(0, 0.9, -0.19);
-    g.add(bottomRail);
-    for (let i = -1; i <= 1; i++) {
-      const slat = box3(0.045, 0.5, 0.045, color, { roughness: 0.6 });
-      slat.position.set(i * 0.16, 1.12, -0.19);
-      g.add(slat);
-    }
-    return g;
-  }
-  // Round 2 fix: at x=+-0.85 with the settle camera only ~0.3 units
-  // away in Z, the chairs' angular offset from the view axis was far
-  // outside the camera's ~33 degree horizontal half-FOV — entirely
-  // off-frame, which is why nothing but the two hands showed up.
-  // Scaled down and pulled in closer to center so they land at the
-  // frame's edges (partially cropped, same as her drawing) instead of
-  // off it entirely.
-  // Lightened from a near-black brown — against this scene's dark
-  // fogged background the chair tops were blending straight into it.
-  const chairColor = 0x6b4a32;
-  const chairL = buildChairBack(chairColor);
-  chairL.scale.setScalar(0.46);
-  chairL.position.set(-0.5, -0.34, 0.2);
-  chairL.rotation.y = 0.15;
-  world.add(chairL);
-  const chairR = buildChairBack(0x5c3f2a);
-  chairR.scale.setScalar(0.46);
-  chairR.position.set(0.5, -0.34, 0.2);
-  chairR.rotation.y = -0.15;
-  world.add(chairR);
-
-  // Feet/shoes near the base of each chair.
-  const shoeL = buildShoe3(0x5a9dd6, 0.5);
-  shoeL.rotation.y = Math.PI * 0.55;
-  shoeL.position.set(-0.4, -0.5, 0.25);
-  world.add(shoeL);
-  const shoeR = buildShoe3(0x2d5fa8, 0.5);
-  shoeR.rotation.y = -Math.PI * 0.55;
-  shoeR.position.set(0.38, -0.5, 0.25);
-  world.add(shoeR);
-
-  // Two hands reaching in from either side, meeting just below the
-  // table's front edge — passing the note there, out of sight of
-  // anyone looking down at the tabletop (where only the book shows).
-  const handAPos = new THREE.Vector3(-0.32, 0.42, 0.1);
-  const handBPos = new THREE.Vector3(0.3, 0.4, 0.12);
-  const meetPoint = new THREE.Vector3(0, 0.4, 0.14);
-
-  const handA = buildHandProp(0xf0c49a);
-  handA.position.copy(handAPos);
-  orientHand(handA, meetPoint.clone().sub(handAPos), new THREE.Vector3(0, -1, 0.15));
-  poseHand(handA, 0.45, 0.3);
-  attachForearm(handA, 0xe888b0, 0.4);
-  world.add(handA);
-
-  const handB = buildHandProp(0xc9895c);
-  handB.position.copy(handBPos);
-  orientHand(handB, meetPoint.clone().sub(handBPos), new THREE.Vector3(0, 1, 0.15));
-  poseHand(handB, 0.4, 0.35);
-  attachForearm(handB, 0x5cb85c, 0.4);
-  world.add(handB);
-
-  return {
-    start: { pos: { x: 0.02, y: 0.1, z: 1.5 }, look: { x: 0, y: 0.3, z: -0.5 } },
-    // Framed to fit both (now correctly-scaled) chairs at the edges,
-    // the table + book behind, and the hands meeting in the middle —
-    // the fuller composition from her drawing, vs. the previous
-    // version's much tighter two-hands-only crop.
-    settle: { pos: { x: 0, y: 0.4, z: 1.15 }, look: { x: 0, y: 0.55, z: -0.15 } }
-  };
-}
-
-const SCENE3D_BUILDERS = {
-  unlockingDoor: buildSceneUnlockingDoor,
-  frightenedFace: buildSceneFrightenedFace,
-  glassOfWater: buildSceneGlassOfWater,
-  walkingFeet: buildSceneWalkingFeet,
-  secretNote: buildSceneSecretNote
-};
 
 /* ============================================================
    STORY DRAWING ROUND — one after every story, all five required, same
@@ -3081,7 +2050,7 @@ function renderStoryDraw(story, i){
            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
          <button class="video-tap-overlay" id="storyRefVideoTap" hidden>🔊 Tap to Play</button>
        </div>`
-    : `<div class="practice-ref-video practice-ref-placeholder"><div class="practice-ref-placeholder-icon">🎨</div><div>Quick Sketch Reference video coming soon.</div></div>`;
+    : story.crop ? CloseupVisuals.practice(story) : `<div class="practice-ref-video practice-ref-placeholder"><div class="practice-ref-placeholder-icon">🎨</div><div>Quick Sketch Reference video coming soon.</div></div>`;
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
     const t = PRACTICE_TOOLS[key];
@@ -3089,14 +2058,14 @@ function renderStoryDraw(story, i){
   }).join('');
   return `
     <div class="step-inner practice-round">
-      <div class="practice-story-label">Situation ${i + 1}: ${story.title} — ${story.framing}</div>
+      <div class="practice-story-label">${story.crop ? "Extreme Close-Up practice" : "Situation " + (i+1)}: ${story.title} — ${story.framing}</div>
       <div class="practice-two-panel">
         <div class="practice-panel practice-panel-teacher">
-          <div class="practice-panel-label">Quick Sketch Reference</div>
+          <div class="practice-panel-label">${story.crop ? "Same story · One detail" : "Quick Sketch Reference"}</div>
           <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
           ${refInner}
           <div class="practice-ref-note">This is just one reference — there are many possible ways to draw this scene.</div>
-          ${typeof ShotSizeTips !== 'undefined' ? ShotSizeTips.html({ current: 'ms' }) : ''}
+          ${typeof ShotSizeTips !== 'undefined' ? ShotSizeTips.html({ current: story.crop ? 'ecu' : 'cu' }) : ''}
         </div>
         <div class="practice-panel practice-panel-student" id="practiceStudentPanel">
           <div class="practice-panel-label">Your Turn</div>
@@ -3208,9 +2177,10 @@ function renderTeacherCommunity(){
 async function afterRenderTeacherCommunity(){
   const host = document.getElementById('ownWorkArea');
   const cards = [];
-  for (let i = 0; i < LESSON_DATA.story_scenes.length; i++) {
-    const story = LESSON_DATA.story_scenes[i];
-    const label = 'Situation ' + (i + 1);
+  const allStories = [...LESSON_DATA.story_scenes, ...CloseupVisuals.comparisons];
+  for (let i = 0; i < allStories.length; i++) {
+    const story = allStories[i];
+    const label = i < 5 ? 'Close-Up · Situation ' + (i + 1) : 'Extreme Close-Up · ' + story.title;
     const result = STATE.storyResults[i];
     if (result === 'digital') {
       let record = null;
@@ -3305,6 +2275,7 @@ function toggleCheck(el, opt){
   document.getElementById('completeBtn').disabled = STATE.checkedConcepts.length === 0;
 }
 function finishLesson(){
+  if(STATE.lessonSaved)return;
   bumpXP(30);
   markLessonComplete();
   try {

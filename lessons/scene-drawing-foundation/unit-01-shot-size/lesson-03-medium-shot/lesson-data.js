@@ -164,7 +164,7 @@
     // calls itself (same convention Lesson 02 used for this lesson).
     next_lesson: {
       href: '../lesson-04-close-up/',
-      title: 'Close-Up',
+      title: 'Close-Up and Extreme Close-Up',
       subtitle: 'Look Closer'
     },
 

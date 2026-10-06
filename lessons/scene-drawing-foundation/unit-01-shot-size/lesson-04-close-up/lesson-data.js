@@ -58,13 +58,13 @@
     id: 'close-up',
     unit: 'unit-01-shot-size',
     courseId: 'close-up',
-    title: 'Close-Up',
+    title: 'Close-Up and Extreme Close-Up',
     // Short "Show X" form, matching Lessons 02/03's subtitle convention
     // (and Lesson 05's own 'Show the Detail') — picked to echo the
     // "close-up = look closer at what matters" line below, since "Show
     // Emotion" (the pre-rebuild subtitle) undersold a lesson that's
     // explicitly about 4 categories, not just faces.
-    subtitle: 'Look Closer',
+    subtitle: 'See the action. Then reveal the detail.',
 
     // Step 1 — full-screen, video-like explanation moment (NOT a video),
     // same ShotSizeCompare device as Lesson 03's Step 1, pushed one stop
@@ -105,7 +105,7 @@
     // Lesson 03's scenes_intro.
     scenes_intro: {
       titleCard: 'Close-Up Practice',
-      explainerCard: "Five short stories, all yours to draw. Each one starts with a tip, then you'll see the scene and sketch it yourself."
+      explainerCard: "Sketch five Close-Up stories. Then revisit the mug, the footsteps and the frightened face — and move closer to one detail."
     },
 
     // Step 2 — five Close-Up stories, in Faye's storyboard v2 order.
@@ -210,17 +210,17 @@
     // verbatim from that lesson's own welcome.title/subtitle, same
     // convention Lessons 02/03 used.
     next_lesson: {
-      href: '../lesson-05-extreme-close-up/',
-      title: 'Extreme Close-Up',
-      subtitle: 'Show the Detail'
+      href: '../../unit-02-viewpoints-perspective/',
+      title: 'Viewpoints & Perspective',
+      subtitle: 'Explore where the camera looks from'
     },
 
     // Claude Code's own wording (flagged) — same multi-select chip
     // mechanic as Lessons 02/03's check, no right/wrong answer. Options
     // mirror the four Step 1 categories directly.
     completion_check: {
-      question: 'What can a Close-Up help us show?',
-      options: ['Emotion', 'Action', 'A Detail', 'A Clue']
+      question: 'What did you discover by moving closer?',
+      options: ['Close-Up shows the action', 'Extreme Close-Up emphasizes a detail', 'A tighter frame can intensify emotion', 'The same story can use both']
     }
   };
 
