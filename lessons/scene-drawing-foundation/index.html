@@ -8,58 +8,17 @@
 <link rel="stylesheet" href="../../core/scene-drawing-style.css">
 <style>
 body{padding:24px;background:linear-gradient(145deg,#fff 0%,#f4f2fb 62%,#eefbff 100%)}
-.app{max-width:1080px;min-height:calc(100vh - 48px);background:#fff;border-radius:26px}.content{padding:30px 34px 70px}
+.app{max-width:1080px;min-height:calc(100vh - 48px);background:#fff;border-radius:26px}.content{padding:30px 34px 70px}#course-overview-root{display:block;min-width:0}
 .scene-journey-hero{display:grid;grid-template-columns:1fr 220px;gap:28px;align-items:center;padding:34px;border-radius:24px;background:linear-gradient(120deg,#eee8ff,#dcfaff);margin-bottom:22px}.scene-journey-hero h1{font:800 clamp(38px,5vw,58px)/1.03 'Montserrat';margin:7px 0 10px}.scene-journey-hero p{max-width:650px;color:var(--ink-soft);line-height:1.6}.scene-eyebrow{font:800 9px 'Montserrat';letter-spacing:.16em;text-transform:uppercase;color:#7665a2}.scene-start{display:inline-flex;margin-top:18px;padding:11px 16px;border:0;border-radius:11px;background:var(--ink);color:#fff;text-decoration:none;font:800 10px 'Montserrat';letter-spacing:.07em;cursor:pointer}.scene-badge-goal{text-align:center}.scene-badge-goal img{display:block;width:118px;height:118px;margin:auto;border-radius:50%;object-fit:cover;box-shadow:0 14px 30px #55477635}.scene-badge-goal strong,.scene-badge-goal small{display:block}.scene-badge-goal strong{margin-top:10px;font:800 13px 'Montserrat'}.scene-badge-goal small{margin-top:4px;color:var(--ink-soft);font-size:10px;line-height:1.45}
 .scene-current{display:grid;grid-template-columns:1fr auto;gap:10px 25px;padding:24px;border:2px solid #67dbea;border-radius:22px;background:#f0fdff}.scene-current h2{margin:5px 0 7px;font:800 28px 'Montserrat'}.scene-current p{color:var(--ink-soft)}.scene-current progress{grid-column:1/-1;width:100%;height:9px;accent-color:#2796ae}.scene-progress-copy{text-align:right}.scene-progress-copy b,.scene-progress-copy span{display:block}.scene-progress-copy b{font:800 28px 'Montserrat'}.scene-progress-copy span{color:var(--ink-soft);font-size:10px}
 .scene-road{margin:30px 0 4px}.scene-stop{position:relative;width:100%;min-height:104px;display:grid;grid-template-columns:76px 1fr;gap:23px;align-items:start;padding:0 0 28px;border:0;background:transparent;text-align:left;text-decoration:none;color:var(--ink);cursor:pointer}.scene-stop:not(:last-child):before{content:'';position:absolute;left:37px;top:76px;bottom:0;border-left:3px dashed #d7cef0}.scene-stop-icon{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#edf0ff,#ccecff);border:2px solid #fff;box-shadow:0 8px 20px #51486d20;font:800 16px 'Montserrat';overflow:hidden}.scene-stop-icon img{width:100%;height:100%;object-fit:cover}.scene-stop>span:last-child{padding:10px 18px 14px;border-radius:16px}.scene-stop:hover>span:last-child{background:#fff;box-shadow:0 8px 24px #51486d12}.scene-stop em{display:block;margin-bottom:5px;color:#8b7da1;font:800 9px 'Montserrat';letter-spacing:.15em;font-style:normal}.scene-stop b{display:block;font:700 21px 'Montserrat'}.scene-stop small{display:block;margin-top:7px;color:var(--ink-soft);font-size:12px;line-height:1.5}.scene-stop.current .scene-stop-icon{outline:4px solid #1895ae;outline-offset:5px}.scene-stop.done .scene-stop-icon:after{content:'✓';display:grid;place-items:center;position:absolute;width:42px;height:42px;border-radius:50%;background:#319567;color:#fff;font-size:20px}.intro-stop .scene-stop-icon{background:#242733;color:#fff;font-size:25px}
 .scene-intro-overlay{position:fixed;z-index:200;inset:0;padding:24px;background:#171923e8;display:grid;place-items:center}.scene-intro-card{width:min(920px,96vw);padding:22px;border-radius:24px;background:#fff;box-shadow:0 25px 80px #0007}.scene-intro-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.scene-intro-top h2{font:800 26px 'Montserrat'}.scene-intro-close{border:0;background:#f0edf5;border-radius:10px;padding:8px 11px;cursor:pointer}.scene-intro-video{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#171923}.scene-intro-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.scene-intro-foot{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-top:15px}.scene-intro-foot p{color:var(--ink-soft);font-size:12px;line-height:1.5}.scene-intro-foot a{white-space:nowrap;padding:10px 14px;border-radius:10px;background:var(--ink);color:#fff;text-decoration:none;font:800 10px 'Montserrat'}
 [hidden]{display:none!important}
 @media(max-width:680px){body{padding:0}.app{border-radius:0;min-height:100vh}.content{padding:20px 16px 55px}.scene-journey-hero{display:block;padding:23px}.scene-badge-goal{display:none}.scene-current{grid-template-columns:1fr}.scene-progress-copy{text-align:left;display:flex;align-items:baseline;gap:7px}.scene-stop{grid-template-columns:60px 1fr;gap:14px}.scene-stop-icon{width:60px;height:60px}.scene-stop:not(:last-child):before{left:29px;top:60px}.scene-stop>span:last-child{padding:5px 4px 12px}.scene-intro-overlay{padding:9px}.scene-intro-card{padding:13px}.scene-intro-foot{display:grid}}
+.unit-map{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.unit-map a{display:block;padding:18px;border:1px solid #e3dbed;border-radius:16px;text-decoration:none;color:var(--ink);background:linear-gradient(120deg,#eee8ff,#dcfaff)}.unit-map b{font:700 14px Montserrat,sans-serif}.unit-map small{display:block;margin-top:8px;font:12px/1.5 "Open Sans",sans-serif}#viewpoints-practice-progress{display:block;margin:8px 0;color:#635583}@media(max-width:680px){.unit-map{grid-template-columns:1fr}}
 </style>
 
-<!--
-  Course listing page for the NEW "Scene Drawing Foundation" course
-  (Unit 01 · Shot Size, and Units 02-06 later) — distinct from the
-  OLD, now-renamed "Perspective Drawing Foundation" course that still
-  lives at scene-drawing/index.html.
-
-  This is a SEPARATE, purpose-built page rather than a reuse of
-  scene-drawing-app.js's renderCourseOverview(), per Faye's explicit
-  decision after diagnosis: that engine's lesson cards assume a
-  lesson.steps[] array rendered by a shared step-by-step SPA at
-  scene-drawing/lesson/?id=..., with progress tracked in
-  fei_scene_drawing_progress (localStorage). This course's 5 lessons
-  are the opposite — fully self-contained pages under
-  unit-01-shot-size/, each with its own dispatcher, own IndexedDB, and
-  completion tracked via the real fei_user_profile.completedLessons
-  (sessionStorage), the same way every other lesson on the platform
-  works. Reusing renderCourseOverview would have meant either
-  fabricating a fake steps[] array or extending that engine's routing
-  assumptions — Faye chose a separate lightweight page instead, so the
-  old course's engine (scene-drawing-app.js, course-data.js) stays
-  completely untouched.
-
-  Visual consistency: reuses the exact same CSS classes as the old
-  course's page (course-hero, lesson-card, course-badge-card,
-  material-chip, etc. — see ../../core/scene-drawing-style.css) and
-  the same Artchi mascot include, so this reads as the same platform,
-  not a bolted-on page.
-
-  materials-strip is deliberately omitted: `materials` is an optional
-  field in the old course's data shape (renderCourseOverview does
-  `(course.materials || [])`), and this course's actual supply list
-  (digital canvas, no physical materials) is still an open decision
-  per Faye — see the build prompt's explicit "don't invent one, ask"
-  instruction. Left off rather than guessed.
-
-  Badge: uses the SAME renderCourseBadgeCard() as the old course
-  (core/scene-drawing-app.js), now parameterized to take a badge id —
-  see that file's own commit history for why. This page passes
-  'scene_drawing_unit_01' (core/course-badge-registry.js +
-  core/badge-catalog.js), scoped to only these 5 lessons per Faye's
-  "Unit 01 badge now, Unit 02+ badges added the same way later, don't
-  restructure this one" instruction.
--->
+<!-- Scene Drawing parent map. Existing lesson URLs and progress identifiers remain stable. -->
 
 </head>
 <body>
@@ -138,6 +97,8 @@ function scdrLoadCompletedLessons() {
 ============================================================ */
 function renderSceneDrawingFoundationOverview(course) {
   const completed = scdrLoadCompletedLessons();
+  let practiceDone=[];try{practiceDone=JSON.parse(localStorage.getItem('fei_viewpoints_practice_v1')||'{}').completed||[]}catch{}
+  const practiceLabel=i=>i===3?(practiceDone.includes('review')?'✓ REVIEW COMPLETE':'Three viewpoints, one story'):`${[0,1,2].filter(n=>practiceDone.includes(`angle-${i}-story-${n}`)).length}/3 story sketches complete`;
   const badge = (window.BADGE_CATALOG || []).find(b => b.id === 'scene_drawing_unit_01') || {};
   const introSeen = localStorage.getItem('fei_scene_drawing_intro_seen') === 'true';
   const doneCount = course.lessons.filter(l => completed.includes(l.courseId)).length;
@@ -155,14 +116,20 @@ function renderSceneDrawingFoundationOverview(course) {
     `;
   }).join('');
   return `
-    <section class="scene-journey-hero"><div><div class="scene-eyebrow">Your creative journey · Skill</div><h1>Scene Drawing</h1><p>${course.description}</p>${doneCount?`<a class="scene-start" href="${activeLesson.href}">Continue learning →</a>`:`<button class="scene-start" data-scene-intro>Start with the Intro →</button>`}</div><div class="scene-badge-goal">${badge.imgUrl?`<img src="${badge.imgUrl}" alt="Scene Drawing badge">`:`<span>${badge.emoji||'📖'}</span>`}<strong>Scene Drawing</strong><small>Your course badge goal<br>${doneCount}/${course.lessons.length} lessons completed</small></div></section>
-    <section class="scene-current"><div><div class="scene-eyebrow">YOU ARE HERE · UNIT 01</div><h2>${doneCount===course.lessons.length?'Shot Size Complete':activeLesson.title}</h2><p>Intro → Shot size → Story action → Reflection</p></div><div class="scene-progress-copy"><b>${doneCount}/${course.lessons.length}</b><span>lessons completed</span></div><progress value="${doneCount}" max="${course.lessons.length}"></progress></section>
+    <section class="scene-journey-hero"><div><div class="scene-eyebrow">Your creative journey · Skill</div><h1>Scene Drawing Foundation</h1><p>${course.description}</p>${doneCount?`<a class="scene-start" href="${activeLesson.href}">Continue learning →</a>`:`<button class="scene-start" data-scene-intro>Start with the Intro →</button>`}</div><div class="scene-badge-goal">${badge.imgUrl?`<img src="${badge.imgUrl}" alt="Scene Drawing badge">`:`<span>${badge.emoji||'📖'}</span>`}<strong>Shot Sizes &amp; Framing</strong><small>Your Unit 01 badge goal<br>${doneCount}/${course.lessons.length} lessons completed</small></div></section>
+    <nav aria-label="Scene Drawing units" class="unit-map"><a href="#shot-sizes"><b>01 · Shot Sizes &amp; Framing</b><small>Choose what fits in the frame · 5 lessons</small></a><a href="#viewpoints"><b>02 · Viewpoints &amp; Perspective</b><small>Choose where to look from · 4 lessons</small></a><a href="#construction"><b>03 · Perspective Construction</b><small>Build the space · 2 lessons</small></a></nav>
+    <section class="scene-current" id="shot-sizes"><div><div class="scene-eyebrow">UNIT 01 · SHOT SIZES &amp; FRAMING</div><h2>${doneCount===course.lessons.length?'Shot Size Complete':activeLesson.title}</h2><p>Intro → Shot size → Story action → Reflection</p></div><div class="scene-progress-copy"><b>${doneCount}/${course.lessons.length}</b><span>lessons completed</span></div><progress value="${doneCount}" max="${course.lessons.length}"></progress></section>
     <nav class="scene-road" aria-label="Scene Drawing course map"><button class="scene-stop intro-stop ${introSeen?'done':!introSeen?'current':''}" data-scene-intro><span class="scene-stop-icon">▶</span><span><em>${introSeen?'✓ WATCHED':'START HERE'}</em><b>Intro · What Is a Scene?</b><small>Begin with the course video before exploring shot size.</small></span></button>${lessonRoad}</nav>
+    <section class="scene-current" id="viewpoints"><div><div class="scene-eyebrow">UNIT 02 · 4 LESSONS · CONCEPT PREVIEW</div><h2>Viewpoints &amp; Perspective</h2><p>Where is the camera? Build a simple story from eye level, below and above.</p><small id="viewpoints-practice-progress"></small><small>Intro · Point of View &amp; Perspective — teacher video coming later.</small></div><a class="scene-start" href="unit-02-viewpoints-perspective/">Explore the concept →</a></section>
+    <nav class="scene-road" aria-label="Viewpoints lessons">${['Normal Shot','Low Angle','High Angle','One Story, Three Viewpoints'].map((name,i)=>`<a class="scene-stop" href="unit-02-viewpoints-perspective/?lesson=${i}"><span class="scene-stop-icon">${i+1}</span><span><em>LESSON ${i+1} · ${practiceLabel(i)}</em><b>${name}</b><small>${i===3?'Draw the same story from three viewpoints.':'Camera → horizon → vanishing points → three story scenes.'}</small></span></a>`).join('')}</nav>
+    <section class="scene-current" id="construction"><div><div class="scene-eyebrow">UNIT 03 · 2 EXISTING LESSONS</div><h2>Perspective Construction</h2><p>Develop your simple scene into a complete street or room, with structure, details and value.</p></div><a class="scene-start" href="../../scene-drawing/">Open the unit →</a></section>
+    <nav class="scene-road" aria-label="Perspective construction lessons"><a class="scene-stop" href="../../scene-drawing/lesson/?id=one-point-street"><span class="scene-stop-icon">01</span><span><em>ONE-POINT PERSPECTIVE</em><b>Street Scene</b><small>Road, buildings, depth and grey-scale value.</small></span></a><a class="scene-stop" href="../../scene-drawing/lesson/?id=two-point-bedroom"><span class="scene-stop-icon">02</span><span><em>TWO-POINT PERSPECTIVE</em><b>Bedroom Interior</b><small>Room structure, furniture and personal details.</small></span></a></nav>
     <div class="scene-intro-overlay" data-intro-overlay hidden><section class="scene-intro-card"><div class="scene-intro-top"><div><div class="scene-eyebrow">SCENE DRAWING · INTRO</div><h2>${course.intro.title}</h2></div><button class="scene-intro-close" data-intro-close>Close ✕</button></div><div class="scene-intro-video"><iframe src="https://customer-a78os4oj56dr67ab.cloudflarestream.com/${course.intro.videoStreamId}/iframe" loading="lazy" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen title="${course.intro.title}"></iframe></div><div class="scene-intro-foot"><p>Watch how a scene combines character, place and story. When you are ready, begin with Extreme Wide Shot.</p><a href="${course.lessons[0].href}" data-intro-start>Begin Extreme Wide Shot →</a></div></section></div>
   `;
 }
 
 document.getElementById('course-overview-root').innerHTML = renderSceneDrawingFoundationOverview(SCENE_DRAWING_FOUNDATION_COURSE);
+try { const practice=JSON.parse(localStorage.getItem('fei_viewpoints_practice_v1')||'{}'); const done=new Set(practice.completed||[]);const count=[0,1,2].flatMap(a=>[0,1,2].map(b=>`angle-${a}-story-${b}`)).filter(id=>done.has(id)).length;document.getElementById('viewpoints-practice-progress').textContent=`Practice on this browser: ${count}/9 story sketches${done.has('review')?' · Three-viewpoint review complete':''}`; } catch {}
 const introOverlay = document.querySelector('[data-intro-overlay]');
 document.querySelectorAll('[data-scene-intro]').forEach(button => button.addEventListener('click', () => { introOverlay.hidden = false; document.body.style.overflow = 'hidden'; }));
 document.querySelector('[data-intro-close]').addEventListener('click', () => { introOverlay.hidden = true; document.body.style.overflow = ''; });
