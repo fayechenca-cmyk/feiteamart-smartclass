@@ -1,0 +1,55 @@
+{
+  "text": "Two best friends build a blanket fort at a sleepover.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.103083,
+      "end": 0.347916
+    },
+    {
+      "text": "best",
+      "start": 0.360833,
+      "end": 0.798958
+    },
+    {
+      "text": "friends",
+      "start": 0.798958,
+      "end": 1.198458
+    },
+    {
+      "text": "build",
+      "start": 1.211333,
+      "end": 1.494833
+    },
+    {
+      "text": "a",
+      "start": 1.559291,
+      "end": 1.6108319
+    },
+    {
+      "text": "blanket",
+      "start": 1.623708,
+      "end": 2.087624
+    },
+    {
+      "text": "fort",
+      "start": 2.1005,
+      "end": 2.512875
+    },
+    {
+      "text": "at",
+      "start": 2.590208,
+      "end": 2.706166
+    },
+    {
+      "text": "a",
+      "start": 2.706166,
+      "end": 2.7577069
+    },
+    {
+      "text": "sleepover",
+      "start": 2.770625,
+      "end": 3.32475
+    }
+  ]
+}

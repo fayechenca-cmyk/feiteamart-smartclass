@@ -100,7 +100,7 @@ function renderScreen(){
  $('interaction-hint').hidden=step!==2;
  camera();picture();
 }
-function render(){renderScreen();StepVoice.setStep(cursor);}
+function render(){renderScreen();StepVoice.setStep(cursor);IntroFilm.setActive(journey[cursor].kind==='intro');if(journey[cursor].kind==='intro')StepVoice.stop();}
 function advance(delta){
  if(cursor===journey.length-1&&delta>0){location.href='../';return}
  const current=journey[cursor];

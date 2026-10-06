@@ -1,0 +1,55 @@
+{
+  "text": "A kid sits in a theater seat, watching the show.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.077333,
+      "end": 0.180416
+    },
+    {
+      "text": "kid",
+      "start": 0.193291,
+      "end": 0.489666
+    },
+    {
+      "text": "sits",
+      "start": 0.502583,
+      "end": 0.837624
+    },
+    {
+      "text": "in",
+      "start": 0.8505,
+      "end": 0.9665
+    },
+    {
+      "text": "a",
+      "start": 0.979375,
+      "end": 1.0309159
+    },
+    {
+      "text": "theater",
+      "start": 1.030916,
+      "end": 1.378874
+    },
+    {
+      "text": "seat",
+      "start": 1.378875,
+      "end": 1.79125
+    },
+    {
+      "text": "watching",
+      "start": 2.036083,
+      "end": 2.409791
+    },
+    {
+      "text": "the",
+      "start": 2.409791,
+      "end": 2.474207
+    },
+    {
+      "text": "show",
+      "start": 2.487125,
+      "end": 2.938166
+    }
+  ]
+}

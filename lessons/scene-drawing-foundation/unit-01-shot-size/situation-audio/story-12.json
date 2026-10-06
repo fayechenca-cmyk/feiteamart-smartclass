@@ -1,0 +1,55 @@
+{
+  "text": "A girl on a hike stops to drink some water.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.090208,
+      "end": 0.180416
+    },
+    {
+      "text": "girl",
+      "start": 0.180416,
+      "end": 0.425249
+    },
+    {
+      "text": "on",
+      "start": 0.438125,
+      "end": 0.528333
+    },
+    {
+      "text": "a",
+      "start": 0.54125,
+      "end": 0.5799159
+    },
+    {
+      "text": "hike",
+      "start": 0.592791,
+      "end": 0.940749
+    },
+    {
+      "text": "stops",
+      "start": 0.99225,
+      "end": 1.353083
+    },
+    {
+      "text": "to",
+      "start": 1.353083,
+      "end": 1.430416
+    },
+    {
+      "text": "drink",
+      "start": 1.430416,
+      "end": 1.610832
+    },
+    {
+      "text": "some",
+      "start": 1.610833,
+      "end": 1.804124
+    },
+    {
+      "text": "water",
+      "start": 1.817,
+      "end": 2.255125
+    }
+  ]
+}

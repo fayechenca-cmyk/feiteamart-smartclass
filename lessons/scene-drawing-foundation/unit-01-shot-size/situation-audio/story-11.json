@@ -1,0 +1,55 @@
+{
+  "text": "Two friends stand at the edge of the playground, talking.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.090208,
+      "end": 0.386583
+    },
+    {
+      "text": "friends",
+      "start": 0.386583,
+      "end": 0.734541
+    },
+    {
+      "text": "stand",
+      "start": 0.734541,
+      "end": 1.185582
+    },
+    {
+      "text": "at",
+      "start": 1.185583,
+      "end": 1.288666
+    },
+    {
+      "text": "the",
+      "start": 1.301541,
+      "end": 1.365957
+    },
+    {
+      "text": "edge",
+      "start": 1.378875,
+      "end": 1.67525
+    },
+    {
+      "text": "of",
+      "start": 1.688125,
+      "end": 1.7396659
+    },
+    {
+      "text": "the",
+      "start": 1.752583,
+      "end": 1.829916
+    },
+    {
+      "text": "playground",
+      "start": 1.842791,
+      "end": 2.474249
+    },
+    {
+      "text": "talking",
+      "start": 2.680416,
+      "end": 3.247416
+    }
+  ]
+}

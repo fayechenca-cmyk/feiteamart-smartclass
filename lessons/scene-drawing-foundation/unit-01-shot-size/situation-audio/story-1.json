@@ -1,0 +1,40 @@
+{
+  "text": "Winter has passed. Is spring getting closer?",
+  "cues": [
+    {
+      "text": "Winter",
+      "start": 0.064416,
+      "end": 0.373707
+    },
+    {
+      "text": "has",
+      "start": 0.386583,
+      "end": 0.554124
+    },
+    {
+      "text": "passed",
+      "start": 0.567,
+      "end": 1.172666
+    },
+    {
+      "text": "Is",
+      "start": 1.572166,
+      "end": 1.701041
+    },
+    {
+      "text": "spring",
+      "start": 1.701041,
+      "end": 2.087624
+    },
+    {
+      "text": "getting",
+      "start": 2.1005,
+      "end": 2.306666
+    },
+    {
+      "text": "closer",
+      "start": 2.306708,
+      "end": 2.822166
+    }
+  ]
+}

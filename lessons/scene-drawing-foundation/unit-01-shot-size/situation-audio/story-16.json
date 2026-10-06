@@ -1,0 +1,75 @@
+{
+  "text": "At midnight, a hand turns the door handle — someone is peeking around the edge.",
+  "cues": [
+    {
+      "text": "At",
+      "start": 0.103083,
+      "end": 0.257708
+    },
+    {
+      "text": "midnight",
+      "start": 0.270625,
+      "end": 0.760333
+    },
+    {
+      "text": "a",
+      "start": 1.10825,
+      "end": 1.134041
+    },
+    {
+      "text": "hand",
+      "start": 1.146916,
+      "end": 1.597957
+    },
+    {
+      "text": "turns",
+      "start": 1.662375,
+      "end": 1.971666
+    },
+    {
+      "text": "the",
+      "start": 1.971666,
+      "end": 2.113416
+    },
+    {
+      "text": "door",
+      "start": 2.126291,
+      "end": 2.384041
+    },
+    {
+      "text": "handle",
+      "start": 2.396916,
+      "end": 2.886624
+    },
+    {
+      "text": "someone",
+      "start": 3.170083,
+      "end": 3.530916
+    },
+    {
+      "text": "is",
+      "start": 3.543833,
+      "end": 3.672666
+    },
+    {
+      "text": "peeking",
+      "start": 3.672666,
+      "end": 4.020624
+    },
+    {
+      "text": "around",
+      "start": 4.0335,
+      "end": 4.304125
+    },
+    {
+      "text": "the",
+      "start": 4.317,
+      "end": 4.3556659
+    },
+    {
+      "text": "edge",
+      "start": 4.355666,
+      "end": 4.832457
+    }
+  ]
+}

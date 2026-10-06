@@ -1,0 +1,70 @@
+{
+  "text": "A girl draws at a table while her teacher stands beside her, helping.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.103083,
+      "end": 0.193291
+    },
+    {
+      "text": "girl",
+      "start": 0.206166,
+      "end": 0.463916
+    },
+    {
+      "text": "draws",
+      "start": 0.476791,
+      "end": 0.876291
+    },
+    {
+      "text": "at",
+      "start": 0.889166,
+      "end": 0.953582
+    },
+    {
+      "text": "a",
+      "start": 0.9665,
+      "end": 1.0180409
+    },
+    {
+      "text": "table",
+      "start": 1.030916,
+      "end": 1.507707
+    },
+    {
+      "text": "while",
+      "start": 1.520625,
+      "end": 1.713916
+    },
+    {
+      "text": "her",
+      "start": 1.726791,
+      "end": 1.855666
+    },
+    {
+      "text": "teacher",
+      "start": 1.868541,
+      "end": 2.293791
+    },
+    {
+      "text": "stands",
+      "start": 2.306708,
+      "end": 2.680416
+    },
+    {
+      "text": "beside",
+      "start": 2.693291,
+      "end": 3.066999
+    },
+    {
+      "text": "her",
+      "start": 3.079916,
+      "end": 3.286082
+    },
+    {
+      "text": "helping",
+      "start": 3.49225,
+      "end": 3.994833
+    }
+  ]
+}

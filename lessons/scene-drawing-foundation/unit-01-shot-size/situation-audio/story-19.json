@@ -1,0 +1,90 @@
+{
+  "text": "One pair of feet walks forward down a school hallway, a door waiting at the far end.",
+  "cues": [
+    {
+      "text": "One",
+      "start": 0.090208,
+      "end": 0.322166
+    },
+    {
+      "text": "pair",
+      "start": 0.322166,
+      "end": 0.541249
+    },
+    {
+      "text": "of",
+      "start": 0.554125,
+      "end": 0.618541
+    },
+    {
+      "text": "feet",
+      "start": 0.631458,
+      "end": 0.914958
+    },
+    {
+      "text": "walks",
+      "start": 0.927833,
+      "end": 1.288666
+    },
+    {
+      "text": "forward",
+      "start": 1.301541,
+      "end": 1.701041
+    },
+    {
+      "text": "down",
+      "start": 1.701041,
+      "end": 1.907207
+    },
+    {
+      "text": "a",
+      "start": 1.920083,
+      "end": 1.9587489
+    },
+    {
+      "text": "school",
+      "start": 1.971666,
+      "end": 2.345374
+    },
+    {
+      "text": "hallway",
+      "start": 2.35825,
+      "end": 2.860833
+    },
+    {
+      "text": "a",
+      "start": 3.311875,
+      "end": 3.402083
+    },
+    {
+      "text": "door",
+      "start": 3.414958,
+      "end": 3.775791
+    },
+    {
+      "text": "waiting",
+      "start": 3.788666,
+      "end": 4.162374
+    },
+    {
+      "text": "at",
+      "start": 4.162375,
+      "end": 4.265458
+    },
+    {
+      "text": "the",
+      "start": 4.265458,
+      "end": 4.355666
+    },
+    {
+      "text": "far",
+      "start": 4.368541,
+      "end": 4.729374
+    },
+    {
+      "text": "end",
+      "start": 4.74225,
+      "end": 5.14175
+    }
+  ]
+}

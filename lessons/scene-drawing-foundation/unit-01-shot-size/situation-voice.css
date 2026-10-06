@@ -1,0 +1,3 @@
+.situation-voice-controls{display:flex;justify-content:center;gap:12px;margin:12px auto;font:12px 'Open Sans',sans-serif}
+.situation-voice-controls button{font:inherit;color:#625477;background:#f3eefb;border:1px solid #ddd3ee;border-radius:20px;padding:7px 12px;cursor:pointer}
+.situation-voice-controls button:focus-visible{outline:3px solid #67e8f9;outline-offset:3px}

@@ -1,0 +1,50 @@
+{
+  "text": "A girl runs into the classroom, late for class.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.103083,
+      "end": 0.206166
+    },
+    {
+      "text": "girl",
+      "start": 0.219083,
+      "end": 0.528374
+    },
+    {
+      "text": "runs",
+      "start": 0.54125,
+      "end": 0.850541
+    },
+    {
+      "text": "into",
+      "start": 0.863416,
+      "end": 1.043832
+    },
+    {
+      "text": "the",
+      "start": 1.043833,
+      "end": 1.121166
+    },
+    {
+      "text": "classroom",
+      "start": 1.134,
+      "end": 1.701
+    },
+    {
+      "text": "late",
+      "start": 2.126291,
+      "end": 2.306707
+    },
+    {
+      "text": "for",
+      "start": 2.306708,
+      "end": 2.435583
+    },
+    {
+      "text": "class",
+      "start": 2.448458,
+      "end": 2.976791
+    }
+  ]
+}

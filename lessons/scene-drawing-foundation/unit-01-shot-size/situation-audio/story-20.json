@@ -1,0 +1,60 @@
+{
+  "text": "Under the table, one hand passes a secret note to another.",
+  "cues": [
+    {
+      "text": "Under",
+      "start": 0.077333,
+      "end": 0.283499
+    },
+    {
+      "text": "the",
+      "start": 0.2835,
+      "end": 0.347916
+    },
+    {
+      "text": "table",
+      "start": 0.347958,
+      "end": 0.824749
+    },
+    {
+      "text": "one",
+      "start": 1.327333,
+      "end": 1.533499
+    },
+    {
+      "text": "hand",
+      "start": 1.546375,
+      "end": 1.95875
+    },
+    {
+      "text": "passes",
+      "start": 1.971666,
+      "end": 2.461374
+    },
+    {
+      "text": "a",
+      "start": 2.474208,
+      "end": 2.538624
+    },
+    {
+      "text": "secret",
+      "start": 2.551541,
+      "end": 2.976791
+    },
+    {
+      "text": "note",
+      "start": 2.989708,
+      "end": 3.273208
+    },
+    {
+      "text": "to",
+      "start": 3.286083,
+      "end": 3.414958
+    },
+    {
+      "text": "another",
+      "start": 3.427833,
+      "end": 3.917541
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "text": "Two kids search the park for a ball they lost.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.103083,
+      "end": 0.309249
+    },
+    {
+      "text": "kids",
+      "start": 0.322166,
+      "end": 0.644332
+    },
+    {
+      "text": "search",
+      "start": 0.657208,
+      "end": 0.953583
+    },
+    {
+      "text": "the",
+      "start": 0.9665,
+      "end": 1.056708
+    },
+    {
+      "text": "park",
+      "start": 1.056708,
+      "end": 1.404666
+    },
+    {
+      "text": "for",
+      "start": 1.417541,
+      "end": 1.559291
+    },
+    {
+      "text": "a",
+      "start": 1.559291,
+      "end": 1.6108319
+    },
+    {
+      "text": "ball",
+      "start": 1.623708,
+      "end": 1.829874
+    },
+    {
+      "text": "they",
+      "start": 1.829916,
+      "end": 1.958749
+    },
+    {
+      "text": "lost",
+      "start": 1.95875,
+      "end": 2.551541
+    }
+  ]
+}

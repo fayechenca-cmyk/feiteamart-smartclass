@@ -1,0 +1,65 @@
+{
+  "text": "Two friends sit face to face at a restaurant table, having lunch.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.103083,
+      "end": 0.347916
+    },
+    {
+      "text": "friends",
+      "start": 0.360833,
+      "end": 0.670083
+    },
+    {
+      "text": "sit",
+      "start": 0.670083,
+      "end": 0.850499
+    },
+    {
+      "text": "face",
+      "start": 0.863416,
+      "end": 1.134041
+    },
+    {
+      "text": "to",
+      "start": 1.146916,
+      "end": 1.237124
+    },
+    {
+      "text": "face",
+      "start": 1.237125,
+      "end": 1.6495
+    },
+    {
+      "text": "at",
+      "start": 1.701041,
+      "end": 1.791249
+    },
+    {
+      "text": "a",
+      "start": 1.804125,
+      "end": 1.8427909
+    },
+    {
+      "text": "restaurant",
+      "start": 1.855666,
+      "end": 2.409791
+    },
+    {
+      "text": "table",
+      "start": 2.422666,
+      "end": 2.809249
+    },
+    {
+      "text": "having",
+      "start": 2.8995,
+      "end": 3.195875
+    },
+    {
+      "text": "lunch",
+      "start": 3.195875,
+      "end": 3.711333
+    }
+  ]
+}

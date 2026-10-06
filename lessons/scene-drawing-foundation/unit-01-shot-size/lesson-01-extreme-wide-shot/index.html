@@ -930,6 +930,7 @@ button{font-family:inherit;}
 <script src="../../../../core/course-badge-registry.js"></script>
 <script src="../../../../core/badge-catalog.js"></script>
 <script src="../../../../core/scene-drawing-app.js"></script>
+<script src="../situation-audio/data.js"></script><script src="../situation-voice.js"></script><link rel="stylesheet" href="../situation-voice.css">
 <script src="lesson-data.js"></script>
 <!-- Written "Tips" under the Quick Sketch panel (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
 <script src="../../shared/shot-size-tips.js"></script>
@@ -1988,6 +1989,7 @@ function playTypeTick(){
   if (typeof artchiPlayTone === 'function') artchiPlayTone(1400, 0.025);
 }
 function typewriterInto(el, text, speed, timers, onDone, onChar){
+  if (SituationVoice.reveal(el, text, speed, timers, onDone)) return;
   el.textContent = '';
   let i = 0;
   function tick(){
@@ -2024,6 +2026,7 @@ function runPracticeCountdown(el, timers, onDone){
 // against with their own reveal-timer cleanup.
 let _storyRevealTimers = [];
 function cleanupStoryPractice(){
+  SituationVoice.stop();
   _storyRevealTimers.forEach(id => clearTimeout(id));
   _storyRevealTimers = [];
 }
@@ -3061,6 +3064,7 @@ function renderRail(){
 // student navigates off Step 2, in either direction.
 let _liveStep = null;
 function renderCurrentStep(){
+  SituationVoice.stop();
   hideContinue();
   if (_liveStep && _liveStep.cleanup) {
     try { _liveStep.cleanup(); } catch (e) { console.warn('[cleanup] failed', e); }
@@ -3121,6 +3125,7 @@ function prevStep(){
   if (STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex--; renderCurrentStep(); }
 }
 function goToStep(i){
+  SituationVoice.stop();
   playStepAdvanceTone();
   STATE.stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
   renderCurrentStep();

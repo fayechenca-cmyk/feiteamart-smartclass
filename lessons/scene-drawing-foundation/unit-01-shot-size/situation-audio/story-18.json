@@ -1,0 +1,80 @@
+{
+  "text": "A hand holds a warm mug at the table, next to a plate of food.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.090208,
+      "end": 0.1417489
+    },
+    {
+      "text": "hand",
+      "start": 0.14175,
+      "end": 0.592791
+    },
+    {
+      "text": "holds",
+      "start": 0.605666,
+      "end": 0.953624
+    },
+    {
+      "text": "a",
+      "start": 0.9665,
+      "end": 1.0825
+    },
+    {
+      "text": "warm",
+      "start": 1.095375,
+      "end": 1.456208
+    },
+    {
+      "text": "mug",
+      "start": 1.469083,
+      "end": 1.675249
+    },
+    {
+      "text": "at",
+      "start": 1.688125,
+      "end": 1.752541
+    },
+    {
+      "text": "the",
+      "start": 1.765458,
+      "end": 1.829874
+    },
+    {
+      "text": "table",
+      "start": 1.842791,
+      "end": 2.255166
+    },
+    {
+      "text": "next",
+      "start": 2.719083,
+      "end": 2.938166
+    },
+    {
+      "text": "to",
+      "start": 2.951041,
+      "end": 3.015457
+    },
+    {
+      "text": "a",
+      "start": 3.028333,
+      "end": 3.092749
+    },
+    {
+      "text": "plate",
+      "start": 3.105666,
+      "end": 3.376291
+    },
+    {
+      "text": "of",
+      "start": 3.389166,
+      "end": 3.453582
+    },
+    {
+      "text": "food",
+      "start": 3.4665,
+      "end": 3.878875
+    }
+  ]
+}

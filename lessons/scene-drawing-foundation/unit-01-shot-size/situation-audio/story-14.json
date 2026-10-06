@@ -1,0 +1,75 @@
+{
+  "text": "A girl stops in front of a shop window, looking at something she loves.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.090208,
+      "end": 0.180416
+    },
+    {
+      "text": "girl",
+      "start": 0.193291,
+      "end": 0.438124
+    },
+    {
+      "text": "stops",
+      "start": 0.451041,
+      "end": 0.889166
+    },
+    {
+      "text": "in",
+      "start": 0.902041,
+      "end": 1.095332
+    },
+    {
+      "text": "front",
+      "start": 1.10825,
+      "end": 1.340208
+    },
+    {
+      "text": "of",
+      "start": 1.353083,
+      "end": 1.417499
+    },
+    {
+      "text": "a",
+      "start": 1.430416,
+      "end": 1.4819569
+    },
+    {
+      "text": "shop",
+      "start": 1.494833,
+      "end": 1.881416
+    },
+    {
+      "text": "window",
+      "start": 1.894333,
+      "end": 2.332458
+    },
+    {
+      "text": "looking",
+      "start": 2.770625,
+      "end": 3.092791
+    },
+    {
+      "text": "at",
+      "start": 3.092791,
+      "end": 3.247416
+    },
+    {
+      "text": "something",
+      "start": 3.260291,
+      "end": 3.633999
+    },
+    {
+      "text": "she",
+      "start": 3.634,
+      "end": 3.788625
+    },
+    {
+      "text": "loves",
+      "start": 3.801541,
+      "end": 4.342791
+    }
+  ]
+}

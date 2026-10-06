@@ -1,0 +1,75 @@
+{
+  "text": "A girl freezes, hiding behind a cushion — she just heard or saw something scary.",
+  "cues": [
+    {
+      "text": "A",
+      "start": 0.090208,
+      "end": 0.193291
+    },
+    {
+      "text": "girl",
+      "start": 0.206166,
+      "end": 0.489666
+    },
+    {
+      "text": "freezes",
+      "start": 0.502583,
+      "end": 1.159791
+    },
+    {
+      "text": "hiding",
+      "start": 1.39175,
+      "end": 1.6495
+    },
+    {
+      "text": "behind",
+      "start": 1.662375,
+      "end": 1.984541
+    },
+    {
+      "text": "a",
+      "start": 1.984541,
+      "end": 2.0360819
+    },
+    {
+      "text": "cushion",
+      "start": 2.048958,
+      "end": 2.525749
+    },
+    {
+      "text": "she",
+      "start": 2.989708,
+      "end": 3.182999
+    },
+    {
+      "text": "just",
+      "start": 3.195875,
+      "end": 3.440708
+    },
+    {
+      "text": "heard",
+      "start": 3.453625,
+      "end": 3.89175
+    },
+    {
+      "text": "or",
+      "start": 3.969083,
+      "end": 4.188166
+    },
+    {
+      "text": "saw",
+      "start": 4.201041,
+      "end": 4.523207
+    },
+    {
+      "text": "something",
+      "start": 4.523208,
+      "end": 4.884041
+    },
+    {
+      "text": "scary",
+      "start": 4.896916,
+      "end": 5.451041
+    }
+  ]
+}

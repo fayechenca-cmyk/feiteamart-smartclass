@@ -1,0 +1,70 @@
+{
+  "text": "After travelling for a long time, I suddenly discovered an incredible new world.",
+  "cues": [
+    {
+      "text": "After",
+      "start": 0.103083,
+      "end": 0.386583
+    },
+    {
+      "text": "travelling",
+      "start": 0.386583,
+      "end": 0.889166
+    },
+    {
+      "text": "for",
+      "start": 0.902041,
+      "end": 1.018041
+    },
+    {
+      "text": "a",
+      "start": 1.030916,
+      "end": 1.095332
+    },
+    {
+      "text": "long",
+      "start": 1.10825,
+      "end": 1.456208
+    },
+    {
+      "text": "time",
+      "start": 1.469083,
+      "end": 1.932999
+    },
+    {
+      "text": "I",
+      "start": 2.461333,
+      "end": 2.577333
+    },
+    {
+      "text": "suddenly",
+      "start": 2.590208,
+      "end": 3.028333
+    },
+    {
+      "text": "discovered",
+      "start": 3.04125,
+      "end": 3.621166
+    },
+    {
+      "text": "an",
+      "start": 3.685583,
+      "end": 3.7371239
+    },
+    {
+      "text": "incredible",
+      "start": 3.75,
+      "end": 4.626291
+    },
+    {
+      "text": "new",
+      "start": 4.7165,
+      "end": 4.935583
+    },
+    {
+      "text": "world",
+      "start": 4.948458,
+      "end": 5.476791
+    }
+  ]
+}

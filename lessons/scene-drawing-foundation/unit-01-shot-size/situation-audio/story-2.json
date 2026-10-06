@@ -1,0 +1,50 @@
+{
+  "text": "Late at night, I became lost in the forest.",
+  "cues": [
+    {
+      "text": "Late",
+      "start": 0.090208,
+      "end": 0.412374
+    },
+    {
+      "text": "at",
+      "start": 0.42525,
+      "end": 0.54125
+    },
+    {
+      "text": "night",
+      "start": 0.54125,
+      "end": 0.927833
+    },
+    {
+      "text": "I",
+      "start": 1.378875,
+      "end": 1.50775
+    },
+    {
+      "text": "became",
+      "start": 1.520625,
+      "end": 1.945875
+    },
+    {
+      "text": "lost",
+      "start": 1.945875,
+      "end": 2.35825
+    },
+    {
+      "text": "in",
+      "start": 2.35825,
+      "end": 2.3969159
+    },
+    {
+      "text": "the",
+      "start": 2.396916,
+      "end": 2.474207
+    },
+    {
+      "text": "forest",
+      "start": 2.474208,
+      "end": 3.092749
+    }
+  ]
+}

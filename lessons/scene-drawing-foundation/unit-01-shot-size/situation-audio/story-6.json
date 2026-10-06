@@ -1,0 +1,50 @@
+{
+  "text": "Two friends walk out through the school gate together.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.090208,
+      "end": 0.438166
+    },
+    {
+      "text": "friends",
+      "start": 0.451041,
+      "end": 0.850499
+    },
+    {
+      "text": "walk",
+      "start": 0.8505,
+      "end": 1.146875
+    },
+    {
+      "text": "out",
+      "start": 1.159791,
+      "end": 1.365957
+    },
+    {
+      "text": "through",
+      "start": 1.366,
+      "end": 1.494875
+    },
+    {
+      "text": "the",
+      "start": 1.50775,
+      "end": 1.585083
+    },
+    {
+      "text": "school",
+      "start": 1.597958,
+      "end": 1.907208
+    },
+    {
+      "text": "gate",
+      "start": 1.907208,
+      "end": 2.126291
+    },
+    {
+      "text": "together",
+      "start": 2.139166,
+      "end": 2.641749
+    }
+  ]
+}

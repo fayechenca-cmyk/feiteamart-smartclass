@@ -1,0 +1,60 @@
+{
+  "text": "Two friends work together on an art project at a table.",
+  "cues": [
+    {
+      "text": "Two",
+      "start": 0.103083,
+      "end": 0.399458
+    },
+    {
+      "text": "friends",
+      "start": 0.412375,
+      "end": 0.773208
+    },
+    {
+      "text": "work",
+      "start": 0.786083,
+      "end": 1.005166
+    },
+    {
+      "text": "together",
+      "start": 1.018041,
+      "end": 1.546374
+    },
+    {
+      "text": "on",
+      "start": 1.559291,
+      "end": 1.675291
+    },
+    {
+      "text": "an",
+      "start": 1.688125,
+      "end": 1.804125
+    },
+    {
+      "text": "art",
+      "start": 1.817,
+      "end": 1.997416
+    },
+    {
+      "text": "project",
+      "start": 1.997416,
+      "end": 2.538666
+    },
+    {
+      "text": "at",
+      "start": 2.551541,
+      "end": 2.641749
+    },
+    {
+      "text": "a",
+      "start": 2.64175,
+      "end": 2.6804159
+    },
+    {
+      "text": "table",
+      "start": 2.693291,
+      "end": 3.208749
+    }
+  ]
+}

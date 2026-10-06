@@ -893,6 +893,7 @@ button{font-family:inherit;}
 <script src="../../../../core/course-badge-registry.js"></script>
 <script src="../../../../core/badge-catalog.js"></script>
 <script src="../../../../core/scene-drawing-app.js"></script>
+<script src="../situation-audio/data.js"></script><script src="../situation-voice.js"></script><link rel="stylesheet" href="../situation-voice.css">
 <script src="lesson-data.js"></script>
 <!-- Written "Tips" under the Quick Sketch panel (shared/, NOT _shared/ — Pages does not publish underscore dirs). -->
 <script src="../../shared/shot-size-tips.js"></script>
@@ -1022,6 +1023,7 @@ function cleanupActive3DStage(){
 // STORY_SCENE_STEPS entry uses.
 let _sceneRevealTimers = [];
 function cleanupStoryScene(){
+  SituationVoice.stop();
   _sceneRevealTimers.forEach(id => clearTimeout(id));
   _sceneRevealTimers = [];
   cleanupActive3DStage();
@@ -1663,6 +1665,7 @@ function afterRenderScenesIntroExplain(){
         reveal sequence needs its own timer cancellation.
 ============================================================ */
 function typewriterInto(el, text, speed, timers, onDone){
+  if (SituationVoice.reveal(el, text, speed, timers, onDone)) return;
   el.textContent = '';
   let i = 0;
   function tick(){
@@ -1813,6 +1816,7 @@ function attachTeacherRefVideo(streamId, frameId, tapId){
   document.head.appendChild(sdk);
 }
 function openTeacherLightbox(sceneId) {
+  SituationVoice.stop();
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === sceneId);
   if (!ref) return;
   const frame = document.getElementById('teacherLightboxFrame');
@@ -3162,6 +3166,7 @@ function renderRail(){
 // student navigates off Step 2, in either direction.
 let _liveStep = null;
 function renderCurrentStep(){
+  SituationVoice.stop();
   hideContinue();
   if (_liveStep && _liveStep.cleanup) {
     try { _liveStep.cleanup(); } catch (e) { console.warn('[cleanup] failed', e); }
@@ -3209,6 +3214,7 @@ function prevStep(){
   if (t >= 0 && STATE.stepIndex > 0) { playStepAdvanceTone(); STATE.stepIndex = t; renderCurrentStep(); }
 }
 function goToStep(i){
+  SituationVoice.stop();
   playStepAdvanceTone();
   STATE.stepIndex = Math.max(0, Math.min(STEPS.length - 1, i));
   renderCurrentStep();
