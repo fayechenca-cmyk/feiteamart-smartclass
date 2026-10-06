@@ -86,6 +86,30 @@
   // owns it — so this is a plain copy, not a derived reference.
   const EXTENDED_PREVIEW_SKILLS = [...FREE_SKILLS, 'sphere', 'cylinder', 'cup'];
 
+  // Oct 2026 — Faye: the 4 legacy live-class codes are enrolled in
+  // the live Foundation of Sketch A Zoom course, not automatically
+  // entitled to the self-paced Smart Class Foundation of Sketch
+  // program. They get Step 1 only (through Paper Crane) — Step 2
+  // onward (every still-life-* id) requires a separate real purchase,
+  // same as any other paying user. Until/unless one of them pays,
+  // removing a code from this list is how that upgrade is applied for
+  // now — same manual-list pattern as RESTRICTED_LEGACY_CODES above,
+  // no Stripe flow requested or built here. Scoped to the 'skills'
+  // branch only: their Creation access is already correctly capped by
+  // the Oct 2026 3-lesson policy (creationCapExempt below only exempts
+  // true admin and genuinely paid non-legacy accounts), and their
+  // Zodiac access is already correctly scoped off by hasFullAccess's
+  // existing isLiveClass check — neither needed any change here.
+  const STEP1_ONLY_LEGACY_CODES = ['JOJO-10', 'A7Q9-FOX', 'SELENA-23', 'XIDA-25'];
+  // FOUNDATION_A_PATH's full 11 ids, in order (confirmed directly
+  // against index.html). core/access.js has no access to that array
+  // itself — index.html owns it — so this is a plain copy, same
+  // convention as EXTENDED_PREVIEW_SKILLS above.
+  const FOUNDATION_A_STEP1_SKILLS = [
+    'preparation', 'cube', 'sphere', 'cylinder', 'cup', 'apple',
+    'cone', 'icecream', 'intersecting', 'box', 'papercrane'
+  ];
+
   // Cache the access row so we don't hit Supabase on every nav.
   let _cache = null;
   let _cacheUserId = null;
@@ -308,6 +332,12 @@
     // Foundation Step 1 preview rule further down instead.
     const isRestrictedLegacy = status.isLegacy && RESTRICTED_LEGACY_CODES.includes(status.studentCode);
 
+    // Oct 2026: the 4 legacy live-class codes must ALSO not hit the
+    // blanket bypass below — same reasoning as isRestrictedLegacy
+    // above, different narrower rule further down (Step 1 only,
+    // through Paper Crane, instead of a 5-lesson preview).
+    const isStep1OnlyLegacy = status.isLegacy && STEP1_ONLY_LEGACY_CODES.includes(status.studentCode);
+
     // Oct 2026 — Creation 3-lesson cap, permanent platform policy,
     // replaces the old "Creation fully open" rule below. Deliberately
     // checked BEFORE the general bypass and with its own exemption
@@ -335,22 +365,26 @@
       // way it already does for Skills.
     }
 
-    // Legacy code OR paid → everything open. !isRestrictedLegacy gates
-    // the WHOLE condition, not just the isLegacy half — status.membership
-    // is unconditionally 'paid' for every legacy profile regardless of
-    // which code it is, so without this a restricted code would still
-    // slip through via that second half of the OR.
-    if (!isRestrictedLegacy && (status.isLegacy || status.membership === 'paid')) {
+    // Legacy code OR paid → everything open. !isRestrictedLegacy and
+    // !isStep1OnlyLegacy gate the WHOLE condition, not just the
+    // isLegacy half — status.membership is unconditionally 'paid' for
+    // every legacy profile regardless of which code it is, so without
+    // this a restricted/capped code would still slip through via that
+    // second half of the OR.
+    if (!isRestrictedLegacy && !isStep1OnlyLegacy && (status.isLegacy || status.membership === 'paid')) {
       return { allowed: true, reason: 'full_access' };
     }
 
-    // Free user (or a restricted legacy code, above) — apply branch rules
+    // Free user (or a restricted/capped legacy code, above) — apply branch rules
     if (branch === 'skills') {
       if (FREE_SKILLS.includes(lessonId)) {
         return { allowed: true, reason: 'free_skills' };
       }
       if (isRestrictedLegacy && EXTENDED_PREVIEW_SKILLS.includes(lessonId)) {
         return { allowed: true, reason: 'extended_preview' };
+      }
+      if (isStep1OnlyLegacy && FOUNDATION_A_STEP1_SKILLS.includes(lessonId)) {
+        return { allowed: true, reason: 'step1_only_legacy' };
       }
       return { allowed: false, reason: 'paywall_skills' };
     }
