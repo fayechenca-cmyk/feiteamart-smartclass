@@ -820,7 +820,7 @@ button{font-family:inherit;}
 </style>
 <link rel="stylesheet" href="closeup-visuals.css">
 <script src="closeup-visuals.js"></script>
-</head>
+<link rel="stylesheet" href="teaching-flow.css"></head>
 <body>
 
 <!-- Round 6 — shared hand-drawn/sketchy SVG filter, defined once and
@@ -884,7 +884,7 @@ button{font-family:inherit;}
       <div class="teacher-lightbox-icon">🎨</div>
     </div>
     <div class="teacher-lightbox-label" id="teacherLightboxLabel"></div>
-    <div class="teacher-lightbox-disclaimer" id="teacherLightboxDisclaimer" hidden>This is just one reference — there are many possible ways to draw this scene.</div>
+    <div class="teacher-lightbox-disclaimer" id="teacherLightboxDisclaimer" hidden>Sketch your own version. You will see the teacher’s approach afterwards.</div>
     <div class="teacher-lightbox-note" id="teacherLightboxNote"></div>
   </div>
 </div>
@@ -955,8 +955,8 @@ const EXTREME_STEPS = CloseupVisuals.comparisons.flatMap((story, i) => [
 ]);
 const STEPS = [
   { id:'closeup_concept',    render:renderCloseupConcept,       afterRender:afterRenderCloseupConcept, cleanup:cleanupCloseupConcept },
-  { id:'scenes_intro_title', render:renderScenesIntroTitle,     afterRender:afterRenderScenesIntroTitle },
-  { id:'scenes_intro_explain', render:renderScenesIntroExplain, afterRender:afterRenderScenesIntroExplain },
+  { id:'scenes_intro_title', render:renderScenesIntroTitle,     afterRender:afterRenderScenesIntroTitle, cleanup:cleanupStoryScene },
+  { id:'scenes_intro_explain', render:renderScenesIntroExplain, afterRender:afterRenderScenesIntroExplain, cleanup:cleanupStoryScene },
   ...STORY_SCENE_STEPS,
   ...EXTREME_STEPS,
   { id:'artwork_community',  render:renderTeacherCommunity,     afterRender:afterRenderTeacherCommunity },
@@ -1650,26 +1650,16 @@ function afterRenderCloseupConcept(){
    LESSON_DATA.scenes_intro supplies the copy; both cards use the
    standard fixed-dock Continue, same as every other simple step.
 ============================================================ */
+const CLOSEUP_WHY = 'Use a close-up when you want us to pay attention to one part of a story. Move closer to show a facial expression, a hand in action, or an important object. What should we notice? For an extreme close-up, move even closer and let one tiny detail fill the frame.';
+const CLOSEUP_PLAN = 'Let’s try five short stories. Listen, then take five seconds to imagine your picture. Sketch your own idea first. Afterwards, watch your teacher’s quick sketch. Yours does not have to look the same. Then we’ll revisit three stories as extreme close-ups.';
 function renderScenesIntroTitle(){
-  return `
-    <div class="step-inner intro-card">
-      <div class="intro-card-title">${LESSON_DATA.scenes_intro.titleCard}</div>
-    </div>
-  `;
+ return '<div class="step-inner why-closeup"><h2 class="step-title">When do we move closer?</h2><div class="why-examples">'+
+ [['frightenedFace','A facial expression'],['unlockingDoor','A hand in action'],['glassOfWater','An important object']].map(([key,label])=>'<figure>'+CloseupVisuals.image(key)+'<figcaption>'+label+'</figcaption></figure>').join('')+
+ '<p id="closeupWhy" class="step-sub"></p></div>';
 }
-function afterRenderScenesIntroTitle(){
-  showContinue('Next →', nextStep);
-}
-function renderScenesIntroExplain(){
-  return `
-    <div class="step-inner intro-card">
-      <p class="intro-card-line">${LESSON_DATA.scenes_intro.explainerCard}</p>
-    </div>
-  `;
-}
-function afterRenderScenesIntroExplain(){
-  showContinue('Next →', nextStep);
-}
+function afterRenderScenesIntroTitle(){typewriterInto(document.getElementById('closeupWhy'),CLOSEUP_WHY,24,_sceneRevealTimers);showContinue('Let’s practise →',nextStep)}
+function renderScenesIntroExplain(){return '<div class="step-inner intro-card"><h2 class="step-title">Your idea comes first</h2><div class="flow-strip">Listen → Imagine → Sketch → Teacher reference</div><p id="closeupPlan" class="intro-card-line"></p></div>'}
+function afterRenderScenesIntroExplain(){typewriterInto(document.getElementById('closeupPlan'),CLOSEUP_PLAN,24,_sceneRevealTimers);showContinue('Begin story 1 →',nextStep)}
 
 /* ============================================================
    STEP 3 — SIX STORY SCENES (exploration only, no drawing yet). Each
@@ -1883,12 +1873,14 @@ function closeTeacherLightbox() {
 }
 
 function renderStoryScene(sceneData, sceneIndex) {
-  return CloseupVisuals.scene(sceneData, sceneIndex);
+ return '<div class="step-inner story-think"><div class="think-copy"><div class="study-kicker">CLOSE-UP · STORY '+(sceneIndex+1)+' / 5</div><h2 class="step-title">'+sceneData.title+'</h2><p id="storyListen" class="step-sub"></p></div><div class="think-space"><p>Imagine your frame</p><div id="storyCountdown" class="scene-reveal-countdown">…</div><p>What will you bring closer?</p></div></div>';
 }
 function afterRenderStoryScene(sceneData) {
-  typewriterInto(document.querySelector(".study-shell .step-sub"), sceneData.situationLine, 24, _sceneRevealTimers);
-  ensureArtchiMounted();
-  showContinue('Now sketch this Close-Up →', nextStep);
+ hideContinue();
+ typewriterInto(document.getElementById('storyListen'),sceneData.situationLine,24,_sceneRevealTimers,()=>{
+  runRevealCountdown(document.getElementById('storyCountdown'),_sceneRevealTimers,()=>nextStep());
+ });
+ ensureArtchiMounted();
 }
 
 /* ============================================================
@@ -2047,16 +2039,42 @@ function initPracticeCanvas(){
   canvas.onpointercancel = () => { practiceDrawing = false; };
 }
 
+const practiceDrafts = {};
+let teacherRevealed = false;
+function capturePracticeDraft(){
+ const canvas=document.getElementById('practiceCanvas');
+ if(canvas && _currentStory)practiceDrafts[_currentStory.id]=canvas.toDataURL();
+}
+function restorePracticeDraft(src){
+ const canvas=document.getElementById('practiceCanvas'),story=_currentStory,img=new Image();
+ img.onload=()=>{if(canvas.isConnected && _currentStory===story)canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height)};
+ img.src=src;
+}
+function drawingContinue(){
+ if(!_currentStory.crop && !teacherRevealed)showContinue('I’ve sketched my idea · See the teacher →',revealTeacherReference);
+ else showContinue('Continue →',nextStep);
+}
+function revealTeacherReference(){
+ SituationVoice.stop();
+ capturePracticeDraft();
+ const ref=LESSON_DATA.teacher_references.find(r=>r.sceneId===_currentStory.id);
+ if(!ref || !ref.demoVideoStreamId){nextStep();return}
+ teacherRevealed=true;
+ document.getElementById('storyReferencePanel').innerHTML='<div class="practice-panel-label">Teacher’s Quick Sketch</div><p class="practice-panel-hint" id="teacherEncouragement"></p><div class="practice-ref-video"><iframe id="storyRefVideoFrame" src="'+teacherRefVideoSrc(ref.demoVideoStreamId,ref.posterTimeSecs)+'" title="Teacher quick sketch" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe><button class="video-tap-overlay" id="storyRefVideoTap" hidden>Tap to Play</button></div><p class="practice-ref-note">Your drawing stays here. Keep your own ideas.</p>';
+ attachTeacherRefVideo(ref.demoVideoStreamId,'storyRefVideoFrame','storyRefVideoTap');
+ document.getElementById('teacherEncouragement').textContent='Here is one way your teacher imagined this story. Your sketch does not have to be the same. Have fun, and keep what makes your idea yours.';
+ drawingContinue();
+}
+function expandDrawingWorkspace(){
+ const workspace=document.querySelector('.practice-round');
+ if(document.fullscreenElement)document.exitFullscreen?.();
+ else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>workspace.scrollIntoView({block:'start'}));
+ else workspace.scrollIntoView({block:'start'});
+}
+
 function renderStoryDraw(story, i){
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === story.id);
-  const hasVideo = !!(ref && ref.demoVideoStreamId);
-  const refInner = hasVideo
-    ? `<div class="practice-ref-video">
-         <iframe id="storyRefVideoFrame" src="${teacherRefVideoSrc(ref.demoVideoStreamId, ref.posterTimeSecs)}" loading="lazy" title="${ref.label}"
-           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen></iframe>
-         <button class="video-tap-overlay" id="storyRefVideoTap" hidden>🔊 Tap to Play</button>
-       </div>`
-    : story.crop ? CloseupVisuals.practice(story) : `<div class="practice-ref-video practice-ref-placeholder"><div class="practice-ref-placeholder-icon">🎨</div><div>Quick Sketch Reference video coming soon.</div></div>`;
+  const refInner = story.crop ? CloseupVisuals.practice(story) : '<div class="independent-reference">'+CloseupVisuals.image(story.sceneKey)+'</div>';
   const colors = PRACTICE_COLORS.map(c => `<span class="practice-color-dot${practiceColor === c ? ' picked' : ''}" data-color="${c}" style="background:${c};" onclick="pickPracticeColor('${c}')"></span>`).join('');
   const tools = Object.keys(PRACTICE_TOOLS).map(key => {
     const t = PRACTICE_TOOLS[key];
@@ -2066,15 +2084,15 @@ function renderStoryDraw(story, i){
     <div class="step-inner practice-round">
       <div class="practice-story-label">${story.crop ? "Extreme Close-Up practice" : "Situation " + (i+1)}: ${story.title} — ${story.framing}</div>
       <div class="practice-two-panel">
-        <div class="practice-panel practice-panel-teacher">
-          <div class="practice-panel-label">${story.crop ? "Same story · One detail" : "Quick Sketch Reference"}</div>
-          <div class="practice-panel-hint">A fast idea sketch, not a formal tutorial — you can sketch quickly too, digitally or on paper.</div>
+        <div class="practice-panel practice-panel-teacher" id="storyReferencePanel">
+          <div class="practice-panel-label">${story.crop ? "Same story · One detail" : "A starting idea"}</div>
+          <div class="practice-panel-hint">${story.crop ? "Bring one detail closer." : story.situationLine}</div>
           ${refInner}
-          <div class="practice-ref-note">This is just one reference — there are many possible ways to draw this scene.</div>
-          ${typeof ShotSizeTips !== 'undefined' ? ShotSizeTips.html({ current: story.crop ? 'ecu' : 'cu' }) : ''}
+          <div class="practice-ref-note">${story.crop ? "Keep the same story. Make one detail the focus." : "Sketch your own version. You will see the teacher’s approach afterwards."}</div>
+          <details class="optional-shot-tips"><summary>Need a framing reminder?</summary>${typeof ShotSizeTips !== 'undefined' ? ShotSizeTips.html({ current: story.crop ? 'ecu' : 'cu' }) : ''}</details>
         </div>
         <div class="practice-panel practice-panel-student" id="practiceStudentPanel">
-          <div class="practice-panel-label">Your Turn</div>
+          <div class="practice-panel-label">Your Turn <button class="workspace-expand" onclick="expandDrawingWorkspace()">⛶ Expand workspace</button></div>
           <div class="practice-canvas-wrap"><canvas id="practiceCanvas"></canvas></div>
           <div class="practice-tool-row">${tools}</div>
           <div class="practice-tool-row">${colors}</div>
@@ -2095,17 +2113,19 @@ function afterRenderStoryDraw(story, i){
   practiceColor = PRACTICE_COLORS[0];
   practiceTool = 'fineliner';
   const ref = LESSON_DATA.teacher_references.find(r => r.sceneId === story.id);
-  if (ref && ref.demoVideoStreamId) attachTeacherRefVideo(ref.demoVideoStreamId, 'storyRefVideoFrame', 'storyRefVideoTap');
+  teacherRevealed = false;
   initPracticeCanvas();
   const result = STATE.storyResults[i];
-  if (result === 'digital') {
+  if (practiceDrafts[story.id]) {
+    restorePracticeDraft(practiceDrafts[story.id]);
+  } else if (result === 'digital') {
     // Returning via Previous: put the saved drawing back so it isn't lost from view.
     practiceGetArtwork(practiceKeyForStory(story.id)).then(rec => {
       if (!rec || !rec.blob) return;
       const img = new Image();
       img.onload = () => {
         const c = document.getElementById('practiceCanvas');
-        if (c) c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        if (c && _currentStory === story) c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(img.src);
       };
       img.src = URL.createObjectURL(rec.blob);
@@ -2117,7 +2137,7 @@ function afterRenderStoryDraw(story, i){
     if (btn) btn.classList.add('picked');
     document.getElementById('practiceSavedNote').textContent = 'No problem — grab a pencil and draw this one on paper.';
   }
-  showContinue('Continue →', nextStep, { ghost: result == null });
+  drawingContinue();
 }
 async function savePracticeDrawingForStory(){
   const canvas = document.getElementById('practiceCanvas');
@@ -2130,7 +2150,7 @@ async function savePracticeDrawingForStory(){
     document.getElementById('practiceSavedNote').textContent = '✓ Saved — you can keep drawing or continue.';
     const paperBtn = document.getElementById('preferPaperBtn');
     if (paperBtn) paperBtn.classList.remove('picked');
-    showContinue('Continue →', nextStep);
+    drawingContinue();
   } catch (e) {
     console.warn('[savePracticeDrawingForStory] failed', e);
     document.getElementById('practiceSavedNote').textContent = "Couldn't save — you can still continue without saving.";
@@ -2143,7 +2163,7 @@ function choosePreferPaper(){
   const btn = document.getElementById('preferPaperBtn');
   if (btn) btn.classList.add('picked');
   document.getElementById('practiceSavedNote').textContent = 'No problem — grab a pencil and draw this one on paper.';
-  showContinue('Continue →', nextStep);
+  drawingContinue();
 }
 
 /* ============================================================
@@ -2425,6 +2445,7 @@ function renderRail(){
 // student navigates off Step 2, in either direction.
 let _liveStep = null;
 function renderCurrentStep(){
+  capturePracticeDraft();
   SituationVoice.stop();
   hideContinue();
   if (_liveStep && _liveStep.cleanup) {

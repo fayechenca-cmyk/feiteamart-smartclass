@@ -21,7 +21,7 @@
     "text": "Two kids search the park for a ball they lost."
   },
   "story-8": {
-    "text": "Two friends share an umbrella — and one steps in a puddle."
+    "text": "Two friends share an umbrella \u2014 and one steps in a puddle."
   },
   "story-9": {
     "text": "Two best friends build a blanket fort at a sleepover."
@@ -45,10 +45,10 @@
     "text": "A girl draws at a table while her teacher stands beside her, helping."
   },
   "story-16": {
-    "text": "At midnight, a hand turns the door handle — someone is peeking around the edge."
+    "text": "At midnight, a hand turns the door handle \u2014 someone is peeking around the edge."
   },
   "story-17": {
-    "text": "A girl freezes, hiding behind a cushion — she just heard or saw something scary."
+    "text": "A girl freezes, hiding behind a cushion \u2014 she just heard or saw something scary."
   },
   "story-18": {
     "text": "A hand holds a warm mug at the table, next to a plate of food."
@@ -58,5 +58,11 @@
   },
   "story-20": {
     "text": "Under the table, one hand passes a secret note to another."
+  },
+  "closeup-why": {
+    "text": "Use a close-up when you want us to pay attention to one part of a story. Move closer to show a facial expression, a hand in action, or an important object. What should we notice? For an extreme close-up, move even closer and let one tiny detail fill the frame."
+  },
+  "closeup-plan": {
+    "text": "Let\u2019s try five short stories. Listen, then take five seconds to imagine your picture. Sketch your own idea first. Afterwards, watch your teacher\u2019s quick sketch. Yours does not have to look the same. Then we\u2019ll revisit three stories as extreme close-ups."
   }
 }

@@ -1,0 +1,255 @@
+{
+  "text": "Use a close-up when you want us to pay attention to one part of a story. Move closer to show a facial expression, a hand in action, or an important object. What should we notice? For an extreme close-up, move even closer and let one tiny detail fill the frame.",
+  "cues": [
+    {
+      "text": "Use",
+      "start": 0.077333,
+      "end": 0.257749
+    },
+    {
+      "text": "a",
+      "start": 0.25775,
+      "end": 0.322166
+    },
+    {
+      "text": "close-up",
+      "start": 0.322166,
+      "end": 0.889166
+    },
+    {
+      "text": "when",
+      "start": 0.902041,
+      "end": 1.018041
+    },
+    {
+      "text": "you",
+      "start": 1.030916,
+      "end": 1.133999
+    },
+    {
+      "text": "want",
+      "start": 1.146916,
+      "end": 1.327332
+    },
+    {
+      "text": "us",
+      "start": 1.340208,
+      "end": 1.443291
+    },
+    {
+      "text": "to",
+      "start": 1.456166,
+      "end": 1.520582
+    },
+    {
+      "text": "pay",
+      "start": 1.5335,
+      "end": 1.739666
+    },
+    {
+      "text": "attention",
+      "start": 1.739708,
+      "end": 2.319624
+    },
+    {
+      "text": "to",
+      "start": 2.332458,
+      "end": 2.474208
+    },
+    {
+      "text": "one",
+      "start": 2.487125,
+      "end": 2.744833
+    },
+    {
+      "text": "part",
+      "start": 2.744833,
+      "end": 2.912374
+    },
+    {
+      "text": "of",
+      "start": 2.92525,
+      "end": 2.9767909
+    },
+    {
+      "text": "a",
+      "start": 2.989708,
+      "end": 3.0412489
+    },
+    {
+      "text": "story",
+      "start": 3.04125,
+      "end": 3.5825
+    },
+    {
+      "text": "Move",
+      "start": 3.981958,
+      "end": 4.291249
+    },
+    {
+      "text": "closer",
+      "start": 4.304125,
+      "end": 4.793833
+    },
+    {
+      "text": "to",
+      "start": 4.793833,
+      "end": 4.884041
+    },
+    {
+      "text": "show",
+      "start": 4.896916,
+      "end": 5.309291
+    },
+    {
+      "text": "a",
+      "start": 5.322166,
+      "end": 5.412374
+    },
+    {
+      "text": "facial",
+      "start": 5.412375,
+      "end": 5.773208
+    },
+    {
+      "text": "expression",
+      "start": 5.786083,
+      "end": 6.365999
+    },
+    {
+      "text": "a",
+      "start": 6.752583,
+      "end": 6.778374
+    },
+    {
+      "text": "hand",
+      "start": 6.79125,
+      "end": 7.19075
+    },
+    {
+      "text": "in",
+      "start": 7.203625,
+      "end": 7.280958
+    },
+    {
+      "text": "action",
+      "start": 7.293833,
+      "end": 7.873749
+    },
+    {
+      "text": "or",
+      "start": 8.260291,
+      "end": 8.556666
+    },
+    {
+      "text": "an",
+      "start": 8.711333,
+      "end": 8.7628739
+    },
+    {
+      "text": "important",
+      "start": 8.775791,
+      "end": 9.188166
+    },
+    {
+      "text": "object",
+      "start": 9.201041,
+      "end": 9.768041
+    },
+    {
+      "text": "What",
+      "start": 10.14175,
+      "end": 10.296375
+    },
+    {
+      "text": "should",
+      "start": 10.296375,
+      "end": 10.554125
+    },
+    {
+      "text": "we",
+      "start": 10.567,
+      "end": 10.670083
+    },
+    {
+      "text": "notice",
+      "start": 10.683,
+      "end": 11.301541
+    },
+    {
+      "text": "For",
+      "start": 11.752583,
+      "end": 11.958749
+    },
+    {
+      "text": "an",
+      "start": 11.971666,
+      "end": 12.036082
+    },
+    {
+      "text": "extreme",
+      "start": 12.048958,
+      "end": 12.525749
+    },
+    {
+      "text": "close-up",
+      "start": 12.538666,
+      "end": 13.157207
+    },
+    {
+      "text": "move",
+      "start": 13.3505,
+      "end": 13.569583
+    },
+    {
+      "text": "even",
+      "start": 13.685583,
+      "end": 13.917541
+    },
+    {
+      "text": "closer",
+      "start": 13.930416,
+      "end": 14.536082
+    },
+    {
+      "text": "and",
+      "start": 15.0,
+      "end": 15.128875
+    },
+    {
+      "text": "let",
+      "start": 15.14175,
+      "end": 15.309291
+    },
+    {
+      "text": "one",
+      "start": 15.322166,
+      "end": 15.592791
+    },
+    {
+      "text": "tiny",
+      "start": 15.605666,
+      "end": 16.043791
+    },
+    {
+      "text": "detail",
+      "start": 16.056708,
+      "end": 16.585041
+    },
+    {
+      "text": "fill",
+      "start": 16.597916,
+      "end": 16.804082
+    },
+    {
+      "text": "the",
+      "start": 16.817,
+      "end": 16.907208
+    },
+    {
+      "text": "frame",
+      "start": 16.907208,
+      "end": 17.448458
+    }
+  ]
+}

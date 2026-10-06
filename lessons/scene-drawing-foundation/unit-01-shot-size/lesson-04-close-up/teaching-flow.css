@@ -1,0 +1,20 @@
+/* Keep the learning canvas open on tablets and laptops. */
+.step-inner.practice-round{width:100%;max-width:1440px;padding:12px 26px 115px}
+.practice-two-panel{width:100%;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:24px}
+.practice-panel{min-width:0}.practice-canvas-wrap{width:100%;height:auto!important;aspect-ratio:4/3;max-height:none}
+.practice-canvas-wrap canvas{touch-action:none}.independent-reference{aspect-ratio:4/3;background:#fafaf8;border-radius:14px;overflow:hidden;display:grid;place-items:center}
+.independent-reference svg{width:100%;height:100%;max-height:none}.independent-reference img{width:100%;height:100%;object-fit:contain}
+.practice-panel-label{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.workspace-expand{font:600 11px 'Open Sans',sans-serif;background:#eee8ff;color:#51466a;border:1px solid #d8cce9;border-radius:20px;padding:9px 12px;cursor:pointer}
+.practice-round:fullscreen,.practice-round.workspace-open{overflow:auto;background:#fafaf8;max-width:none;padding:25px 30px 100px}
+.practice-round.workspace-open{position:fixed;inset:0;z-index:80}
+.story-think{max-width:1200px!important;display:grid!important;grid-template-columns:1.2fr 1fr;gap:55px;align-items:center}
+.think-copy{text-align:left}.think-space{min-height:310px;border:2px dashed #d8cce9;border-radius:22px;background:#f3effa;display:flex;flex-direction:column;justify-content:center;text-align:center;color:#695e78}
+#storyCountdown{font:800 76px Montserrat,sans-serif;color:#9a7ac7;min-height:100px}
+.why-closeup{max-width:1180px!important}.why-examples{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%}
+.why-examples figure{margin:0;min-width:0}.why-examples svg{width:100%;height:auto;max-height:260px}.why-examples img{width:100%;height:220px;object-fit:contain}
+.why-examples figcaption{font:700 14px Montserrat,sans-serif;text-align:center;margin:12px}
+.why-closeup .step-sub{max-width:900px;min-height:100px}.flow-strip{font:700 clamp(15px,2vw,23px) Montserrat,sans-serif;color:#80629f;margin:25px 0}
+@media(min-width:700px) and (max-width:1100px){.step-inner.practice-round{padding-inline:16px}.practice-two-panel{gap:14px}.practice-panel{padding:12px}.practice-tool-row{flex-wrap:wrap}.story-think{gap:24px}}
+@media(max-width:699px){.practice-two-panel,.story-think{grid-template-columns:1fr!important}.story-think{gap:20px}.think-space{min-height:190px}.why-examples{gap:8px}.why-examples figcaption{font-size:11px;margin:5px}.step-inner.practice-round{padding-inline:12px}}
+.optional-shot-tips{font-size:12px;margin-top:14px;color:#695e78}.optional-shot-tips summary{cursor:pointer;min-height:36px;padding:8px}
