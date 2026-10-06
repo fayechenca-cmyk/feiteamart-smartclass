@@ -5079,7 +5079,7 @@ const LFC_HOOKS = {
 const LESSON = {
   id: 'still-life-4a-dog-structure',
   title: 'Dog',
-  totalXP: 50,
+  totalXP: 65,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
@@ -5124,7 +5124,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 4',
+      partLabel: 'Part b · teacher demo · video 1 of 7',
       type: 'videoSegment',
       videoId: '48db52a7e71678b1769e95897e55e461',
       videoNumber: 1,
@@ -5137,10 +5137,36 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 4',
+      partLabel: 'Part b · teacher demo · video 2 of 7',
+      type: 'videoSegment',
+      videoId: 'ea9d20472e8085281505641bc47b64e7',
+      videoNumber: 2,
+      videoTitle: 'Quick Pass — Eyes and Ears',
+      stepName: 'Quick Pass — Eyes and Ears',
+      teacher: 'Mrs. Dawn',
+      title: 'Quick Pass — Eyes and Ears',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 3 of 7',
+      type: 'videoSegment',
+      videoId: 'f4b0d0a59dd9eb12efa9e1075690c7f3',
+      videoNumber: 3,
+      videoTitle: 'Quick Pass — Tone (Light & Dark)',
+      stepName: 'Quick Pass — Tone (Light & Dark)',
+      teacher: 'Mrs. Dawn',
+      title: 'Quick Pass — Tone (Light & Dark)',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 7',
       type: 'videoSegment',
       videoId: '2337732f108d82be7399fcfdeb03d253',
-      videoNumber: 2,
+      videoNumber: 4,
       videoTitle: 'Detail — Eyes',
       stepName: 'Detail — Eyes',
       teacher: 'Mrs. Dawn',
@@ -5150,10 +5176,10 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 3 of 4',
+      partLabel: 'Part b · teacher demo · video 5 of 7',
       type: 'videoSegment',
       videoId: '152ba2f3fe58d733c788dcc5ba15a589',
-      videoNumber: 3,
+      videoNumber: 5,
       videoTitle: 'Detail — Nose',
       stepName: 'Detail — Nose',
       teacher: 'Mrs. Dawn',
@@ -5163,14 +5189,27 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 4 of 4',
+      partLabel: 'Part b · teacher demo · video 6 of 7',
       type: 'videoSegment',
       videoId: 'f7924a0efeee71fe7ffce0bc51e3206d',
-      videoNumber: 4,
+      videoNumber: 6,
       videoTitle: 'Detail — Mouth and Neck',
       stepName: 'Detail — Mouth and Neck',
       teacher: 'Mrs. Dawn',
       title: 'Detail — Mouth and Neck',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 7 of 7',
+      type: 'videoSegment',
+      videoId: '8876d665061fa07356f6a08db27ef169',
+      videoNumber: 7,
+      videoTitle: 'Final',
+      stepName: 'Final',
+      teacher: 'Mrs. Dawn',
+      title: 'Final',
       intro: 'This is the teacher\'s own way of drawing it — not the only way.',
       isCoreEnd: true,
       xp: 5
@@ -7009,7 +7048,7 @@ function demoPauseInLocalMode() {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 function renderVideoSegment(step) {
-  const partOf = `${step.videoNumber} of 4`;
+  const partOf = `${step.videoNumber} of 7`;
   const pauses = VIDEO_PAUSES[step.videoId] || [];
   const hasPauses = pauses.length > 0;
   
@@ -7179,7 +7218,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-text">${
           hasPauses
             ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
-            : 'Pause anytime if you need to catch up. This is a 4-video sequence — go at your own pace.'
+            : 'Pause anytime if you need to catch up. This is a 7-video sequence — go at your own pace.'
         }</div>
       </div>
 
