@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 2 · Glass Cup and Bottle · Texture & Finish</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 2 · Dog</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3050,8 +3050,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of Sketch <span class="sep">·</span> Step 2 <span class="sep">·</span> Still Life and Texture</div>
-  <div class="lesson-title">Glass Cup and Bottle</div>
-  <div class="lesson-sub">Texture & Finish</div>
+  <div class="lesson-title">Dog</div>
+  <div class="lesson-sub">Structure and facial detail — more steps coming soon</div>
 
   <div class="progress-rail">
     <div class="rail-top">
@@ -3313,7 +3313,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Glass Cup and Bottle — Part 2</div>
+    <div class="welcome-lesson-label">Dog</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
@@ -3826,7 +3826,7 @@ const LFC = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'Glass Cup and Bottle — Part 2',
+  title: 'Dog',
   audioUrl: null,
   sections: [],
   cta: "I'm ready to begin →"
@@ -3842,21 +3842,21 @@ const HONEST_WELCOME = {
 const CLOSING_LFC = {
   kicker: '✨ TAKE THIS WITH YOU',
   paragraphs: [
-    'You turned straight lines into curves, and gave your glass bottle a clean, finished outline.',
-    'That\'s the whole idea: straight lines find the shape fast, then curves make it feel real.'
+    'You outlined a dog, then refined its eyes, nose, and mouth with careful, close attention.',
+    'This lesson is still growing — tone, fur texture, and a finished surface will be added as new teacher footage arrives.'
   ],
   invitations: {
     label: 'When you get a chance, look at:',
     items: [
-      'a curved object near you',
-      'how its edges are actually made of many small curves'
+      'a dog or other animal near you',
+      'how its eyes, nose, and mouth are built from simple shapes'
     ]
   },
   reflection: [
-    'You\'ll start noticing curves the same way you noticed straight lines.'
+    'You\'ll start noticing how a few careful details bring a face to life.'
   ],
   // Cross-lesson echo: graceful "nothing to echo yet" path for now (per
-  // Faye, Sept 2026). Later, 2B can echo 2A ("your straight-line bottle") once that wiring is built.
+  // Faye, Sept 2026).
   crossLesson: {
     enabled: false,
     label: '',
@@ -3864,7 +3864,7 @@ const CLOSING_LFC = {
   },
   openQuestion: {
     intro: 'And one question to keep:',
-    question: 'How did turning straight lines into curves change your bottle?',
+    question: 'Which detail — the eyes, the nose, or the mouth — felt most alive once you drew it?',
     afterthought: "There's no wrong answer — every artist starts differently."
   },
   cta: 'Mark lesson complete →'
@@ -4917,7 +4917,7 @@ const AccessControl = {
   // USER STATE (future: populated from Memberstack/Supabase)
   // =============================================
   currentUser: null,            // future: { id, email, name, avatar }
-  currentCourseId: 'still-life-2b-glass-texture',  // current lesson's course ID
+  currentCourseId: 'still-life-4a-dog-structure',  // current lesson's course ID
   selectedPath: null,           // 'explorer' | 'master' | 'pro' (the tier student actually bought)
   
   // =============================================
@@ -5077,22 +5077,24 @@ const LFC_HOOKS = {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 const LESSON = {
-  id: 'still-life-2b-glass-texture',
-  title: 'Glass Cup and Bottle · Texture & Finish',
-  totalXP: 35,
+  id: 'still-life-4a-dog-structure',
+  title: 'Dog',
+  totalXP: 50,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
-  badge: { name: 'Curve Finisher', emoji: '🥃', desc: 'You turned straight lines into curves and gave the glass a clean, finished outline.' },
-  // Video is 310s — longer than the usual ~2-minute target.
-  // Will be re-cut later; if so, VIDEO_PAUSES times below must be regenerated.
-  video: { url: '996b341c737b48b241bfc930b389c1d1' },
+  // WIP lesson (per Faye): only structure + facial detail exist so far.
+  // Tone block-in, fur texture, and finish will be appended as future
+  // steps when that footage arrives — badge/closing copy below is
+  // deliberately scoped to what is actually taught today, not a
+  // finished piece.
+  badge: { name: 'Dog Structure Starter', emoji: '🐾', desc: 'You outlined a dog and refined its eyes, nose, and mouth. More steps are coming as the teacher delivers new footage.' },
   steps: [
     {
       part: 'OPEN',
       partLabel: '✨ Before we start',
       type: 'openingLFC',
-      title: 'From straight to curved',
+      title: 'Meet the dog',
       intro: '',
       xp: 5
     },
@@ -5100,8 +5102,8 @@ const LESSON = {
       part: 'A',
       partLabel: 'Part a · look closely',
       type: 'reference',
-      title: 'From straight to curved',
-      intro: 'Now the teacher changes the straight lines into curves to make the bottle finer. Use a 2H pencil for the outline, and take extra care on the rim.',
+      title: 'Outline first',
+      intro: 'The teacher outlines the dog, then refines the eyes, nose, and mouth with careful detail. More steps — tone, fur texture, and finish — will be added as new footage arrives.',
       xp: 0
     },
     {
@@ -5109,7 +5111,7 @@ const LESSON = {
       partLabel: 'Part a · materials',
       type: 'tools',
       title: 'What you need',
-      intro: 'Pencil: 2H for the outline',
+      intro: 'Pencils: HB and 2B, sharpened. Use either for the structure outline, then HB for all the detail work — eyes, nose, and mouth and neck.',
       xp: 0
     },
     {
@@ -5122,28 +5124,54 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 2',
+      partLabel: 'Part b · teacher demo · video 1 of 4',
       type: 'videoSegment',
-      videoId: '7a16d51aea7a8c0fe366e76807085fdc',
+      videoId: '48db52a7e71678b1769e95897e55e461',
       videoNumber: 1,
-      videoTitle: 'Painting the Overall Tone',
-      stepName: 'Painting the Overall Tone',
+      videoTitle: 'Structure/Outline',
+      stepName: 'Structure/Outline',
       teacher: 'Mrs. Dawn',
-      title: 'Painting the Overall Tone',
+      title: 'Structure/Outline',
       intro: 'This is the teacher\'s own way of drawing it — not the only way.',
       xp: 5
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 2',
+      partLabel: 'Part b · teacher demo · video 2 of 4',
       type: 'videoSegment',
-      videoId: '788587447ded8766c25eaedae4268c2d',
+      videoId: '2337732f108d82be7399fcfdeb03d253',
       videoNumber: 2,
-      videoTitle: 'Blending Texture with a Fingertip',
-      stepName: 'Blending Texture with a Fingertip',
+      videoTitle: 'Detail — Eyes',
+      stepName: 'Detail — Eyes',
       teacher: 'Mrs. Dawn',
-      title: 'Blending Texture with a Fingertip',
-      intro: 'Now blend the tone with your fingertip to bring out the glass\'s texture.',
+      title: 'Detail — Eyes',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 3 of 4',
+      type: 'videoSegment',
+      videoId: '152ba2f3fe58d733c788dcc5ba15a589',
+      videoNumber: 3,
+      videoTitle: 'Detail — Nose',
+      stepName: 'Detail — Nose',
+      teacher: 'Mrs. Dawn',
+      title: 'Detail — Nose',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 4',
+      type: 'videoSegment',
+      videoId: 'f7924a0efeee71fe7ffce0bc51e3206d',
+      videoNumber: 4,
+      videoTitle: 'Detail — Mouth and Neck',
+      stepName: 'Detail — Mouth and Neck',
+      teacher: 'Mrs. Dawn',
+      title: 'Detail — Mouth and Neck',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
       isCoreEnd: true,
       xp: 5
     },
@@ -5992,11 +6020,11 @@ function renderOpeningLFC(step) {
                   padding: 16px 18px; margin-bottom: 20px; text-align: left;">
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0 0 10px;">
-          Look back at your straight-line bottle from last time — where do you think the curves will go?
+          Have you ever looked closely at a dog? Its face is built from simple shapes — eyes, nose, and mouth.
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0;">
-          Today we turn those straight lines into smooth curves, and finish the outline.
+          Today we outline the dog, then refine the eyes, nose, and mouth. More steps will be added later.
         </p>
       </div>
       
@@ -6981,7 +7009,7 @@ function demoPauseInLocalMode() {
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 function renderVideoSegment(step) {
-  const partOf = `${step.videoNumber} of 2`;
+  const partOf = `${step.videoNumber} of 4`;
   const pauses = VIDEO_PAUSES[step.videoId] || [];
   const hasPauses = pauses.length > 0;
   
@@ -7151,7 +7179,7 @@ function renderVideoSegment(step) {
         <div class="pro-tip-text">${
           hasPauses
             ? `This video has ${pauses.length} key moments. At each one, a reference image will appear over the video, with the teaching note shown below. Click "Continue" and the video resumes automatically.`
-            : 'Pause anytime if you need to catch up. This is a 2-video sequence — go at your own pace.'
+            : 'Pause anytime if you need to catch up. This is a 4-video sequence — go at your own pace.'
         }</div>
       </div>
 
@@ -8095,15 +8123,15 @@ function renderBadgeUnlocked(profileOrLead) {
       <!-- Next lesson teaser -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ MORE COMING SOON</div>
-        <div class="lesson2-teaser-title">More Still Life lessons</div>
+        <div class="lesson2-teaser-title">More steps for this dog</div>
         <div class="lesson2-teaser-sub">
-          You finished the Glass Cup and Bottle painting. More Still Life lessons are on the way.
+          You outlined the dog and refined its eyes, nose, and mouth. Tone, fur texture, and finish will be added to this lesson as new teacher footage arrives.
         </div>
         <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
-      
+
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="window.location.href='../still-life/'">
+        <button class="btn btn-primary" onclick="window.location.href='../still-life/';">
           <span class="glyph">◈</span> Back to Step 2
         </button>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">
@@ -8595,9 +8623,7 @@ function toggleCheck(row) {
 // Future: Faye + Mrs. Dawn to spec pause points for cube 2-5.
 // ─────────────────────────────────────────────────────────────────────
 
-// Retired: the old single video and its 4 timestamped cues no longer
-// apply to the new 2-video sequence above. Neither new video has pause
-// points for now.
+// None of this lesson's 4 videos have pause points for now.
 const VIDEO_PAUSES = {};
 
 // Legacy variable name retained for backward compatibility
@@ -8822,7 +8848,7 @@ function openUploadModal() {
     // Upload is OPTIONAL.
     content.innerHTML = `
       <div class="modal-title">Show your work</div>
-      <div class="modal-sub">Optional — share your cube if you'd like feedback.</div>
+      <div class="modal-sub">Optional — share your drawing if you'd like feedback.</div>
       
       <!-- Preview disclosure (transparent: Artchi feedback is mock for now) -->
       <div class="upload-preview-banner">
@@ -9275,7 +9301,7 @@ function sendChat() {
     body: JSON.stringify({
       email: studentEmail,
       message: text,
-      lessonContext: 'Foundation of Sketch · Step 2 · Glass Cup and Bottle · Texture & Finish'
+      lessonContext: 'Foundation of Sketch · Step 2 · Dog'
     })
   })
     .then(res => res.json())

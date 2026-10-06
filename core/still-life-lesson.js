@@ -54,12 +54,20 @@
     // footage as one 5-video sequence instead — the still-life-1b-*
     // id/page was retired, this is now a single unified lesson.
     { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
-    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle · Structure & Composition', href: 'lessons/still-life-2a-glass-structure/', ready: true },
-    { id: 'still-life-2b-glass-texture', title: 'Glass Cup and Bottle · Texture & Finish', href: 'lessons/still-life-2b-glass-texture/', ready: true },
+    // Glass Cup and Bottle: same consolidation as the balloon above —
+    // rebuilt as one 4-step lesson (structure, composition, texture,
+    // finish); still-life-2b-* id/page retired.
+    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle', href: 'lessons/still-life-2a-glass-structure/', ready: true },
     { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
     { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
-    { id: 'still-life-4a-plush-structure', title: 'Plush Toy · Structure & Composition', href: 'lessons/still-life-4a-plush-structure/', ready: false },
-    { id: 'still-life-4b-plush-texture', title: 'Plush Toy · Texture & Finish', href: 'lessons/still-life-4b-plush-texture/', ready: false },
+    // Dog replaces the Plush Toy placeholder in this lineup position
+    // (per Faye). Built incrementally like the other single-entry
+    // lessons above: 4 steps exist today (structure, eyes, nose,
+    // mouth/neck); tone, fur texture, and finish will be appended as
+    // future steps when that footage arrives — ready:true now is
+    // intentional, publishing what exists rather than waiting for
+    // the full set.
+    { id: 'still-life-4a-dog-structure', title: 'Dog', href: 'lessons/still-life-4a-dog-structure/', ready: true },
     { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
     { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
   ];
@@ -67,9 +75,9 @@
   // "painting complete" celebration tier and the landing page's grouping.
   const FOUNDATION_STILL_LIFE_PAINTINGS = [
     { id: 'star-balloon', title: 'Foil Star Balloon', materialFocus: 'Glossy, reflective', lessonIds: ['still-life-1a-star-balloon-structure'] },
-    { id: 'glass', title: 'Glass Cup and Bottle', materialFocus: 'Transparency, glass', lessonIds: ['still-life-2a-glass-structure', 'still-life-2b-glass-texture'] },
+    { id: 'glass', title: 'Glass Cup and Bottle', materialFocus: 'Transparency, glass', lessonIds: ['still-life-2a-glass-structure'] },
     { id: 'pillow', title: 'Pillow', materialFocus: 'Fabric, soft folds', lessonIds: ['still-life-3a-pillow-structure', 'still-life-3b-pillow-texture'] },
-    { id: 'plush', title: 'Plush Toy', materialFocus: 'Fur, soft fuzz', lessonIds: ['still-life-4a-plush-structure', 'still-life-4b-plush-texture'] },
+    { id: 'dog', title: 'Dog', materialFocus: 'Fur, animal hair', lessonIds: ['still-life-4a-dog-structure'] },
     { id: 'tree', title: 'Tree', materialFocus: 'Bark, organic form', lessonIds: ['still-life-5a-tree-structure', 'still-life-5b-tree-texture'] }
   ];
   const FOUNDATION_STILL_LIFE_LANDING_HREF = 'lessons/still-life/';
