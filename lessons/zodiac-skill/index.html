@@ -246,6 +246,16 @@ button{font-family:inherit;}
   transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--d) * .15s + .95s);
 }
 .scroll-unroll-stage.unrolled .scroll-motif{opacity:1;transform:translateY(0);}
+.why-zodiac-invite{
+  display:flex;align-items:center;gap:10px;margin:18px auto 0;max-width:420px;
+  background:var(--xuan);border:1px solid var(--xuan-line);border-radius:999px;
+  padding:10px 18px;font-size:12.5px;color:var(--ink-warm-soft);text-align:left;
+  cursor:pointer;box-shadow:0 6px 16px rgba(43,38,32,.12);
+  transition:box-shadow .15s ease,transform .15s ease;
+}
+.why-zodiac-invite:hover{box-shadow:0 8px 22px rgba(43,38,32,.18);}
+.why-zodiac-invite:active{transform:scale(.98);}
+.why-zodiac-invite-icon{font-size:1.1rem;flex-shrink:0;}
 
 /* ---- Materials layout (§4) — video + a right-side vertical numbered
    list, bamboo-stalk rhythm (a thin connecting line between segment
@@ -507,6 +517,17 @@ button{font-family:inherit;}
   </div>
 </div>
 
+<div class="map-modal-backdrop" id="whyModalBackdrop" onclick="if(event.target===this) closeWhyZodiac();">
+  <div class="map-modal">
+    <div class="journey-close" onclick="closeWhyZodiac()" title="Close">×</div>
+    <div class="journey-hero">
+      <div class="journey-kicker">十二生肖 · Why the Zodiac</div>
+      <div class="journey-title">Why do we paint the zodiac?</div>
+    </div>
+    <div id="whyZodiacVideoWrap"></div>
+  </div>
+</div>
+
 <div class="journey-modal-backdrop" id="journeyModalBackdrop" onclick="if(event.target===this) closeMyJourney();">
   <div class="journey-modal">
     <div class="journey-close" onclick="closeMyJourney()" title="Close">×</div>
@@ -604,6 +625,21 @@ const COURSE_ID = 'zodiac-skill';
 // ACCESS/PAYWALL note for why this is step-granularity, not a
 // FREE_SKILLS page-id entry.
 const FREE_STEP_COUNT = 2;
+
+// Course intro video (teacher's welcome, real content) — goes through
+// the same renderZodiacVideoStage/afterRenderZodiacVideoStage pair as
+// every step video, per the file-header "single place every video
+// goes through" rule.
+const COURSE_INTRO_STEP = { videoUrl: 'fe20eee6cb3b1b8af82e5a71b97a3c2f', posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
+
+// Optional companion video — "why do we paint the zodiac" — not yet
+// recorded. videoUrl:null renders the existing platform coming-soon
+// fallback, same as Steps 9-14 above; a real id later is a one-line
+// data change. This step is deliberately never added to STAGES/
+// ZODIAC_ANIMALS — it is opened from a standalone invite button (see
+// openWhyZodiac), so it can never affect step count, progress,
+// completedLessons, the badge, or the paywall.
+const WHY_ZODIAC_STEP = { videoUrl: null, posterUrl: null, title: 'Why do we paint the zodiac?' };
 
 // §6 — the full 12-animal order (Rat -> Pig), used ONLY by the course
 // map to show real scope. Deliberately separate from ZODIAC_ANIMALS
@@ -865,8 +901,7 @@ function afterRenderZodiacVideoStage(step, iframeId){
    fresh at reveal time.
 ============================================================ */
 function renderCourseIntro(){
-  const introStep = { videoUrl: null, posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
-  const videoHtml = renderZodiacVideoStage(introStep, 'zodiacVideo_course_intro', 'intro');
+  const videoHtml = renderZodiacVideoStage(COURSE_INTRO_STEP, 'zodiacVideo_course_intro', 'intro');
   return `
     <div class="step-inner full-bleed">
       <div class="course-intro-kicker">十二生肖 · The Twelve Zodiac Animals</div>
@@ -885,11 +920,15 @@ function renderCourseIntro(){
         <div class="scroll-roller scroll-roller-left"></div>
         <div class="scroll-roller scroll-roller-right"></div>
       </div>
+      <button class="why-zodiac-invite" onclick="openWhyZodiac()">
+        <span class="why-zodiac-invite-icon">💬</span>
+        <span>Curious why we paint the twelve zodiac animals? Your teacher has a few words for you.</span>
+      </button>
     </div>
   `;
 }
 function afterRenderCourseIntro(){
-  afterRenderZodiacVideoStage({ videoUrl: null }, 'zodiacVideo_course_intro');
+  afterRenderZodiacVideoStage(COURSE_INTRO_STEP, 'zodiacVideo_course_intro');
   const stage = document.getElementById('scrollUnrollStage');
   // Double rAF: forces the browser to paint the rolled-up starting
   // state on its own frame before the class that triggers the CSS
@@ -899,6 +938,25 @@ function afterRenderCourseIntro(){
     requestAnimationFrame(() => { if (stage) stage.classList.add('unrolled'); });
   });
   showContinue('Begin →', nextStage);
+}
+
+/* ============================================================
+   OPTIONAL "WHY THE ZODIAC" VIDEO — a standalone invite next to the
+   course intro, never part of STAGES. Opens a modal through the same
+   renderZodiacVideoStage/afterRenderZodiacVideoStage pair (so it gets
+   the coming-soon fallback now and the real synchronous-autoplay
+   treatment the moment Faye supplies a videoUrl, no code change).
+   Strictly optional: no XP, no JournalStorage write, no completedLessons
+   entry, no paywall check — closing it is just as valid as opening it.
+============================================================ */
+function openWhyZodiac(){
+  document.getElementById('whyZodiacVideoWrap').innerHTML = renderZodiacVideoStage(WHY_ZODIAC_STEP, 'zodiacVideo_why');
+  document.getElementById('whyModalBackdrop').classList.add('show');
+  afterRenderZodiacVideoStage(WHY_ZODIAC_STEP, 'zodiacVideo_why');
+}
+function closeWhyZodiac(){
+  document.getElementById('whyModalBackdrop').classList.remove('show');
+  document.getElementById('whyZodiacVideoWrap').innerHTML = '';
 }
 
 /* ============================================================
