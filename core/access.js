@@ -80,11 +80,16 @@
   // Their one widened exception: Foundation of Sketch Step 1's first 5
   // lessons instead of the default first 2 (FREE_SKILLS) — Step 2-4
   // still require the normal upgrade, same as everyone else.
-  // FOUNDATION_A_PATH's first 5 ids, in order (confirmed directly
-  // against index.html: preparation, cube, sphere, cylinder, cup).
-  // core/access.js has no access to that array itself — index.html
-  // owns it — so this is a plain copy, not a derived reference.
-  const EXTENDED_PREVIEW_SKILLS = [...FREE_SKILLS, 'sphere', 'cylinder', 'cup'];
+  // Oct 2026 reorder: Step 1's first 5 ids under the new Level 1 order
+  // are preparation, cube, sphere, cylinder, cone (core/foundation-a-
+  // path.js). Faye's explicit instruction: keep cup open too, on top
+  // of the new first 5, so neither Coraline-12 nor Alicia-11 loses a
+  // lesson she may already be partway into under the old first-5
+  // (preparation, cube, sphere, cylinder, cup). 6 entries, not 5.
+  // core/access.js has no access to FOUNDATION_A_PATH itself — index.
+  // html (via core/foundation-a-path.js) owns it — so this is a plain
+  // copy, not a derived reference.
+  const EXTENDED_PREVIEW_SKILLS = [...FREE_SKILLS, 'sphere', 'cylinder', 'cone', 'cup'];
 
   // Oct 2026 — Faye: the 4 legacy live-class codes are enrolled in
   // the live Foundation of Sketch A Zoom course, not automatically
@@ -101,13 +106,14 @@
   // Zodiac access is already correctly scoped off by hasFullAccess's
   // existing isLiveClass check — neither needed any change here.
   const STEP1_ONLY_LEGACY_CODES = ['JOJO-10', 'A7Q9-FOX', 'SELENA-23', 'XIDA-25'];
-  // FOUNDATION_A_PATH's full 11 ids, in order (confirmed directly
-  // against index.html). core/access.js has no access to that array
-  // itself — index.html owns it — so this is a plain copy, same
-  // convention as EXTENDED_PREVIEW_SKILLS above.
+  // FOUNDATION_A_PATH's full 11 ids (core/foundation-a-path.js is the
+  // real source; core/access.js has no access to it, so this is a
+  // plain copy, same convention as EXTENDED_PREVIEW_SKILLS above).
+  // Order here does not affect behavior (plain .includes() check) but
+  // is kept matching the real order for readability. Oct 2026 reorder.
   const FOUNDATION_A_STEP1_SKILLS = [
-    'preparation', 'cube', 'sphere', 'cylinder', 'cup', 'apple',
-    'cone', 'icecream', 'intersecting', 'box', 'papercrane'
+    'preparation', 'cube', 'sphere', 'cylinder', 'cone', 'intersecting',
+    'box', 'cup', 'apple', 'papercrane', 'icecream'
   ];
 
   // Cache the access row so we don't hit Supabase on every nav.
