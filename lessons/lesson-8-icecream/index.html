@@ -8990,21 +8990,10 @@ function renderLessonComplete(profileOrLead) {
         ${greeting}you earned ${state.xp} XP and saved ${courseThoughtCount} thought${courseThoughtCount !== 1 ? 's' : ''} on this journey. Thank you for thinking with us. ✨
       </div>
       
-      <!-- Ice Cream → Intersecting Geometry -->
-      <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 9</div>
-        <div class="lesson2-teaser-title">Intersecting Geometry</div>
-        <div class="lesson2-teaser-sub">
-          You've practiced patience and detail on something soft. Next: two forms sharing one space — intersecting geometry.
-        </div>
-        <div class="lesson2-teaser-status">→ Two forms, one space</div>
-      </div>
-
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('intersecting', '../lesson-9-intersecting/')">
-          <span class="glyph">→</span> Continue to Lesson 9: Intersecting Geometry
-        </button>
-        <a href="../../" class="btn btn-secondary" style="text-decoration:none; text-align:center;">← Back to Art GPS home</a>
+        <a href="../../" class="btn btn-primary" style="text-decoration:none; text-align:center;">
+          <span class="glyph">→</span> Back to Art GPS home
+        </a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
         <button class="btn btn-ghost" onclick="restartLesson()">Replay this lesson</button>
       </div>
