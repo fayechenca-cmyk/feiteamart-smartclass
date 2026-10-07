@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 1 · Lesson 2: The Sphere</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 1 · The Sphere</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3236,6 +3236,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
 </style>
+<script src="../../core/foundation-a-path.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
@@ -3273,7 +3274,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 1 <span class="sep">·</span> form &amp; light</div>
-  <div class="lesson-title">Lesson 2: The Sphere</div>
+  <div class="lesson-title">The Sphere</div>
   <div class="lesson-sub">Building form with value — our first foundation</div>
 
   <div class="progress-rail">
@@ -3458,7 +3459,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 2: The Sphere</div>
+    <div class="welcome-lesson-label">The Sphere</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
@@ -5595,7 +5596,7 @@ const CLOSING_LFC = {
 
 const LESSON = {
   id: 'sphere',
-  title: 'Lesson 2: The Sphere',
+  title: 'The Sphere',
   totalXP: 100,
   ageGroups: ['kids', 'teen', 'adult'],  // Which AGE_GROUPS keys this lesson uses (basic techniques → no 'pro')
   fullyFree: true,   // Lesson 1 is our free "flagship" — all parts open, no paywall. Badge still requires email.
@@ -9084,7 +9085,7 @@ function renderBadgeUnlock() {
   // Counts Preparation + all numbered Foundation A lessons the learner has finished.
   const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
   const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   let _completedFromProfile = [];
   try {
     const _raw = sessionStorage.getItem('fei_user_profile');
@@ -9135,7 +9136,7 @@ function renderBadgeUnlock() {
       
       <!-- Email gate (still essential — lead capture for Lesson 2 unlock) -->
       <div class="lesson-complete-email-block">
-        <div class="lesson-complete-email-title">Like to be notified when Lesson 2 unlocks?</div>
+        <div class="lesson-complete-email-title">Like to be notified when the next lesson unlocks?</div>
         <div class="lesson-complete-email-sub">
           Drop your email — we'll let you know when The Cube is ready, plus other thoughtful updates.
         </div>
@@ -9191,7 +9192,7 @@ function renderLessonComplete(profileOrLead) {
   return `
     <div class="step-card lesson-complete-celebration show">
       <div class="lesson-complete-emoji-big">🌱</div>
-      <div class="lesson-complete-title">Lesson 2 complete</div>
+      <div class="lesson-complete-title">The Sphere complete</div>
       <div class="lesson-complete-subtitle">You finished the sphere.</div>
       
       <!-- Progress bar -->
@@ -9222,7 +9223,7 @@ function renderLessonComplete(profileOrLead) {
       
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
         <button class="btn btn-primary" onclick="continueToNextLessonGuarded('cylinder', '../lesson-5-cylinder/')">
-          <span class="glyph">◈</span> Continue to Lesson 3: Cylinder →
+          <span class="glyph">◈</span> Continue to The Cylinder →
         </button>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">← Back to Art GPS home</button>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
@@ -10153,7 +10154,7 @@ async function submitToSupabase() {
   }
   
   // Determine course id (Foundation A vs Creation)
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
   
   console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id, hasFile: !!state.uploadedFile });
@@ -10584,7 +10585,7 @@ function renderReturningWelcome(profile) {
   } else if (profile.currentStepIdx > 0) {
     const currentStep = LESSON.steps[profile.currentStepIdx];
     const stepLabel = currentStep ? (currentStep.title || currentStep.type) : 'your lesson';
-    lessonStatus.textContent = `You're on Lesson 1: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
+    lessonStatus.textContent = `You're on The Sphere: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
   } else {
     lessonStatus.textContent = `Ready to continue your journey?`;
   }

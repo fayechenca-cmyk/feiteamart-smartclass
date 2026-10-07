@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 1 · Lesson 3: The Cylinder</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 1 · The Cylinder</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3466,6 +3466,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .members-lock-icon-large { font-size: 50px; }
 }
 </style>
+<script src="../../core/foundation-a-path.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
@@ -3503,7 +3504,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 1 <span class="sep">·</span> form &amp; light</div>
-  <div class="lesson-title">Lesson 3: The Cylinder</div>
+  <div class="lesson-title">The Cylinder</div>
   <div class="lesson-sub">Building form with value — our first foundation</div>
 
   <div class="progress-rail">
@@ -3670,14 +3671,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     
     <div class="members-lock-icon-large">◗</div>
     
-    <div class="members-lock-title">Continue to Lesson 3: The Cylinder</div>
-    <div class="members-lock-subtitle">Foundation A is $150 for the full 10-lesson series.<br/>Lessons 2 through 10 unlock with membership.</div>
+    <div class="members-lock-title">Continue to The Cylinder</div>
+    <div class="members-lock-subtitle">Form and Structure is $150 for the full program.<br/>The rest of the lessons unlock with membership.</div>
     
     <!-- What's inside membership -->
     <div class="members-lock-preview">
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">📐</span>
-        <span><b>Lesson 2-10</b> · all of Foundation A (cube, cylinder, and more)</span>
+        <span><b>the rest of Form and Structure</b> (cube, cylinder, and more)</span>
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🎬</span>
@@ -3736,11 +3737,11 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div style="text-align: center; margin-top: 14px;">
-      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Lesson 1 (free)</a>
+      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Preparation (free)</a>
     </div>
     
     <div class="privacy-note" style="margin-top: 12px;">
-      🔒 Secure payment via Stripe. Foundation A is $150 for 10 lessons.
+      🔒 Secure payment via Stripe. Form and Structure is $150 for the full program.
     </div>
   </div>
 </div>
@@ -3770,13 +3771,13 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 3: The Cylinder</div>
+    <div class="welcome-lesson-label">The Cylinder</div>
     
     <!-- Cylinder cover image -->
     <div style="margin: 12px 0 16px; border-radius: 14px; overflow: hidden; 
                 box-shadow: 0 8px 24px rgba(0,0,0,0.12); line-height: 0;">
       <img src="https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a05f01239dce22e7426971a_ChatGPT%20Image%20May%2014%2C%202026%2C%2008_53_19%20AM.png"
-           alt="The Cylinder — Lesson 5"
+           alt="The Cylinder"
            style="width: 100%; height: auto; display: block; border-radius: 14px;"
            loading="lazy">
     </div>
@@ -5930,7 +5931,7 @@ const CLOSING_LFC = {
 
 const LESSON = {
   id: 'cylinder',
-  title: 'Lesson 3: The Cylinder',
+  title: 'The Cylinder',
   totalXP: 100,
   membersOnly: true,       // Trial users see paywall after Opening LFC; members get full access
   ageGroups: ['kids', 'teen', 'adult'],  // Which AGE_GROUPS keys this lesson uses (basic techniques → no 'pro')
@@ -9496,7 +9497,7 @@ function renderBadgeUnlock() {
   // Counts Preparation + all numbered Foundation A lessons the learner has finished.
   const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
   const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   let _completedFromProfile = [];
   try {
     const _raw = sessionStorage.getItem('fei_user_profile');
@@ -9547,7 +9548,7 @@ function renderBadgeUnlock() {
       
       <!-- Email gate (still essential — lead capture for Lesson 2 unlock) -->
       <div class="lesson-complete-email-block">
-        <div class="lesson-complete-email-title">Like to be notified when Lesson 2 unlocks?</div>
+        <div class="lesson-complete-email-title">Like to be notified when the next lesson unlocks?</div>
         <div class="lesson-complete-email-sub">
           Drop your email — we'll let you know when The Cube is ready, plus other thoughtful updates.
         </div>
@@ -9603,7 +9604,7 @@ function renderLessonComplete(profileOrLead) {
   return `
     <div class="step-card lesson-complete-celebration show">
       <div class="lesson-complete-emoji-big">🌱</div>
-      <div class="lesson-complete-title">Lesson 3 complete</div>
+      <div class="lesson-complete-title">The Cylinder complete</div>
       <div class="lesson-complete-subtitle">You finished the cylinder.</div>
       
       <!-- Progress bar -->
@@ -9624,17 +9625,17 @@ function renderLessonComplete(profileOrLead) {
       
       <!-- Next lesson: Box is locked, so we point to Cup which is next available -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ NEXT — LESSON 5</div>
-        <div class="lesson2-teaser-title">The Cup</div>
+        <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
+        <div class="lesson2-teaser-title">The Cone</div>
         <div class="lesson2-teaser-sub">
-          You've drawn the cylinder. Next: the cup — the same form, but now observed as a real object with handle, rim, and material.
+          You've drawn the cylinder. Next: the cone — another geometric form, same light logic, a new shape to construct.
         </div>
-        <div class="lesson2-teaser-status">→ Cylinder applied to the real world</div>
+        <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
-      
+
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
-        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('cup', '../lesson-6-cup/')">
-          <span class="glyph">→</span> Continue to Lesson 5: The Cup
+        <button class="btn btn-primary" onclick="continueToNextLessonGuarded('cone', '../lesson-7-cone/')">
+          <span class="glyph">→</span> Continue to The Cone
         </button>
         <a href="../../" class="btn btn-secondary" style="text-decoration:none; text-align:center;">← Back to Art GPS home</a>
         <button class="btn btn-ghost" onclick="openMyJourney()">View my thinking journey</button>
@@ -10558,7 +10559,7 @@ async function submitToSupabase() {
   }
   
   // Determine course id (Foundation A vs Creation)
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
   
   console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id, hasFile: !!state.uploadedFile });
@@ -10976,7 +10977,7 @@ function renderReturningWelcome(profile) {
   } else if (profile.currentStepIdx > 0) {
     const currentStep = LESSON.steps[profile.currentStepIdx];
     const stepLabel = currentStep ? (currentStep.title || currentStep.type) : 'your lesson';
-    lessonStatus.textContent = `You're on Lesson 1: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
+    lessonStatus.textContent = `You're on The Cylinder: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
   } else {
     lessonStatus.textContent = `Ready to continue your journey?`;
   }

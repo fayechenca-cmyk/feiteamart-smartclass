@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 1 · Lesson 10: Paper Crane</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 1 · Paper Crane</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3528,6 +3528,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .members-lock-icon-large { font-size: 50px; }
 }
 </style>
+<script src="../../core/foundation-a-path.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
@@ -3575,7 +3576,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 1 <span class="sep">·</span> form &amp; light</div>
-  <div class="lesson-title">Lesson 10: Paper Crane</div>
+  <div class="lesson-title">Paper Crane</div>
   <div class="lesson-sub">Building form with value — our first foundation</div>
 
   <div class="progress-rail">
@@ -3742,14 +3743,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     
     <div class="members-lock-icon-large">◗</div>
     
-    <div class="members-lock-title">Continue to Lesson 10: Paper Crane</div>
-    <div class="members-lock-subtitle">Foundation A is $150 for the full 10-lesson series.<br/>Lessons 2 through 10 unlock with membership.</div>
+    <div class="members-lock-title">Continue to Paper Crane</div>
+    <div class="members-lock-subtitle">Form and Structure is $150 for the full program.<br/>The rest of the lessons unlock with membership.</div>
     
     <!-- What's inside membership -->
     <div class="members-lock-preview">
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">📐</span>
-        <span><b>Lesson 2-10</b> · all of Foundation A (cube, cylinder, and more)</span>
+        <span><b>the rest of Form and Structure</b> (cube, cylinder, and more)</span>
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🎬</span>
@@ -3808,11 +3809,11 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div style="text-align: center; margin-top: 14px;">
-      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Lesson 1 (free)</a>
+      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Preparation (free)</a>
     </div>
     
     <div class="privacy-note" style="margin-top: 12px;">
-      🔒 Secure payment via Stripe. Foundation A is $150 for 10 lessons.
+      🔒 Secure payment via Stripe. Form and Structure is $150 for the full program.
     </div>
   </div>
 </div>
@@ -3842,7 +3843,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 10: Paper Crane</div>
+    <div class="welcome-lesson-label">Paper Crane</div>
     
     <!-- Cylinder cover image -->
     <div style="margin: 12px 0 16px; border-radius: 14px; overflow: hidden; 
@@ -5981,7 +5982,7 @@ const CLOSING_LFC = {
 
 const LESSON = {
   id: 'papercrane',
-  title: 'Lesson 10: Paper Crane',
+  title: 'Paper Crane',
   totalXP: 120,
   membersOnly: true,
   ageGroups: ['kids', 'teen', 'adult'],
@@ -9328,7 +9329,7 @@ function renderBadgeUnlock() {
   // Counts Preparation + all numbered Foundation A lessons the learner has finished.
   const TOTAL_LESSONS = 10;  // 10 numbered lessons + 1 prep
   const TOTAL_STEPS_WITH_PREP = 11;  // Total path including Preparation
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   let _completedFromProfile = [];
   try {
     const _raw = sessionStorage.getItem('fei_user_profile');
@@ -9379,7 +9380,7 @@ function renderBadgeUnlock() {
       
       <!-- Email gate (still essential — lead capture for Lesson 2 unlock) -->
       <div class="lesson-complete-email-block">
-        <div class="lesson-complete-email-title">Like to be notified when Lesson 2 unlocks?</div>
+        <div class="lesson-complete-email-title">Like to be notified when the next lesson unlocks?</div>
         <div class="lesson-complete-email-sub">
           Drop your email — we'll let you know when The Cube is ready, plus other thoughtful updates.
         </div>
@@ -9435,7 +9436,7 @@ function renderLessonComplete(profileOrLead) {
   return `
     <div class="step-card lesson-complete-celebration show">
       <div class="lesson-complete-emoji-big">🌱</div>
-      <div class="lesson-complete-title">Lesson 10 complete</div>
+      <div class="lesson-complete-title">Paper Crane complete</div>
       <div class="lesson-complete-subtitle">You finished the cylinder.</div>
       
       <!-- Progress bar -->
@@ -10404,7 +10405,7 @@ async function submitToSupabase() {
   }
   
   // Determine course id (Foundation A vs Creation)
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
   
   console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id, hasFile: !!state.uploadedFile });
@@ -10822,7 +10823,7 @@ function renderReturningWelcome(profile) {
   } else if (profile.currentStepIdx > 0) {
     const currentStep = LESSON.steps[profile.currentStepIdx];
     const stepLabel = currentStep ? (currentStep.title || currentStep.type) : 'your lesson';
-    lessonStatus.textContent = `You're on Lesson 1: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
+    lessonStatus.textContent = `You're on Paper Crane: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
   } else {
     lessonStatus.textContent = `Ready to continue your journey?`;
   }
