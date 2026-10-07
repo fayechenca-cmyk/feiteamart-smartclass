@@ -279,6 +279,31 @@ button{font-family:inherit;}
   .materials-item:not(:last-child)::after{display:none;}
 }
 
+/* ---- Materials Kit (Part 2) — vertical photo-list, one teacher-kit
+   item per row, matching the existing materials-list pattern but with
+   a bigger photo since these are the real reference images. ---- */
+.kit-item-list{display:flex;flex-direction:column;gap:4px;}
+.kit-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--xuan-line);}
+.kit-item:last-child{border-bottom:none;}
+.kit-item-num{
+  width:26px;height:26px;border-radius:50%;background:var(--xuan-deep);border:1.5px solid var(--bamboo);
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-weight:800;font-size:11px;color:var(--bamboo);flex-shrink:0;margin-top:2px;
+}
+.kit-item-photos{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;}
+.kit-item-photo{width:72px;height:72px;border-radius:8px;object-fit:cover;border:1.5px solid var(--xuan-line);background:#fff;}
+.kit-item-info{flex:1;min-width:0;padding-top:2px;}
+.kit-item-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--ink-warm);}
+.kit-item-zh{font-weight:500;color:var(--ink-warm-soft);}
+.kit-item-use{font-size:12.5px;color:var(--ink-warm-soft);margin-top:3px;line-height:1.45;}
+.kit-pigment-list{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:9px;}
+.kit-pigment{font-size:11px;color:var(--ink-warm);background:var(--xuan-deep);border-radius:5px;padding:3px 8px;}
+.kit-pigment i{font-style:normal;color:var(--ink-warm-faint);}
+@media(max-width:600px){
+  .kit-item{flex-direction:column;}
+  .kit-item-photo{width:64px;height:64px;}
+}
+
 /* ---- Scroll panel — the mounted "paper" surface step content sits
    on, distinct from the deeper xuan-deep page backdrop behind it
    (body). A lighter fiber-noise texture than the backdrop, plus a
@@ -561,21 +586,23 @@ const ZODIAC_ANIMALS = [
     steps: [
       { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null,
         // §4 (Addendum 1) — vertical numbered materials list, rendered
-        // to the right of the video by renderMaterialsLayout(). Icons
-        // are emoji placeholders (no real product photography supplied
-        // yet). Labels corrected per Faye's Addendum 2, §3 — "brush-
-        // washing container" -> "brush washer" (笔洗) and "ink dish" ->
+        // to the right of the video by renderMaterialsLayout(). Labels
+        // corrected per Faye's Addendum 2, §3 — "brush-washing
+        // container" -> "brush washer" (笔洗) and "ink dish" ->
         // "inkstone" (砚台), the standard art-historical/professional
         // English terms, confirmed via reference/museum sources.
-        // imageUrl:null for all four — real reference photos not in the
-        // repo yet (Faye has them for inkstone + brush washer; flagged
-        // in the build report for where to hand them off). Falls back
-        // to the emoji icon until a real imageUrl is set — see
-        // renderMaterialsLayout.
+        // Brush washer + rice paper now use the teacher's real photos
+        // (assets/zodiac-skill/materials/) — unambiguous matches to
+        // MATERIALS_KIT_ITEMS below. Inkstone and the generic Brush
+        // stay emoji placeholders: the teacher's kit has no plain
+        // "inkstone" photo (only an ambiguous paperweight-or-inkstone
+        // one, flagged in the build report) and five distinct brush
+        // photos with no single one standing in for "brush" generically
+        // — guessing either would be inventing a match, not using one.
         materialsList: [
-          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:null },
+          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:'../../assets/zodiac-skill/materials/brush-washer.jpg' },
           { icon:'⬛', label:'Inkstone (砚台)', imageUrl:null },
-          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:null },
+          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:'../../assets/zodiac-skill/materials/xuan-paper-raw.jpg' },
           { icon:'🖌️', label:'Brush (毛笔)', imageUrl:null }
         ] },
       { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
@@ -631,6 +658,40 @@ const COURSE_INTRO_STEP = { videoUrl: 'fe20eee6cb3b1b8af82e5a71b97a3c2f', poster
 // completedLessons, the badge, or the paywall.
 const WHY_ZODIAC_STEP = { videoUrl: null, posterUrl: null, title: 'Why do we paint the zodiac?' };
 
+// Teacher's Materials Kit (Part 2 of the map+kit prompt) — the real
+// package, photo by photo, in the teacher's own order from her slides.
+// English names are PROVISIONAL translations — one data array so Faye
+// can correct wording later with no code change. Photos load from
+// assets/zodiac-skill/materials/ (teacher-supplied, confirmed present
+// for all 9 items as of this build — see renderMaterialsKitScreen's
+// onerror fallback for what happens if a filename ever goes missing).
+const MATERIALS_KIT_ASSET_PATH = '../../assets/zodiac-skill/materials/';
+const MATERIALS_KIT_ITEMS = [
+  { en: 'Fine-line brush', zh: '勾线笔', use: 'Fine details and lines', photos: ['brush-1-liner.jpg'] },
+  { en: 'Small red-handled brush', zh: '小红毛笔', use: 'Basic lines', photos: ['brush-2-small-red.jpg'] },
+  { en: 'Small mixed-hair brush', zh: '小兼毫笔', use: 'Basic fur and small color blocks', photos: ['brush-3-small-mixed-hair.jpg'] },
+  { en: 'Mixed-hair brush', zh: '兼毫笔', use: 'Large color blocks', photos: ['brush-4-mixed-hair.jpg'] },
+  { en: 'Garlic-head brush', zh: '蒜头笔', use: 'Large color blocks', photos: ['brush-5-garlic-head.jpg'] },
+  { en: 'Raw xuan paper', zh: '生宣纸', use: 'The painting paper', photos: ['xuan-paper-raw.jpg'] },
+  { en: 'Brush washer', zh: '笔洗', use: 'Holds water. One for ink and one for color works best', photos: ['brush-washer.jpg'] },
+  { en: 'Chinese painting pigments', zh: '中国画颜料', use: 'A 12- or 24-color set works', photos: ['pigments-green.jpg', 'pigments-red.jpg', 'pigments-black.jpg'],
+    // Chinese names first — English pigment-color names are not
+    // standardized, per Faye's own instruction. en:null for 三绿/三青
+    // is deliberate (not invented) — she said not to guess glosses
+    // for those two specifically.
+    pigmentColors: [
+      { zh: '白色', en: 'white' }, { zh: '嫩黄', en: 'light yellow' }, { zh: '花青', en: 'indigo' },
+      { zh: '天蓝', en: 'sky blue' }, { zh: '三绿', en: null }, { zh: '三青', en: null },
+      { zh: '赭石', en: 'ochre' }, { zh: '大红', en: 'red' }, { zh: '曙红', en: 'rose red' },
+      { zh: '朱砂', en: 'cinnabar' }, { zh: '朱膘', en: 'light vermilion' }, { zh: '胭脂', en: 'rouge' }
+    ] },
+  // Teacher's slide for this item is labeled paperweight (镇尺), but
+  // shows a brown rectangular block that may actually be a lidded
+  // inkstone — flagged for Faye to confirm, her label kept as-is
+  // until she does (see build report).
+  { en: 'Paperweight', zh: '镇尺', use: 'Holds the paper down at both ends or four corners', photos: ['paperweight-or-inkstone.jpg'] }
+];
+
 // §6 — the full 12-animal order (Rat -> Pig), used ONLY by the course
 // map to show real scope. Deliberately separate from ZODIAC_ANIMALS
 // (which only Rat populates so far, with real steps) — an entry here
@@ -671,6 +732,19 @@ function buildStages(){
         render: () => renderStepScreen(animal, step),
         afterRender: () => afterRenderStepScreen(animal, step)
       });
+      // Materials Kit (Part 2) — inserted right after Step 1 in the
+      // flat stage order, NOT into animal.steps, so it has no
+      // stepNumber of its own and cannot shift numbering, rail-dot
+      // counts or the paywall boundary. Rat-only: only Rat has a
+      // materials kit built so far.
+      if (animal.id === 'rat' && step.stepNumber === 1) {
+        stages.push({
+          id: animal.id + '_materials_kit',
+          animal: animal,
+          render: () => renderMaterialsKitScreen(animal),
+          afterRender: afterRenderMaterialsKitScreen
+        });
+      }
     });
     stages.push({
       id: animal.id + '_complete',
@@ -988,6 +1062,56 @@ function renderMaterialsLayout(step, videoHtml){
       <div class="materials-list">${items}</div>
     </div>
   `;
+}
+
+/* ============================================================
+   MATERIALS KIT (Part 2) — a photo-by-photo walkthrough of the
+   teacher's full materials package. Sits between Step 1 (Materials)
+   and Step 2 (Draw the Nose) in the flat stage order (see buildStages)
+   but is deliberately NOT one of animal.steps — it carries no
+   stepNumber, so it can never shift step numbering, rail-dot counts,
+   or the FREE_STEP_COUNT paywall boundary. It is part of Materials,
+   so it is always free, with no access check of its own.
+============================================================ */
+function materialsKitPhotoHtml(filename, alt){
+  const src = MATERIALS_KIT_ASSET_PATH + filename;
+  // Missing-file fallback: a neutral placeholder swapped in on image
+  // load failure, plus a console warning naming the exact missing
+  // file — per the brief, never fabricate or silently drop the row.
+  return `<img class="kit-item-photo" src="${src}" alt="${escapeHtml(alt)}"
+    onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect width=%2780%27 height=%2780%27 fill=%27%23ddd3bd%27/%3E%3Ctext x=%2740%27 y=%2744%27 font-size=%2228%27 text-anchor=%27middle%27%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E';console.warn('[materials kit] missing photo file:', '${filename}');">`;
+}
+function renderMaterialsKitScreen(animal){
+  const itemsHtml = MATERIALS_KIT_ITEMS.map((item, i) => {
+    const photosHtml = item.photos.map(f => materialsKitPhotoHtml(f, item.en)).join('');
+    const pigmentsHtml = item.pigmentColors ? `
+      <div class="kit-pigment-list">
+        ${item.pigmentColors.map(p => `<span class="kit-pigment">${escapeHtml(p.zh)}${p.en ? ` <i>${escapeHtml(p.en)}</i>` : ''}</span>`).join('')}
+      </div>` : '';
+    return `
+      <div class="kit-item">
+        <div class="kit-item-num">${i + 1}</div>
+        <div class="kit-item-photos">${photosHtml}</div>
+        <div class="kit-item-info">
+          <div class="kit-item-name">${escapeHtml(item.en)} <span class="kit-item-zh">(${escapeHtml(item.zh)})</span></div>
+          <div class="kit-item-use">${escapeHtml(item.use)}</div>
+          ${pigmentsHtml}
+        </div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="step-inner scroll-wide">
+      <div class="scroll-panel">
+        <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Materials Kit</div>
+        <h2 class="step-title">Your full materials package</h2>
+        <p style="text-align:center;font-size:12.5px;color:var(--ink-warm-soft);max-width:480px;margin:0 auto 20px;">Everything from the teacher's own kit, one item at a time.</p>
+        <div class="kit-item-list">${itemsHtml}</div>
+      </div>
+    </div>
+  `;
+}
+function afterRenderMaterialsKitScreen(){
+  showContinue('Next →', nextStage);
 }
 
 /* ============================================================
