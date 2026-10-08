@@ -1,0 +1,10 @@
+# Local operating-system and authoring caches
+.DS_Store
+__pycache__/
+*.pyc
+# Retired local exports; the site uses current videos or Cloudflare Stream.
+/assets/sketch-intro/intro-film.mp4
+/assets/sketch-intro/intro-film-v2.mp4
+/assets/sketch-intro/intro-film-mobile-v2.mp4
+/color-practice-shapes/assets/classroom-process-clean.mp4
+/color-practice-shapes/assets/value-process.mp4

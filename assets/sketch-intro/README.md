@@ -48,3 +48,6 @@ Render with `scripts/render-sketch-intro-film.py --media-dir <selected-media-dir
 ## Swan correction (v3)
 
 The active wide and portrait videos are now `intro-film-v3.mp4` and `intro-film-mobile-v3.mp4`. The 19.365–22.4 second scene uses the teacher’s graphite swan supplied by Faye, preserved unchanged as `swan-teacher-study.jpg`. It replaces the colored-pencil landscape entirely in both current exports. The title and annotations now teach light/dark contrast and reflection. The swan source is part of the repository and is read directly by the render script. The other scenes, approved narration and timing remain the same.
+
+## Repository cleanup (2026-10-07)
+The obsolete original and v2 MP4 exports were removed. Only the active v3 wide and portrait exports remain. Earlier sections above describe historical versions, not available files. Source artwork, captions and authoring inputs are retained to support future edits.
