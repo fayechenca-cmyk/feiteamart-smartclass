@@ -2,3 +2,31 @@
 @media(min-width:900px){body:has(.sketch-watch-layout) .app{max-width:1160px!important}.sketch-watch-layout{grid-template-columns:minmax(0,1fr) 250px}}
 @media(max-width:1100px){.sketch-watch-layout{grid-template-columns:minmax(0,1fr)}.sketch-final-reference{display:grid;grid-template-columns:130px minmax(0,1fr);gap:5px 14px;padding:12px}.sketch-reference-image{grid-column:1;grid-row:1/5}.sketch-reference-image img{height:110px}.sketch-final-reference>small,.sketch-final-reference h3,.sketch-final-reference p{grid-column:2;margin:0}.sketch-final-reference p{font-size:11px}.sketch-final-reference h3{font-size:15px}}
 @media(max-width:390px){.sketch-final-reference{grid-template-columns:105px minmax(0,1fr);gap:5px 10px}.sketch-reference-image img{height:105px}}
+
+/* The lesson video keeps the entire main column. Never nest two columns inside it. */
+.sketch-watch-layout{grid-template-columns:minmax(0,1fr)}
+body.sketch-cube-studio .app{max-width:1480px!important}
+.sketch-cube-studio #step-content{min-width:0}
+.sketch-cube-studio .sketch-watch-layout{margin:16px 0}
+.sketch-cube-studio .toolkit-photo{display:block;width:100%;border-radius:16px;margin:16px 0}
+.toolkit-checks{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.toolkit-checks label{display:flex;gap:8px;align-items:center;padding:12px;background:white;border:1px solid #ddd2ef;border-radius:12px;cursor:pointer;min-height:44px;font-weight:700;font-size:13px}
+.toolkit-checks label:has(input:checked){background:#e4f5ef;border-color:#379878}
+.toolkit-checks input{width:19px;height:19px;accent-color:#379878}
+.toolkit-progress{font-size:13px;color:#625970;margin:12px 0}
+@media(min-width:1000px){
+ .sketch-cube-studio .content{grid-template-columns:minmax(0,7fr) minmax(230px,3fr);gap:24px;padding:24px}
+ .sketch-cube-studio .step-card{padding:20px}
+ .sketch-cube-studio .side-panel{min-height:0;padding:14px}
+ .sketch-cube-studio .side-panel .sketch-final-reference{display:block}
+ .sketch-cube-studio .side-panel .sketch-final-reference h3{margin:8px 0 12px}
+ .sketch-cube-studio .side-panel .sketch-final-reference p{margin:12px 0}
+ .sketch-cube-studio .side-panel .sketch-reference-image img{height:auto;max-height:290px}
+}
+@media(max-width:999px){
+ .sketch-cube-studio .content{display:block;padding:20px 14px}
+ .sketch-cube-studio .side-panel{display:none}
+ .sketch-cube-studio .step-card{padding:16px}
+}
+
+.sketch-cube-studio .toolkit-photo{max-height:380px;object-fit:contain;background:#faf9f6}
