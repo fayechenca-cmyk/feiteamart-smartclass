@@ -3472,6 +3472,12 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <script src="../../core/teacher-submission.js"></script>
 <link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=2">
 <script src="../../core/sketch-lesson-support.js?v=2" defer></script>
+<style>
+body:has(.cylinder-intro-card) .app{max-width:1400px!important}
+@media(min-width:1000px){body:has(.cylinder-intro-card) .content{grid-template-columns:minmax(0,7fr) minmax(230px,3fr);gap:24px}}
+@media(max-width:999px){body:has(.cylinder-intro-card) .content{display:block}body:has(.cylinder-intro-card) .side-panel{display:none}}
+.cylinder-intro-card{padding:18px!important;max-width:none!important;width:100%;box-sizing:border-box}.cylinder-intro-card .opening-lfc-title{margin-bottom:16px}
+</style>
 </head>
 <body>
 
@@ -5761,106 +5767,7 @@ const LFC_HOOKS = {
 // reference. This is the same lesson that begins with the platform's 
 // macro-LFC (Cézanne quote on the homepage). Two angles, same source.
 // ═══════════════════════════════════════════════════════════════════════════
-const HONEST_WELCOME = {
-  kicker: 'BEFORE WE START',
-  title: 'Meet the cylinder',
-  
-  sections: [
-    {
-      // Hero visual - cylinder reference image (Round 50: Faye's URL)
-      type: 'image',
-      src: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a04015ab9ca88ca7443c9b5_13c170a0-dc4c-4939-82fe-b67443f69ffd.png',
-      placeholderEmoji: '◗',
-      placeholderLabel: 'The cylinder · reference',
-      placeholderNote: ''
-    },
-    {
-      // Intro visual - secondary cylinder image (Round 50: Faye replaced placeholder with image)
-      type: 'image',
-      src: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a05f01239dce22e7426971a_ChatGPT%20Image%20May%2014%2C%202026%2C%2008_53_19%20AM.png',
-      placeholderEmoji: '◗',
-      placeholderLabel: 'The cylinder · in context',
-      placeholderNote: ''
-    },
-    {
-      // Opening - acknowledge what this is
-      type: 'prose',
-      paragraphs: [
-        "You've drawn a sphere. You've drawn a cube. Today: the cylinder.",
-        "This is the form where curve and flat meet. The side gradates like the sphere. The top stays one shade like the cube. One light, two surfaces, two different responses.",
-        "<strong>Why we draw cylinders:</strong> they're everywhere in real life. Bottles, cans, columns, candles, chair legs, fingers, tree trunks, tea cups — once you understand the cylinder, you can construct most everyday objects with confidence.",
-        "<strong>Why this lesson matters:</strong> the cylinder is the bridge between everything you've learned. The Cup lesson will build on cylinders. Apples will use what you learned about curves. The cylinder is foundational."
-      ]
-    },
-    {
-      type: 'heading',
-      label: 'WHAT THIS IS'
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Foundation drawing trains three things:"
-      ]
-    },
-    {
-      type: 'list',
-      items: [
-        "Understanding structure",
-        "Understanding perspective",
-        "Understanding light and shadow"
-      ]
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Today's lesson is the bridge between two ideas you already know. Drawing a cylinder asks you to switch between two kinds of seeing — for one part you think like you did with the sphere, for another you think like you did with the cube. The hardest part is the edge where they meet."
-      ]
-    },
-    {
-      type: 'heading',
-      label: 'WHAT THIS ISN\'T'
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "This won't make you an artist.",
-        "Drawing a thousand cylinders won't either. But understanding how light behaves on different surfaces — that becomes a kind of vocabulary you carry into everything else.",
-        "We're teaching grammar. What you say with it is up to you."
-      ]
-    },
-    {
-      type: 'heading',
-      label: 'WHAT WE WANT YOU TO KNOW'
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Cylinders are everywhere. Once you can see them clearly, you'll start noticing how a coffee mug catches light differently from a bowl, or how a candle softens at the rim differently from a column.",
-        "This isn't a trick to memorize — it's a way of looking. The drawing is just the place where the looking shows."
-      ]
-    },
-    {
-      type: 'heading',
-      label: 'OUR HOPE'
-    },
-    {
-      type: 'prose',
-      paragraphs: [
-        "Take your time with this one. The cylinder is harder than the sphere or the cube — not because the geometry is more complex, but because your hand has to do two different things at once.",
-        "If you struggle today, that's fine. Many great artists found cylinders harder than spheres for years."
-      ]
-    },
-    {
-      // Cézanne micro-LFC — same quote, but new gloss for cylinder context
-      type: 'cezanne',
-      quote: "Treat nature by means of the cylinder, the sphere, the cone.",
-      attribution: "Cézanne, 1904",
-      gloss: "Cézanne put the cylinder first in his list. He saw it as the form most things in the world reduce to — bottles, vases, tree trunks, human limbs."
-    }
-  ],
-  
-  cta: 'I\'m ready to begin →'
-};
+
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CLOSING LFC — Take It Home (closing LFC moment for Lesson 1)
@@ -5962,36 +5869,12 @@ const LESSON = {
       type: 'openingLFC',
       title: 'Meet the cylinder',
       intro: '',
-      xp: 5
+      xp: 10
     },
-    // ===== PART A · PREPARATION =====
-    {
-      part: 'A',
-      partLabel: 'Part a · preparation',
-      type: 'reference',
-      title: 'Where curve meets flat',
-      intro: 'Before we draw, let\'s learn how light behaves on a cylinder. The side curves like a sphere. The top stays flat like a cube face. One light, two different surfaces — see how each one responds.',
-      xp: 0
-    },
-    // ═══════════════════════════════════════════════════════════════
-    // PLAY WITH THE LIGHT — interactive sphere
-    // 
-    // After the textual Reference step, students get to FEEL light & shadow
-    // by dragging the sun around a sphere. This is the Art GPS signature
-    // interaction — the moment when reading turns into discovering.
-    // 
-    // PRODUCT PHILOSOPHY (per Faye, Apr 2026):
-    // Critical thinking happens through hands, not through reading.
-    // "学生可以直接理解,而不是我在下面去讲,这个就更智能"
-    // ═══════════════════════════════════════════════════════════════
-    {
-      part: 'A',
-      partLabel: '✨ Play with the light',
-      type: 'playLight',
-      title: 'Now feel it — drag the sun',
-      intro: 'Move the sun. Watch how the side gradates smoothly while the top changes as one flat shade. Same light, two surfaces, different responses.',
-      xp: 5
-    },
+    // Retired slots preserve previously saved drawing-step indices.
+    // Their ideas now live inside the opening video; they never appear in navigation.
+    { retired: true, title: 'Merged into introduction', xp: 0 },
+    { retired: true, title: 'Merged into introduction', xp: 0 },
     {
       part: 'A',
       partLabel: 'Part a · preparation',
@@ -6153,6 +6036,7 @@ function renderRailDots() {
   const container = document.getElementById('rail-dots');
   container.innerHTML = '';
   LESSON.steps.forEach((s, i) => {
+    if (s.retired) return;
     const dot = document.createElement('div');
     dot.className = 'rail-dot';
     if (state.completedSteps.includes(i)) dot.classList.add('done');
@@ -6165,6 +6049,8 @@ function renderRailDots() {
 }
 
 function renderStep() {
+  document.getElementById('cylinder-intro')?.pause();
+  if (LESSON.steps[state.currentStepIndex]?.retired) state.currentStepIndex = 3;
   // Defensive: clamp currentStepIndex to valid range
   // (prevents crash if state was corrupted or profile has stale idx)
   if (state.currentStepIndex < 0) state.currentStepIndex = 0;
@@ -6897,89 +6783,17 @@ function changeAgeGroup(e) {
 // experience honestly so meaning can grow naturally during the work.
 // ═══════════════════════════════════════════════════════════════════════════
 function renderOpeningLFC(step) {
-  const data = HONEST_WELCOME;
-  const sectionsHtml = data.sections.map(section => {
-    if (section.type === 'prose') {
-      // Allow safe HTML (<strong>, <em>) for emphasis in intro prose
-      return section.paragraphs.map(p => 
-        `<p class="opening-lfc-prose">${p}</p>`
-      ).join('');
-    }
-    if (section.type === 'heading') {
-      return `<div class="opening-lfc-heading">${escapeHtml(section.label)}</div>`;
-    }
-    if (section.type === 'list') {
-      return `<ul class="opening-lfc-list">${
-        section.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')
-      }</ul>`;
-    }
-    if (section.type === 'image') {
-      // Hero image or placeholder if src is empty
-      if (section.src && section.src.length > 0) {
-        return `
-          <div class="opening-lfc-image" style="margin: 20px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08);">
-            <img src="${section.src}" alt="${escapeHtml(section.placeholderLabel || 'Lesson hero image')}"
-                 style="display: block; width: 100%; height: auto;" loading="lazy">
-          </div>
-        `;
-      } else {
-        return `
-          <div class="opening-lfc-image-placeholder" 
-               style="margin: 20px 0; padding: 36px 20px; text-align: center;
-                      background: linear-gradient(135deg, #faf8ff, #ecfeff);
-                      border: 2px dashed rgba(167,139,250,0.4);
-                      border-radius: 14px;">
-            <div style="font-size: 48px; opacity: 0.5; margin-bottom: 10px;">${section.placeholderEmoji || '🖼️'}</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
-                        color: #7c5fc7; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px;">${escapeHtml(section.placeholderLabel || 'Image coming soon')}</div>
-            <div style="font-size: 12px; color: rgba(26,29,43,0.6); font-style: italic;">${escapeHtml(section.placeholderNote || '')}</div>
-          </div>
-        `;
-      }
-    }
-    if (section.type === 'videoPlaceholder') {
-      return `
-        <div class="opening-lfc-video-placeholder"
-             style="margin: 20px 0; padding: 32px 20px; text-align: center;
-                    background: linear-gradient(135deg, #1a1d2b, #2a2f42);
-                    color: #fff; border-radius: 14px;">
-          <div style="font-size: 42px; opacity: 0.7; margin-bottom: 10px;">🎬</div>
-          <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 800;
-                      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;
-                      color: #c8a96e;">${escapeHtml(section.label || 'Intro video — coming soon')}</div>
-          <div style="font-size: 12px; opacity: 0.75; font-style: italic;">${escapeHtml(section.note || '')}</div>
-        </div>
-      `;
-    }
-    if (section.type === 'cezanne') {
-      // The micro-LFC — Cézanne's single sentence
-      return `
-        <div class="opening-lfc-cezanne">
-          <div class="opening-lfc-cezanne-quote">${escapeHtml(section.quote)}</div>
-          <div class="opening-lfc-cezanne-attr">— ${escapeHtml(section.attribution)}</div>
-          <div class="opening-lfc-cezanne-gloss">${escapeHtml(section.gloss)}</div>
-        </div>
-      `;
-    }
-    return '';
-  }).join('');
-  
-  return `
-    <div class="step-card opening-lfc show">
-      <div class="opening-lfc-kicker">✨ ${escapeHtml(data.kicker)}</div>
-      <h1 class="opening-lfc-title">${escapeHtml(data.title)}</h1>
-      
-      <div class="opening-lfc-body">
-        ${sectionsHtml}
-      </div>
-      
-      <div class="opening-lfc-action">
-        <button class="btn btn-primary" onclick="onOpeningLFCComplete()">
-          <span class="glyph">◈</span> ${escapeHtml(data.cta)}
-        </button>
-      </div>
-    </div>
-  `;
+  return `<div class="step-card opening-lfc show cylinder-intro-card">
+    <div class="opening-lfc-kicker">BEFORE YOU DRAW · 83 SECONDS</div>
+    <h1 class="opening-lfc-title">Meet the cylinder</h1>
+    <video id="cylinder-intro" controls playsinline preload="metadata" poster="intro/poster.jpg" style="display:block;width:100%;height:auto;border-radius:16px;background:#201c29" aria-label="Meet the cylinder: structure, ellipses, curved and flat surfaces, and moving light">
+      <source src="intro/meet-the-cylinder.mp4" type="video/mp4">
+      <track kind="captions" src="intro/captions.vtt" srclang="en" label="English">
+      <a href="intro/meet-the-cylinder.mp4">Watch Meet the cylinder</a>
+    </video>
+    <p style="font-size:13px;color:#756a82;margin:14px 0">Watch the idea. Then draw it with your teacher.</p>
+    <div class="opening-lfc-action"><button class="btn btn-primary" onclick="onOpeningLFCComplete()">Get my pencils ready →</button></div>
+  </div>`;
 }
 
 function onOpeningLFCComplete() {
@@ -6995,7 +6809,7 @@ function onOpeningLFCComplete() {
     momentKey: 'openingLFC',
     ageGroup: AccessControl.ageGroup || 'adult',
     inputType: 'milestone',
-    studentText: 'Read the honest welcome and chose to begin.'
+    studentText: 'Opened the cylinder video introduction and chose to begin.'
   });
   nextStep();
 }
@@ -9828,6 +9642,7 @@ function diffMin(seg) {
 }
 
 function goToStep(i) {
+  if (LESSON.steps[i]?.retired) i = 3;
   if (i < 0 || i >= LESSON.steps.length) return;
   state.currentStepIndex = i;
   renderStep();
@@ -9836,7 +9651,8 @@ function goToStep(i) {
 function nextStep() {
   const curr = state.currentStepIndex;
   const currStep = LESSON.steps[curr];
-  const nextStepObj = LESSON.steps[curr + 1];
+  const nextIndex = curr === 0 ? 3 : curr + 1;
+  const nextStepObj = LESSON.steps[nextIndex];
 
   // PAYWALL TRIGGER (v2 — preview-then-paywall model)
   // 
@@ -9907,7 +9723,7 @@ function nextStep() {
     });
     // Persist progress to UserProfile (so "Welcome back" can resume)
     UserProfile.update({
-      currentStepIdx: curr + 1,  // where they'll be on next visit
+      currentStepIdx: nextIndex,  // where they'll be on next visit
       totalXP: state.xp
     });
     // Background write to Supabase so progress survives across devices
@@ -9921,7 +9737,7 @@ function nextStep() {
     setTimeout(() => playTone(880, 0.15), 110);
   }
   if (curr < LESSON.steps.length - 1) {
-    goToStep(curr + 1);
+    goToStep(nextIndex);
     showBubble(randomEncouragement(), 3000);
     resetSleep();
   } else {
@@ -10960,7 +10776,7 @@ function renderReturningWelcome(profile) {
   } else if (profile.currentStepIdx > 0) {
     const currentStep = LESSON.steps[profile.currentStepIdx];
     const stepLabel = currentStep ? (currentStep.title || currentStep.type) : 'your lesson';
-    lessonStatus.textContent = `You're on The Cylinder: ${stepLabel} (step ${profile.currentStepIdx + 1} of ${LESSON.steps.length})`;
+    lessonStatus.textContent = `You're on The Cylinder: ${stepLabel} (step ${LESSON.steps.slice(0, (profile.currentStepIdx || 0) + 1).filter(s => !s.retired).length} of ${LESSON.steps.filter(s => !s.retired).length})`;
   } else {
     lessonStatus.textContent = `Ready to continue your journey?`;
   }
