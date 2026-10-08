@@ -2213,7 +2213,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .artchi svg { width: 100px; height: 100px; }
   .artchi-hint { right: 40px; bottom: 8px; }
   
-  /* Info button hidden on wide — "About Artchi" is in side panel instead (BUG FIX #6 / Gemini) */
+  /* Info button hidden on wide — the side-panel About Artchi button that used to duplicate it was removed (Oct 2026); desktop has no other entry point to it right now. */
   .artchi-info { display: none !important; }
   
   .bubble { right: 28px; bottom: 138px; max-width: 260px; }
@@ -3294,28 +3294,15 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   
   <!-- SIDE PANEL (visible on iPad landscape + desktop only) -->
   <aside class="side-panel" id="side-panel">
+    <!-- Reference image (if this step has one) is prepended above this
+         point by core/sketch-lesson-support.js. Artchi preview, Bring
+         Artchi back and About Artchi removed (Oct 2026) - Artchi isn't
+         connected to AI yet, so those explanations aren't needed. Only
+         My Journey + Upload remain, pushed to the bottom as a small,
+         quiet group by the spacer below. Floating Artchi is untouched. -->
+    <div style="flex: 1"></div>
+
     <div class="side-panel-title">Actions</div>
-    
-    <div class="side-artchi-preview">
-      <svg width="60" height="60" viewBox="0 0 100 100" style="display: block; margin: 0 auto 8px;">
-        <defs>
-          <linearGradient id="sidePreviewBody" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#e9d5ff"/>
-            <stop offset="100%" stop-color="#a78bfa"/>
-          </linearGradient>
-        </defs>
-        <ellipse cx="50" cy="62" rx="22" ry="26" fill="url(#sidePreviewBody)"/>
-        <ellipse cx="50" cy="40" rx="20" ry="18" fill="url(#sidePreviewBody)"/>
-        <path d="M 34 28 Q 34 16 44 18 L 56 18 Q 66 16 66 28 Z" fill="#8b5cf6"/>
-        <circle cx="50" cy="16" r="3.5" fill="#c8a96e"/>
-        <circle cx="42" cy="43" r="3.5" fill="#1a1d2b"/>
-        <circle cx="58" cy="43" r="3.5" fill="#1a1d2b"/>
-        <path d="M 46 50 Q 50 53 54 50" stroke="#1a1d2b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      </svg>
-      <div style="font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; color: var(--ink); letter-spacing: 1px; text-align: center;">Artchi lives in the corner</div>
-      <div style="font-size: 10px; color: var(--ink-muted); text-align: center; margin-top: 2px;">Tap her to chat. Use buttons below for actions.</div>
-    </div>
-    
     <div class="side-actions">
       <button class="side-action-btn primary" onclick="openMyJourney()">
         <span class="side-action-btn-ico">📖</span>
@@ -3325,23 +3312,13 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
         <span class="side-action-btn-ico">📸</span>
         <span>Upload my work</span>
       </button>
-      <button class="side-action-btn" onclick="recallArtchi()">
-        <span class="side-action-btn-ico">🧚</span>
-        <span>Bring Artchi back</span>
-      </button>
-      <button class="side-action-btn" onclick="openInfoModal()">
-        <span class="side-action-btn-ico">ℹ️</span>
-        <span>About Artchi</span>
-      </button>
     </div>
-    
-    <div style="flex: 1"></div>
-    
+
     <!-- Current user indicator (populated dynamically) -->
     <div class="side-user-info" id="side-user-info">
       <!-- filled by renderSideUserInfo() -->
     </div>
-    
+
     <div style="font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; color: var(--ink-muted); letter-spacing: 1.5px; text-transform: uppercase; text-align: center; padding-top: 14px; border-top: 0.5px solid var(--border);">
       FEI TeamArt · Art GPS
     </div>
