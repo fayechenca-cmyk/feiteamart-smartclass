@@ -148,6 +148,17 @@
   --ink-warm-faint:rgba(43,38,32,.42);
   --bamboo:#5c7a52;            /* technique badge accent */
   --bamboo-soft:rgba(92,122,82,.12);
+
+  /* FEI TeamArt signature purple-to-turquoise gradient (Oct 2026,
+     practice-step background, round 3) — the exact stops already used
+     as the platform's own page-background wash (see e.g. the body
+     background in lessons/lesson-5-cylinder/index.html and the
+     --purple/--cyan tokens in index.html's :root). Reused verbatim,
+     not invented, so practice steps read as "the same app" while
+     still standing apart from the rice-paper scroll drawing steps use. */
+  --fei-purple-wash:#e9d8fd;
+  --fei-blue-wash:#d4e6ff;
+  --fei-cyan-wash:#cffafe;
 }
 *{box-sizing:border-box;}
 html,body{height:100%;}
@@ -413,34 +424,26 @@ button{font-family:inherit;}
 }
 .video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
 
-/* ---- Practice-sheet treatment (§2A, Oct 2026 "Simply Piano" prompt) —
-   a loose scrap of paper, not the main scroll: smaller, lightly tilted,
-   a taped corner, dashed red border. Same ink-red/Skill-tier palette as
-   the rest of the course, not a new playful style. ---- */
-.practice-sheet-outer{max-width:560px;margin:0 auto;}
-.practice-sheet-wrap{
-  border:2px dashed var(--ink-red);border-radius:6px;padding:16px;
-  background:
-    repeating-linear-gradient(180deg, rgba(138,46,34,.06) 0px, rgba(138,46,34,.06) 1px, transparent 1px, transparent 30px),
-    #fbf3e6;
-  position:relative;
-  transform:rotate(-0.6deg);
-  box-shadow:0 10px 24px rgba(43,38,32,.14);
-}
-.practice-sheet-tape{
-  position:absolute;top:-10px;right:28px;width:58px;height:22px;
-  background:rgba(244,236,216,.82);border:1px solid rgba(138,46,34,.18);
-  transform:rotate(3deg);box-shadow:0 2px 6px rgba(43,38,32,.15);
-}
-.practice-sheet-ribbon{
-  position:absolute;top:-11px;left:20px;
-  background:var(--ink-red);color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:800;
-  font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;padding:4px 14px;border-radius:999px;
-  box-shadow:0 4px 10px rgba(138,46,34,.3);
-}
+/* ---- Practice treatment, round 3 (Oct 2026) — Faye saw the round-2
+   tilted/taped/padded "practice sheet" shrink the video below drawing-
+   step size. Removed entirely: no wrapper, no padding, no rotation, no
+   tape, no inner frame — the video renders exactly like a drawing
+   step's (full width, normal fullscreen button). Practice now reads
+   apart from drawing purely through the page background (see
+   .scroll-panel.practice-gradient below) plus the existing PRACTICE
+   badge pill and this instruction line. ---- */
 .practice-sheet-instruction{
-  text-align:center;font-size:12px;color:var(--ink-red);font-weight:700;
-  margin:12px 0 0;transform:rotate(-0.6deg);
+  text-align:center;font-size:12.5px;color:var(--ink-red);font-weight:700;
+  margin:14px 0 0;
+}
+/* The FEI signature gradient, standing in for the rice-paper scroll
+   only on practice steps. Text inside (.scroll-title-col/.warmup-row/
+   instruction line) all uses the same dark ink/red tones already used
+   on the xuan background, which stayed readable against this lighter
+   pastel wash in testing — see the Part 2 screenshots. */
+.scroll-panel.practice-gradient{
+  background-image:none;
+  background:linear-gradient(135deg, var(--fei-purple-wash) 0%, var(--fei-blue-wash) 50%, var(--fei-cyan-wash) 100%);
 }
 
 /* ---- "Warm up first" card (§2B) — links a drawing step to the
@@ -471,7 +474,8 @@ button{font-family:inherit;}
   margin:2px 0 6px 26px;padding-left:14px;border-left:2px dashed rgba(138,46,34,.35);
 }
 .map-step-row.practice-branch{
-  background:#fbf3e6;border:1px dashed var(--ink-red);border-radius:5px;margin-bottom:4px;
+  background:linear-gradient(135deg, var(--fei-purple-wash) 0%, var(--fei-cyan-wash) 100%);
+  border:1px dashed var(--ink-red);border-radius:5px;margin-bottom:4px;
 }
 .map-step-row.practice-branch .map-step-num{border-color:var(--ink-red);color:var(--ink-red);background:#fff;}
 .map-step-row.practice-branch .map-step-tag{color:var(--ink-red);}
@@ -1264,24 +1268,20 @@ function renderStepScreen(animal, step){
   const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span></div>`;
   const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
   const videoHtml = renderZodiacVideoStage(step, iframeId);
-  // §2A — practice steps read as a loose, tilted practice sheet (tape
-  // corner, dashed border, short "use a separate sheet" instruction),
-  // never the main video-plus-reference layout two videos never sit
-  // side by side here. §2B — drawing steps instead get a "Warm up
-  // first" row above the video when a practice step supports them.
+  // §2A, round 3 — practice steps never shrink the video (no wrapper,
+  // no padding, no rotation): it renders exactly like a drawing step's,
+  // full width with the normal fullscreen control. Practice reads apart
+  // from drawing through the FEI gradient page background instead (see
+  // .scroll-panel.practice-gradient) plus the PRACTICE badge and the
+  // instruction line. §2B — drawing steps get a "Warm up first" row
+  // above the video when a practice step supports them.
   const target = isPractice && step.supportsStep ? animal.steps.find(s => s.stepNumber === step.supportsStep) : null;
   const body = step.materialsList
     ? renderMaterialsLayout(step, videoHtml)
     : isPractice
-      ? `<div class="practice-sheet-outer">
-          <div class="practice-sheet-wrap">
-            <span class="practice-sheet-ribbon">✎ Practice Sheet</span>
-            <span class="practice-sheet-tape"></span>
-            ${videoHtml}
-          </div>
+      ? `${videoHtml}
           <p class="practice-sheet-instruction">Use a separate sheet of paper. Practice first, then draw.</p>
-          ${target ? `<button type="button" class="back-to-drawing" onclick="goToMapStep('${animal.id}',${target.stepNumber})">← Back to drawing: ${escapeHtml(target.title)}</button>` : ''}
-        </div>`
+          ${target ? `<button type="button" class="back-to-drawing" onclick="goToMapStep('${animal.id}',${target.stepNumber})">← Back to drawing: ${escapeHtml(target.title)}</button>` : ''}`
       : renderWarmupRow(animal, step) + videoHtml;
   // Scroll composition: title/kicker/badge in a narrower left column,
   // the video as a wide horizontal band filling the rest — East Asian
@@ -1291,7 +1291,7 @@ function renderStepScreen(animal, step){
   // keep true side-by-side panels readable under ~760px.
   return `
     <div class="step-inner scroll-wide">
-      <div class="scroll-panel">
+      <div class="scroll-panel${isPractice ? ' practice-gradient' : ''}">
         <div class="scroll-layout">
           <div class="scroll-title-col">
             <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Step ${step.stepNumber} of ${animal.steps.length}</div>
