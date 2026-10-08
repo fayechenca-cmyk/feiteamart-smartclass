@@ -282,28 +282,6 @@ button{font-family:inherit;}
 .why-zodiac-invite:active{transform:scale(.98);}
 .why-zodiac-invite-icon{font-size:1.1rem;flex-shrink:0;}
 
-/* ---- Materials layout (§4) — video + a right-side vertical numbered
-   list, bamboo-stalk rhythm (a thin connecting line between segment
-   "nodes"). ---- */
-.materials-row{display:flex;gap:24px;align-items:stretch;}
-.materials-video-col{flex:1.6;min-width:0;}
-.materials-list{flex:0 0 190px;display:flex;flex-direction:column;justify-content:center;}
-.materials-item{display:flex;align-items:center;gap:11px;padding:12px 0;position:relative;}
-.materials-item:not(:last-child)::after{content:'';position:absolute;left:17px;top:calc(100% - 4px);width:2px;height:12px;background:var(--bamboo);opacity:.55;}
-.materials-item-num{
-  width:34px;height:34px;border-radius:50%;background:var(--xuan);border:1.5px solid var(--bamboo);
-  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
-  font-weight:800;font-size:13px;color:var(--bamboo);flex-shrink:0;z-index:1;
-}
-.materials-item-icon{font-size:1.35rem;flex-shrink:0;line-height:1;}
-.materials-item-photo{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;border:1.5px solid var(--xuan-line);}
-.materials-item-label{font-size:12px;color:var(--ink-warm);font-weight:600;line-height:1.35;}
-@media(max-width:900px){
-  .materials-row{flex-direction:column;}
-  .materials-list{flex:none;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:0 18px;}
-  .materials-item:not(:last-child)::after{display:none;}
-}
-
 /* ---- Materials Kit gallery, round 3 (Oct 2026) — a swipeable,
    one-card gallery instead of a long cropped list. Every photo shown
    whole (object-fit:contain inside a fixed-ratio box, never cropped). ---- */
@@ -685,27 +663,14 @@ const ZODIAC_ANIMALS = [
   {
     id: 'rat', label: 'Rat', chineseCharacter: '鼠',
     steps: [
-      { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null,
-        // §4 (Addendum 1) — vertical numbered materials list, rendered
-        // to the right of the video by renderMaterialsLayout(). Labels
-        // corrected per Faye's Addendum 2, §3 — "brush-washing
-        // container" -> "brush washer" (笔洗) and "ink dish" ->
-        // "inkstone" (砚台), the standard art-historical/professional
-        // English terms, confirmed via reference/museum sources.
-        // Brush washer + rice paper now use the teacher's real photos
-        // (assets/zodiac-skill/materials/) — unambiguous matches to
-        // MATERIALS_KIT_ITEMS below. Inkstone and the generic Brush
-        // stay emoji placeholders: the teacher's kit has no plain
-        // "inkstone" photo (only an ambiguous paperweight-or-inkstone
-        // one, flagged in the build report) and five distinct brush
-        // photos with no single one standing in for "brush" generically
-        // — guessing either would be inventing a match, not using one.
-        materialsList: [
-          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:'../../assets/zodiac-skill/materials/brush-washer.jpg' },
-          { icon:'⬛', label:'Inkstone (砚台)', imageUrl:null },
-          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:'../../assets/zodiac-skill/materials/xuan-paper-raw.jpg' },
-          { icon:'🖌️', label:'Brush (毛笔)', imageUrl:null }
-        ] },
+      // The old four-item materials list (brush washer, inkstone, rice
+      // paper, brush) that used to sit beside this video was removed
+      // (Oct 2026, per Faye) — the inkstone was never real (the
+      // teacher's kit has none), and the Materials Kit gallery right
+      // after this step already covers every real item with real
+      // photos. The video below now renders full width, same size as
+      // every other step.
+      { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null },
       // §9 REORDER (Oct 2026, per Faye, option b) — the teacher draws
       // the eyes and the nose together in one step. Eye practice now
       // sits immediately before it, same convention as every other
@@ -1186,37 +1151,6 @@ function closeWhyZodiac(){
 }
 
 /* ============================================================
-   MATERIALS LAYOUT (§4) — video on one side, a vertical numbered list
-   to its RIGHT (not below), bamboo-stalk rhythm between items. Only
-   Rat's Step 1 carries a materialsList this pass; any future step
-   that sets one gets the same treatment automatically.
-============================================================ */
-function renderMaterialsLayout(step, videoHtml){
-  const items = step.materialsList.map((m, i) => {
-    // Real photo once Faye supplies one (imageUrl set) — until then,
-    // the emoji icon. Never silently keeps showing a generic icon
-    // once a real photo IS available; this branch is the only place
-    // that decides which one renders.
-    const visual = m.imageUrl
-      ? `<img class="materials-item-photo" src="${m.imageUrl}" alt="${escapeHtml(m.label)}">`
-      : `<div class="materials-item-icon">${m.icon}</div>`;
-    return `
-    <div class="materials-item">
-      <div class="materials-item-num">${i + 1}</div>
-      ${visual}
-      <div class="materials-item-label">${escapeHtml(m.label)}</div>
-    </div>
-  `;
-  }).join('');
-  return `
-    <div class="materials-row">
-      <div class="materials-video-col">${videoHtml}</div>
-      <div class="materials-list">${items}</div>
-    </div>
-  `;
-}
-
-/* ============================================================
    MATERIALS KIT (Part 2) — a photo-by-photo walkthrough of the
    teacher's full materials package. Sits right after Step 1
    (Materials) in the flat stage order (see buildStages) but is
@@ -1424,9 +1358,7 @@ function renderStepScreen(animal, step){
   // instruction line. §2B — drawing steps get a "Warm up first" row
   // above the video when a practice step supports them.
   const target = isPractice && step.supportsStep ? animal.steps.find(s => s.stepNumber === step.supportsStep) : null;
-  const body = step.materialsList
-    ? renderMaterialsLayout(step, videoHtml)
-    : isPractice
+  const body = isPractice
       ? `${videoHtml}
           <p class="practice-sheet-instruction">Use a separate sheet of paper. Practice first, then draw.</p>
           ${target ? `<button type="button" class="back-to-drawing" onclick="goToMapStep('${animal.id}',${target.stepNumber})">← Back to drawing: ${escapeHtml(target.title)}</button>` : ''}`
@@ -1695,20 +1627,12 @@ function buildFixedMapRowsHtml(){
         </div>
       </div>`;
   }).join('');
-  // Practice — course-level node, no content yet. Faye to confirm what
-  // this is for; built as an inert coming-soon placeholder only, no
-  // invented behavior or destination.
-  const practiceRow = `
-    <div class="map-animal-row locked">
-      <div class="map-animal-head" style="cursor:default;">
-        <div class="map-animal-char">📝</div>
-        <div class="map-animal-info">
-          <div class="map-animal-name">Practice</div>
-          <div class="map-animal-meta">Coming soon</div>
-        </div>
-      </div>
-    </div>`;
-  return rows + practiceRow;
+  // No separate course-level Practice node (removed Oct 2026, per
+  // Faye) — practice lives inside each animal as side-branches next
+  // to the drawing step it supports, so a standalone placeholder here
+  // was never needed. Map skeleton is now Intro, Materials, then the
+  // 12 zodiac animals.
+  return rows;
 }
 // §2C — one map step row. branchClass marks a practice node rendered
 // as a small side-branch off the drawing step it supports.
