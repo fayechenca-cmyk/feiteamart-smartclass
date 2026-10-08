@@ -1,0 +1,5 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../../"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><title>Before You Start · Design preview</title><link rel="stylesheet" href="core/onboarding.css"></head><body style="font-family:Open Sans,sans-serif;background:#fafaf8"><p>Design preview · No account data is saved.</p><div id="home-screen"></div><script src="core/onboarding.js"></script><script>
+const user={id:'design-preview',user_metadata:{name:'',full_name:''}};
+window.FEIAuth={displayName:()=>'',getClient:()=>({auth:{updateUser:async()=>({error:null})}})};
+FEIOnboarding.open(user).then(p=>FEIOnboarding.mount(user,p,()=>{}));
+</script></body></html>

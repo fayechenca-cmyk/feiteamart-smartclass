@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Animated comparison of shot sizes and camera viewpoints">
+ <defs><clipPath id="film-clip"><rect x="10" y="10" width="780" height="380" rx="16"/></clipPath><filter id="film-glow"><feGaussianBlur stdDeviation="4"/></filter></defs>
+ <g clip-path="url(#film-clip)">
+ <rect x="10" y="10" width="780" height="380" fill="#fafaf8"/>
+ <g id="film-world" stroke="#695e78" stroke-width="2.3" fill="none">
+ <path d="M0 225L120 130 220 222 360 100 480 220 680 110 800 218M0 240H800" stroke="#d4c9e6"/>
+ <path d="M45 285V186H172V285M30 186L109 139 184 186M70 214H94V245H70ZM125 214H148V245H125ZM600 285V177H749V285M582 177L673 127 766 177M624 205H653V237H624ZM690 205H720V237H690Z" fill="#eee8ff"/>
+ <path d="M352 240L205 420M448 240L595 420M310 293H490M266 349H534" stroke="#cbbce3"/>
+ <g id="film-person" stroke="#252337" stroke-width="3"><path d="M376 201Q400 191 424 201L436 287H364Z" fill="#ded5f3"/><path d="M375 287L369 353H393L400 299 407 353H430L424 287" fill="#f1edf7"/><path d="M376 210L348 265M424 210L452 265"/><ellipse cx="400" cy="172" rx="29" ry="33" fill="#fffaf2"/><path d="M373 164Q370 132 400 137Q433 135 429 167L417 152Q397 168 375 154" fill="#695e78"/><ellipse cx="390" cy="172" rx="3" ry="5" fill="#252337"/><ellipse cx="411" cy="172" rx="3" ry="5" fill="#252337"/><path d="M390 186Q400 192 411 186"/></g>
+ </g>
+ <g id="film-angle" opacity="0">
+ <text x="130" y="35" font-size="11">CAMERA POSITION</text><text x="605" y="35" font-size="11">YOUR DRAWING</text>
+ <path d="M34 345H355" stroke="#cbbce3" stroke-width="2"/>
+ <g stroke="#252337" stroke-width="3" fill="none"><circle cx="295" cy="140" r="26" fill="#fffaf2"/><path d="M295 166V266M295 190L263 233M295 190L323 231M295 266L271 344M295 266L318 344"/></g>
+ <path id="film-beam" fill="#67e8f944"/><path id="film-sight" stroke="#a78bfa" stroke-width="2" stroke-dasharray="6 6"/>
+ <g id="film-camera" stroke="#252337" stroke-width="3" fill="#eee8ff"><rect x="-40" y="-20" width="66" height="40" rx="5"/><path d="M26 -11L49 -23V23L26 11Z"/><circle cx="-22" cy="-31" r="12"/><circle cx="7" cy="-34" r="15"/></g>
+ <rect x="440" y="55" width="326" height="310" rx="14" fill="white" stroke="#e3dbed"/>
+ <path id="film-ground" stroke="#cbbce3" fill="none" stroke-width="2"/>
+ <g id="film-result" stroke="#252337" stroke-width="3" fill="none"></g>
+ <circle id="film-vp" cx="603" cy="170" r="6" fill="#a78bfa"/>
+ </g>
+ </g></svg>

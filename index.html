@@ -2142,7 +2142,9 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   </div>
 </div>
 
+<link rel="stylesheet" href="core/onboarding.css?v=2">
 <script src="core/auth.js"></script>
+<script src="core/onboarding.js?v=2"></script>
 <script src="core/access.js"></script>
 <script src="core/progress.js"></script>
 <script src="core/badge-catalog.js?v=learning-journey-1"></script>
@@ -3986,7 +3988,17 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       if (pendingPlan) showPaidWelcome(pendingPlan);
     }
 
+    const preferences = await window.FEIOnboarding.open(user);
+    function applyPreferences(value) {
+      saveProfile(Object.assign({}, userProfile, {
+        name: value.name,
+        ageGroup: value.age === '18+ · Adult' ? 'adult' : ['Under 6', '6–8', '9–12'].includes(value.age) ? 'kids' : 'teen',
+        artPreferences: value
+      }));
+    }
+    applyPreferences(preferences);
     showHome();
+    window.FEIOnboarding.mount(user, preferences, applyPreferences);
     checkUnreadFeedback().catch(e => console.warn('[Feedback]', e));
   }
 

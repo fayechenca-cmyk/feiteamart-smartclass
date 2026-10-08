@@ -26,7 +26,7 @@ window.IntroFilm=(()=>{
  </g>
  </g></svg>
  <p id="film-caption">You’ve explored shot sizes, from wide shots to extreme close-ups.</p>
- <div class="film-controls"><button id="film-play" class="primary">▶ Play intro</button><button id="film-restart" aria-label="Restart intro">↻</button><input id="film-seek" type="range" min="0" max="100" value="0" step=".1" aria-label="Intro playback position"><span id="film-time">0:00</span><button id="film-mute" aria-pressed="false">Sound on</button></div>
+ <div class="film-controls"><button id="film-play" class="primary">▶ Play intro</button><button id="film-restart" aria-label="Restart intro">↻</button><input id="film-seek" type="range" min="0" max="100" value="0" step=".1" aria-label="Intro playback position"><span id="film-time">0:00</span><button id="film-music" aria-pressed="true">Music on</button><button id="film-mute" aria-pressed="false">Sound on</button></div>
  <p id="film-status" role="status"></p><audio id="film-audio" preload="metadata" src="audio/viewpoints-intro.mp3"></audio></div>`;
  const $=id=>document.getElementById(id),audio=$('film-audio'),words=INTRO_SPEECH.cues;
  const sentences=INTRO_SPEECH.text.match(/[^.!?]+[.!?]+/g).map(s=>s.trim());
@@ -38,6 +38,13 @@ window.IntroFilm=(()=>{
  // A local blob supports scrubbing even on simple preview servers without Range responses.
  let blobUrl=null;
  const ready=fetch('audio/viewpoints-intro.mp3').then(r=>{if(!r.ok)throw Error('Audio unavailable');return r.blob()}).then(blob=>{blobUrl=URL.createObjectURL(blob);audio.src=blobUrl;audio.load()}).catch(()=>{});
+ const music=new Audio('audio/intro-music.wav');music.preload='auto';music.volume=.5;
+ let musicEnabled=true;
+ fetch('audio/intro-music.wav').then(r=>{if(!r.ok)throw Error('Music unavailable');return r.blob()}).then(blob=>{music.src=URL.createObjectURL(blob);music.load()}).catch(()=>{});
+ function syncMusic(){music.muted=audio.muted||!musicEnabled;if(Number.isFinite(music.duration))music.currentTime=Math.min(audio.currentTime,music.duration);if(!audio.paused&&musicEnabled)music.play().catch(()=>{});else music.pause();}
+ $('film-music').onclick=()=>{musicEnabled=!musicEnabled;$('film-music').textContent=musicEnabled?'Music on':'Music off';$('film-music').setAttribute('aria-pressed',String(musicEnabled));syncMusic()};
+ audio.addEventListener('play',syncMusic);audio.addEventListener('pause',()=>music.pause());audio.addEventListener('seeking',syncMusic);audio.addEventListener('volumechange',syncMusic);audio.addEventListener('ended',()=>music.pause());
+ music.addEventListener('loadedmetadata',syncMusic);
  const clamp=x=>Math.max(0,Math.min(1,x)),smooth=x=>{x=clamp(x);return x*x*(3-2*x)};
  const set=(id,k,v)=>$(id).setAttribute(k,v);
  function frame(){
