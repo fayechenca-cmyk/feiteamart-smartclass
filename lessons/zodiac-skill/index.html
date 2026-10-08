@@ -246,6 +246,19 @@ button{font-family:inherit;}
   transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--d) * .15s + .95s);
 }
 .scroll-unroll-stage.unrolled .scroll-motif{opacity:1;transform:translateY(0);}
+/* Sound fix round 3 — the real tap target that opens the scroll and,
+   from inside that same tap, starts the intro video unmuted. Sits
+   centered over the rolled-up sliver, above the rollers. */
+.scroll-open-gate{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:7px;
+  background:rgba(43,38,32,.82);color:#fff;border:none;border-radius:16px;
+  padding:20px 24px;cursor:pointer;backdrop-filter:blur(3px);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.scroll-open-gate:active{transform:translate(-50%,-50%) scale(.97);}
+.scroll-open-gate-icon{font-size:1.9rem;}
+.scroll-open-gate-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;letter-spacing:.3px;white-space:nowrap;}
 .why-zodiac-invite{
   display:flex;align-items:center;gap:10px;margin:18px auto 0;max-width:420px;
   background:var(--xuan);border:1px solid var(--xuan-line);border-radius:999px;
@@ -975,6 +988,27 @@ function loadStreamSdk(){
 // set above during render — already in the DOM by the time this
 // runs) is what actually attempts unmuted autoplay; this function
 // only wires up the two recovery controls, it never gates playback.
+//
+// _zodiacPlayers (Oct 2026, sound fix round 3) caches each step's
+// Stream player once the SDK resolves, so a LATER real tap elsewhere
+// on the page — specifically the course intro's "Open the scroll"
+// gate — can call play() SYNCHRONOUSLY from inside that tap's own
+// click handler via forcePlayZodiacVideo() below, instead of only
+// relying on the iframe's declarative autoplay attribute. iOS Safari
+// is stricter than desktop browsers about unmuted autoplay on a
+// cross-origin iframe with no engagement history on that origin yet;
+// a direct, gesture-synchronous play() call is the real fix for that,
+// not something Playwright's desktop WebKit build can fully prove
+// (see the Part 1 build report).
+const _zodiacPlayers = {};
+function forcePlayZodiacVideo(iframeId){
+  const player = _zodiacPlayers[iframeId];
+  if (!player) return false;
+  try { player.muted = false; player.volume = 1; } catch (e) { /* best-effort */ }
+  const playResult = player.play();
+  if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
+  return true;
+}
 function afterRenderZodiacVideoStage(step, iframeId){
   if (!step.videoUrl) return;
   const soundBtn = document.getElementById('videoSoundBtn_' + iframeId);
@@ -983,12 +1017,8 @@ function afterRenderZodiacVideoStage(step, iframeId){
       const iframe = document.getElementById(iframeId);
       const player = window.Stream && iframe ? window.Stream(iframe) : null;
       if (!player) return;
-      const forceSound = () => {
-        try { player.muted = false; player.volume = 1; } catch (e) { /* best-effort */ }
-        const playResult = player.play();
-        if (playResult && playResult.catch) playResult.catch((e) => console.warn('[video] play() failed', e));
-      };
-      if (soundBtn) soundBtn.onclick = forceSound;
+      _zodiacPlayers[iframeId] = player;
+      if (soundBtn) soundBtn.onclick = () => forcePlayZodiacVideo(iframeId);
 
       let started = false;
       player.addEventListener('play', () => {
@@ -1001,7 +1031,7 @@ function afterRenderZodiacVideoStage(step, iframeId){
         const overlay = document.getElementById('videoTapOverlay_' + iframeId);
         if (!overlay) return;
         overlay.hidden = false;
-        overlay.onclick = () => { forceSound(); overlay.hidden = true; };
+        overlay.onclick = () => { forcePlayZodiacVideo(iframeId); overlay.hidden = true; };
       }, 1200);
     } catch (e) { console.warn('[video] Stream SDK attach failed', e); }
   }).catch((e) => console.warn('[video] Stream SDK failed to load', e));
@@ -1054,6 +1084,15 @@ function renderCourseIntro(){
         </div>
         <div class="scroll-roller scroll-roller-left"></div>
         <div class="scroll-roller scroll-roller-right"></div>
+        <!-- Sound fix round 3 — the scroll now opens on a real tap
+             instead of automatically, so that tap can be the direct,
+             synchronous user gesture iOS Safari requires for unmuted
+             JS-initiated playback. Opening the scroll IS the start of
+             the lesson; the student never touches a sound control. -->
+        <button type="button" class="scroll-open-gate" id="scrollOpenGate" onclick="openScroll()">
+          <span class="scroll-open-gate-icon">📜</span>
+          <span class="scroll-open-gate-text">Tap to open the scroll</span>
+        </button>
       </div>
       <button class="why-zodiac-invite" onclick="openWhyZodiac()">
         <span class="why-zodiac-invite-icon">💬</span>
@@ -1063,7 +1102,17 @@ function renderCourseIntro(){
   `;
 }
 function afterRenderCourseIntro(){
+  // Still called immediately so the iframe/SDK start loading right
+  // away — by the time the student taps the gate, the player is
+  // almost always already cached and ready for a synchronous play()
+  // call. The declarative autoplay attempt also still runs in
+  // parallel, same as before.
   afterRenderZodiacVideoStage(COURSE_INTRO_STEP, 'zodiacVideo_course_intro');
+  showContinue('Begin →', nextStage);
+}
+function openScroll(){
+  const gate = document.getElementById('scrollOpenGate');
+  if (gate) gate.remove();
   const stage = document.getElementById('scrollUnrollStage');
   // Double rAF: forces the browser to paint the rolled-up starting
   // state on its own frame before the class that triggers the CSS
@@ -1072,7 +1121,9 @@ function afterRenderCourseIntro(){
   requestAnimationFrame(() => {
     requestAnimationFrame(() => { if (stage) stage.classList.add('unrolled'); });
   });
-  showContinue('Begin →', nextStage);
+  // The real fix: an unmuted play() call made synchronously inside
+  // this tap handler, not just the iframe's declarative autoplay.
+  forcePlayZodiacVideo('zodiacVideo_course_intro');
 }
 
 /* ============================================================
