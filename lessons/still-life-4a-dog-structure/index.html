@@ -3844,8 +3844,8 @@ const HONEST_WELCOME = {
 const CLOSING_LFC = {
   kicker: '✨ TAKE THIS WITH YOU',
   paragraphs: [
-    'You outlined a dog, built up a quick pass of light and dark across the face, then refined the eyes, nose, and mouth with careful, close attention, and finished with a final pass.',
-    'This lesson is still growing — fur texture will be added as new teacher footage arrives.'
+    'You outlined a dog, built up a quick pass of light and dark across the face, refined the eyes, nose, and mouth with careful, close attention, rendered fur texture across the ears, face, and muzzle, blended and lifted highlights, and finished with a final pass.',
+    'Every pass the teacher has recorded for this dog — structure, tone, detail, texture, and finish — is now part of this lesson.'
   ],
   invitations: {
     label: 'When you get a chance, look at:',
@@ -5081,16 +5081,16 @@ const LFC_HOOKS = {
 const LESSON = {
   id: 'still-life-4a-dog-structure',
   title: 'Dog',
-  totalXP: 65,
+  totalXP: 90,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
-  // WIP lesson (per Faye): only structure + facial detail exist so far.
-  // Tone block-in, fur texture, and finish will be appended as future
-  // steps when that footage arrives — badge/closing copy below is
-  // deliberately scoped to what is actually taught today, not a
-  // finished piece.
-  badge: { name: 'Dog Structure Starter', emoji: '🐾', desc: 'You outlined a dog, built up its light and dark tone, refined its eyes, nose, and mouth, and completed a final pass. Fur texture is coming as the teacher delivers new footage.' },
+  // All of the teacher's raw footage supplied so far is now built into
+  // this lesson (structure, tone, detail, texture, finish) — copy below
+  // reflects that. Worded as "all currently known raw footage is now
+  // live" rather than permanently finished, since more could still
+  // arrive later; see the build report for this round.
+  badge: { name: 'Dog Structure Starter', emoji: '🐾', desc: 'You outlined a dog, built up its light and dark tone, refined its eyes, nose, and mouth, rendered fur texture across the ears, face, and muzzle, blended and lifted highlights, and completed a final pass.' },
   steps: [
     {
       part: 'OPEN',
@@ -5105,7 +5105,7 @@ const LESSON = {
       partLabel: 'Part a · look closely',
       type: 'reference',
       title: 'Outline first',
-      intro: 'The teacher outlines the dog, quickly blocks in light and dark tone, then refines the eyes, nose, and mouth with careful detail before a final pass. Fur texture will be added as new footage arrives.',
+      intro: 'The teacher outlines the dog, quickly blocks in light and dark tone, refines the eyes, nose, and mouth with careful detail, renders fur texture, blends and lifts highlights, then finishes with a final pass.',
       xp: 0
     },
     {
@@ -6130,7 +6130,7 @@ function renderOpeningLFC(step) {
         </p>
         <p style="font-family:'Open Sans',sans-serif; font-size:14px;
                   color:#4a4f5e; line-height:1.7; margin:0;">
-          Today we outline the dog, block in light and dark tone, refine the eyes, nose, and mouth, and finish with a final pass. Fur texture will be added later.
+          Today we outline the dog, block in light and dark tone, refine the eyes, nose, and mouth, render fur texture, blend and lift highlights, and finish with a final pass.
         </p>
       </div>
       
@@ -8231,10 +8231,10 @@ function renderBadgeUnlocked(profileOrLead) {
       
       <!-- Next lesson teaser -->
       <div class="lesson2-teaser">
-        <div class="lesson2-teaser-kicker">✨ MORE COMING SOON</div>
-        <div class="lesson2-teaser-title">More steps for this dog</div>
+        <div class="lesson2-teaser-kicker">✨ EVERY STEP, DONE</div>
+        <div class="lesson2-teaser-title">A complete dog portrait</div>
         <div class="lesson2-teaser-sub">
-          You outlined the dog, built up tone, refined its eyes, nose, and mouth, and finished with a final pass. Fur texture will be added to this lesson as new teacher footage arrives.
+          You outlined the dog, built up tone, refined its eyes, nose, and mouth, rendered fur texture, blended and lifted highlights, and finished with a final pass.
         </div>
         <div class="lesson2-teaser-status">→ Click below to continue</div>
       </div>
