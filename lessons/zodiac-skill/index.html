@@ -303,30 +303,65 @@ button{font-family:inherit;}
   .materials-item:not(:last-child)::after{display:none;}
 }
 
-/* ---- Materials Kit (Part 2) — vertical photo-list, one teacher-kit
-   item per row, matching the existing materials-list pattern but with
-   a bigger photo since these are the real reference images. ---- */
-.kit-item-list{display:flex;flex-direction:column;gap:4px;}
-.kit-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--xuan-line);}
-.kit-item:last-child{border-bottom:none;}
-.kit-item-num{
-  width:26px;height:26px;border-radius:50%;background:var(--xuan-deep);border:1.5px solid var(--bamboo);
-  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
-  font-weight:800;font-size:11px;color:var(--bamboo);flex-shrink:0;margin-top:2px;
+/* ---- Materials Kit gallery, round 3 (Oct 2026) — a swipeable,
+   one-card gallery instead of a long cropped list. Every photo shown
+   whole (object-fit:contain inside a fixed-ratio box, never cropped). ---- */
+.kit-gallery{position:relative;display:flex;align-items:center;gap:10px;max-width:640px;margin:0 auto;}
+.kit-gallery-viewport{flex:1;min-width:0;}
+.kit-gallery-card{width:100%;}
+.kit-card-photos{
+  display:flex;aspect-ratio:4/3;max-height:32vh;background:#fff;border:1.5px solid var(--xuan-line);
+  border-radius:10px;overflow:hidden;box-shadow:0 8px 20px rgba(43,38,32,.12);
 }
-.kit-item-photos{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;}
-.kit-item-photo{width:72px;height:72px;border-radius:8px;object-fit:cover;border:1.5px solid var(--xuan-line);background:#fff;}
-.kit-item-info{flex:1;min-width:0;padding-top:2px;}
-.kit-item-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--ink-warm);}
-.kit-item-zh{font-weight:500;color:var(--ink-warm-soft);}
-.kit-item-use{font-size:12.5px;color:var(--ink-warm-soft);margin-top:3px;line-height:1.45;}
-.kit-pigment-list{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:9px;}
+.kit-card-photo-btn{flex:1;min-width:0;border:0;padding:0;background:none;cursor:zoom-in;display:block;}
+.kit-card-photos.multi .kit-card-photo-btn{border-right:1px solid var(--xuan-line);}
+.kit-card-photos.multi .kit-card-photo-btn:last-child{border-right:0;}
+.kit-card-photo{width:100%;height:100%;object-fit:contain;display:block;}
+.kit-card-info{text-align:center;margin-top:14px;}
+.kit-card-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:var(--ink-warm);}
+.kit-card-zh{font-weight:500;color:var(--ink-warm-soft);}
+.kit-card-use{font-size:13px;color:var(--ink-warm-soft);margin-top:5px;line-height:1.5;}
+.kit-pigment-list{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-top:10px;}
 .kit-pigment{font-size:11px;color:var(--ink-warm);background:var(--xuan-deep);border-radius:5px;padding:3px 8px;}
 .kit-pigment i{font-style:normal;color:var(--ink-warm-faint);}
-@media(max-width:600px){
-  .kit-item{flex-direction:column;}
-  .kit-item-photo{width:64px;height:64px;}
+.kit-gallery-arrow{
+  flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--xuan-line);
+  background:#fff;color:var(--ink-red);font-size:18px;font-weight:800;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(43,38,32,.1);
 }
+.kit-gallery-arrow:active{transform:scale(.94);}
+.kit-gallery-position{text-align:center;font-size:11.5px;font-weight:700;color:var(--ink-warm-faint);margin-top:10px;}
+.kit-thumb-strip{display:flex;gap:8px;overflow-x:auto;padding:14px 4px 4px;max-width:640px;margin:0 auto;scroll-behavior:smooth;}
+.kit-thumb{
+  flex-shrink:0;width:46px;height:46px;border-radius:7px;border:2px solid transparent;
+  padding:0;overflow:hidden;cursor:pointer;background:#fff;opacity:.6;
+}
+.kit-thumb img{width:100%;height:100%;object-fit:cover;}
+.kit-thumb.active{border-color:var(--ink-red);opacity:1;}
+@media(max-width:600px){
+  .kit-gallery{max-width:100%;}
+  .kit-gallery-arrow{width:32px;height:32px;font-size:15px;}
+}
+
+/* ---- Materials Kit full-screen zoom viewer ---- */
+.kit-zoom-backdrop{
+  position:fixed;inset:0;background:#15110d;z-index:400;
+  display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;
+}
+.kit-zoom-backdrop.show{display:flex;}
+.kit-zoom-img{max-width:92vw;max-height:76vh;object-fit:contain;touch-action:none;transition:transform .15s ease;}
+.kit-zoom-close{
+  position:absolute;top:18px;right:18px;background:rgba(255,255,255,.12);color:#fff;border:0;
+  border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+}
+.kit-zoom-nav{
+  position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:#fff;border:0;font-size:22px;font-weight:800;cursor:pointer;
+}
+.kit-zoom-nav-left{left:16px;}
+.kit-zoom-nav-right{right:16px;}
+.kit-zoom-caption{color:#fff;font-size:13px;margin-top:16px;text-align:center;opacity:.85;}
 
 /* ---- Scroll panel — the mounted "paper" surface step content sits
    on, distinct from the deeper xuan-deep page backdrop behind it
@@ -763,12 +798,17 @@ const MATERIALS_KIT_ITEMS = [
       { zh: '赭石', en: 'ochre' }, { zh: '大红', en: 'red' }, { zh: '曙红', en: 'rose red' },
       { zh: '朱砂', en: 'cinnabar' }, { zh: '朱膘', en: 'light vermilion' }, { zh: '胭脂', en: 'rouge' }
     ] },
-  // Teacher's slide for this item is labeled paperweight (镇尺), but
-  // shows a brown rectangular block that may actually be a lidded
-  // inkstone — flagged for Faye to confirm, her label kept as-is
-  // until she does (see build report).
+  // Confirmed by Faye (round 3): the brown block is the paperweight
+  // (镇纸/镇尺), not an inkstone. Teacher's label kept as-is.
   { en: 'Paperweight', zh: '镇尺', use: 'Holds the paper down at both ends or four corners', photos: ['paperweight-or-inkstone.jpg'] }
 ];
+// Flat list of every individual photo across all items, in order —
+// what the full-screen zoom viewer pages through with left/right, so
+// a pigment item's 3 photos are each reachable in sequence too, not
+// just from their own small row inside the card.
+const MATERIALS_KIT_PHOTOS = MATERIALS_KIT_ITEMS.flatMap((item, itemIndex) =>
+  item.photos.map((filename, photoIndex) => ({ filename, item, itemIndex, photoIndex }))
+);
 
 // §6 — the full 12-animal order (Rat -> Pig), used ONLY by the course
 // map to show real scope. Deliberately separate from ZODIAC_ANIMALS
@@ -1189,44 +1229,156 @@ function renderMaterialsLayout(step, videoHtml){
    or the FREE_STEP_COUNT paywall boundary. It is part of Materials,
    so it is always free, with no access check of its own.
 ============================================================ */
-function materialsKitPhotoHtml(filename, alt){
-  const src = MATERIALS_KIT_ASSET_PATH + filename;
-  // Missing-file fallback: a neutral placeholder swapped in on image
-  // load failure, plus a console warning naming the exact missing
-  // file — per the brief, never fabricate or silently drop the row.
-  return `<img class="kit-item-photo" src="${src}" alt="${escapeHtml(alt)}"
-    onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect width=%2780%27 height=%2780%27 fill=%27%23ddd3bd%27/%3E%3Ctext x=%2740%27 y=%2744%27 font-size=%2228%27 text-anchor=%27middle%27%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E';console.warn('[materials kit] missing photo file:', '${filename}');">`;
+// Missing-file fallback: a neutral placeholder swapped in on image load
+// failure, plus a console warning naming the exact missing file — per
+// the brief, never fabricate or silently drop a photo.
+const KIT_MISSING_PHOTO_SVG = "data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect width=%2780%27 height=%2780%27 fill=%27%23ddd3bd%27/%3E%3Ctext x=%2740%27 y=%2744%27 font-size=%2228%27 text-anchor=%27middle%27%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E";
+function kitPhotoOnerror(filename){
+  return `this.onerror=null;this.src='${KIT_MISSING_PHOTO_SVG}';console.warn('[materials kit] missing photo file:', '${filename}');`;
 }
-function renderMaterialsKitScreen(animal){
-  const itemsHtml = MATERIALS_KIT_ITEMS.map((item, i) => {
-    const photosHtml = item.photos.map(f => materialsKitPhotoHtml(f, item.en)).join('');
-    const pigmentsHtml = item.pigmentColors ? `
-      <div class="kit-pigment-list">
-        ${item.pigmentColors.map(p => `<span class="kit-pigment">${escapeHtml(p.zh)}${p.en ? ` <i>${escapeHtml(p.en)}</i>` : ''}</span>`).join('')}
-      </div>` : '';
-    return `
-      <div class="kit-item">
-        <div class="kit-item-num">${i + 1}</div>
-        <div class="kit-item-photos">${photosHtml}</div>
-        <div class="kit-item-info">
-          <div class="kit-item-name">${escapeHtml(item.en)} <span class="kit-item-zh">(${escapeHtml(item.zh)})</span></div>
-          <div class="kit-item-use">${escapeHtml(item.use)}</div>
-          ${pigmentsHtml}
-        </div>
-      </div>`;
+function kitPhotoUrl(filename){ return MATERIALS_KIT_ASSET_PATH + filename; }
+
+/* ============================================================
+   MATERIALS KIT GALLERY (round 3, Oct 2026) — photos were too small,
+   cropped, and ran in one long list. Now a swipeable, one-card-at-a-
+   time gallery (arrows, swipe, a thumbnail strip, "N of 9"), every
+   photo shown whole (object-fit:contain, never cropped), and tap any
+   photo for a full-screen viewer with pinch-to-zoom and left/right
+   through every photo in the kit — including each pigment sub-photo.
+============================================================ */
+let kitGalleryIndex = 0;
+function kitGalleryGo(delta){
+  kitGalleryIndex = Math.max(0, Math.min(MATERIALS_KIT_ITEMS.length - 1, kitGalleryIndex + delta));
+  renderKitGallery();
+}
+function kitGalleryJump(i){ kitGalleryIndex = i; renderKitGallery(); }
+function renderKitCardHtml(item, i){
+  const photosHtml = item.photos.map((f, pi) => {
+    const flatIndex = MATERIALS_KIT_PHOTOS.findIndex(p => p.item === item && p.photoIndex === pi);
+    return `<button type="button" class="kit-card-photo-btn" onclick="openKitZoom(${flatIndex})">
+      <img class="kit-card-photo" src="${kitPhotoUrl(f)}" alt="${escapeHtml(item.en)}" loading="lazy" onerror="${kitPhotoOnerror(f)}">
+    </button>`;
   }).join('');
+  const pigmentsHtml = item.pigmentColors ? `
+    <div class="kit-pigment-list">
+      ${item.pigmentColors.map(p => `<span class="kit-pigment">${escapeHtml(p.zh)}${p.en ? ` <i>${escapeHtml(p.en)}</i>` : ''}</span>`).join('')}
+    </div>` : '';
+  return `
+    <div class="kit-gallery-card">
+      <div class="kit-card-photos${item.photos.length > 1 ? ' multi' : ''}">${photosHtml}</div>
+      <div class="kit-card-info">
+        <div class="kit-card-name">${escapeHtml(item.en)} <span class="kit-card-zh">(${escapeHtml(item.zh)})</span></div>
+        <div class="kit-card-use">${escapeHtml(item.use)}</div>
+        ${pigmentsHtml}
+      </div>
+    </div>`;
+}
+function renderKitThumbStripHtml(){
+  return MATERIALS_KIT_ITEMS.map((item, i) => `
+    <button type="button" class="kit-thumb${i === kitGalleryIndex ? ' active' : ''}" onclick="kitGalleryJump(${i})" aria-label="${escapeHtml(item.en)}">
+      <img src="${kitPhotoUrl(item.photos[0])}" alt="" loading="lazy" onerror="${kitPhotoOnerror(item.photos[0])}">
+    </button>`).join('');
+}
+function renderKitGallery(){
+  const viewport = document.getElementById('kitGalleryViewport');
+  const position = document.getElementById('kitGalleryPosition');
+  const strip = document.getElementById('kitThumbStrip');
+  if (!viewport) return;
+  const item = MATERIALS_KIT_ITEMS[kitGalleryIndex];
+  viewport.innerHTML = renderKitCardHtml(item, kitGalleryIndex);
+  if (position) position.textContent = (kitGalleryIndex + 1) + ' of ' + MATERIALS_KIT_ITEMS.length;
+  if (strip) {
+    strip.innerHTML = renderKitThumbStripHtml();
+    const activeThumb = strip.querySelector('.kit-thumb.active');
+    if (activeThumb) activeThumb.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  }
+}
+function setupKitSwipe(el, onLeft, onRight){
+  let startX = null;
+  el.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', (e) => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) { if (dx < 0) onLeft(); else onRight(); }
+    startX = null;
+  });
+}
+
+/* ---- Full-screen enlarge viewer ---- */
+let kitZoomIndex = 0;
+function openKitZoom(flatIndex){
+  kitZoomIndex = flatIndex;
+  renderKitZoom();
+  document.getElementById('kitZoomBackdrop').classList.add('show');
+}
+function closeKitZoom(){
+  document.getElementById('kitZoomBackdrop').classList.remove('show');
+}
+function kitZoomGo(delta){
+  kitZoomIndex = (kitZoomIndex + delta + MATERIALS_KIT_PHOTOS.length) % MATERIALS_KIT_PHOTOS.length;
+  renderKitZoom();
+}
+function renderKitZoom(){
+  const p = MATERIALS_KIT_PHOTOS[kitZoomIndex];
+  const img = document.getElementById('kitZoomImg');
+  img.style.transform = '';
+  img.src = kitPhotoUrl(p.filename);
+  img.alt = p.item.en;
+  img.onerror = function(){ this.onerror = null; this.src = KIT_MISSING_PHOTO_SVG; console.warn('[materials kit] missing photo file:', p.filename); };
+  const caption = document.getElementById('kitZoomCaption');
+  const multi = p.item.photos.length > 1 ? ` (${p.photoIndex + 1}/${p.item.photos.length})` : '';
+  caption.textContent = p.item.en + multi + ' · ' + p.item.zh;
+  setupKitZoomPinch(img);
+}
+// Basic two-finger pinch-to-zoom — scales the image via CSS transform
+// around its center; resets once the pinch ends back near 1x.
+function setupKitZoomPinch(img){
+  let startDist = 0, startScale = 1, currentScale = 1;
+  function dist(t){ const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY; return Math.sqrt(dx * dx + dy * dy); }
+  img.ontouchstart = (e) => { if (e.touches.length === 2) { startDist = dist(e.touches); startScale = currentScale; } };
+  img.ontouchmove = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      currentScale = Math.min(4, Math.max(1, startScale * (dist(e.touches) / startDist)));
+      img.style.transform = 'scale(' + currentScale + ')';
+    }
+  };
+  img.ontouchend = (e) => { if (e.touches.length < 2 && currentScale <= 1.02) { currentScale = 1; img.style.transform = ''; } };
+}
+
+function renderMaterialsKitScreen(animal){
+  kitGalleryIndex = 0;
   return `
     <div class="step-inner scroll-wide">
       <div class="scroll-panel">
         <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Materials Kit</div>
         <h2 class="step-title">Your full materials package</h2>
-        <p style="text-align:center;font-size:12.5px;color:var(--ink-warm-soft);max-width:480px;margin:0 auto 20px;">Everything from the teacher's own kit, one item at a time.</p>
-        <div class="kit-item-list">${itemsHtml}</div>
+        <p style="text-align:center;font-size:12.5px;color:var(--ink-warm-soft);max-width:480px;margin:0 auto 20px;">Everything from the teacher's own kit. Swipe, use the arrows, or tap a photo to enlarge.</p>
+        <div class="kit-gallery">
+          <button type="button" class="kit-gallery-arrow kit-gallery-arrow-left" onclick="kitGalleryGo(-1)" aria-label="Previous item">‹</button>
+          <div class="kit-gallery-viewport" id="kitGalleryViewport"></div>
+          <button type="button" class="kit-gallery-arrow kit-gallery-arrow-right" onclick="kitGalleryGo(1)" aria-label="Next item">›</button>
+        </div>
+        <div class="kit-gallery-position" id="kitGalleryPosition"></div>
+        <div class="kit-thumb-strip" id="kitThumbStrip"></div>
       </div>
+    </div>
+
+    <div class="kit-zoom-backdrop" id="kitZoomBackdrop" onclick="if(event.target===this) closeKitZoom();">
+      <button type="button" class="kit-zoom-close" onclick="closeKitZoom()">✕ Close</button>
+      <button type="button" class="kit-zoom-nav kit-zoom-nav-left" onclick="kitZoomGo(-1)" aria-label="Previous photo">‹</button>
+      <img class="kit-zoom-img" id="kitZoomImg" src="" alt="">
+      <button type="button" class="kit-zoom-nav kit-zoom-nav-right" onclick="kitZoomGo(1)" aria-label="Next photo">›</button>
+      <div class="kit-zoom-caption" id="kitZoomCaption"></div>
     </div>
   `;
 }
 function afterRenderMaterialsKitScreen(){
+  renderKitGallery();
+  const viewportWrap = document.querySelector('.kit-gallery');
+  if (viewportWrap) setupKitSwipe(viewportWrap, () => kitGalleryGo(1), () => kitGalleryGo(-1));
+  const zoomBackdrop = document.getElementById('kitZoomBackdrop');
+  if (zoomBackdrop) setupKitSwipe(zoomBackdrop, () => kitZoomGo(1), () => kitZoomGo(-1));
   showContinue('Next →', nextStage);
 }
 
