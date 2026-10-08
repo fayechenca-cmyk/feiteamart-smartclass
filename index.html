@@ -2142,9 +2142,9 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   </div>
 </div>
 
-<link rel="stylesheet" href="core/onboarding.css?v=2">
+<link rel="stylesheet" href="core/onboarding.css?v=8">
 <script src="core/auth.js"></script>
-<script src="core/onboarding.js?v=2"></script>
+<script src="core/onboarding.js?v=9"></script>
 <script src="core/access.js"></script>
 <script src="core/progress.js"></script>
 <script src="core/badge-catalog.js?v=learning-journey-1"></script>
@@ -3874,7 +3874,18 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   }
   window.handleGoogleSignIn = handleGoogleSignIn;
 
+  function hasStudentCodeSession() {
+    if (userProfile?.studentCode) return true;
+    try { return !!JSON.parse(sessionStorage.getItem(PROFILE_KEY) || 'null')?.studentCode; }
+    catch { return false; }
+  }
+
   async function onAuthSuccess(user) {
+    // A remembered OAuth session must never replace the active offline student.
+    if (!user?.id || hasStudentCodeSession()) return;
+    const session = await window.FEIAuth.getSession();
+    if (session?.user?.id !== user.id) return;
+    clearAuthLoadingTimer();
     // Sync to legacy profile shape so the rest of the UI works
     const name = window.FEIAuth.displayName(user);
     let existing = (function () {
@@ -3973,6 +3984,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     // Pre-load access status (creates row if needed) and sync membership
     // tier (membershipType/isLiveClass) so it survives across devices —
     // not just at the moment of payment.
+    if (hasStudentCodeSession()) return;
     profile = progressResult.profile;
     saveProfile(profile);
 
@@ -3988,6 +4000,8 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       if (pendingPlan) showPaidWelcome(pendingPlan);
     }
 
+    // Render the authenticated studio before asking for creative preferences.
+    showHome();
     const preferences = await window.FEIOnboarding.open(user);
     function applyPreferences(value) {
       saveProfile(Object.assign({}, userProfile, {
@@ -3996,6 +4010,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
         artPreferences: value
       }));
     }
+    if (!preferences) return;
     applyPreferences(preferences);
     showHome();
     window.FEIOnboarding.mount(user, preferences, applyPreferences);
@@ -4232,7 +4247,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 
     // 1. If Supabase is configured, check for an existing session FIRST
     let supabaseUser = null;
-    if (window.FEIAuth && window.FEIAuth._isConfigured()) {
+    if (!hasStudentCodeSession() && window.FEIAuth && window.FEIAuth._isConfigured()) {
       try {
         await window.FEIAuth.init();
         supabaseUser = await window.FEIAuth.getUser();

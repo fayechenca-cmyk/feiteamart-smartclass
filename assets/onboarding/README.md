@@ -1,11 +1,7 @@
-# Before You Start visual samples
+# Onboarding media policy
 
-Existing FEI course material; no generated replacement artwork.
+Use original hosted URLs for media already on Cloudflare or the existing website CDN. Do not download duplicate images, animations or videos into this repository.
 
-- `studio-finished.jpg`: completed teacher diorama from Dream Art Studio step 2, image delivery ID `ee229d4d-10e7-4dc8-f174-7ebc98d7fa00`. Step 9 displays the learner's own upload, so it has no shared final image.
-- `magic-city.gif`: My Magical City / Adding the Details, Cloudflare Stream `2f8f0d0f117e6a9abfe42e9a2710e9c8`, 620–623 seconds. 24 frames, 3.01 seconds. Explicit play/pause; static poster by default.
-- `magic-city-poster.jpg`: same video at 620 seconds.
-- `leather.png`: existing Leather Craft for Beginners course page image (website-files asset `6833b240839a771394ce7139`).
-- Apple, chameleon and scene artwork reference their existing course assets directly.
+The six previous local media copies were removed after updating their references. Dog uses the final demonstration at 431 seconds, with no hand covering its face. Magic City uses 620–623 seconds. Studio and Yōkai use their original Cloudflare Images assets. Leather uses the existing website CDN image.
 
-Onboarding uses the main index page's existing palette and Montserrat / Open Sans. The mascot SVG is copied from `core/scene-drawing-archi.js` with gradient IDs prefixed to avoid collisions.
+Existing shared local course assets remain in use; do not remove those without checking all consumers. The authoritative media URLs are in core/onboarding.js.
