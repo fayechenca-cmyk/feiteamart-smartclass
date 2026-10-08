@@ -677,19 +677,21 @@ const ZODIAC_ANIMALS = [
       { stepNumber:6,  title:'Head & Hands',                               stepType:'technique', videoUrl:'fa132a0665dd9de005961668923886ab', posterUrl:null },
       { stepNumber:7,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null, supportsStep:8 },
       { stepNumber:8,  title:'Torso',                                     stepType:'technique', videoUrl:'4df356429002b37734f71c9fd7a1ff95', posterUrl:null },
-      // Steps 9-14 — not yet recorded. Real entries (so step count/
-      // progress indicator are accurate), videoUrl:null renders the
+      // §8 REORDER (Oct 2026, per Faye) — Tail and Claw practice now sit
+      // immediately before Tail & Claws, same "practice immediately
+      // before the technique step it supports" convention as the §7
+      // Ear/Torso swap above. Previously both practice steps came AFTER
+      // Tail & Claws, so Next from drawing the tail went backward into
+      // practicing it — confirmed live against the real STAGES order
+      // before this change, not assumed. Safe to renumber: completedLessons/
+      // XP/JournalStorage are keyed by animal id only (markAnimalComplete,
+      // isAnimalDone), nothing persists a step number or array index, and
+      // no stage id is hardcoded anywhere outside this array (checked).
+      // Steps 9-14 are not yet recorded — videoUrl:null still renders the
       // existing platform "coming soon" fallback. No content invented.
-      { stepNumber:9,  title:'Tail & Claws',                               stepType:'technique', videoUrl:null, posterUrl:null },
-      // Tail (10) and Claw (11) practice both support step 9, but unlike
-      // the Ear/Torso pairs they physically sit AFTER it, not before —
-      // flagged for Faye rather than reordered (see build report). The
-      // course map and the "Warm up first" card both use supportsStep to
-      // show them attached to step 9 regardless of this array order, so
-      // the student-facing experience is correct even though the raw
-      // array is not yet reordered to match.
-      { stepNumber:10, title:'Practice: Tail Brushwork',                   stepType:'practice',  videoUrl:'08515d455173b2d1003844c4e995a2f1', posterUrl:null, supportsStep:9 },
-      { stepNumber:11, title:'Breakdown 5 — Claw Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:9 },
+      { stepNumber:9,  title:'Practice: Tail Brushwork',                   stepType:'practice',  videoUrl:'08515d455173b2d1003844c4e995a2f1', posterUrl:null, supportsStep:11 },
+      { stepNumber:10, title:'Breakdown 5 — Claw Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:11 },
+      { stepNumber:11, title:'Tail & Claws',                               stepType:'technique', videoUrl:null, posterUrl:null },
       { stepNumber:12, title:'Whiskers',                                   stepType:'technique', videoUrl:null, posterUrl:null },
       { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:null, posterUrl:null },
       { stepNumber:14, title:'Seal',                                       stepType:'technique', videoUrl:null, posterUrl:null }
