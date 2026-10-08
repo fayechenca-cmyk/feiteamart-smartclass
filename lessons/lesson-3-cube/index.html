@@ -3016,6 +3016,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   // `function celebrate(){}` declared further down in the main script.
   const FoundationGlow = FEICelebrate.create({ namespace: 'foundation' });
 </script>
+<link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=1">
+<script src="../../core/sketch-lesson-support.js?v=1" defer></script>
 </head>
 <body>
 
@@ -7802,7 +7804,10 @@ function triggerVSPause(idx) {
   }, 200);
   
   // Start countdown
-  startVSCountdown(p.duration || 60);
+  if (vsState.countdown) clearInterval(vsState.countdown);
+  const guidedTimer=document.getElementById(`vp-timer-${n}`);
+  if(guidedTimer)guidedTimer.textContent='Take your time';
+  window.FEISketchSupport?.narrate(p, document.getElementById(`vp-panel-${n}`));
   
   // TODO (future): if p.audioUrl exists, play it
   // const audio = new Audio(p.audioUrl);
@@ -7901,6 +7906,7 @@ function vpKeepPaused(videoNumber) {
 }
 
 function hideVPOverlay() {
+  window.FEISketchSupport?.stop();
   if (vsState.videoNumber == null) return;
   const imageOverlay = document.getElementById(`vp-image-overlay-${vsState.videoNumber}`);
   if (imageOverlay) imageOverlay.style.display = 'none';
@@ -9109,7 +9115,7 @@ const VIDEO_PAUSES = {
       shortPrompt: 'Reinforce the terminator for stronger 3D.',
       text: 'Mrs. Dawn returns to the terminator — the boundary between light and shadow — and darkens it further. This is the key move: the terminator is the darkest area on the form itself (not the cast shadow). Strengthening it pushes the 3D effect dramatically. A soft terminator makes a sphere look flat; a firm one makes it pop.',
       learnerAction: 'Find your terminator line and add a few more strokes to darken just that belt.',
-      voiceoverEn: 'Mrs. Dawn goes back to the terminator line — the boundary between light and shadow — and reinforces it. This is what creates the strongest sense of three-dimensional form. The darker the terminator, the more the sphere pops.',
+      voiceoverEn: 'Mrs. Dawn goes back to the terminator line — the boundary between light and shadow — and reinforces it. This is what creates the strongest sense of three-dimensional form. The darker the terminator, the more the cube feels solid.',
       resumeLabel: 'Continue',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0666ab5a6e702db8d70aa2_p3-3.PNG'
     },
@@ -9120,7 +9126,7 @@ const VIDEO_PAUSES = {
       shortPrompt: 'Tone flows left to right, top to bottom — dark to light.',
       text: 'Notice the overall tonal map now: from left to right, from top to bottom, values transition naturally from dark to light. This isn\'t accidental — it\'s planned. Each area of the sphere flows smoothly into the next. There are no sudden jumps in value, no hard edges where there shouldn\'t be any.',
       learnerAction: 'Step back from your drawing. Can you see a smooth gradient from dark to light? Look for any jumps that need softening.',
-      voiceoverEn: 'Look at the full sphere now. From left to right, from top to bottom, the tone transitions naturally from dark to light. This gradual flow is what makes the form feel unified and real.',
+      voiceoverEn: 'Look at the full cube now. From left to right, from top to bottom, the tone transitions naturally from dark to light. This gradual flow is what makes the form feel unified and real.',
       resumeLabel: 'Continue',
       image: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0666aae5969d1fef86a564_p3-4.PNG'
     },

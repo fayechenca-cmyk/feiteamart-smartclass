@@ -3239,6 +3239,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
+<link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=1">
+<script src="../../core/sketch-lesson-support.js?v=1" defer></script>
 </head>
 <body>
 
@@ -8770,7 +8772,7 @@ function triggerSPPause(idx) {
                     background:rgba(255,255,255,0.18); border-radius:18px;
                     font-family:'Montserrat',sans-serif; font-size:10px; font-weight:700;
                     letter-spacing:1.2px; text-transform:uppercase; opacity:0.85;">
-          🎙️ Voice narration coming soon
+          Listen to the guide below
         </div>
       `}
     `;
@@ -8819,8 +8821,11 @@ function triggerSPPause(idx) {
     if (frame) frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 200);
   
-  // Start countdown
-  startSPCountdown(p.duration || 60);
+  // Wait for the learner to continue
+  if (spState.countdown) clearInterval(spState.countdown);
+  const guidedTimer=document.getElementById(`sp-timer-${seg}`);
+  if(guidedTimer)guidedTimer.textContent='Take your time';
+  window.FEISketchSupport?.narrate(p, document.getElementById(`sp-panel-${seg}`));
   
   // Analytics
   if (typeof Analytics !== 'undefined' && Analytics.track) {
@@ -8878,9 +8883,11 @@ function spResume(seg) {
     const resumeBtn = document.getElementById(`sp-resume-btn-${seg}`);
     if (resumeBtn) resumeBtn.innerHTML = '✨ Continue';
     
-    // Restart countdown for stage B
+    // Keep stage B open while the learner listens
     if (spState.countdown) { clearInterval(spState.countdown); spState.countdown = null; }
-    startSPCountdown(p.duration || 60);
+    const guidedTimer=document.getElementById(`sp-timer-${seg}`);
+    if(guidedTimer)guidedTimer.textContent='Take your time';
+    window.FEISketchSupport?.narrate(p, document.getElementById(`sp-panel-${seg}`));
     return;
   }
   
@@ -8915,6 +8922,7 @@ function spKeepPaused(seg) {
 }
 
 function hideSPOverlay() {
+  window.FEISketchSupport?.stop();
   const seg = spState.videoSeg;
   if (!seg) return;
   const imageOverlay = document.getElementById(`sp-image-overlay-${seg}`);

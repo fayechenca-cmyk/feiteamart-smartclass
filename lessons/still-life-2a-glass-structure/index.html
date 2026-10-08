@@ -3016,6 +3016,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   // `function celebrate(){}` declared further down in the main script.
   const FoundationGlow = FEICelebrate.create({ namespace: 'foundation' });
 </script>
+<link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=1">
+<script src="../../core/sketch-lesson-support.js?v=1" defer></script>
 </head>
 <body>
 
@@ -7514,7 +7516,10 @@ function triggerVSPause(idx) {
   }, 200);
   
   // Start countdown
-  startVSCountdown(p.duration || 60);
+  if (vsState.countdown) clearInterval(vsState.countdown);
+  const guidedTimer=document.getElementById(`vp-timer-${n}`);
+  if(guidedTimer)guidedTimer.textContent='Take your time';
+  window.FEISketchSupport?.narrate(p, document.getElementById(`vp-panel-${n}`));
   
   // TODO (future): if p.audioUrl exists, play it
   // const audio = new Audio(p.audioUrl);
@@ -7613,6 +7618,7 @@ function vpKeepPaused(videoNumber) {
 }
 
 function hideVPOverlay() {
+  window.FEISketchSupport?.stop();
   if (vsState.videoNumber == null) return;
   const imageOverlay = document.getElementById(`vp-image-overlay-${vsState.videoNumber}`);
   if (imageOverlay) imageOverlay.style.display = 'none';

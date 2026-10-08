@@ -3469,6 +3469,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
+<link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=1">
+<script src="../../core/sketch-lesson-support.js?v=1" defer></script>
 </head>
 <body>
 
@@ -9158,7 +9160,10 @@ function triggerCylPause(idx) {
   }, 200);
   
   // Start countdown
-  startCylCountdown(p.duration || 25);
+  if (cylState.countdown) clearInterval(cylState.countdown);
+  const guidedTimer=document.getElementById(`cyl-timer-${seg}`);
+  if(guidedTimer)guidedTimer.textContent='Take your time';
+  window.FEISketchSupport?.narrate(p, document.getElementById(`cyl-panel-${seg}`));
 }
 
 function startCylCountdown(duration) {
@@ -9206,6 +9211,7 @@ function cylKeepPaused(seg) {
 }
 
 function hideCylOverlay() {
+  window.FEISketchSupport?.stop();
   const seg = cylState.videoSeg;
   if (!seg) return;
   const imageOverlay = document.getElementById(`cyl-image-overlay-${seg}`);

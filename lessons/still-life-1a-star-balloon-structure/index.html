@@ -3016,6 +3016,8 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   // `function celebrate(){}` declared further down in the main script.
   const FoundationGlow = FEICelebrate.create({ namespace: 'foundation' });
 </script>
+<link rel="stylesheet" href="../../core/sketch-lesson-support.css?v=1">
+<script src="../../core/sketch-lesson-support.js?v=1" defer></script>
 </head>
 <body>
 
@@ -7527,7 +7529,10 @@ function triggerVSPause(idx) {
   }, 200);
   
   // Start countdown
-  startVSCountdown(p.duration || 60);
+  if (vsState.countdown) clearInterval(vsState.countdown);
+  const guidedTimer=document.getElementById(`vp-timer-${n}`);
+  if(guidedTimer)guidedTimer.textContent='Take your time';
+  window.FEISketchSupport?.narrate(p, document.getElementById(`vp-panel-${n}`));
   
   // TODO (future): if p.audioUrl exists, play it
   // const audio = new Audio(p.audioUrl);
@@ -7626,6 +7631,7 @@ function vpKeepPaused(videoNumber) {
 }
 
 function hideVPOverlay() {
+  window.FEISketchSupport?.stop();
   if (vsState.videoNumber == null) return;
   const imageOverlay = document.getElementById(`vp-image-overlay-${vsState.videoNumber}`);
   if (imageOverlay) imageOverlay.style.display = 'none';
@@ -8632,7 +8638,46 @@ function toggleCheck(row) {
 // ─────────────────────────────────────────────────────────────────────
 
 // Neither video in this lesson has pause points for now.
-const VIDEO_PAUSES = {};
+const VIDEO_PAUSES = {
+  "6bb909b0169fb6e58f666c8e2abb6ad2": [
+    {
+      "time": 45,
+      "duration": 60,
+      "title": "Find the tilt before the outline",
+      "shortPrompt": "Compare the guide lines before adding detail.",
+      "text": "The teacher is finding the direction and overall shape before adding any shading. Notice the tilted guide lines. Compare their angles, and keep your construction marks light.",
+      "voiceoverEn": "The teacher is finding the direction and overall shape before adding any shading. Notice the tilted guide lines. Compare their angles, and keep your construction marks light.",
+      "image": "../../assets/sketch-support/balloon/key-1.svg"
+    },
+    {
+      "time": 150,
+      "duration": 60,
+      "title": "Turn corners into soft curves",
+      "shortPrompt": "Foil has volume: let the edges bend.",
+      "text": "Pause to compare the outline with the finished balloon beside the video. The edges bend inward between the points. Use gentle curves instead of making every edge a straight line.",
+      "voiceoverEn": "Pause to compare the outline with the finished balloon beside the video. The edges bend inward between the points. Use gentle curves instead of making every edge a straight line.",
+      "image": "../../assets/sketch-support/balloon/key-2.svg"
+    },
+    {
+      "time": 270,
+      "duration": 60,
+      "title": "Separate the seam from the outline",
+      "shortPrompt": "Look for the narrow rim inside the edge.",
+      "text": "Look closely at the rim just inside the balloon outline. This seam is separate from the outer edge. Keep that narrow space visible; it will help the balloon feel like inflated foil.",
+      "voiceoverEn": "Look closely at the rim just inside the balloon outline. This seam is separate from the outer edge. Keep that narrow space visible; it will help the balloon feel like inflated foil.",
+      "image": "../../assets/sketch-support/balloon/key-3.svg"
+    },
+    {
+      "time": 330,
+      "duration": 60,
+      "title": "Let folds turn toward the centre",
+      "shortPrompt": "Follow each fold\u2019s direction.",
+      "text": "These small inward curves describe folds in the foil. Notice how they turn from the rim toward the centre. Draw the folds you can see, keeping them light before the shading begins.",
+      "voiceoverEn": "These small inward curves describe folds in the foil. Notice how they turn from the rim toward the centre. Draw the folds you can see, keeping them light before the shading begins.",
+      "image": "../../assets/sketch-support/balloon/key-4.svg"
+    }
+  ]
+};
 
 // Legacy variable name retained for backward compatibility
 // (some demo/preview functions still reference it)

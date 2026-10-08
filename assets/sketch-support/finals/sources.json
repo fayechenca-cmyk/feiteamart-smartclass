@@ -1,0 +1,90 @@
+{
+  "cube": {
+    "uid": "af20cfc9c1313d4313b332e50be4a17b",
+    "seconds": 192.4,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/af20cfc9c1313d4313b332e50be4a17b/thumbnails/thumbnail.jpg?time=192.4s&height=720"
+  },
+  "sphere": {
+    "uid": "193d127866f1ace07a7667af81f14961",
+    "seconds": 380.1,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=380.1s&height=720"
+  },
+  "cylinder": {
+    "uid": "7f14e8ccbc6831ec6710578bf58f3d6c",
+    "seconds": 10,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7f14e8ccbc6831ec6710578bf58f3d6c/thumbnails/thumbnail.jpg?time=10s&height=480",
+    "selection": "Clear view of finished study with less hand occlusion"
+  },
+  "apple": {
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "seconds": 10,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=10s&height=480",
+    "selection": "Clear view of finished study with less hand occlusion"
+  },
+  "cone": {
+    "uid": "9ee03efb74cce27368752b9644cc3dd4",
+    "seconds": 54.0,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9ee03efb74cce27368752b9644cc3dd4/thumbnails/thumbnail.jpg?time=54.0s&height=720"
+  },
+  "intersecting": {
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "seconds": 793.1,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=793.1s&height=720"
+  },
+  "balloon": {
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "seconds": 990.82,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6c3dd3cd1d35439b765cd903c0c3b0d2/thumbnails/thumbnail.jpg?time=990.82s&height=720"
+  },
+  "glass": {
+    "uid": "788587447ded8766c25eaedae4268c2d",
+    "seconds": 1242.87,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/788587447ded8766c25eaedae4268c2d/thumbnails/thumbnail.jpg?time=1242.87s&height=720"
+  },
+  "cup": {
+    "uid": "01cb2719246c22e4509ca54ed0c01c88",
+    "seconds": 10,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/01cb2719246c22e4509ca54ed0c01c88/thumbnails/thumbnail.jpg?time=10s&height=480",
+    "selection": "Clear view of finished study with less hand occlusion"
+  },
+  "icecream": {
+    "uid": "38837e97c0c435214adc35b0cc3b8fb2",
+    "seconds": 599.0,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/38837e97c0c435214adc35b0cc3b8fb2/thumbnails/thumbnail.jpg?time=599.0s&height=720"
+  },
+  "box": {
+    "uid": "7c6090590f645d78bd35033ffcd9ec25",
+    "seconds": 881.49,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7c6090590f645d78bd35033ffcd9ec25/thumbnails/thumbnail.jpg?time=881.49s&height=720"
+  },
+  "papercrane": {
+    "uid": "7e43378fd346f73ec130e46a98c8fede",
+    "seconds": 352.7,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7e43378fd346f73ec130e46a98c8fede/thumbnails/thumbnail.jpg?time=352.7s&height=720"
+  },
+  "dog": {
+    "uid": "8876d665061fa07356f6a08db27ef169",
+    "seconds": 429.76,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/8876d665061fa07356f6a08db27ef169/thumbnails/thumbnail.jpg?time=429.76s&height=720"
+  },
+  "prep-lines": {
+    "uid": "8bd402e0d2480692b41a65817038baf3",
+    "seconds": 316.79,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/8bd402e0d2480692b41a65817038baf3/thumbnails/thumbnail.jpg?time=316.79s&height=720"
+  },
+  "prep-setup": {
+    "uid": "9b335ebd533cbfdab6a608255a1c202c",
+    "seconds": 3.69,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/thumbnails/thumbnail.jpg?time=3.69s&height=720"
+  },
+  "prep-tape": {
+    "uid": "5fee79867ca52d1ec9b26654bb3bc0e5",
+    "seconds": 71.29,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/thumbnails/thumbnail.jpg?time=71.29s&height=720"
+  },
+  "prep-warmup": {
+    "uid": "cf7834125b757d86d0965702c6550202",
+    "seconds": 120,
+    "source": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/thumbnails/thumbnail.jpg?time=120s&height=720"
+  }
+}
