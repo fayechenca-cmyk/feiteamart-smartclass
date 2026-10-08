@@ -1,32 +1,43 @@
-.sketch-watch-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:18px;align-items:start;margin:16px 0}.sketch-watch-layout>.sketch-demo-frame{width:100%;min-width:0;margin:0!important}.sketch-final-reference{background:#faf8ff;border:1px solid #e2d8f1;border-radius:18px;padding:15px;color:#303044;box-sizing:border-box}.sketch-final-reference h3{font:800 17px/1.3 Montserrat,Arial,sans-serif;margin:7px 0 12px}.sketch-final-reference>small{font:700 10px/1.5 Arial,sans-serif;letter-spacing:.5px;color:#79668d}.sketch-final-reference p{font:400 12px/1.6 'Open Sans',Arial,sans-serif;margin:12px 0}.sketch-reference-image{display:block;border:0;padding:0;width:100%;background:white;border-radius:12px;overflow:hidden;cursor:zoom-in}.sketch-reference-image img{display:block;width:100%;height:160px;object-fit:contain}.sketch-reference-zoom{padding:18px;border:0;border-radius:20px;margin:auto;max-width:95vw;max-height:94dvh;background:#fff}.sketch-reference-zoom::backdrop{background:#201b35bb}.sketch-reference-zoom img{display:block;max-width:85vw;max-height:80dvh;object-fit:contain}.sketch-reference-zoom button{display:block;margin:0 0 12px auto;border:0;border-radius:18px;padding:10px 16px;cursor:pointer}.sketch-narration{margin-top:16px;padding-top:14px;border-top:1px solid #dfd1f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.sketch-narration button{border:0;border-radius:22px;padding:12px 18px;background:#7653ad;color:#fff;font:700 12px Arial,sans-serif;cursor:pointer;min-height:44px}.sketch-narration span,.sketch-narration summary{font:400 12px/1.6 Arial,sans-serif;color:#675977}.sketch-narration details{width:100%}.sketch-narration p{font-size:14px;line-height:1.6}.sketch-reference-image:focus-visible,.sketch-narration button:focus-visible{outline:3px solid #13c7ae;outline-offset:3px}
-@media(min-width:900px){body:has(.sketch-watch-layout) .app{max-width:1160px!important}.sketch-watch-layout{grid-template-columns:minmax(0,1fr) 250px}}
-@media(max-width:1100px){.sketch-watch-layout{grid-template-columns:minmax(0,1fr)}.sketch-final-reference{display:grid;grid-template-columns:130px minmax(0,1fr);gap:5px 14px;padding:12px}.sketch-reference-image{grid-column:1;grid-row:1/5}.sketch-reference-image img{height:110px}.sketch-final-reference>small,.sketch-final-reference h3,.sketch-final-reference p{grid-column:2;margin:0}.sketch-final-reference p{font-size:11px}.sketch-final-reference h3{font-size:15px}}
-@media(max-width:390px){.sketch-final-reference{grid-template-columns:105px minmax(0,1fr);gap:5px 10px}.sketch-reference-image img{height:105px}}
+.sketch-watch-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:18px;align-items:start;margin:16px 0}.sketch-watch-layout>.sketch-demo-frame{width:100%;min-width:0;margin:0!important}.sketch-final-reference{background:#faf8ff;border:1px solid #e2d8f1;border-radius:18px;padding:12px;color:#303044;box-sizing:border-box}.sketch-reference-image{display:block;border:0;padding:0;width:100%;background:white;border-radius:12px;overflow:hidden;cursor:zoom-in}.sketch-reference-image img{display:block;width:100%;height:160px;object-fit:contain}.sketch-reference-zoom{padding:18px;border:0;border-radius:20px;margin:auto;max-width:95vw;max-height:94dvh;background:#fff}.sketch-reference-zoom::backdrop{background:#201b35bb}.sketch-reference-zoom img{display:block;max-width:85vw;max-height:80dvh;object-fit:contain}.sketch-reference-zoom button{display:block;margin:0 0 12px auto;border:0;border-radius:18px;padding:10px 16px;cursor:pointer}.sketch-narration{margin-top:16px;padding-top:14px;border-top:1px solid #dfd1f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.sketch-narration button{border:0;border-radius:22px;padding:12px 18px;background:#7653ad;color:#fff;font:700 12px Arial,sans-serif;cursor:pointer;min-height:44px}.sketch-narration span,.sketch-narration summary{font:400 12px/1.6 Arial,sans-serif;color:#675977}.sketch-narration details{width:100%}.sketch-narration p{font-size:14px;line-height:1.6}.sketch-reference-image:focus-visible,.sketch-narration button:focus-visible{outline:3px solid #13c7ae;outline-offset:3px}
+@media(min-width:900px){.sketch-watch-layout{grid-template-columns:minmax(0,1fr) 250px}}
+/* Below ~1000px (iPad portrait / phone): compact strip — just the
+   image now, no kicker/heading/hint/caption to lay out beside it. */
+@media(max-width:999px){.sketch-final-reference{padding:8px;max-width:220px;margin-left:auto;margin-right:auto}.sketch-reference-image img{height:130px}}
+@media(max-width:390px){.sketch-reference-image img{height:100px}}
 
-/* The lesson video keeps the entire main column. Never nest two columns inside it. */
-.sketch-watch-layout{grid-template-columns:minmax(0,1fr)}
-body.sketch-cube-studio .app{max-width:1480px!important}
-.sketch-cube-studio #step-content{min-width:0}
-.sketch-cube-studio .sketch-watch-layout{margin:16px 0}
-.sketch-cube-studio .toolkit-photo{display:block;width:100%;border-radius:16px;margin:16px 0}
+/* On any lesson that has a .side-panel, the reference image moves
+   there (see sketch-lesson-support.js) instead of sitting beside the
+   video inside .sketch-watch-layout — so the video keeps the entire
+   width of its own column there. Lessons with no .side-panel
+   (preparation) keep the two-column .sketch-watch-layout above. */
+body:has(.side-panel) .sketch-watch-layout{grid-template-columns:minmax(0,1fr)}
+
 .toolkit-checks{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
 .toolkit-checks label{display:flex;gap:8px;align-items:center;padding:12px;background:white;border:1px solid #ddd2ef;border-radius:12px;cursor:pointer;min-height:44px;font-weight:700;font-size:13px}
 .toolkit-checks label:has(input:checked){background:#e4f5ef;border-color:#379878}
 .toolkit-checks input{width:19px;height:19px;accent-color:#379878}
 .toolkit-progress{font-size:13px;color:#625970;margin:12px 0}
+
+/* Wide studio layout (Oct 2026) — was Cube-only (.sketch-cube-studio),
+   now every lesson with a .app/.content/.side-panel shell gets it, so
+   the video is the same size everywhere and the reference image has
+   real room beside it. Scoped under .app throughout so preparation
+   (no .app) is never affected, even though it shares some class names
+   like .step-card/#step-content. */
+.app .toolkit-photo{display:block;width:100%;border-radius:16px;margin:16px 0;max-height:380px;object-fit:contain;background:#faf9f6}
 @media(min-width:1000px){
- .sketch-cube-studio .content{grid-template-columns:minmax(0,7fr) minmax(230px,3fr);gap:24px;padding:24px}
- .sketch-cube-studio .step-card{padding:20px}
- .sketch-cube-studio .side-panel{min-height:0;padding:14px}
- .sketch-cube-studio .side-panel .sketch-final-reference{display:block}
- .sketch-cube-studio .side-panel .sketch-final-reference h3{margin:8px 0 12px}
- .sketch-cube-studio .side-panel .sketch-final-reference p{margin:12px 0}
- .sketch-cube-studio .side-panel .sketch-reference-image img{height:auto;max-height:290px}
+ .app{max-width:1480px!important}
+ .app #step-content{min-width:0}
+ .app .content{grid-template-columns:minmax(0,7fr) minmax(230px,3fr);gap:24px;padding:24px}
+ .app .step-card{padding:20px}
+ .side-panel{min-height:0;padding:14px;gap:12px}
+ /* Reference image fills the column, capped to roughly the video's
+    rendered height so it never grows taller than the video next to it.
+    Keeps the same subtle lavender rounded-card frame as elsewhere. */
+ .side-panel .sketch-reference-image img{height:auto;max-height:480px}
 }
 @media(max-width:999px){
- .sketch-cube-studio .content{display:block;padding:20px 14px}
- .sketch-cube-studio .side-panel{display:none}
- .sketch-cube-studio .step-card{padding:16px}
+ .app .content{display:block;padding:20px 14px}
+ .side-panel{display:none}
+ .app .step-card{padding:16px}
 }
-
-.sketch-cube-studio .toolkit-photo{max-height:380px;object-fit:contain;background:#faf9f6}

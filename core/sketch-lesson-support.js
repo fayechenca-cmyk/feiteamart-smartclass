@@ -3,8 +3,6 @@
  'use strict';
  const root=new URL('../assets/sketch-support/',document.currentScript.src);
  const lesson=location.pathname.split('/').filter(Boolean).at(-1)==='index.html'?location.pathname.split('/').filter(Boolean).at(-2):location.pathname.split('/').filter(Boolean).at(-1);
- const cube=lesson==='lesson-3-cube';
- if(cube)document.body.classList.add('sketch-cube-studio');
  const desktop=matchMedia('(min-width: 1000px)');
  const placements=new Map();
  desktop.addEventListener('change',scan);
@@ -34,7 +32,12 @@
  function scan(){
   for(const [layout,card] of placements){
    if(!layout.isConnected){card.remove();placements.delete(layout);continue;}
-   const destination=cube&&desktop.matches?document.querySelector('.side-panel'):layout;
+   // Every lesson with a .side-panel now gets the reference image moved
+   // there on desktop, beside the video (was Cube-only). Lessons with no
+   // .side-panel (preparation) fall back to staying in layout, where the
+   // shared CSS still lays video+card out as two columns for them.
+   const sidePanel=document.querySelector('.side-panel');
+   const destination=(desktop.matches&&sidePanel)?sidePanel:layout;
    if(destination&&card.parentElement!==destination)destination.prepend(card);
   }
   if(panel&&(!panel.isConnected||getComputedStyle(panel).display==='none'))stop();
@@ -46,15 +49,15 @@
    if(!video||video===document.body)return;
    const layout=document.createElement('div');layout.className='sketch-watch-layout';video.before(layout);layout.append(video);video.classList.add('sketch-demo-frame');
    const card=document.createElement('aside');card.className='sketch-final-reference';
-   const kicker=document.createElement('small');kicker.textContent=lesson==='preparation'?'YOUR PRACTICE REFERENCE':'THE FINISHED DRAWING';
-   const heading=document.createElement('h3');heading.textContent=ref[1];
+   // Image only (Oct 2026) — kicker/heading/hint/caption removed; the
+   // image itself still opens the zoom dialog on tap.
    const button=document.createElement('button');button.type='button';button.className='sketch-reference-image';button.setAttribute('aria-label','Enlarge '+ref[1]+' teacher reference');
    const image=document.createElement('img');image.src=new URL('finals/'+ref[0]+'.jpg',root);image.alt='Teacher demonstration: '+ref[1];image.loading='lazy';button.append(image);
    button.onclick=()=>{zoom.querySelector('img').src=image.src;zoom.showModal()};
-   const hint=document.createElement('p');hint.textContent=lesson==='preparation'?'Look at the example, then practise at your own pace.':'This is where the lesson is heading. Follow the current step; you don’t need all these details yet.';
-   const caption=document.createElement('small');caption.textContent='Teacher’s demonstration · Tap to enlarge';card.append(kicker,heading,button,hint,caption);layout.append(card);
+   card.append(button);layout.append(card);
    placements.set(layout,card);
-   if(cube&&desktop.matches)document.querySelector('.side-panel')?.prepend(card);
+   const sidePanel=document.querySelector('.side-panel');
+   if(desktop.matches&&sidePanel)sidePanel.prepend(card);
   });
  }
  let scheduled=false;new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;scan()})}}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
