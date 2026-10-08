@@ -400,13 +400,24 @@ button{font-family:inherit;}
 }
 .video-tap-overlay:active{transform:translate(-50%,-50%) scale(.96);}
 
-/* ---- Practice-sheet treatment ---- */
+/* ---- Practice-sheet treatment (§2A, Oct 2026 "Simply Piano" prompt) —
+   a loose scrap of paper, not the main scroll: smaller, lightly tilted,
+   a taped corner, dashed red border. Same ink-red/Skill-tier palette as
+   the rest of the course, not a new playful style. ---- */
+.practice-sheet-outer{max-width:560px;margin:0 auto;}
 .practice-sheet-wrap{
   border:2px dashed var(--ink-red);border-radius:6px;padding:16px;
   background:
     repeating-linear-gradient(180deg, rgba(138,46,34,.06) 0px, rgba(138,46,34,.06) 1px, transparent 1px, transparent 30px),
     #fbf3e6;
   position:relative;
+  transform:rotate(-0.6deg);
+  box-shadow:0 10px 24px rgba(43,38,32,.14);
+}
+.practice-sheet-tape{
+  position:absolute;top:-10px;right:28px;width:58px;height:22px;
+  background:rgba(244,236,216,.82);border:1px solid rgba(138,46,34,.18);
+  transform:rotate(3deg);box-shadow:0 2px 6px rgba(43,38,32,.15);
 }
 .practice-sheet-ribbon{
   position:absolute;top:-11px;left:20px;
@@ -414,6 +425,43 @@ button{font-family:inherit;}
   font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;padding:4px 14px;border-radius:999px;
   box-shadow:0 4px 10px rgba(138,46,34,.3);
 }
+.practice-sheet-instruction{
+  text-align:center;font-size:12px;color:var(--ink-red);font-weight:700;
+  margin:12px 0 0;transform:rotate(-0.6deg);
+}
+
+/* ---- "Warm up first" card (§2B) — links a drawing step to the
+   practice step(s) that support it. A suggestion, never a gate: lives
+   above the drawing video, does not block Next/Previous. ---- */
+.warmup-row{max-width:560px;margin:0 auto 18px;}
+.warmup-card{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:8px;
+  background:#fbf3e6;border:1.5px dashed var(--ink-red);border-radius:10px;cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.warmup-card:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(138,46,34,.12);}
+.warmup-thumb{width:52px;height:52px;border-radius:7px;object-fit:cover;flex-shrink:0;background:var(--ink-warm);}
+.warmup-thumb-placeholder{width:52px;height:52px;border-radius:7px;flex-shrink:0;background:var(--ink-warm);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.warmup-info{flex:1;min-width:0;}
+.warmup-label{font-size:9px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink-red);}
+.warmup-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:var(--ink-warm);margin-top:2px;}
+.warmup-arrow{font-size:16px;color:var(--ink-red);flex-shrink:0;}
+.back-to-drawing{
+  display:block;width:100%;text-align:center;margin-top:14px;font-size:12.5px;font-weight:700;
+  color:var(--bamboo);cursor:pointer;background:none;border:0;font-family:'Space Grotesk',sans-serif;
+}
+
+/* ---- Course map: practice side-nodes (§2C) — small branches off the
+   main drawing path, joined by a dashed connector, just before the
+   drawing node they support (by supportsStep, not array position). ---- */
+.map-step-branch{
+  margin:2px 0 6px 26px;padding-left:14px;border-left:2px dashed rgba(138,46,34,.35);
+}
+.map-step-row.practice-branch{
+  background:#fbf3e6;border:1px dashed var(--ink-red);border-radius:5px;margin-bottom:4px;
+}
+.map-step-row.practice-branch .map-step-num{border-color:var(--ink-red);color:var(--ink-red);background:#fff;}
+.map-step-row.practice-branch .map-step-tag{color:var(--ink-red);}
 
 /* ---- Paywall ---- */
 .zodiac-paywall-card{
@@ -619,18 +667,29 @@ const ZODIAC_ANIMALS = [
       //     guessing which step it's meant to precede; needs Faye's
       //     confirmation against the teacher's material — see the
       //     build report.
-      { stepNumber:3,  title:'Breakdown 1 — Eye Brush Technique',          stepType:'practice',  videoUrl:'e5ff9e3928f792adfec1fc9d631d7541', posterUrl:null },
-      { stepNumber:4,  title:'Breakdown 2 — Ear Brush Technique',          stepType:'practice',  videoUrl:'42eb32971c1417e25f69766493160e40', posterUrl:null },
+      // supportsStep (Oct 2026, "Simply Piano" prompt) — which drawing
+      // step this practice warms the student up for. Eye practice has
+      // none: still flagged, still not guessed (see the §7 note above —
+      // no "Draw the Eyes" step exists to pair it with).
+      { stepNumber:3,  title:'Breakdown 1 — Eye Brush Technique',          stepType:'practice',  videoUrl:'e5ff9e3928f792adfec1fc9d631d7541', posterUrl:null, supportsStep:null },
+      { stepNumber:4,  title:'Breakdown 2 — Ear Brush Technique',          stepType:'practice',  videoUrl:'42eb32971c1417e25f69766493160e40', posterUrl:null, supportsStep:5 },
       { stepNumber:5,  title:'Draw the Ears',                              stepType:'technique', videoUrl:'19104c7886d50c84b8fbf54df97bdc55', posterUrl:null },
       { stepNumber:6,  title:'Head & Hands',                               stepType:'technique', videoUrl:'fa132a0665dd9de005961668923886ab', posterUrl:null },
-      { stepNumber:7,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null },
+      { stepNumber:7,  title:'Breakdown 3 — Torso Brush Technique',        stepType:'practice',  videoUrl:'7869c59854116389faa9c28c57c2abc1', posterUrl:null, supportsStep:8 },
       { stepNumber:8,  title:'Torso',                                     stepType:'technique', videoUrl:'4df356429002b37734f71c9fd7a1ff95', posterUrl:null },
       // Steps 9-14 — not yet recorded. Real entries (so step count/
       // progress indicator are accurate), videoUrl:null renders the
       // existing platform "coming soon" fallback. No content invented.
       { stepNumber:9,  title:'Tail & Claws',                               stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:10, title:'Practice: Tail Brushwork',                   stepType:'practice',  videoUrl:'08515d455173b2d1003844c4e995a2f1', posterUrl:null },
-      { stepNumber:11, title:'Breakdown 5 — Claw Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null },
+      // Tail (10) and Claw (11) practice both support step 9, but unlike
+      // the Ear/Torso pairs they physically sit AFTER it, not before —
+      // flagged for Faye rather than reordered (see build report). The
+      // course map and the "Warm up first" card both use supportsStep to
+      // show them attached to step 9 regardless of this array order, so
+      // the student-facing experience is correct even though the raw
+      // array is not yet reordered to match.
+      { stepNumber:10, title:'Practice: Tail Brushwork',                   stepType:'practice',  videoUrl:'08515d455173b2d1003844c4e995a2f1', posterUrl:null, supportsStep:9 },
+      { stepNumber:11, title:'Breakdown 5 — Claw Brush Technique',         stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:9 },
       { stepNumber:12, title:'Whiskers',                                   stepType:'technique', videoUrl:null, posterUrl:null },
       { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:null, posterUrl:null },
       { stepNumber:14, title:'Seal',                                       stepType:'technique', videoUrl:null, posterUrl:null }
@@ -1117,6 +1176,33 @@ function afterRenderMaterialsKitScreen(){
 /* ============================================================
    STEP SCREEN
 ============================================================ */
+// §2B — thumbnail for a "Warm up first" card. Uses the same Cloudflare
+// thumbnail convention as cfStreamSrc's own poster default; a practice
+// step with no video yet (videoUrl:null) gets a neutral placeholder,
+// same "coming soon" honesty as everywhere else in this file.
+function warmupThumbHtml(practiceStep){
+  if (!practiceStep.videoUrl) return `<div class="warmup-thumb-placeholder">🎥</div>`;
+  const src = `https://${CF_STREAM_CUSTOMER}/${practiceStep.videoUrl}/thumbnails/thumbnail.jpg?time=&height=200`;
+  return `<img class="warmup-thumb" src="${src}" alt="${escapeHtml(practiceStep.title)}" loading="lazy">`;
+}
+// §2B — the small, non-blocking "Warm up first" row on a drawing step,
+// one card per practice step whose supportsStep points here. Driven by
+// supportsStep, not array position, so Tail/Claw practice (physically
+// AFTER step 9 in the data) still show up attached to it correctly.
+function renderWarmupRow(animal, step){
+  const warmups = animal.steps.filter(s => s.stepType === 'practice' && s.supportsStep === step.stepNumber);
+  if (!warmups.length) return '';
+  return `<div class="warmup-row">${warmups.map(w => `
+    <div class="warmup-card" onclick="goToMapStep('${animal.id}',${w.stepNumber})">
+      ${warmupThumbHtml(w)}
+      <div class="warmup-info">
+        <div class="warmup-label">Warm up first</div>
+        <div class="warmup-title">${escapeHtml(w.title)}</div>
+      </div>
+      <span class="warmup-arrow">→</span>
+    </div>
+  `).join('')}</div>`;
+}
 function renderStepScreen(animal, step){
   if (step.stepNumber > FREE_STEP_COUNT && !STATE.hasFullAccess) {
     return renderZodiacPaywallScreen(animal, step);
@@ -1125,11 +1211,25 @@ function renderStepScreen(animal, step){
   const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span></div>`;
   const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
   const videoHtml = renderZodiacVideoStage(step, iframeId);
+  // §2A — practice steps read as a loose, tilted practice sheet (tape
+  // corner, dashed border, short "use a separate sheet" instruction),
+  // never the main video-plus-reference layout two videos never sit
+  // side by side here. §2B — drawing steps instead get a "Warm up
+  // first" row above the video when a practice step supports them.
+  const target = isPractice && step.supportsStep ? animal.steps.find(s => s.stepNumber === step.supportsStep) : null;
   const body = step.materialsList
     ? renderMaterialsLayout(step, videoHtml)
     : isPractice
-      ? `<div class="practice-sheet-wrap"><span class="practice-sheet-ribbon">✎ Practice Sheet</span>${videoHtml}</div>`
-      : videoHtml;
+      ? `<div class="practice-sheet-outer">
+          <div class="practice-sheet-wrap">
+            <span class="practice-sheet-ribbon">✎ Practice Sheet</span>
+            <span class="practice-sheet-tape"></span>
+            ${videoHtml}
+          </div>
+          <p class="practice-sheet-instruction">Use a separate sheet of paper. Practice first, then draw.</p>
+          ${target ? `<button type="button" class="back-to-drawing" onclick="goToMapStep('${animal.id}',${target.stepNumber})">← Back to drawing: ${escapeHtml(target.title)}</button>` : ''}
+        </div>`
+      : renderWarmupRow(animal, step) + videoHtml;
   // Scroll composition: title/kicker/badge in a narrower left column,
   // the video as a wide horizontal band filling the rest — East Asian
   // scroll convention (left-right panels), not the old stacked
@@ -1409,6 +1509,52 @@ function buildFixedMapRowsHtml(){
     </div>`;
   return rows + practiceRow;
 }
+// §2C — one map step row. branchClass marks a practice node rendered
+// as a small side-branch off the drawing step it supports.
+function renderMapStepRowHtml(entry, s, currentStageId, branchClass){
+  const stageId = entry.id + '_step_' + s.stepNumber;
+  const idx = STAGES.findIndex(st => st.id === stageId);
+  const cls = [];
+  if (!s.videoUrl) cls.push('pending');
+  if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
+  if (stageId === currentStageId) cls.push('current');
+  if (branchClass) cls.push(branchClass);
+  const clickable = idx > -1;
+  return `
+    <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
+      <span class="map-step-num">${s.stepNumber}</span>
+      <span class="map-step-title">${escapeHtml(s.title)}</span>
+      ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
+    </div>`;
+}
+// §2C — drawing steps are the main path; any practice step whose
+// supportsStep points here renders as a small side-branch just before
+// it, via a dashed connector — driven by supportsStep, not array
+// position, so Tail/Claw practice (physically AFTER step 9 in the
+// data — flagged, not reordered, see build report) still appear
+// attached to the step they support. A practice step with no
+// supportsStep (Eye practice) stays inline at its own position rather
+// than being guessed onto a target.
+function buildStepListHtml(entry, built, currentStageId){
+  const practiceByTarget = {};
+  built.steps.forEach(s => {
+    if (s.stepType === 'practice' && s.supportsStep != null) {
+      (practiceByTarget[s.supportsStep] = practiceByTarget[s.supportsStep] || []).push(s);
+    }
+  });
+  const branched = new Set();
+  Object.values(practiceByTarget).forEach(list => list.forEach(s => branched.add(s.stepNumber)));
+  let html = '';
+  built.steps.forEach(s => {
+    if (branched.has(s.stepNumber)) return;
+    const supporters = practiceByTarget[s.stepNumber];
+    if (supporters && supporters.length) {
+      html += `<div class="map-step-branch">${supporters.map(p => renderMapStepRowHtml(entry, p, currentStageId, 'practice-branch')).join('')}</div>`;
+    }
+    html += renderMapStepRowHtml(entry, s, currentStageId);
+  });
+  return html;
+}
 function buildAnimalMapRowsHtml(){
   const currentStageId = STAGES[STATE.stageIndex] ? STAGES[STATE.stageIndex].id : null;
   return ZODIAC_ORDER.map(entry => {
@@ -1423,21 +1569,7 @@ function buildAnimalMapRowsHtml(){
     } else {
       const availableCount = built.steps.filter(s => s.videoUrl).length;
       metaText = done ? '✓ Complete — revisit anytime' : `${availableCount} of ${built.steps.length} steps available`;
-      stepsHtml = built.steps.map(s => {
-        const stageId = entry.id + '_step_' + s.stepNumber;
-        const idx = STAGES.findIndex(st => st.id === stageId);
-        const cls = [];
-        if (!s.videoUrl) cls.push('pending');
-        if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
-        if (stageId === currentStageId) cls.push('current');
-        const clickable = idx > -1;
-        return `
-          <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
-            <span class="map-step-num">${s.stepNumber}</span>
-            <span class="map-step-title">${escapeHtml(s.title)}</span>
-            ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
-          </div>`;
-      }).join('');
+      stepsHtml = buildStepListHtml(entry, built, currentStageId);
     }
     const rowCls = ['map-animal-row'];
     if (!built) rowCls.push('locked');
