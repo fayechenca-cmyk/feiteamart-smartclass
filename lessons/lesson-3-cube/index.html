@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FEI TeamArt · Foundation of Sketch · Step 1 · Lesson 1: The Cube</title>
+<title>FEI TeamArt · Foundation of Sketch · Step 1 · The Cube</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -3001,6 +3001,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
 </style>
+<script src="../../core/foundation-a-path.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
@@ -3052,7 +3053,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 <!-- CONTENT -->
 <div class="content">
   <div class="crumb">Foundation of sketch a <span class="sep">·</span> step 2 <span class="sep">·</span> edges &amp; planes</div>
-  <div class="lesson-title">Lesson 1: The Cube</div>
+  <div class="lesson-title">The Cube</div>
   <div class="lesson-sub">Constructing form with perspective — your second foundation</div>
 
   <div class="progress-rail">
@@ -3225,14 +3226,14 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     
     <div class="members-lock-icon-large">◼</div>
     
-    <div class="members-lock-title">Continue to Lesson 1: The Cube</div>
-    <div class="members-lock-subtitle">Foundation A is $150 for the full 10-lesson series.<br/>Lessons 2 through 10 unlock with membership.</div>
+    <div class="members-lock-title">Continue to The Cube</div>
+    <div class="members-lock-subtitle">Form and Structure is $150 for the full program.<br/>The rest of the lessons unlock with membership.</div>
     
     <!-- What's inside membership -->
     <div class="members-lock-preview">
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">📐</span>
-        <span><b>Lesson 2-10</b> · all of Foundation A (cube, cylinder, and more)</span>
+        <span><b>the rest of Form and Structure</b> (cube, cylinder, and more)</span>
       </div>
       <div class="members-lock-preview-row">
         <span class="members-lock-preview-ico">🎬</span>
@@ -3291,11 +3292,11 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
     </div>
     
     <div style="text-align: center; margin-top: 14px;">
-      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Lesson 1 (free)</a>
+      <a href="#" onclick="goBackToLesson1(event)" class="members-lock-back">← Back to Preparation (free)</a>
     </div>
     
     <div class="privacy-note" style="margin-top: 12px;">
-      🔒 Secure payment via Stripe. Foundation A is $150 for 10 lessons.
+      🔒 Secure payment via Stripe. Form and Structure is $150 for the full program.
     </div>
   </div>
 </div>
@@ -3315,7 +3316,7 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   <!-- NEW VISITOR state: student code + age group -->
   <div class="welcome-card" id="welcome-new-visitor" style="display: none;">
     <div class="welcome-kicker">✨ ABOUT TO BEGIN</div>
-    <div class="welcome-lesson-label">Lesson 1: The Cube</div>
+    <div class="welcome-lesson-label">The Cube</div>
     <div class="welcome-title">Welcome —</div>
     <div class="welcome-sub">enter your student code to begin. Art GPS is for FEI students only.</div>
     
@@ -3828,7 +3829,7 @@ const LFC = {
 // ═══════════════════════════════════════════════════════════════════════════
 const HONEST_WELCOME = {
   kicker: 'BEFORE WE START',
-  title: 'Lesson 1 — the cube',
+  title: 'The Cube',
   
   // ElevenLabs audio URL — fill in when mp3 is ready.
   // Script for Mrs. Dawn's cloned voice (30-40 sec):
@@ -5146,7 +5147,7 @@ const LFC_HOOKS = {
 
 const LESSON = {
   id: 'cube',
-  title: 'Lesson 1: The Cube',
+  title: 'The Cube',
   totalXP: 100,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,        // Lesson 2 is members-only — paywall enforced via AccessControl
@@ -8445,7 +8446,7 @@ function renderBadgeUnlocked(profileOrLead) {
       <!-- Next lesson teaser (updates with FOUNDATION_A_PATH order) -->
       <div class="lesson2-teaser">
         <div class="lesson2-teaser-kicker">✨ COMING NEXT</div>
-        <div class="lesson2-teaser-title">Lesson 2: The Sphere</div>
+        <div class="lesson2-teaser-title">The Sphere</div>
         <div class="lesson2-teaser-sub">
           You\'ve drawn the cube — three planes, one light. Next: the sphere. Same light, but now wrapping a curved surface. Watch how shadows turn instead of breaking.
         </div>
@@ -8456,7 +8457,7 @@ function renderBadgeUnlocked(profileOrLead) {
            must check paywall, not bypass it like a raw <a href>. -->
       <div class="btn-stack" style="max-width: 320px; margin: 20px auto 0;">
         <button class="btn btn-primary" onclick="continueToNextLessonGuarded('sphere', '../lesson-1-sphere/')">
-          <span class="glyph">◈</span> Continue to Lesson 2: Sphere →
+          <span class="glyph">◈</span> Continue to The Sphere →
         </button>
         <button class="btn btn-secondary" onclick="window.location.href='../../';">
           ← Back to Art GPS home
@@ -9594,7 +9595,7 @@ async function submitToSupabase() {
     }
   }
   
-  const FOUNDATION_IDS = ['preparation','cube','sphere','cylinder','box','cup','apple','cone','icecream','intersecting','papercrane'];
+  const FOUNDATION_IDS = FOUNDATION_A_PATH.map(l => l.id); // core/foundation-a-path.js — single source of truth, Oct 2026
   const courseId = FOUNDATION_IDS.includes(LESSON.id) ? 'foundation-a' : 'creation';
   
   console.log('[Submit] Sending to Supabase…', { lesson: LESSON.id });

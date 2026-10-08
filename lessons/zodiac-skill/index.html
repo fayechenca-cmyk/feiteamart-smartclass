@@ -246,6 +246,16 @@ button{font-family:inherit;}
   transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--d) * .15s + .95s);
 }
 .scroll-unroll-stage.unrolled .scroll-motif{opacity:1;transform:translateY(0);}
+.why-zodiac-invite{
+  display:flex;align-items:center;gap:10px;margin:18px auto 0;max-width:420px;
+  background:var(--xuan);border:1px solid var(--xuan-line);border-radius:999px;
+  padding:10px 18px;font-size:12.5px;color:var(--ink-warm-soft);text-align:left;
+  cursor:pointer;box-shadow:0 6px 16px rgba(43,38,32,.12);
+  transition:box-shadow .15s ease,transform .15s ease;
+}
+.why-zodiac-invite:hover{box-shadow:0 8px 22px rgba(43,38,32,.18);}
+.why-zodiac-invite:active{transform:scale(.98);}
+.why-zodiac-invite-icon{font-size:1.1rem;flex-shrink:0;}
 
 /* ---- Materials layout (§4) — video + a right-side vertical numbered
    list, bamboo-stalk rhythm (a thin connecting line between segment
@@ -267,6 +277,31 @@ button{font-family:inherit;}
   .materials-row{flex-direction:column;}
   .materials-list{flex:none;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:0 18px;}
   .materials-item:not(:last-child)::after{display:none;}
+}
+
+/* ---- Materials Kit (Part 2) — vertical photo-list, one teacher-kit
+   item per row, matching the existing materials-list pattern but with
+   a bigger photo since these are the real reference images. ---- */
+.kit-item-list{display:flex;flex-direction:column;gap:4px;}
+.kit-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--xuan-line);}
+.kit-item:last-child{border-bottom:none;}
+.kit-item-num{
+  width:26px;height:26px;border-radius:50%;background:var(--xuan-deep);border:1.5px solid var(--bamboo);
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;
+  font-weight:800;font-size:11px;color:var(--bamboo);flex-shrink:0;margin-top:2px;
+}
+.kit-item-photos{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;}
+.kit-item-photo{width:72px;height:72px;border-radius:8px;object-fit:cover;border:1.5px solid var(--xuan-line);background:#fff;}
+.kit-item-info{flex:1;min-width:0;padding-top:2px;}
+.kit-item-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--ink-warm);}
+.kit-item-zh{font-weight:500;color:var(--ink-warm-soft);}
+.kit-item-use{font-size:12.5px;color:var(--ink-warm-soft);margin-top:3px;line-height:1.45;}
+.kit-pigment-list{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:9px;}
+.kit-pigment{font-size:11px;color:var(--ink-warm);background:var(--xuan-deep);border-radius:5px;padding:3px 8px;}
+.kit-pigment i{font-style:normal;color:var(--ink-warm-faint);}
+@media(max-width:600px){
+  .kit-item{flex-direction:column;}
+  .kit-item-photo{width:64px;height:64px;}
 }
 
 /* ---- Scroll panel — the mounted "paper" surface step content sits
@@ -454,16 +489,18 @@ button{font-family:inherit;}
   padding:28px 24px 22px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(43,38,32,.35);
 }
 .map-animal-list{display:flex;flex-direction:column;gap:8px;}
-.map-animal-row{border:1.5px solid var(--xuan-line);border-radius:6px;background:#fffaf0;overflow:hidden;}
-.map-animal-row.locked{opacity:.55;}
+.map-animal-row{border:1.5px solid var(--xuan-line);border-radius:6px;background:#fffaf0;overflow:hidden;transition:border-color .15s ease,box-shadow .15s ease;}
+.map-animal-row.locked{opacity:.65;}
+.map-animal-row.current{border-color:var(--ink-red);box-shadow:0 3px 12px rgba(138,46,34,.14);}
 .map-animal-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;}
-.map-animal-row.locked .map-animal-head{cursor:default;}
 .map-animal-char{font-size:1.4rem;width:32px;text-align:center;flex-shrink:0;color:var(--ink-red);}
 .map-animal-info{flex:1;min-width:0;}
 .map-animal-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink-warm);}
+.map-you-are-here{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink-red);margin-left:7px;vertical-align:middle;}
 .map-animal-meta{font-size:11px;color:var(--ink-warm-faint);margin-top:1px;}
 .map-animal-caret{font-size:12px;color:var(--ink-warm-faint);flex-shrink:0;}
 .map-step-list{border-top:1px solid var(--xuan-line);padding:6px 10px 10px;}
+.map-coming-soon-msg{padding:10px 6px;font-size:12px;color:var(--ink-warm-faint);font-style:italic;}
 .map-step-row{display:flex;align-items:center;gap:9px;padding:8px 6px;border-radius:5px;cursor:pointer;}
 .map-step-row:hover{background:var(--xuan);}
 .map-step-row.pending{opacity:.45;cursor:default;}
@@ -495,15 +532,14 @@ button{font-family:inherit;}
 
 <div class="continue-dock" id="continueDock"></div>
 
-<div class="map-modal-backdrop" id="mapModalBackdrop" onclick="if(event.target===this) closeCourseMap();">
+<div class="map-modal-backdrop" id="whyModalBackdrop" onclick="if(event.target===this) closeWhyZodiac();">
   <div class="map-modal">
-    <div class="journey-close" onclick="closeCourseMap()" title="Close">×</div>
+    <div class="journey-close" onclick="closeWhyZodiac()" title="Close">×</div>
     <div class="journey-hero">
-      <div class="journey-kicker">十二生肖 · Course Map</div>
-      <div class="journey-title">Zodiac Brush Technique</div>
-      <div class="journey-subtitle">All twelve zodiac animals — the Rat is live today; the rest are coming soon.</div>
+      <div class="journey-kicker">十二生肖 · Why the Zodiac</div>
+      <div class="journey-title">Why do we paint the zodiac?</div>
     </div>
-    <div class="map-animal-list" id="mapAnimalList"></div>
+    <div id="whyZodiacVideoWrap"></div>
   </div>
 </div>
 
@@ -550,21 +586,23 @@ const ZODIAC_ANIMALS = [
     steps: [
       { stepNumber:1,  title:'Materials',                                  stepType:'technique', videoUrl:'3d88d2b65f34137e2354cc5dbbcdfb53', posterUrl:null,
         // §4 (Addendum 1) — vertical numbered materials list, rendered
-        // to the right of the video by renderMaterialsLayout(). Icons
-        // are emoji placeholders (no real product photography supplied
-        // yet). Labels corrected per Faye's Addendum 2, §3 — "brush-
-        // washing container" -> "brush washer" (笔洗) and "ink dish" ->
+        // to the right of the video by renderMaterialsLayout(). Labels
+        // corrected per Faye's Addendum 2, §3 — "brush-washing
+        // container" -> "brush washer" (笔洗) and "ink dish" ->
         // "inkstone" (砚台), the standard art-historical/professional
         // English terms, confirmed via reference/museum sources.
-        // imageUrl:null for all four — real reference photos not in the
-        // repo yet (Faye has them for inkstone + brush washer; flagged
-        // in the build report for where to hand them off). Falls back
-        // to the emoji icon until a real imageUrl is set — see
-        // renderMaterialsLayout.
+        // Brush washer + rice paper now use the teacher's real photos
+        // (assets/zodiac-skill/materials/) — unambiguous matches to
+        // MATERIALS_KIT_ITEMS below. Inkstone and the generic Brush
+        // stay emoji placeholders: the teacher's kit has no plain
+        // "inkstone" photo (only an ambiguous paperweight-or-inkstone
+        // one, flagged in the build report) and five distinct brush
+        // photos with no single one standing in for "brush" generically
+        // — guessing either would be inventing a match, not using one.
         materialsList: [
-          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:null },
+          { icon:'🪣', label:'Brush washer (笔洗)', imageUrl:'../../assets/zodiac-skill/materials/brush-washer.jpg' },
           { icon:'⬛', label:'Inkstone (砚台)', imageUrl:null },
-          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:null },
+          { icon:'📜', label:'Rice paper (宣纸)', imageUrl:'../../assets/zodiac-skill/materials/xuan-paper-raw.jpg' },
           { icon:'🖌️', label:'Brush (毛笔)', imageUrl:null }
         ] },
       { stepNumber:2,  title:'Draw the Nose',                              stepType:'technique', videoUrl:'26971263bdc601cae27b4a40e2b6aa47', posterUrl:null },
@@ -604,6 +642,55 @@ const COURSE_ID = 'zodiac-skill';
 // ACCESS/PAYWALL note for why this is step-granularity, not a
 // FREE_SKILLS page-id entry.
 const FREE_STEP_COUNT = 2;
+
+// Course intro video (teacher's welcome, real content) — goes through
+// the same renderZodiacVideoStage/afterRenderZodiacVideoStage pair as
+// every step video, per the file-header "single place every video
+// goes through" rule.
+const COURSE_INTRO_STEP = { videoUrl: 'fe20eee6cb3b1b8af82e5a71b97a3c2f', posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
+
+// Optional companion video — "why do we paint the zodiac" — not yet
+// recorded. videoUrl:null renders the existing platform coming-soon
+// fallback, same as Steps 9-14 above; a real id later is a one-line
+// data change. This step is deliberately never added to STAGES/
+// ZODIAC_ANIMALS — it is opened from a standalone invite button (see
+// openWhyZodiac), so it can never affect step count, progress,
+// completedLessons, the badge, or the paywall.
+const WHY_ZODIAC_STEP = { videoUrl: null, posterUrl: null, title: 'Why do we paint the zodiac?' };
+
+// Teacher's Materials Kit (Part 2 of the map+kit prompt) — the real
+// package, photo by photo, in the teacher's own order from her slides.
+// English names are PROVISIONAL translations — one data array so Faye
+// can correct wording later with no code change. Photos load from
+// assets/zodiac-skill/materials/ (teacher-supplied, confirmed present
+// for all 9 items as of this build — see renderMaterialsKitScreen's
+// onerror fallback for what happens if a filename ever goes missing).
+const MATERIALS_KIT_ASSET_PATH = '../../assets/zodiac-skill/materials/';
+const MATERIALS_KIT_ITEMS = [
+  { en: 'Fine-line brush', zh: '勾线笔', use: 'Fine details and lines', photos: ['brush-1-liner.jpg'] },
+  { en: 'Small red-handled brush', zh: '小红毛笔', use: 'Basic lines', photos: ['brush-2-small-red.jpg'] },
+  { en: 'Small mixed-hair brush', zh: '小兼毫笔', use: 'Basic fur and small color blocks', photos: ['brush-3-small-mixed-hair.jpg'] },
+  { en: 'Mixed-hair brush', zh: '兼毫笔', use: 'Large color blocks', photos: ['brush-4-mixed-hair.jpg'] },
+  { en: 'Garlic-head brush', zh: '蒜头笔', use: 'Large color blocks', photos: ['brush-5-garlic-head.jpg'] },
+  { en: 'Raw xuan paper', zh: '生宣纸', use: 'The painting paper', photos: ['xuan-paper-raw.jpg'] },
+  { en: 'Brush washer', zh: '笔洗', use: 'Holds water. One for ink and one for color works best', photos: ['brush-washer.jpg'] },
+  { en: 'Chinese painting pigments', zh: '中国画颜料', use: 'A 12- or 24-color set works', photos: ['pigments-green.jpg', 'pigments-red.jpg', 'pigments-black.jpg'],
+    // Chinese names first — English pigment-color names are not
+    // standardized, per Faye's own instruction. en:null for 三绿/三青
+    // is deliberate (not invented) — she said not to guess glosses
+    // for those two specifically.
+    pigmentColors: [
+      { zh: '白色', en: 'white' }, { zh: '嫩黄', en: 'light yellow' }, { zh: '花青', en: 'indigo' },
+      { zh: '天蓝', en: 'sky blue' }, { zh: '三绿', en: null }, { zh: '三青', en: null },
+      { zh: '赭石', en: 'ochre' }, { zh: '大红', en: 'red' }, { zh: '曙红', en: 'rose red' },
+      { zh: '朱砂', en: 'cinnabar' }, { zh: '朱膘', en: 'light vermilion' }, { zh: '胭脂', en: 'rouge' }
+    ] },
+  // Teacher's slide for this item is labeled paperweight (镇尺), but
+  // shows a brown rectangular block that may actually be a lidded
+  // inkstone — flagged for Faye to confirm, her label kept as-is
+  // until she does (see build report).
+  { en: 'Paperweight', zh: '镇尺', use: 'Holds the paper down at both ends or four corners', photos: ['paperweight-or-inkstone.jpg'] }
+];
 
 // §6 — the full 12-animal order (Rat -> Pig), used ONLY by the course
 // map to show real scope. Deliberately separate from ZODIAC_ANIMALS
@@ -645,6 +732,19 @@ function buildStages(){
         render: () => renderStepScreen(animal, step),
         afterRender: () => afterRenderStepScreen(animal, step)
       });
+      // Materials Kit (Part 2) — inserted right after Step 1 in the
+      // flat stage order, NOT into animal.steps, so it has no
+      // stepNumber of its own and cannot shift numbering, rail-dot
+      // counts or the paywall boundary. Rat-only: only Rat has a
+      // materials kit built so far.
+      if (animal.id === 'rat' && step.stepNumber === 1) {
+        stages.push({
+          id: animal.id + '_materials_kit',
+          animal: animal,
+          render: () => renderMaterialsKitScreen(animal),
+          afterRender: afterRenderMaterialsKitScreen
+        });
+      }
     });
     stages.push({
       id: animal.id + '_complete',
@@ -704,7 +804,13 @@ function goStage(idx){
   renderCurrentStage();
 }
 function nextStage(){ if (STATE.stageIndex < STAGES.length - 1) goStage(STATE.stageIndex + 1); }
-function prevStage(){ if (STATE.stageIndex > 0) goStage(STATE.stageIndex - 1); }
+// At the very first stage, Previous returns to the course map — the
+// map is the landing screen, so stepping "back" from stage 0 means
+// back to it, not a dead-end disabled button.
+function prevStage(){
+  if (STATE.stageIndex > 0) { goStage(STATE.stageIndex - 1); return; }
+  showCourseMapLanding();
+}
 
 function showContinue(label, onClick){
   const dock = document.getElementById('continueDock');
@@ -716,9 +822,14 @@ function showContinue(label, onClick){
 function hideContinue(){ document.getElementById('continueDock').innerHTML = ''; }
 
 function renderRail(){
+  // Previous is always meaningful now (prior step, or back to the
+  // course map at stage 0 — see prevStage), so it is never disabled;
+  // only re-shown here since the landing map hides it entirely.
+  document.getElementById('prevStepBtn').style.display = '';
+  document.getElementById('prevStepBtn').disabled = false;
   const current = STAGES[STATE.stageIndex];
   const animal = current.animal;
-  if (!animal) { document.getElementById('rail').innerHTML = ''; document.getElementById('prevStepBtn').disabled = STATE.stageIndex === 0; return; }
+  if (!animal) { document.getElementById('rail').innerHTML = ''; return; }
   const dots = animal.steps.map(s => {
     const stageId = animal.id + '_step_' + s.stepNumber;
     const idx = STAGES.findIndex(st => st.id === stageId);
@@ -729,7 +840,6 @@ function renderRail(){
     return `<span class="rail-dot ${cls.join(' ')}"></span>`;
   }).join('');
   document.getElementById('rail').innerHTML = dots;
-  document.getElementById('prevStepBtn').disabled = STATE.stageIndex === 0;
 }
 function renderCurrentStage(){
   hideContinue();
@@ -865,8 +975,7 @@ function afterRenderZodiacVideoStage(step, iframeId){
    fresh at reveal time.
 ============================================================ */
 function renderCourseIntro(){
-  const introStep = { videoUrl: null, posterUrl: null, title: 'Welcome to Zodiac Brush Technique' };
-  const videoHtml = renderZodiacVideoStage(introStep, 'zodiacVideo_course_intro', 'intro');
+  const videoHtml = renderZodiacVideoStage(COURSE_INTRO_STEP, 'zodiacVideo_course_intro', 'intro');
   return `
     <div class="step-inner full-bleed">
       <div class="course-intro-kicker">十二生肖 · The Twelve Zodiac Animals</div>
@@ -885,11 +994,15 @@ function renderCourseIntro(){
         <div class="scroll-roller scroll-roller-left"></div>
         <div class="scroll-roller scroll-roller-right"></div>
       </div>
+      <button class="why-zodiac-invite" onclick="openWhyZodiac()">
+        <span class="why-zodiac-invite-icon">💬</span>
+        <span>Curious why we paint the twelve zodiac animals? Your teacher has a few words for you.</span>
+      </button>
     </div>
   `;
 }
 function afterRenderCourseIntro(){
-  afterRenderZodiacVideoStage({ videoUrl: null }, 'zodiacVideo_course_intro');
+  afterRenderZodiacVideoStage(COURSE_INTRO_STEP, 'zodiacVideo_course_intro');
   const stage = document.getElementById('scrollUnrollStage');
   // Double rAF: forces the browser to paint the rolled-up starting
   // state on its own frame before the class that triggers the CSS
@@ -899,6 +1012,25 @@ function afterRenderCourseIntro(){
     requestAnimationFrame(() => { if (stage) stage.classList.add('unrolled'); });
   });
   showContinue('Begin →', nextStage);
+}
+
+/* ============================================================
+   OPTIONAL "WHY THE ZODIAC" VIDEO — a standalone invite next to the
+   course intro, never part of STAGES. Opens a modal through the same
+   renderZodiacVideoStage/afterRenderZodiacVideoStage pair (so it gets
+   the coming-soon fallback now and the real synchronous-autoplay
+   treatment the moment Faye supplies a videoUrl, no code change).
+   Strictly optional: no XP, no JournalStorage write, no completedLessons
+   entry, no paywall check — closing it is just as valid as opening it.
+============================================================ */
+function openWhyZodiac(){
+  document.getElementById('whyZodiacVideoWrap').innerHTML = renderZodiacVideoStage(WHY_ZODIAC_STEP, 'zodiacVideo_why');
+  document.getElementById('whyModalBackdrop').classList.add('show');
+  afterRenderZodiacVideoStage(WHY_ZODIAC_STEP, 'zodiacVideo_why');
+}
+function closeWhyZodiac(){
+  document.getElementById('whyModalBackdrop').classList.remove('show');
+  document.getElementById('whyZodiacVideoWrap').innerHTML = '';
 }
 
 /* ============================================================
@@ -930,6 +1062,56 @@ function renderMaterialsLayout(step, videoHtml){
       <div class="materials-list">${items}</div>
     </div>
   `;
+}
+
+/* ============================================================
+   MATERIALS KIT (Part 2) — a photo-by-photo walkthrough of the
+   teacher's full materials package. Sits between Step 1 (Materials)
+   and Step 2 (Draw the Nose) in the flat stage order (see buildStages)
+   but is deliberately NOT one of animal.steps — it carries no
+   stepNumber, so it can never shift step numbering, rail-dot counts,
+   or the FREE_STEP_COUNT paywall boundary. It is part of Materials,
+   so it is always free, with no access check of its own.
+============================================================ */
+function materialsKitPhotoHtml(filename, alt){
+  const src = MATERIALS_KIT_ASSET_PATH + filename;
+  // Missing-file fallback: a neutral placeholder swapped in on image
+  // load failure, plus a console warning naming the exact missing
+  // file — per the brief, never fabricate or silently drop the row.
+  return `<img class="kit-item-photo" src="${src}" alt="${escapeHtml(alt)}"
+    onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect width=%2780%27 height=%2780%27 fill=%27%23ddd3bd%27/%3E%3Ctext x=%2740%27 y=%2744%27 font-size=%2228%27 text-anchor=%27middle%27%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E';console.warn('[materials kit] missing photo file:', '${filename}');">`;
+}
+function renderMaterialsKitScreen(animal){
+  const itemsHtml = MATERIALS_KIT_ITEMS.map((item, i) => {
+    const photosHtml = item.photos.map(f => materialsKitPhotoHtml(f, item.en)).join('');
+    const pigmentsHtml = item.pigmentColors ? `
+      <div class="kit-pigment-list">
+        ${item.pigmentColors.map(p => `<span class="kit-pigment">${escapeHtml(p.zh)}${p.en ? ` <i>${escapeHtml(p.en)}</i>` : ''}</span>`).join('')}
+      </div>` : '';
+    return `
+      <div class="kit-item">
+        <div class="kit-item-num">${i + 1}</div>
+        <div class="kit-item-photos">${photosHtml}</div>
+        <div class="kit-item-info">
+          <div class="kit-item-name">${escapeHtml(item.en)} <span class="kit-item-zh">(${escapeHtml(item.zh)})</span></div>
+          <div class="kit-item-use">${escapeHtml(item.use)}</div>
+          ${pigmentsHtml}
+        </div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="step-inner scroll-wide">
+      <div class="scroll-panel">
+        <div class="step-kicker">${animal.chineseCharacter} ${animal.label} · Materials Kit</div>
+        <h2 class="step-title">Your full materials package</h2>
+        <p style="text-align:center;font-size:12.5px;color:var(--ink-warm-soft);max-width:480px;margin:0 auto 20px;">Everything from the teacher's own kit, one item at a time.</p>
+        <div class="kit-item-list">${itemsHtml}</div>
+      </div>
+    </div>
+  `;
+}
+function afterRenderMaterialsKitScreen(){
+  showContinue('Next →', nextStage);
 }
 
 /* ============================================================
@@ -1140,71 +1322,133 @@ function deleteJourneyEntry(entryId){
 }
 
 /* ============================================================
-   COURSE MAP (§6) — all 12 zodiac animals, so students see the real
-   scope of the course, not just step-after-step with no sense of
-   scale. Rat (the only built animal) starts expanded; clicking a real
-   step jumps there and closes the modal. Ox-Pig are shown, not
-   hidden, but not clickable — no step data exists for them yet.
+   COURSE MAP (§6, extended) — the course landing screen (Part 1 of
+   the map+materials-kit prompt). Originally built as a modal only
+   (openCourseMap/renderMapModalContent); extended here rather than
+   duplicated: buildFixedMapRowsHtml/buildAnimalMapRowsHtml are the
+   one real content source, now used by BOTH the full-page landing
+   (showCourseMapLanding, called from init() and from the topbar Map
+   button) and still reachable mid-course the same way. All 12 zodiac
+   animals so students see the real scope, not just step-after-step
+   with no sense of scale. Rat (the only built animal) starts
+   expanded; tapping any other animal now also expands — to a calm
+   "coming soon" message, never a fake step list (§1 behavior: no
+   invented content, no step counts for animals with no data).
+
+   DONE/CURRENT STATE: reuses real data only, no parallel tracker.
+   - Animal-level done comes from completedLessons (same array the
+     badge and My Journey already read) via isAnimalDone().
+   - Finer-grained "current" (which stage: intro / materials / later
+     Rat steps) can only be session-accurate — this file has no
+     persisted per-step position (no core/progress.js include, see
+     file header) — so it reads STATE.stageIndex, same signal the
+     existing step-list done/current dots already used pre-Part-1.
+     Once an animal is marked done via completedLessons, no node is
+     marked "current" for it — a returning, finished student should
+     not see a stale "you are here" pointing at the intro video.
 ============================================================ */
+const COURSE_MAP_FIXED_NODES = [
+  { stageId: 'course_intro', icon: '🎬', label: 'Intro', doneLabel: 'Watched · tap to replay', notDoneLabel: 'Teacher welcome + why the zodiac' },
+  { stageId: 'rat_step_1', icon: '🖌️', label: 'Materials', doneLabel: 'Watched · tap to replay', notDoneLabel: 'Your materials kit, explained' }
+];
 let mapExpandedAnimalId = 'rat';
-function openCourseMap(){
-  renderMapModalContent();
-  document.getElementById('mapModalBackdrop').classList.add('show');
+function isAnimalDone(animalId){
+  try {
+    const raw = sessionStorage.getItem('fei_user_profile');
+    if (!raw) return false;
+    const profile = JSON.parse(raw);
+    return Array.isArray(profile.completedLessons) && profile.completedLessons.includes('zodiac-' + animalId);
+  } catch (e) { return false; }
 }
-function closeCourseMap(){
-  document.getElementById('mapModalBackdrop').classList.remove('show');
-}
+function openCourseMap(){ showCourseMapLanding(); }
 function toggleMapAnimal(animalId){
   mapExpandedAnimalId = mapExpandedAnimalId === animalId ? null : animalId;
-  renderMapModalContent();
+  const listEl = document.getElementById('landingMapAnimalList');
+  if (listEl) listEl.innerHTML = buildFixedMapRowsHtml() + buildAnimalMapRowsHtml();
 }
 function goToMapStep(animalId, stepNumber){
   const idx = STAGES.findIndex(s => s.id === animalId + '_step_' + stepNumber);
   if (idx === -1) return;
-  closeCourseMap();
   goStage(idx);
 }
-function renderMapModalContent(){
-  const listEl = document.getElementById('mapAnimalList');
+function enterMapSection(stageId){
+  const idx = STAGES.findIndex(s => s.id === stageId);
+  if (idx === -1) return;
+  goStage(idx);
+}
+function buildFixedMapRowsHtml(){
+  const ratDone = isAnimalDone('rat');
   const currentStageId = STAGES[STATE.stageIndex] ? STAGES[STATE.stageIndex].id : null;
-  listEl.innerHTML = ZODIAC_ORDER.map(entry => {
-    const built = ZODIAC_ANIMALS.find(a => a.id === entry.id);
-    if (!built) {
-      return `
-        <div class="map-animal-row locked">
-          <div class="map-animal-head">
-            <div class="map-animal-char">${entry.chineseCharacter}</div>
-            <div class="map-animal-info">
-              <div class="map-animal-name">${entry.label}</div>
-              <div class="map-animal-meta">Coming soon</div>
-            </div>
-          </div>
-        </div>`;
-    }
-    const expanded = mapExpandedAnimalId === entry.id;
-    const availableCount = built.steps.filter(s => s.videoUrl).length;
-    const stepsHtml = built.steps.map(s => {
-      const stageId = entry.id + '_step_' + s.stepNumber;
-      const idx = STAGES.findIndex(st => st.id === stageId);
-      const cls = [];
-      if (!s.videoUrl) cls.push('pending');
-      if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
-      if (stageId === currentStageId) cls.push('current');
-      const clickable = idx > -1;
-      return `
-        <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
-          <span class="map-step-num">${s.stepNumber}</span>
-          <span class="map-step-title">${escapeHtml(s.title)}</span>
-          ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
-        </div>`;
-    }).join('');
+  const rows = COURSE_MAP_FIXED_NODES.map(node => {
+    const stageIdx = STAGES.findIndex(s => s.id === node.stageId);
+    const done = ratDone || (stageIdx > -1 && STATE.stageIndex > stageIdx);
+    const current = !ratDone && currentStageId === node.stageId;
     return `
-      <div class="map-animal-row built${expanded ? ' expanded' : ''}">
+      <div class="map-animal-row${current ? ' current' : ''}">
+        <div class="map-animal-head" onclick="enterMapSection('${node.stageId}')">
+          <div class="map-animal-char">${node.icon}</div>
+          <div class="map-animal-info">
+            <div class="map-animal-name">${node.label}${current ? '<span class="map-you-are-here">You are here</span>' : ''}</div>
+            <div class="map-animal-meta">${done ? node.doneLabel : node.notDoneLabel}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  // Practice — course-level node, no content yet. Faye to confirm what
+  // this is for; built as an inert coming-soon placeholder only, no
+  // invented behavior or destination.
+  const practiceRow = `
+    <div class="map-animal-row locked">
+      <div class="map-animal-head" style="cursor:default;">
+        <div class="map-animal-char">📝</div>
+        <div class="map-animal-info">
+          <div class="map-animal-name">Practice</div>
+          <div class="map-animal-meta">Coming soon</div>
+        </div>
+      </div>
+    </div>`;
+  return rows + practiceRow;
+}
+function buildAnimalMapRowsHtml(){
+  const currentStageId = STAGES[STATE.stageIndex] ? STAGES[STATE.stageIndex].id : null;
+  return ZODIAC_ORDER.map(entry => {
+    const built = ZODIAC_ANIMALS.find(a => a.id === entry.id);
+    const expanded = mapExpandedAnimalId === entry.id;
+    const done = isAnimalDone(entry.id);
+    const current = !done && built && currentStageId && currentStageId.indexOf(entry.id + '_') === 0;
+    let metaText, stepsHtml;
+    if (!built) {
+      metaText = 'Coming soon';
+      stepsHtml = `<div class="map-coming-soon-msg">This animal is coming soon — no steps published yet.</div>`;
+    } else {
+      const availableCount = built.steps.filter(s => s.videoUrl).length;
+      metaText = done ? '✓ Complete — revisit anytime' : `${availableCount} of ${built.steps.length} steps available`;
+      stepsHtml = built.steps.map(s => {
+        const stageId = entry.id + '_step_' + s.stepNumber;
+        const idx = STAGES.findIndex(st => st.id === stageId);
+        const cls = [];
+        if (!s.videoUrl) cls.push('pending');
+        if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
+        if (stageId === currentStageId) cls.push('current');
+        const clickable = idx > -1;
+        return `
+          <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
+            <span class="map-step-num">${s.stepNumber}</span>
+            <span class="map-step-title">${escapeHtml(s.title)}</span>
+            ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
+          </div>`;
+      }).join('');
+    }
+    const rowCls = ['map-animal-row'];
+    if (!built) rowCls.push('locked');
+    if (current) rowCls.push('current');
+    return `
+      <div class="${rowCls.join(' ')}${expanded ? ' expanded' : ''}">
         <div class="map-animal-head" onclick="toggleMapAnimal('${entry.id}')">
           <div class="map-animal-char">${entry.chineseCharacter}</div>
           <div class="map-animal-info">
-            <div class="map-animal-name">${entry.label}</div>
-            <div class="map-animal-meta">${availableCount} of ${built.steps.length} steps available</div>
+            <div class="map-animal-name">${entry.label}${current ? '<span class="map-you-are-here">You are here</span>' : ''}</div>
+            <div class="map-animal-meta">${metaText}</div>
           </div>
           <div class="map-animal-caret">${expanded ? '▾' : '▸'}</div>
         </div>
@@ -1212,13 +1456,35 @@ function renderMapModalContent(){
       </div>`;
   }).join('');
 }
+/* ---- Full-page landing map — shown by init() before any stage, and
+   by the topbar Map button from inside any step (Part 1's "a way to
+   get back to the map from inside any step"). ---- */
+function renderCourseMapScreen(){
+  return `
+    <div class="step-inner">
+      <div class="step-kicker">十二生肖 · Course Map</div>
+      <h2 class="step-title">Zodiac Brush Technique</h2>
+      <p style="text-align:center;font-size:13px;color:var(--ink-warm-soft);max-width:460px;margin:0 auto 20px;">All twelve zodiac animals — the Rat is live today; the rest are coming soon.</p>
+      <div class="scroll-panel" style="text-align:left;">
+        <div class="map-animal-list" id="landingMapAnimalList">${buildFixedMapRowsHtml()}${buildAnimalMapRowsHtml()}</div>
+      </div>
+    </div>
+  `;
+}
+function showCourseMapLanding(){
+  hideContinue();
+  document.getElementById('stage').innerHTML = `<div class="step">${renderCourseMapScreen()}</div>`;
+  document.getElementById('rail').innerHTML = '';
+  document.getElementById('prevStepBtn').style.display = 'none';
+  window.scrollTo(0, 0);
+}
 
 /* ============================================================
    INIT
 ============================================================ */
 async function init(){
   await computeAccess();
-  renderCurrentStage();
+  showCourseMapLanding();
 }
 init();
 </script>

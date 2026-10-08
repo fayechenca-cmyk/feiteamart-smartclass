@@ -1358,7 +1358,7 @@
   }
 
 
-  #student-learning-map{background:linear-gradient(135deg,#eee7ff,#e0faff);border:1px solid #ddd8f1;border-radius:24px;padding:26px;margin:24px 0 32px}.journey-heading{display:flex;justify-content:space-between;gap:20px}.journey-heading h2{font:800 26px Montserrat,sans-serif;margin:8px 0}.journey-heading p,.journey-caption{font-size:13px;color:var(--ink-soft)}.journey-heading small,.journey-next small{font-size:10px;font-weight:800;letter-spacing:1px;color:#715c95}.journey-prize{display:grid;gap:6px;text-align:center;min-width:150px;font-size:12px}.journey-prize>span{font-size:36px}.journey-path{display:flex;overflow:auto;gap:10px;padding:18px 3px;scroll-snap-type:x proximity}.journey-stop{position:relative;flex:0 0 112px;border:1px solid #ddd8ef;border-radius:18px;background:#ffffffa8;padding:12px 8px;cursor:pointer;color:var(--ink);scroll-snap-align:start}.journey-stop span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#ebe5f6;margin:0 auto 10px;font-weight:800}.journey-stop b,.journey-stop small{display:block;font-size:11px;line-height:1.5}.journey-stop small{font-size:9px;margin-top:8px}.journey-stop.current{border:2px solid #29b0c8;background:white;box-shadow:0 5px 15px #3badc51a}.journey-stop.current span{background:#67e8f9}.journey-stop.complete span{background:#cff5e4;color:#17644a}.journey-next{display:grid;grid-template-columns:1fr 1fr;gap:16px}.journey-next>div{display:grid;align-content:start;gap:9px;background:#ffffffaa;padding:18px;border-radius:16px;font-size:12px}.journey-next a,.journey-next button{display:inline-flex;align-items:center;min-height:44px;font-family:inherit;font-size:12px;font-weight:700;color:#475183;background:none;border:0;cursor:pointer;text-align:left}.map-node.locked .node-visual{opacity:.85;filter:saturate(.5);background:color-mix(in srgb,var(--badge-color,#a78bfa) 12%,white);border-color:color-mix(in srgb,var(--badge-color,#a78bfa) 40%,white);box-shadow:0 4px 12px #68568a12}.badge-progress{opacity:1;line-height:1.5}.studio-card{background:linear-gradient(150deg,#fff,#f7f3ff)}
+  #student-learning-map{background:linear-gradient(135deg,#eee7ff,#e0faff);border:1px solid #ddd8f1;border-radius:24px;padding:26px;margin:24px 0 32px}.journey-heading{display:flex;justify-content:space-between;gap:20px}.journey-heading h2{font:800 26px Montserrat,sans-serif;margin:8px 0}.journey-heading p,.journey-caption{font-size:13px;color:var(--ink-soft)}.journey-heading small,.journey-next small{font-size:10px;font-weight:800;letter-spacing:1px;color:#715c95}.journey-prize{display:grid;gap:6px;text-align:center;min-width:150px;font-size:12px}.journey-prize>span{font-size:36px}.journey-path{display:flex;overflow:auto;gap:10px;padding:18px 3px;scroll-snap-type:x proximity}.journey-stop{position:relative;flex:0 0 112px;border:1px solid #ddd8ef;border-radius:18px;background:#ffffffa8;padding:12px 8px;cursor:pointer;color:var(--ink);scroll-snap-align:start}.journey-stop span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#ebe5f6;margin:0 auto 10px;font-weight:800}.journey-stop b,.journey-stop small{display:block;font-size:11px;line-height:1.5}.journey-stop small{font-size:9px;margin-top:8px}.journey-stop.current{border:2px solid #29b0c8;background:white;box-shadow:0 5px 15px #3badc51a}.journey-stop.current span{background:#67e8f9}.journey-stop.complete span{background:#cff5e4;color:#17644a}.journey-group-divider{flex:0 0 90px;display:flex;align-items:center;justify-content:center;text-align:center;font:800 9px Montserrat,sans-serif;letter-spacing:.6px;text-transform:uppercase;color:#715c95;line-height:1.4;border-left:1px dashed #ddd8f1;padding-left:14px}.journey-group-divider:first-child{border-left:0;padding-left:0}.journey-next{display:grid;grid-template-columns:1fr 1fr;gap:16px}.journey-next>div{display:grid;align-content:start;gap:9px;background:#ffffffaa;padding:18px;border-radius:16px;font-size:12px}.journey-next a,.journey-next button{display:inline-flex;align-items:center;min-height:44px;font-family:inherit;font-size:12px;font-weight:700;color:#475183;background:none;border:0;cursor:pointer;text-align:left}.map-node.locked .node-visual{opacity:.85;filter:saturate(.5);background:color-mix(in srgb,var(--badge-color,#a78bfa) 12%,white);border-color:color-mix(in srgb,var(--badge-color,#a78bfa) 40%,white);box-shadow:0 4px 12px #68568a12}.badge-progress{opacity:1;line-height:1.5}.studio-card{background:linear-gradient(150deg,#fff,#f7f3ff)}
   @media(max-width:600px){#student-learning-map{padding:18px}.journey-heading{display:block}.journey-prize{display:flex;text-align:left;align-items:center;flex-wrap:wrap;margin-top:16px}.journey-next{grid-template-columns:1fr}.journey-heading h2{font-size:22px}}
   @media(prefers-reduced-motion:reduce){.map-node,.map-node.recommended .node-visual{animation:none;transition:none}}
 
@@ -2153,6 +2153,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
      here too (not just by the lesson pages themselves) purely for its
      FOUNDATION_STILL_LIFE_PATH export, which the Map (renderFoundationMap)
      reads — single source of truth, no second copy of the 10-lesson list. -->
+<script src="core/foundation-a-path.js"></script>
 <script src="core/still-life-lesson.js"></script>
 <script src="core/student-dashboard.js?v=workspace-1"></script>
 <script>
@@ -2171,115 +2172,15 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   const FB_URL = 'https://rudztwseatwayhztbarj.supabase.co';
   
   // ═══════════════════════════════════════════════════════════
-  // FOUNDATION A PATH — order is configurable!
-  // 改这个数组就能调换顺序 (per Faye's request: flexible reordering)
+  // FOUNDATION A PATH (Form and Structure) — order + level grouping
+  // now live in core/foundation-a-path.js, loaded in <head>, which
+  // sets window.FOUNDATION_A_PATH / window.FOUNDATION_A_LEVELS. Single
+  // source of truth — see that file's header for why (it replaced 3
+  // independently-drifted copies of this same data). Nothing below
+  // needed to change: every bare FOUNDATION_A_PATH reference in this
+  // script still resolves, now via that global instead of a local
+  // const.
   // ═══════════════════════════════════════════════════════════
-  const FOUNDATION_A_PATH = [
-    {
-      id: 'preparation',
-      title: 'Preparation',
-      subtitle: 'Before you draw',
-      emoji: '✏️',
-      href: 'lessons/preparation/',
-      ready: true
-    },
-    {
-      id: 'cube',
-      title: 'The Cube',
-      subtitle: 'Geometric form',
-      emoji: '◧',
-      href: 'lessons/lesson-3-cube/',
-      ready: true
-    },
-    {
-      id: 'sphere',
-      title: 'The Sphere',
-      subtitle: 'Geometric form',
-      emoji: '⬤',
-      href: 'lessons/lesson-1-sphere/',
-      ready: true
-    },
-    {
-      id: 'cylinder',
-      title: 'The Cylinder',
-      subtitle: 'Geometric form',
-      emoji: '◗',
-      href: 'lessons/lesson-5-cylinder/',
-      ready: true
-    },
-    {
-      id: 'cup',
-      title: 'The Cup',
-      subtitle: 'Cylinder · real world',
-      emoji: '☕',
-      href: 'lessons/lesson-6-cup/',
-      ready: true
-    },
-    {
-      id: 'apple',
-      title: 'The Apple',
-      subtitle: 'Sphere · real world',
-      emoji: '🍎',
-      href: 'lessons/lesson-2-sphere-realworld/',
-      ready: true
-    },
-    {
-      id: 'cone',
-      title: 'The Cone',
-      subtitle: 'Geometric form · ice cream cousin',
-      emoji: '🔺',
-      href: 'lessons/lesson-7-cone/',
-      ready: true
-    },
-    {
-      // Round 42: activated — 4 videos provided + course built (lesson-8-icecream)
-      // Round 43 (per Faye): moved to directly after Cone — thematically
-      // connected (cone → ice cream cone), so they now flow as neighbors.
-      id: 'icecream',
-      title: 'The Ice Cream',
-      subtitle: 'Cone · real world',
-      emoji: '🍦',
-      href: 'lessons/lesson-8-icecream/',
-      ready: true
-    },
-    {
-      id: 'intersecting',
-      title: 'Intersecting Geometry',
-      subtitle: 'Two forms, one space',
-      emoji: '💎',
-      href: 'lessons/lesson-9-intersecting/',
-      ready: true
-    },
-    {
-      // Round 40 fixes:
-      //   ① href: 'lesson-4-box/' → 'lesson-4-giftbox/' (theme-oriented naming, matches Cup style)
-      //   ② ready: false → true (Round 39 built this — 4 demo videos provided)
-      //   ③ title: 'The Box' → 'Gift Box' (Faye: course theme = a gift box)
-      //   ④ subtitle: 'Cube · real world' → 'Cube · gift box' (course-specific framing)
-      id: 'box',
-      title: 'Gift Box',
-      subtitle: 'Cube · gift box',
-      emoji: '🎁',
-      href: 'lessons/lesson-4-giftbox/',
-      ready: true
-    },
-    {
-      // Round 41: activated — 4 videos provided + course built (lesson-10-papercrane)
-      id: 'papercrane',
-      title: 'Paper Crane',
-      subtitle: 'Intersecting planes · finale',
-      emoji: '🕊️',
-      href: 'lessons/lesson-10-papercrane/',
-      ready: true
-    }
-  ];
-  // Exposed on window so core/course-badge-registry.js (a separate
-  // script, loaded earlier in <head>) can derive basic_sketch's
-  // requiredIds from this same array at badge-progress-read time,
-  // instead of hand-typing a second copy of these 11 ids that could
-  // drift out of sync. const bindings don't attach to window on their
-  // own, hence this explicit assignment.
-  window.FOUNDATION_A_PATH = FOUNDATION_A_PATH;
 
   // FOUNDATION_STILL_LIFE_PATH / FOUNDATION_STILL_LIFE_LANDING_HREF (Step 2
   // · Still Life and Texture) now come from core/still-life-lesson.js,
@@ -2565,7 +2466,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     try { fashion = JSON.parse(localStorage.getItem(`fei_fashion_v2:${identity}:standing-demo`) || 'null'); } catch {}
     const practice = fashion?.runs?.[fashion.mode];
     const fashionDone = Object.values(practice?.strokes || {}).filter(s => s.status === 'passed').length;
-    host.innerHTML = `<div class="journey-heading"><div><small>YOUR LEARNING MAP</small><h2>Small steps. Real progress.</h2><p>Start with a shape. Build your skills. Make something yours.</p></div><div class="journey-prize"><span>✏️</span><b>Form and Structure</b><small>${done === FOUNDATION_A_PATH.length ? '✓ Badge earned — you did it!' : `${FOUNDATION_A_PATH.length-done} sessions to your badge`}</small></div></div><div class="journey-path" aria-label="Foundation A lesson path">${FOUNDATION_A_PATH.map((l,i)=>`<button data-journey-lesson="${i}" class="journey-stop ${completed.includes(l.id)?'complete':i===current?'current':''}" ${i===current?'aria-current="step"':''}><span>${completed.includes(l.id)?'✓':i+1}</span><b>${l.title}</b><small>${completed.includes(l.id)?'Practised · Revisit':i===current?'YOU ARE HERE':'Up next'}</small></button>`).join('')}</div><p class="journey-caption">Foundation A · ${done}/${FOUNDATION_A_PATH.length} sessions complete · Repeat any lesson. Practice is never lost.</p><div class="journey-next"><div><small>YOUR NEXT CHAPTER</small><strong>Foundation B · Still Life and Texture</strong><span>Apply your drawing skills to objects and surfaces.</span><button onclick="showFoundationMap()">Explore the foundation map →</button></div><div><small>CHOOSE ANOTHER PATH</small><strong>Fashion Design</strong><span>${fashionDone ? `${fashionDone} activities practised · Your figure is saved on this device.` : 'Build a figure → Explore clothing → Create your design.'}</span><a href="fashion-design/#${fashion ? 'lesson' : 'course'}">${fashion ? 'Continue your figure' : 'Explore the 6-unit map'} →</a><small>First lesson: demo practice · Further units in development</small></div></div>`;
+    host.innerHTML = `<div class="journey-heading"><div><small>YOUR LEARNING MAP</small><h2>Small steps. Real progress.</h2><p>Start with a shape. Build your skills. Make something yours.</p></div><div class="journey-prize"><span>✏️</span><b>Form and Structure</b><small>${done === FOUNDATION_A_PATH.length ? '✓ Badge earned — you did it!' : `${FOUNDATION_A_PATH.length-done} sessions to your badge`}</small></div></div><div class="journey-path" aria-label="Form and Structure lesson path">${(function(){let g=null;return FOUNDATION_A_PATH.map((l,i)=>{const gl=(FOUNDATION_A_LEVELS.find(lv=>lv.level===l.level)||{}).label||null;const dv=(gl!=null&&gl!==g)?(g=gl,`<div class="journey-group-divider">${gl}</div>`):'';return dv+`<button data-journey-lesson="${i}" class="journey-stop ${completed.includes(l.id)?'complete':i===current?'current':''}" ${i===current?'aria-current="step"':''}><span>${completed.includes(l.id)?'✓':i+1}</span><b>${l.title}</b><small>${completed.includes(l.id)?'Practised · Revisit':i===current?'YOU ARE HERE':'Up next'}</small></button>`;}).join('');})()}</div><p class="journey-caption">Form and Structure · ${done}/${FOUNDATION_A_PATH.length} sessions complete · Repeat any lesson. Practice is never lost.</p><div class="journey-next"><div><small>YOUR NEXT CHAPTER</small><strong>Foundation B · Still Life and Texture</strong><span>Apply your drawing skills to objects and surfaces.</span><button onclick="showFoundationMap()">Explore the foundation map →</button></div><div><small>CHOOSE ANOTHER PATH</small><strong>Fashion Design</strong><span>${fashionDone ? `${fashionDone} activities practised · Your figure is saved on this device.` : 'Build a figure → Explore clothing → Create your design.'}</span><a href="fashion-design/#${fashion ? 'lesson' : 'course'}">${fashion ? 'Continue your figure' : 'Explore the 6-unit map'} →</a><small>First lesson: demo practice · Further units in development</small></div></div>`;
     host.querySelectorAll('[data-journey-lesson]').forEach(button => button.onclick = e => {
       const l = FOUNDATION_A_PATH[Number(button.dataset.journeyLesson)];
       handleResumeClick(e, l.id, l.href);
@@ -3582,7 +3483,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     const completed = userProfile.completedLessons || [];
     const container = document.getElementById('path-nodes');
     
-    container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed);
+    container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed, '', true, (l) => (FOUNDATION_A_LEVELS.find(lv => lv.level === l.level) || {}).label || null);
     const next = pickNextLesson();
     document.getElementById('sketch-form-hero').innerHTML = SketchMap.hero('Form and Structure','Start with a shape. Build your skills. Make something yours.','basic_sketch') + `<section class="sketch-current"><span class="sketch-eyebrow">${next?'Your next practice':'All sessions complete'}</span><h2>${next?next.title:'Your foundation is taking shape'}</h2><p>${completed.filter(id=>FOUNDATION_A_PATH.some(l=>l.id===id)).length}/${FOUNDATION_A_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?`<a class="sketch-action" href="${next.href}" onclick="handleResumeClick(event, '${next.id}', '${next.href}')">Continue practice →</a>`:''}</section>`;
 
