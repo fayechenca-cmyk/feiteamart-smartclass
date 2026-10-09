@@ -745,6 +745,16 @@ const COURSE_ID = 'zodiac-skill';
 // see the file-header ACCESS/PAYWALL note for why this is
 // step-granularity, not a FREE_SKILLS page-id entry.
 const FREE_STEP_COUNT = 3;
+// isStepPaywalled (Ox build, Oct 2026) — the free preview is Rat's
+// first FREE_STEP_COUNT steps only, per Faye. A plain
+// `step.stepNumber > FREE_STEP_COUNT` check (the original form of this
+// condition) has no animal awareness, so adding a second animal whose
+// own steps are also numbered 1..N would make ITS first few steps free
+// too — confirmed live as a real bug before this helper existed. Every
+// non-Rat animal is paid in full, regardless of its own step numbers.
+function isStepPaywalled(animal, step){
+  return !STATE.hasFullAccess && (animal.id !== 'rat' || step.stepNumber > FREE_STEP_COUNT);
+}
 
 // Course intro video (teacher's welcome, real content) — goes through
 // the same renderZodiacVideoStage/afterRenderZodiacVideoStage pair as
@@ -1385,7 +1395,7 @@ function renderWarmupRow(animal, step){
     </div>`;
 }
 function renderStepScreen(animal, step){
-  if (step.stepNumber > FREE_STEP_COUNT && !STATE.hasFullAccess) {
+  if (isStepPaywalled(animal, step)) {
     return renderZodiacPaywallScreen(animal, step);
   }
   const isPractice = step.stepType === 'practice';
@@ -1435,7 +1445,7 @@ function renderStepScreen(animal, step){
   `;
 }
 function afterRenderStepScreen(animal, step){
-  if (step.stepNumber > FREE_STEP_COUNT && !STATE.hasFullAccess) return;
+  if (isStepPaywalled(animal, step)) return;
   const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
   afterRenderZodiacVideoStage(step, iframeId);
   const isLast = STATE.stageIndex === STAGES.length - 1;
@@ -1443,6 +1453,13 @@ function afterRenderStepScreen(animal, step){
 }
 
 function renderZodiacPaywallScreen(animal, step){
+  // Rat gets the "first N steps free" framing (it has free steps to
+  // reference); every other animal is paid in full per isStepPaywalled
+  // above, so its paywall copy points back at Rat's preview instead of
+  // claiming a free range that doesn't exist for this animal.
+  const body = animal.id === 'rat'
+    ? `The first ${FREE_STEP_COUNT} steps are free to try. Upgrade to continue with "${escapeHtml(step.title)}" and every step after it.`
+    : `Try the Rat's first ${FREE_STEP_COUNT} steps free. Upgrade to unlock "${escapeHtml(step.title)}" and every other zodiac animal.`;
   return `
     <div class="step-inner">
       <div class="scroll-panel">
@@ -1450,7 +1467,7 @@ function renderZodiacPaywallScreen(animal, step){
         <div class="zodiac-paywall-card">
           <div class="zodiac-paywall-icon">🔒</div>
           <div class="zodiac-paywall-title">Unlock the rest of ${escapeHtml(animal.label)}'s Brush Technique</div>
-          <div class="zodiac-paywall-body">The first ${FREE_STEP_COUNT} steps are free to try. Upgrade to continue with "${escapeHtml(step.title)}" and every step after it.</div>
+          <div class="zodiac-paywall-body">${body}</div>
           <a class="zodiac-paywall-cta" href="../../upgrade/?reason=paywall_skills&branch=skills">See teacher-supported plans →</a>
         </div>
       </div>
