@@ -21,10 +21,12 @@ window.FashionCourse = {
   const points = [
     ['head-top',200,38,'Head top'],['chin',200,108,'Chin'],
     ['shoulder-left',142,145,'Left shoulder'],['shoulder-right',258,160,'Right shoulder'],
+    ['chest-left',157,202,'Left chest'],['chest-right',243,202,'Right chest'],
     ['waist-left',176,258,'Left waist'],['waist-right',224,250,'Right waist'],
     ['hip-left',149,319,'Left hip'],['hip-right',251,302,'Right hip'],
     ['knee-support',174,452,'Supporting knee'],['knee-free',240,449,'Other knee'],
     ['ankle-support',184,610,'Supporting ankle'],['ankle-free',244,596,'Other ankle'],
+    ['toe-support',161,652,'Supporting toes'],['toe-free',272,635,'Other toes'],
     ['back-head',184,64,'Back-of-head cue']
   ].map(([id,x,y,label])=>({id,x,y,label}));
   const groups = [
@@ -48,7 +50,7 @@ window.FashionCourse = {
       startRegion:{radius:18},endRegion:{radius:20},animation:{duration:2600},
       tolerance:{mouse:22,pen:25,touch:30,coverage:.5,order:.5},
       feedback:{success:extra.success||'You connected the intended landmarks. Keep this relationship in mind.',retry:prompt},
-      audio:null,video:{src:null,start:null,end:null,poster:null},
+      narration:extra.narration||`${prompt} ${tip}`,audio:null,video:{src:null,start:null,end:null,poster:null},
       teacherNote:'Sequence follows the teacher briefing and IMG_9095 / IMG_9096. Original geometry still awaits exact proportion approval.',
       confirmation:{sequence:'teacher-directed',geometry:'provisional'},confirmed:false,...extra});
   }
@@ -81,7 +83,8 @@ window.FashionCourse = {
     prompt:'Find the ankle directly below the back-of-head cue. Tap that ankle to choose the supporting leg.',
     tip:{title:'A plumb-line check',body:'For this pose, use the teacher cue: a vertical line from the back of the head toward the supporting ankle. It meets the ground at 90°. This is a pose-specific observation, not a rule for every figure.'},
     feedback:{success:'You found the supporting ankle. Draw that leg first.',retry:'Follow the vertical line down to the ankle on the left side of the page.'},
-    path:null,animation:{duration:2600},video:{src:null,start:null,end:null,poster:null},confirmed:false});
+    narration:'Find the supporting ankle before drawing the legs. Follow the purple plumb line from the back of the head down to the standing ankle.',
+    path:null,animation:{duration:2600},audio:null,video:{src:null,start:null,end:null,poster:null},confirmed:false});
   stroke('support-thigh-outer','thighs',P[2],'Supporting thigh · outer edge','M149 319 Q146 383 164 451',['hip','knee'],
     'Draw the outer thigh of the supporting leg first, from hip toward knee.', 'Left and right always mean the sides of the page in this demo.',{overlays:['plumb']});
   stroke('support-thigh-inner','thighs',P[2],'Supporting thigh · inner edge','M201 335 Q190 392 184 451',['hip','knee'],
@@ -138,19 +141,29 @@ window.FashionCourse = {
     'Finish the inner forearm and simple hand shape.', 'Look over the whole figure: head, directional lines, body, supporting leg, neck and arms.');
   window.FashionLesson={
     unitId:'figure',id:'standing-demo',title:'Basic Standing Pose',estimatedMinutes:35,status:'demo',revision:2,
-    introduction:'Locate first. Build the head, set the body directions, then connect one stroke at a time.',
+    introduction:'Fashion design begins with the figure. We use the head as one measuring unit, build a nine-head grid, locate the body landmarks, and only then begin drawing.',
+    orientation:{
+      title:'Fashion starts with the figure',
+      narration:'Whether we are designing costumes or fashion, clothing begins with the human figure underneath. An everyday character may be six, six and a half, or seven heads tall. Fashion figures are often stretched to eight, nine, or nine and a half heads so the legs appear longer and the silhouette feels elegant. In this practice, one head is one unit. We will build nine units first, locate the shoulders, chest, waist, hips, knees, ankles, and toes, and then draw the figure one stroke at a time.',
+      comparison:[{label:'Everyday character',units:6.5,note:'Often 6–7 heads tall'},{label:'Fashion figure',units:9,note:'This demonstration uses 9 head units'}]
+    },
+    proportionGrid:{units:9,lineCount:10,narration:'Before drawing the body, build nine equal head units. Ten horizontal guide lines create nine spaces. Tap Add guide line until the grid is complete. On paper, draw these light lines with a ruler.'},
     confirmation:{approved:false,label:'Teacher-guided sequence · Proportions under review',note:'Rebuilt from the teaching references. Exact spacing, widths and final paths still need teacher approval.'},
-    objectives:['Locate head, shoulder, waist and hip widths','Build the head before the shoulder, waist and hip lines','Find the supporting leg, then finish the neck and arms'],
+    objectives:['Build a nine-head proportion grid','Locate the major body levels and widths before drawing','Build the figure one clear stroke at a time'],
     materials:['A mouse, trackpad, touchscreen or Apple Pencil','Paper, a pencil and an eraser'],
     canvas:{width:400,height:700},guides,points,groups,phases,steps,
     centerLine:{x:200,label:'Construction center',explanation:'A construction guide, distinct from the supporting-leg plumb line.'},
     balance:{x:184,top:64,bottom:652,pointIds:['back-head','ankle-support'],label:'Supporting-leg plumb line'},
     overlays:[{id:'waist-parallel',path:'M135 265 L271 242.3',label:'Waist direction',color:'#a78bfa'}],
     landmarks:[
-      {id:'head',title:'Head and chin',pointIds:['head-top','chin'],guideIds:['head-top','chin'],tip:'Locate the top and chin first. A small circle sits within this interval; the jaw continues to line 2.',widthNote:'Circle + jaw, not one full-height oval.'},
-      {id:'shoulders',title:'Shoulder width',pointIds:['shoulder-left','shoulder-right'],guideIds:['shoulder'],tip:'Find both shoulder endpoints. Their span sets the width; their height difference sets the shoulder tilt.',widthNote:'Compare the full shoulder span with the head width. Exact ratio awaits teacher approval.'},
-      {id:'waist',title:'Waist width',pointIds:['waist-left','waist-right'],guideIds:['waist'],tip:'Locate both waist endpoints. This span is narrower and tilts differently from the shoulders.',widthNote:'Narrower than the shoulders; do not make these two lines parallel.'},
-      {id:'hips',title:'Hip width',pointIds:['hip-left','hip-right'],guideIds:['waist','hip'],tip:'Find the wider hip endpoints. The hip and waist direction lines are parallel in this construction.',widthNote:'Wider than the waist, with the same tilt.'}
+      {id:'head',title:'Head unit',pointIds:['head-top','chin'],guideIds:['head-top','chin'],tip:'Tap the head top and chin. You are locating two markers, not drawing yet.',widthNote:'The distance from head top to chin is one unit.',narration:'Do not draw yet. Tap the head top and the chin. This distance is one head unit.'},
+      {id:'shoulders',title:'Shoulder level and width',pointIds:['shoulder-left','shoulder-right'],guideIds:['shoulder'],tip:'Tap both shoulder endpoints. Their height difference also shows the shoulder tilt.',widthNote:'Demonstration width: about two and a half head widths.',narration:'Do not draw yet. Tap the two shoulder endpoints. The demonstration shoulder span is about two and a half head widths.'},
+      {id:'chest',title:'Chest level',pointIds:['chest-left','chest-right'],guideIds:['chest'],tip:'Tap across the chest level so you can see where the upper torso has volume.',widthNote:'The chest sits below the shoulder line and above the waist.',narration:'Tap the two chest markers. The chest level sits below the shoulders and above the waist.'},
+      {id:'waist',title:'Waist level and width',pointIds:['waist-left','waist-right'],guideIds:['waist'],tip:'Tap both waist endpoints. The waist is narrower and tilts differently from the shoulders.',widthNote:'Demonstration width: about one and a half head widths.',narration:'Tap the two waist endpoints. The demonstration waist is about one and a half head widths, and its angle is different from the shoulders.'},
+      {id:'hips',title:'Hip level and width',pointIds:['hip-left','hip-right'],guideIds:['waist','hip'],tip:'Tap the wider hip endpoints. The hip and waist direction lines are parallel in this construction.',widthNote:'Demonstration width: about two head widths.',narration:'Tap the two hip endpoints. The demonstration hips are about two head widths. In this pose, the hip line is parallel to the waist line.'},
+      {id:'knees',title:'Knee level',pointIds:['knee-support','knee-free'],guideIds:['knee'],tip:'Tap both knees. They are not at exactly the same position because the pose shifts its weight.',widthNote:'Compare each knee with the hip and foot above and below it.',narration:'Tap both knee markers. The pose shifts its weight, so the two knees do not need to sit at exactly the same height.'},
+      {id:'ankles',title:'Ankle level',pointIds:['ankle-support','ankle-free'],guideIds:['ankle'],tip:'Tap both ankles before placing the feet.',widthNote:'The standing ankle also helps us check the body balance.',narration:'Tap both ankle markers. The standing ankle will later help us check the balance of the whole pose.'},
+      {id:'toes',title:'Heel and toe level',pointIds:['toe-support','toe-free'],guideIds:['heel','toe'],tip:'Tap the toe endpoints. High heels can extend the fashion figure toward nine and a half head units.',widthNote:'Flat feet and high heels finish at different levels.',narration:'Tap the two toe endpoints. A flat foot and a high heel finish differently. High heels can extend a fashion figure toward nine and a half head units.'}
     ],
     sound:{volume:.11,strokeNotes:[784,1046.5],phaseNotes:[659.25,783.99,1046.5],duration:.28,noteGap:.12},
     teacherVideo:{src:null,poster:null,rights:null,note:'Awaiting teacher recording; each stroke has editable start/end times.'},
