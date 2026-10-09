@@ -1,4 +1,4 @@
-import { createGothicProject } from './gothic-app.js?v=window-redesign-2';
+import { createGothicProject } from './gothic-app.js?v=gothic-window-tower-1';
 import { course, materials, preparation } from './data.js';
 const main = document.querySelector('main');
 const status = document.querySelector('#save-status');

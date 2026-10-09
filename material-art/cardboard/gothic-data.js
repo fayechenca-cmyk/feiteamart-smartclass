@@ -16,21 +16,18 @@ export const gothicProject={
  step('layer-2','Make the second arch','Trace the same outside on a new piece. Draw and cut a wider frame.',[550,596,422,243],{cutting:true,teacherNote:'The teacher makes progressively smaller openings, not identical copies. Measurements refer to the border width along the sides.'}),
  step('layer-3','Make the third arch','Make one more frame. Keep the outside the same; widen the sides to 2 cm.',[550,596,422,243],{cutting:true}),
  step('layer','Test, then glue','Stack 1.2 cm, 1.5 cm and 2 cm borders from front to back. Align the outer edges.',[550,596,422,243],{teacherNote:'Dry-fit all three pieces before gluing. The widest border goes behind; each inner edge should remain visible. This replaces the earlier identical-layer extension.'})]},
- {id:'window',title:'Gothic window · Part 1',sheet:'assets/gothic/window.png',width:1312,height:1199,mapRect:[267,300,221,252],resultRect:[1000,599,248,264],steps:[
+ {id:'window',title:'Gothic window',sheet:'assets/gothic/window.png',width:1312,height:1199,mapRect:[267,300,221,252],resultRect:[1000,599,248,264],steps:[
  step('prepare-card','Prepare the panel','Cut one piece: 25 cm tall × 10–11 cm wide.',[19,216,205,260],{image:'assets/gothic/window-video/01-prepare-card.jpg',goalLabel:'Start with this panel',measurements:['↕ 25 cm','↔ 10–11 cm']}),
  step('draw-window','Draw the complete window','Draw the pointed frame, the circle and all 8 petals before cutting. Keep the side frame 1.5 cm, the tip gap 2.5 cm and each petal border about 1 cm.',[299,215,220,260],{image:'assets/gothic/window-video/02-draw-window.png',referenceImage:'assets/gothic/window-video/02-draw-window-measure.png',goalLabel:'Finish the whole drawing first',measurements:['Sides · 1.5 cm','Tip · 2.5 cm','Petals · about 1 cm','8 petals'],teacherNote:'These measurements and photographs come from the teacher demonstration and replace the earlier AI guide.'}),
  step('cut-point','Cut the pointed top','Cut away only the two outside top corners.',[557,215,209,264],{image:'assets/gothic/window-video/03-cut-point.jpg',goalLabel:'Keep every inside line',measurements:['Cut 2 corners'],cutting:true}),
- step('open-rose','Open the rose window','Cut out the 8 petal centres. Keep the 1 cm borders connected.',[45,590,191,244],{image:'assets/gothic/window-video/04-open-rose.png',goalLabel:'Part 1 finished',measurements:['Open 8 petals','Keep 1 cm borders'],cutting:true,teacherNote:'This lesson stops halfway through the window. Keep this piece for Part 2.'})]},
- {id:'tower',title:'Tower + spire',sheet:'assets/gothic/tower.png',width:1226,height:1283,mapRect:[520,294,203,261],resultRect:[924,737,170,370],steps:[
- step('rectangle','Cut the tower piece','18 cm wide × 12 cm tall.',[15,347,163,222],{part:'A · Tower'}),
- step('fold-lines','Mark four panels','Mark a fold every 4.5 cm.',[190,323,178,225],{part:'A · Tower'}),
- step('tube','Fold a square tube','Fold four sides. Tape the joining edges.',[378,317,174,253],{part:'A · Tower',teacherNote:'18 cm gives four 4.5 cm panels with no glue tab. Tape the seam, or demonstrate adding a separate joining strip.'}),
- step('windows','Add windows · optional','Plan the openings before cutting.',[572,329,143,245],{part:'A · Tower',cutting:true,teacherNote:'Safer to mark and cut windows while the card is flat, before closing the tube. Open the seam again if needed.'}),
- step('triangles','Cut four triangles','Each face: base 4.5 cm · height 9 cm.',[748,331,137,231],{part:'B · Spire',cutting:true,teacherNote:'9 cm is the triangular face height, not the assembled pyramid vertical height. Dry-fit before gluing.'}),
- step('spire','Join the triangles','Tape or glue the four edges to form a spire.',[922,333,141,229],{part:'B · Spire'}),
- step('attach','Attach the spire','Try the fit, then join it to the tower.',[1116,330,94,247],{part:'B · Spire'}),
- step('details','Add your details · optional','Choose a border, a window shape, or small pinnacles.',[20,745,383,373],{part:'Make it yours'}),
- step('variations','Choose your tower style','One tower, twin towers, or your own variation.',[449,749,410,375],{part:'Make it yours'})]},
+ step('open-rose','Open the rose window','Cut out the 8 petal centres. Keep the 1 cm borders connected.',[45,590,191,244],{image:'assets/gothic/window-video/04-open-rose.png',goalLabel:'Open all 8 petals',measurements:['Open 8 petals','Keep 1 cm borders'],cutting:true}),
+ step('edge-border','Optional · Add a light border','Make a border about 1 cm wide around the outside. Draw it with marker, or cut thin white card strips and glue them on.',[800,590,191,244],{image:'assets/gothic/window-video/05-edge-border.jpg',goalLabel:'Choose one border method',measurements:['Border · about 1 cm','Marker or white card'],optional:true}),
+ step('edge-pattern','Optional · Add line texture','After the white card border is attached, draw short repeated lines to create a stone-like texture.',[800,590,191,244],{image:'assets/gothic/window-video/06-edge-pattern.jpg',goalLabel:'Repeat one simple mark',measurements:['Short lines','Repeat evenly'],optional:true}),
+ step('attach-arch','Attach the layered arch','Glue the three-layer pointed arch from Element 01 below the rose window. Centre it before pressing.',[1000,599,248,264],{image:'assets/gothic/window-video/07-attach-arch.jpg',goalLabel:'Finish the window panel',measurements:['Centre first','Glue last'],teacherNote:'Use the completed three-layer pointed arch from Element 01.'})]},
+ {id:'tower',title:'Tower body · Part 1',sheet:'assets/gothic/tower.png',width:1226,height:1283,mapRect:[520,294,203,261],resultRect:[924,737,170,370],partial:true,steps:[
+ step('divide-panel','Prepare four tower faces','Use cardboard 23–25 cm tall × 22 cm wide. It must not be shorter than your Gothic window. Divide the 22 cm width into four equal panels.',[15,347,163,222],{image:'assets/gothic/tower-video/01-divide-panel.jpg',goalLabel:'Mark 4 equal faces',measurements:['Height · 23–25 cm','Width · 22 cm','Each face · 5.5 cm']}),
+ step('draw-floors','Draw two floors','Use marker to add the middle band, then draw four rounded upper windows and four pointed lower windows.',[190,323,178,225],{image:'assets/gothic/tower-video/02-draw-floors.jpg',goalLabel:'Finish every line before cutting',measurements:['4 upper windows','4 lower windows','Top + bottom match']}),
+ step('cut-windows','Open the tower windows','Keep the cardboard flat. With adult help, use a craft knife to cut out each window centre.',[572,329,143,245],{image:'assets/gothic/tower-video/03-cut-windows.jpg',goalLabel:'Open one window at a time',measurements:['Keep borders connected','Cut while flat'],cutting:true})]},
  {id:'buttress',title:'Buttress',sheet:'assets/gothic/buttress.png',width:1226,height:1283,mapRect:[758,315,185,235],resultRect:[925,620,283,278],steps:[
  step('rectangle','Cut a rectangle','8 cm wide × 10 cm tall.',[20,227,253,259]),
  step('shape','Draw the support','Mark a 2 cm upright. Add the diagonal and curved opening.',[305,217,267,279]),
@@ -125,9 +122,24 @@ const windowStreams={
  'prepare-card':{motion:'e6d476e0adba9601bf339cc4a0276e41',src:'e6d476e0adba9601bf339cc4a0276e41',complete:true},
  'draw-window':{motion:'2b8a069ac45463274adb821376eb1e71',src:'2b8a069ac45463274adb821376eb1e71',complete:true},
  'cut-point':{motion:'f8ef11b4a04afe1f1c1cfea66b4554cb',src:'f8ef11b4a04afe1f1c1cfea66b4554cb',complete:true},
- 'open-rose':{motion:'01fa1122c2135d110c85962a72984760',src:'01fa1122c2135d110c85962a72984760',complete:true}
+ 'open-rose':{motion:'01fa1122c2135d110c85962a72984760',src:'01fa1122c2135d110c85962a72984760',complete:true},
+ 'edge-border':{motion:'e202b579c28db903708527d5c1081939',src:'e202b579c28db903708527d5c1081939',complete:true},
+ 'edge-pattern':{motion:'7fd7e9309de8d135dccd1d7e8c48e674',src:'7fd7e9309de8d135dccd1d7e8c48e674',complete:true},
+ 'attach-arch':{motion:'2902f798764799e7fd821b992a57a056',src:'2902f798764799e7fd821b992a57a056',complete:true}
 };
 for(const s of gothicProject.elements[1].steps){
  s.video={...windowStreams[s.screenId],captions:'',transcript:''};
 }
-gothicProject.elements[1].resultImage='assets/gothic/window-video/04-open-rose.png';
+gothicProject.elements[1].resultImage='assets/gothic/window-video/07-attach-arch.jpg';
+
+// The teacher's current Tower recording covers the flat tower body only.
+// Folding the body and building the spire will be added in Part 2.
+const towerStreams={
+ 'divide-panel':{motion:'461a5f027a428b1fc388532660556354',src:'461a5f027a428b1fc388532660556354',complete:true},
+ 'draw-floors':{motion:'32f993ee7eebf96d11487cd1930c54ed',src:'32f993ee7eebf96d11487cd1930c54ed',complete:true},
+ 'cut-windows':{motion:'410925506956da662f2bea0fbd1f090d',src:'410925506956da662f2bea0fbd1f090d',complete:true}
+};
+for(const s of gothicProject.elements[2].steps){
+ s.video={...towerStreams[s.screenId],captions:'',transcript:''};
+}
+gothicProject.elements[2].resultImage='assets/gothic/tower-video/03-cut-windows.jpg';
