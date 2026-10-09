@@ -534,6 +534,8 @@ button{font-family:inherit;}
 .complete-exit{display:inline-block;margin-top:22px;font-size:12.5px;color:var(--ink-faint);text-decoration:none;font-weight:700;}
 .complete-exit:hover{color:var(--ink-red);}
 .complete-next{text-align:center;font-size:12.5px;color:var(--ink-warm-faint);font-style:italic;margin:4px 0 16px;}
+.complete-next-link{display:block;margin:4px auto 16px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13.5px;padding:11px 24px;border-radius:999px;border:none;background:var(--accent);color:#fff;cursor:pointer;}
+.complete-next-link:active{transform:scale(.97);}
 
 /* ---- Course badge card (ported verbatim from color-theory/index.html,
    same real renderCourseBadgeCard() output/class names) ---- */
@@ -736,6 +738,49 @@ const ZODIAC_ANIMALS = [
       // nothing needed to change there.
       { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:'907e202610a2c9b273731554c8bd2a6d', posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to sign your painting." },
       { stepNumber:14, title:'Seal',                                       stepType:'technique', videoUrl:'4703f2aacf4a1dc41a8059d69816f01d', posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to stamp your painting." }
+    ]
+  },
+  // Ox (丑牛) — second ZODIAC_ANIMALS entry, built the same shape as Rat
+  // above with zero new code (buildStages/renderRail/map all read this
+  // generically). No intro video and no Materials step — those stay
+  // Rat-only (see the Rat-only Materials Kit gate in buildStages and
+  // the Rat-only free preview in isStepPaywalled above). Titles are
+  // provisional English, kept in the data so Faye can edit them.
+  // Steps 4-11 have no recorded video yet (videoUrl:null renders the
+  // existing "coming soon" fallback) — no content invented for them.
+  //
+  // FLAGGED, not resolved here — Faye's own word for word description
+  // split "hooves" across two mentions and "leg practice" once; this
+  // reads it as one leg-practice step (6) feeding one legs-drawing step
+  // (7), then a separate hooves step (8). Please confirm that 3-step
+  // split is right.
+  // FLAGGED, not resolved here — Faye listed only a closing inscription
+  // (step 12 below), not a separate Seal step like Rat's step 14.
+  // Built exactly as listed; confirm whether Ox should also get a Seal.
+  {
+    id: 'ox', label: 'Ox', chineseCharacter: '牛',
+    steps: [
+      // A single brush stroke practicing the brush's three parts — belly
+      // (笔肚), root (笔根), tip (笔尖) — and the mark each one makes. A
+      // practice, not a drawing.
+      { stepNumber:1,  title:'Practice: Head Brushwork', stepType:'practice',  videoUrl:'93dd42af8ea76fdeb5219a66b1e7a6ee', posterUrl:null, supportsStep:2 },
+      // The head built up in ink: basic shape and bone structure only —
+      // not finished/detailed yet, that comes later at step 9.
+      { stepNumber:2,  title:'Draw the Head',            stepType:'technique', videoUrl:'8cce0e9e92d1d7b4a84a131f7f93b47a', posterUrl:null },
+      // How to draw the neck.
+      { stepNumber:3,  title:'Draw the Neck',             stepType:'technique', videoUrl:'2598aa3749798693e67f14777d757c42', posterUrl:null },
+      { stepNumber:4,  title:'Practice: Torso Brushwork', stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:5 },
+      { stepNumber:5,  title:'Draw the Torso',            stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:6,  title:'Practice: Leg Brushwork',   stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:7 },
+      { stepNumber:7,  title:'Draw the Legs',             stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:8,  title:'Draw the Hooves',           stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:9,  title:'Head Details',              stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:10, title:'Outline',                   stepType:'technique', videoUrl:null, posterUrl:null },
+      { stepNumber:11, title:'Strengthen the Color',      stepType:'technique', videoUrl:null, posterUrl:null },
+      // optional:true — same pattern as Rat's Signature/Seal (step
+      // 728 above): the main course does not require writing on the
+      // painting, so this is skippable with no effect on completion.
+      { stepNumber:12, title:'Inscription (题款)',        stepType:'technique', videoUrl:null, posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to inscribe your painting." }
     ]
   }
 ];
@@ -1530,7 +1575,15 @@ function renderComplete(animal){
   // card, never auto-earned here.
   const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('zodiac_master') : '';
   const nextAnimal = ZODIAC_ORDER[ZODIAC_ORDER.findIndex(a => a.id === animal.id) + 1];
-  const nextHtml = nextAnimal ? `<p class="complete-next">Next up: ${nextAnimal.chineseCharacter} ${escapeHtml(nextAnimal.label)} — coming soon.</p>` : '';
+  // Ox build (Oct 2026) — the "coming soon" copy was only ever true
+  // while the next animal had no ZODIAC_ANIMALS entry yet. Check for a
+  // real entry so a built next animal (Ox, and whoever follows) gets a
+  // real continue link instead of a stale "coming soon" on Rat's own
+  // completion screen.
+  const nextBuilt = nextAnimal ? ZODIAC_ANIMALS.find(a => a.id === nextAnimal.id) : null;
+  const nextHtml = !nextAnimal ? '' : nextBuilt
+    ? `<button type="button" class="complete-next-link" onclick="goToMapStep('${nextBuilt.id}',${nextBuilt.steps[0].stepNumber})">Continue to ${nextAnimal.chineseCharacter} ${escapeHtml(nextAnimal.label)} →</button>`
+    : `<p class="complete-next">Next up: ${nextAnimal.chineseCharacter} ${escapeHtml(nextAnimal.label)} — coming soon.</p>`;
   return `
     <div class="step-inner">
       <div class="scroll-panel">
