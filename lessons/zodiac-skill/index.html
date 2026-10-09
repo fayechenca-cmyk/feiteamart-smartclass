@@ -378,11 +378,15 @@ button{font-family:inherit;}
 .scroll-title-col .step-kicker,.scroll-title-col .step-title{text-align:left;}
 @media(max-width:760px){.scroll-title-col .step-kicker,.scroll-title-col .step-title{text-align:center;}}
 
-.step-type-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin:0 0 16px;}
+.step-type-badge{display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;padding:5px 13px;border-radius:999px;margin:0 6px 16px 0;}
 .step-type-badge-wrap{text-align:left;}
 @media(max-width:760px){.step-type-badge-wrap{text-align:center;}}
 .step-type-badge.technique{background:var(--bamboo-soft);color:var(--bamboo);border:1.5px solid rgba(92,122,82,.32);}
 .step-type-badge.practice{background:var(--ink-red-soft);color:var(--ink-red);border:1.5px solid rgba(138,46,34,.32);}
+/* optional (Oct 2026) — deliberately neutral/dashed, existing tokens
+   only, never the ink-red practice treatment. */
+.step-type-badge.optional{background:var(--xuan);color:var(--ink-warm-faint);border:1.5px dashed var(--xuan-line);}
+.optional-step-note{text-align:center;font-size:12.5px;color:var(--ink-warm-faint);font-style:italic;margin:14px 0 0;}
 
 /* ---- Continue dock ---- */
 .continue-dock{
@@ -500,6 +504,11 @@ button{font-family:inherit;}
 }
 .map-step-row.practice-branch .map-step-num{border-color:var(--ink-red);color:var(--ink-red);background:#fff;}
 .map-step-row.practice-branch .map-step-tag{color:var(--ink-red);}
+/* optional (Oct 2026) — a quieter node, dashed border, no gradient:
+   deliberately NOT the purple-to-turquoise practice treatment. */
+.map-step-row.optional{border:1px dashed var(--xuan-line);opacity:.82;}
+.map-step-row.optional .map-step-num{border-style:dashed;color:var(--ink-warm-faint);}
+.map-step-tag.optional{color:var(--ink-warm-faint);}
 
 /* ---- Paywall ---- */
 .zodiac-paywall-card{
@@ -712,7 +721,16 @@ const ZODIAC_ANIMALS = [
       { stepNumber:10, title:'Practice: Claw Brushwork',                   stepType:'practice',  videoUrl:'0f950cb7d044102c32d1c1132b14e355', posterUrl:null, supportsStep:11 },
       { stepNumber:11, title:'Tail & Claws',                               stepType:'technique', videoUrl:'9694b5bec7656f034d94450eca05bc3f', posterUrl:null },
       { stepNumber:12, title:'Whiskers',                                   stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:null, posterUrl:null },
+      // optional:true (Oct 2026, per Faye) — the main course does not
+      // teach students to write, so this step is skippable. Generic
+      // field, works the same for any future step/animal with no code
+      // change: see the "Optional" tag + optionalNote handling in
+      // renderStepScreen and the lighter map-node styling below.
+      // Completion was never gated on visiting every step to begin
+      // with (markAnimalComplete only fires on reaching rat_complete,
+      // the final stage, regardless of which steps were visited), so
+      // nothing needed to change there.
+      { stepNumber:13, title:'Signature',                                  stepType:'technique', videoUrl:'907e202610a2c9b273731554c8bd2a6d', posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to sign your painting." },
       { stepNumber:14, title:'Seal',                                       stepType:'technique', videoUrl:null, posterUrl:null }
     ]
   }
@@ -1362,7 +1380,12 @@ function renderStepScreen(animal, step){
     return renderZodiacPaywallScreen(animal, step);
   }
   const isPractice = step.stepType === 'practice';
-  const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span></div>`;
+  // optional (Oct 2026) — a small second tag alongside Technique/
+  // Practice, generic: any future step can set optional:true with no
+  // code change here. NOT a practice-gradient treatment — kept purely
+  // in the existing neutral/dashed tokens per Faye's "not a purple to
+  // turquoise practice node" instruction.
+  const badge = `<div class="step-type-badge-wrap"><span class="step-type-badge ${isPractice ? 'practice' : 'technique'}">${isPractice ? 'Practice' : 'Technique'}</span>${step.optional ? '<span class="step-type-badge optional">Optional</span>' : ''}</div>`;
   const iframeId = 'zodiacVideo_' + animal.id + '_' + step.stepNumber;
   const videoHtml = renderZodiacVideoStage(step, iframeId);
   // §2A, round 3 — practice steps never shrink the video (no wrapper,
@@ -1373,11 +1396,12 @@ function renderStepScreen(animal, step){
   // instruction line. §2B — drawing steps get a "Warm up first" row
   // above the video when a practice step supports them.
   const target = isPractice && step.supportsStep ? animal.steps.find(s => s.stepNumber === step.supportsStep) : null;
+  const optionalNoteHtml = step.optional ? `<p class="optional-step-note">${escapeHtml(step.optionalNote || 'Not needed to finish the course.')}</p>` : '';
   const body = isPractice
       ? `${videoHtml}
           <p class="practice-sheet-instruction">Use a separate sheet of paper. Practice first, then draw.</p>
           ${target ? `<button type="button" class="back-to-drawing" onclick="goToMapStep('${animal.id}',${target.stepNumber})">← Back to drawing: ${escapeHtml(target.title)}</button>` : ''}`
-      : renderWarmupRow(animal, step) + videoHtml;
+      : renderWarmupRow(animal, step) + videoHtml + optionalNoteHtml;
   // Scroll composition: title/kicker/badge in a narrower left column,
   // the video as a wide horizontal band filling the rest — East Asian
   // scroll convention (left-right panels), not the old stacked
@@ -1659,12 +1683,17 @@ function renderMapStepRowHtml(entry, s, currentStageId, branchClass){
   if (idx > -1 && idx < STATE.stageIndex) cls.push('done');
   if (stageId === currentStageId) cls.push('current');
   if (branchClass) cls.push(branchClass);
+  // optional (Oct 2026) — a lighter, dashed-outline node on the map,
+  // generic for any future step: no count change, no practice-gradient
+  // treatment, just a quieter look plus a small "Optional" tag.
+  if (s.optional) cls.push('optional');
   const clickable = idx > -1;
   return `
     <div class="map-step-row ${cls.join(' ')}" ${clickable ? `onclick="goToMapStep('${entry.id}',${s.stepNumber})"` : ''}>
       <span class="map-step-num">${s.stepNumber}</span>
       <span class="map-step-title">${escapeHtml(s.title)}</span>
       ${s.stepType === 'practice' ? '<span class="map-step-tag">Practice</span>' : ''}
+      ${s.optional ? '<span class="map-step-tag optional">Optional</span>' : ''}
     </div>`;
 }
 // §2C — drawing steps are the main path; any practice step whose
