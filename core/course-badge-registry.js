@@ -60,15 +60,19 @@ window.COURSE_BADGE_REGISTRY = {
     requiredIds: ['extreme-wide-shot', 'wide-full-shot', 'medium-shot', 'close-up-and-extreme-close-up']
   },
 
-  // Zodiac Brush Technique (Skill, internal review build) — badged per
-  // animal, not per eventual whole 12-animal course, same reasoning as
-  // scene_drawing_unit_01 above ("badge per Unit, doesn't get
-  // restructured when more are added"). lessons/zodiac-skill/
-  // index.html's markAnimalComplete() writes 'zodiac-rat' into
-  // completedLessons once every recorded step of Rat is finished. A
-  // future Ox entry gets its own 'zodiac_ox' badge id here.
-  zodiac_rat: {
-    requiredIds: ['zodiac-rat']
+  // Zodiac Brush Technique (Skill) — one badge for the WHOLE 12-animal
+  // course (per Faye: "the badge belongs to the whole course, not to
+  // Rat"), replacing an earlier per-animal zodiac_rat badge that fired
+  // as soon as Rat alone was finished. requiredIds is a lazy function,
+  // same pattern as basic_sketch below, reading the real 12-animal list
+  // off window.ZODIAC_ORDER at read time instead of a hand-typed copy
+  // that hardcodes "12" and could drift out of sync with the course map.
+  // Finishing Rat still writes 'zodiac-rat' into completedLessons as
+  // before (lessons/zodiac-skill/index.html's markAnimalComplete()) —
+  // that data is untouched; it now just counts as 1 of 12 toward this
+  // badge instead of satisfying a Rat-only badge on its own.
+  zodiac_master: {
+    requiredIds: () => (window.ZODIAC_ORDER || []).map((a) => 'zodiac-' + a.id)
   },
 
   // Foundation of Sketch, Step 1 — "Form and Structure" badge
@@ -119,8 +123,9 @@ window.COURSE_BADGE_REGISTRY = {
   },
 
   // Ink Painting (new ink_painting badge) — whole "Painting -> Ink
-  // Painting" category badge, distinct from the per-animal zodiac_rat
-  // badge just above. lessons/zodiac-skill/index.html's
+  // Painting" category badge, distinct from the whole-course zodiac_master
+  // badge above (this one is the broader category, zodiac_master is
+  // Zodiac specifically). lessons/zodiac-skill/index.html's
   // markAnimalComplete() already writes 'zodiac-rat' into
   // completedLessons, so no new tracking code is needed for this one —
   // just this registry entry. Expand as more zodiac animals go live.

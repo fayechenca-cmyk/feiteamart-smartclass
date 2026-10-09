@@ -47,8 +47,11 @@ window.BADGE_CATALOG = [
   // category-level badge and will keep counting as more animals launch.
   { id:'ink_painting', title:'Ink Painting', artist:'', imgUrl:'', emoji:'🖌️', color:'#8a2e22', earnedMessage:'you completed your first ink painting course.' },
 
-  // Zodiac Brush Technique (internal review build) — placeholder
-  // artwork/icon per Faye's addendum ("actual artwork can be a
-  // placeholder for now"); ink-painting motif (brush + seal-stamp red).
-  { id:'zodiac_rat', title:'Rat Brush Master', artist:'', imgUrl:'', emoji:'🖌️', color:'#8a2e22', earnedMessage:'you completed the Rat\'s brush technique, stroke by stroke.' }
+  // Zodiac Brush Technique — one whole-course badge (replaces an earlier
+  // per-animal zodiac_rat entry; see core/course-badge-registry.js).
+  // Title is provisional/easy to edit; imgUrl is still a placeholder per
+  // Faye's addendum ("actual artwork can be a placeholder for now") —
+  // Faye will supply the final badge image later. Ink-painting motif
+  // (brush + seal-stamp red) kept from the placeholder it replaces.
+  { id:'zodiac_master', title:'Zodiac Brush Master', artist:'', imgUrl:'', emoji:'🖌️', color:'#8a2e22', earnedMessage:'you completed the full Zodiac Brush Technique course, all twelve animals.' }
 ];

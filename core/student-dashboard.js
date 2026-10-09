@@ -16,7 +16,7 @@
     basic_sketch:base+'courses/foundation-a', still_life:'lessons/still-life/', realism_expert:'lessons/still-life/', landscape:'lessons/sketch-branches/?branch=light', portrait_master:'lessons/sketch-branches/?branch=portrait', costume_design:'fashion-design/',
     scene_designer:'scene-drawing/', hand_crafter:'material-art/cardboard/', art_history:'art-theory/',
     color_theory:'color-theory/', scene_drawing_unit_01:'lessons/scene-drawing-foundation/',
-    zodiac_rat:'lessons/zodiac-skill/', ink_painting:base+'courses/ink-painting'
+    zodiac_master:'lessons/zodiac-skill/', ink_painting:base+'courses/ink-painting'
   };
   // Counts describe recorded activity, not ability. No invented LFC signal: it is explicitly unconnected.
   // Rules and normalization are isolated here so new dimensions/signals can be added independently.

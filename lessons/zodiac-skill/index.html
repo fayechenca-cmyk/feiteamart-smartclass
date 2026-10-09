@@ -105,13 +105,16 @@
   tracker. sessionStorage (not localStorage) for fei_user_profile
   specifically, per the platform's Safari-iframe fix convention.
 
-  BADGE (addendum item 6): core/course-badge-registry.js gets one new
-  'zodiac_rat' entry (requiredIds:['zodiac-rat']) — same single-
-  course-badge pattern as color_theory/collage_creator/fridge_curator.
-  Badged per-animal (not per whole eventual 12-animal course), same
-  reasoning as Scene Drawing Foundation's "badge per Unit, not per
-  whole course, doesn't get restructured when more are added" — a
-  future Ox entry gets its own badge id here, this one won't change.
+  BADGE (addendum item 6, UPDATED — see core/course-badge-registry.js):
+  the per-animal 'zodiac_rat' entry described below was replaced by a
+  single whole-course 'zodiac_master' entry once more than one animal
+  was in scope ("the badge belongs to the whole course, not to Rat").
+  Original note, kept for history: core/course-badge-registry.js got
+  one new 'zodiac_rat' entry (requiredIds:['zodiac-rat']) — same
+  single-course-badge pattern as color_theory/collage_creator/
+  fridge_curator. Badged per-animal, same reasoning as Scene Drawing
+  Foundation's "badge per Unit, not per whole course" — superseded by
+  the whole-course badge above once Ox and beyond were planned.
 -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -530,6 +533,7 @@ button{font-family:inherit;}
 .complete-check{margin:6px auto 14px;width:64px;height:64px;border-radius:50%;background:var(--ink-red-soft);display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
 .complete-exit{display:inline-block;margin-top:22px;font-size:12.5px;color:var(--ink-faint);text-decoration:none;font-weight:700;}
 .complete-exit:hover{color:var(--ink-red);}
+.complete-next{text-align:center;font-size:12.5px;color:var(--ink-warm-faint);font-style:italic;margin:4px 0 16px;}
 
 /* ---- Course badge card (ported verbatim from color-theory/index.html,
    same real renderCourseBadgeCard() output/class names) ---- */
@@ -815,6 +819,11 @@ const ZODIAC_ORDER = [
   { id:'dog', label:'Dog', chineseCharacter:'狗' },
   { id:'pig', label:'Pig', chineseCharacter:'猪' }
 ];
+// Exposed on window so core/course-badge-registry.js can read the full
+// 12-animal order at badge-check time (same reason window.FOUNDATION_A_PATH
+// exists: a plain `const` doesn't attach to window on its own, and the
+// registry needs the real list, not a second hand-typed copy of "12").
+window.ZODIAC_ORDER = ZODIAC_ORDER;
 
 /* ============================================================
    STAGES — flat-mapped from ZODIAC_ANIMALS, one animal for now.
@@ -1498,7 +1507,13 @@ function renderComplete(animal){
       });
     } catch (e) { console.warn('[renderComplete] JournalStorage.save failed', e); }
   }
-  const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('zodiac_' + animal.id) : '';
+  // One course-wide badge now (see core/course-badge-registry.js's
+  // zodiac_master entry), not a per-animal one — finishing Rat alone
+  // leaves it at 1/12, shown as locked progress via the same generic
+  // card, never auto-earned here.
+  const badgeHtml = typeof renderCourseBadgeCard === 'function' ? renderCourseBadgeCard('zodiac_master') : '';
+  const nextAnimal = ZODIAC_ORDER[ZODIAC_ORDER.findIndex(a => a.id === animal.id) + 1];
+  const nextHtml = nextAnimal ? `<p class="complete-next">Next up: ${nextAnimal.chineseCharacter} ${escapeHtml(nextAnimal.label)} — coming soon.</p>` : '';
   return `
     <div class="step-inner">
       <div class="scroll-panel">
@@ -1506,6 +1521,7 @@ function renderComplete(animal){
           <div class="complete-check">🖌️</div>
           <h2 class="step-title">${escapeHtml(animal.label)} Complete</h2>
           <p style="text-align:center;font-size:13.5px;color:var(--ink-warm-soft);">You've worked through every recorded step of ${animal.chineseCharacter} ${escapeHtml(animal.label)}'s brush technique.</p>
+          ${nextHtml}
           ${badgeHtml}
           <a class="complete-exit" href="../../">← Back to Skill</a>
         </div>
