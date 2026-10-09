@@ -34,7 +34,7 @@
     return s;
   }
   function strokePath(points){return points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');}
-  function addWork(s,strokes){Object.values(strokes).forEach(st=>{if(st.points?.length)s.append(pathNode(strokePath(st.points),{stroke:st.status==='passed'?'#1a1d2b':'#64748b','stroke-width':2.5}));});}
+  function addWork(s,strokes){Object.entries(strokes).forEach(([id,st])=>{if(st.points?.length)s.append(pathNode(strokePath(st.points),{'data-stroke':id,stroke:st.status==='passed'?'#1a1d2b':'#64748b','stroke-width':3}));});}
   function markers(svg,lesson,ids,onPick,selected=[]){
     svg.setAttribute('role','group');svg.setAttribute('aria-label','Locate the marked guide points');
     ids.forEach(id=>{const p=lesson.points.find(p=>p.id===id);if(!p)return;const g=el('g',{'data-point':id,class:'landmark-target',role:'button',tabindex:0,'aria-label':`Locate ${p.label}`});
@@ -46,6 +46,8 @@
   class Board {
     constructor(host,lesson,step,options){this.lesson=lesson;this.step=step;this.options=options;
       this.svg=svg(lesson,{guides:options.guides,points:options.mode!=='own',activeGuides:step.guideIds,activePoints:step.pointIds||[],overlays:options.mode==='own'?[]:(step.overlays||[])});
+      const group=lesson.groups.find(group=>group.id===step.groupId);
+      if(group?.focus){const f=group.focus;this.svg.setAttribute('viewBox',`${f.x} ${f.y} ${f.width} ${f.height}`);this.svg.dataset.focused='true';}
       this.svg.setAttribute('aria-label',`${step.title}; ${step.prompt} Draw with a finger, stylus or mouse. Paper practice is also available.`);
       this.svg.classList.add('drawing-surface');host.replaceChildren(this.svg);
       addWork(this.svg,options.strokes);
@@ -63,10 +65,10 @@
       this.svg.addEventListener('pointerdown',e=>this.down(e));this.svg.addEventListener('pointermove',e=>this.move(e));this.svg.addEventListener('pointerup',e=>this.up(e));this.svg.addEventListener('pointercancel',()=>this.cancel());this.svg.addEventListener('lostpointercapture',()=>this.cancel());
     }
     position(e){const matrix=this.svg.getScreenCTM();if(!matrix)return null;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());return {x:Math.max(0,Math.min(this.lesson.canvas.width,p.x)),y:Math.max(0,Math.min(this.lesson.canvas.height,p.y))};}
-    down(e){if(this.pointer!==undefined||e.button>0)return;e.preventDefault();this.stopDemo();this.pointer=e.pointerId;this.pointerType=e.pointerType;this.svg.setPointerCapture(e.pointerId);this.points=[this.position(e)];this.live=pathNode(strokePath(this.points),{stroke:'#1a1d2b','stroke-width':2.5});this.svg.append(this.live);this.options.onGesture?.();}
+    down(e){if(this.pointer!==undefined||e.button>0)return;e.preventDefault();this.stopDemo();const first=this.position(e);if(!first)return;this.pointer=e.pointerId;this.pointerType=e.pointerType;try{this.svg.setPointerCapture(e.pointerId);}catch{}this.previousAttempt=this.svg.querySelector(`[data-stroke="${this.step.id}"]`);if(this.previousAttempt)this.previousAttempt.setAttribute('opacity','.18');this.points=[first];this.live=pathNode(strokePath(this.points),{'data-stroke':this.step.id,stroke:'#1a1d2b','stroke-width':3});this.svg.append(this.live);this.options.onGesture?.();}
     move(e){if(e.pointerId!==this.pointer)return;e.preventDefault();for(const event of e.getCoalescedEvents?.().length?e.getCoalescedEvents():[e]){const p=this.position(event);if(distance(p,this.points.at(-1))>1.2&&this.points.length<5000)this.points.push(p);}this.live.setAttribute('d',strokePath(this.points));}
-    up(e){if(e.pointerId!==this.pointer)return;this.points.push(this.position(e));const points=this.points;this.pointer=undefined;this.svg.releasePointerCapture(e.pointerId);const result=assess(points,this.samples,this.step,this.pointerType);this.options.onStroke(points,result);}
-    cancel(){if(this.pointer===undefined)return;this.pointer=undefined;this.live?.remove();this.points=[];this.options.onCancel?.();}
+    up(e){if(e.pointerId!==this.pointer)return;e.preventDefault();const last=this.position(e);if(last)this.points.push(last);const points=this.points;this.pointer=undefined;try{this.svg.releasePointerCapture(e.pointerId);}catch{}const result=assess(points,this.samples,this.step,this.pointerType);this.previousAttempt?.remove();this.previousAttempt=null;this.live.setAttribute('stroke',result.ok?'#1a1d2b':'#64748b');this.live.setAttribute('stroke-width',result.ok?'3.2':'3');this.options.onStroke(points,result);}
+    cancel(){if(this.pointer===undefined)return;this.pointer=undefined;this.live?.remove();if(this.previousAttempt)this.previousAttempt.setAttribute('opacity','1');this.previousAttempt=null;this.points=[];this.options.onCancel?.();}
     replay(){this.stopDemo();if(!this.step.path)return;this.demo=pathNode(this.step.path,{stroke:'#997a43','stroke-width':3});this.svg.append(this.demo);const length=this.demo.getTotalLength();if(!matchMedia('(prefers-reduced-motion: reduce)').matches)this.animation=this.demo.animate([{strokeDasharray:`${length}`,strokeDashoffset:length},{strokeDasharray:`${length}`,strokeDashoffset:0}],{duration:this.step.animation.duration,fill:'forwards',easing:'linear'});}
     stopDemo(){this.animation?.cancel();this.demo?.remove();}
     destroy(){this.stopDemo();this.cancel();}

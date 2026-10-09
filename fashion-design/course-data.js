@@ -3,7 +3,7 @@
 window.FashionCourse = {
   id: 'fashion-design', title: 'Fashion Design', version: 2,
   units: [
-    {id:'figure',title:'Fashion Figure',description:'Figure proportions and movement',lessons:[{id:'standing-demo',title:'Basic Standing Pose',status:'demo'},{id:'walking',title:'Walking Pose',status:'awaiting-teacher'},{id:'cross-stance',title:'Crossed-leg Standing Pose',status:'awaiting-teacher'},{id:'pose-4',title:'Pose 4 · To be selected by the teacher',status:'awaiting-teacher'},{id:'pose-5',title:'Pose 5 · To be selected by the teacher',status:'awaiting-teacher'}]},
+    {id:'figure',title:'Fashion Figure',description:'Figure proportions and movement',lessons:[{id:'standing-demo',title:'Pose 1 · Basic Standing',status:'demo'},{id:'weight-shift',title:'Pose 2 · Weight Shift',status:'reference-received'},{id:'fashion-walk',title:'Pose 3 · Fashion Walk',status:'reference-received'},{id:'relaxed-asymmetry',title:'Pose 4 · Relaxed Asymmetry',status:'reference-received'}]},
     {id:'close-fitting',title:'Close-fitting Clothing',description:'Explore swimwear, camisoles, one-piece and two-piece outfits, and leggings. Compare body and clothing contours.',status:'planned'},
     {id:'everyday',title:'Everyday Clothing',description:'Draw T-shirts, long sleeves, shorts and skirts. Notice fabric thickness and the space between clothing and skin.',status:'planned'},
     {id:'folds',title:'Fabric and Folds',description:'Begin with a hanging towel, then explore folds at the underarm, elbow, waist, hip and knee.',status:'planned'},
@@ -28,11 +28,11 @@ window.FashionCourse = {
     ['back-head',184,64,'Back-of-head cue']
   ].map(([id,x,y,label])=>({id,x,y,label}));
   const groups = [
-    ['head','Build the head'],['shoulders','Set the shoulder line'],['waist','Set the waist line'],['hips','Set the hip line'],
-    ['upper-body','Connect shoulders to waist'],['lower-body','Connect waist to hips'],['balance','Find the supporting leg'],
-    ['thighs','Build thighs and knees'],['calves','Build the lower legs'],['feet','Place ankles and feet'],
-    ['neck','Add the neck cylinder'],['shoulder-slopes','Add the shoulder slopes'],['upper-arms','Draw the upper arms'],['forearms','Draw the forearms']
-  ].map(([id,title],i)=>({id,title,number:i+1}));
+    ['head','Build the head',{x:70,y:0,width:260,height:250}],['shoulders','Set the shoulder line',{x:45,y:35,width:310,height:285}],['waist','Set the waist line',{x:45,y:105,width:310,height:310}],['hips','Set the hip line',{x:45,y:145,width:310,height:315}],
+    ['upper-body','Connect shoulders to waist',{x:45,y:75,width:310,height:355}],['lower-body','Connect waist to hips',{x:45,y:155,width:310,height:330}],['balance','Find the supporting leg',{x:45,y:270,width:310,height:420}],
+    ['thighs','Build thighs and knees',{x:45,y:245,width:310,height:360}],['calves','Build the lower legs',{x:45,y:365,width:310,height:335}],['feet','Place ankles and feet',{x:45,y:450,width:310,height:250}],
+    ['neck','Add the neck cylinder',{x:65,y:20,width:270,height:260}],['shoulder-slopes','Add the shoulder slopes',{x:45,y:35,width:310,height:285}],['upper-arms','Draw the upper arms',{x:25,y:90,width:350,height:355}],['forearms','Draw the forearms',{x:25,y:145,width:350,height:340}]
+  ].map(([id,title,focus],i)=>({id,title,number:i+1,focus}));
   const phases = [
     {id:'Head and directional lines',review:'The circle leaves room for the jaw. Compare the shoulder tilt with the parallel waist and hip lines.'},
     {id:'Connect the torso',review:'Check both sides from shoulder to waist, then both sides from waist to hip.'},
@@ -46,7 +46,7 @@ window.FashionCourse = {
       tip:{title:'Look for the relationship',body:tip},
       direction:'Follow the circle toward the square in the demonstrated direction.',
       startRegion:{radius:18},endRegion:{radius:20},animation:{duration:2600},
-      tolerance:{mouse:16,pen:20,touch:25,coverage:.65,order:.68},
+      tolerance:{mouse:22,pen:25,touch:30,coverage:.5,order:.5},
       feedback:{success:extra.success||'You connected the intended landmarks. Keep this relationship in mind.',retry:prompt},
       audio:null,video:{src:null,start:null,end:null,poster:null},
       teacherNote:'Sequence follows the teacher briefing and IMG_9095 / IMG_9096. Original geometry still awaits exact proportion approval.',
@@ -87,13 +87,13 @@ window.FashionCourse = {
   stroke('support-thigh-inner','thighs',P[2],'Supporting thigh · inner edge','M201 335 Q190 392 184 451',['hip','knee'],
     'Draw the other edge of the supporting thigh toward the same knee.', 'Leave width for the thigh. Do not replace the whole leg with one straight stick.');
   stroke('support-knee','thighs',P[2],'Describe the supporting knee','M164 451 Q174 465 184 451',['knee'],
-    'Use a small curved line to describe the knee.', 'The knee is a rounded transition between thigh and lower leg.',{tolerance:{mouse:10,pen:13,touch:17,coverage:.65,order:.5},startRegion:{radius:12},endRegion:{radius:12}});
+    'Use a small curved line to describe the knee.', 'The knee is a rounded transition between thigh and lower leg.',{tolerance:{mouse:16,pen:19,touch:23,coverage:.5,order:.4},startRegion:{radius:16},endRegion:{radius:16}});
   stroke('free-thigh-outer','thighs',P[2],'Other thigh · outer edge','M251 302 Q270 377 251 444',['hip','knee'],
     'Move to the other thigh. Follow its outer edge toward the knee.', 'Compare its direction with the supporting thigh; the two legs do not have identical outlines.');
   stroke('free-thigh-inner','thighs',P[2],'Other thigh · inner edge','M201 335 Q218 391 228 453',['hip','knee'],
     'Draw the inner edge of the other thigh.', 'Use its own knee position rather than mirroring the first leg.');
   stroke('free-knee','thighs',P[2],'Describe the other knee','M228 453 Q242 464 251 444',['knee'],
-    'Round the second knee with a short arc.', 'A simple arc describes the bend without adding too much detail.',{tolerance:{mouse:10,pen:13,touch:17,coverage:.65,order:.5},startRegion:{radius:12},endRegion:{radius:12}});
+    'Round the second knee with a short arc.', 'A simple arc describes the bend without adding too much detail.',{tolerance:{mouse:16,pen:19,touch:23,coverage:.5,order:.4},startRegion:{radius:16},endRegion:{radius:16}});
   stroke('support-calf-outer','calves',P[2],'Supporting lower leg · outer edge','M164 451 Q163 512 177 600',['knee','ankle'],
     'Begin with the lower leg that has less foreshortening. Draw toward the supporting ankle.', 'Keep the knee and supporting ankle relationship visible.',{overlays:['plumb']});
   stroke('support-calf-inner','calves',P[2],'Supporting lower leg · inner edge','M184 451 Q199 520 191 600',['knee','ankle'],
@@ -154,7 +154,7 @@ window.FashionCourse = {
     ],
     sound:{volume:.11,strokeNotes:[784,1046.5],phaseNotes:[659.25,783.99,1046.5],duration:.28,noteGap:.12},
     teacherVideo:{src:null,poster:null,rights:null,note:'Awaiting teacher recording; each stroke has editable start/end times.'},
-    assets:{svg:null,demonstrationImage:null,finalImage:null,video:null,audio:null,source:'Teacher references IMG_9095.HEIC and IMG_9096.HEIC, supplied September 24, 2026. Newly constructed paths; no photo-coordinate extraction.',rights:'Teacher-provided references; public media publication not included.'},
+    assets:{svg:null,demonstrationImage:null,finalImage:null,video:null,audio:null,source:'Teacher references IMG_9095.HEIC, IMG_9096.HEIC, IMG_9104.HEIC and IMG_9105.HEIC. Newly constructed paths; no photo-coordinate extraction.',rights:'Teacher-provided references; public media publication not included.'},
     pendingTeacherChecks:['Exact head units, guide heights and widths','Interpretation of lower-leg versus foot perspective order','Final weight-bearing pose and back-of-head marker','Step-matched video timestamps'],
     paper:{levels:['Full steps and proportion guides','Guides, joint markers and short prompts','Blank drawing space with a side reference'],prompts:['Locate the head, shoulder, waist and hip endpoints.','Circle + jaw; shoulders, waist, hips; connect the torso.','Supporting leg first. Neck and arms come last.']}
   };
