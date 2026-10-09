@@ -41,3 +41,18 @@ body:has(.side-panel) .sketch-watch-layout{grid-template-columns:minmax(0,1fr)}
  .side-panel{display:none}
  .app .step-card{padding:16px}
 }
+
+/* Keep the picture level with the teaching video, not the page header.
+   Relative positioning preserves the existing main-column width and moves
+   the actions underneath the reference. Both columns scroll together. */
+@media(min-width:1000px){
+ .app .content{column-gap:12px}
+ .side-panel.sketch-aligned-side{position:relative;top:var(--sketch-side-offset,0px);padding:0;min-height:0;align-self:start;background:transparent;border:0;box-shadow:none}
+ .sketch-aligned-side .sketch-final-reference{padding:0;margin:0;background:transparent;border:0;border-radius:12px;width:100%}
+ .sketch-aligned-side .sketch-reference-image img{width:100%;height:auto;max-height:var(--sketch-video-height,480px);object-fit:contain;object-position:top center}
+ .sketch-aligned-side .side-panel-title{margin-top:20px}
+}
+@media(min-width:1000px){
+ body:has(.side-panel) .sketch-watch-layout{width:calc(100% + 20px)}
+ body:has(.side-panel) .sketch-watch-layout>.sketch-demo-frame{max-width:none!important}
+}

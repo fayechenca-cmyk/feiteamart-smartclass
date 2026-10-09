@@ -29,6 +29,26 @@
  }
  window.FEISketchSupport={narrate,stop};
  const zoom=document.createElement('dialog');zoom.className='sketch-reference-zoom';zoom.innerHTML='<button type="button" aria-label="Close reference">✕ Close</button><img alt="Teacher’s finished drawing">';document.body.append(zoom);zoom.querySelector('button').onclick=()=>zoom.close();zoom.onclick=e=>{if(e.target===zoom)zoom.close()};
+ function alignReference(){
+  const side=document.querySelector('.side-panel');
+  if(!side)return;
+  const pair=[...placements].find(([layout,card])=>layout.isConnected&&card.parentElement===side);
+  const enabled=desktop.matches&&!!pair;
+  side.classList.toggle('sketch-aligned-side',enabled);
+  if(!enabled){side.style.removeProperty('--sketch-side-offset');return;}
+  const frame=pair[0].querySelector('.sketch-demo-frame');
+  const rect=frame.getBoundingClientRect();
+  const old=parseFloat(side.style.getPropertyValue('--sketch-side-offset'))||0;
+  const offset=Math.max(0,rect.top-side.getBoundingClientRect().top+old);
+  const value=Math.round(offset)+'px';
+  if(side.style.getPropertyValue('--sketch-side-offset')!==value)side.style.setProperty('--sketch-side-offset',value);
+  const height=Math.round(rect.height)+'px';
+  if(side.style.getPropertyValue('--sketch-video-height')!==height)side.style.setProperty('--sketch-video-height',height);
+ }
+ window.addEventListener('resize',()=>requestAnimationFrame(alignReference));
+ document.fonts?.ready.then(alignReference);
+ const sizeObserver=new ResizeObserver(()=>requestAnimationFrame(alignReference));
+ const content=document.querySelector('.content');if(content)sizeObserver.observe(content);
  function scan(){
   for(const [layout,card] of placements){
    if(!layout.isConnected){card.remove();placements.delete(layout);continue;}
@@ -58,7 +78,9 @@
    placements.set(layout,card);
    const sidePanel=document.querySelector('.side-panel');
    if(desktop.matches&&sidePanel)sidePanel.prepend(card);
+   sizeObserver.observe(video);
   });
+  alignReference();
  }
  let scheduled=false;new MutationObserver(()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{scheduled=false;scan()})}}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});window.addEventListener('pagehide',stop);scan();
