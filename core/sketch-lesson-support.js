@@ -10,7 +10,7 @@
  'lesson-1-sphere':['sphere','The Sphere'],'lesson-2-sphere-realworld':['apple','The Apple'],'lesson-3-cube':['cube','The Cube'],'lesson-4-giftbox':['box','Gift Box'],'lesson-5-cylinder':['cylinder','The Cylinder'],'lesson-6-cup':['cup','The Cup'],'lesson-7-cone':['cone','The Cone'],'lesson-8-icecream':['icecream','Ice Cream'],'lesson-9-intersecting':['intersecting','Intersecting Geometry'],'lesson-10-papercrane':['papercrane','Paper Crane'],'still-life-1a-star-balloon-structure':['balloon','Foil Star Balloon'],'still-life-2a-glass-structure':['glass','Glass Cup and Bottle'],'still-life-2b-glass-texture':['glass','Glass Cup and Bottle'],'still-life-4a-dog-structure':['dog','Dog']};
  const prep={'9b335ebd533cbfdab6a608255a1c202c':['prep-setup','Workspace setup'],'5fee79867ca52d1ec9b26654bb3bc0e5':['prep-tape','Taped paper'],'8bd402e0d2480692b41a65817038baf3':['prep-lines','Pencil marks and shading'],'cf7834125b757d86d0965702c6550202':['prep-warmup','Hand warm-up']};
  document.addEventListener('load',e=>{if(e.target.tagName==='IMG'&&/^(vp|sp|cyl)-image-/.test(e.target.id))e.target.style.opacity='1'},true);
- const manifest=fetch(new URL('narration.json',root)).then(r=>r.ok?r.json():{}).catch(()=>({}));
+ const manifest=fetch(new URL('narration.json?v=cone-key-20261008',root)).then(r=>r.ok?r.json():{}).catch(()=>({}));
  let audio=null,panel=null,request=0;
  function stop(){request++;if(audio){audio.pause();audio=null;}if(panel){const b=panel.querySelector('[data-pause-voice]');if(b)b.textContent='▶ Listen again';}panel=null;}
  async function narrate(p,target){

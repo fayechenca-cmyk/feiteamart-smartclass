@@ -1,0 +1,186 @@
+[
+  [
+    1,
+    40,
+    "Compare height and width",
+    "Keep the cone balanced around its centre.",
+    "Before adding detail, compare the height with the base width. Use light marks to set the limits. The tip should sit above the centre of the base, so neither side feels heavier.",
+    "axis"
+  ],
+  [
+    1,
+    100,
+    "Check both sides of the axis",
+    "Compare left and right before joining them.",
+    "Look at the small width marks on either side of the centre line. Compare those distances before drawing the sides. A small correction now is easier than repairing a shaded cone.",
+    "width"
+  ],
+  [
+    1,
+    130,
+    "Connect the tip to the base",
+    "Light straight guides first.",
+    "The teacher connects the top point to the two outer limits of the base. Keep these construction lines light. They establish the overall taper before the curved base is refined.",
+    "sides"
+  ],
+  [
+    1,
+    175,
+    "Round the base into an ellipse",
+    "Avoid sharp corners at the ends.",
+    "The circular base appears as an ellipse from this viewpoint. Notice the curve across the front. Round the ends gently instead of closing them into sharp points.",
+    "base"
+  ],
+  [
+    2,
+    10,
+    "Lift the construction marks",
+    "Erase gently; keep the useful outline.",
+    "The teacher is using an eraser to lift construction marks near the base. Remove only the guides you no longer need. Keep the curved outline readable and avoid rubbing hard enough to damage the paper.",
+    "base"
+  ],
+  [
+    2,
+    40,
+    "Check the front curve",
+    "One smooth curve, not a flat bottom.",
+    "Pause and compare the front edge of the base with your drawing. It curves smoothly across the form. Keep that curve consistent so the cone feels round and rests naturally on the surface.",
+    "base"
+  ],
+  [
+    2,
+    70,
+    "Place the light\u2013shadow boundary",
+    "The shadow narrows toward the tip.",
+    "This inner line maps where the cone turns away from the light. Notice how it approaches the tip. It is a guide for a tonal transition, not a dark outline to leave on the finished cone.",
+    "boundary"
+  ],
+  [
+    3,
+    20,
+    "Connect the cast shadow",
+    "The shadow begins at the contact point.",
+    "The teacher shades the cast shadow beside the base. Keep the shadow connected to the cone, rather than floating away from it. Build the tone with several light passes.",
+    "cast"
+  ],
+  [
+    3,
+    65,
+    "Establish the dark side",
+    "Keep the light area clear.",
+    "Build a clear dark area on the side that turns away from the light. Compare this with the still-light area. Keep the difference readable before adding softer middle tones.",
+    "dark"
+  ],
+  [
+    4,
+    70,
+    "Layer your pencil marks",
+    "Several light passes give you control.",
+    "Watch how the teacher returns to the same area with light strokes. Build the dark gradually instead of pressing hard in one pass. This keeps the paper workable and the tone easier to adjust.",
+    "dark"
+  ],
+  [
+    4,
+    160,
+    "Let the marks follow the taper",
+    "The form narrows as it rises.",
+    "Near the tip, the shaded area becomes narrower. Keep your marks controlled as they approach that point. Avoid a heavy knot of graphite at the top.",
+    "tip"
+  ],
+  [
+    4,
+    250,
+    "Build the middle tone",
+    "Bridge light and shadow gradually.",
+    "Now look between the light area and the darker band. These middle tones help the surface turn toward the shadow. Add them gradually so the cone does not look like two flat cut-out shapes.",
+    "middle"
+  ],
+  [
+    4,
+    370,
+    "Soften the transition",
+    "Blend with pencil strokes before rubbing.",
+    "Use overlapping light pencil marks to connect neighbouring tones. Keep the light area lighter, and let the transition become smoother. Softening a transition does not mean making the whole cone the same grey.",
+    "middle"
+  ],
+  [
+    4,
+    490,
+    "Keep the base grounded",
+    "Compare the contact edge with the side.",
+    "Look at the darker contact along the bottom. It helps the cone sit on the table. Keep this accent controlled, rather than outlining the entire cone with an equally dark line.",
+    "base"
+  ],
+  [
+    5,
+    70,
+    "Use the background to reveal the edge",
+    "Dark beside light makes the form clearer.",
+    "The teacher adds tone outside the light side of the cone. This contrast helps the light edge become visible without a thick outline. Keep the background marks outside the form.",
+    "background"
+  ],
+  [
+    5,
+    190,
+    "Keep broad marks consistent",
+    "Build an even surrounding tone.",
+    "Notice the broad diagonal strokes around the cone. Use a consistent direction and gentle pressure to establish the surrounding tone. Check that the cone still stands out clearly.",
+    "background"
+  ],
+  [
+    5,
+    310,
+    "Check the cast-shadow shape",
+    "Keep it attached; soften farther away.",
+    "Compare the cast shadow with the base. Its darkest contact stays near the object, while the outer area can soften. Avoid turning it into a hard, equally dark border.",
+    "cast"
+  ],
+  [
+    5,
+    490,
+    "Compare the whole value pattern",
+    "Light side, turning tone, dark side.",
+    "Step back for a moment. Compare the light area, the middle transition, and the shadow. The background should support those differences, not compete with the cone.",
+    "middle"
+  ],
+  [
+    5,
+    520,
+    "Blend gently with tissue",
+    "Soften graphite without losing the form.",
+    "Here the teacher uses tissue over a fingertip to soften the graphite. Use gentle pressure and short controlled movements. Keep a clean part of the tissue over light areas, so you do not drag dark graphite into them.",
+    "tissue"
+  ],
+  [
+    5,
+    640,
+    "Return to the pencil after blending",
+    "Restore the structure you still need.",
+    "After blending, return to the pencil to strengthen selected tones and edges. Do not redraw every outline. Restore only the details that help the form read clearly.",
+    "boundary"
+  ],
+  [
+    5,
+    820,
+    "Balance the background",
+    "Keep attention on the cone.",
+    "Compare the background on both sides. Adjust it gradually so it supports the lighter and darker parts of the cone. Keep checking the whole drawing instead of darkening one small area too much.",
+    "background"
+  ],
+  [
+    6,
+    10,
+    "Refine the turning tone",
+    "Small changes can make the curve clearer.",
+    "These final pencil touches refine the transition near the lower side. Compare neighbouring tones and make small changes. Preserve the difference between the lit surface and the shadow.",
+    "middle"
+  ],
+  [
+    6,
+    40,
+    "Finish the contact edge",
+    "A grounded base, not a heavy outline.",
+    "Check the contact at the base one last time. A controlled dark accent anchors the cone. Then step back and compare the tip, the curved side, and the ellipse as one complete form.",
+    "base"
+  ]
+]
