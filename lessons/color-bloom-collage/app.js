@@ -29,6 +29,12 @@
     const studio = lesson.querySelector('.studio');
     const done = lesson.querySelector('[data-done]');
     if (!studio || !done) return;
+    const frame = lesson.querySelector('iframe');
+    if (step === 0 && frame && !frame.src.includes('muted=true')) {
+      frame.src += '&muted=true';
+      frame.title = `${frame.title} · muted classroom video`;
+      lesson.querySelector('.video')?.insertAdjacentHTML('beforeend', '<span class="muted-video-label">Muted classroom video</span>');
+    }
     done.disabled = true;
 
     if (step === 0) {
