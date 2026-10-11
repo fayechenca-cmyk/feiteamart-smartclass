@@ -192,6 +192,14 @@ window.FashionCourse = {
   function makePose(id,title,number,focus,teacherNote){
     const lesson=structuredClone(baseLesson),warp=poseWarps[id];lesson.id=id;lesson.title=title;lesson.poseNumber=number;lesson.status='demo';lesson.estimatedMinutes=28;
     lesson.steps=lesson.steps.map(step=>({...step,path:step.path?pathPoints(step.path,warp,step):null,teacherNote,confirmation:{sequence:'teacher-directed',geometry:'provisional-reference-study'}}));
+    if(id==='fashion-walk'){
+      const cleanRightThigh={
+        'free-thigh-outer':'M241.4 302 L278.2 444',
+        'free-thigh-inner':'M205 335 L256.9 453',
+        'free-knee':'M256.9 453 Q268 462 278.2 444'
+      };
+      lesson.steps=lesson.steps.map(step=>cleanRightThigh[step.id]?{...step,path:cleanRightThigh[step.id],teacherNote:`${teacherNote} The right thigh uses a clean hip-to-knee line without the earlier outward bulge.`}:step);
+    }
     lesson.points=lesson.points.map(point=>({...point,...warp(point,{groupId:'landmarks'})}));
     lesson.balance={...lesson.balance,x:warp({x:lesson.balance.x,y:lesson.balance.bottom},{groupId:'balance'}).x};
     lesson.orientation={...lesson.orientation,title,sequence:[{id:'body',text:`This is Pose ${number}. First, look at the whole figure and find its balance.`},{id:'everyday',text:'Use the same nine-head guide and landmark order you already know.'},{id:'fashion',text:focus},{id:'today',text:'Keep the visual guidance on. Voice guidance is optional while you practise.'}],audio:null};
