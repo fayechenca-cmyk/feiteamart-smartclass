@@ -38,27 +38,14 @@
     done.disabled = true;
 
     if (step === 0) {
-      studio.insertAdjacentHTML('beforeend', choices([
-        {name:'Yellow',color:'#efcf4f',ok:true},{name:'Yellow-orange',color:'#eda447',ok:true},{name:'Red',color:'#df665b',ok:true},
-        {name:'Rose violet',color:'#a64091'},{name:'Green',color:'#53916b'},{name:'Blue',color:'#5365ad'}
-      ], 'Build the analogous family used in the video', true));
-      const selected = new Set();
-      lesson.querySelectorAll('[data-choice]').forEach(button => button.onclick = () => {
-        const i = Number(button.dataset.choice); button.classList.toggle('on');
-        button.classList.contains('on') ? selected.add(i) : selected.delete(i);
-        if (selected.size === 3) {
-          if ([...selected].every(n => n < 3)) { selected.forEach(n => lesson.querySelector(`[data-choice="${n}"]`).classList.add('good')); finishInteraction('Yes—yellow, yellow-orange and red move as one warm neighboring family.'); }
-          else lesson.querySelector('.check-msg').textContent = 'Look for the three warm colors used together in the first wash.';
-        }
-      });
+      studio.insertAdjacentHTML('beforeend', `<section class="micro-lab watch-palette" data-lab><h3>Analogous colors used in this wash</h3><p>Watch how one color flows into the next.</p><div class="watch-swatches">${[
+        ['Yellow','#efcf4f'],['Yellow-orange','#eda447'],['Red','#df544f'],['Rose','#cf3f78'],['Violet','#7d479e']
+      ].map(([name,color])=>`<span style="--c:${color}"><i></i><b>${name}</b></span>`).join('<em>→</em>')}</div><p class="check-msg">No tapping needed—use this as your visual guide while you watch.</p></section>`);
+      finishInteraction('No tapping needed—use this as your visual guide while you watch.');
     } else if (step === 1) {
-      studio.insertAdjacentHTML('beforeend', choices([{name:'Violet',color:'#7d479e',ok:true},{name:'Orange',color:'#e58b45'},{name:'Green',color:'#55916f'}], 'Which color can quiet the yellow layer?'));
-      lesson.querySelectorAll('[data-choice]').forEach((button, i) => button.onclick = () => {
-        lesson.querySelectorAll('[data-choice]').forEach(x => x.classList.remove('on'));
-        button.classList.add('on');
-        if (i === 0) { button.classList.add('good'); finishInteraction('Good choice. Violet is yellow’s complement. Use it lightly so the warm base still shows.'); }
-        else lesson.querySelector('.check-msg').textContent = 'Try the cool opposite family shown in the teacher video.';
-      });
+      const row = colors => colors.map(([name,color])=>`<span style="--c:${color}"><i></i><b>${name}</b></span>`).join('');
+      studio.insertAdjacentHTML('beforeend', `<section class="micro-lab side-palettes" data-lab><h3>Two sides, two color directions</h3><div class="palette-sides"><div><strong>LEFT SIDE · COOLER LAYER</strong><div class="watch-swatches">${row([['Rose violet','#a64091'],['Red','#d94d57'],['Blue-violet','#654da1'],['Blue','#496daf']])}</div></div><div><strong>RIGHT SIDE · WARMER, DEEPER LAYER</strong><div class="watch-swatches">${row([['Deep yellow','#d2aa37'],['Yellow-orange','#e59843'],['Red','#d94d57'],['Rose violet','#a64091']])}</div></div></div><p class="check-msg">Watch where the cool family and warm family stay transparent over the first wash.</p></section>`);
+      finishInteraction('Watch where the cool family and warm family stay transparent over the first wash.');
     } else if (step === 2) {
       studio.insertAdjacentHTML('beforeend', `<section class="micro-lab" data-lab><h3>Keep the first layer visible</h3><p>Move the slider until both the warm base and cool upper layer can be seen.</p><div class="wash-lab"><span>transparent watercolor layers</span></div><input data-layer-range type="range" min="0" max="100" value="75" aria-label="Upper color layer strength"><p class="check-msg"></p></section>`);
       const range = lesson.querySelector('[data-layer-range]');
