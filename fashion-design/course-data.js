@@ -3,7 +3,7 @@
 window.FashionCourse = {
   id: 'fashion-design', title: 'Fashion Design', version: 2,
   units: [
-    {id:'figure',title:'Fashion Figure',description:'Figure proportions and movement',lessons:[{id:'standing-demo',title:'Pose 1 · Basic Standing',status:'demo'},{id:'weight-shift',title:'Pose 2 · Weight Shift',status:'reference-received'},{id:'fashion-walk',title:'Pose 3 · Fashion Walk',status:'reference-received'},{id:'relaxed-asymmetry',title:'Pose 4 · Relaxed Asymmetry',status:'reference-received'}]},
+    {id:'figure',title:'Fashion Figure',description:'Figure proportions and movement',lessons:[{id:'standing-demo',title:'Pose 1 · Basic Standing',status:'demo'},{id:'weight-shift',title:'Pose 2 · Weight Shift',status:'demo'},{id:'fashion-walk',title:'Pose 3 · Fashion Walk',status:'demo'},{id:'relaxed-asymmetry',title:'Pose 4 · Relaxed Asymmetry',status:'demo'}]},
     {id:'close-fitting',title:'Close-fitting Clothing',description:'Explore swimwear, camisoles, one-piece and two-piece outfits, and leggings. Compare body and clothing contours.',status:'planned'},
     {id:'everyday',title:'Everyday Clothing',description:'Draw T-shirts, long sleeves, shorts and skirts. Notice fabric thickness and the space between clothing and skin.',status:'planned'},
     {id:'folds',title:'Fabric and Folds',description:'Begin with a hanging towel, then explore folds at the underarm, elbow, waist, hip and knee.',status:'planned'},
@@ -177,4 +177,30 @@ window.FashionCourse = {
     pendingTeacherChecks:['Exact head units, guide heights and widths','Interpretation of lower-leg versus foot perspective order','Final weight-bearing pose and back-of-head marker','Step-matched video timestamps'],
     paper:{levels:['Full steps and proportion guides','Guides, joint markers and short prompts','Blank drawing space with a side reference'],prompts:['Locate the head, shoulder, waist and hip endpoints.','Circle + jaw; shoulders, waist, hips; connect the torso.','Supporting leg first. Neck and arms come last.']}
   };
+  const baseLesson=window.FashionLesson;
+  function pathPoints(d,warp,step){
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);
+    const length=path.getTotalLength(),count=Math.max(12,Math.ceil(length/6)),points=Array.from({length:count+1},(_,i)=>warp(path.getPointAtLength(length*i/count),step));
+    return points.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+  }
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+  const poseWarps={
+    'weight-shift':(p,step)=>{let x=p.x,y=p.y;if(y<320)x+=10-(y-160)*.035;if(y>=300){const side=p.x<205?-1:1,amount=(y-300)/350;if(side>0)x-=42*amount;else x-=8*amount;}if(step.groupId==='upper-arms'||step.groupId==='forearms')x+=(p.x<200?-8:8);return{x:clamp(x,40,360),y};},
+    'fashion-walk':(p,step)=>{let x=p.x,y=p.y;if(y<320)x-=8;if(y>=300){const amount=(y-300)/350;if(p.x<205)x-=34*amount;else x+=46*amount;}if(step.groupId==='upper-arms'||step.groupId==='forearms')x+=(p.x<200?18:-12);return{x:clamp(x,32,368),y};},
+    'relaxed-asymmetry':(p,step)=>{let x=p.x,y=p.y;if(y<320)x+=8*Math.sin((y-40)/130);if(y>=300){const amount=(y-300)/350;x+=(p.x<205?-55:55)*amount;}if(step.groupId==='upper-arms'||step.groupId==='forearms'){x+=(p.x<200?-30:24);y-=p.x<200?24:8;}return{x:clamp(x,25,375),y:clamp(y,24,675)};}
+  };
+  function makePose(id,title,number,focus,teacherNote){
+    const lesson=structuredClone(baseLesson),warp=poseWarps[id];lesson.id=id;lesson.title=title;lesson.poseNumber=number;lesson.status='demo';lesson.estimatedMinutes=28;
+    lesson.steps=lesson.steps.map(step=>({...step,path:step.path?pathPoints(step.path,warp,step):null,teacherNote,confirmation:{sequence:'teacher-directed',geometry:'provisional-reference-study'}}));
+    lesson.points=lesson.points.map(point=>({...point,...warp(point,{groupId:'landmarks'})}));
+    lesson.balance={...lesson.balance,x:warp({x:lesson.balance.x,y:lesson.balance.bottom},{groupId:'balance'}).x};
+    lesson.orientation={...lesson.orientation,title,sequence:[{id:'body',text:`This is Pose ${number}. First, look at the whole figure and find its balance.`},{id:'everyday',text:'Use the same nine-head guide and landmark order you already know.'},{id:'fashion',text:focus},{id:'today',text:'Keep the visual guidance on. Voice guidance is optional while you practise.'}],audio:null};
+    lesson.proportionGrid={...lesson.proportionGrid,audio:null};lesson.confirmation={approved:false,label:'Teacher reference received · Practice geometry under review',note:'The pose follows the teacher reference as an original provisional construction. Exact demonstration paths still await teacher approval.'};
+    lesson.assets={...lesson.assets,demonstrationImage:'assets/references/four-pose-teacher-reference.jpg',source:'Teacher reference IMG_9104.HEIC; provisional paths are newly constructed and do not trace photo coordinates.'};
+    return lesson;
+  }
+  window.FashionLessons=[baseLesson,
+    makePose('weight-shift','Pose 2 · Weight Shift',2,'Notice which leg carries the weight and how the hips respond.','Pose 2 follows the second teacher pose; final landmarks and paths await confirmation.'),
+    makePose('fashion-walk','Pose 3 · Fashion Walk',3,'Compare the crossing leg directions while keeping the torso clear.','Pose 3 follows the third teacher pose; final landmarks and paths await confirmation.'),
+    makePose('relaxed-asymmetry','Pose 4 · Relaxed Asymmetry',4,'Look for the wider stance and different arm directions before drawing.','Pose 4 follows the fourth teacher pose; final landmarks and paths await confirmation.')];
 })();
