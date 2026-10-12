@@ -746,41 +746,54 @@ const ZODIAC_ANIMALS = [
   // Rat-only (see the Rat-only Materials Kit gate in buildStages and
   // the Rat-only free preview in isStepPaywalled above). Titles are
   // provisional English, kept in the data so Faye can edit them.
-  // Steps 4-11 have no recorded video yet (videoUrl:null renders the
-  // existing "coming soon" fallback) — no content invented for them.
   //
-  // FLAGGED, not resolved here — Faye's own word for word description
-  // split "hooves" across two mentions and "leg practice" once; this
-  // reads it as one leg-practice step (6) feeding one legs-drawing step
-  // (7), then a separate hooves step (8). Please confirm that 3-step
-  // split is right.
-  // FLAGGED, not resolved here — Faye listed only a closing inscription
-  // (step 12 below), not a separate Seal step like Rat's step 14.
-  // Built exactly as listed; confirm whether Ox should also get a Seal.
+  // RESOLVED (was flagged): legs/hooves confirmed as a 3-step split
+  // (6 practice, 7 legs, 8 hooves). Inscription and Seal confirmed
+  // combined into one closing step (12), not split like Rat's two
+  // separate Signature/Seal steps.
+  //
+  // REORDER NOTE — Faye's videos arrived in the teacher's own recording
+  // order (draw the part, then practice it). Platform convention is
+  // practice BEFORE the drawing step it supports (same rule as Rat's
+  // Ear/Torso/Tail/Claw swaps), so steps 4-7 below are reordered from
+  // that recording order: practice(4)->body(5), practice(6)->legs(7).
+  // To put a pair back in the teacher's original draw-then-practice
+  // order, swap just that pair's two stepNumber values (and move the
+  // supportsStep target to match) — nothing else references step
+  // position, same as the Rat §7/§8 swaps above.
   {
     id: 'ox', label: 'Ox', chineseCharacter: '牛',
     steps: [
       // A single brush stroke practicing the brush's three parts — belly
       // (笔肚), root (笔根), tip (笔尖) — and the mark each one makes. A
       // practice, not a drawing.
-      { stepNumber:1,  title:'Practice: Head Brushwork', stepType:'practice',  videoUrl:'93dd42af8ea76fdeb5219a66b1e7a6ee', posterUrl:null, supportsStep:2 },
+      { stepNumber:1,  title:'Practice: Head Brushwork',  stepType:'practice',  videoUrl:'93dd42af8ea76fdeb5219a66b1e7a6ee', posterUrl:null, supportsStep:2 },
       // The head built up in ink: basic shape and bone structure only —
       // not finished/detailed yet, that comes later at step 9.
-      { stepNumber:2,  title:'Draw the Head',            stepType:'technique', videoUrl:'8cce0e9e92d1d7b4a84a131f7f93b47a', posterUrl:null },
+      { stepNumber:2,  title:'Draw the Head',              stepType:'technique', videoUrl:'8cce0e9e92d1d7b4a84a131f7f93b47a', posterUrl:null },
       // How to draw the neck.
-      { stepNumber:3,  title:'Draw the Neck',             stepType:'technique', videoUrl:'2598aa3749798693e67f14777d757c42', posterUrl:null },
-      { stepNumber:4,  title:'Practice: Torso Brushwork', stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:5 },
-      { stepNumber:5,  title:'Draw the Torso',            stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:6,  title:'Practice: Leg Brushwork',   stepType:'practice',  videoUrl:null, posterUrl:null, supportsStep:7 },
-      { stepNumber:7,  title:'Draw the Legs',             stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:8,  title:'Draw the Hooves',           stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:9,  title:'Head Details',              stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:10, title:'Outline',                   stepType:'technique', videoUrl:null, posterUrl:null },
-      { stepNumber:11, title:'Strengthen the Color',      stepType:'technique', videoUrl:null, posterUrl:null },
-      // optional:true — same pattern as Rat's Signature/Seal (step
-      // 728 above): the main course does not require writing on the
-      // painting, so this is skippable with no effect on completion.
-      { stepNumber:12, title:'Inscription (题款)',        stepType:'technique', videoUrl:null, posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to inscribe your painting." }
+      { stepNumber:3,  title:'Draw the Neck',               stepType:'technique', videoUrl:'2598aa3749798693e67f14777d757c42', posterUrl:null },
+      // Practice for the torso brushwork and structure; a practice, not a drawing.
+      { stepNumber:4,  title:'Practice: Torso Brushwork',  stepType:'practice',  videoUrl:'03f029b8a49cdbed12264f7e9d3c687e', posterUrl:null, supportsStep:5 },
+      // How to draw the ox's body and posture.
+      { stepNumber:5,  title:'Draw the Body',               stepType:'technique', videoUrl:'ce0c033c614294756f7b3b819129b56d', posterUrl:null },
+      // Practice for the leg brushwork; a practice, not a drawing.
+      { stepNumber:6,  title:'Practice: Leg Brushwork',    stepType:'practice',  videoUrl:'0fc8f62170451b8feb58c09eec7a5047', posterUrl:null, supportsStep:7 },
+      // How to draw the legs.
+      { stepNumber:7,  title:'Draw the Legs',               stepType:'technique', videoUrl:'2778cc99266c242ca7a8b834e8ced13e', posterUrl:null },
+      // How to draw the hooves.
+      { stepNumber:8,  title:'Draw the Hooves',             stepType:'technique', videoUrl:'be080c564e2969030341cb4e67e7491d', posterUrl:null },
+      // How to draw the head details.
+      { stepNumber:9,  title:'Head Details',                stepType:'technique', videoUrl:'ba534381b3ef612fb3d93e47e296b76f', posterUrl:null },
+      // Outlining.
+      { stepNumber:10, title:'Outline',                     stepType:'technique', videoUrl:'148ccddde0f53523ca6b396d4231ec07', posterUrl:null },
+      // Strengthening the color.
+      { stepNumber:11, title:'Strengthen the Color',        stepType:'technique', videoUrl:'af2eb3a41275101f25e09c81d30ca48f', posterUrl:null },
+      // The inscription and the seal (题款 and 印章), combined into one
+      // closing step. optional:true — same pattern as Rat's Signature/
+      // Seal (step 728 above): the main course does not require writing
+      // on the painting, so this is skippable with no effect on completion.
+      { stepNumber:12, title:'Inscription & Seal',          stepType:'technique', videoUrl:'564b272b417cb756f2961f73533b28c0', posterUrl:null, optional:true, optionalNote:"Not needed to finish the course. Watch it if you'd like to inscribe and stamp your painting." }
     ]
   }
 ];
