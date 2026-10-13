@@ -104,6 +104,11 @@ h2{font-size:clamp(30px,4vw,50px);line-height:1.08;margin:8px 0 12px}
 .voice-note{padding:13px;border-radius:17px;background:#2a2631;color:#fff}
 .voice-note b,.voice-note span{display:block}
 .voice-note span{font-size:10px;opacity:.7;margin-top:4px}
+.audio-guide-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.listen-guide{appearance:none;border:0;border-radius:999px;background:#2f2940;color:#fff;padding:10px 14px;font:800 10px Montserrat;letter-spacing:.04em;cursor:pointer;box-shadow:0 7px 16px rgba(40,32,56,.16)}
+.listen-guide.playing{background:var(--violet)}
+.listen-guide.light{margin-top:12px;background:#fff;color:#2a2631;box-shadow:none}
+.audio-guide-controls small{font:600 10px 'Open Sans',sans-serif;color:var(--muted)}
 .final-portraits{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
 .final-portraits>div{overflow:hidden;border-radius:24px;background:#fff;border:1px solid var(--line)}
 .final-portraits b{display:block;padding:12px 15px;font:800 11px Montserrat}
