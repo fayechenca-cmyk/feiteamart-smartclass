@@ -229,7 +229,16 @@
     if (!url) return "";
     const id = parseYouTubeId(url);
     if (!id) return url; // might be another provider
-    return `https://www.youtube.com/embed/${id}`;
+    const source = new URL(url);
+    const start = source.searchParams.get("start") || source.searchParams.get("t");
+    const seconds = /^\d+s?$/.test(start || "") ? parseInt(start, 10) : 0;
+    return `https://www.youtube.com/embed/${id}${seconds ? `?start=${seconds}` : ""}`;
+  }
+
+  function escapeMediaText(value) {
+    return String(value || "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
   }
 
   // ---------- views
@@ -364,6 +373,7 @@
   function closeModal() {
     hide($("#fei-modal"));
     $("#m-video-box").innerHTML = "";
+    $("#m-video-credit")?.replaceChildren();
     $("#m-feedback").innerHTML = "";
   }
 
@@ -382,6 +392,8 @@
       videoBox.innerHTML = `
         <iframe width="100%" height="100%"
           src="${v}"
+          title="${escapeMediaText(lesson.videoSource?.title || lesson.title)}"
+          referrerpolicy="strict-origin-when-cross-origin"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -392,20 +404,58 @@
       videoBox.style.display = "none";
     }
 
+    let videoCredit = $("#m-video-credit");
+    if (!videoCredit) {
+      videoCredit = document.createElement("div");
+      videoCredit.id = "m-video-credit";
+      videoCredit.className = "fei-media-credit";
+      videoBox.after(videoCredit);
+    }
+    const source = lesson.videoSource;
+    videoCredit.innerHTML = source ? `
+      <strong>${escapeMediaText(source.title)}</strong>
+      <span>By <a href="${escapeMediaText(source.channelUrl)}" target="_blank" rel="noopener">${escapeMediaText(source.channel)}</a></span>
+      <a href="${escapeMediaText(source.watchUrl)}" target="_blank" rel="noopener">Open on YouTube ↗</a>
+      ${source.note ? `<p>${escapeMediaText(source.note)}</p>` : ""}
+      <small>If the player is unavailable in your region or browser, try the original YouTube page.</small>
+      ${(lesson.companionVideos || []).map(video => `<p>Also watch: <a href="${escapeMediaText(video.watchUrl)}" target="_blank" rel="noopener">${escapeMediaText(video.title)}</a> · ${escapeMediaText(video.channel)}</p>
+        <div class="fei-video-container"><iframe width="100%" height="100%" loading="lazy"
+          src="${escapeMediaText(normalizeVideoUrl(video.watchUrl))}" title="${escapeMediaText(video.title)}"
+          referrerpolicy="strict-origin-when-cross-origin" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`).join("")}
+    ` : "";
+    videoCredit.hidden = !source;
+
     // lecture
     $("#m-lecture-content").innerHTML = lesson.lecture || "";
 
     // images
-    $("#m-images").innerHTML = (lesson.images || [])
-      .map(src => `
-        <div class="fei-img-box">
-          <img src="${src}" loading="lazy" referrerpolicy="no-referrer"
-               onerror="this.style.opacity='0.2';" />
-        </div>
-      `).join("");
+    $("#m-images").innerHTML = (lesson.galleryNote ? `<p class="fei-gallery-note">${escapeMediaText(lesson.galleryNote)}</p>` : "") +
+      (lesson.images || []).map(image => {
+        const item = typeof image === "string" ? { src: image, title: lesson.title } : image;
+        return `<figure class="fei-gallery-item">
+          <div class="fei-img-box"><img src="${escapeMediaText(item.src)}" alt="${escapeMediaText(item.title)}" loading="lazy" /></div>
+          ${item.sourceUrl ? `<figcaption>
+            <strong>${escapeMediaText(item.title)}</strong>
+            <span>${escapeMediaText(item.credit)}</span>
+            <a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">Image source ↗</a> ·
+            <a href="${escapeMediaText(item.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(item.license)}</a>
+            <small>${escapeMediaText(item.changes)}</small>
+          </figcaption>` : ""}
+        </figure>`;
+      }).join("");
+    $("#m-images").querySelectorAll("img").forEach(img => {
+      img.addEventListener("error", () => {
+        img.hidden = true;
+        const message = document.createElement("p");
+        message.className = "fei-image-fallback";
+        message.textContent = "Image could not load. Open the image source below to view it.";
+        img.parentElement.appendChild(message);
+      }, { once: true });
+    });
 
     // resources
-    $("#m-resources").innerHTML = (lesson.resources || [])
+    $("#m-resources").innerHTML = [...(lesson.artworkLinks || []), ...(lesson.resources || [])]
       .map(r => `<a href="${r.url}" target="_blank" rel="noopener" class="fei-resource-link">📚 ${r.name} ➔</a>`)
       .join("");
 

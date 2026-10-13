@@ -470,8 +470,20 @@
 .fei-img-box img{
   width:100%;
   height:100%;
-  object-fit: cover;
+  object-fit: contain;
 }
+
+.fei-gallery-item { margin:0; min-width:0; }
+.fei-gallery-item figcaption { padding:12px 2px 18px; font-size:12px; line-height:1.6; overflow-wrap:anywhere; }
+.fei-gallery-item figcaption strong, .fei-gallery-item figcaption span, .fei-gallery-item figcaption small { display:block; }
+.fei-gallery-item a, .fei-media-credit a { color:#355946; text-underline-offset:3px; }
+.fei-gallery-item small, .fei-media-credit small { color:#686868; }
+.fei-gallery-note { grid-column:1 / -1; font-size:13px; line-height:1.7; margin:0 0 6px; }
+.fei-image-fallback { padding:24px; font-size:13px; line-height:1.6; }
+.fei-media-credit { margin:-6px 0 24px; font-size:13px; line-height:1.65; }
+.fei-media-credit > strong, .fei-media-credit > span, .fei-media-credit > small { display:block; }
+.fei-media-credit p { margin:8px 0; }
+@media (max-width:600px) { .fei-gallery-grid { grid-template-columns:1fr; } }
 
 .fei-sub-heading{
   font-family: var(--font-head);
