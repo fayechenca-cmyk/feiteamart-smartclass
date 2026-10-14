@@ -2085,6 +2085,10 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   
   <!-- Path nodes will be rendered here -->
   <div class="path-nodes" id="path-nodes"></div>
+  <dialog id="fs-level2-intro-dialog" class="fs-level-intro-dialog" aria-label="Level 2 introduction: from forms to objects">
+    <button class="back-btn" type="button" onclick="document.getElementById('fs-level2-intro-dialog').close()">← Back to your path</button>
+    <video id="fs-level2-intro-video" controls playsinline preload="none" poster="assets/form-structure-intro/poster.jpg" src="assets/form-structure-intro/level2-intro-v1.mp4"></video>
+  </dialog>
   
   <!-- Foundation A certificate footer -->
   <div class="badge-footer" id="badge-footer">
@@ -3484,11 +3488,49 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   // RENDER DRAWING PATH (Foundation A unlock map)
   // ═══════════════════════════════════════════════════════════
   
+  // Level 2 intro film (Oct 2026): sits under the Level 2 divider, between
+  // Intersecting Geometry and Gift Box. Open to everyone; "watched" is a
+  // per-browser convenience only, so storage failures are ignored.
+  const FS_L2_INTRO_KEY = 'fei_fs_level2_intro_watched';
+  function fsLevel2IntroWatched() {
+    try { return localStorage.getItem(FS_L2_INTRO_KEY) === '1'; } catch (e) { return false; }
+  }
+  function insertLevel2Intro(container) {
+    const divider = [...container.querySelectorAll('.path-group-divider')]
+      .find(d => d.textContent.trim().startsWith('Level 2'));
+    if (!divider) return;
+    const watched = fsLevel2IntroWatched();
+    divider.insertAdjacentHTML('afterend',
+      `<button type="button" class="path-node level-intro ${watched ? 'done' : ''}" onclick="openLevel2Intro()">` +
+      `<div class="node-icon"><img src="assets/form-structure-intro/poster.jpg" alt="Level 2 introduction film" loading="lazy">` +
+      `${watched ? '<b class="lesson-check" aria-label="Watched">✓</b>' : '<b class="level-intro-play" aria-hidden="true">▶</b>'}</div>` +
+      `<div class="node-info"><div class="node-kicker">Level 2 intro · 1:33</div>` +
+      `<div class="node-title">From Forms to Objects</div>` +
+      `<div class="node-tag">${watched ? 'Watched · Play again anytime' : 'Watch before the Gift Box'}</div></div>` +
+      `<div class="node-arrow">${watched ? '↻' : '▶'}</div></button>`);
+  }
+  window.openLevel2Intro = function () {
+    const dialog = document.getElementById('fs-level2-intro-dialog');
+    const video = document.getElementById('fs-level2-intro-video');
+    if (!dialog.dataset.wired) {
+      dialog.dataset.wired = '1';
+      dialog.addEventListener('close', () => video.pause());
+      video.addEventListener('ended', () => {
+        try { localStorage.setItem(FS_L2_INTRO_KEY, '1'); } catch (e) {}
+        dialog.close();
+        renderDrawingPath();
+      });
+    }
+    dialog.showModal();
+    video.play().catch(() => {});
+  };
+
   function renderDrawingPath() {
     const completed = userProfile.completedLessons || [];
     const container = document.getElementById('path-nodes');
     
     container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed, '', true, (l) => (FOUNDATION_A_LEVELS.find(lv => lv.level === l.level) || {}).label || null);
+    insertLevel2Intro(container);
     const next = pickNextLesson();
     document.getElementById('sketch-form-hero').innerHTML = SketchMap.hero('Form and Structure','Start with a shape. Build your skills. Make something yours.','basic_sketch') + `<section class="sketch-current"><span class="sketch-eyebrow">${next?'Your next practice':'All sessions complete'}</span><h2>${next?next.title:'Your foundation is taking shape'}</h2><p>${completed.filter(id=>FOUNDATION_A_PATH.some(l=>l.id===id)).length}/${FOUNDATION_A_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?`<a class="sketch-action" href="${next.href}" onclick="handleResumeClick(event, '${next.id}', '${next.href}')">Continue practice →</a>`:''}</section>`;
 
