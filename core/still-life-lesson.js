@@ -68,8 +68,18 @@
     // intentional, publishing what exists rather than waiting for
     // the full set.
     { id: 'still-life-4a-dog-structure', title: 'Dog', href: 'lessons/still-life-4a-dog-structure/', ready: true },
-    { id: 'still-life-5a-tree-structure', title: 'Tree · Structure & Composition', href: 'lessons/still-life-5a-tree-structure/', ready: false },
-    { id: 'still-life-5b-tree-texture', title: 'Tree · Texture & Finish', href: 'lessons/still-life-5b-tree-texture/', ready: false }
+    // Wooden Photo Frame replaces the Tree placeholder in this lineup
+    // position (per Faye — same object category/wood-grain texture
+    // focus as originally planned, different object). Same single-entry
+    // consolidation as Balloon/Glass/Dog above: the old still-life-5a-
+    // tree-structure/still-life-5b-tree-texture stub pair (both
+    // ready:false, never built past a 26-line StillLifeLesson.init()
+    // placeholder) is retired and its directories removed, matching how
+    // still-life-1b-*/still-life-2b-* were retired when Balloon/Glass
+    // were built. Built incrementally like Dog: 3 steps exist today
+    // (structure and composition, tone, finish); a texture step will be
+    // inserted between tone and finish when that footage arrives.
+    { id: 'still-life-5a-frame-structure', title: 'Wooden Photo Frame', href: 'lessons/still-life-5a-frame-structure/', ready: true }
   ];
   // The 5 paintings, each pairing its A/B lesson ids — used for the
   // "painting complete" celebration tier and the landing page's grouping.
@@ -78,7 +88,9 @@
     { id: 'glass', title: 'Glass Cup and Bottle', materialFocus: 'Transparency, glass', lessonIds: ['still-life-2a-glass-structure'] },
     { id: 'pillow', title: 'Pillow', materialFocus: 'Fabric, soft folds', lessonIds: ['still-life-3a-pillow-structure', 'still-life-3b-pillow-texture'] },
     { id: 'dog', title: 'Dog', materialFocus: 'Fur, animal hair', lessonIds: ['still-life-4a-dog-structure'] },
-    { id: 'tree', title: 'Tree', materialFocus: 'Bark, organic form', lessonIds: ['still-life-5a-tree-structure', 'still-life-5b-tree-texture'] }
+    // materialFocus wording is proposed -- confirm/adjust with Faye, same
+    // flag as the id/title choice on the lineup entry above.
+    { id: 'frame', title: 'Wooden Photo Frame', materialFocus: 'Wood grain, framed edges', lessonIds: ['still-life-5a-frame-structure'] }
   ];
   const FOUNDATION_STILL_LIFE_LANDING_HREF = 'lessons/still-life/';
 
