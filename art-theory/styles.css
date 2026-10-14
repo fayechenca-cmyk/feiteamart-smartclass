@@ -1,365 +1,51 @@
-/* FEI Art History Journey — styles.css */
-/* Keep scoped under #fei-art-system */
-
-#fei-art-system{
-  --c-bg-grad: linear-gradient(90deg, #E2D1F9 0%, #9BEBEB 100%);
-  --c-text: #1a1a1a;
-  --font-ui: 'Montserrat', sans-serif;
-  --font-head: 'Playfair Display', serif;
-
-  position: relative;
-  width: 100%;
-  height: 850px;
-  background: var(--c-bg-grad);
-  font-family: var(--font-ui);
-  color: var(--c-text);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.1);
-}
-
-#fei-art-system *{ box-sizing: border-box; }
-
-.fei-hidden{ display:none !important; }
-
-/* ---------- fullscreen layers */
-.fei-fullscreen{
-  position:absolute;
-  inset:0;
-  z-index:100;
-  background: var(--c-bg-grad);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-/* COVER background (replace url if needed) */
-#fei-cover.fei-fullscreen{
-  background:
-    linear-gradient(90deg, rgba(226,209,249,0.78) 0%, rgba(155,235,235,0.78) 100%),
-    url("https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/699f5c6b1b0802987e7968b0_ChatGPT%20Image%20Feb%2025%2C%202026%2C%2012_32_12%20PM.png")
-    center/cover no-repeat;
-}
-
-.fei-login-card{
-  background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(255,255,255,0.85);
-  padding: 46px;
-  border-radius: 14px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.12);
-  text-align:center;
-  width: min(420px, 92%);
-  backdrop-filter: blur(10px);
-}
-
-.fei-brand-tag{
-  font-size: 11px;
-  letter-spacing: 2px;
-  color:#666;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.fei-login-card h1{
-  font-family: var(--font-head);
-  font-size: 34px;
-  margin: 0 0 10px 0;
-  color:#000;
-}
-
-.fei-cover-sub{
-  margin:0 0 18px 0;
-  font-size: 12px;
-  color:#666;
-}
-
-.fei-login-form label{
-  display:block;
-  text-align:left;
-  font-size: 12px;
-  font-weight: 700;
-  color:#111;
-  margin: 12px 0 8px;
-}
-
-.fei-login-form input{
-  width:100%;
-  padding: 14px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: var(--font-ui);
-}
-
-.fei-btn-black{
-  background:#000;
-  color:#fff;
-  border:none;
-  width:100%;
-  padding: 14px 15px;
-  font-weight: 800;
-  cursor:pointer;
-  border-radius: 10px;
-  font-size: 12px;
-  letter-spacing: 1px;
-  margin-top: 12px;
-}
-.fei-btn-black:hover{ background:#333; }
-.fei-btn-black.full{ width:100%; }
-
-/* ---------- Track select */
-.fei-track-panel{
-  width: min(760px, 92%);
-  background: rgba(255,255,255,0.90);
-  border: 1px solid rgba(255,255,255,0.9);
-  border-radius: 16px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.10);
-  padding: 28px;
-  backdrop-filter: blur(12px);
-}
-
-.fei-track-title{
-  font-family: var(--font-head);
-  font-size: 26px;
-  margin: 6px 0 8px;
-  color:#000;
-}
-
-.fei-track-desc{
-  margin: 0 0 14px;
-  color:#666;
-  font-size: 12px;
-}
-
-.fei-track-grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.fei-track-card{
-  text-align:left;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #eee;
-  background:#fff;
-  cursor:pointer;
-  transition: .2s;
-}
-
-.fei-track-card:hover{
-  border-color:#000;
-  transform: translateY(-2px);
-}
-
-.fei-track-card .t{
-  font-weight: 900;
-  font-size: 13px;
-  color:#000;
-  margin-bottom: 5px;
-}
-
-.fei-track-card .s{
-  font-size: 11px;
-  color:#666;
-  line-height: 1.4;
-}
-
-.fei-track-card .mini{
-  margin-top: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  color:#111;
-  opacity: .75;
-}
-
-.fei-link-reset{
-  background:none;
-  border:none;
-  font-size: 11px;
-  color:#000;
-  cursor:pointer;
-  text-decoration: underline;
-  margin-top: 14px;
-}
-
-/* ---------- Header */
-.fei-header{
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height: 74px;
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,0.35);
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  padding: 0 18px;
-  z-index: 10;
-}
-
-.fei-user-badge{ display:flex; align-items:center; gap:10px; }
-
-.fei-avatar{
-  width: 36px; height: 36px;
-  background:#000;
-  color:#fff;
-  border-radius: 50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size: 10px;
-  font-weight: 900;
-}
-
-.fei-user-text{ display:flex; flex-direction: column; gap:2px; }
-
-#display-name{ font-weight: 900; font-size: 13px; color:#000; }
-.fei-progress-pill{ font-size: 10px; color:#555; }
-
-.fei-track-pill{
-  display:inline-block;
-  width: fit-content;
-  font-size: 10px;
-  font-weight: 800;
-  color:#111;
-  opacity: .75;
-}
-
-.fei-header-actions{ display:flex; gap:10px; align-items:center; }
-
-/* ---------- Map board (NO SCROLL, auto scale) */
-.fei-map-scroll{
-  width:100%;
-  height:100%;
-  padding-top: 86px;
-  overflow: hidden; /* no scroll */
-}
-
-.fei-board-viewport{
-  height: calc(100% - 0px);
-  padding: 14px 14px 18px;
-}
-
-.fei-board-wrap{
-  transform-origin: top center;
-  width: 100%;
-  display:flex;
-  justify-content:center;
-}
-
-.fei-board{
-  width: min(980px, 100%);
-  display:grid;
-  grid-template-columns: repeat(5, minmax(150px, 1fr));
-  gap: 14px;
-  padding: 18px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.35);
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
-}
-
-/* responsive columns */
-@media (max-width: 900px){
-  .fei-board{ grid-template-columns: repeat(4, minmax(150px, 1fr)); }
-}
-@media (max-width: 640px){
-  .fei-track-grid{ grid-template-columns: 1fr; }
-  .fei-board{ grid-template-columns: repeat(3, minmax(140px, 1fr)); }
-}
-
-.fei-node-card{
-  background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(255,255,255,0.95);
-  border-radius: 12px;
-  padding: 14px 14px 12px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
-  cursor: pointer;
-  position: relative;
-  transition: transform .2s, box-shadow .2s;
-  min-height: 92px;
-}
-
-.fei-node-card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(0,0,0,0.10);
-}
-
-.fei-node-num{
-  position:absolute;
-  top:-14px; left:-14px;
-  width:30px; height:30px;
-  border-radius: 50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#000;
-  color:#fff;
-  font-weight: 900;
-  font-size: 12px;
-}
-
-.fei-node-card h4{
-  margin: 6px 0 6px;
-  font-size: 12px;
-  font-weight: 900;
-  color:#000;
-  line-height: 1.25;
-}
-
-.fei-node-card p{
-  margin:0;
-  font-size: 10px;
-  color:#666;
-  text-transform: uppercase;
-}
-
-/* states */
-.fei-node-card.locked{ opacity:.45; pointer-events:none; cursor: default; }
-.fei-node-card.unlocked{ border-left: 5px solid #000; }
-.fei-node-card.completed{ border-left: 5px solid #27AE60; background:#fff; }
-.fei-node-card.completed .fei-node-num{ background:#27AE60; }
-.fei-node-card.completed::after{
-  content:'✓';
-  position:absolute;
-  top: 10px;
-  right: 12px;
-  color:#27AE60;
-  font-weight: 900;
-  font-size: 18px;
-}
-
-/* empty track */
-.fei-empty{
-  grid-column: 1 / -1;
-  padding: 22px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.85);
-  border: 1px solid #eee;
-  text-align:center;
-}
-.fei-empty-title{
-  font-family: var(--font-head);
-  font-size: 20px;
-  color:#000;
-  margin-bottom: 6px;
-}
-.fei-empty-sub{
-  font-size: 12px;
-  color:#666;
-}
-
+/* Art History shares Fashion Design's lavender, cyan and mint learning-path language. */
+:root{color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px;background:linear-gradient(135deg,#e9d8fd,#d4e6ff 50%,#cffafe);background-attachment:fixed;color:#1a1d2b;font:16px/1.65 'Open Sans',sans-serif}
+.art-theory-shell{max-width:1180px;margin:auto;background:#faf8ff;border:1px solid #ffffffb3;border-radius:26px;overflow:hidden;box-shadow:0 18px 65px #51417814}
+.art-theory-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 5%;border-bottom:1px solid #e8ecf2;background:#ffffffcc;font:700 13px 'Montserrat',sans-serif}
+.art-theory-topbar a{color:#1d725b;text-decoration:none}.art-theory-wrap{padding:32px 5%}
+.art-theory-footer{padding:18px 5%;border-top:1px solid #e8ecf2;font-size:12px;color:#536174}
+#fei-art-system{--font-ui:'Montserrat',sans-serif;--font-head:'Montserrat',sans-serif;position:relative;width:100%;color:#1a1d2b}
+#fei-art-system button{font-family:var(--font-ui);cursor:pointer;min-height:44px}
+#fei-art-system a{color:#23664f;text-underline-offset:3px}
+#fei-art-system :focus-visible{outline:3px solid #9363db;outline-offset:4px}
+.fei-hidden{display:none!important}
+h1,h2,h3{font-family:'Montserrat',sans-serif;line-height:1.25}
+.fei-brand-tag{font:800 11px/1.5 'Montserrat',sans-serif;letter-spacing:2px;color:#665282;margin-bottom:10px}
+.fei-track-title{font-size:clamp(30px,4vw,46px);max-width:650px;margin:16px 0}
+.fei-track-desc{max-width:650px;color:#536174;margin-bottom:30px}
+.fei-track-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:28px 0}
+.fei-track-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:30px;border:1px solid #dcd3ed;background:linear-gradient(135deg,#eee8ff,#dcfaff);border-radius:24px;transition:transform .2s,border-color .2s;color:#1a1d2b}
+.fei-track-card:not(:disabled):hover{transform:translateY(-3px);border-color:#319aae}
+.fei-track-card:disabled{cursor:default!important;background:#f0edf5;color:#6a6474}
+.fei-track-symbol{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;background:#fff9;font-size:38px;color:#8560bd;margin-bottom:25px}
+.fei-track-card .t{font-size:22px;font-weight:800;margin-bottom:12px}.fei-track-card .s{font-size:14px;line-height:1.7}.fei-track-card .mini{font-size:12px;font-weight:700;margin-top:28px;padding:8px 12px;border-radius:99px;background:#fff9}
+.fei-header{display:flex;justify-content:space-between;margin:0 0 20px;gap:12px}
+.fei-link-reset,.fei-open-lesson{border:1px solid #ded7e9;background:white;border-radius:99px;padding:9px 16px;color:#315b51;font-weight:700;font-size:12px}
+.fei-link-reset:hover,.fei-open-lesson:hover{background:#ecfdf5;border-color:#60a58b}
+.fei-journey-hero{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:30px;border-radius:24px;background:linear-gradient(120deg,#eee8ff,#dcfaff);margin-bottom:24px}
+.fei-journey-hero h1{font-size:clamp(28px,4vw,40px);margin:8px 0 16px}.fei-journey-hero p{max-width:530px;color:#536174}
+.fei-primary,.fei-btn-black{border:0;background:#67e8f9;color:#1a1d2b;border-radius:99px;padding:13px 21px;font-weight:800;font-size:13px}.fei-primary:hover,.fei-btn-black:hover{background:#91eef9}.fei-btn-black.full{width:100%}
+.fei-reward-token{display:grid;text-align:center;align-content:center;gap:8px;min-width:180px;font-size:13px}.fei-reward-token>span{font-size:42px;border:3px dashed #ad92d7;border-radius:50%;width:90px;height:90px;display:grid;place-items:center;margin:auto;background:#ffffff8c}.fei-reward-token small{max-width:190px;color:#605579}.fei-reward-token.earned>span{border-style:solid;background:#fff4cc;box-shadow:0 0 30px #f4d77c99}
+.fei-journey-current{padding:24px;border:2px solid #67dbea;border-radius:22px;background:#f0fdff}.fei-journey-current h2{font-size:22px;margin:8px 0}.fei-journey-current p{font-size:13px;color:#536174}.fei-progress-line{display:flex;justify-content:space-between;gap:12px;font-size:12px;font-weight:700}.fei-journey-current progress{width:100%;height:12px;accent-color:#2796ae;margin:12px 0}.fei-journey-current small{font-size:12px;color:#536174}
+.fei-board{list-style:none;margin:38px auto 0;padding:0;max-width:780px}
+.fei-path-stop{position:relative;display:grid;grid-template-columns:120px minmax(0,1fr);gap:32px;padding:0 0 38px}
+.fei-path-stop:not(:last-child):before{content:'';position:absolute;left:59px;top:116px;bottom:0;border-left:3px solid #d8d0e6}.fei-path-stop.completed:before{border-color:#88bda8}
+.fei-lesson-circle{position:relative;width:120px;height:120px;border-radius:50%;border:4px solid #ddd4ed;padding:10px;background:#f0ebf9;display:grid;place-items:center;align-self:start}
+.fei-lesson-circle img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70%;height:70%;object-fit:contain}
+.fei-circle-number{position:absolute;right:-3px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#e4dcef;color:#514362;border:2px solid #faf8ff;display:grid;place-items:center;font-size:12px;font-weight:800}
+.current .fei-lesson-circle{border-color:#44c8db;box-shadow:0 0 0 7px #dff9fd;background:#fff}.current .fei-circle-number{background:#67e8f9;color:#19353d}.completed .fei-lesson-circle{border-color:#78bca5;background:#f1fcf7}.completed .fei-circle-number{background:#28795b;color:white}
+.fei-lesson-circle:disabled{cursor:default!important}.locked .fei-lesson-circle{filter:saturate(.6)}
+.fei-stop-content{padding:8px 0 0;min-width:0}.fei-stop-status{font-size:11px;font-weight:700;color:#656276}.current .fei-stop-status{color:#176d7a}.completed .fei-stop-status{color:#28795b}
+.fei-stop-content h2{font-size:20px;margin:6px 0}.fei-stop-content>p{font-size:12px;color:#536174;margin:6px 0 10px}.fei-map-credit{font-size:10px;color:#626175;margin-top:9px}.fei-map-credit summary{cursor:pointer;width:max-content}.fei-map-credit p{max-width:420px;overflow-wrap:anywhere}
 /* ---------- Modal */
 .fei-overlay{
-  position:absolute;
+  position:fixed;
   inset:0;
   background: rgba(255,255,255,0.62);
   backdrop-filter: blur(10px);
-  z-index: 200;
+  z-index: 10000;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -368,7 +54,7 @@
 .fei-modal-window{
   width: 92%;
   max-width: 860px;
-  height: 90%;
+  height: 90dvh;
   background:#fff;
   display:flex;
   flex-direction: column;
@@ -394,7 +80,7 @@
 }
 
 .fei-modal-top{
-  padding: 28px 28px 12px;
+  padding: 28px 64px 12px 28px;
   border-bottom: 1px solid #f2f2f2;
 }
 .fei-era-tag{
@@ -406,7 +92,7 @@
 .fei-modal-top h2{
   font-family: var(--font-head);
   margin: 6px 0 10px;
-  font-size: 28px;
+  font-size: 26px;
   color:#000;
 }
 
@@ -584,58 +270,7 @@
 }
 .fei-feedback.good{ background:#E8F8F5; color:#27AE60; }
 .fei-feedback.bad{ background:#FDEDEC; color:#C0392B; }
-/* =========================
-   Map layout v2 (auto-fit grid)
-   Paste at END of styles.css
-   ========================= */
 
-/* 让容器高度更“跟着屏幕走”，少一点空白浪费 */
-#fei-art-system{
-  height: clamp(760px, 88vh, 980px);
-}
-
-/* Board：不要固定 5 列，改成自动适配列数
-   屏幕越宽，列越多；屏幕窄就自动减少列 */
-.fei-board{
-  width: min(1240px, 100%);
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: clamp(10px, 1.2vw, 14px);
-  padding: clamp(14px, 1.4vw, 18px);
-  align-content: start;
-}
-
-/* 中等屏幕稍微放大卡片最小宽度，避免字太挤 */
-@media (max-width: 900px){
-  .fei-board{
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-}
-
-/* 小屏保持 3 列比较稳 */
-@media (max-width: 640px){
-  .fei-board{
-    grid-template-columns: repeat(3, minmax(140px, 1fr));
-  }
-}
-
-/* 卡片：整体稍微“瘦身”，36 节时更容易装下且不显拥挤 */
-.fei-node-card{
-  min-height: 86px;
-  padding: 12px 12px 10px;
-}
-
-/* 标题统一两行截断，避免某些标题把卡片撑高导致“忽挤忽松” */
-.fei-node-card h4{
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 2.6em; /* 两行占位，保证卡片高度一致 */
-}
-
-/* era 字段太长就省略号，别撑爆布局 */
-.fei-node-card p{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.fei-tabs{overflow-x:auto;flex-shrink:0;gap:12px}.fei-tab{white-space:nowrap;color:#666}.fei-tab-body{min-height:0}.fei-modal-window{max-height:960px}.fei-close{min-height:34px!important}.fei-gallery-item img{display:block}
+@media(max-width:640px){body{padding:10px 8px}.art-theory-shell{border-radius:20px}.art-theory-wrap{padding:22px 16px}.art-theory-topbar{padding:15px 16px;font-size:11px}.fei-track-grid{grid-template-columns:1fr}.fei-track-card{padding:24px}.fei-journey-hero{flex-direction:column;align-items:stretch;padding:22px}.fei-reward-token{grid-template-columns:64px 1fr;text-align:left;align-items:center;gap:4px 14px;min-width:0;border-top:1px solid #d9d3ed;padding-top:20px}.fei-reward-token>span{grid-row:span 2;width:64px;height:64px;font-size:32px}.fei-reward-token small{max-width:none}.fei-journey-current{padding:18px}.fei-journey-current h2{font-size:18px}.fei-path-stop{grid-template-columns:82px minmax(0,1fr);gap:18px;padding-bottom:30px}.fei-lesson-circle{width:82px;height:82px;padding:7px;border-width:3px}.fei-path-stop:not(:last-child):before{left:40px;top:82px}.fei-circle-number{width:26px;height:26px;font-size:10px}.fei-stop-content{padding-top:2px}.fei-stop-content h2{font-size:16px}.fei-stop-status{font-size:10px}.fei-modal-window{width:96%;height:95dvh}.fei-modal-top{padding:22px 52px 10px 18px}.fei-modal-top h2{font-size:21px}.fei-tabs{padding:0 12px;gap:6px}.fei-tab{font-size:11px}.fei-tab-body{padding:20px 16px}.fei-header{gap:8px}.fei-link-reset{font-size:10px;padding:8px 12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}

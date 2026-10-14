@@ -10,7 +10,8 @@ run('curriculum.js');
 const before = JSON.parse(JSON.stringify(context.window.FEI_ART_HISTORY_TRACKS));
 run('western-media.js');
 const after = JSON.parse(JSON.stringify(context.window.FEI_ART_HISTORY_TRACKS));
-assert.deepEqual(after.chinese, before.chinese, 'Chinese track must remain unchanged');
+assert.equal(before.china.lessons.length, 20);
+assert.deepEqual(after.china, before.china, 'Chinese track must remain unchanged');
 assert.equal(after.western.lessons.length, 36);
 let count = 0;
 for (const [index, lesson] of after.western.lessons.entries()) {
