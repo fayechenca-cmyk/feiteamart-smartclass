@@ -22,11 +22,20 @@ for (const [index, lesson] of after.western.lessons.entries()) {
   assert.ok(lesson.videoSource.channel && lesson.videoSource.watchUrl);
   assert.ok(lesson.images.length, `Lesson ${lesson.id}: no gallery images`);
   for (const item of lesson.images) {
+    if (item.generated) {
+      assert.ok(lesson.id >= 29 && lesson.id <= 36);
+      assert.ok(item.title && item.credit && item.sourceUrl);
+      assert.equal(item.license, undefined, 'Do not invent an open license for generated images');
+      const bytes = fs.readFileSync(path.join(root, 'art-theory', item.src));
+      assert.equal(bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+      assert.ok(lesson.artworkLinks.length, 'Keep museum artwork links');
+    } else {
     assert.ok(item.title && item.credit && item.sourceUrl && item.licenseUrl);
     assert.match(item.license, /^(Public domain|CC0|CC BY)/);
     const bytes = fs.readFileSync(path.join(root, 'art-theory', item.src));
     assert.equal(bytes[0], 0xff, `${item.src} is not a JPEG`);
     assert.equal(bytes[1], 0xd8, `${item.src} is not a JPEG`);
+    }
     count++;
   }
 }

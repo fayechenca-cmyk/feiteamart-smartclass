@@ -285,7 +285,7 @@
       card.className = "fei-track-card";
       card.disabled = k === "china";
       card.innerHTML = `
-        <span class="fei-track-symbol" aria-hidden="true">${k === "china" ? "山" : "✦"}</span>
+        <span class="fei-track-symbol" aria-hidden="true">${k === "china" ? `<svg viewBox="0 0 64 64" width="58" height="58" fill="none" aria-hidden="true"><path d="M14 16c8-4 28-4 36 0v32c-8-4-28-4-36 0Z" fill="#fff8eb" stroke="#ac9275" stroke-width="2"/><path d="M14 12v40M50 12v40" stroke="#ac9275" stroke-width="5" stroke-linecap="round"/><path d="M25 39c8-1 5-15 16-18M26 39c4-8 10-12 15-18" stroke="#4b6c62" stroke-width="2.5" stroke-linecap="round"/><path d="m31 30-7-4 3 7m8-7 1-6" stroke="#4b6c62" stroke-width="2"/><rect x="39" y="39" width="6" height="6" rx="1" fill="#b96059"/></svg>` : "✦"}</span>
         <span class="t">${meta.label}</span>
         <span class="s">${k === "china" ? "A new history path is taking shape." : "36 stories, from ancient worlds to contemporary art."}</span>
         <span class="mini">${k === "china" ? "Coming soon" : `${p.completed.length}/${total} completed · Explore path →`}</span>
@@ -349,7 +349,7 @@
           <h2>${escapeMediaText(lesson.title)}</h2>
           <p>${escapeMediaText(lesson.era)}</p>
           ${unlocked ? `<button class="fei-open-lesson">${done ? "Revisit lesson" : "Explore lesson"} →</button>` : ""}
-          ${photo?.src ? `<details class="fei-map-credit"><summary>Image credit</summary><p>${escapeMediaText(photo.title)} · ${escapeMediaText(photo.credit)}<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">Source</a> · <a href="${escapeMediaText(photo.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(photo.license)}</a><br>Reduced-size preview; original proportions preserved.</p></details>` : ""}
+          ${photo?.generated ? `<details class="fei-map-credit"><summary>About this illustration</summary><p>${escapeMediaText(photo.title)}<br>AI-assisted teaching illustration, not a historical artwork.<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">How this image was made</a></p></details>` : photo?.src ? `<details class="fei-map-credit"><summary>Image credit</summary><p>${escapeMediaText(photo.title)} · ${escapeMediaText(photo.credit)}<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">Source</a> · <a href="${escapeMediaText(photo.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(photo.license)}</a><br>Reduced-size preview; original proportions preserved.</p></details>` : ""}
         </div>`;
       if (unlocked) item.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openLevel(lesson)));
       container.appendChild(item);
@@ -430,7 +430,7 @@
         const item = typeof image === "string" ? { src: image, title: lesson.title } : image;
         return `<figure class="fei-gallery-item">
           <div class="fei-img-box"><img src="${escapeMediaText(item.src)}" alt="${escapeMediaText(item.title)}" loading="lazy" /></div>
-          ${item.sourceUrl ? `<figcaption>
+          ${item.generated ? `<figcaption><strong>${escapeMediaText(item.title)}</strong><span>AI-assisted teaching illustration for FEI TeamArt.</span><small>Concept illustration, not a historical artwork or an artist’s portrait.</small><a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">About this illustration ↗</a></figcaption>` : item.sourceUrl ? `<figcaption>
             <strong>${escapeMediaText(item.title)}</strong>
             <span>${escapeMediaText(item.credit)}</span>
             <a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">Image source ↗</a> ·

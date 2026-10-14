@@ -832,17 +832,16 @@
     },
     "images": [
       {
-        "src": "assets/western/153656077.jpg",
-        "title": "Helen Frankenthaler — portrait illustration by Caroline Andrieu (artist context)",
-        "credit": "Carolineandrieu",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Helen-Frankenthaler.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-29.png",
+        "title": "Gesture & Colour — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-29",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Jackson Pollock — Number 1A, 1948",
@@ -863,17 +862,16 @@
     },
     "images": [
       {
-        "src": "assets/western/15047586.jpg",
-        "title": "Andy Warhol with Archie — portrait by Jack Mitchell (artist context)",
-        "credit": "Jack Mitchell",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Andy_Warhol_by_Jack_Mitchell.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-30.png",
+        "title": "Everyday Icons — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-30",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Andy Warhol — collection and works",
@@ -894,17 +892,16 @@
     },
     "images": [
       {
-        "src": "assets/western/151535816.jpg",
-        "title": "Agnes Martin — portrait illustration by Caroline Andrieu, 2024 (artist context)",
-        "credit": "Caroline Andrieu",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Agnes-Martin.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-31.png",
+        "title": "Form & Space — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-31",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Minimalism — works and context",
@@ -924,17 +921,16 @@
     },
     "images": [
       {
-        "src": "assets/western/185382894.jpg",
-        "title": "Joseph Kosuth — portrait (artist context)",
-        "credit": "SonnensturmNr7",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Joseph_Kosuth_(cropped).jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-32.png",
+        "title": "Ideas & Objects — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-32",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Joseph Kosuth — One and Three Chairs",
@@ -954,17 +950,16 @@
     },
     "images": [
       {
-        "src": "assets/western/199311591.jpg",
-        "title": "Marina Abramović — portrait at Venice, 2026 (artist context)",
-        "credit": "CaseyJNewell",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marina_Abramovi%C4%87_at_Venice_Film_Festival_2026_01.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-33.png",
+        "title": "Movement as Art — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-33",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Marina Abramović — The Artist Is Present",
@@ -985,17 +980,16 @@
     },
     "images": [
       {
-        "src": "assets/western/155207029.jpg",
-        "title": "Barbara Kruger — portrait illustration (artist context)",
-        "credit": "Luisafantinel",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbara_Kruger.jpg",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-34.png",
+        "title": "Layers & Remix — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-34",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Postmodernism — works and context",
@@ -1016,17 +1010,16 @@
     },
     "images": [
       {
-        "src": "assets/western/48833133.jpg",
-        "title": "Ai Weiwei — portrait, 2008 (artist context)",
-        "credit": "Andy Miah",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ai_Weiwei_2008.jpg",
-        "license": "CC BY-SA 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-35.png",
+        "title": "Threads of Connection — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-35",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "Tate: Ai Weiwei — Sunflower Seeds",
@@ -1047,17 +1040,16 @@
     },
     "images": [
       {
-        "src": "assets/western/155585433.jpg",
-        "title": "Refik Anadol — portrait at Dubai Future Forum, 2024 (artist context)",
-        "credit": "Creator not specified; see source",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dubai_Future_Forum_2024_-_Refik_Anadol.jpg",
-        "license": "CC0",
-        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-        "changes": "No additional edits; displayed at reduced size.",
-        "checkedAt": "2026-10-13"
+        "src": "assets/western/concept-36.png",
+        "title": "Pixels & Possibility — course concept illustration",
+        "credit": "FEI TeamArt · AI-assisted teaching illustration",
+        "sourceUrl": "illustration-notes.html#lesson-36",
+        "generated": true,
+        "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+        "checkedAt": "2026-10-14"
       }
     ],
-    "galleryNote": "The image below introduces the artist. Explore the artworks on the museum’s own page using the links below; these works are not labelled as openly licensed reproductions.",
+    "galleryNote": "This AI-assisted illustration explores the lesson’s ideas. It is not a historical artwork or an artist’s portrait. View actual artworks through the museum links below.",
     "artworkLinks": [
       {
         "name": "MoMA: Refik Anadol — Unsupervised",
