@@ -1,0 +1,1828 @@
+[
+  {
+    "lesson": 1,
+    "title": "The Dawn of Art (Prehistoric)",
+    "originalVideo": "https://www.youtube.com/embed/ZjejoT1gFOc",
+    "originalVideoMetadata": {
+      "title": "Cave Art 101 | National Geographic",
+      "author_name": "National Geographic",
+      "author_url": "https://www.youtube.com/@NatGeo",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/ZjejoT1gFOc/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/ZjejoT1gFOc?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Cave Art 101 | National Geographic\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Cave Art 101 | National Geographic",
+      "channel": "National Geographic",
+      "channelUrl": "https://www.youtube.com/@NatGeo",
+      "watchUrl": "https://www.youtube.com/watch?v=ZjejoT1gFOc",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/File:Lascaux_painting.jpg",
+      "https://commons.wikimedia.org/wiki/File:Venus_of_Willendorf,_20210730_1214_1255.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/3c/Stonehenge2007_07_30.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/2846254.jpg",
+        "title": "Lascaux painting",
+        "credit": "EU",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lascaux_painting.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Lascaux_painting.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/108181499.jpg",
+        "title": "Venus of Willendorf, 20210730 1214 1255",
+        "credit": "Jakub Hałun",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venus_of_Willendorf,_20210730_1214_1255.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/13278936.jpg",
+        "title": "Stonehenge2007 07 30",
+        "credit": "garethwiscombe",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stonehenge2007_07_30.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 2,
+    "title": "Mesopotamia: Order from Chaos",
+    "originalVideo": "https://www.youtube.com/embed/6ZYnYBGLqyU",
+    "originalVideoMetadata": {
+      "title": "Introducing the Ancient Near East and the White Temple and Ziggurat",
+      "author_name": "Art History 101",
+      "author_url": "https://www.youtube.com/@ArtHistory101",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/6ZYnYBGLqyU/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/6ZYnYBGLqyU?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Introducing the Ancient Near East and the White Temple and Ziggurat\"></iframe>"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "Ancient Mesopotamia 101 | National Geographic",
+      "channel": "National Geographic",
+      "channelUrl": "https://www.youtube.com/@NatGeo",
+      "watchUrl": "https://www.youtube.com/watch?v=xVf5kZA0HtQ",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "Overview of Mesopotamian civilization and its material culture."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/c/c5/Code_of_Hammurabi_Louvre_Museum.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/d/d4/Standard_of_ur.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/c/cb/Ishtar_Gate_at_Berlin_Museum.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/72260043.jpg",
+        "title": "Code of Hammurabi Louvre Museum",
+        "credit": "Gil Dbd",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Code_of_Hammurabi_Louvre_Museum.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/934130.jpg",
+        "title": "Standard of ur",
+        "credit": "Unknown artistUnknown artist",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Standard_of_ur.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/1409322.jpg",
+        "title": "Ishtar Gate at Berlin Museum",
+        "credit": "Rictor Norton",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ishtar_Gate_at_Berlin_Museum.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 3,
+    "title": "Ancient Egypt: Art for Eternity",
+    "originalVideo": "https://www.youtube.com/embed/xVf5kZA0HtQ",
+    "originalVideoMetadata": {
+      "title": "Ancient Mesopotamia 101 | National Geographic",
+      "author_name": "National Geographic",
+      "author_url": "https://www.youtube.com/@NatGeo",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/xVf5kZA0HtQ/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/xVf5kZA0HtQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Ancient Mesopotamia 101 | National Geographic\"></iframe>"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Seated Scribe",
+      "channel": "Smarthistory",
+      "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+      "watchUrl": "https://www.youtube.com/watch?v=IKkcop-dlUY",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "A close reading of an Egyptian sculpture: materials, status, and the afterlife. Read the lesson for the wider survey."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/b/be/Narmer_Palette.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/1/1f/Tutanchamun_Maske.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/282496.jpg",
+        "title": "Kheops-Pyramid",
+        "credit": "Nina",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kheops-Pyramid.jpg",
+        "license": "CC BY 2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/27338888.jpg",
+        "title": "Narmer Palette",
+        "credit": "anonymous",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Narmer_Palette.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Narmer_Palette.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/34321.jpg",
+        "title": "Tutanchamun Maske",
+        "credit": "en:User:MykReeve",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tutanchamun_Maske.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 4,
+    "title": "Ancient Greece: The Ideal Human",
+    "originalVideo": "https://www.youtube.com/embed/o5gGeZ--TGo",
+    "originalVideoMetadata": {
+      "title": "The Perfect Human Form: Greek Art, Math, and the Spear Bearer",
+      "author_name": "Apt Observations",
+      "author_url": "https://www.youtube.com/@aptobservations",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/o5gGeZ--TGo/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/o5gGeZ--TGo?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Perfect Human Form: Greek Art, Math, and the Spear Bearer\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "The Perfect Human Form: Greek Art, Math, and the Spear Bearer",
+      "channel": "Apt Observations",
+      "channelUrl": "https://www.youtube.com/@aptobservations",
+      "watchUrl": "https://www.youtube.com/watch?v=o5gGeZ--TGo",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/1/1c/Parthenon_from_west.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/c/cd/Doryphoros_MAN_Napoli_Inv6011-2.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/b/b3/Amphora_Heracles_Geryon_Staatliche_Antikensammlungen_137.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/1427237.jpg",
+        "title": "Parthenon from west",
+        "credit": "User:Mountain",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Parthenon_from_west.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Parthenon_from_west.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/18366140.jpg",
+        "title": "Doryphoros MAN Napoli Inv6011-2",
+        "credit": "derivative work: tetraktys (talk)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Doryphoros_MAN_Napoli_Inv6011-2.jpg",
+        "license": "CC BY 2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.5",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 5,
+    "title": "Ancient Rome: Engineering the Empire",
+    "originalVideo": "https://www.youtube.com/embed/BbcJh3uvax0",
+    "originalVideoMetadata": {
+      "title": "Rick Steves Art of Ancient Rome",
+      "author_name": "Rick Steves' Europe",
+      "author_url": "https://www.youtube.com/@RickStevesEuropeOfficial",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/BbcJh3uvax0/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/BbcJh3uvax0?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Rick Steves Art of Ancient Rome\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Rick Steves Art of Ancient Rome",
+      "channel": "Rick Steves' Europe",
+      "channelUrl": "https://www.youtube.com/@RickStevesEuropeOfficial",
+      "watchUrl": "https://www.youtube.com/watch?v=BbcJh3uvax0",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/d/d5/Colosseo_2020.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/9/98/Rome_Pantheon_interior.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/8/87/Portrait_bust_of_an_old_man_-_Palazzo_Nuovo_-_Musei_Capitolini_-_Rome_2016.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/95579199.jpg",
+        "title": "Colosseo 2020",
+        "credit": "FeaturedPics",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colosseo_2020.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/97352880.jpg",
+        "title": "Rome Pantheon interior",
+        "credit": "Nicholas Hartmann",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rome_Pantheon_interior.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 6,
+    "title": "Byzantine: Heaven on Earth",
+    "originalVideo": "https://www.youtube.com/watch?v=0leET9HyUjI",
+    "originalVideoMetadata": {
+      "title": "AP Art History - Byzantine Art and Architecture",
+      "author_name": "Fleet's AP Art History",
+      "author_url": "https://www.youtube.com/@FleetsAPArtHistory",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/0leET9HyUjI/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/0leET9HyUjI?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"AP Art History - Byzantine Art and Architecture\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "AP Art History - Byzantine Art and Architecture",
+      "channel": "Fleet's AP Art History",
+      "channelUrl": "https://www.youtube.com/@FleetsAPArtHistory",
+      "watchUrl": "https://www.youtube.com/watch?v=0leET9HyUjI",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/3/37/Hagia_Sophia_Mars_2013.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6f/Justinien_521.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/b/bf/Virgin_and_Child_Icon_from_Saint_Catherine%27s_Monastery.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/24932378.jpg",
+        "title": "Hagia Sophia Mars 2013",
+        "credit": "Arild Vågen",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hagia_Sophia_Mars_2013.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 7,
+    "title": "Islamic Art: The Infinite Pattern",
+    "originalVideo": "https://www.youtube.com/watch?v=hVdaXZTFiII",
+    "originalVideoMetadata": {
+      "title": "Unlocking The Mysteries Of Islamic Art | The Dark Ages: An Age of Light | Everything History",
+      "author_name": "Everything History",
+      "author_url": "https://www.youtube.com/@EverythingHistoryYT",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/hVdaXZTFiII/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/hVdaXZTFiII?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Unlocking The Mysteries Of Islamic Art | The Dark Ages: An Age of Light | Everything History\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Unlocking The Mysteries Of Islamic Art | The Dark Ages: An Age of Light | Everything History",
+      "channel": "Everything History",
+      "channelUrl": "https://www.youtube.com/@EverythingHistoryYT",
+      "watchUrl": "https://www.youtube.com/watch?v=hVdaXZTFiII",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/e/e6/Great_Mosque_of_Kairouan_prayer_hall.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/7/70/Folio_from_a_Qur%27an_Manuscript.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/9/90/Alhambra_Patio_de_los_Leones.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/8815665.jpg",
+        "title": "Great Mosque of Kairouan prayer hall",
+        "credit": "ovancantfort",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Great_Mosque_of_Kairouan_prayer_hall.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/35321938.jpg",
+        "title": "Alhambra Patio de los Leones",
+        "credit": "Pattiz",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alhambra_Patio_de_los_Leones.jpg",
+        "license": "CC BY-SA 3.0 es",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/es/deed.en",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 8,
+    "title": "Romanesque: The Fortress of God",
+    "originalVideo": "https://www.youtube.com/watch?v=6_UvBLmdBMU",
+    "originalVideoMetadata": {
+      "title": "Contest of the cathedrals – the Romanesque period | DW Documentary",
+      "author_name": "DW Documentary",
+      "author_url": "https://www.youtube.com/@DWDocumentary",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/6_UvBLmdBMU/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/6_UvBLmdBMU?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Contest of the cathedrals – the Romanesque period | DW Documentary\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Contest of the cathedrals – the Romanesque period | DW Documentary",
+      "channel": "DW Documentary",
+      "channelUrl": "https://www.youtube.com/@DWDocumentary",
+      "watchUrl": "https://www.youtube.com/watch?v=6_UvBLmdBMU",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/8/8e/Toulouse_Basilique_Saint-Sernin_Chevet.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/36/Autun_tympan_1.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Reliquaire_de_Sainte_Foy.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/94978886.jpg",
+        "title": "Basilica of Saint-Sernin, Toulouse — Romanesque façade",
+        "credit": "Didier Descouens",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:31_-_Toulouse_-_Basilique_Saint-Sernin_-_Facade.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 9,
+    "title": "Gothic: Height and Light",
+    "originalVideo": "https://www.youtube.com/watch?v=5UT889YeCuo",
+    "originalVideoMetadata": {
+      "title": "Eroticism, death and the devil - How Gothic art captivates us | DW Documentary",
+      "author_name": "DW Documentary",
+      "author_url": "https://www.youtube.com/@DWDocumentary",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/5UT889YeCuo/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/5UT889YeCuo?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Eroticism, death and the devil - How Gothic art captivates us | DW Documentary\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Eroticism, death and the devil - How Gothic art captivates us | DW Documentary",
+      "channel": "DW Documentary",
+      "channelUrl": "https://www.youtube.com/@DWDocumentary",
+      "watchUrl": "https://www.youtube.com/watch?v=5UT889YeCuo",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/a/a4/Notre-Dame_de_Paris_2013-07-24.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/f8/Sainte_Chapelle_-_Upper_level_1.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/7/74/Notre-Dame_de_Paris_South_Rose_Window.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/32131500.jpg",
+        "title": "Notre-Dame de Paris 2013-07-24",
+        "credit": "P e z i",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Notre-Dame_de_Paris_2013-07-24.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/1109265.jpg",
+        "title": "Sainte Chapelle - Upper level 1",
+        "credit": "Didier B (Sam67fr)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sainte_Chapelle_-_Upper_level_1.jpg",
+        "license": "CC BY-SA 2.5",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 10,
+    "title": "Proto-Renaissance: The Awakening",
+    "originalVideo": "https://www.youtube.com/watch?v=Iirq69IBfCQ",
+    "originalVideoMetadata": {
+      "title": "Italian 14th century (proto-Renaissance art)",
+      "author_name": "Mary McConnell",
+      "author_url": "https://www.youtube.com/@marycmcconnell",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/Iirq69IBfCQ/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/Iirq69IBfCQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Italian 14th century (proto-Renaissance art)\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Italian 14th century (proto-Renaissance art)",
+      "channel": "Mary McConnell",
+      "channelUrl": "https://www.youtube.com/@marycmcconnell",
+      "watchUrl": "https://www.youtube.com/watch?v=Iirq69IBfCQ",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/7/73/Giotto_-_Scrovegni_-_-36-_-_Lamentation_%28The_Mourning_of_Christ%29.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/30/Giotto_di_Bondone_-_Maest%C3%A0_%28Ognissanti_Madonna%29_-_Uffizi.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cappella_degli_Scrovegni.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/82029552.jpg",
+        "title": "Cappella degli Scrovegni",
+        "credit": "Hugo DK",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cappella_degli_Scrovegni.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 11,
+    "title": "Early Renaissance: Discovery of Space",
+    "originalVideo": "https://www.youtube.com/watch?v=IDCIXr17d-E",
+    "originalVideoMetadata": {
+      "title": "AP Art History - The Early Italian Renaissance",
+      "author_name": "Fleet's AP Art History",
+      "author_url": "https://www.youtube.com/@FleetsAPArtHistory",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/IDCIXr17d-E/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/IDCIXr17d-E?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"AP Art History - The Early Italian Renaissance\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "AP Art History - The Early Italian Renaissance",
+      "channel": "Fleet's AP Art History",
+      "channelUrl": "https://www.youtube.com/@FleetsAPArtHistory",
+      "watchUrl": "https://www.youtube.com/watch?v=IDCIXr17d-E",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/9/93/Masaccio_trinity.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/b/b3/Donatello_-_David_-_Floren%C3%A7a.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/a/a1/Santa_Maria_del_Fiore_-_Florence_-_Italy_2015.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/421285.jpg",
+        "title": "Masaccio trinity",
+        "credit": "Masaccio",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Masaccio_trinity.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Masaccio_trinity.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/8967887.jpg",
+        "title": "Donatello - David - Florença",
+        "credit": "original file by Patrick A. Rodgers",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Donatello_-_David_-_Floren%C3%A7a.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 12,
+    "title": "High Renaissance: The Masters",
+    "originalVideo": "https://www.youtube.com/watch?v=2oSpTXgPkQc",
+    "originalVideoMetadata": {
+      "title": "The High Renaissance: Europe's Cultural Peak (Short Documentary)",
+      "author_name": "Lesser Known History",
+      "author_url": "https://www.youtube.com/@LesserKnownHistory",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/2oSpTXgPkQc/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/2oSpTXgPkQc?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The High Renaissance: Europe&#39;s Cultural Peak (Short Documentary)\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "The High Renaissance: Europe's Cultural Peak (Short Documentary)",
+      "channel": "Lesser Known History",
+      "channelUrl": "https://www.youtube.com/@LesserKnownHistory",
+      "watchUrl": "https://www.youtube.com/watch?v=2oSpTXgPkQc",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/8/80/Michelangelo%27s_David_-_Right_View_2.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/15442524.jpg",
+        "title": "Mona Lisa, by Leonardo da Vinci, from C2RMF retouched",
+        "credit": "Leonardo da Vinci",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/4406048.jpg",
+        "title": "\"The School of Athens\" by Raffaello Sanzio da Urbino",
+        "credit": "Raphael",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 13,
+    "title": "Northern Renaissance: Oil and Detail",
+    "originalVideo": "https://www.youtube.com/watch?v=EuzAbE-kPkM",
+    "originalVideoMetadata": {
+      "title": "The Northern Renaissance: Crash Course European History #3",
+      "author_name": "CrashCourse",
+      "author_url": "https://www.youtube.com/@crashcourse",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/EuzAbE-kPkM/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/EuzAbE-kPkM?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Northern Renaissance: Crash Course European History #3\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "The Northern Renaissance: Crash Course European History #3",
+      "channel": "CrashCourse",
+      "channelUrl": "https://www.youtube.com/@crashcourse",
+      "watchUrl": "https://www.youtube.com/watch?v=EuzAbE-kPkM",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/3/33/Jan_van_Eyck_-_The_Arnolfini_Portrait_-_Google_Art_Project.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/5/5e/Albrecht_D%C3%BCrer_-_Self-Portrait_-_WGA7356.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/22605738.jpg",
+        "title": "The Garden of Earthly Delights by Bosch High Resolution",
+        "credit": "Hieronymus Bosch",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 14,
+    "title": "Mannerism: Breaking the Rules",
+    "originalVideo": "https://www.youtube.com/watch?v=BOKXbOyTYCk",
+    "originalVideoMetadata": {
+      "title": "What Was Mannerist Art? AP Euro Bit by Bit #49",
+      "author_name": "AP Euro Bit by Bit with Paul Sargent",
+      "author_url": "https://www.youtube.com/@PaulSargentMakesHistory",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/BOKXbOyTYCk/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/BOKXbOyTYCk?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"What Was Mannerist Art? AP Euro Bit by Bit #49\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "What Was Mannerist Art? AP Euro Bit by Bit #49",
+      "channel": "AP Euro Bit by Bit with Paul Sargent",
+      "channelUrl": "https://www.youtube.com/@PaulSargentMakesHistory",
+      "watchUrl": "https://www.youtube.com/watch?v=BOKXbOyTYCk",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/6/6c/Parmigianino_-_Madonna_dal_collo_lungo_-_Google_Art_Project.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/41/Pontormo_-_The_Entombment_of_Christ_-_Google_Art_Project.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/1/1b/Agnolo_Bronzino_-_Venus%2C_Cupid%2C_Folly_and_Time_-_National_Gallery%2C_London.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/13516608.jpg",
+        "title": "Parmigianino - Madonna dal collo lungo - Google Art Project",
+        "credit": "Parmigianino",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Parmigianino_-_Madonna_dal_collo_lungo_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Parmigianino_-_Madonna_dal_collo_lungo_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 15,
+    "title": "Baroque: The Theater of Light",
+    "originalVideo": "https://www.youtube.com/watch?v=EFHPAbHaoqk&t=383s",
+    "originalVideoMetadata": {
+      "title": "How to recognize Baroque art",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/EFHPAbHaoqk/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/EFHPAbHaoqk?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"How to recognize Baroque art\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "How to recognize Baroque art",
+      "channel": "Smarthistory",
+      "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+      "watchUrl": "https://www.youtube.com/watch?v=EFHPAbHaoqk",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/5/58/Caravaggio_-_La_vocazione_di_San_Matteo.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/1/1e/Estasi_di_Santa_Teresa.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/2/28/The_Nightwatch_by_Rembrandt.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/10250620.jpg",
+        "title": "Caravaggio - La vocazione di San Matteo",
+        "credit": "Caravaggio",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caravaggio_-_La_vocazione_di_San_Matteo.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Caravaggio_-_La_vocazione_di_San_Matteo.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/1144216.jpg",
+        "title": "Estasi di Santa Teresa",
+        "credit": "aischylos",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Estasi_di_Santa_Teresa.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/29589409.jpg",
+        "title": "The Nightwatch by Rembrandt - Rijksmuseum",
+        "credit": "Rembrandt",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 16,
+    "title": "Rococo: Pastel Play",
+    "originalVideo": "https://www.youtube.com/watch?v=GTmQEYCJrjY",
+    "originalVideoMetadata": {
+      "title": "What is Rococo Art? | Fragonard's The Swing",
+      "author_name": "ARTSQ",
+      "author_url": "https://www.youtube.com/@ARTSQ_channel",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/GTmQEYCJrjY/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/GTmQEYCJrjY?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"What is Rococo Art? | Fragonard&#39;s The Swing\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "What is Rococo Art? | Fragonard's The Swing",
+      "channel": "ARTSQ",
+      "channelUrl": "https://www.youtube.com/@ARTSQ_channel",
+      "watchUrl": "https://www.youtube.com/watch?v=GTmQEYCJrjY",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/d/d1/The_Swing_%28Fragonard%29.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/0/07/Salon_de_la_princesse_de_Soubise.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/60/Marie-Antoinette_de_Lorraine-Habsbourg%2C_queen_of_France%2C_and_her_children_-_Elisabeth_Louise_Vig%C3%A9e-Lebrun_-_Google_Cultural_Institute.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/21996805.jpg",
+        "title": "Jean-Honoré Fragonard — The Swing, 1767",
+        "credit": "Jean-Honoré Fragonard",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jean-Honor%C3%A9_Fragonard_-_The_Swing_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Jean-Honor%C3%A9_Fragonard_-_The_Swing_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 17,
+    "title": "Neoclassicism: Reason",
+    "originalVideo": "https://www.youtube.com/watch?v=0_7BDc6vSHM",
+    "originalVideoMetadata": {
+      "title": "Introducing Neoclassicism",
+      "author_name": "Art History 101",
+      "author_url": "https://www.youtube.com/@ArtHistory101",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/0_7BDc6vSHM/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/0_7BDc6vSHM?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Introducing Neoclassicism\"></iframe>"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "David, Oath of the Horatii",
+      "channel": "Smarthistory",
+      "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+      "watchUrl": "https://www.youtube.com/watch?v=qfAga9DAuU4",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "A close reading of David’s Oath of the Horatii and Neoclassical ideals."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/1/15/Jacques-Louis_David_-_Oath_of_the_Horatii_-_Google_Art_Project.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/f6/Jacques-Louis_David_-_Marat_assassinated_-_Google_Art_Project_2.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/2/25/Pantheon_Paris_1.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/21977949.jpg",
+        "title": "Jacques-Louis David - Oath of the Horatii - Google Art Project",
+        "credit": "Anne-Louis Girodet / After Jacques-Louis David",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jacques-Louis_David_-_Oath_of_the_Horatii_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Jacques-Louis_David_-_Oath_of_the_Horatii_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/20519183.jpg",
+        "title": "Jacques-Louis David - Marat assassinated - Google Art Project 2",
+        "credit": "Jacques-Louis David",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jacques-Louis_David_-_Marat_assassinated_-_Google_Art_Project_2.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Jacques-Louis_David_-_Marat_assassinated_-_Google_Art_Project_2.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 18,
+    "title": "Romanticism: The Sublime",
+    "originalVideo": "https://www.youtube.com/watch?v=pBiGVlTLO6Q",
+    "originalVideoMetadata": {
+      "title": "What Was Romanticism And Why Was It So Vital For Art? | Landmarks Of Western Art",
+      "author_name": "Perspective",
+      "author_url": "https://www.youtube.com/@PerspectiveArts",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/pBiGVlTLO6Q/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/pBiGVlTLO6Q?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"What Was Romanticism And Why Was It So Vital For Art? | Landmarks Of Western Art\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "What Was Romanticism And Why Was It So Vital For Art? | Landmarks Of Western Art",
+      "channel": "Perspective",
+      "channelUrl": "https://www.youtube.com/@PerspectiveArts",
+      "watchUrl": "https://www.youtube.com/watch?v=pBiGVlTLO6Q",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/b/b9/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/c/c4/Francisco_de_Goya%2C_El_tres_de_mayo_de_1808_en_Madrid.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/30/The_Slave_Ship_-_Joseph_Mallord_William_Turner.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/1020146.jpg",
+        "title": "Caspar David Friedrich - Wanderer above the sea of fog",
+        "credit": "Caspar David Friedrich",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 19,
+    "title": "Realism: Truth",
+    "originalVideo": "https://www.youtube.com/watch?v=Os6i6fneV-E",
+    "originalVideoMetadata": {
+      "title": "The Case for Realism",
+      "author_name": "The Art Assignment",
+      "author_url": "https://www.youtube.com/@theartassignment",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/Os6i6fneV-E/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/Os6i6fneV-E?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Case for Realism\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "The Case for Realism",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=Os6i6fneV-E",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Gustave_Courbet_-_A_Burial_at_Ornans_-_Google_Art_Project.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/1/1f/Jean-Fran%C3%A7ois_Millet_-_Gleaners_-_Google_Art_Project_2.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/Honor%C3%A9_Daumier_-_The_Third-Class_Carriage_-_Google_Art_Project.jpg"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/21856148.jpg",
+        "title": "Gustave Courbet - A Burial at Ornans - Google Art Project",
+        "credit": "Gustave Courbet",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gustave_Courbet_-_A_Burial_at_Ornans_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Gustave_Courbet_-_A_Burial_at_Ornans_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      },
+      {
+        "src": "assets/western/20111149.jpg",
+        "title": "Jean-François Millet - Gleaners - Google Art Project 2",
+        "credit": "Jean-François Millet",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jean-Fran%C3%A7ois_Millet_-_Gleaners_-_Google_Art_Project_2.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Jean-Fran%C3%A7ois_Millet_-_Gleaners_-_Google_Art_Project_2.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 20,
+    "title": "Barbizon & Early Modern Vision: From Realism to Impressionism",
+    "originalVideo": "https://youtu.be/Yp4710qbxVQ?si=TVaEhM2ZFKiJBDDv",
+    "originalVideoMetadata": {
+      "title": "26-01 The Barbizon School",
+      "author_name": "Dr Laurence Shafe",
+      "author_url": "https://www.youtube.com/@LaurenceShafe",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/Yp4710qbxVQ/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/Yp4710qbxVQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"26-01 The Barbizon School\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "26-01 The Barbizon School",
+      "channel": "Dr Laurence Shafe",
+      "channelUrl": "https://www.youtube.com/@LaurenceShafe",
+      "watchUrl": "https://www.youtube.com/watch?v=Yp4710qbxVQ",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Th%C3%A9odore_Rousseau_-_Forest_of_Fontainebleau.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-Fran%C3%A7ois_Millet_-_The_Gleaners_-_Google_Art_Project_2.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/%C3%89douard_Manet_-_Olympia_-_Google_Art_Project.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/103392012.jpg",
+        "title": "Théodore Rousseau — The Forest of Fontainebleau, Morning",
+        "credit": "Théodore Rousseau",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Th%C3%A9odore_Rousseau_(1812-1867)_-_The_Forest_of_Fontainebleau,_Morning_-_P283_-_The_Wallace_Collection.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Th%C3%A9odore_Rousseau_(1812-1867)_-_The_Forest_of_Fontainebleau,_Morning_-_P283_-_The_Wallace_Collection.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 21,
+    "title": "Impressionism: Painting Light, Not Objects",
+    "originalVideo": "https://youtu.be/vExG3Wgm4cQ?si=LXBKGUjYofGKLmtt",
+    "originalVideoMetadata": {
+      "title": "What is Impressionism?",
+      "author_name": "The Arts Hole",
+      "author_url": "https://www.youtube.com/@theartshole311",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/vExG3Wgm4cQ/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/vExG3Wgm4cQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"What is Impressionism?\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "What is Impressionism?",
+      "channel": "The Arts Hole",
+      "channelUrl": "https://www.youtube.com/@theartshole311",
+      "watchUrl": "https://www.youtube.com/watch?v=vExG3Wgm4cQ",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_-_Impression,_soleil_levant.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pierre-Auguste_Renoir_-_Bal_du_moulin_de_la_Galette.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Edgar_Degas_-_The_Ballet_Class.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/5504881.jpg",
+        "title": "Claude Monet — Impression, Sunrise, 1872",
+        "credit": "Claude Monet",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Claude_Monet,_Impression,_soleil_levant.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Claude_Monet,_Impression,_soleil_levant.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 22,
+    "title": "Post-Impressionism: Structure, Emotion, and Symbol",
+    "originalVideo": "https://youtu.be/N-Mg-cxEJqc?si=TYSI6GSGidvK6oVP",
+    "originalVideoMetadata": {
+      "title": "What Is Post-Impressionism? | Post-Impressionism: The Beginnings of Modern Art",
+      "author_name": "The Great Courses",
+      "author_url": "https://www.youtube.com/@TheGreatCourses",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/N-Mg-cxEJqc/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/N-Mg-cxEJqc?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"What Is Post-Impressionism? | Post-Impressionism: The Beginnings of Modern Art\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "What Is Post-Impressionism? | Post-Impressionism: The Beginnings of Modern Art",
+      "channel": "The Great Courses",
+      "channelUrl": "https://www.youtube.com/@TheGreatCourses",
+      "watchUrl": "https://www.youtube.com/watch?v=N-Mg-cxEJqc",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Vincent_van_Gogh_-_The_Starry_Night.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Paul_Cezanne_-_Mont_Sainte-Victoire.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Georges_Seurat_-_A_Sunday_on_La_Grande_Jatte.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/25498286.jpg",
+        "title": "Vincent van Gogh — The Starry Night, 1889",
+        "credit": "Vincent van Gogh",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 23,
+    "title": "Symbolism: Dreams, Myths, and Inner Worlds",
+    "originalVideo": "https://youtu.be/hQQaVQhW1Is?si=vmkG_nTPthZQ7X7u",
+    "originalVideoMetadata": {
+      "title": "AP Art History - Symbolism and Art Nouveau",
+      "author_name": "Fleet's AP Art History",
+      "author_url": "https://www.youtube.com/@FleetsAPArtHistory",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/hQQaVQhW1Is/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/hQQaVQhW1Is?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"AP Art History - Symbolism and Art Nouveau\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "AP Art History - Symbolism and Art Nouveau",
+      "channel": "Fleet's AP Art History",
+      "channelUrl": "https://www.youtube.com/@FleetsAPArtHistory",
+      "watchUrl": "https://www.youtube.com/watch?v=hQQaVQhW1Is",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Gustave_Moreau_-_The_Apparition.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Odilon_Redon_-_The_Cyclops.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Arnold_Bocklin_-_Isle_of_the_Dead.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/116119392.jpg",
+        "title": "Odilon Redon — The Cyclops, c. 1914",
+        "credit": "Odilon Redon",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Odilon_Redon_-_The_Cyclops,_c._1914.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Odilon_Redon_-_The_Cyclops,_c._1914.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 24,
+    "title": "Fauvism: Color as a Wild Beast",
+    "originalVideo": "https://youtu.be/tcjJEOapNKY?si=piETv6UDsRypsCjC",
+    "originalVideoMetadata": {
+      "title": "Fauvism in 4 Minutes: The Wild Beasts of Art 👹",
+      "author_name": "Curious Muse",
+      "author_url": "https://www.youtube.com/@CuriousMuse",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/tcjJEOapNKY/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/tcjJEOapNKY?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Fauvism in 4 Minutes: The Wild Beasts of Art 👹\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Fauvism in 4 Minutes: The Wild Beasts of Art 👹",
+      "channel": "Curious Muse",
+      "channelUrl": "https://www.youtube.com/@CuriousMuse",
+      "watchUrl": "https://www.youtube.com/watch?v=tcjJEOapNKY",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Henri_Matisse_-_Woman_with_a_Hat.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Andre_Derain_-_Charing_Cross_Bridge.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Henri_Matisse_-_The_Joy_of_Life.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/157391682.jpg",
+        "title": "Henri Matisse — Woman with a Hat, 1905",
+        "credit": "Henri Matisse",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Matisse-Woman-with-a-Hat.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Matisse-Woman-with-a-Hat.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 25,
+    "title": "Expressionism: Painting Feeling Under Pressure",
+    "originalVideo": "https://youtu.be/YnsRLQ4A0hc?si=SUZAfPp6_bUY-iTZ",
+    "originalVideoMetadata": {
+      "title": "Expressionism in 8 Minutes: The Most Disturbing Art Ever? 😱",
+      "author_name": "Curious Muse",
+      "author_url": "https://www.youtube.com/@CuriousMuse",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/YnsRLQ4A0hc/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/YnsRLQ4A0hc?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Expressionism in 8 Minutes: The Most Disturbing Art Ever? 😱\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Expressionism in 8 Minutes: The Most Disturbing Art Ever? 😱",
+      "channel": "Curious Muse",
+      "channelUrl": "https://www.youtube.com/@CuriousMuse",
+      "watchUrl": "https://www.youtube.com/watch?v=YnsRLQ4A0hc",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Edvard_Munch_-_The_Scream.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Ernst_Ludwig_Kirchner_-_Street,_Berlin.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Wassily_Kandinsky_-_Improvisation_28.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/195454725.jpg",
+        "title": "Edvard Munch - The Scream",
+        "credit": "Edvard Munch",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Edvard_Munch_-_The_Scream.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Edvard_Munch_-_The_Scream.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 26,
+    "title": "Cubism: Shattering Reality into Angles",
+    "originalVideo": "https://youtu.be/IF-nmwm7-Bg?si=-VMrhDkHZG_Veldx",
+    "originalVideoMetadata": {
+      "title": "Cubism in 9 Minutes: Art Movement by Pablo Picasso Explained",
+      "author_name": "Curious Muse",
+      "author_url": "https://www.youtube.com/@CuriousMuse",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/IF-nmwm7-Bg/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/IF-nmwm7-Bg?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Cubism in 9 Minutes: Art Movement by Pablo Picasso Explained\"></iframe>"
+    },
+    "replacement": false,
+    "selectedVideo": {
+      "title": "Cubism in 9 Minutes: Art Movement by Pablo Picasso Explained",
+      "channel": "Curious Muse",
+      "channelUrl": "https://www.youtube.com/@CuriousMuse",
+      "watchUrl": "https://www.youtube.com/watch?v=IF-nmwm7-Bg",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pablo_Picasso_-_Les_Demoiselles_d%27Avignon.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Georges_Braque_-_Violin_and_Candlestick.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Picasso_-_Still_Life_with_Chair_Caning.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/166490424.jpg",
+        "title": "Juan Gris — The Breakfast, 1915",
+        "credit": "Juan Gris",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Juan_Gris_-_The_Breakfast_(Le_Petit_D%C3%A9jeuner)_(1915).jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Juan_Gris_-_The_Breakfast_(Le_Petit_D%C3%A9jeuner)_(1915).jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 27,
+    "title": "Futurism & Dada: Speed, Chaos, Anti-Art",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Futurism%20Dada%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "Futurism in 9 Minutes: How to Rewrite Culture",
+      "channel": "Curious Muse",
+      "channelUrl": "https://www.youtube.com/@CuriousMuse",
+      "watchUrl": "https://www.youtube.com/watch?v=YFPIP9NxU30",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "Start with Futurism; then watch the companion Dada introduction below."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Umberto_Boccioni_-_Unique_Forms_of_Continuity_in_Space.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Hannah_Hoch_Cut_with_the_Kitchen_Knife.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Marcel_Duchamp_-_Fountain.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/24439259.jpg",
+        "title": "Umberto Boccioni — The City Rises, 1910",
+        "credit": "Umberto Boccioni",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_City_Rises_by_Umberto_Boccioni_1910.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:The_City_Rises_by_Umberto_Boccioni_1910.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 28,
+    "title": "Surrealism: The Logic of Dreams",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Surrealism%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case for Surrealism | The Art Assignment | PBS Digital Studios",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=wtPBOwE0Qn0",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Salvador_Dali_-_The_Persistence_of_Memory.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Rene_Magritte_-_The_Treachery_of_Images.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Max_Ernst_-_The_Elephant_Celebes.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/22627282.jpg",
+        "title": "Paul Klee — Fish Magic, 1925",
+        "credit": "Paul Klee",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paul_Klee,_Swiss_-_Fish_Magic_-_Google_Art_Project.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://commons.wikimedia.org/wiki/File:Paul_Klee,_Swiss_-_Fish_Magic_-_Google_Art_Project.jpg",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "lesson": 29,
+    "title": "Abstract Expressionism: Painting as a Record of Being",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Abstract%20Expressionism%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "Abstract Expressionism at the Royal Academy",
+      "channel": "ZCZ Films",
+      "channelUrl": "https://www.youtube.com/@zczfilms",
+      "watchUrl": "https://www.youtube.com/watch?v=RNrHnrspBF8",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "An exhibition overview of Abstract Expressionism, including gesture and color-field painting."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Jackson_Pollock_Number_1A_1948.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Mark_Rothko_Seagram_Murals.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Willem_de_Kooning_Woman_I.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/153656077.jpg",
+        "title": "Helen Frankenthaler — portrait illustration by Caroline Andrieu (artist context)",
+        "credit": "Carolineandrieu",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Helen-Frankenthaler.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-29.png",
+          "title": "Gesture & Colour — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-29",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 30,
+    "title": "Pop Art: Images, Brands, Mass Media",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Pop%20Art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case For Andy Warhol | The Art Assignment | PBS Digital Studios",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=7VH5MRtk9HQ",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "A Pop Art case study through Warhol, mass-produced imagery, and repetition."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Andy_Warhol_1975.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Roy_Lichtenstein_Whaam.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Pop_art_exhibition_view.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/15047586.jpg",
+        "title": "Andy Warhol with Archie — portrait by Jack Mitchell (artist context)",
+        "credit": "Jack Mitchell",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Andy_Warhol_by_Jack_Mitchell.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-30.png",
+          "title": "Everyday Icons — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-30",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 31,
+    "title": "Minimalism: Less, But Louder",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Minimalism%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case for Minimalism | The Art Assignment | PBS Digital Studios",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=XEi0Ib-nNGo",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "A survey of Minimalism, industrial forms, repetition, and the viewer’s space."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Donald_Judd_untitled_1969.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Dan_Flavin_installation.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Minimalist_sculpture_museum_installation.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/151535816.jpg",
+        "title": "Agnes Martin — portrait illustration by Caroline Andrieu, 2024 (artist context)",
+        "credit": "Caroline Andrieu",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Agnes-Martin.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-31.png",
+          "title": "Form & Space — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-31",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 32,
+    "title": "Conceptual Art: The Idea Is the Artwork",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Conceptual%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case for Conceptual Art",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=VHLs76HLon4",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Joseph_Kosuth_One_and_Three_Chairs.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Conceptual_art_text_installation.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Museum_label_conceptual_display.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/185382894.jpg",
+        "title": "Joseph Kosuth — portrait (artist context)",
+        "credit": "SonnensturmNr7",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Joseph_Kosuth_(cropped).jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-32.png",
+          "title": "Ideas & Objects — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-32",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 33,
+    "title": "Performance & Body Art: Art as Action",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Performance%20art%20body%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case for Performance Art | The Art Assignment | PBS Digital Studios",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=EmMTKdUAokM",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Performance_art_documentation_photo.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Marina_Abramovic_The_Artist_Is_Present.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Performance_installation_audience.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/199311591.jpg",
+        "title": "Marina Abramović — portrait at Venice, 2026 (artist context)",
+        "credit": "CaseyJNewell",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Marina_Abramovi%C4%87_at_Venice_Film_Festival_2026_01.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-33.png",
+          "title": "Movement as Art — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-33",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 34,
+    "title": "Postmodernism: Remix, Critique, and Doubt",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Postmodernism%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "What is Postmodernism?",
+      "channel": "Victoria and Albert Museum",
+      "channelUrl": "https://www.youtube.com/@vamuseum",
+      "watchUrl": "https://www.youtube.com/watch?v=5x4ntciHTXU",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "Postmodernism through art, design, and architecture; connect its examples to the lesson’s themes of remix and critique."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Appropriation_art_exhibition_wall.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Barbara_Kruger_installation.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Postmodern_art_museum_gallery.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/155207029.jpg",
+        "title": "Barbara Kruger — portrait illustration (artist context)",
+        "credit": "Luisafantinel",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbara_Kruger.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-34.png",
+          "title": "Layers & Remix — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-34",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 35,
+    "title": "Global Contemporary: Identity, Power, Systems",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=Contemporary%20art%20identity%20institutional%20critique",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "The Case for Ai Weiwei | The Art Assignment | PBS Digital Studios",
+      "channel": "The Art Assignment",
+      "channelUrl": "https://www.youtube.com/@theartassignment",
+      "watchUrl": "https://www.youtube.com/watch?v=YMtsodcAsVU",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "Ai Weiwei as a case study of global contemporary art, identity, and institutional power."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Contemporary_art_installation_museum.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Documenta_exhibition_view.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Venice_Biennale_exhibition_view.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/48833133.jpg",
+        "title": "Ai Weiwei — portrait, 2008 (artist context)",
+        "credit": "Andy Miah",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ai_Weiwei_2008.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-35.png",
+          "title": "Threads of Connection — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-35",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  },
+  {
+    "lesson": 36,
+    "title": "New Media & AI: Images After the Machine",
+    "originalVideo": "https://www.youtube.com/embed?listType=search&list=New%20media%20art%20AI%20art%20history",
+    "originalVideoMetadata": {
+      "error": "search placeholder"
+    },
+    "replacement": true,
+    "selectedVideo": {
+      "title": "AI Art: How artists are using and confronting machine learning | HOW TO SEE LIKE A MACHINE",
+      "channel": "The Museum of Modern Art",
+      "channelUrl": "https://www.youtube.com/@themuseumofmodernart",
+      "watchUrl": "https://www.youtube.com/watch?v=G2XdZIC3AM8",
+      "checkedAt": "2026-10-13",
+      "verification": "YouTube oEmbed returned a player; regional and in-browser playback may vary.",
+      "note": "Artists and curators discuss AI, datasets, and machine learning; read the lesson for the wider new-media history."
+    },
+    "originalImages": [
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Interactive_media_art_installation.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Video_art_installation_museum.jpg?width=1400",
+      "https://commons.wikimedia.org/wiki/Special:FilePath/Digital_art_exhibition_projection.jpg?width=1400"
+    ],
+    "selectedImages": [
+      {
+        "src": "assets/western/155585433.jpg",
+        "title": "Refik Anadol — portrait at Dubai Future Forum, 2024 (artist context)",
+        "credit": "Creator not specified; see source",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dubai_Future_Forum_2024_-_Refik_Anadol.jpg",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "changes": "No additional edits; displayed at reduced size.",
+        "checkedAt": "2026-10-13"
+      }
+    ],
+    "displayUpdate": {
+      "date": "2026-10-14",
+      "note": "Portrait replaced with AI-assisted concept illustration; museum links retained. Original audit metadata below is historical.",
+      "currentImages": [
+        {
+          "src": "assets/western/concept-36.png",
+          "title": "Pixels & Possibility — course concept illustration",
+          "credit": "FEI TeamArt · AI-assisted teaching illustration",
+          "sourceUrl": "illustration-notes.html#lesson-36",
+          "generated": true,
+          "changes": "Generated from a written concept brief; no reference artwork or portrait supplied.",
+          "checkedAt": "2026-10-14"
+        }
+      ]
+    }
+  }
+]

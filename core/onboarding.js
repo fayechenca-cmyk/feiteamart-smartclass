@@ -4,11 +4,11 @@
   const VERSION = 1;
   const courses = [
     {id:'color',title:'My Magical City',image:'https://customer-a78os4oj56dr67ab.cloudflarestream.com/2f8f0d0f117e6a9abfe42e9a2710e9c8/thumbnails/thumbnail.jpg?time=620s&height=360',motion:'https://customer-a78os4oj56dr67ab.cloudflarestream.com/2f8f0d0f117e6a9abfe42e9a2710e9c8/thumbnails/thumbnail.gif?time=620s&duration=3s&height=360',href:'lessons/my-magical-city/',tags:['Color','Painting','Acrylic','Color mixing','Watercolor'],hint:'Discover what happens when colors meet.'},
-    {id:'craft',title:'Build a tiny art studio',image:'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ee229d4d-10e7-4dc8-f174-7ebc98d7fa00/public',href:'lessons/dream-art-studio/',tags:['Making','Design','Creative exploration','Handicrafts','Cute elements'],hint:'Turn everyday materials into your own little world.'},
-    {id:'sketch',title:'See it. Sketch it.',image:'assets/sketch-map/apple.jpg',href:'lessons/sketch-branches/',tags:['Drawing','Realism','Teacher guidance'],hint:'Build confidence with shapes, light, and patient looking.'},
+    {id:'craft',title:'Build a tiny art studio',image:'assets/dashboard/studio.jpg',href:'lessons/dream-art-studio/',tags:['Making','Design','Creative exploration','Handicrafts','Cute elements'],hint:'Turn everyday materials into your own little world.'},
+    {id:'sketch',title:'See it. Sketch it.',image:'assets/dashboard/dog.jpg',href:'lessons/sketch-branches/',tags:['Drawing','Realism','Teacher guidance'],hint:'Build confidence with shapes, light, and patient looking.'},
     {id:'fashion',title:'Think like a designer',image:'assets/creation-intro/craft.jpg',href:'fashion-design/',tags:['Fashion design','Design','Creative exploration'],hint:'Explore figures and bring your design ideas to life.'},
     {id:'theory',title:'Look a little closer',image:'assets/creation-intro/color.jpg',href:'art-theory/',tags:['Art stories','Theory','Color','Art history','Art theory','Contemporary art','Art criticism'],hint:'Explore the ideas behind the art.'},
-    {id:'handcraft',title:'Make a colorful chameleon',image:'https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cf313ccd-d1e3-4f62-dc9e-2150b3a22500/public',href:'lessons/carle-colorful-chameleon/',tags:['Making','Color','Creative exploration','Handicrafts','Cute elements','Painting','Storytelling'],hint:'Make painted textures into a character of your own.'},
+    {id:'handcraft',title:'Make a colorful chameleon',image:'assets/dashboard/chameleon.jpg',href:'lessons/carle-colorful-chameleon/',tags:['Making','Color','Creative exploration','Handicrafts','Cute elements','Painting','Storytelling'],hint:'Make painted textures into a character of your own.'},
     {id:'leather',title:'Make it in leather',image:'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6833b240839a771394ce7139_Screenshot%202025-05-25%20at%205.13.29%E2%80%AFPM.png',href:'https://www.feiteamart.com/leathercraft-for-beginners',tags:['Making','Design','Leather craft','Leather crafting','Handicrafts'],hint:'Explore hands-on leather crafting.'},
     {id:'scene',title:'Imagine a scene',image:'lessons/scene-drawing-foundation/unit-01-shot-size/lesson-01-extreme-wide-shot/card3-night-city-illustration-only.png',href:'lessons/scene-drawing-foundation/',tags:['Drawing','Storytelling','Creative exploration','Movie scenes','Photography','Animation'],hint:'Turn a place into a visual story.'}
     ,{id:'cathedral',title:'Build a cardboard cathedral',image:'material-art/cardboard/assets/gothic/project-map.png',href:'material-art/cardboard/#project/gothic',tags:['Handicrafts','Making','Design'],hint:'Turn cardboard into arches, towers, and a little building.'},
@@ -125,9 +125,10 @@
     const hero=document.querySelector('#home-screen .hero');if(!hero)return;
     const section=document.createElement('section');section.id='fei-personal-picks';section.className='fei-picks';
     section.setAttribute('aria-labelledby','fei-recommended-title');
-    section.innerHTML=`<div class="start-recommend-heading"><div><h2 id="fei-recommended-title">Recommended courses for you</h2><p>${preferences.pace==='guided'?'A suggested order, based on your interests.':'Courses to explore, based on your interests.'}</p></div><button type="button">Edit interests ↗</button></div><ol class="start-course-list">${recommend(preferences).map(c=>`<li><a href="${c.href}"><span><strong>${c.title}</strong><small>${c.hint}</small></span><span aria-hidden="true">↗</span></a></li>`).join('')}</ol>`;
+    section.innerHTML=`<div class="start-recommend-heading"><div><h2 id="fei-recommended-title">Recommended courses for you</h2><p>${preferences.pace==='guided'?'A suggested order, based on your interests.':'Courses to explore, based on your interests.'}</p></div><button type="button">Edit interests ↗</button></div><ol class="start-course-list">${recommend(preferences).map(c=>`<li><a href="${c.href}"><img src="${c.image}" alt="${c.title}" loading="lazy"><span class="pick-copy"><small class="pick-label">YOUR NEXT DISCOVERY</small><strong>${c.title}</strong><small>${c.hint}</small><b>Explore this course ↗</b></span></a></li>`).join('')}</ol>`;
     section.querySelector('button').onclick=async()=>{const next=await open(user,true);if(!next)return;onChange(next);const name=document.getElementById('hero-name');if(name)name.textContent=next.name;mount(user,next,onChange);};
     hero.after(section);
+    window.FEIDashboardExplore?.render();
   }
-  window.FEIOnboarding={open,mount,recommend};
+  window.FEIOnboarding={open,mount,recommend,courses};
 })();

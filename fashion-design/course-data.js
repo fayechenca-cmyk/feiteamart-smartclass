@@ -200,6 +200,20 @@ window.FashionCourse = {
       };
       lesson.steps=lesson.steps.map(step=>cleanRightThigh[step.id]?{...step,path:cleanRightThigh[step.id],teacherNote:`${teacherNote} The right thigh uses a clean hip-to-knee line without the earlier outward bulge.`}:step);
     }
+    if(id==='relaxed-asymmetry'){
+      const cleanPoseFour={
+        'support-thigh-outer':'M149 319 L159 451','support-thigh-inner':'M201 335 L184 451','support-knee':'M159 451 Q171 462 184 451',
+        'free-thigh-outer':'M251 302 L250 444','free-thigh-inner':'M201 335 L225 453','free-knee':'M225 453 Q238 461 250 444',
+        'support-calf-outer':'M159 451 L169 600','support-calf-inner':'M184 451 L184 600','free-calf-outer':'M250 444 L263 590','free-calf-inner':'M225 453 L243 590',
+        'support-ankle':'M169 600 Q176 607 184 600','free-ankle':'M243 590 Q253 598 263 590',
+        'support-foot':'M169 600 L168 626 L154 650 Q178 656 194 650 L184 600','free-foot':'M243 590 L243 615 L260 639 Q273 641 279 634 L263 590',
+        'upper-arm-left-outer':'M142 145 Q112 151 96 186','upper-arm-left-inner':'M155 170 Q129 176 110 194',
+        'forearm-left-outer':'M96 186 Q120 138 168 94','forearm-left-inner':'M110 194 Q136 151 178 104',
+        'upper-arm-right-outer':'M258 160 Q279 207 280 252','upper-arm-right-inner':'M245 181 Q262 218 264 252',
+        'forearm-right-outer':'M280 252 Q288 292 275 334','forearm-right-inner':'M264 252 Q272 292 263 326'
+      };
+      lesson.steps=lesson.steps.map(step=>cleanPoseFour[step.id]?{...step,path:cleanPoseFour[step.id],teacherNote:`${teacherNote} Clean construction follows the teacher's raised-hand pose: a readable bent arm and even, uninterrupted leg contours.`}:step);
+    }
     lesson.points=lesson.points.map(point=>({...point,...warp(point,{groupId:'landmarks'})}));
     lesson.balance={...lesson.balance,x:warp({x:lesson.balance.x,y:lesson.balance.bottom},{groupId:'balance'}).x};
     lesson.orientation={...lesson.orientation,title,sequence:[{id:'body',text:`This is Pose ${number}. First, look at the whole figure and find its balance.`},{id:'everyday',text:'Use the same nine-head guide and landmark order you already know.'},{id:'fashion',text:focus},{id:'today',text:'Keep the visual guidance on. Voice guidance is optional while you practise.'}],audio:null};

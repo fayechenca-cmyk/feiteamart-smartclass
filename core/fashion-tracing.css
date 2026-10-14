@@ -171,13 +171,24 @@ input[type=file]{max-width:100%}
 .fixed-learning-path{display:grid;gap:0;margin:28px 0}.path-stage{position:relative;display:grid;grid-template-columns:58px minmax(0,1fr);gap:20px;padding:0 0 34px}.path-stage:not(:last-child):before{content:"";position:absolute;left:28px;top:58px;bottom:0;border-left:3px solid #d8d0e6}.stage-number{width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:#eee8fa;color:#6e558f;font:800 22px Montserrat,sans-serif}.path-stage.current>.stage-number{background:#67e8f9;color:#18353b;box-shadow:0 0 0 7px #e8fbff}.path-stage.done>.stage-number{background:#d9f5e8;color:#24634d}.path-stage.locked{opacity:.68}.path-stage h2{margin:5px 0}.path-stage>.pose-path{grid-column:2}.pose-cards{grid-template-columns:1fr}.pose-card{min-height:74px}.pose-card>span{flex-basis:42px;width:42px;height:42px}.close-sequence{display:grid;gap:10px;margin:18px 0}.sequence-item{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#fff}.sequence-item>span{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:#eee8fa;font-weight:800}.sequence-item div{display:grid;gap:4px}.sequence-item small{font-size:11px;color:var(--muted)}.sequence-item button{width:max-content;margin-top:5px}.sequence-item.current{border-color:#47bfd2;background:#f0fdff}.sequence-item.done{border-color:#78bca5;background:#f1fcf7}.sequence-item.locked{opacity:.65}@media(max-width:600px){.path-stage{grid-template-columns:46px minmax(0,1fr);gap:12px}.stage-number{width:46px;height:46px}.path-stage:not(:last-child):before{left:22px;top:48px}.pose-path{padding:14px}}
 
 /* A fixed drawing workspace keeps the active body area under the pen on tablets. */
-.focus-feedback{display:none}
+.focus-feedback,.live-overview{display:none}
+.drawing-stage{min-height:0}
 body.focus-drawing{overflow:hidden;overscroll-behavior:none}
 body.focus-drawing .drawing-screen{position:fixed;inset:0;z-index:100;box-sizing:border-box;height:100vh;height:100dvh;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));background:#f8f7fb;overflow:hidden}
 body.focus-drawing .drawing-screen>.lesson-map,body.focus-drawing .drawing-screen>.demo-note,body.focus-drawing .drawing-context,body.focus-drawing .drawing-screen>.modes{display:none}
 body.focus-drawing .drawing-screen>.workspace{height:100%;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:12px}
 body.focus-drawing .canvas-card{height:100%;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden}
 body.focus-drawing .canvas-card>.muted{display:none}
-body.focus-drawing .board-wrap{height:auto;min-height:0;flex:1 1 auto}
+body.focus-drawing .drawing-stage{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:10px;min-height:0;flex:1 1 auto}
+body.focus-drawing .board-wrap{height:100%;min-height:0}
+body.focus-drawing .live-overview{display:flex;min-width:0;flex-direction:column;padding:10px;border:1px solid #ddd3ef;border-radius:14px;background:#fff;box-shadow:0 8px 24px #49386812}
+body.focus-drawing .live-overview b{font:700 12px Montserrat,sans-serif}
+body.focus-drawing .live-overview small{font-size:10px;margin:2px 0 6px}
+body.focus-drawing #live-overview-svg{display:flex;justify-content:center;min-height:0;flex:1}
+body.focus-drawing #live-overview-svg svg{width:100%;height:100%;min-height:0}
+.overview-current-stroke{fill:none;stroke:#997a43;stroke-width:6;stroke-dasharray:8 7;stroke-linecap:round}
+.overview-live-stroke{fill:none;stroke:#111827;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.overview-focus-box{fill:#67e8f91a;stroke:#1596ac;stroke-width:4;stroke-dasharray:10 7;rx:12;ry:12;vector-effect:non-scaling-stroke}
 body.focus-drawing .panel{position:static;height:100%;overflow:auto;align-content:start}
-@media(max-width:900px){body.focus-drawing .drawing-screen>.workspace{grid-template-columns:1fr}body.focus-drawing .panel{display:none}body.focus-drawing .mobile-cue,body.focus-drawing .focus-feedback{display:grid}body.focus-drawing .focus-feedback{min-height:0;margin:4px 0;padding:8px 12px;font-size:12px}body.focus-drawing .canvas-card{padding:8px;border-radius:14px}}
+@media(max-width:900px){body.focus-drawing .drawing-screen>.workspace{grid-template-columns:1fr}body.focus-drawing .panel{display:none}body.focus-drawing .mobile-cue,body.focus-drawing .focus-feedback{display:grid}body.focus-drawing .focus-feedback{min-height:0;margin:4px 0;padding:8px 12px;font-size:12px}body.focus-drawing .canvas-card{padding:8px;border-radius:14px}body.focus-drawing .drawing-stage{grid-template-columns:minmax(0,1fr) 150px}}
+@media(max-width:560px){body.focus-drawing .drawing-stage{grid-template-columns:minmax(0,1fr) 108px;gap:6px}body.focus-drawing .live-overview{padding:6px}body.focus-drawing .live-overview small{display:none}}

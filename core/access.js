@@ -399,6 +399,17 @@
   }
 
   async function recordLessonOpened(branch, lessonId) {
+    try {
+      const profile=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null');
+      const identity=profile?.supabaseUserId||profile?.studentCode||profile?.learnerId||profile?.id;
+      if(identity && typeof lessonId==='string' && ['skills','creation'].includes(branch)) {
+        const key='feiDashboard.opened.v1:'+encodeURIComponent(identity);
+        const saved=JSON.parse(localStorage.getItem(key)||'[]');
+        const list=Array.isArray(saved)?saved:[];
+        localStorage.setItem(key,JSON.stringify([{id:lessonId,branch,at:Date.now()},...list.filter(x=>x.id!==lessonId||x.branch!==branch)].slice(0,100)));
+      }
+    } catch {} // A storage restriction must never block lesson access.
+
     let row, matchColumn, matchValue;
 
     if (_isLegacyAccessCode()) {

@@ -119,7 +119,11 @@
     const progressGrid=document.createElement('div');progressGrid.className='studio-grid';progressGrid.append(cards[1],cards[2]);feedbackPanel.append(progressGrid);
     $('dashboard-journey-badges').append(cards[3]);
     $('dashboard-journey-story').innerHTML='<section class="dashboard-panel"><div class="dashboard-kicker">Student Art Journey</div><h2>Your story through art</h2><p class="dashboard-small">Milestones from your completed lessons and earned badges. Completion dates are not yet recorded here.</p><ul class="dashboard-timeline" id="dashboard-timeline"></ul></section>';
-    const courses=page('courses');courses.append(hero,resumeHeading,resume,map,tracksHeading,tracks,cards[0]);
+    const courses=page('courses');courses.append(hero,tracksHeading,tracks);
+    $('dashboard-journey-feedback').prepend(map,cards[0]);
+    // Preserve the original guarded resume renderer within the Skill catalogue.
+    const legacyResume=document.createElement('div');legacyResume.hidden=true;legacyResume.append(resumeHeading,resume);$('skills-screen').append(legacyResume);
+    global.FEIDashboardExplore?.mount(courses, bridge);
     hero.querySelector('.hero-subtitle').textContent='What would you like to practise today?';
     const livePage=page('live','<div class="dashboard-panel dashboard-empty" id="dashboard-live-empty"><div class="dashboard-kicker">Learning together</div><h2>Your next live connection</h2><p class="dashboard-small" id="dashboard-live-message">You’re not enrolled in a live class yet. Your sessions and class materials will appear here when you join.</p><a class="dashboard-button" href="https://www.feiteamart.com/contact" target="_blank" rel="noopener">Ask about live classes ↗</a></div>');livePage.append(live);
     page('lfc',`<div class="dashboard-lfs"><section class="dashboard-panel"><div class="dashboard-kicker">Learn from Collections</div><h2>A closer look.<br>A new perspective.</h2><p class="dashboard-small">Explore artworks, follow your curiosity and discover new ways of seeing.</p><a class="dashboard-button primary" href="https://learnfromcollections.com/learn" target="_blank" rel="noopener">Explore LFC ↗</a><p class="dashboard-small">Opens Learn from Collections in a new tab.</p></section><section class="dashboard-panel"><h3>Looking becomes thinking</h3><p class="dashboard-small">Take time to observe, compare and reflect. LFC exploration records are not yet connected to this dashboard.</p><a class="dashboard-link" href="creation/">Create with the Masters →</a></section></div>`);
@@ -173,6 +177,7 @@
   function render() {
     if(!shell||!bridge.getProfile())return;
     preferences=readPreferences();renderIdentity();renderShape();
+    global.FEIDashboardExplore?.render();
     const badgeProgress=global.getCourseBadgeProgress?.()||{};
     const catalog=global.BADGE_CATALOG||[];
     const record=bridge.getRecord();

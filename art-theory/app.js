@@ -1,4 +1,4 @@
-/* app.js — FEI Art History Journey (Tracks + No-scroll board)
+/* app.js — FEI Art History Journey (Tracks + vertical learning path)
    - loads tracks from window.FEI_ART_HISTORY_TRACKS (curriculum.js)
    - injects UI into #fei-art-history (Webflow embed stays tiny)
    - per-track progress in localStorage
@@ -36,6 +36,7 @@
   };
 
   let currentLevelId = null;
+  let returnFocus = null;
 
   function safeNum(n, fallback) {
     const x = Number(n);
@@ -45,7 +46,7 @@
   function normalizeProgress(p, total) {
     const unlocked = Math.max(1, Math.min(total || 1, safeNum(p?.unlocked, 1)));
     const completed = Array.isArray(p?.completed)
-      ? p.completed.map(Number).filter(Number.isFinite)
+      ? [...new Set(p.completed.map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= total))]
       : [];
     return { unlocked, completed };
   }
@@ -74,7 +75,10 @@
   }
 
   function saveState() {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {
+      const status = document.getElementById("history-save-status");
+      if (status) status.textContent = "Progress cannot be saved in this browser.";
+    }
   }
 
   function loadState() {
@@ -109,9 +113,9 @@
     <!-- TRACK SELECT -->
     <div id="fei-track-view" class="fei-fullscreen">
       <div class="fei-track-panel">
-        <div class="fei-brand-tag">SELECT A TRACK</div>
-        <h2 class="fei-track-title">Welcome, <span id="track-student">Student</span></h2>
-        <p class="fei-track-desc">Pick your learning path.</p>
+        <div class="fei-brand-tag">ART THEORY · HISTORY CLASS</div>
+        <h1 class="fei-track-title">Every artwork has a story.</h1>
+        <p class="fei-track-desc"><span id="track-student">Student</span>, choose a history path. Look closely, discover new ideas, and build your own creative perspective.</p>
         <div class="fei-track-grid" id="track-grid"></div>
       </div>
     </div>
@@ -119,24 +123,29 @@
     <!-- MAP VIEW -->
     <div id="fei-map-view" class="fei-hidden">
       <div class="fei-header">
-        <div class="fei-user-badge">
-          <div class="fei-avatar">LFC</div>
-          <div class="fei-user-text">
-            <span id="display-name">Student</span>
-            <span class="fei-progress-pill" id="progress-display">0/0 Credits</span>
-            <span class="fei-track-pill" id="track-pill">Track</span>
-          </div>
-        </div>
-        <div class="fei-header-actions">
-          <button id="btn-switch-track" class="fei-link-reset">Tracks</button>
-          <button id="btn-reset" class="fei-link-reset">Reset</button>
-        </div>
+        <button id="btn-switch-track" class="fei-link-reset">← History paths</button>
+        <button id="btn-reset" class="fei-link-reset">Reset progress</button>
       </div>
-
+      <section class="fei-journey-hero">
+        <div><div class="fei-brand-tag">YOUR ART HISTORY PATH</div>
+          <h1 id="track-pill">Western Art History</h1>
+          <p>From the first marks to new media. Discover art, one story at a time.</p>
+          <button id="btn-continue" class="fei-primary">Start learning →</button>
+        </div>
+        <div id="history-badge" class="fei-reward-token" role="status"></div>
+      </section>
+      <section class="fei-journey-current" aria-labelledby="current-title">
+        <div class="fei-brand-tag" id="current-label">YOU ARE HERE</div>
+        <h2 id="current-title"></h2>
+        <p>Watch · Explore · Create · Challenge</p>
+        <div class="fei-progress-line"><span id="display-name"></span><span id="progress-display"></span></div>
+        <progress id="history-progress" value="0" max="36" aria-label="Completed lessons"></progress>
+        <small>Pass each lesson’s Challenge to unlock the next circle. Return to completed lessons anytime.</small>
+      </section>
       <div class="fei-map-scroll">
         <div class="fei-board-viewport">
           <div class="fei-board-wrap" id="board-wrap">
-            <div class="fei-board" id="map-container"></div>
+            <ol class="fei-board" id="map-container" aria-label="Lesson path"></ol>
           </div>
         </div>
       </div>
@@ -144,7 +153,7 @@
 
     <!-- MODAL -->
     <div id="fei-modal" class="fei-overlay fei-hidden">
-      <div class="fei-modal-window">
+      <div class="fei-modal-window" role="dialog" aria-modal="true" aria-labelledby="m-title" tabindex="-1">
         <button class="fei-close" id="btn-close" aria-label="Close">×</button>
 
         <div class="fei-modal-top">
@@ -229,7 +238,16 @@
     if (!url) return "";
     const id = parseYouTubeId(url);
     if (!id) return url; // might be another provider
-    return `https://www.youtube.com/embed/${id}`;
+    const source = new URL(url);
+    const start = source.searchParams.get("start") || source.searchParams.get("t");
+    const seconds = /^\d+s?$/.test(start || "") ? parseInt(start, 10) : 0;
+    return `https://www.youtube.com/embed/${id}${seconds ? `?start=${seconds}` : ""}`;
+  }
+
+  function escapeMediaText(value) {
+    return String(value || "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
   }
 
   // ---------- views
@@ -262,12 +280,15 @@
       const total = totalLessons(k);
       const p = state.progress[k] || { unlocked: 1, completed: [] };
 
-      const card = document.createElement("div");
+      const card = document.createElement("button");
+      card.type = "button";
       card.className = "fei-track-card";
+      card.disabled = k === "china";
       card.innerHTML = `
-        <div class="t">${meta.label}</div>
-        <div class="s">${meta.desc}</div>
-        <div class="mini">${p.completed.length}/${total} completed</div>
+        <span class="fei-track-symbol" aria-hidden="true">${k === "china" ? `<svg viewBox="0 0 64 64" width="58" height="58" fill="none" aria-hidden="true"><path d="M14 16c8-4 28-4 36 0v32c-8-4-28-4-36 0Z" fill="#fff8eb" stroke="#ac9275" stroke-width="2"/><path d="M14 12v40M50 12v40" stroke="#ac9275" stroke-width="5" stroke-linecap="round"/><path d="M25 39c8-1 5-15 16-18M26 39c4-8 10-12 15-18" stroke="#4b6c62" stroke-width="2.5" stroke-linecap="round"/><path d="m31 30-7-4 3 7m8-7 1-6" stroke="#4b6c62" stroke-width="2"/><rect x="39" y="39" width="6" height="6" rx="1" fill="#b96059"/></svg>` : "✦"}</span>
+        <span class="t">${meta.label}</span>
+        <span class="s">${k === "china" ? "A new history path is taking shape." : "36 stories, from ancient worlds to contemporary art."}</span>
+        <span class="mini">${k === "china" ? "Coming soon" : `${p.completed.length}/${total} completed · Explore path →`}</span>
       `;
       card.addEventListener("click", () => {
         state.activeTrack = k;
@@ -280,6 +301,7 @@
   }
 
   function showMap() {
+    if (state.activeTrack === "china") return showTrackSelect();
     hide($("#fei-track-view"));
     show($("#fei-map-view"));
 
@@ -290,87 +312,70 @@
     renderMap();
   }
 
-  // ---------- map render (NO SCROLL: auto scale to fit)
-  function fitBoard() {
-    const viewport = root.querySelector(".fei-board-viewport");
-    const wrap = $("#board-wrap");
-    const board = $("#map-container");
-    if (!viewport || !wrap || !board) return;
-
-    // reset
-    wrap.style.transform = "scale(1)";
-    wrap.dataset.scale = "1";
-
-    const availH = viewport.clientHeight - 10;
-    const contentH = board.scrollHeight;
-
-    if (contentH <= 0) return;
-
-    const scale = Math.max(0.55, Math.min(1.12, availH / contentH)); // don't shrink to unreadable dot
-    wrap.style.transform = `scale(${scale})`;
-    wrap.dataset.scale = String(scale);
-  }
-
+  // ---------- vertical learning path
   function renderMap() {
     const lessons = getLessons(state.activeTrack);
-    const total = lessons.length;
-
     ensureProgress(state.activeTrack);
     const prog = state.progress[state.activeTrack];
-
-    $("#progress-display").textContent = `${prog.completed.length}/${total || 0} Credits`;
-
+    const count = prog.completed.length;
+    const finished = count === lessons.length && lessons.length > 0;
+    const current = lessons.find(l => !prog.completed.includes(Number(l.id)) && Number(l.id) <= prog.unlocked) || lessons[lessons.length - 1];
+    $("#progress-display").textContent = `${count} / ${lessons.length} completed`;
+    $("#history-progress").max = lessons.length || 1;
+    $("#history-progress").value = count;
+    $("#current-label").textContent = finished ? "YOUR PATH IS COMPLETE" : "YOU ARE HERE";
+    $("#current-title").textContent = finished ? "36 stories. A new way of seeing." : `Lesson ${current?.id || 1} · ${current?.title || "Welcome"}`;
+    $("#btn-continue").textContent = finished ? "Revisit the final lesson →" : count ? "Continue learning →" : "Start learning →";
+    $("#btn-continue").onclick = () => current && openLevel(current);
+    $("#history-badge").classList.toggle("earned", finished);
+    $("#history-badge").innerHTML = `<span aria-hidden="true">🏺</span><strong>Art History badge</strong><small>${finished ? "Badge earned · Well done!" : `${count} / ${lessons.length} lessons · Keep exploring`}</small>`;
     const container = $("#map-container");
     container.innerHTML = "";
-
-    if (!lessons.length) {
-      const box = document.createElement("div");
-      box.className = "fei-empty";
-      box.innerHTML = `<div class="fei-empty-title">No lessons yet</div><div class="fei-empty-sub">This track is coming soon.</div>`;
-      container.appendChild(box);
-      requestAnimationFrame(fitBoard);
-      return;
-    }
-
-    lessons.forEach((lesson) => {
-      const id = safeNum(lesson.id, 0);
-      const isUnlocked = id <= prog.unlocked;
-      const isDone = prog.completed.includes(id);
-
-      const card = document.createElement("div");
-      card.className = "fei-node-card";
-      if (isDone) card.classList.add("completed");
-      else if (isUnlocked) card.classList.add("unlocked");
-      else card.classList.add("locked");
-
-      card.innerHTML = `
-        <div class="fei-node-num">${id}</div>
-        <h4>${lesson.title || "Untitled"}</h4>
-        <p>${lesson.era || ""}</p>
-      `;
-
-      if (isUnlocked) {
-        card.addEventListener("click", () => openLevel(lesson));
-      }
-
-      container.appendChild(card);
+    lessons.forEach(lesson => {
+      const id = Number(lesson.id);
+      const done = prog.completed.includes(id);
+      const unlocked = id <= prog.unlocked;
+      const active = !finished && id === Number(current?.id);
+      const photo = lesson.images?.[0];
+      const item = document.createElement("li");
+      item.className = `fei-path-stop ${done ? "completed" : unlocked ? "unlocked" : "locked"}${active ? " current" : ""}`;
+      item.innerHTML = `
+        <button class="fei-lesson-circle" ${unlocked ? "" : "disabled"} ${active ? 'aria-current="step"' : ""} aria-label="${escapeMediaText(`${done ? "Revisit" : unlocked ? "Open" : "Locked"} lesson ${id}: ${lesson.title}`)}">
+          ${photo?.src ? `<img src="${escapeMediaText(photo.src)}" alt="" loading="lazy">` : ""}
+          <span class="fei-circle-number">${done ? "✓" : id}</span>
+        </button>
+        <div class="fei-stop-content">
+          <span class="fei-stop-status">${done ? "✓ Completed" : active ? "Your next discovery" : unlocked ? "Ready to explore" : "Locked · Complete the previous lesson"}</span>
+          <h2>${escapeMediaText(lesson.title)}</h2>
+          <p>${escapeMediaText(lesson.era)}</p>
+          ${unlocked ? `<button class="fei-open-lesson">${done ? "Revisit lesson" : "Explore lesson"} →</button>` : ""}
+          ${photo?.generated ? `<details class="fei-map-credit"><summary>About this illustration</summary><p>${escapeMediaText(photo.title)}<br>AI-assisted teaching illustration, not a historical artwork.<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">How this image was made</a></p></details>` : photo?.src ? `<details class="fei-map-credit"><summary>Image credit</summary><p>${escapeMediaText(photo.title)} · ${escapeMediaText(photo.credit)}<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">Source</a> · <a href="${escapeMediaText(photo.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(photo.license)}</a><br>Reduced-size preview; original proportions preserved.</p></details>` : ""}
+        </div>`;
+      if (unlocked) item.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openLevel(lesson)));
+      container.appendChild(item);
     });
-
-    // scale to fit
-    setTimeout(fitBoard, 50);
   }
 
   // ---------- modal
   function closeModal() {
     hide($("#fei-modal"));
+    document.body.style.overflow = "";
+    if (returnFocus?.isConnected) returnFocus.focus();
+    else $("#btn-continue").focus();
     $("#m-video-box").innerHTML = "";
+    $("#m-video-credit")?.replaceChildren();
     $("#m-feedback").innerHTML = "";
   }
 
   function openLevel(lesson) {
+    if (state.activeTrack === "china") return;
+    returnFocus = document.activeElement;
     currentLevelId = safeNum(lesson.id, 0);
     show($("#fei-modal"));
     switchTab("study");
+    document.body.style.overflow = "hidden";
+    $(".fei-tab-body").scrollTop = 0;
+    $("#btn-close").focus();
 
     $("#m-title").textContent = lesson.title || "";
     $("#m-era").textContent = lesson.era || "";
@@ -382,6 +387,8 @@
       videoBox.innerHTML = `
         <iframe width="100%" height="100%"
           src="${v}"
+          title="${escapeMediaText(lesson.videoSource?.title || lesson.title)}"
+          referrerpolicy="strict-origin-when-cross-origin"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -392,20 +399,58 @@
       videoBox.style.display = "none";
     }
 
+    let videoCredit = $("#m-video-credit");
+    if (!videoCredit) {
+      videoCredit = document.createElement("div");
+      videoCredit.id = "m-video-credit";
+      videoCredit.className = "fei-media-credit";
+      videoBox.after(videoCredit);
+    }
+    const source = lesson.videoSource;
+    videoCredit.innerHTML = source ? `
+      <strong>${escapeMediaText(source.title)}</strong>
+      <span>By <a href="${escapeMediaText(source.channelUrl)}" target="_blank" rel="noopener">${escapeMediaText(source.channel)}</a></span>
+      <a href="${escapeMediaText(source.watchUrl)}" target="_blank" rel="noopener">Open on YouTube ↗</a>
+      ${source.note ? `<p>${escapeMediaText(source.note)}</p>` : ""}
+      <small>If the player is unavailable in your region or browser, try the original YouTube page.</small>
+      ${(lesson.companionVideos || []).map(video => `<p>Also watch: <a href="${escapeMediaText(video.watchUrl)}" target="_blank" rel="noopener">${escapeMediaText(video.title)}</a> · ${escapeMediaText(video.channel)}</p>
+        <div class="fei-video-container"><iframe width="100%" height="100%" loading="lazy"
+          src="${escapeMediaText(normalizeVideoUrl(video.watchUrl))}" title="${escapeMediaText(video.title)}"
+          referrerpolicy="strict-origin-when-cross-origin" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`).join("")}
+    ` : "";
+    videoCredit.hidden = !source;
+
     // lecture
     $("#m-lecture-content").innerHTML = lesson.lecture || "";
 
     // images
-    $("#m-images").innerHTML = (lesson.images || [])
-      .map(src => `
-        <div class="fei-img-box">
-          <img src="${src}" loading="lazy" referrerpolicy="no-referrer"
-               onerror="this.style.opacity='0.2';" />
-        </div>
-      `).join("");
+    $("#m-images").innerHTML = (lesson.galleryNote ? `<p class="fei-gallery-note">${escapeMediaText(lesson.galleryNote)}</p>` : "") +
+      (lesson.images || []).map(image => {
+        const item = typeof image === "string" ? { src: image, title: lesson.title } : image;
+        return `<figure class="fei-gallery-item">
+          <div class="fei-img-box"><img src="${escapeMediaText(item.src)}" alt="${escapeMediaText(item.title)}" loading="lazy" /></div>
+          ${item.generated ? `<figcaption><strong>${escapeMediaText(item.title)}</strong><span>AI-assisted teaching illustration for FEI TeamArt.</span><small>Concept illustration, not a historical artwork or an artist’s portrait.</small><a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">About this illustration ↗</a></figcaption>` : item.sourceUrl ? `<figcaption>
+            <strong>${escapeMediaText(item.title)}</strong>
+            <span>${escapeMediaText(item.credit)}</span>
+            <a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">Image source ↗</a> ·
+            <a href="${escapeMediaText(item.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(item.license)}</a>
+            <small>${escapeMediaText(item.changes)}</small>
+          </figcaption>` : ""}
+        </figure>`;
+      }).join("");
+    $("#m-images").querySelectorAll("img").forEach(img => {
+      img.addEventListener("error", () => {
+        img.hidden = true;
+        const message = document.createElement("p");
+        message.className = "fei-image-fallback";
+        message.textContent = "Image could not load. Open the image source below to view it.";
+        img.parentElement.appendChild(message);
+      }, { once: true });
+    });
 
     // resources
-    $("#m-resources").innerHTML = (lesson.resources || [])
+    $("#m-resources").innerHTML = [...(lesson.artworkLinks || []), ...(lesson.resources || [])]
       .map(r => `<a href="${r.url}" target="_blank" rel="noopener" class="fei-resource-link">📚 ${r.name} ➔</a>`)
       .join("");
 
@@ -522,7 +567,13 @@
       if (e.key === "Escape" && !$("#fei-modal").classList.contains("fei-hidden")) closeModal();
     });
 
-    window.addEventListener("resize", () => setTimeout(fitBoard, 80));
+    $("#fei-modal").addEventListener("keydown", e => {
+      if (e.key !== "Tab") return;
+      const focusable = [...$("#fei-modal").querySelectorAll('button, a, iframe, [tabindex="0"]')].filter(el => el.getClientRects().length);
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+    });
   }
 
   // ---------- Art GPS profile bridge

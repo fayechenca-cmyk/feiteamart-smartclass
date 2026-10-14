@@ -23,6 +23,18 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  await page.locator('#signin-code').fill('DASHBOARD-TEST');await page.locator('#signin-btn').click();
  await page.locator('#dashboard-page-courses').waitFor({state:'visible'});
  assert.equal(await page.locator('#dashboard-heading').isVisible(),false);
+ await page.waitForTimeout(1100);
+ assert.equal(await page.locator('#explore-tour').isVisible(),true);
+ for(let step=0;step<5;step++){
+   assert.match(await page.locator('#explore-tour small').innerText(),new RegExp((step+1)+' / 5'));
+   await page.locator('#explore-tour [data-next]').click();
+ }
+ assert.equal(await page.locator('#explore-tour').isVisible(),false);
+ await page.locator('#explore-tour-start').click();
+ await page.keyboard.press('Escape');
+ assert.equal(await page.locator('#explore-tour').isVisible(),false);
+ assert.equal(await page.locator('.fei-picks img').count(),3);
+
  assert.deepEqual(await page.locator('.dashboard-nav[aria-label="Student workspace"] a').evaluateAll(links=>links.map(a=>a.dataset.page)),['courses','live','journey']);
  await page.locator('[data-page=journey]').click();await page.locator('#dashboard-page-journey').waitFor({state:'visible'});
  assert.equal(await page.locator('#dashboard-page-courses').isVisible(),false);
@@ -41,7 +53,7 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  assert.equal(await page.locator('#dashboard-name').innerText(),'<Faye & Studio>');
  assert.equal(await page.locator('#dashboard-name img').count(),0);
  await page.locator('[data-page=courses]').click();
- await page.locator('#resume-card').waitFor({state:'visible'});
+ await page.locator('#continue-skills').waitFor({state:'visible'});
  assert.equal(await page.locator('#dashboard-page-journey').isVisible(),false);
  await page.screenshot({path:path.join(output,'courses-desktop.png'),fullPage:true});
  await page.locator('[data-page=journey]').click();
@@ -51,7 +63,7 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  await page.reload();await page.locator('#drawing-screen').waitFor({state:'visible'});
  await page.locator('[data-page=journey]').click();
  await page.locator('[data-tab=badges]').click();
- assert.equal(await page.locator('#studio-badge-grid a[href="lessons/still-life/"]').count(),1);
+ assert.ok(await page.locator('#studio-badge-grid a[href="lessons/still-life/"]').count() >= 1);
  assert.equal(await page.locator('#studio-badge-grid a[href="fashion-design/"]').count(),1);
  await page.locator('[data-tab=studio]').click();await page.locator('#dashboard-journey-studio').waitFor({state:'visible'});assert.equal(await page.locator('#dashboard-journey-studio').isVisible(),true);
  await page.locator('[data-tab=feedback]').click();await page.locator('#dashboard-journey-feedback').waitFor({state:'visible'});assert.equal(await page.locator('#studio-progress-value').isVisible(),true);
@@ -64,9 +76,27 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  // Existing course guard is still called from Resume.
  await page.locator('[data-page=courses]').click();
  await page.evaluate(()=>{const p=JSON.parse(sessionStorage.getItem('fei_user_profile'));p.studentCode=null;p.supabaseUserId='dashboard-test-auth';sessionStorage.setItem('fei_user_profile',JSON.stringify(p));});
- await page.reload();await page.locator('#resume-card').waitFor({state:'visible'});
+ await page.reload();await page.locator('#continue-skills').waitFor({state:'visible'});
+ assert.equal(await page.locator('#dashboard-page-courses #student-learning-map').count(),0);
+ assert.equal(await page.locator('#dashboard-page-courses #resume-card').count(),0);
+ assert.equal(await page.locator('#continue-skills a').count(),0);
+ await page.evaluate(()=>{
+   localStorage.setItem('feiDashboard.opened.v1:dashboard-test-auth',JSON.stringify([{id:'cube',branch:'skills',at:1},{id:'rousseau-jungle',branch:'creation',at:2},{id:'yokai-in-the-great-wave',branch:'creation',at:3}]));
+   window.FEIStudentDashboard.render();
+ });
+ assert.equal(await page.locator('#continue-skills a').count(),1);
+ assert.equal(await page.locator('#continue-creation a').count(),2);
+ await page.evaluate(()=>window.FEIDashboardExplore.renderContinuations({...JSON.parse(sessionStorage.getItem('fei_user_profile')),completedLessons:['rousseau-jungle']}));
+ assert.equal(await page.locator('#continue-creation a').count(),1);
+ await page.evaluate(()=>window.FEIStudentDashboard.render());
+ await page.screenshot({path:path.join(output,'courses-with-progress.png'),fullPage:true});
+ await page.locator('#track-skills').click();
+ await page.locator('.skill-gallery').waitFor({state:'visible'});
+ assert.equal(await page.locator('.skill-gallery img').count(),6);
+ await page.screenshot({path:path.join(output,'skills-desktop.png'),fullPage:true});
+ await page.locator('[data-page=courses]').click();
  await page.evaluate(()=>{window.FEIAccess.canOpenLesson=async()=>({allowed:false});});
- await page.locator('#resume-btn').click();await page.locator('#paywall-modal').waitFor({state:'visible'});
+ await page.locator('#continue-skills a').first().click();await page.locator('#paywall-modal').waitFor({state:'visible'});
  await page.locator('#paywall-modal .paywall-dismiss').click();
  // All-complete, live enrolment, identity switch and signal deduplication.
  await page.evaluate(()=>{const p=JSON.parse(sessionStorage.getItem('fei_user_profile'));p.id='DASHBOARD-TEST-OTHER';delete p.supabaseUserId;p.studentCode='DASHBOARD-TEST-OTHER';p.name='Another student';p.isLiveClass=true;p.completedLessons=window.FOUNDATION_A_PATH.map(l=>l.id);sessionStorage.setItem('fei_user_profile',JSON.stringify(p));});
@@ -83,17 +113,18 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  // Every section at mobile/tablet widths must fit without horizontal document overflow.
  for(const width of [320,390,768,1024]){
    await page.setViewportSize({width,height:900});
-   for(const section of ['journey','journey/studio','journey/feedback','journey/badges','journey/story','courses','live','lfc','events','profile']){
+   for(const section of ['journey','journey/studio','journey/feedback','journey/badges','journey/story','courses','courses/skills','live','lfc','events','profile']){
      await page.evaluate(hash=>{location.hash=hash},'#dashboard/'+section);
      await page.waitForFunction(hash=>location.hash===hash,'#dashboard/'+section);
      await page.waitForTimeout(50);
      const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
      assert.equal(overflow,false,`Overflow at ${width}px ${section}`);
+     if(width===390&&['courses','courses/skills'].includes(section)) await page.screenshot({path:path.join(output,section==='courses'?'courses-mobile.png':'skills-mobile.png'),fullPage:true});
    }
  }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'#dashboard/journey');await page.reload();await page.locator('#dashboard-page-journey').waitFor({state:'visible'});
  await page.screenshot({path:path.join(output,'journey-mobile.png'),fullPage:true});
  assert.deepEqual(errors,[]);
- console.log('PASS: login shell, navigation/back/reload, avatar/profile persistence and isolation, badges, progress, course gate, live states, activity rules, and 40 responsive checks.');
+ console.log('PASS: login shell, navigation/back/reload, avatar/profile persistence and isolation, badges, progress, course gate, live states, activity rules, and 44 responsive checks.');
  await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

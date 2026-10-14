@@ -42,3 +42,25 @@ The suite mocks external services and the student roster so no real student data
 - Browser runtime errors.
 
 Desktop and mobile screenshots are under `docs/dashboard-preview/` and were visually inspected. Actual Google OAuth, Supabase writes and live production enrollment were not exercised. No deployment or remote push was performed.
+
+## Studio landing refresh (October 14, 2026)
+
+The landing uses a paper-colored background, solid sage/blue/clay panels, course-image recommendation cards, and larger Skill / Creation entrances. Account recommendations reuse the existing onboarding preferences; access-code students receive starter suggestions. Course actions retain their existing destinations. The independent Skill introduction/video remains future work.
+
+`core/dashboard-explore.js` supplies a five-stop, non-modal Artchi tour: recommendations, Skill, Creation, resume, and My Journey. It offers automatic first-visit guidance after onboarding, Back/Next, Skip, Escape, replay, viewport repositioning, and reduced-motion support. Dismissal/completion is stored per student in this browser. Navigation and sign-out close the tour. The SVG reuses the onboarding character. Two default course thumbnails are local copies of the existing course CDN images (`assets/dashboard/`).
+
+Verified with the dashboard browser suite: tour progression/replay/Escape, three recommendation images, existing login/navigation/profile/course gates, and 40 responsive checks. External services remain mocked; production authentication was not exercised.
+
+## Simplified landing and visual Skill catalogue
+
+The landing now contains compact recommendations and two large Skill / Creation directions. Each direction has its own multi-project Continue Learning list. The Foundation map and My Courses card moved to My Journey → Progress & Feedback. The legacy resume node is retained in a hidden compatibility container for the original renderer and is no longer offered as an automatic Preparation suggestion.
+
+Continuations combine the existing account's opened-lesson lists with account-scoped local opening history and saved step evidence. A default `currentLesson` alone is not treated as activity. Completed items are excluded; more than three projects expand under a details control. New successful lesson-open calls in `core/access.js` keep local ordering, including admin users. Direct Skill catalogue entries for Fashion / Color also record their opening locally. Resume actions check the existing branch access gate. Older lessons without an account opening record or recognized saved progress cannot be reconstructed as unfinished projects; local ordering is browser-specific. Destination mappings are explicit in `core/studio-catalog.js`.
+
+Skill now uses six illustrated category cards. The images are actual course assets: dog drawing, the fashion module's three reference figures, Color Practice materials, a Zodiac ink-painting video frame, the art-history cathedral photograph, and the cardboard cathedral. The separate Skill intro video remains deferred.
+
+Validation: mocked browser regression passes, including separate multi-project lists, completion exclusion, denied-resume gating, 44 responsive checks, and desktop/mobile visual inspection. Screenshots with progress use synthetic test data, never real student records. No production deployment.
+
+## Typography constraint
+
+Use the existing brand fonts throughout: Open Sans for body copy and Montserrat for titles. Do not introduce serif fonts or substitute a new font family. Keep titles restrained: Skill / Creation 26px, Skill page heading 24px (22px mobile), course-card headings 18px, recommendation heading 18px. This is an explicit user requirement, not a stylistic suggestion.
