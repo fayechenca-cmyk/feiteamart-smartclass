@@ -8,7 +8,8 @@
  * dashboard catalog, upgrade/index.html). The SAME id prefixed with
  * 'live-' is the course_purchases.course_id value for that course's
  * enrollment rows (e.g. id 'sketch-b' -> course_purchases row with
- * course_id 'live-sketch-b') -- see core/live-enrollment.js (Part 3).
+ * course_id 'live-sketch-b') -- see getLiveEnrollments()/
+ * recordLiveEnrollment() in core/access.js (Part 3).
  * live_class_sessions.course_id (Part 2) uses the bare id instead
  * ('sketch-a', not 'live-sketch-a'), since that table only ever holds
  * schedule rows, never purchase rows, so there is no prefix collision

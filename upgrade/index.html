@@ -527,7 +527,7 @@ h1, h2, h3, h4, .h-display, .h-section {
           <li>10 live sessions per course</li>
           <li>In-class feedback and teacher-led structure</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('live_class')">Enroll — Foundation of Sketch A →</button>
+        <a class="plan-cta" href="../#live-class-section" style="display:block; text-align:center;">See live classes →</a>
       </div>
 
     </div>
@@ -566,10 +566,12 @@ h1, h2, h3, h4, .h-display, .h-section {
 <script src="../core/access.js"></script>
 <script src="../core/live-courses.js"></script>
 <script>
+// live_class no longer has its own goToStripe() entry here -- Option C's
+// button now links to the dashboard's Live Classes catalog
+// (core/live-courses.js), which has its own per-course Stripe links.
 const STRIPE_LINKS = {
   self_study:          'https://buy.stripe.com/fZu14o6P35Cq0DU3hQd7q0l',  // $60 CAD / year
-  self_study_teacher:  'https://buy.stripe.com/9B6cN66P3fd086m19Id7q0m',  // $120 CAD / year
-  live_class:          'https://buy.stripe.com/7sYcN67T70i65YecSqd7q0g'   // Foundation of Sketch A, $180 CAD
+  self_study_teacher:  'https://buy.stripe.com/9B6cN66P3fd086m19Id7q0m'   // $120 CAD / year
 };
 
 function applyContextFromUrl() {

@@ -528,13 +528,17 @@
     font-size: 12px; color: var(--ink-soft);
   }
 
-  /* ═══ LIVE CLASS VIP SECTION ═══ */
+  /* ═══ LIVE CLASS VIP SECTION ═══
+     One of these renders per enrolled course inside #live-class-catalog
+     (Part 4) — margin-bottom is between-card spacing now, not
+     end-of-section spacing (the #live-class-section wrapper around the
+     whole catalog handles that instead). */
   .live-class-vip-section {
     background: linear-gradient(135deg, #1a1d2b 0%, #2a2f42 100%);
     border: 1px solid rgba(200,169,110,0.3);
     border-radius: var(--radius-lg);
     padding: 26px 20px;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
     color: #fff;
   }
   @media (min-width: 768px) {
@@ -666,6 +670,44 @@
     .live-class-next-actions, .live-class-session-detail-actions { flex-direction: column; }
     .live-class-zoom-btn, .live-class-materials-btn, .live-class-submit-btn { justify-content: center; }
     .live-class-session-row { align-items: flex-start; }
+  }
+
+  /* ═══ LIVE CLASS ENROLL CARD (Part 4) ═══
+     Compact card for a course the current student has NOT enrolled in —
+     light, unlike the dark enrolled .live-class-vip-section card, so the
+     two states read as clearly different at a glance. */
+  .live-class-enroll-card {
+    background: #fff; border: 1.5px solid var(--ink-veryfaint);
+    border-radius: var(--radius-lg); padding: 20px 18px;
+    margin-bottom: 16px;
+  }
+  .live-class-enroll-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px;
+    font-weight: 900; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .live-class-enroll-title {
+    font-family: 'Montserrat', sans-serif; font-size: 17px;
+    font-weight: 800; margin-bottom: 4px;
+  }
+  .live-class-enroll-subtitle { font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .live-class-enroll-meta { font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+  .live-class-enroll-price {
+    font-family: 'Montserrat', sans-serif; font-size: 16px;
+    font-weight: 800; color: var(--ink); margin-bottom: 10px;
+  }
+  .live-class-enroll-note {
+    font-size: 12px; color: var(--ink-soft); font-style: italic; margin-bottom: 12px;
+  }
+  .live-class-enroll-btn {
+    background: var(--gold); color: var(--ink); border: none;
+    padding: 10px 20px; border-radius: 22px; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    letter-spacing: 0.3px; transition: background 0.18s;
+  }
+  .live-class-enroll-btn:hover { background: #d8bc85; }
+  .live-class-enroll-btn:disabled {
+    background: var(--ink-veryfaint); color: var(--ink-soft); cursor: not-allowed;
   }
 
   /* ═══ TRACK CARDS (Skills / Creation) ═══ */
@@ -1647,30 +1689,19 @@
 
   <section id="student-learning-map" aria-label="Your learning map"></section>
 
-  <!-- ═══ LIVE CLASS VIP SECTION — only for isLiveClass students ═══
-       Hidden by default (inline style), unhidden by renderLiveClassSection()
-       only after isLiveClassStudent() passes. See RENDER HOME below. -->
-  <div class="live-class-vip-section" id="live-class-section" style="display:none;">
-
-    <div class="live-class-vip-header">
-      <div class="live-class-vip-kicker">🎓 YOUR LIVE CLASS</div>
-      <div class="live-class-vip-title" id="live-class-vip-title">Foundation of Sketch A</div>
-      <div class="live-class-vip-subtitle" id="live-class-vip-subtitle">Form, Light &amp; Perspective · 10 Sessions</div>
+  <!-- ═══ LIVE CLASSES SECTION — shown to every signed-in student ═══
+       Hidden by default (inline style), unhidden by renderLiveClassSection(),
+       which now renders a catalog: one full dark "enrolled" card per
+       course the student is enrolled in, one compact light "enroll" card
+       per course they are not. See RENDER HOME below. -->
+  <div id="live-class-section" style="display:none; margin-bottom: 28px;">
+    <div class="section-heading">
+      <div class="section-title">Live Classes</div>
+      <div class="section-sub">Small-group classes with a real teacher, live on Zoom.</div>
     </div>
-
-    <div class="live-class-next-card" id="live-class-next-card">
-      <!-- populated by renderLiveClassSection() -->
+    <div id="live-class-catalog">
+      <!-- populated by renderLiveClassSection(): one card per course in window.LIVE_COURSES -->
     </div>
-
-    <div class="live-class-sessions-list" id="live-class-sessions-list">
-      <!-- populated by renderLiveClassSection() -->
-    </div>
-
-    <button class="live-class-toggle-past" id="live-class-toggle-past"
-            onclick="togglePastSessions()" style="display:none;">
-      Show past sessions ↓
-    </button>
-
   </div>
 
   <!-- ═══ LEARNING PATHS ═══ -->
@@ -2954,12 +2985,20 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   window.closeBadgeDetail = closeBadgeDetail;
 
   // ═══════════════════════════════════════════════════════════
-  // LIVE CLASS VIP SECTION
-  // Reads window.LIVE_CLASS_SCHEDULE (core/live-class-schedule.js).
-  // Visible ONLY to isLiveClassStudent() — everyone else never sees
-  // the section render (it stays display:none from the static HTML).
+  // LIVE CLASSES SECTION
+  // Reads window.LIVE_CLASS_SCHEDULE (core/live-class-schedule.js) for
+  // sketch-a's static fallback, and window.LIVE_COURSES (core/live-
+  // courses.js) for the catalog itself. Visible to every signed-in
+  // student (Part 4) — see renderLiveClassSection() below, which no
+  // longer gates on isLiveClassStudent().
   // ═══════════════════════════════════════════════════════════
 
+  // isLiveClassStudent() predates the Part 4 catalog and only ever
+  // detects sketch-a enrollment (the platform's original single-live-
+  // course design) — it does NOT know about sketch-b/c/d enrollment via
+  // core/access.js's getLiveEnrollments()/course_purchases. Still used
+  // by attachSkillsLessonGuard/handleResumeClick and the My Studio ·
+  // Live panel (core/student-dashboard.js), left as-is intentionally.
   // Mirrors isLiveClassStudent() in the lesson pages (e.g.
   // lessons/lesson-3-cube/index.html), adapted to this page's own
   // userProfile / validStudents instead of UserProfile / StudentRoster.
@@ -2992,10 +3031,11 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     return FOUNDATION_A_PATH.find(l => l.id === refId) || null;
   }
 
-  // Live Class VIP section only ever renders for isLiveClassStudent()
-  // (see renderLiveClassSection()'s guard), so these smartClassRef links
-  // are only ever shown to live class students in the first place. They
-  // still go through goToSmartClassLesson() below — a dedicated handler
+  // This enrolled-course card (renderEnrolledCourseCard, Part 4) only
+  // ever renders for a course the student is actually enrolled in, so
+  // these smartClassRef links are only ever shown to an enrolled live
+  // class student in the first place. They still go through
+  // goToSmartClassLesson() below — a dedicated handler
   // that just navigates, with NO FEIAccess.canOpenLesson() call — so the
   // lesson opens directly and can never be intercepted by the Foundation A
   // paywall/order gate (unlike attachSkillsLessonGuard, which only guards
@@ -3144,15 +3184,36 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   }
   window.toggleSessionDetail = toggleSessionDetail;
 
-  function togglePastSessions() {
-    const list = document.getElementById('live-class-past-list');
-    const btn = document.getElementById('live-class-toggle-past');
+  // courseId-scoped (Part 4) — each enrolled course's card has its own
+  // past-sessions list/button now that the catalog can render more than
+  // one enrolled course at once.
+  function togglePastSessions(courseId) {
+    const list = document.getElementById('live-class-past-list-' + courseId);
+    const btn = document.getElementById('live-class-toggle-past-' + courseId);
     if (!list || !btn) return;
     const showing = list.style.display !== 'none';
     list.style.display = showing ? 'none' : 'block';
     btn.textContent = showing ? 'Show past sessions ↓' : 'Hide past sessions ↑';
   }
   window.togglePastSessions = togglePastSessions;
+
+  // Escapes to window.top the same way upgrade/index.html's goToStripe()
+  // does, so the Enroll button on the dashboard still reaches Stripe
+  // correctly if this page is ever embedded in an iframe.
+  function goToLiveCourseStripe(courseId) {
+    const course = (window.LIVE_COURSES || []).find(c => c.id === courseId);
+    if (!course || !course.stripeUrl || course.stripeUrl.indexOf('TBD') === 0) return;
+    try {
+      if (window.top !== window.self) {
+        window.top.location.href = course.stripeUrl;
+        return;
+      }
+      window.location.href = course.stripeUrl;
+    } catch (e) {
+      window.open(course.stripeUrl, '_blank');
+    }
+  }
+  window.goToLiveCourseStripe = goToLiveCourseStripe;
 
   // ── Supabase-backed schedule, falling back to LIVE_CLASS_SCHEDULE ──
   // Lets a teacher's edits in teacher-admin/index.html's Course Schedule
@@ -3241,65 +3302,147 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     };
   }
 
-  async function renderLiveClassSection() {
-    const section = document.getElementById('live-class-section');
-    if (!section) return;
+  // Full dark "enrolled" card for one course: Next Class, sessions list,
+  // past-sessions toggle — exactly today's single-course card, just
+  // parameterized by course so the catalog can render several of these
+  // at once. The static LIVE_CLASS_SCHEDULE fallback only ever applies
+  // to sketch-a (core/live-class-schedule.js is sketch-a's own data);
+  // every other course relies entirely on live_class_sessions.
+  async function renderEnrolledCourseCard(course) {
+    const staticSchedule = course.id === 'sketch-a' ? window.LIVE_CLASS_SCHEDULE : null;
+    const supabaseRows = await fetchLiveClassSessions(course.id);
 
-    if (!isLiveClassStudent()) {
-      section.style.display = 'none';
-      return;
-    }
-
-    // The static LIVE_CLASS_SCHEDULE fallback below is sketch-a's own
-    // data (core/live-class-schedule.js) -- only ever correct here
-    // because this function is still single-course (sketch-a). Part 4's
-    // multi-course catalog loop scopes that fallback to sketch-a only,
-    // same reasoning.
-    const staticSchedule = window.LIVE_CLASS_SCHEDULE;
-    const supabaseRows = await fetchLiveClassSessions('sketch-a');
-
-    let schedule;
+    let schedule = null;
     if (supabaseRows) {
-      console.log('[LiveClass] Using Supabase data:', supabaseRows.length, 'sessions');
       const sessions = supabaseRows.map(convertSupabaseRow);
       schedule = buildSessionsSchedule(sessions, staticSchedule ? staticSchedule.defaultZoom : null);
     } else if (staticSchedule) {
-      console.log('[LiveClass] Using default schedule (fallback)');
       const sessions = staticSchedule.sessions.map(s => Object.assign({}, s, { status: staticSchedule.computeStatus(s) }));
       schedule = buildSessionsSchedule(sessions, staticSchedule.defaultZoom);
-    } else {
-      section.style.display = 'none';
-      return;
     }
 
-    section.style.display = 'block';
-    const courseInfo = staticSchedule ? staticSchedule.course : null;
-    document.getElementById('live-class-vip-title').textContent = courseInfo ? courseInfo.title : 'Live Class';
-    document.getElementById('live-class-vip-subtitle').textContent = courseInfo
-      ? `${courseInfo.subtitle} · ${courseInfo.totalClasses} Sessions`
-      : `${schedule.sessions.length} Sessions`;
+    // TBD_* subtitle placeholders (core/live-courses.js, courses B-D
+    // before Faye fills them in) must never reach the screen as literal
+    // text — same handling as the TBD stripeUrl convention there.
+    const realSubtitle = course.subtitle && course.subtitle.indexOf('TBD_') !== 0 ? course.subtitle : '';
+    const subtitleLine = (realSubtitle ? realSubtitle + ' · ' : '') + course.totalClasses + ' Sessions';
+
+    const header = `
+      <div class="live-class-vip-header">
+        <div class="live-class-vip-kicker">🎓 YOUR LIVE CLASS</div>
+        <div class="live-class-vip-title">${liveClassEscapeHtml(course.title)}</div>
+        <div class="live-class-vip-subtitle">${liveClassEscapeHtml(subtitleLine)}</div>
+      </div>
+    `;
+
+    // No session rows at all yet (a just-enrolled course whose schedule
+    // has not been set up in teacher-admin) -- show the course's own
+    // startNote instead of a Next Class block, and nothing else.
+    if (!schedule || schedule.sessions.length === 0) {
+      return `
+        <div class="live-class-vip-section">
+          ${header}
+          <div class="live-class-next-card">
+            <div class="live-class-next-label">YOU'RE ENROLLED</div>
+            <div class="live-class-next-title">${liveClassEscapeHtml(course.startNote || 'Your class schedule will appear here once the first session is set.')}</div>
+          </div>
+        </div>
+      `;
+    }
 
     const next = schedule.getNextUpcoming();
-    document.getElementById('live-class-next-card').innerHTML = renderLiveClassNextCard(next, schedule);
-
     const upcoming = schedule.getUpcoming().filter(s => !next || s.id !== next.id);
     const past = schedule.getPast();
 
     let sessionsHtml = upcoming.map(s => renderLiveClassSessionRow(s, schedule, false)).join('');
     if (past.length > 0) {
-      sessionsHtml += `<div id="live-class-past-list" style="display:none;">`
+      sessionsHtml += `<div id="live-class-past-list-${course.id}" style="display:none;">`
         + past.map(s => renderLiveClassSessionRow(s, schedule, true)).join('')
         + `</div>`;
     }
-    document.getElementById('live-class-sessions-list').innerHTML = sessionsHtml;
 
-    const toggleBtn = document.getElementById('live-class-toggle-past');
-    if (past.length > 0) {
-      toggleBtn.style.display = 'block';
-      toggleBtn.textContent = 'Show past sessions ↓';
-    } else {
-      toggleBtn.style.display = 'none';
+    const toggleBtn = past.length > 0
+      ? `<button class="live-class-toggle-past" id="live-class-toggle-past-${course.id}" onclick="togglePastSessions('${course.id}')">Show past sessions ↓</button>`
+      : '';
+
+    return `
+      <div class="live-class-vip-section">
+        ${header}
+        <div class="live-class-next-card">${renderLiveClassNextCard(next, schedule)}</div>
+        <div class="live-class-sessions-list">${sessionsHtml}</div>
+        ${toggleBtn}
+      </div>
+    `;
+  }
+
+  // Compact light "enroll" card for a course the student is not enrolled
+  // in. "Opening soon" + a disabled button when stripeUrl is still a
+  // TBD_STRIPE_* placeholder (core/live-courses.js), matching that
+  // file's own documented convention.
+  function renderEnrollCard(course) {
+    const realSubtitle = course.subtitle && course.subtitle.indexOf('TBD_') !== 0 ? course.subtitle : '';
+    const isOpen = !!(course.stripeUrl && course.stripeUrl.indexOf('TBD') !== 0);
+    const noteHtml = course.startNote
+      ? `<div class="live-class-enroll-note">${liveClassEscapeHtml(course.startNote)}</div>`
+      : '';
+    const btnHtml = isOpen
+      ? `<button class="live-class-enroll-btn" onclick="goToLiveCourseStripe('${course.id}')">Enroll →</button>`
+      : `<button class="live-class-enroll-btn" disabled>Opening soon</button>`;
+
+    return `
+      <div class="live-class-enroll-card">
+        <div class="live-class-enroll-kicker">LIVE SMALL GROUP CLASS</div>
+        <div class="live-class-enroll-title">${liveClassEscapeHtml(course.title)}</div>
+        ${realSubtitle ? `<div class="live-class-enroll-subtitle">${liveClassEscapeHtml(realSubtitle)}</div>` : ''}
+        <div class="live-class-enroll-meta">${course.totalClasses} live sessions on Zoom · max 4 students</div>
+        <div class="live-class-enroll-price">${liveClassEscapeHtml(course.price)}</div>
+        ${noteHtml}
+        ${btnHtml}
+      </div>
+    `;
+  }
+
+  // Part 4: the Live Classes section is now a catalog shown to every
+  // signed-in student (renderHome(), this function's only caller,
+  // already guarantees userProfile is set) -- not just isLiveClassStudent()
+  // students. Enrolled courses (core/access.js getLiveEnrollments())
+  // render as full schedule cards; everyone else renders as a compact
+  // enroll card. isLiveClassStudent() itself is untouched and still used
+  // elsewhere (attachSkillsLessonGuard, handleResumeClick) -- intentionally
+  // out of scope here.
+  async function renderLiveClassSection() {
+    const section = document.getElementById('live-class-section');
+    const catalog = document.getElementById('live-class-catalog');
+    if (!section || !catalog) return;
+
+    const courses = Array.isArray(window.LIVE_COURSES) ? window.LIVE_COURSES : [];
+    if (courses.length === 0) {
+      section.style.display = 'none';
+      return;
     }
+
+    let enrollments = [];
+    try {
+      if (window.FEIAccess) {
+        await window.FEIAccess.init();
+        enrollments = await window.FEIAccess.getLiveEnrollments();
+      }
+    } catch (e) {
+      console.warn('[LiveClass] getLiveEnrollments failed', e);
+    }
+    const enrolledIds = new Set(enrollments.map(e => e.courseId));
+
+    const blocks = [];
+    for (const course of courses) {
+      if (enrolledIds.has(course.id)) {
+        blocks.push(await renderEnrolledCourseCard(course));
+      } else {
+        blocks.push(renderEnrollCard(course));
+      }
+    }
+
+    catalog.innerHTML = blocks.join('');
+    section.style.display = 'block';
   }
   window.renderLiveClassSection = renderLiveClassSection;
 
