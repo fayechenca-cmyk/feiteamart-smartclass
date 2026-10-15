@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Unlock Smart Class — FEI TeamArt</title>
+<title>Join Smart Class — FEI TeamArt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -212,6 +212,19 @@ h1, h2, h3, h4, .h-display, .h-section {
   margin-bottom: 6px;
   color: var(--ink);
 }
+.plan-price {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.plan-price-note {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-bottom: 16px;
+}
 .plan-tagline {
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
@@ -313,6 +326,13 @@ h1, h2, h3, h4, .h-display, .h-section {
 }
 .branch-icon.skills { background: var(--accent-soft); }
 .branch-icon.creation { background: var(--teacher-soft); }
+.branches-footnote {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: -14px 0 28px;
+}
 .branch-block h4 {
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
@@ -417,8 +437,8 @@ h1, h2, h3, h4, .h-display, .h-section {
   <!-- Confirmation view (Stripe success) -->
   <div id="confirm-section">
     <div class="checkmark">✨</div>
-    <h2>Welcome to the full Foundation A experience.</h2>
-    <p class="confirm-sub">Your account is unlocked. Skills, Creation, and your saved work are now fully open to you.</p>
+    <h2>Welcome to Smart Class.</h2>
+    <p class="confirm-sub">Your account is unlocked. Every course and your saved work are now open to you.</p>
     <a href="../" class="plan-cta" style="display:inline-block; max-width:280px; background: var(--accent);">Enter Smart Class →</a>
   </div>
 
@@ -426,9 +446,9 @@ h1, h2, h3, h4, .h-display, .h-section {
   <div id="upgrade-section">
 
     <div class="intro">
-      <div class="eyebrow">Unlock Foundation A</div>
+      <div class="eyebrow">Smart Class membership</div>
       <h1 class="headline">Choose how you'd like to learn.</h1>
-      <p class="sub">All three options open the full <strong>current Foundation A class experience</strong> — both Skills and Creation. Pick the level of support that fits you.</p>
+      <p class="sub">Every course included. No extra fees.</p>
     </div>
 
     <div class="context-card" id="ctx-card">
@@ -443,69 +463,71 @@ h1, h2, h3, h4, .h-display, .h-section {
       <div class="branch-block">
         <div class="branch-icon skills">📐</div>
         <div>
-          <h4>Skills · Foundation A</h4>
-          <p>The full structured drawing path — Cube, Sphere, Cylinder, Box, Cup, Apple, Cone, Ice Cream, Intersecting Forms, Paper Crane.</p>
+          <h4>Skills</h4>
+          <p>Every Skills course — Foundation of Sketch, Scene Drawing, Color Practice, Ink Painting, and more as they open.</p>
         </div>
       </div>
       <div class="branch-block">
         <div class="branch-icon creation">🎨</div>
         <div>
-          <h4>Creation · Studio</h4>
-          <p>Every current Creation lesson — Surrealism Illustration, Learn From Masters series, and the studio lessons available now.</p>
+          <h4>Creation</h4>
+          <p>Every Creation studio — Learn From Masters, Material Art, Leather Craft, and more as they open.</p>
         </div>
       </div>
     </div>
+    <p class="branches-footnote">Always free: Art History</p>
 
     <div class="plans">
 
       <!-- OPTION A — Smart Feedback -->
       <div class="plan standard">
         <div class="plan-eyebrow">Option A · Self-paced</div>
-        <div class="plan-name">Smart Feedback</div>
-        <p class="plan-tagline">Learn at your own rhythm with built-in guidance, hints, and reflection prompts inside every lesson.</p>
+        <div class="plan-name">Self-Study</div>
+        <div class="plan-price">$60 CAD / year</div>
+        <div class="plan-price-note">Renews yearly · cancel anytime</div>
+        <p class="plan-tagline">Learn at your own rhythm with built-in guidance inside every lesson.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li class="highlight">Full Foundation A Smart Class access</li>
-          <li>Every Skills lesson (Cube → Paper Crane)</li>
-          <li>Every current Creation studio lesson</li>
-          <li>New lessons added to Foundation A — included</li>
-          <li>Saved cards, journal, badges across devices</li>
+          <li class="highlight">Every course on the platform</li>
+          <li>New courses added during your year — included</li>
+          <li>Saved work, journal and badges across devices</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('self_study')">Choose Smart Feedback →</button>
+        <button class="plan-cta" onclick="goToStripe('self_study')">Choose Self-Study →</button>
       </div>
 
       <!-- OPTION B — Smart Feedback + Real Teacher Support -->
       <div class="plan recommended">
         <div class="badge">Most chosen</div>
         <div class="plan-eyebrow">Option B · Self-paced + teacher</div>
-        <div class="plan-name">Smart Feedback<br>+ Real Teacher Support</div>
-        <p class="plan-tagline">Everything in Option A, plus personal written feedback from your teacher on the work you submit.</p>
+        <div class="plan-name">Self-Study + Teacher Feedback</div>
+        <div class="plan-price">$120 CAD / year</div>
+        <div class="plan-price-note">Renews yearly · cancel anytime</div>
+        <p class="plan-tagline">Everything in Self-Study, plus personal written feedback from the teacher on the work you submit.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li class="highlight">Everything in Smart Feedback</li>
+          <li class="highlight">Everything in Self-Study</li>
           <li>Personal teacher feedback on submitted work</li>
-          <li>Written notes that help you grow faster</li>
-          <li>Direct support when you're stuck</li>
-          <li>Still self-paced — feedback on your timeline</li>
+          <li>Still self-paced — on your timeline</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('self_study_teacher')">Choose Smart + Teacher →</button>
+        <button class="plan-cta" onclick="goToStripe('self_study_teacher')">Choose Self-Study + Feedback →</button>
       </div>
 
       <!-- OPTION C — Online Teacher Small Group Class -->
       <div class="plan premium">
         <div class="badge">Most complete</div>
         <div class="plan-eyebrow">Option C · Live group class</div>
-        <div class="plan-name">Online Teacher<br>Small Group Class</div>
-        <p class="plan-tagline">The live group class with Ms. Dawn — includes everything in Smart Feedback, so you can practice and review on your own time too.</p>
+        <div class="plan-name">Live Small Group Class</div>
+        <div class="plan-price">Priced per course</div>
+        <div class="plan-price-note">Now enrolling: Foundation of Sketch A — $180 CAD</div>
+        <p class="plan-tagline">Live teaching on Zoom in a small group, with the teacher guiding every session.</p>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li class="highlight">Live group teaching by Ms. Dawn on Zoom</li>
+          <li class="highlight">Live group teaching on Zoom</li>
           <li>Maximum 4 students per group</li>
-          <li>Includes full Smart Class self-study (Option A)</li>
-          <li>In-class feedback + teacher-led structure</li>
-          <li>The most complete current pathway</li>
+          <li>10 live sessions per course</li>
+          <li>In-class feedback and teacher-led structure</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('live_class')">Enroll in the group class →</button>
+        <button class="plan-cta" onclick="goToStripe('live_class')">Enroll — Foundation of Sketch A →</button>
       </div>
 
     </div>
@@ -517,12 +539,12 @@ h1, h2, h3, h4, .h-display, .h-section {
 
     <div class="faq-title">A few quick answers</div>
     <div class="faq-item">
-      <div class="faq-q">What does "Foundation A Smart Class" mean?</div>
-      <div class="faq-a">Foundation A is the first Foundation stage. Inside Smart Class, that means all 10 Skills lessons (Cube, Sphere, Cylinder, Box, Cup, Apple, Cone, Ice Cream, Intersecting Forms, Paper Crane) plus the current Creation studio lessons. As we add more Smart Class lessons to the Foundation A scope, you get them too — at no extra cost.</div>
+      <div class="faq-q">What's included?</div>
+      <div class="faq-a">Every course on Smart Class — Skills and Creation — including new courses added during your membership year. Art History is always free for everyone.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Will future classes be included automatically?</div>
-      <div class="faq-a">Lessons we add to the Foundation A scope are included in your access. When we open new course families — like Foundation B, or new Creation stations — those will be priced as separate scopes, so you always know what you're buying. We will never silently bundle a new paid scope into your existing access.</div>
+      <div class="faq-q">How does the yearly plan work?</div>
+      <div class="faq-a">Your membership renews once a year. You can cancel anytime from the link in your Stripe receipt email, and you keep access until the end of the year you paid for.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Will my saved work and progress carry over?</div>
@@ -534,7 +556,7 @@ h1, h2, h3, h4, .h-display, .h-section {
     </div>
     <div class="faq-item">
       <div class="faq-q">How does the online small group class work?</div>
-      <div class="faq-a">Groups meet live on Zoom with Ms. Dawn on a scheduled cadence, with a maximum of 4 students per group. Option C also includes the full Smart Class self-study, so you can review and practice between live sessions. After you enroll, we'll be in touch about the next group's schedule.</div>
+      <div class="faq-a">Groups meet live on Zoom with the teacher, with a maximum of 4 students per group. Each live course is priced separately. After you enroll, we'll be in touch about the next group's schedule.</div>
     </div>
 
   </div>
@@ -555,7 +577,7 @@ function applyContextFromUrl() {
   const ctx = document.getElementById('ctx-card');
   if (reason === 'paywall_creation') {
     ctx.querySelector('.ctx-text').innerHTML =
-      "<strong>Two Creation lessons explored</strong> · You've used your free Creation explorations. Unlock the rest, plus the full Skills path.";
+      "<strong>Three Creation lessons explored</strong> · You've used your free Creation explorations. Unlock the rest, plus the full Skills path.";
     ctx.querySelector('.ctx-icon').textContent = '🎨';
   } else if (reason === 'paywall_skills') {
     ctx.querySelector('.ctx-text').innerHTML =
