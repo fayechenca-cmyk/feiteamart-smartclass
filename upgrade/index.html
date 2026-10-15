@@ -597,9 +597,12 @@ async function handleSuccessReturn() {
   document.getElementById('upgrade-section').style.display = 'none';
   document.getElementById('confirm-section').classList.add('visible');
   try {
+    const params = new URLSearchParams(window.location.search);
+    const requestedPlan = params.get('plan');
+    const plan = ['self_study', 'self_study_teacher', 'live_class'].includes(requestedPlan) ? requestedPlan : undefined;
     if (window.FEIAccess) {
       await window.FEIAccess.init();
-      await window.FEIAccess.markPaid();
+      await window.FEIAccess.markPaid(plan);
     }
   } catch (e) { console.warn('[upgrade] markPaid failed', e); }
 }
