@@ -124,3 +124,57 @@
 #student-shell .explore-portals .track-quote {font-family:"Open Sans",sans-serif;font-size:14px}
 #student-shell .studio-continue h3 {font-family:Montserrat,sans-serif}
 #student-shell .start-recommend-heading h2 {font-size:18px}
+
+/* Homepage palette: #defde2 canvas, #fffdf9 surfaces, #17182f ink.
+   Scoped to the dashboard; Artchi and standalone lesson themes keep their own colors. */
+#student-shell {--dash-ink:#17182f;--dash-purple:#17182f;--dash-muted:#626574;--dash-line:#dce5db;background:#fffdf9;color:var(--dash-ink)}
+#student-shell .dashboard-content {background:#fffdf9}
+#student-shell .dashboard-sidebar {background:#eff8ed;border-color:#dce5db}
+#student-shell .dashboard-avatar {background:#defde2}
+#student-shell .dashboard-nav a {color:#535866}
+#student-shell .dashboard-nav a[aria-current=page] {background:#17182f;color:#fff;box-shadow:0 5px 16px #17182f18}
+#student-shell .dashboard-nav a:hover:not([aria-current=page]) {background:#defde2;color:#17182f}
+#student-shell .dashboard-link,#student-shell .dashboard-button,#student-shell #hero-name,#student-shell .hero-name {color:#17182f}
+#student-shell .dashboard-button {border-color:#d8dfd5;background:#fffdf9}
+#student-shell .dashboard-button.primary {background:#17182f;color:#fff}
+#student-shell .dashboard-special a {background:#defde2;border-color:#bfd6c0}
+#student-shell .dashboard-special small,#student-shell .dashboard-small {color:#626574}
+#student-shell .dashboard-tabs a[aria-current=page] {color:#17182f;border-color:#17182f}
+#student-shell .dashboard-panel,#student-shell .dashboard-shape-panel {background:#fffdf9}
+#student-shell .dashboard-badge-symbol {background:#e7f7f2;color:#17182f}
+#student-shell .dashboard-profile-form input[type=text],#student-shell .dashboard-profile-form textarea {border-color:#d8dfd5}
+#student-shell .dashboard-avatar-options input:checked+span {border-color:#17182f;background:#defde2}
+#student-shell .explore-hero {background:#eff8ed;border:1px solid #dce5db;border-radius:16px;padding:16px 22px}
+#student-shell .explore-invitation .dashboard-button {border:1px solid #cbdccc;background:#fffdf9;padding:9px 13px;border-radius:999px}
+#student-shell .start-course-list a {background:#fff;border-color:#e1e4dc;box-shadow:0 4px 14px #17182f06;color:#17182f}
+#student-shell .start-course-list a:hover {border-color:#91ac95;box-shadow:0 7px 20px #17182f12}
+#student-shell .pick-copy small,#student-shell .start-recommend-heading p {color:#626574}
+#student-shell .start-recommend-heading button {color:#17182f;border-color:#c7d7c5;background:#eff8ed}
+#student-shell .studio-direction {position:relative;isolation:isolate;background:#e7f7f2;border:1px solid #d0e0d5;border-radius:18px 40px 18px 18px;box-shadow:0 12px 32px #23273d0d}
+#student-shell .creation-direction {background:#fff8eb;border-color:#e5ddce}
+#student-shell .studio-direction::before {content:'';position:absolute;inset:210px 0 0;background:url('../assets/dashboard/skill-background.jpg') center bottom/cover no-repeat;opacity:.38;pointer-events:none;z-index:-2}
+#student-shell .creation-direction::before {background-image:url('../assets/dashboard/creation-background.jpg')}
+#student-shell .studio-direction::after {content:'';position:absolute;inset:210px 0 0;background:#e7f7f280;pointer-events:none;z-index:-1}
+#student-shell .creation-direction::after {background:#fff8eb99}
+#student-shell .studio-direction .track-card,#student-shell .studio-direction .track-card:hover {background:transparent;color:#17182f}
+#student-shell .studio-direction .track-card::before {display:none}
+#student-shell .studio-direction .track-age-pill {background:#fffdf9cc;color:#535866;border:1px solid #ffffff}
+#student-shell .studio-direction .track-quote,#student-shell .studio-direction .track-description {color:#343747;opacity:1}
+#student-shell .studio-direction .explore-portal-link {display:inline-flex;align-items:center;min-height:40px;padding:0 15px;background:#fffdf9;border:1px solid #becfc1;border-radius:999px;box-shadow:0 4px 12px #17182f0b;color:#17182f}
+#student-shell .creation-direction .explore-portal-link {border-color:#d9ccba}
+#student-shell .studio-continue {margin:0 22px 22px;padding:18px;border:1px solid #ffffff;border-radius:14px;background:#fffdf9ed;box-shadow:0 6px 22px #23273d0c;backdrop-filter:blur(5px)}
+#student-shell .studio-continue h3 {color:#17182f}
+#student-shell .studio-continue h3 span {color:#626574;opacity:1}
+#student-shell .studio-continue p {color:#626574}
+#student-shell .studio-continue a {align-items:center;min-height:58px;gap:12px;border-color:#e3e7df;color:#17182f}
+#student-shell .studio-continue a:hover {text-decoration:none}
+#student-shell .studio-continue a b {display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 15px;border:1px solid #17182f;border-radius:999px;background:#17182f;color:#fff;font:600 11px 'Open Sans',sans-serif;box-shadow:0 0 0 3px #defde266,0 5px 16px #587c5d40;transition:box-shadow .2s,transform .2s,background .2s}
+#student-shell .creation-direction .studio-continue a b {box-shadow:0 0 0 3px #f3e5cc88,0 5px 16px #b89a6640}
+#student-shell .studio-continue a:hover b,#student-shell .studio-continue a:focus-visible b {background:#30334c;transform:translateY(-2px);box-shadow:0 0 0 4px #defde2,0 7px 22px #587c5d59}
+#student-shell .creation-direction .studio-continue a:hover b,#student-shell .creation-direction .studio-continue a:focus-visible b {box-shadow:0 0 0 4px #f3e5cc,0 7px 22px #b89a6659}
+#student-shell a:focus-visible,#student-shell button:focus-visible {outline:2px solid #17182f;outline-offset:4px}
+#student-shell .skill-gallery .subtrack {background:#fffdf9;border-color:#dce5db;box-shadow:0 6px 18px #23273d08}
+#student-shell .skill-gallery .subtrack-name,#student-shell .skill-gallery .subtrack-arrow {color:#17182f}
+#student-shell .skill-gallery-description,#student-shell .skill-gallery .subtrack-meta {color:#626574}
+@media(max-width:680px){#student-shell .explore-hero{padding:14px}#student-shell .studio-continue{margin:0 16px 18px;padding:14px}#student-shell .studio-continue a b{padding:0 12px;min-height:44px}#student-shell .studio-direction::before,#student-shell .studio-direction::after{top:180px}}
+@media(prefers-reduced-motion:reduce){#student-shell .studio-continue a b{transition:none;transform:none}}

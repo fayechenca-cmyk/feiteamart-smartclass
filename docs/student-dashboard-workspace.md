@@ -64,3 +64,9 @@ Validation: mocked browser regression passes, including separate multi-project l
 ## Typography constraint
 
 Use the existing brand fonts throughout: Open Sans for body copy and Montserrat for titles. Do not introduce serif fonts or substitute a new font family. Keep titles restrained: Skill / Creation 26px, Skill page heading 24px (22px mobile), course-card headings 18px, recommendation heading 18px. This is an explicit user requirement, not a stylistic suggestion.
+
+## Homepage color alignment and continuation emphasis
+
+The dashboard theme follows the live FEI homepage inspected October 14: warm white `#fffdf9`, light green `#defde2`, and dark ink `#17182f`. Tinted surfaces use pale green and warm cream. The two original track background images (the existing CDN IDs in `index.html`) are restored below the photo collages, with translucent color masks. Local copies live at `assets/dashboard/skill-background.jpg` and `creation-background.jpg`.
+
+Continuation links retain their original guarded link behavior but now display a dark pill CTA with a soft branch-tinted glow, hover feedback, keyboard focus treatment and reduced-motion handling. All theme rules are dashboard-scoped; Artchi artwork and standalone Fashion Design remain unchanged. Browser regression and 44 responsive checks pass; progress screenshots contain test fixtures.
