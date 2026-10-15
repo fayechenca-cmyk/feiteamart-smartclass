@@ -11,10 +11,18 @@
     ['.dashboard-nav a[data-page="journey"]','Your art has a home','Visit My Journey for your artwork, recorded progress, feedback and badges. Ready? Choose your first spark.']
   ];
   const key=()=>identity?'feiDashboard.tour.v1:'+encodeURIComponent(identity):null;
+  function rememberTour() {
+    if(!identity)return;
+    invited.add(identity);
+    try { localStorage.setItem(key(),'seen'); } catch {}
+    clearTimeout(autoTimer);
+    const replay=root?.querySelector('#explore-tour-start');
+    if(replay)replay.textContent='Meet Artchi · Replay tour ↗';
+  }
   function stop(save=false) {
     if(!tour)return;
     tour.hidden=true;target?.classList.remove('explore-highlight');target=null;
-    if(save&&key())try{localStorage.setItem(key(),'seen');}catch{}
+    if(save)rememberTour();
     if(previous?.isConnected&&previous.getClientRects().length)previous.focus({preventScroll:true});
   }
   function position() {
@@ -31,6 +39,8 @@
     target.classList.add('explore-highlight');
     target.scrollIntoView({block:'center',behavior:'instant'});
     tour.hidden=false;
+    // Remember the first display, even if the learner leaves before finishing.
+    rememberTour();
     tour.querySelector('small').textContent='ARTCHI’S STUDIO TOUR · '+(step+1)+' / '+steps.length;
     tour.querySelector('h3').textContent=steps[step][1];tour.querySelector('p').textContent=steps[step][2];
     tour.querySelector('[data-back]').disabled=step===0;

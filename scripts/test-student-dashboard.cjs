@@ -25,6 +25,18 @@ const output = path.resolve(__dirname, '../docs/dashboard-preview');
  assert.equal(await page.locator('#dashboard-heading').isVisible(),false);
  await page.waitForTimeout(1100);
  assert.equal(await page.locator('#explore-tour').isVisible(),true);
+ // Leaving during the first step must still count as having seen the welcome.
+ await page.reload();await page.locator('#dashboard-page-courses').waitFor({state:'visible'});
+ await page.waitForTimeout(1100);
+ assert.equal(await page.locator('#explore-tour').isVisible(),false);
+ // Simulate a closed session, then sign the same fixture back in.
+ await page.evaluate(()=>sessionStorage.removeItem('fei_user_profile'));
+ await page.reload();await page.locator('#signin-screen').waitFor({state:'visible'});
+ await page.locator('.access-code-section summary').click();
+ await page.locator('#signin-code').fill('DASHBOARD-TEST');await page.locator('#signin-btn').click();
+ await page.locator('#dashboard-page-courses').waitFor({state:'visible'});await page.waitForTimeout(1100);
+ assert.equal(await page.locator('#explore-tour').isVisible(),false);
+ await page.locator('#explore-tour-start').click();
  for(let step=0;step<5;step++){
    assert.match(await page.locator('#explore-tour small').innerText(),new RegExp((step+1)+' / 5'));
    await page.locator('#explore-tour [data-next]').click();
