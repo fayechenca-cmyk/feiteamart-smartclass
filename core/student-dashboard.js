@@ -204,9 +204,23 @@
     $('dashboard-feedback-summary').textContent=record?.teacher_note?'A note from your teacher is waiting in Feedback.':'Make room for your process.';
     updateLiveState();
   }
-  function updateLiveState(state) {
+  async function updateLiveState(state) {
     if(!shell)return;
-    const enrolled=global.isLiveClassStudent?.();
+    // isLiveClassStudent() only ever detected sketch-a (the platform's
+    // original single-live-course design) -- getLiveEnrollments() (Part 3,
+    // core/access.js) covers any enrolled course (A/B/C/D), matching what
+    // the dashboard's own Live Classes catalog (index.html) now shows.
+    // Starts from isLiveClassStudent() rather than false, so a getLiveEnrollments()
+    // failure or a missing FEIAccess falls back to the old check instead
+    // of wrongly telling an existing sketch-a student they are not enrolled.
+    let enrolled=global.isLiveClassStudent?.()||false;
+    try {
+      if(global.FEIAccess){
+        await global.FEIAccess.init();
+        const enrollments=await global.FEIAccess.getLiveEnrollments();
+        enrolled=enrolled||(Array.isArray(enrollments)&&enrollments.length>0);
+      }
+    } catch(e){ console.warn('[StudentDashboard] getLiveEnrollments failed',e); }
     $('dashboard-live-empty').hidden=enrolled&&$('live-class-section').style.display!=='none';
     $('dashboard-live-message').textContent=!enrolled?'You’re not enrolled in a live class yet. Your sessions and class materials will appear here when you join.':state==='error'?'Your class schedule could not be loaded. Please refresh to try again.':'Your class schedule is being prepared. Your sessions will appear here when available.';
   }
