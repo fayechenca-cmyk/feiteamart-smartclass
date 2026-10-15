@@ -58,7 +58,34 @@
     }
   }
 
+  // Mirrors lessons/zodiac-skill/index.html's computeAccess() exactly, so
+  // Ink Animal Studio and Zodiac behave identically for the same account:
+  // status.hasFullAccess already folds in admin tiers and the Supabase
+  // paid case (core/access.js), and already excludes RESTRICTED_LEGACY_CODES
+  // and isLiveClass-scoped codes from it — nothing to re-derive here.
+  // Deliberately fails OPEN (true) both when FEIAccess isn't loaded and
+  // when the check itself throws, same as Zodiac — this is a different
+  // philosophy than hasPurchased()'s own fail-closed lookup below, but
+  // matching Zodiac here is the explicit point: a real lookup failure on
+  // the membership check should not block an actually-entitled student.
+  async function _hasFullAccess() {
+    if (!global.FEIAccess) return true;
+    try {
+      await global.FEIAccess.init();
+      const status = await global.FEIAccess.getStatus();
+      return !!status.hasFullAccess;
+    } catch (e) {
+      console.warn('[InkAnimalAccess] full-access check failed, allowing through', e);
+      return true;
+    }
+  }
+
   async function hasPurchased() {
+    // A site-wide paid membership (or admin) now also unlocks animals
+    // 02-10, same as any other course — checked first so a paid member
+    // never needs the course_purchases round trip at all. The
+    // course_purchases path below is unchanged for everyone else.
+    if (await _hasFullAccess()) return true;
     try {
       const sb = _supabase();
       const studentCode = _legacyStudentCode();
