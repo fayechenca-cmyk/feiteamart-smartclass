@@ -24,3 +24,9 @@
 .path-group-divider{font:800 11px Montserrat,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#635583;margin:22px 0 10px;padding-top:14px;border-top:1px dashed #d8cce7}
 .path-group-divider:first-child{margin-top:0;padding-top:0;border-top:0}
 @media(max-width:600px){#foundation-map-nodes{padding-left:12px!important;margin-left:0}#foundation-map-nodes .sketch-branch{grid-template-columns:34px minmax(0,1fr);gap:12px;padding:16px}#foundation-map-nodes .foundation-reward{display:none}.foundation-step{width:32px;height:32px;font-size:16px}.sketch-package .path-node,#drawing-screen .path-node{padding:14px;gap:12px}#drawing-screen .node-icon,.sketch-package .node-icon{width:60px;height:60px;flex-basis:60px}.sketch-package .node-title,#drawing-screen .node-title{font-size:15px}}
+/* Form and Structure Level 2 intro film (Oct 2026). */
+.path-node.level-intro{width:100%;font:inherit;text-align:left;cursor:pointer;box-sizing:border-box}
+.level-intro .level-intro-play{position:absolute;inset:0;display:grid;place-items:center;border-radius:50%;background:#2523376b;color:#fff;font-size:24px}
+.fs-level-intro-dialog{border:0;border-radius:24px;padding:20px;width:min(1000px,94vw);max-height:92dvh;margin:auto;overflow:auto;background:#faf9f7;color:#252337}
+.fs-level-intro-dialog::backdrop{background:#252337bb;backdrop-filter:blur(5px)}
+.fs-level-intro-dialog video{display:block;width:100%;aspect-ratio:16/9;margin-top:12px;border-radius:16px;background:#000}
