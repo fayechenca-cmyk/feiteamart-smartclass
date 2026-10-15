@@ -586,7 +586,15 @@ async function handleSuccessReturn() {
 function goToStripe(planId) {
   const url = STRIPE_LINKS[planId];
   if (!url) return;
-  window.location.href = url;
+  try {
+    if (window.top !== window.self) {
+      window.top.location.href = url;
+      return;
+    }
+    window.location.href = url;
+  } catch (e) {
+    window.open(url, '_blank');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', applyContextFromUrl);
