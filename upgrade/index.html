@@ -471,7 +471,7 @@ h1, h2, h3, h4, .h-display, .h-section {
           <li>New lessons added to Foundation A — included</li>
           <li>Saved cards, journal, badges across devices</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('smart_feedback')">Choose Smart Feedback →</button>
+        <button class="plan-cta" onclick="goToStripe('self_study')">Choose Smart Feedback →</button>
       </div>
 
       <!-- OPTION B — Smart Feedback + Real Teacher Support -->
@@ -488,7 +488,7 @@ h1, h2, h3, h4, .h-display, .h-section {
           <li>Direct support when you're stuck</li>
           <li>Still self-paced — feedback on your timeline</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('smart_plus_teacher')">Choose Smart + Teacher →</button>
+        <button class="plan-cta" onclick="goToStripe('self_study_teacher')">Choose Smart + Teacher →</button>
       </div>
 
       <!-- OPTION C — Online Teacher Small Group Class -->
@@ -505,7 +505,7 @@ h1, h2, h3, h4, .h-display, .h-section {
           <li>In-class feedback + teacher-led structure</li>
           <li>The most complete current pathway</li>
         </ul>
-        <button class="plan-cta" onclick="goToStripe('online_teacher_group')">Enroll in the group class →</button>
+        <button class="plan-cta" onclick="goToStripe('live_class')">Enroll in the group class →</button>
       </div>
 
     </div>
@@ -544,10 +544,9 @@ h1, h2, h3, h4, .h-display, .h-section {
 <script src="../core/access.js"></script>
 <script>
 const STRIPE_LINKS = {
-  smart_feedback:        'https://buy.stripe.com/3cI9AU1uJ1ma5Ye8Cad7q0e',
-  smart_plus_teacher:    'https://buy.stripe.com/00w6oI5KZc0O72i2dMd7q0f',
-  online_teacher_group:  'https://buy.stripe.com/7sYcN67T70i65YecSqd7q0g'
-  // Foundation B / C / D group-class links may be added later as those scopes open.
+  self_study:          'https://buy.stripe.com/fZu14o6P35Cq0DU3hQd7q0l',  // $60 CAD / year
+  self_study_teacher:  'https://buy.stripe.com/9B6cN66P3fd086m19Id7q0m',  // $120 CAD / year
+  live_class:          'https://buy.stripe.com/7sYcN67T70i65YecSqd7q0g'   // Foundation of Sketch A, $180 CAD
 };
 
 function applyContextFromUrl() {
