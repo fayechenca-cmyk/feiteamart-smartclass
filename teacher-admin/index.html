@@ -612,6 +612,18 @@
   }
   .schedule-seed-btn:hover { background: #2c3047; }
   .schedule-seed-btn:disabled { opacity: 0.6; cursor: default; }
+  .schedule-course-select {
+    font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 13px;
+    padding: 9px 14px; border-radius: 22px; border: 1.5px solid var(--ink);
+    background: #fff; color: var(--ink); cursor: pointer;
+  }
+  .schedule-new-btn {
+    background: #fff; color: var(--ink); border: 1.5px solid var(--ink);
+    padding: 10px 17px; border-radius: 22px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    white-space: nowrap; cursor: pointer; transition: background 0.15s;
+  }
+  .schedule-new-btn:hover { background: #f0edf5; }
 
   .schedule-status {
     font-size: 12.5px; color: var(--ink-soft);
@@ -827,7 +839,9 @@
     <!-- ═══ COURSE SCHEDULE VIEW ═══ -->
     <div id="scheduleView" hidden>
       <div class="schedule-header">
-        <h1>Foundation A · Live Class Schedule</h1>
+        <h1>Live Class Schedule</h1>
+        <select class="schedule-course-select" id="scheduleCourseSelect" aria-label="Course"></select>
+        <button class="schedule-new-btn" id="scheduleNewBtn">+ New Session</button>
         <button class="schedule-seed-btn" id="scheduleSeedBtn">📥 Load default schedule from code</button>
       </div>
 
@@ -947,6 +961,7 @@
      this file defines. Loaded before the main inline script block below
      so it's always ready by the time a teacher could click the seed
      button. -->
+<script src="../core/live-courses.js"></script>
 <script src="../core/live-class-schedule.js"></script>
 
 <script>
@@ -1071,7 +1086,8 @@
     lessonFilter: null,        // null = "All Lessons", else a lesson_id
     view: 'submissions',       // 'submissions' | 'schedule'
     scheduleSessions: [],
-    scheduleLoaded: false
+    scheduleLoaded: false,
+    scheduleCourseId: 'sketch-a'
   };
 
   const loadingState = document.getElementById('loadingState');
@@ -1088,6 +1104,8 @@
   const scheduleEmptyMsg = document.getElementById('scheduleEmptyMsg');
   const scheduleList = document.getElementById('scheduleList');
   const scheduleSeedBtn = document.getElementById('scheduleSeedBtn');
+  const scheduleCourseSelect = document.getElementById('scheduleCourseSelect');
+  const scheduleNewBtn = document.getElementById('scheduleNewBtn');
   const scheduleModal = document.getElementById('scheduleModal');
   const scheduleModalTitle = document.getElementById('scheduleModalTitle');
   const scheduleForm = document.getElementById('scheduleForm');
@@ -1743,13 +1761,27 @@
   // the same trap already fixed for #loadingState/#dashboard/#loginScreen
   // earlier in this file. Using style.display directly here from the
   // start avoids reintroducing that bug for the new schedule elements.
+  // Populates scheduleCourseSelect from LIVE_COURSES (core/live-courses.js)
+  // once, at startup. Falls back to a single 'sketch-a' option if the
+  // catalog script failed to load, so the view never ends up with an
+  // empty/unusable selector.
+  function populateScheduleCourseSelect() {
+    const courses = (window.LIVE_COURSES && window.LIVE_COURSES.length)
+      ? window.LIVE_COURSES
+      : [{ id: 'sketch-a', title: 'Foundation of Sketch A' }];
+    scheduleCourseSelect.innerHTML = courses.map(c =>
+      `<option value="${c.id}">${escapeHtml(c.title)}</option>`
+    ).join('');
+    scheduleCourseSelect.value = appState.scheduleCourseId;
+  }
+
   async function loadScheduleSessions() {
     scheduleLoadingState.style.display = 'flex';
     scheduleEmptyState.style.display = 'none';
     scheduleList.style.display = 'none';
 
     try {
-      const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SCHEDULE_TABLE}?select=*&order=class_number.asc`, {
+      const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SCHEDULE_TABLE}?course_id=eq.${encodeURIComponent(appState.scheduleCourseId)}&select=*&order=class_number.asc`, {
         headers: sbHeaders()
       });
       console.log('[Admin] schedule response status:', res.status);
@@ -1775,7 +1807,9 @@
     const rows = appState.scheduleSessions;
 
     if (rows.length === 0) {
-      scheduleEmptyMsg.textContent = 'No sessions in database yet. Sessions will be seeded from the default schedule.';
+      scheduleEmptyMsg.textContent = appState.scheduleCourseId === 'sketch-a'
+        ? 'No sessions in database yet. Sessions will be seeded from the default schedule.'
+        : 'No sessions yet for this course. Use + New Session to add the first one.';
       scheduleEmptyState.style.display = 'flex';
       scheduleList.style.display = 'none';
       return;
@@ -1796,6 +1830,16 @@
   }
 
   async function seedScheduleFromCode() {
+    // core/live-class-schedule.js is sketch-a's own static schedule only
+    // (the fallback index.html's renderLiveClassSection() uses) -- seeding
+    // it into any other course would silently overwrite that course's
+    // sessions with sketch-a's dates/Zoom links/homework. Guarded here
+    // rather than hiding the button per-course, so the reason is visible
+    // if someone switches courses mid-seed.
+    if (appState.scheduleCourseId !== 'sketch-a') {
+      showScheduleStatus(scheduleStatus, '⚠️ The default schedule is Foundation of Sketch A only -- switch to that course to seed it.', 'error');
+      return;
+    }
     const schedule = window.LIVE_CLASS_SCHEDULE;
     if (!schedule || !Array.isArray(schedule.sessions)) {
       showScheduleStatus(scheduleStatus, '⚠️ core/live-class-schedule.js not loaded — cannot seed.', 'error');
@@ -1813,6 +1857,7 @@
       const zoom = schedule.getZoom(s);
       return {
         id: s.id,
+        course_id: 'sketch-a',
         class_number: s.classNumber,
         title: s.title,
         topic: s.topic || null,
@@ -1862,11 +1907,42 @@
   }
   scheduleSeedBtn.addEventListener('click', seedScheduleFromCode);
 
+  populateScheduleCourseSelect();
+  scheduleCourseSelect.addEventListener('change', () => {
+    appState.scheduleCourseId = scheduleCourseSelect.value;
+    appState.scheduleLoaded = false;
+    loadScheduleSessions();
+  });
+
+  // There was previously no way to create a single new session row at
+  // all -- only seedScheduleFromCode()'s bulk insert and openScheduleEdit()
+  // for existing rows. Courses B/C/D have no static schedule to seed from,
+  // so without this they could never get a single session. Reuses the
+  // same modal/form as editing; class_number is computed here (one past
+  // the highest existing number for the currently selected course) since
+  // it is still not a form field, same convention the edit path already
+  // uses for carrying it over untouched.
+  function openScheduleCreate() {
+    const nextClassNumber = appState.scheduleSessions.reduce(
+      (max, s) => Math.max(max, s.class_number || 0), 0
+    ) + 1;
+    scheduleForm.dataset.sessionId = '';
+    scheduleForm.dataset.newClassNumber = String(nextClassNumber);
+    scheduleModalTitle.textContent = 'New Session · Class ' + nextClassNumber;
+
+    scheduleForm.reset();
+    scheduleModalStatus.hidden = true;
+    scheduleModal.classList.add('visible');
+  }
+  window.openScheduleCreate = openScheduleCreate;
+  scheduleNewBtn.addEventListener('click', openScheduleCreate);
+
   function openScheduleEdit(id) {
     const session = appState.scheduleSessions.find(s => s.id === id);
     if (!session) return;
 
     scheduleForm.dataset.sessionId = id;
+    delete scheduleForm.dataset.newClassNumber;
     scheduleModalTitle.textContent = 'Edit ' + (session.title || id);
 
     document.getElementById('sf-title').value = session.title || '';
@@ -1947,21 +2023,28 @@
 
   scheduleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const id = scheduleForm.dataset.sessionId;
-    if (!id) return;
+    // Empty sessionId means openScheduleCreate() opened this form (new
+    // session, not edit) -- generate a real id client-side, same as any
+    // other new-row insert in this app that doesn't rely on a DB default.
+    const isNew = !scheduleForm.dataset.sessionId;
+    const id = isNew ? crypto.randomUUID() : scheduleForm.dataset.sessionId;
 
     scheduleSaveBtn.disabled = true;
     scheduleSaveBtn.textContent = 'Saving…';
     scheduleModalStatus.hidden = true;
 
     // class_number isn't an editable field in this form (see the STEP 4
-    // field list — it was never one of the inputs), so it's carried over
-    // from the session's existing row rather than read from the form.
+    // field list — it was never one of the inputs). Editing carries it
+    // over from the existing row; creating uses the number computed by
+    // openScheduleCreate() when the modal opened.
     const existingSession = appState.scheduleSessions.find(s => s.id === id);
-    const classNumber = existingSession ? existingSession.class_number : null;
+    const classNumber = isNew
+      ? Number(scheduleForm.dataset.newClassNumber)
+      : (existingSession ? existingSession.class_number : null);
 
     const payload = {
       id: id,
+      course_id: appState.scheduleCourseId,
       class_number: classNumber,
       title: document.getElementById('sf-title').value.trim(),
       date: document.getElementById('sf-date').value.trim() || null,

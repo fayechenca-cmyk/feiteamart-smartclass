@@ -1,4 +1,5 @@
 -- Run this once in the Supabase SQL Editor (Dashboard -> SQL Editor -> New query)
+-- Applied to production 2026-10-15.
 --
 -- WHY THIS TABLE EXISTS
 -- smartclass_access (see core/access.js) is single-row-per-user: one

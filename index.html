@@ -3159,10 +3159,10 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   // tab show up here without a code deploy. Falls back to the static
   // core/live-class-schedule.js data if Supabase is empty or unreachable.
 
-  async function fetchLiveClassSessions() {
+  async function fetchLiveClassSessions(courseId) {
     try {
       const res = await fetch(
-        'https://rudztwseatwayhztbarj.supabase.co/rest/v1/live_class_sessions?order=class_number.asc',
+        'https://rudztwseatwayhztbarj.supabase.co/rest/v1/live_class_sessions?course_id=eq.' + encodeURIComponent(courseId) + '&order=class_number.asc',
         {
           headers: {
             'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1ZHp0d3NlYXR3YXloenRiYXJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5NTQyOTYsImV4cCI6MjA4NjUzMDI5Nn0.YrPIS26glb-N5JIKspFuzdtp-t32qXAtLoDHwTbLVtk',
@@ -3250,8 +3250,13 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       return;
     }
 
+    // The static LIVE_CLASS_SCHEDULE fallback below is sketch-a's own
+    // data (core/live-class-schedule.js) -- only ever correct here
+    // because this function is still single-course (sketch-a). Part 4's
+    // multi-course catalog loop scopes that fallback to sketch-a only,
+    // same reasoning.
     const staticSchedule = window.LIVE_CLASS_SCHEDULE;
-    const supabaseRows = await fetchLiveClassSessions();
+    const supabaseRows = await fetchLiveClassSessions('sketch-a');
 
     let schedule;
     if (supabaseRows) {
