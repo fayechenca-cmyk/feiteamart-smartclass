@@ -392,10 +392,199 @@
       if (isStep1OnlyLegacy && FOUNDATION_A_STEP1_SKILLS.includes(lessonId)) {
         return { allowed: true, reason: 'step1_only_legacy' };
       }
+      // Oct 2026 — a live-course purchase (core/live-courses.js) unlocks
+      // the full self-paced Foundation of Sketch program (Step 1 +
+      // Step 2, and future Steps per this file's own "nothing to add
+      // when Steps 3-4 ship" note above), WITHOUT setting
+      // membership='paid' — that would also lift the Creation cap and
+      // every other paid scope, which a live-course purchase must not
+      // do. Scoped to an EXPLICIT Foundation-of-Sketch lesson-id check
+      // (_isFoundationOfSketchLesson), not this whole branch, so any
+      // other current or future 'skills'-branch id this function
+      // doesn't already special-case above stays on its normal rule.
+      //
+      // isStep1OnlyLegacy codes are deliberately excluded from the
+      // generic "any enrollment qualifies" rule: being one of the 4
+      // codes always derives a sketch-a enrollment (their enrolled live
+      // course), and that alone must not lift their Step-1-only cap —
+      // only a REAL course_purchases row for sketch-b/c/d does. This
+      // only ever matters for Step 2 (still-life-*) ids here, since
+      // Step 1 ids were already allowed for them two lines up.
+      if (_isFoundationOfSketchLesson(lessonId)) {
+        const enrollments = await getLiveEnrollments();
+        const qualifies = isStep1OnlyLegacy
+          ? enrollments.some(function (e) { return !e.derived; })
+          : enrollments.length > 0;
+        if (qualifies) {
+          return { allowed: true, reason: 'live_class_foundation' };
+        }
+      }
       return { allowed: false, reason: 'paywall_skills' };
     }
 
     return { allowed: false, reason: 'unknown_branch' };
+  }
+
+  // Foundation of Sketch's own lesson-id lists, read live off the globals
+  // their owning files set (core/foundation-a-path.js, core/still-life-
+  // lesson.js) — same "no direct reference, this file has no access to
+  // them at its own load time" convention already used by
+  // FOUNDATION_A_STEP1_SKILLS/EXTENDED_PREVIEW_SKILLS above, just derived
+  // instead of hand-copied. Scene Drawing Foundation, Color Practice and
+  // Zodiac never reach canOpenLesson('skills', ...) at all (confirmed —
+  // none of them call gateLessonPage or canOpenLesson anywhere), so this
+  // can never accidentally unlock them regardless of their own lesson ids.
+  //
+  // IMPORTANT: when Step 3 and Step 4 of Foundation of Sketch are built,
+  // their lesson-id source (whatever global it turns out to be, likely
+  // its own file following the Step 2 pattern) MUST be added to this
+  // function too. Forgetting to do so will not break anything visibly —
+  // it will just silently leave live-class students unable to open
+  // Step 3/4 even after a live-course purchase, since this function is
+  // the only place that decides what counts as "Foundation of Sketch."
+  function _isFoundationOfSketchLesson(lessonId) {
+    const step1 = Array.isArray(global.FOUNDATION_A_PATH) ? global.FOUNDATION_A_PATH : [];
+    const step2 = Array.isArray(global.FOUNDATION_STILL_LIFE_PATH) ? global.FOUNDATION_STILL_LIFE_PATH : [];
+    return step1.some(function (l) { return l.id === lessonId; })
+      || step2.some(function (l) { return l.id === lessonId; });
+  }
+
+  // Cache per identity (same shape as _cache/_cacheUserId above), so
+  // canOpenLesson('skills', id) called repeatedly in a loop (e.g.
+  // attachSkillsLessonGuard iterating every lesson link on the map)
+  // doesn't re-query course_purchases once per lesson.
+  let _liveEnrollmentsCache = null;
+  let _liveEnrollmentsCacheKey = null;
+
+  // Returns [{courseId, derived}] — courseId is the BARE id matching
+  // core/live-courses.js (e.g. 'sketch-b'), not the 'live-' prefixed
+  // course_purchases.course_id. derived:true means inferred from
+  // isLiveClass / membership_type === 'live_class' (the platform's
+  // original single-live-course design — sketch-a only), NOT a real
+  // course_purchases row. canOpenLesson's isStep1OnlyLegacy branch above
+  // relies on this distinction directly.
+  async function getLiveEnrollments() {
+    if (_isLegacyAccessCode()) {
+      const flags = _legacyProfileFlags();
+      const key = 'code:' + (flags.studentCode || '');
+      if (_liveEnrollmentsCacheKey === key && _liveEnrollmentsCache) return _liveEnrollmentsCache;
+      const result = [];
+      if (flags.isLiveClass) result.push({ courseId: 'sketch-a', derived: true });
+      if (flags.studentCode) {
+        try {
+          const sb = _supabase();
+          const { data, error } = await sb
+            .from('course_purchases')
+            .select('course_id')
+            .eq('student_code', flags.studentCode);
+          if (!error && Array.isArray(data)) {
+            data.forEach(function (row) {
+              if (row.course_id && row.course_id.indexOf('live-') === 0) {
+                result.push({ courseId: row.course_id.slice(5), derived: false });
+              }
+            });
+          }
+        } catch (e) {
+          console.warn('[FEIAccess] getLiveEnrollments legacy lookup failed', e);
+        }
+      }
+      _liveEnrollmentsCache = result;
+      _liveEnrollmentsCacheKey = key;
+      return result;
+    }
+
+    const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
+    if (!user) return [];
+    const key = 'user:' + user.id;
+    if (_liveEnrollmentsCacheKey === key && _liveEnrollmentsCache) return _liveEnrollmentsCache;
+
+    const result = [];
+    try {
+      const row = await _fetchOrCreateRow(user.id);
+      // Old-style live_class purchases (markPaid('live_class')) already
+      // set membership='paid', so this never changes their canOpenLesson
+      // outcome in practice — kept for getLiveEnrollments() callers that
+      // need the full enrollment list regardless (e.g. the dashboard
+      // catalog), so their sketch-a card renders as enrolled too.
+      if (row.membership_type === 'live_class') result.push({ courseId: 'sketch-a', derived: true });
+    } catch (e) {
+      console.warn('[FEIAccess] getLiveEnrollments membership_type lookup failed', e);
+    }
+    try {
+      const sb = _supabase();
+      const { data, error } = await sb
+        .from('course_purchases')
+        .select('course_id')
+        .eq('user_id', user.id);
+      if (!error && Array.isArray(data)) {
+        data.forEach(function (row) {
+          if (row.course_id && row.course_id.indexOf('live-') === 0) {
+            result.push({ courseId: row.course_id.slice(5), derived: false });
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('[FEIAccess] getLiveEnrollments user lookup failed', e);
+    }
+    _liveEnrollmentsCache = result;
+    _liveEnrollmentsCacheKey = key;
+    return result;
+  }
+
+  // courseId: bare id (e.g. 'sketch-b'), matching core/live-courses.js.
+  // Stored as 'live-' + courseId in course_purchases.course_id — the
+  // same prefix convention core/live-courses.js documents, so
+  // core/ink-animal-access.js's 'ink-animal-studio' course_id (no
+  // prefix) can never collide with a live-course enrollment row.
+  //
+  // Unlike markPaid(), this MUST work for legacy/access-code students —
+  // Part 0 confirmed markPaid() returns early for them, which is exactly
+  // why a code-login student paying for a live course today gets nothing
+  // recorded. Checks-before-insert on the student_code path (Faye's
+  // explicit instruction) — the DB also enforces this now via
+  // course_purchases_code_course_uniq, but checking first avoids a
+  // wasted round trip and a conflict response in the normal case. The
+  // user_id path relies on the table's original unique(user_id,
+  // course_id) constraint instead — already real, already sufficient,
+  // no need to duplicate the pre-check there.
+  async function recordLiveEnrollment(courseId) {
+    if (!courseId) return;
+    const fullCourseId = 'live-' + courseId;
+    _liveEnrollmentsCache = null; // stale after a successful insert below
+    _liveEnrollmentsCacheKey = null;
+
+    if (_isLegacyAccessCode()) {
+      const flags = _legacyProfileFlags();
+      if (!flags.studentCode) return;
+      const sb = _supabase();
+      try {
+        const { data: existing, error: lookupErr } = await sb
+          .from('course_purchases')
+          .select('id')
+          .eq('student_code', flags.studentCode)
+          .eq('course_id', fullCourseId)
+          .maybeSingle();
+        if (lookupErr) console.warn('[FEIAccess] recordLiveEnrollment lookup error', lookupErr);
+        if (existing) return;
+      } catch (e) {
+        console.warn('[FEIAccess] recordLiveEnrollment lookup failed', e);
+      }
+      const { error } = await sb.from('course_purchases').insert({
+        student_code: flags.studentCode,
+        course_id: fullCourseId
+      });
+      if (error) console.warn('[FEIAccess] recordLiveEnrollment insert error', error);
+      return;
+    }
+
+    const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
+    if (!user) return;
+    const sb = _supabase();
+    const { error } = await sb.from('course_purchases').insert({
+      user_id: user.id,
+      course_id: fullCourseId
+    });
+    if (error) console.warn('[FEIAccess] recordLiveEnrollment insert error', error);
   }
 
   async function recordLessonOpened(branch, lessonId) {
@@ -541,6 +730,8 @@
     markPaid: markPaid,
     clearCache: clearCache,
     gateLessonPage: gateLessonPage,
+    getLiveEnrollments: getLiveEnrollments,
+    recordLiveEnrollment: recordLiveEnrollment,
     FREE_SKILLS: FREE_SKILLS,
     FREE_CREATION_LIMIT: FREE_CREATION_LIMIT
   };
