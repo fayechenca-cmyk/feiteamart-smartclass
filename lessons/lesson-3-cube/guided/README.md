@@ -1,0 +1,25 @@
+# Cube guided studio — independent design preview
+
+An isolated experiment at `lessons/lesson-3-cube/guided/`. The existing Cube lesson is unchanged.
+
+## Learning flow
+
+Welcome → anatomy → move the light → pencils → blending tools → readiness → structure → tones → optional refinement → optional background → drawing check/photo → optional bonus polish → reflection → preview milestone.
+
+The complete original welcome and five teacher videos are streamed, with no omitted time ranges. Eighteen existing semantic pause points plus five end-of-video practice checkpoints form 23 drawing stages. Preparation and closing bring the total to 32 stages. The background and bonus videos remain complete segments in this first prototype; their finer pauses still need teacher review.
+
+Practice never resumes on a timer. Continue is enabled at a teacher checkpoint; the guide speaks automatically and waits. Intro ends advance automatically. Anatomy needs three face taps; light needs a slider movement. Materials and readiness wait after narration. Muting affects both teacher and guide; captions remain. Browser-blocked playback has a visible tap-to-resume recovery.
+
+## Deliberate prototype boundaries
+
+Only the `fei.cube.guided-preview.v1` localStorage key is written. This preview does not change official XP, account progress, paid access rules, submissions, or badges. Selected photos remain in a temporary object URL on this page; the upload screen explicitly links to the regular lesson for a real teacher submission. The closing reward is labelled a preview milestone. Reflection is an optional in-session note, not saved to the account.
+
+## Media and provenance
+
+Teacher footage and 23 stage snapshots: the existing FEI TeamArt Cube Cloudflare Stream videos. The 18 teaching diagrams are compressed copies of existing course diagrams; original URLs are retained as `analysisSource` in flow.json. Two pairs in the source audit were incorrectly matched (cross-layer / full dark plane; light-gray face / meeting edge). This preview pairs them by the visible diagram contents. Two old sphere references in Cube narration were rewritten for the cube.
+
+Toolkit and Artchi reuse existing repository assets. New guide audio is generated with en-US-AvaMultilingualNeural, +2% rate, not a clone of Mrs. Dawn. Mrs. Dawn's own recorded video audio is unchanged. Complete new scripts are in flow.json. No new video files or full teacher-video downloads are stored.
+
+## Verification
+
+`node tests/cube-guided-preview.cjs` with a local server on 18816 tests all 32 transitions, pause boundaries, replay, locked future map steps, mute, and desktop/iPad/phone/landscape layouts using a deterministic Stream mock. A separate live-browser check confirmed the real 15.1-second intro auto-advances and the new guide audio plays unmuted; all 31 MP3 metadata loads were verified. The real first drawing clip also paused at 22 seconds and automatically started its narration. Full teacher review of the new phrasing remains appropriate before replacing the production lesson.
