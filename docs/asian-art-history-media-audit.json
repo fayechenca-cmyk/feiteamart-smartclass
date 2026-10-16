@@ -1,0 +1,1954 @@
+{
+  "checkedAt": "2026-10-15",
+  "lessons": [
+    {
+      "id": 1,
+      "slug": "china-1",
+      "title": "Origins: Neolithic Art & Ritual Objects",
+      "startYear": -7000,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Jade Cong",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=ld8kHvz1yN4",
+        "note": "A Liangzhu jade case study. Compare its geometry with the pottery and ritual objects discussed below.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/100241573.jpg",
+          "title": "Liangzhu jade cong · Neolithic China",
+          "credit": "Gary Lee Todd, Ph.D.",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Liangzhu_Culture_Jade_Cong_07.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/jade-cong/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=ld8kHvz1yN4"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "jomon",
+      "title": "Japan: Jōmon Clay, Pattern, and Community",
+      "startYear": -3000,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "Ceramics from early Japan, the Jōmon",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=VRxcHHLSe8Y",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/31396630.jpg",
+          "title": "Flame-style vessel · Jōmon period",
+          "credit": "Daderot",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jomon_Vessel_with_Flame-like_Ornamentation,_attributed_provenance_Umataka,_Nagaoka-shi,_Niigata,_Jomon_period,_3000-2000_BC_-_Tokyo_National_Museum_-_DSC05620.JPG",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/deep-bowl-dogu-jomon-period/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=VRxcHHLSe8Y"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "china-2",
+      "title": "Shang Dynasty: Bronze, Ancestors, and Authority",
+      "startYear": -1600,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Oracle Bone, Shang Dynasty",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=s9gfIqOo__I",
+        "note": "An oracle-bone case study of Shang ritual and writing. Use the bronze gallery to compare another material serving ancestral authority.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/16028177.jpg",
+          "title": "Houmuwu ding · Shang ritual bronze",
+          "credit": "Mlogic",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:HouMuWuDingFullView.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/oracle-bone/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=s9gfIqOo__I"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "china-3",
+      "title": "Zhou & Warring States: Ritual to Philosophy",
+      "startYear": -1046,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Da Ke Ding",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=tAtweI2BUNE",
+        "note": "A Western Zhou bronze case study. Follow the inscription as a link between ritual, memory, and authority.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/603399.jpg",
+          "title": "Da Ke ding · Western Zhou",
+          "credit": "See source record",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Da_Ke_ding.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/ding/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=tAtweI2BUNE"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "sanchi",
+      "title": "India: Sanchi and the Moving Viewer",
+      "startYear": -250,
+      "regions": [
+        "India"
+      ],
+      "videoSource": {
+        "title": "Buddhist Monuments at Sanchi (UNESCO/NHK)",
+        "channel": "UNESCO",
+        "channelUrl": "https://www.youtube.com/@UNESCO",
+        "watchUrl": "https://www.youtube.com/watch?v=BkFpizJgwYk",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/33567558.jpg",
+          "title": "Great Stupa (Stupa 1) · Sanchi",
+          "credit": "Bernard Gagnon",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stupa_1,_Sanchi_02.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/the-stupa-sanchi/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=BkFpizJgwYk"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "china-4",
+      "title": "Qin & Han: Empire, Tombs, and the Afterlife",
+      "startYear": -221,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "The Terra-Cotta Warriors | National Geographic",
+        "channel": "National Geographic",
+        "channelUrl": "https://www.youtube.com/@NatGeo",
+        "watchUrl": "https://www.youtube.com/watch?v=RsUE-ZtcUFg",
+        "note": "A Qin burial case study. The lesson and further reading extend the discussion to Han funerary culture.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/101665311.jpg",
+          "title": "Terracotta Army · Qin dynasty",
+          "credit": "Gary Lee Todd, Ph.D.",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Qin_Terracotta_Army,_Pit_1_03.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/the-terracotta-warriors/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=RsUE-ZtcUFg"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "china-5",
+      "title": "Buddhism Arrives: Six Dynasties & Cave Temples",
+      "startYear": 220,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Longmen Grottoes (UNESCO/NHK)",
+        "channel": "UNESCO",
+        "channelUrl": "https://www.youtube.com/@UNESCO",
+        "watchUrl": "https://www.youtube.com/watch?v=kFp7D0UxNxU",
+        "note": "A site overview spanning Northern Wei and Tang developments. Distinguish the early caves from the later monumental Buddha.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/97454174.jpg",
+          "title": "Longmen grottoes · Buddhist cave sculpture",
+          "credit": "Gary Todd",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ancient_Buddhist_Grottoes_at_Longmen-_Grotto_of_Buddhas.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        },
+        {
+          "src": "assets/asian/34822592.jpg",
+          "title": "Seated Buddha · Sarnath, India, Gupta period, 5th century",
+          "credit": "See source record",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:British_Museum_-_Seated_Buddha_(Gupta_period).JPG",
+          "license": "CC BY 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        },
+        {
+          "src": "assets/asian/33567558.jpg",
+          "title": "Great Stupa (Stupa 1) · Sanchi",
+          "credit": "Bernard Gagnon",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stupa_1,_Sanchi_02.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/longmen-caves-luoyang/"
+        },
+        {
+          "name": "Smarthistory: Buddhism in Chinese Art, 2nd century–907 CE",
+          "url": "https://smarthistory.org/reframing-art-history/buddhism-chinese-art/"
+        },
+        {
+          "name": "Revisit Sanchi: sacred movement in India",
+          "url": "https://smarthistory.org/the-stupa-sanchi/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=kFp7D0UxNxU"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "china-6",
+      "title": "Sui–Tang: Cosmopolitan Empire & Sacred Splendor",
+      "startYear": 581,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Graceful gestures and terrifying guardians — Tang Tomb figures",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=sKJ8qkIqzfo",
+        "note": "Tang tomb figures: observe gestures, dress, and guardians rather than treating every object as a Buddhist image.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/103615372.jpg",
+          "title": "Sancai horse · Tang dynasty",
+          "credit": "Gary Lee Todd, Ph.D.",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tang_Sancai_Horse_01.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/tomb-figurines-tang-dynasty/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=sKJ8qkIqzfo"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "china-19",
+      "title": "China: Calligraphy and Exchanges across East Asia",
+      "startYear": 600,
+      "regions": [
+        "China",
+        "Japan",
+        "Korea"
+      ],
+      "videoSource": {
+        "title": "Appreciating Chinese Calligraphy",
+        "channel": "Asian Art Museum",
+        "channelUrl": "https://www.youtube.com/@AsianArtMuseum",
+        "watchUrl": "https://www.youtube.com/watch?v=MEN0CzGv5-Y",
+        "note": "A Chinese calligraphy introduction for a comparative bridge across East Asia. The video explains the Chinese practice; compare it with the Japanese and Korean traditions elsewhere on this path.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/7589123.jpg",
+          "title": "Huang Ting Jing · Calligraphy model attributed to Wang Xizhi",
+          "credit": "Wang Xizhi",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wang_Xizhi_Huang_Ting_Jing.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Wang_Xizhi_Huang_Ting_Jing.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/chinese-calligraphy-intro/"
+        },
+        {
+          "name": "The Met: Brush Writing in the Arts of Japan",
+          "url": "https://www.metmuseum.org/exhibitions/listings/2013/brush-writing"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=MEN0CzGv5-Y"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "nara",
+      "title": "Japan: Nara, Buddhism, and the Imperial City",
+      "startYear": 710,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "Historic Monuments of Ancient Nara (UNESCO/NHK)",
+        "channel": "UNESCO",
+        "channelUrl": "https://www.youtube.com/@UNESCO",
+        "watchUrl": "https://www.youtube.com/watch?v=hle43IAxF6s",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/195404338.jpg",
+          "title": "Tōdai-ji · Great Buddha Hall (later rebuilding)",
+          "credit": "ONO Masanobu",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Todai-ji_Daibutsuden_front_view_in_2011.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/todai-ji/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=hle43IAxF6s"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "borobudur",
+      "title": "Indonesia: Borobudur as a Journey in Stone",
+      "startYear": 780,
+      "regions": [
+        "Indonesia"
+      ],
+      "videoSource": {
+        "title": "Borobudur Temple Compounds (UNESCO/NHK)",
+        "channel": "UNESCO",
+        "channelUrl": "https://www.youtube.com/@UNESCO",
+        "watchUrl": "https://www.youtube.com/watch?v=txujqGtB_6g",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/4838861.jpg",
+          "title": "Borobudur · Central Java",
+          "credit": "Gunawan Kartapranata",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Borobudur-Nothwest-view.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Borobudur-Nothwest-view.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/borobudur/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=txujqGtB_6g"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "chola",
+      "title": "India: Chola Bronze and Shiva in Motion",
+      "startYear": 900,
+      "regions": [
+        "India"
+      ],
+      "videoSource": {
+        "title": "Beliefs Made Visible: Hindu Art in South Asia (Part 1 of 2)",
+        "channel": "Asian Art Museum",
+        "channelUrl": "https://www.youtube.com/@AsianArtMuseum",
+        "watchUrl": "https://www.youtube.com/watch?v=IX85uiG86RA",
+        "note": "English thematic introduction to Hindu art and living practice, rather than a dedicated Chola survey. Use the Nataraja reading and image for the period-specific case study.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/75999944.jpg",
+          "title": "Shiva Nataraja · Chola-period bronze",
+          "credit": "See source record",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Clevelandart_1930.331.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/shiva-as-lord-of-the-dance-nataraja/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=IX85uiG86RA"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "goryeo",
+      "title": "Korea: Goryeo Celadon and Inlaid Nature",
+      "startYear": 918,
+      "regions": [
+        "Korea"
+      ],
+      "videoSource": {
+        "title": "Rediscovering Korea's Past",
+        "channel": "Smithsonian National Museum of Asian Art",
+        "channelUrl": "https://www.youtube.com/@NatAsianArt",
+        "watchUrl": "https://www.youtube.com/watch?v=frkHrfqmX-8",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/2758366.jpg",
+          "title": "Maebyeong vase · Goryeo celadon",
+          "credit": "The original uploader was Korea history at English Wikipedia.",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Goryeo_Celadon.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/korean-celadons-goryeo/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=frkHrfqmX-8"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "china-7",
+      "title": "Song: Landscape Painting and the Philosophy of Nature",
+      "startYear": 960,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Chinese Landscape Paintings at the Metropolitan Museum II | Ancient Art Links",
+        "channel": "CUNY TV",
+        "channelUrl": "https://www.youtube.com/@cunytv",
+        "watchUrl": "https://www.youtube.com/watch?v=JO5Dkq9Q_ao",
+        "note": "A museum tour of the landscape tradition from Song onward. Compare later reinterpretations with the Song painting in the gallery.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/22627463.jpg",
+          "title": "Fan Kuan · Travelers Among Mountains and Streams",
+          "credit": "Fan Kuan",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fan_Kuan_-_Travelers_Among_Mountains_and_Streams_-_Google_Art_Project.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Fan_Kuan_-_Travelers_Among_Mountains_and_Streams_-_Google_Art_Project.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/neo-confucianism-fan-kuan-travelers-by-streams-and-mountains/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=JO5Dkq9Q_ao"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "china-8",
+      "title": "Song Ceramics: Form, Silence, and Taste",
+      "startYear": 960,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "White Porcelain, Ding ware in the Northern Song dynasty",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=v81CeT1MNtE",
+        "note": "A Northern Song Ding-ware case study. Notice how carved decoration works with a nearly monochrome glaze.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/30564679.jpg",
+          "title": "Ding-ware bowl with geese · Song dynasty",
+          "credit": "BabelStone",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ding_ware_bowl_with_wild_geese_pattern.jpg",
+          "license": "CC BY-SA 3.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/ding-ware-bowl-northern-song-dynasty/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=v81CeT1MNtE"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "slug": "angkor",
+      "title": "Cambodia: Angkor Wat, Temple and Cosmos",
+      "startYear": 1100,
+      "regions": [
+        "Cambodia"
+      ],
+      "videoSource": {
+        "title": "Before You Visit Angkor Wat, Here's What You Need to Know | National Geographic",
+        "channel": "National Geographic",
+        "channelUrl": "https://www.youtube.com/@NatGeo",
+        "watchUrl": "https://www.youtube.com/watch?v=NJyCKj8pCiY",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/123792913.jpg",
+          "title": "Angkor Wat · Cambodia",
+          "credit": "Satdeep Gill",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Angkor_Wat_with_its_reflection_(cropped).jpg",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/angkor-wat/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=NJyCKj8pCiY"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "slug": "china-9",
+      "title": "Yuan Dynasty: Literati Painting & Identity",
+      "startYear": 1271,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Painting and Poetry Among Friends",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=QkHoGrbx730",
+        "note": "Wang Mian’s plum painting connects poetry, friendship, and brushwork within Yuan literati culture.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/66620145.jpg",
+          "title": "Wang Mian · Ink Plum",
+          "credit": "Wang Mian",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wang_Mian_-_Ink_Plum_-_1954.40.3_-_Yale_University_Art_Gallery.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Wang_Mian_-_Ink_Plum_-_1954.40.3_-_Yale_University_Art_Gallery.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/wang-mian-plum-blossoms-in-ink/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=QkHoGrbx730"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "china-10",
+      "title": "Ming: Court Painting, Workshops, and Urban Culture",
+      "startYear": 1368,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Wang Lü among the peaks, Ming paintings of Mt. Hua",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=9FAfK6MDA-Q",
+        "note": "An early Ming mountain-painting case study. Compare direct observation with inherited pictorial conventions.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/22247191.jpg",
+          "title": "Wang Lü · Mount Hua",
+          "credit": "Wang Lü",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Le_Mont_Hua_par_Wang_L%C3%BC.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Le_Mont_Hua_par_Wang_L%C3%BC.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/wang-lu-landscapes-of-mount-hua-huashan/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=9FAfK6MDA-Q"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "slug": "china-11",
+      "title": "Ming Porcelain: Blue-and-White and Global Trade",
+      "startYear": 1400,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "An introduction to Ming blue and white porcelain | Curator's Corner S5 Ep6 #CuratorsCorner",
+        "channel": "The British Museum",
+        "channelUrl": "https://www.youtube.com/@britishmuseum",
+        "watchUrl": "https://www.youtube.com/watch?v=uwvRXJd22oI",
+        "note": "A curator introduction to blue-and-white porcelain. Consider how materials, workshops, and overseas audiences shape an object.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/98303334.jpg",
+          "title": "Blue-and-white porcelain · Ming dynasty",
+          "credit": "Gary Todd",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ming_Porcelain_Blue_%26_White_Pot.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.britishmuseum.org/collection/china/introduction-ming-blue-and-white-porcelain"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=uwvRXJd22oI"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "slug": "byobu",
+      "title": "Japan: Byōbu — Painting That Shapes a Room",
+      "startYear": 1500,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "Bamboo in the Four Seasons: painting and poetry in Japan",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=vwoK8-y-5_U",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/58765839.jpg",
+          "title": "Bamboo in the Four Seasons · Attributed to Tosa Mitsunobu",
+          "credit": "The Metropolitan Museum of Art · Open Access",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:%E5%9B%9B%E5%AD%A3%E7%AB%B9%E5%9B%B3%E5%B1%8F%E9%A2%A8-Bamboo_in_the_Four_Seasons_MET_DT1607.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/tosa-mistunobu/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=vwoK8-y-5_U"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "slug": "safavid",
+      "title": "Iran: A Painted World in the Shahnama",
+      "startYear": 1524,
+      "regions": [
+        "Iran"
+      ],
+      "videoSource": {
+        "title": "Paradise in miniature, The Court of Kayumars",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=pLHnipC48P0",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/6023256.jpg",
+          "title": "Sultan Muhammad (attributed) · Court of Gayumars",
+          "credit": "Attributed to Sultan Muhammad",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Court_of_Gayumars_Persian_miniature.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Court_of_Gayumars_Persian_miniature.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/the-court-of-gayumars/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=pLHnipC48P0"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "slug": "oribe",
+      "title": "Japan: Tea, Touch, and Deliberate Irregularity",
+      "startYear": 1600,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "Celebrating the imperfect, an Oribe tea bowl",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=-hxs8uOdvxM",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/58772077.jpg",
+          "title": "Clog-shaped Oribe tea bowl · Early 17th century",
+          "credit": "The Metropolitan Museum of Art · Open Access",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:MET_DP244299.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/oribe-tea-bowl/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=-hxs8uOdvxM"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "slug": "shodo",
+      "title": "Japan: Shodō, Kana, and the Poetry of Brushwork",
+      "startYear": 1624,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "A garden for a poet:  Hon'ami Kōetsu's folding screens",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=CJ17bWVrgho",
+        "note": "English discussion of Kōetsu’s calligraphy on poetry screens. Read the Met overview for the earlier development of kana and kanji. The optional museum demonstration shows a living Zen practice.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/59375291.jpg",
+          "title": "Hon’ami Kōetsu · Autumn Poem by Lady Kunaikyō",
+          "credit": "The Metropolitan Museum of Art · Open Access",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:MET_DP-12232-315.jpg",
+          "license": "CC0",
+          "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/honami-koetsu-folding-screen-with-poems/"
+        },
+        {
+          "name": "The Met: Brush Writing in the Arts of Japan",
+          "url": "https://www.metmuseum.org/exhibitions/listings/2013/brush-writing"
+        },
+        {
+          "name": "Optional living-practice demonstration: Zen Calligraphy — Asian Art Museum",
+          "url": "https://education.asianart.org/resources/zen-calligraphy/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=CJ17bWVrgho"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "mughal",
+      "title": "India: The Taj Mahal and Mughal Design",
+      "startYear": 1631,
+      "regions": [
+        "India"
+      ],
+      "videoSource": {
+        "title": "Taj Mahal (UNESCO/NHK)",
+        "channel": "UNESCO",
+        "channelUrl": "https://www.youtube.com/@UNESCO",
+        "watchUrl": "https://www.youtube.com/watch?v=KZzgvng_5GE",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/11293223.jpg",
+          "title": "Taj Mahal · Agra",
+          "credit": "Yann; edited by King of Hearts",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Taj_Mahal,_Agra,_India_edit2.jpg",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/the-taj-mahal/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=KZzgvng_5GE"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "slug": "china-12",
+      "title": "Qing Painting: Court Splendor and Individual Voices",
+      "startYear": 1644,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "The angry ducks of a Ming prince",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=lpZsBrHTdy0",
+        "note": "An individualist Qing painter, rather than a survey of the imperial court. Compare expressive brushwork with court patronage in the lesson.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/13318800.jpg",
+          "title": "Bada Shanren · Lotus and Ducks",
+          "credit": "Bada Shanren",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bada_Shanren_-_Lotus_and_Ducks_-_Google_Art_Project.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Bada_Shanren_-_Lotus_and_Ducks_-_Google_Art_Project.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/bada-shanren-lotus-and-ducks/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=lpZsBrHTdy0"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "slug": "china-13",
+      "title": "Late Qing: Encounter with the West and Visual Crisis",
+      "startYear": 1800,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Marketing peonies, Zhao Zhiqian's flower album",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=AlfQ6rwFj9k",
+        "note": "A nineteenth-century Shanghai School case study of painting for an urban market; the reading supplies the wider history of modern China.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/9919727.jpg",
+          "title": "Zhao Zhiqian · Flowers",
+          "credit": "Zhao Zhiqian",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Flowers_(Zhao_Zhiqian)_-_3.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Flowers_(Zhao_Zhiqian)_-_3.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://smarthistory.org/zhao-zhiqian-flowers-album/"
+        },
+        {
+          "name": "Smarthistory: Modern China, an introduction",
+          "url": "https://smarthistory.org/modern-china-intro/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=AlfQ6rwFj9k"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "slug": "hokusai",
+      "title": "Japan: Ukiyo-e, the Floating World, and Hokusai",
+      "startYear": 1800,
+      "regions": [
+        "Japan"
+      ],
+      "videoSource": {
+        "title": "Better Know the Great Wave | The Art Assignment | PBS Digital Studios",
+        "channel": "The Art Assignment",
+        "channelUrl": "https://www.youtube.com/@theartassignment",
+        "watchUrl": "https://www.youtube.com/watch?v=d1ufFlXIWjA",
+        "note": "English case study of The Great Wave: reproduction, audiences, and the global circulation of a Japanese woodblock print.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/2646210.jpg",
+          "title": "Hokusai · The Great Wave off Kanagawa",
+          "credit": "After Katsushika Hokusai",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Great_Wave_off_Kanagawa.jpg",
+          "license": "Public domain",
+          "licenseUrl": "https://commons.wikimedia.org/wiki/File:The_Great_Wave_off_Kanagawa.jpg",
+          "changes": "Unaltered reduced-size preview; original proportions preserved.",
+          "checkedAt": "2026-10-15"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://smarthistory.org/hokusai-the-great-wave/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=d1ufFlXIWjA"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "slug": "china-14",
+      "title": "Republic Era: Art Education and New Painting Languages",
+      "startYear": 1912,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Chinese Modernist Artists and the Literati Spirit: The Life and Work of Lin Fengmian and Sanyu",
+        "channel": "IAC WSU",
+        "channelUrl": "https://www.youtube.com/@iacwsu3993",
+        "watchUrl": "https://www.youtube.com/watch?v=rypHbl5zO-w",
+        "note": "Extended university lecture on Lin Fengmian and Sanyu. Watch in sections and compare their different responses to study abroad. The lecture also follows their later careers.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-studio.svg",
+          "title": "Republic Era · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.westernsydney.edu.au/iac/art-talks/iac-art-talks-6-chinese-modernist-artists-and-the-literati-spirit-the-life-and-work-of-lin-fengmian-and-sanyu-by-dapeng-liu"
+        },
+        {
+          "name": "Smarthistory: Modern China, an introduction",
+          "url": "https://smarthistory.org/modern-china-intro/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=rypHbl5zO-w"
+        },
+        {
+          "name": "Xu Beihong: Heavenly Horse — The Met collection",
+          "url": "https://www.metmuseum.org/art/collection/search/72778"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "slug": "china-15",
+      "title": "1949–1976: Art, Mass Media, and Socialist Visual Culture",
+      "startYear": 1949,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "The Art of Chinese Propaganda Posters",
+        "channel": "AbeBooks.com",
+        "channelUrl": "https://www.youtube.com/@abebooks",
+        "watchUrl": "https://www.youtube.com/watch?v=65jwAN5hdg8",
+        "note": "A short collector-oriented introduction published by AbeBooks. Treat posters as historical persuasion: ask who commissioned them, whom they addressed, and what they omit.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-press.svg",
+          "title": "1949–1976 · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.britishmuseum.org/collection/object/A_2006-0501-0-1-75"
+        },
+        {
+          "name": "Smarthistory: Modern China, an introduction",
+          "url": "https://smarthistory.org/modern-china-intro/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=65jwAN5hdg8"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "slug": "paik",
+      "title": "Korea and the World: Nam June Paik’s Electronic Art",
+      "startYear": 1963,
+      "regions": [
+        "Korea",
+        "Japan",
+        "International"
+      ],
+      "videoSource": {
+        "title": "5 Times Artist Nam June Paik Predicted the Future | Tate",
+        "channel": "Tate",
+        "channelUrl": "https://www.youtube.com/@tate",
+        "watchUrl": "https://www.youtube.com/watch?v=yMUJB5aFvdo",
+        "note": "English case study. Use the reading and gallery to place this example in its wider historical setting.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-signal.svg",
+          "title": "Korea and the World · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read more / official historical context",
+          "url": "https://www.tate.org.uk/art/artists/nam-june-paik-1751"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=yMUJB5aFvdo"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "slug": "china-16",
+      "title": "Post-1978: New Chinese Art and Opening Up",
+      "startYear": 1978,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Art and China after 1989: Theater of the World",
+        "channel": "Guggenheim Museum",
+        "channelUrl": "https://www.youtube.com/@guggenheim",
+        "watchUrl": "https://www.youtube.com/watch?v=DS22WjHgKMQ",
+        "note": "An exhibition introduction focused on 1989–2008. The lesson explains the earlier post-1978 opening; the film does not cover that entire transition.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-text.svg",
+          "title": "Post-1978 · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.guggenheim.org/exhibition/art-and-china-after-1989-theater-of-the-world"
+        },
+        {
+          "name": "Smarthistory: Modern China, an introduction",
+          "url": "https://smarthistory.org/modern-china-intro/"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=DS22WjHgKMQ"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "slug": "china-17",
+      "title": "Contemporary Ink: Tradition as a Living System",
+      "startYear": 1990,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Xu Bing, Book from the Sky",
+        "channel": "Smarthistory",
+        "channelUrl": "https://www.youtube.com/@smarthistory-art-history",
+        "watchUrl": "https://www.youtube.com/watch?v=DseIYQdjzgE",
+        "note": "A bridge into contemporary ink through Xu Bing’s Book from the Sky (1987–91). Consider how print, invented writing, and installation transform inherited ink traditions.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-ink.svg",
+          "title": "Contemporary Ink · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.metmuseum.org/exhibitions/listings/2013/ink-art"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=DseIYQdjzgE"
+        },
+        {
+          "name": "Xu Bing: Book from the Sky — artist’s original project page",
+          "url": "https://www.xubing.com/en/work/details/206?type=project"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "slug": "china-18",
+      "title": "Contemporary China: Installation, Photography, and the City",
+      "startYear": 1990,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "Saving Chinese Art From Extinction | Meet Yang Yongliang",
+        "channel": "Creators",
+        "channelUrl": "https://www.youtube.com/@TheCreatorsProject",
+        "watchUrl": "https://www.youtube.com/watch?v=ZgYdQUn-cIk",
+        "note": "Artist interview in Chinese with English subtitles. Yang Yongliang uses photographic and digital methods to rethink landscape and urban growth.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-city.svg",
+          "title": "Contemporary China · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://searchcollection.asianart.org/objects/19426/the-night-of-perpetual-day"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=ZgYdQUn-cIk"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "slug": "china-20",
+      "title": "China in Global Contemporary: From Local Language to World Questions",
+      "startYear": 2000,
+      "regions": [
+        "China"
+      ],
+      "videoSource": {
+        "title": "The Case for Ai Weiwei | The Art Assignment | PBS Digital Studios",
+        "channel": "The Art Assignment",
+        "channelUrl": "https://www.youtube.com/@theartassignment",
+        "watchUrl": "https://www.youtube.com/watch?v=YMtsodcAsVU",
+        "note": "A contemporary artist case study connecting materials, labor, public space, and international audiences. This is one voice within a diverse contemporary field.",
+        "checkedAt": "2026-10-15",
+        "verification": "Official YouTube oEmbed returned a player. Playback remains subject to publisher, regional, and browser restrictions."
+      },
+      "images": [
+        {
+          "src": "assets/asian/diagram-network.svg",
+          "title": "China in Global Contemporary · concept diagram",
+          "credit": "Original vector teaching diagram for FEI TeamArt",
+          "illustration": true,
+          "sourceUrl": "media-notes.html#diagrams"
+        }
+      ],
+      "resources": [
+        {
+          "name": "Read the historical context / explore the source",
+          "url": "https://www.tate.org.uk/art/artists/ai-weiwei-8208"
+        },
+        {
+          "name": "Video publisher and original player",
+          "url": "https://www.youtube.com/watch?v=YMtsodcAsVU"
+        }
+      ]
+    }
+  ],
+  "youtubeOEmbed": {
+    "ld8kHvz1yN4": {
+      "title": "Jade Cong",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/ld8kHvz1yN4/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/ld8kHvz1yN4?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Jade Cong\"></iframe>"
+    },
+    "s9gfIqOo__I": {
+      "title": "Oracle Bone, Shang Dynasty",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/s9gfIqOo__I/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/s9gfIqOo__I?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Oracle Bone, Shang Dynasty\"></iframe>"
+    },
+    "tAtweI2BUNE": {
+      "title": "Da Ke Ding",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/tAtweI2BUNE/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/tAtweI2BUNE?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Da Ke Ding\"></iframe>"
+    },
+    "RsUE-ZtcUFg": {
+      "title": "The Terra-Cotta Warriors | National Geographic",
+      "author_name": "National Geographic",
+      "author_url": "https://www.youtube.com/@NatGeo",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/RsUE-ZtcUFg/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/RsUE-ZtcUFg?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Terra-Cotta Warriors | National Geographic\"></iframe>"
+    },
+    "kFp7D0UxNxU": {
+      "title": "Longmen Grottoes (UNESCO/NHK)",
+      "author_name": "UNESCO",
+      "author_url": "https://www.youtube.com/@UNESCO",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/kFp7D0UxNxU/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/kFp7D0UxNxU?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Longmen Grottoes (UNESCO/NHK)\"></iframe>"
+    },
+    "sKJ8qkIqzfo": {
+      "title": "Graceful gestures and terrifying guardians — Tang Tomb figures",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/sKJ8qkIqzfo/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/sKJ8qkIqzfo?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Graceful gestures and terrifying guardians — Tang Tomb figures\"></iframe>"
+    },
+    "JO5Dkq9Q_ao": {
+      "title": "Chinese Landscape Paintings at the Metropolitan Museum II | Ancient Art Links",
+      "author_name": "CUNY TV",
+      "author_url": "https://www.youtube.com/@cunytv",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/JO5Dkq9Q_ao/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/JO5Dkq9Q_ao?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Chinese Landscape Paintings at the Metropolitan Museum II | Ancient Art Links\"></iframe>"
+    },
+    "v81CeT1MNtE": {
+      "title": "White Porcelain, Ding ware in the Northern Song dynasty",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/v81CeT1MNtE/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/v81CeT1MNtE?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"White Porcelain, Ding ware in the Northern Song dynasty\"></iframe>"
+    },
+    "QkHoGrbx730": {
+      "title": "Painting and Poetry Among Friends",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/QkHoGrbx730/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/QkHoGrbx730?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Painting and Poetry Among Friends\"></iframe>"
+    },
+    "9FAfK6MDA-Q": {
+      "title": "Wang Lü among the peaks, Ming paintings of Mt. Hua",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/9FAfK6MDA-Q/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/9FAfK6MDA-Q?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Wang Lü among the peaks, Ming paintings of Mt. Hua\"></iframe>"
+    },
+    "uwvRXJd22oI": {
+      "title": "An introduction to Ming blue and white porcelain | Curator's Corner S5 Ep6 #CuratorsCorner",
+      "author_name": "The British Museum",
+      "author_url": "https://www.youtube.com/@britishmuseum",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/uwvRXJd22oI/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/uwvRXJd22oI?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"An introduction to Ming blue and white porcelain | Curator&#39;s Corner S5 Ep6 #CuratorsCorner\"></iframe>"
+    },
+    "lpZsBrHTdy0": {
+      "title": "The angry ducks of a Ming prince",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/lpZsBrHTdy0/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/lpZsBrHTdy0?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The angry ducks of a Ming prince\"></iframe>"
+    },
+    "AlfQ6rwFj9k": {
+      "title": "Marketing peonies, Zhao Zhiqian's flower album",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/AlfQ6rwFj9k/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/AlfQ6rwFj9k?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Marketing peonies, Zhao Zhiqian&#39;s flower album\"></iframe>"
+    },
+    "rypHbl5zO-w": {
+      "title": "Chinese Modernist Artists and the Literati Spirit: The Life and Work of Lin Fengmian and Sanyu",
+      "author_name": "IAC WSU",
+      "author_url": "https://www.youtube.com/@iacwsu3993",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/rypHbl5zO-w/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/rypHbl5zO-w?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Chinese Modernist Artists and the Literati Spirit: The Life and Work of Lin Fengmian and Sanyu\"></iframe>"
+    },
+    "65jwAN5hdg8": {
+      "title": "The Art of Chinese Propaganda Posters",
+      "author_name": "AbeBooks.com",
+      "author_url": "https://www.youtube.com/@abebooks",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/65jwAN5hdg8/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/65jwAN5hdg8?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Art of Chinese Propaganda Posters\"></iframe>"
+    },
+    "DS22WjHgKMQ": {
+      "title": "Art and China after 1989: Theater of the World",
+      "author_name": "Guggenheim Museum",
+      "author_url": "https://www.youtube.com/@guggenheim",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/DS22WjHgKMQ/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/DS22WjHgKMQ?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Art and China after 1989: Theater of the World\"></iframe>"
+    },
+    "DseIYQdjzgE": {
+      "title": "Xu Bing, Book from the Sky",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/DseIYQdjzgE/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/DseIYQdjzgE?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Xu Bing, Book from the Sky\"></iframe>"
+    },
+    "ZgYdQUn-cIk": {
+      "title": "Saving Chinese Art From Extinction | Meet Yang Yongliang",
+      "author_name": "Creators",
+      "author_url": "https://www.youtube.com/@TheCreatorsProject",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/ZgYdQUn-cIk/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/ZgYdQUn-cIk?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Saving Chinese Art From Extinction | Meet Yang Yongliang\"></iframe>"
+    },
+    "MEN0CzGv5-Y": {
+      "title": "Appreciating Chinese Calligraphy",
+      "author_name": "Asian Art Museum",
+      "author_url": "https://www.youtube.com/@AsianArtMuseum",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/MEN0CzGv5-Y/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/MEN0CzGv5-Y?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Appreciating Chinese Calligraphy\"></iframe>"
+    },
+    "YMtsodcAsVU": {
+      "title": "The Case for Ai Weiwei | The Art Assignment | PBS Digital Studios",
+      "author_name": "The Art Assignment",
+      "author_url": "https://www.youtube.com/@theartassignment",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/YMtsodcAsVU/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/YMtsodcAsVU?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"The Case for Ai Weiwei | The Art Assignment | PBS Digital Studios\"></iframe>"
+    },
+    "VRxcHHLSe8Y": {
+      "title": "Ceramics from early Japan, the Jōmon",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/VRxcHHLSe8Y/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/VRxcHHLSe8Y?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Ceramics from early Japan, the Jōmon\"></iframe>"
+    },
+    "BkFpizJgwYk": {
+      "title": "Buddhist Monuments at Sanchi (UNESCO/NHK)",
+      "author_name": "UNESCO",
+      "author_url": "https://www.youtube.com/@UNESCO",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/BkFpizJgwYk/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/BkFpizJgwYk?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Buddhist Monuments at Sanchi (UNESCO/NHK)\"></iframe>"
+    },
+    "hle43IAxF6s": {
+      "title": "Historic Monuments of Ancient Nara (UNESCO/NHK)",
+      "author_name": "UNESCO",
+      "author_url": "https://www.youtube.com/@UNESCO",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/hle43IAxF6s/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/hle43IAxF6s?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Historic Monuments of Ancient Nara (UNESCO/NHK)\"></iframe>"
+    },
+    "txujqGtB_6g": {
+      "title": "Borobudur Temple Compounds (UNESCO/NHK)",
+      "author_name": "UNESCO",
+      "author_url": "https://www.youtube.com/@UNESCO",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/txujqGtB_6g/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/txujqGtB_6g?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Borobudur Temple Compounds (UNESCO/NHK)\"></iframe>"
+    },
+    "IX85uiG86RA": {
+      "title": "Beliefs Made Visible: Hindu Art in South Asia (Part 1 of 2)",
+      "author_name": "Asian Art Museum",
+      "author_url": "https://www.youtube.com/@AsianArtMuseum",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/IX85uiG86RA/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/IX85uiG86RA?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Beliefs Made Visible: Hindu Art in South Asia (Part 1 of 2)\"></iframe>"
+    },
+    "frkHrfqmX-8": {
+      "title": "Rediscovering Korea's Past",
+      "author_name": "Smithsonian National Museum of Asian Art",
+      "author_url": "https://www.youtube.com/@NatAsianArt",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/frkHrfqmX-8/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/frkHrfqmX-8?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Rediscovering Korea&#39;s Past\"></iframe>"
+    },
+    "NJyCKj8pCiY": {
+      "title": "Before You Visit Angkor Wat, Here's What You Need to Know | National Geographic",
+      "author_name": "National Geographic",
+      "author_url": "https://www.youtube.com/@NatGeo",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/NJyCKj8pCiY/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/NJyCKj8pCiY?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Before You Visit Angkor Wat, Here&#39;s What You Need to Know | National Geographic\"></iframe>"
+    },
+    "pLHnipC48P0": {
+      "title": "Paradise in miniature, The Court of Kayumars",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/pLHnipC48P0/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/pLHnipC48P0?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Paradise in miniature, The Court of Kayumars\"></iframe>"
+    },
+    "-hxs8uOdvxM": {
+      "title": "Celebrating the imperfect, an Oribe tea bowl",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/-hxs8uOdvxM/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/-hxs8uOdvxM?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Celebrating the imperfect, an Oribe tea bowl\"></iframe>"
+    },
+    "KZzgvng_5GE": {
+      "title": "Taj Mahal (UNESCO/NHK)",
+      "author_name": "UNESCO",
+      "author_url": "https://www.youtube.com/@UNESCO",
+      "type": "video",
+      "height": 150,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/KZzgvng_5GE/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"150\" src=\"https://www.youtube.com/embed/KZzgvng_5GE?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Taj Mahal (UNESCO/NHK)\"></iframe>"
+    },
+    "SnAdZnJ5b1A": {
+      "title": "Beyond the Great Wave — Hokusai at 90",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/SnAdZnJ5b1A/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/SnAdZnJ5b1A?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Beyond the Great Wave — Hokusai at 90\"></iframe>"
+    },
+    "yMUJB5aFvdo": {
+      "title": "5 Times Artist Nam June Paik Predicted the Future | Tate",
+      "author_name": "Tate",
+      "author_url": "https://www.youtube.com/@tate",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/yMUJB5aFvdo/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/yMUJB5aFvdo?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"5 Times Artist Nam June Paik Predicted the Future | Tate\"></iframe>"
+    },
+    "vwoK8-y-5_U": {
+      "title": "Bamboo in the Four Seasons: painting and poetry in Japan",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/vwoK8-y-5_U/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/vwoK8-y-5_U?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Bamboo in the Four Seasons: painting and poetry in Japan\"></iframe>"
+    },
+    "CJ17bWVrgho": {
+      "title": "A garden for a poet:  Hon'ami Kōetsu's folding screens",
+      "author_name": "Smarthistory",
+      "author_url": "https://www.youtube.com/@smarthistory-art-history",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/CJ17bWVrgho/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/CJ17bWVrgho?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"A garden for a poet:  Hon&#39;ami Kōetsu&#39;s folding screens\"></iframe>"
+    },
+    "d1ufFlXIWjA": {
+      "title": "Better Know the Great Wave | The Art Assignment | PBS Digital Studios",
+      "author_name": "The Art Assignment",
+      "author_url": "https://www.youtube.com/@theartassignment",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/d1ufFlXIWjA/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/d1ufFlXIWjA?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Better Know the Great Wave | The Art Assignment | PBS Digital Studios\"></iframe>"
+    },
+    "D1SWUURhSs4": {
+      "title": "Zen Calligraphy",
+      "author_name": "Asian Art Museum",
+      "author_url": "https://www.youtube.com/@AsianArtMuseum",
+      "type": "video",
+      "height": 113,
+      "width": 200,
+      "version": "1.0",
+      "provider_name": "YouTube",
+      "provider_url": "https://www.youtube.com/",
+      "thumbnail_height": 360,
+      "thumbnail_width": 480,
+      "thumbnail_url": "https://i.ytimg.com/vi/D1SWUURhSs4/hqdefault.jpg",
+      "html": "<iframe width=\"200\" height=\"113\" src=\"https://www.youtube.com/embed/D1SWUURhSs4?feature=oembed\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen title=\"Zen Calligraphy\"></iframe>"
+    }
+  }
+}
