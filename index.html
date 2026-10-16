@@ -2119,7 +2119,7 @@
     <div class="subtrack-info">
       <div class="subtrack-name">RE:MAKE 01 — CARDBOARD</div>
       <div class="subtrack-meta">From Waste Material to Creative Structure</div>
-      <div class="subtrack-meta">Ages 10–15 · Project-Based Smart Class · 6 lessons</div>
+      <div class="subtrack-meta">Ages 10–15 · Project-Based Art GPS · 6 lessons</div>
     </div>
     <div class="subtrack-arrow">→</div>
   </a>
@@ -3170,7 +3170,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 
   function renderLiveClassSmartRef(session, icon) {
     if (!session.smartClassRef) return '';
-    const note = session.smartClassNote || 'Watch the related lesson in Smart Class first.';
+    const note = session.smartClassNote || 'Watch the related lesson in Art GPS first.';
     const link = renderLiveClassSmartRefLink(session.smartClassRef);
     return `<div class="live-class-smart-ref">${icon} ${liveClassEscapeHtml(note)} ${link}</div>`;
   }
@@ -4644,8 +4644,8 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 
   // Show a brief paid-welcome toast (no obstruction; just gentle confirmation)
   const PAID_WELCOME_MESSAGES = {
-    ai_feedback: '🎉 Welcome! Your Smart Class access is now unlocked.',
-    ai_teacher: '🎉 Welcome! Your Smart Class + Teacher feedback is now unlocked.',
+    ai_feedback: '🎉 Welcome! Your Art GPS access is now unlocked.',
+    ai_teacher: '🎉 Welcome! Your Art GPS + Teacher feedback is now unlocked.',
     live_class: '🎉 Welcome! Your Live Class access is now unlocked — you\'ll see the live class submit button in each lesson.'
   };
   function showPaidWelcome(plan) {

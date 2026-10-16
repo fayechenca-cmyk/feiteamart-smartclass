@@ -39,7 +39,7 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null, // null = use defaultZoom
       smartClassRef: 'cube', // which Smart Class lesson to reference (optional)
-      smartClassNote: 'Watch the Cube lesson in Smart Class before this session.',
+      smartClassNote: 'Watch the Cube lesson in Art GPS before this session.',
       materials: null,
       homework: {
         description: 'Complete a cardboard box sketch using the techniques from class.',
@@ -56,7 +56,7 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'cube',
-      smartClassNote: 'Watch the Cube lesson in Smart Class for reference.',
+      smartClassNote: 'Watch the Cube lesson in Art GPS for reference.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6873482046a8046d51289d91_perspective%20practice.pptx'
@@ -82,7 +82,7 @@ const LIVE_CLASS_SCHEDULE = {
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6873482046a8046d51289d91_perspective%20practice.pptx'
       },
       homework: {
-        description: 'Draw a paper bag from direct observation — no Smart Class video needed.',
+        description: 'Draw a paper bag from direct observation — no Art GPS video needed.',
         downloadUrl: null,
         downloadLabel: null
       }
@@ -96,7 +96,7 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'papercrane',
-      smartClassNote: 'The homework for this class is connected to the Paper Crane lesson in Smart Class. Complete it as your reference before drawing.',
+      smartClassNote: 'The homework for this class is connected to the Paper Crane lesson in Art GPS. Complete it as your reference before drawing.',
       materials: null,
       // Old homework block (description + downloadUrl/downloadLabel
       // reference image link) removed — it duplicated the smart-class-ref
@@ -114,7 +114,7 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM Vancouver',
       zoom: null,
       smartClassRef: 'cylinder',
-      smartClassNote: 'Watch the Cylinder lesson in Smart Class before drawing.',
+      smartClassNote: 'Watch the Cylinder lesson in Art GPS before drawing.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68981411b17923b41bd6040a_circular%20perspective.pptx'
@@ -134,10 +134,10 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'cylinder',
-      smartClassNote: 'Watch the Cylinder lesson in Smart Class before next class.',
+      smartClassNote: 'Watch the Cylinder lesson in Art GPS before next class.',
       materials: null,
       homework: {
-        description: 'Watch the Cylinder lesson in Smart Class — that\'s your homework for this week.',
+        description: 'Watch the Cylinder lesson in Art GPS — that\'s your homework for this week.',
         downloadUrl: null,
         downloadLabel: null
       }
@@ -155,13 +155,13 @@ const LIVE_CLASS_SCHEDULE = {
         joinUrl: 'https://zoom.us/j/5090190896?pwd=431432'
       },
       smartClassRef: 'cup',
-      smartClassNote: 'Watch the Cup lesson in Smart Class for reference.',
+      smartClassNote: 'Watch the Cup lesson in Art GPS for reference.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68bcff71e365f04a1df7330d_cube%20sketching%20methods.pptx'
       },
       homework: {
-        description: 'Watch and draw from the cup lesson in Smart Class — that\'s your homework for this week.',
+        description: 'Watch and draw from the cup lesson in Art GPS — that\'s your homework for this week.',
         downloadUrl: null,
         downloadLabel: null
       }
@@ -175,13 +175,13 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'cone',
-      smartClassNote: 'Go to the Cone lesson in Smart Class and complete your cone drawing.',
+      smartClassNote: 'Go to the Cone lesson in Art GPS and complete your cone drawing.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68cf6d1681fd6b44c8945aec_sketch3%20by%20eira%20wang.pptx'
       },
       homework: {
-        description: 'Watch the Cone lesson in Smart Class and draw the cone — that\'s your homework for this week.',
+        description: 'Watch the Cone lesson in Art GPS and draw the cone — that\'s your homework for this week.',
         downloadUrl: null,
         downloadLabel: null
       }
@@ -195,13 +195,13 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'sphere',
-      smartClassNote: 'Watch the Sphere lesson in Smart Class for reference.',
+      smartClassNote: 'Watch the Sphere lesson in Art GPS for reference.',
       materials: {
         label: 'Class Materials (PPT)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68e1eb232748dccce7a0d396_spherical%20sketch.pptx'
       },
       homework: {
-        description: 'Watch Sphere Lesson in the Smart Class. Draw the Sphere, that is your homework for this week.',
+        description: 'Watch Sphere Lesson in Art GPS. Draw the Sphere, that is your homework for this week.',
         downloadUrl: null,
         downloadLabel: null
       }
@@ -215,7 +215,7 @@ const LIVE_CLASS_SCHEDULE = {
       time: '7:00 PM ET',
       zoom: null,
       smartClassRef: 'sphere',
-      smartClassNote: 'Watch the Sphere lesson in Smart Class before drawing.',
+      smartClassNote: 'Watch the Sphere lesson in Art GPS before drawing.',
       materials: {
         label: 'Class Materials (PNG)',
         url: 'https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/68f994efd0ca518cb33f6137_Sketch%20Spherical%20Animal.png'
