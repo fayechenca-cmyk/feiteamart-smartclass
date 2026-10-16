@@ -3,7 +3,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const root = '../../../';
-const KEY = 'fei.cube.guided-preview.v1';
+const KEY = 'fei.cube.guided-preview.v2';
 let flow=[], index=0, unlocked=0, completed=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null;
 const voice=$('voice');
@@ -51,6 +51,11 @@ function buildScene(s){
  }else if(s.kind==='materials'){
   const rect=s.focus==='pencils'?'x="75" y="24" width="750" height="940"':'x="855" y="25" width="640" height="785"';
   $('visual').innerHTML=`<div class="scene material"><svg viewBox="0 0 1536 1024" role="img" aria-label="Six labelled pencils, two paper blending stumps, and sketch paper"><image href="${root}assets/sketch-support/toolkit/drawing-tools.png" width="1536" height="1024"/><rect ${rect} rx="24" fill="none" stroke="#dcaa49" stroke-width="7" class="tool-glow"/></svg></div>`;
+ }else if(s.kind==='paper'){
+  $('visual').innerHTML=`<div class="scene paper-scene"><button id="paperFlip" class="paper-card" aria-label="Turn the sketch paper over"><svg viewBox="0 0 700 420" role="img" aria-label="Illustration of rough and smooth paper texture"><defs><pattern id="tooth" width="14" height="12" patternUnits="userSpaceOnUse"><path d="M1 4l5 -2M8 9l4 -1" stroke="#c3b99f" stroke-width="1.3"/></pattern><pattern id="graphite" width="9" height="8" patternUnits="userSpaceOnUse"><path d="M0 3l6 -2M3 7l5 -1" stroke="#484746" stroke-width="2"/></pattern></defs><rect x="95" y="35" width="510" height="350" rx="12" fill="#fffdf5"/><rect id="paperGrain" x="95" y="35" width="510" height="350" rx="12" fill="url(#tooth)"/><path id="pencilMark" d="M175 285Q320 150 520 175L515 240Q330 215 180 335Z" fill="url(#graphite)"/></svg><strong id="paperLabel">Rougher side · Tooth</strong><span>Tap to turn over ↻</span></button></div>`;
+  let rough=true;$('paperFlip').onclick=()=>{rough=!rough;$('paperGrain').style.opacity=rough?'1':'.12';$('pencilMark').setAttribute('fill',rough?'url(#graphite)':'#88857d');$('paperLabel').textContent=rough?'Rougher side · Tooth':'Smoother side · Also usable';};
+ }else if(s.kind==='paperSize'){
+  $('visual').innerHTML=`<div class="scene paper-scene"><svg viewBox="0 0 700 470" role="img" aria-label="A4 sketch paper: 210 millimetres wide and 297 millimetres tall"><rect x="215" y="25" width="245" height="346.5" rx="6" fill="#fffdf5" stroke="#A9CEA7" stroke-width="4"/><text x="337" y="175" text-anchor="middle" fill="#7560a7" font-size="54" font-family="system-ui">A4</text><text x="337" y="215" text-anchor="middle" fill="#706b81" font-size="17">Sketch paper</text><path d="M215 395h245M190 25v346" stroke="#7560a7" stroke-width="2"/><text x="337" y="427" text-anchor="middle" fill="#17182D" font-size="21">210 mm</text><text x="166" y="208" text-anchor="middle" transform="rotate(-90 166 208)" fill="#17182D" font-size="21">297 mm</text></svg><small>Another size? That works too.</small></div>`;
  }else if(s.kind==='ready'){
   $('visual').innerHTML=`<div class="scene"><div class="big-symbol">✎</div><p>Paper ready. Shoulders relaxed.</p></div>`;
  }else if(s.kind==='submit'){
@@ -72,28 +77,40 @@ function finishClip(){
  player?.pause();clearTimeout(watchdog);
  const s=flow[index];
  if(s.kind==='intro'){mark();index++;enter();return;}
- waiting();$('media').hidden=true;$('visual').innerHTML=`<img src="${s.frame}" alt="${s.title}: teacher’s drawing at this checkpoint">`;
+ waiting();$('clipControls').hidden=true;$('media').hidden=true;$('visual').innerHTML=`<img src="${s.frame}" alt="${s.title}: teacher’s drawing at this checkpoint">`;
  $('referenceImage').src=s.analysis||s.frame; $('referenceImage').alt=s.analysis?'Teaching diagram for '+s.title:s.title+' — stage reference'; $('analysis').hidden=false;$('replay').hidden=false;
  speak(s);
 }
 function createPlayer(s){
  if(uid===s.uid&&player){startClip(s);return;}
  uid=s.uid;$('media').innerHTML='';
- const iframe=document.createElement('iframe');iframe.title='Mrs. Dawn’s cube demonstration';iframe.allow='autoplay; fullscreen; picture-in-picture';iframe.allowFullscreen=true;
- iframe.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${s.uid}/iframe?autoplay=false&muted=${muted}&controls=true&preload=auto`;
+ const iframe=document.createElement('iframe');iframe.title='Mrs. Dawn’s cube demonstration';iframe.allow='autoplay; fullscreen; picture-in-picture';iframe.tabIndex=-1;
+ iframe.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${s.uid}/iframe?autoplay=false&muted=${muted}&controls=false&preload=auto`;
  $('media').append(iframe);
  if(typeof Stream!=='function'){
   $('notice').hidden=false;$('notice').textContent='The video player could not load. Check your connection and reload to try again.';return;
  }
  player=Stream(iframe);const thisPlayer=player;
  player.addEventListener('loadedmetadata',()=>{if(player===thisPlayer&&flow[index].uid===s.uid)startClip(flow[index]);});
- player.addEventListener('timeupdate',()=>{if(player!==thisPlayer||phase!=='watching')return;const current=flow[index];if(current.end!==null&&current.end!==undefined&&thisPlayer.currentTime>=current.end-.1)finishClip();});
- player.addEventListener('ended',()=>{if(player===thisPlayer)finishClip();});
- player.addEventListener('play',()=>{if(player===thisPlayer){clearTimeout(watchdog);$('resume').hidden=true;}});
+ player.addEventListener('timeupdate',()=>{if(player===thisPlayer)checkClip();});
+ player.addEventListener('ended',()=>{if(player===thisPlayer)checkClip(true);});
+ player.addEventListener('play',()=>{if(player===thisPlayer){clearTimeout(watchdog);$('resume').hidden=true;$('playPause').textContent='Ⅱ';$('playPause').setAttribute('aria-label','Pause demonstration');}});
  player.addEventListener('error',()=>{if(player!==thisPlayer)return;$('notice').hidden=false;$('notice').textContent='The teacher video could not load. Use Replay to try again.';$('replay').hidden=false;});
 }
+function checkClip(ended=false){
+ if(phase!=='watching'||!player)return;
+ const s=flow[index], start=s.start||0, end=s.clipEnd, t=Number(player.currentTime);
+ // A seek outside this microstep never unlocks or completes another checkpoint.
+ if(t<start-.3||t>end+.7){player.currentTime=Math.max(start,Math.min(end-.25,t));if(ended)Promise.resolve(player.play()).catch(()=>{$('resume').hidden=false;});return;}
+ $('clipSeek').value=Math.min(end-.15,Math.max(start,t));
+ $('clipTime').textContent=`${Math.floor(Math.max(0,t-start))} / ${Math.ceil(end-start)}s`;
+ if(t>=end-.12||(ended&&t>=end-.7))finishClip();
+}
+$('playPause').onclick=()=>{if(!player||phase!=='watching')return;if(player.paused){Promise.resolve(player.play()).catch(()=>{$('resume').hidden=false;});}else{player.pause();$('playPause').textContent='▶';$('playPause').setAttribute('aria-label','Play demonstration');}};
+$('clipSeek').oninput=()=>{if(!player||phase!=='watching')return;const s=flow[index];player.currentTime=Math.max(s.start||0,Math.min(s.clipEnd-.15,Number($('clipSeek').value)));};
 function startClip(s){
  phase='watching';$('media').hidden=false;$('visual').innerHTML='';$('resume').hidden=true;
+ $('clipControls').hidden=false;$('clipSeek').min=s.start||0;$('clipSeek').max=s.clipEnd-.15;$('clipSeek').value=s.start||0;$('clipTime').textContent=`0 / ${Math.ceil(s.clipEnd-(s.start||0))}s`;
  player.muted=muted;player.currentTime=s.start||0;
  const token=epoch;
  Promise.resolve(player.play()).catch(()=>{if(token===epoch){$('resume').textContent='Tap to play';$('resume').hidden=false;}});
@@ -101,7 +118,7 @@ function startClip(s){
 }
 function enter(){
  epoch++;clearTimeout(watchdog);stopVoice();player?.pause();
- const s=flow[index];save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
+ const s=flow[index];$('clipControls').hidden=true;save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=s.kind!=='draw';$('analysis').hidden=true;
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
@@ -146,9 +163,9 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pa
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());$('welcome').showModal();
-fetch('flow.json').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
+fetch('flow.json?v=paper2').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
  flow=data;
- try{const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+ try{if(!localStorage.getItem(KEY)){const old=JSON.parse(localStorage.getItem('fei.cube.guided-preview.v1')||'null');if(old){const shift=i=>i>=5?i+2:i;localStorage.setItem(KEY,JSON.stringify({index:shift(old.index||0),unlocked:shift(old.unlocked||0),completed:(old.completed||[]).map(shift)}));}}const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Start drawing →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
 })();

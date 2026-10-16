@@ -12,21 +12,22 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:18816/lessons/lesson-3-cube
  await page.goto(url);await page.locator('#start:not([disabled])').waitFor();await page.click('#start');
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
  assert.equal(await page.locator('#next').isDisabled(),true);
- await page.evaluate(()=>firePlayer('ended'));
+ await page.evaluate(()=>{fakePlayer.currentTime=15.1;firePlayer('ended');});
  await page.waitForFunction(()=>document.getElementById('title').textContent==='Meet the cube');
  assert.equal(await page.locator('#next').isDisabled(),true);
  await page.locator('[data-face=top]').click();await page.locator('[data-face=left]').click();await page.locator('[data-face=right]').click();
  assert.equal(await page.locator('#next').isEnabled(),true);await page.click('#next');
  await page.locator('#sunSlider').fill('80');await page.locator('#sunSlider').dispatchEvent('input');await page.click('#next');
  // No gate is tied to a fixed countdown: narration end enables non-practice scenes.
- for(let i=3;i<6;i++){await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));await page.click('#next');}
+ for(let i=3;i<8;i++){await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));await page.click('#next');}
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- for(let i=6;i<flow.length;i++){
+ for(let i=8;i<flow.length;i++){
   const step=flow[i];await page.waitForFunction(t=>document.getElementById('title').textContent===t,step.title);
   if(step.kind==='draw'){
    await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
    assert.equal(await page.locator('#next').isDisabled(),true,'Cannot continue before video boundary');
-   await page.evaluate(end=>{if(end===null)firePlayer('ended');else{fakePlayer.currentTime=end;firePlayer('timeupdate');}},step.end);
+   await page.evaluate(end=>window.testClipEnd=end,step.clipEnd);
+   await page.evaluate(end=>{if(end===null){fakePlayer.currentTime=window.testClipEnd;firePlayer('ended');}else{fakePlayer.currentTime=end;firePlayer('timeupdate');}},step.end);
    assert.equal(await page.locator('#next').isEnabled(),true);
    assert(await page.evaluate(()=>fakePlayer.paused));
    const src=await page.locator('#voice').getAttribute('src');assert.equal(src,step.audio);
@@ -48,6 +49,6 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:18816/lessons/lesson-3-cube
   await page.click('#next');
  }
  assert.equal(await page.locator('#next').textContent(),'Preview complete ✓');
- const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('fei.cube.guided-preview.v1')));assert.equal(state.completed.length,flow.length);
+ const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('fei.cube.guided-preview.v2')));assert.equal(state.completed.length,flow.length);
  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,stages:flow.length,viewports:4,errors}));await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
