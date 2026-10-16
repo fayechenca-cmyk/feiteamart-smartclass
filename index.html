@@ -112,6 +112,14 @@
   @media (max-width: 600px) {
     .signin-screen { background-attachment: scroll; }
   }
+  /* The generous top padding above was sized for a single small card;
+     with the intro panel now stacked above the card on narrow screens,
+     that same offset pushes the sign-up form well below the fold. Cut
+     it down for #signin-screen specifically (not auth-loading-screen,
+     which still wants its original centered-card spacing). */
+  @media (max-width: 899px) {
+    #signin-screen { padding-top: 20px; }
+  }
   .signin-card {
     background: #fff; border-radius: var(--radius-lg);
     padding: 36px 28px; max-width: 380px; width: 100%;
@@ -173,6 +181,84 @@
     font-weight: 400;
   }
   .signin-help a { color: var(--purple); text-decoration: none; font-weight: 700; }
+
+  /* ═══ SIGN-IN INTRO PANEL ═══
+     Groups the new intro copy + the existing .signin-card as a
+     centered pair, max ~920px. Row at >=900px (intro left, card
+     right); column below that, intro first so it reads above the
+     card on a phone. DOM order is always intro-then-card, so this is
+     also the keyboard tab order regardless of the visual column. */
+  .signin-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 920px;
+  }
+  @media (min-width: 900px) {
+    .signin-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 40px;
+    }
+  }
+  .signin-intro {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 18px 20px;
+    text-align: left;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  @media (min-width: 900px) {
+    .signin-intro { padding: 36px 32px; }
+  }
+  .signin-intro-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 19px; font-weight: 800;
+    color: var(--ink); margin-bottom: 6px;
+    line-height: 1.25;
+  }
+  @media (min-width: 900px) {
+    .signin-intro-title { font-size: 27px; margin-bottom: 10px; }
+  }
+  .signin-intro-body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 1.5; margin-bottom: 10px;
+    font-weight: 400;
+  }
+  @media (min-width: 900px) {
+    .signin-intro-body { font-size: 13.5px; line-height: 1.6; margin-bottom: 18px; }
+  }
+  .signin-points {
+    list-style: none;
+    display: flex; flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-bottom: 8px;
+  }
+  @media (min-width: 900px) {
+    .signin-points { gap: 10px 20px; margin-bottom: 16px; }
+  }
+  .signin-point {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12.5px; font-weight: 700;
+    color: var(--ink);
+  }
+  .signin-point svg { flex-shrink: 0; }
+  .signin-intro-foot {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px; color: var(--ink-faint);
+    line-height: 1.6; padding-top: 8px;
+    border-top: 1px solid var(--ink-veryfaint);
+  }
+  @media (min-width: 900px) {
+    .signin-intro-foot { padding-top: 14px; }
+  }
 
   /* ═══ New auth UI ═══ */
   .auth-tabs {
@@ -1515,7 +1601,36 @@
      SIGN-IN SCREEN
      ═══════════════════════════════════════════════════════════ -->
 <div class="signin-screen" id="signin-screen" style="display:none;">
-  <div class="signin-card">
+  <div class="signin-layout">
+    <div class="signin-intro">
+      <div class="signin-kicker">Art GPS · Guided Practice Studio</div>
+      <h2 class="signin-intro-title">Learn art at your own pace.</h2>
+      <p class="signin-intro-body">Experienced art teachers break every lesson into clear, simple steps — so you can practice on your own, at home, in a café, or wherever you feel comfortable.</p>
+      <ul class="signin-points">
+        <li class="signin-point">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="8" stroke="var(--purple)" stroke-width="1.5"/>
+            <path d="M7.2 6.2L11.8 9L7.2 11.8V6.2Z" fill="var(--purple)"/>
+          </svg>
+          Step-by-step video lessons
+        </li>
+        <li class="signin-point">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="8" stroke="var(--purple)" stroke-width="1.5"/>
+            <path d="M9 5V9L12 11" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Practice anytime, anywhere
+        </li>
+        <li class="signin-point">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M9 2L10.9 6.3L15.5 6.9L12.2 10L13 14.6L9 12.5L5 14.6L5.8 10L2.5 6.9L7.1 6.3L9 2Z" stroke="var(--purple)" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+          Earn badges as you grow
+        </li>
+      </ul>
+      <p class="signin-intro-foot">Start with free lessons. No teacher needed.</p>
+    </div>
+    <div class="signin-card">
     <div class="signin-kicker">Art GPS</div>
     <h1 class="signin-title">Welcome to your studio.</h1>
     <p class="signin-subtitle" id="signin-subtitle">A guided practice studio for art students, families, and teachers. Sign in or create a free account to begin.</p>
@@ -1588,6 +1703,7 @@
     <p class="signin-help">
       Questions? <a href="https://www.feiteamart.com/contact" target="_blank">Contact your teacher or write us →</a>
     </p>
+    </div>
   </div>
 </div>
 
