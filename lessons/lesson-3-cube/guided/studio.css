@@ -20,3 +20,4 @@ dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{c
 .paper-card{border:0;background:none!important;display:flex;flex-direction:column;align-items:center;width:min(100%,800px);height:100%;padding:0;color:#17182D}
 .paper-card svg{width:100%;min-height:0;flex:1;max-height:85%}.paper-card strong{font-size:20px;color:#654d98}.paper-card span{font-size:12px;color:#706b81;margin-top:6px}.paper-scene>svg{max-height:85%}.paper-scene small{letter-spacing:0;font-size:14px}
 @media(max-width:700px){#clipControls{left:5px;right:5px;bottom:5px;padding:5px 8px;gap:6px}.paper-card strong{font-size:16px}}
+.paper-scene{position:absolute;inset:0;min-height:0}.paper-card{min-height:0}.paper-card svg{height:0;flex:1 1 0;max-height:calc(100% - 65px)}.paper-card strong,.paper-card span{flex-shrink:0}.paper-scene>svg{height:0;flex:1 1 0;min-height:0}.paper-scene>small{flex-shrink:0;margin-top:10px}
