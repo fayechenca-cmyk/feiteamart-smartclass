@@ -72,4 +72,4 @@ const lessons = [
  section('present','present','PRESENT YOUR PROJECT','Share your before, process, and after story with your class.')
  ]}
 ].map((l,i)=>({ ...l,lessonId:'remake-cardboard-'+(i+1),lessonFamily:'material-design',number:i+1,estimatedTime:null,ageGroups:['teen'],screens:[...l.screens,section('next','next',i===5?'PROJECT COMPLETE':'NEXT LESSON',i===5?'RE:MAKE 01 — CARDBOARD':'')].map((s,j)=>({...s,stepNumber:j+1})),totalSteps:l.screens.length+1}));
-export const course = {id:'remake-01-cardboard',title:'RE:MAKE 01 — CARDBOARD',subtitle:'From Waste Material to Creative Structure',age:'Ages 10–15',type:'Project-Based Smart Class',cover:asset('collected-cardboard','Start here: cardboard collected at home'),finalProjectCover:asset('course-cover','Cardboard final project hero image'),definitions,lessons};
+export const course = {id:'remake-01-cardboard',title:'RE:MAKE 01 — CARDBOARD',subtitle:'From Waste Material to Creative Structure',age:'Ages 10–15',type:'Project-Based Art GPS',cover:asset('collected-cardboard','Start here: cardboard collected at home'),finalProjectCover:asset('course-cover','Cardboard final project hero image'),definitions,lessons};
