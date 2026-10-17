@@ -15,10 +15,9 @@
     "chapter": "Materials",
     "say": "Find your pencils: 2H, HB, 2B, 3B, 4B and 6B. The harder pencils help with light construction lines. The softer ones build richer darks. Lay them out where you can see the labels. Take your time. I’ll wait here.",
     "hint": "2H · HB · 2B · 3B · 4B · 6B",
-    "kind": "materials",
+    "kind": "photo",
     "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png",
-    "audio": "audio/p01.mp3",
-    "focus": "pencils"
+    "audio": "audio/p01.mp3"
   },
   {
     "id": "p02",

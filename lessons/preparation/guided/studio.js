@@ -141,7 +141,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pa
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());$('welcome').showModal();
-fetch('flow.json?v=realpaper1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
+fetch('flow.json?v=real-pencil-photo').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
  flow=data;
  try{const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Let’s get ready →';
