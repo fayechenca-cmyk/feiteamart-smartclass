@@ -3001,6 +3001,12 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
 </style>
+<!-- Login-fix-era note (Oct 2026): gateThenStart() below calls
+     FEIAccess.gateLessonPage(), but that only works if FEIAccess is
+     actually loaded -- these two were missing, so the gate silently
+     no-op'd and this paid lesson was open to any direct URL hit. -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
