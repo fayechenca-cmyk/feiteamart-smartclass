@@ -1,0 +1,167 @@
+[
+  {
+    "chapter": "Materials",
+    "title": "Your pencils",
+    "kind": "materials",
+    "focus": "pencils",
+    "hint": "Four pencils, chosen by value.",
+    "say": "Four pencils today, chosen by value: two-H and H-B for your brightest areas, two-B for the mid-tones, and six-B for your very darkest darks. We'll use all four, one at a time.",
+    "audio": "audio/s00-pencils.mp3"
+  },
+  {
+    "chapter": "Materials",
+    "title": "A tissue for blending",
+    "kind": "tissue",
+    "hint": "You'll reach for this later.",
+    "say": "You'll also reach for a small tissue later on, to blend your shading smooth. We'll get there in a few steps — for now, just know it's coming.",
+    "audio": "audio/s01-tissue.mp3"
+  },
+  {
+    "chapter": "Materials",
+    "title": "Feel your paper",
+    "kind": "paper",
+    "hint": "A little tooth helps the pencil grip.",
+    "say": "Feel your own paper before you start. A little tooth helps the pencil grip — that's what gives foil its soft, believable shine.",
+    "audio": "audio/s02-paper.mp3"
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Where your balloon will sit",
+    "kind": "placement",
+    "hint": "Leave space around it.",
+    "say": "Before the first line — leave space around your balloon. It sits slightly off-centre, a little tilted, so check the size before any detail. Lightly mark where your balloon will sit. I'll wait.",
+    "audio": "audio/s03-placement.mp3"
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Find the tilt before the outline",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 0,
+    "clipEnd": 45,
+    "frame": "frames/v1-45s.jpg",
+    "watchAudio": "audio/v1-01-watch.mp3",
+    "watchSay": "Watch for the tilt — the teacher's first lines aren't straight up and down. They lean, just slightly, crossing near the middle.",
+    "audio": "audio/v1-01-try.mp3",
+    "say": "Now your turn — lightly cross two tilted guide lines near your centre mark. Take your time. I'll wait.",
+    "overlay": {
+      "guides": [{ "d": "M550 80 L725 585 M385 326 L910 150", "dash": true }],
+      "arrow": { "d": "M1040 100 Q980 90 890 145" },
+      "card": { "kicker": "LOOK CLOSELY · 01", "title": "Find the tilt before the outline", "sub": "Compare the guide lines before adding detail." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Block in the whole shape first",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 45,
+    "clipEnd": 90,
+    "frame": "frames/v1-90s.jpg",
+    "watchAudio": "audio/v1-02-watch.mp3",
+    "watchSay": "Keep going all the way around — block in the whole star before fixing any single point. Size first, detail later.",
+    "audio": "audio/v1-02-try.mp3",
+    "say": "Rough in all six points lightly, all the way around. Don't worry about perfect symmetry yet. I'll wait.",
+    "overlay": {
+      "guides": [{ "d": "M633 63 L783 321 L633 580 L483 500 L393 321 L483 150 Z", "dash": true }],
+      "arrow": { "d": "M1000 200 Q900 180 800 220" },
+      "card": { "kicker": "LOOK CLOSELY · 02", "title": "Block in the whole shape first", "sub": "Size and placement matter before any detail." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Turn corners into soft curves",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 90,
+    "clipEnd": 150,
+    "frame": "frames/v1-150s.jpg",
+    "watchAudio": "audio/v1-03-watch.mp3",
+    "watchSay": "Foil has volume: let the edges bend. Watch how the teacher curves each corner instead of drawing it sharp and straight.",
+    "audio": "audio/v1-03-try.mp3",
+    "say": "Soften your corners into gentle curves, one point at a time. Slow is fine. I'll wait.",
+    "overlay": {
+      "guides": [{ "d": "M550 75 Q480 260 380 326" }],
+      "arrow": { "d": "M190 410 Q220 310 402 300" },
+      "card": { "kicker": "LOOK CLOSELY · 03", "title": "Turn corners into soft curves", "sub": "Foil has volume: let the edges bend." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Clean up with a light touch",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 150,
+    "clipEnd": 178,
+    "frame": "frames/v1-178s.jpg",
+    "watchAudio": "audio/v1-04-watch.mp3",
+    "watchSay": "A quick pass with the eraser — just lightening a line, not erasing the idea. Keep your construction marks soft and easy to adjust.",
+    "audio": "audio/v1-04-try.mp3",
+    "say": "If any line feels too heavy, lift it gently with your eraser. Just a light touch. I'll wait.",
+    "overlay": {
+      "guides": [{ "cx": 950, "cy": 220, "rx": 130, "ry": 95, "ellipse": true }],
+      "arrow": { "d": "M1070 370 Q1010 300 950 250" },
+      "card": { "kicker": "LOOK CLOSELY · 04", "title": "Clean up with a light touch", "sub": "Lighten a line — don't erase the idea." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Separate the seam from the outline",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 178,
+    "clipEnd": 270,
+    "frame": "frames/v1-270s.jpg",
+    "watchAudio": "audio/v1-05-watch.mp3",
+    "watchSay": "Look closely at the rim just inside the outline — that seam is separate from the outer edge, and it matters.",
+    "audio": "audio/v1-05-try.mp3",
+    "say": "Add a thin line just inside your outline, like a seam. Keep that narrow gap visible. I'll wait.",
+    "overlay": {
+      "guides": [{ "d": "M930 180 Q905 290 875 355" }],
+      "arrow": { "d": "M1115 350 Q1040 325 910 305" },
+      "card": { "kicker": "LOOK CLOSELY · 05", "title": "Separate the seam from the outline", "sub": "Look for the narrow rim inside the edge." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Let folds turn toward the centre",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 270,
+    "clipEnd": 330,
+    "frame": "frames/v1-330s.jpg",
+    "watchAudio": "audio/v1-06-watch.mp3",
+    "watchSay": "These small curves are folds in the foil. Notice how they turn from the rim toward the centre, not straight across.",
+    "audio": "audio/v1-06-try.mp3",
+    "say": "Add a few light fold lines, curving in toward the middle. Just a few is enough. I'll wait.",
+    "overlay": {
+      "guides": [{ "cx": 600, "cy": 320, "rx": 155, "ry": 115, "ellipse": true }],
+      "arrow": { "d": "M230 420 Q280 340 430 325" },
+      "card": { "kicker": "LOOK CLOSELY · 06", "title": "Let folds turn toward the centre", "sub": "Follow each fold's direction." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Your outline is ready",
+    "kind": "draw",
+    "uid": "6bb909b0169fb6e58f666c8e2abb6ad2",
+    "start": 330,
+    "clipEnd": 386.46,
+    "frame": "frames/v1-end.jpg",
+    "watchAudio": "audio/v1-end-watch.mp3",
+    "watchSay": "A few more fold marks, and the outline is complete — a strong shape with soft edges, ready for shading.",
+    "audio": "audio/v1-end-try.mp3",
+    "say": "Take one more look at your whole outline before we bring in the light and dark. I'll wait.",
+    "overlay": {
+      "card": { "kicker": "OUTLINE COMPLETE", "title": "Strong shape, soft edges", "sub": "Ready for light and dark." }
+    }
+  },
+  {
+    "chapter": "Outlining the Shape",
+    "title": "Outline complete",
+    "kind": "milestone",
+    "hint": "Your outline is ready — next time, we bring in the light and dark.",
+    "say": "Your outline is ready. That's the hardest part done — next time, we bring in the light and dark.",
+    "audio": "audio/s99-milestone.mp3"
+  }
+]
