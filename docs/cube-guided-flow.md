@@ -59,7 +59,7 @@ This is a blending stump. Its pointed paper tip helps you soften graphite. A fol
 
 ### 6. Feel your sketch paper
 
-Let’s look at your sketch paper. Run your fingers gently over both sides. One side usually feels rougher, and the other smoother. You can draw on either side. Today, choose the rougher side. Those tiny bumps, called tooth, catch the graphite and give your pencil marks a lovely texture. Tap the paper to turn it over, then place the rougher side facing up.
+Here is real sketch paper. Look closely at these two paper samples. The more textured surface has tiny bumps that catch the graphite. The smoother sample has a finer grain. Now gently feel both sides of your own sheet. Either side can work. For this lesson, choose the rougher side, so the paper texture shows through your pencil marks. Tap a photo for a closer look, then put your chosen side facing up.
 
 ### 7. Make room for your drawing
 

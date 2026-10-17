@@ -29,3 +29,7 @@ Toolkit and Artchi reuse existing repository assets. New guide audio is generate
 Dashboard palette reused: #F9EDDA, #E4FCE4, #A9CEA7, #7560a7, #17182D. Added voiced sketch-paper texture/side and A4-size stages. Native whole-video controls and iframe pointer/focus access are disabled. The lesson supplies a pause button and a range restricted to the current microstep. Out-of-range time updates and ended events are clamped before any completion logic; no other step is unlocked. Version 1 local progress is migrated by shifting original indices after the two inserted paper stages.
 
 `node tests/cube-guided-boundaries.cjs` verifies the seek/ended guard without a browser. Live UI verification: seeking the 22–97s step to its end stays on its own drawing checkpoint, with the next step locked until Continue.
+
+## Real paper photography
+
+Replaced the digital texture and paper-size SVGs with three unmodified Hahnemühle photographs. Surface examples are explicitly two paper samples, not a manufactured front/back pair. The guide directs learners to feel their own sheet. Photo credit links are visible; full original URLs are in paper/sources.json. New narration: audio/paper-real.mp3.

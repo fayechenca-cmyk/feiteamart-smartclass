@@ -1,0 +1,18 @@
+{
+  "photographer_credit": "Hahnem\u00fchle product photography; copyright retained by source. Educational surface comparison, no endorsement implied.",
+  "images": {
+    "textured.webp": {
+      "page": "https://www.hahnemuehle.shop/the-collection-sketch/10625161",
+      "image": "https://www.hahnemuehle.shop/thumbnail/ab/d2/1f/1786444221/the-collection-sketch-surface_1200x1200.webp?ts=1786444224"
+    },
+    "smooth.webp": {
+      "page": "https://www.hahnemuehle.shop/en/dessin/10628192",
+      "image": "https://www.hahnemuehle.shop/thumbnail/82/74/ca/1786434384/dessin-150-oberfl%C3%A4che_1200x1200.webp?ts=1786434386"
+    },
+    "sketch-pad.webp": {
+      "page": "https://www.hahnemuehle.shop/the-collection-sketch/10625161",
+      "image": "https://www.hahnemuehle.shop/thumbnail/a6/7c/85/1786444146/the-collection-sketch-mood_1200x765.webp?ts=1786444149"
+    }
+  },
+  "note": "Two different real paper products, explicitly labelled as samples, not a fabricated front/back pair. No generated textures or image edits."
+}

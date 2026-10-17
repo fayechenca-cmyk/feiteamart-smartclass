@@ -52,9 +52,9 @@
     "kind": "paper",
     "title": "Feel your sketch paper",
     "chapter": "Get ready",
-    "hint": "Rougher side · More tooth",
-    "say": "Let’s look at your sketch paper. Run your fingers gently over both sides. One side usually feels rougher, and the other smoother. You can draw on either side. Today, choose the rougher side. Those tiny bumps, called tooth, catch the graphite and give your pencil marks a lovely texture. Tap the paper to turn it over, then place the rougher side facing up.",
-    "audio": "audio/paper-sides.mp3"
+    "hint": "Look closely. Feel your own paper.",
+    "say": "Here is real sketch paper. Look closely at these two paper samples. The more textured surface has tiny bumps that catch the graphite. The smoother sample has a finer grain. Now gently feel both sides of your own sheet. Either side can work. For this lesson, choose the rougher side, so the paper texture shows through your pencil marks. Tap a photo for a closer look, then put your chosen side facing up.",
+    "audio": "audio/paper-real.mp3"
   },
   {
     "id": "paper-size",
