@@ -30,7 +30,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='badge'?'Finish preview ✓':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='badge'?'Celebrate →':'Continue →';}
 function cube(light=false){return `<div class="scene"><svg viewBox="0 0 700 430" role="img" aria-label="Three faces of a cube, with a cast shadow"><ellipse id="shadow" cx="430" cy="353" rx="160" ry="30" fill="#080d17" opacity=".55"/><g><path class="face" data-face="top" role="button" tabindex="0" aria-label="Top face" fill="#edf0dc" d="M160 135 L340 65 L520 145 L340 230 Z"/><path class="face" data-face="left" role="button" tabindex="0" aria-label="Left face" fill="#9aaea9" d="M160 135 L340 230 L340 370 L160 270 Z"/><path class="face" data-face="right" role="button" tabindex="0" aria-label="Right face" fill="#445762" d="M340 230 L520 145 L520 285 L340 370 Z"/></g>${light?'<g id="sun"><circle cx="150" cy="50" r="23" fill="#f1ca86"/><circle cx="150" cy="50" r="33" fill="none" stroke="#f1ca8655" stroke-width="8"/></g>':''}</svg>${light?'<label for="sunSlider">☀ Move the light</label><input id="sunSlider" type="range" min="0" max="100" value="15" aria-label="Move the sun from left to right">':''}</div>`;}
 function buildScene(s){
  $('media').hidden=true;$('visual').innerHTML='';
@@ -59,7 +59,7 @@ function buildScene(s){
  }else if(s.kind==='ready'){
   $('visual').innerHTML=`<div class="scene"><div class="big-symbol">✎</div><p>Paper ready. Shoulders relaxed.</p></div>`;
  }else if(s.kind==='submit'){
-  $('visual').innerHTML='<div class="scene"><img class="upload-preview" hidden alt="Your drawing preview"><label class="upload-label" for="drawing">＋ Add your drawing</label><input id="drawing" type="file" accept="image/jpeg,image/png,image/webp" hidden><p class="local-note">Preview only · Your photo stays on this page</p><a href="../" target="_blank" rel="noopener" style="color:#b8edd9">Open regular lesson to submit →</a></div>';
+  $('visual').innerHTML='<div class="scene"><img class="upload-preview" hidden alt="Your drawing preview"><label class="upload-label" for="drawing">＋ Add your drawing</label><input id="drawing" type="file" accept="image/jpeg,image/png,image/webp" hidden><p class="local-note">Preview only · Your photo stays on this page</p><a href="../?classic=1" target="_blank" rel="noopener" style="color:#b8edd9">Open regular lesson to submit →</a></div>';
   $('drawing').onchange=()=>{
    const file=$('drawing').files[0];if(!file)return;
    if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>20*1024*1024){$('notice').textContent='Choose a JPG, PNG, or WebP image under 20 MB.';$('notice').hidden=false;return;}
@@ -130,14 +130,14 @@ function enter(){
   phase='guidance';buildScene(s);
   // Observation and light stay hands-on. Other scenes wait for the learner after guidance.
   speak(s,()=>{if(!['anatomy','light'].includes(s.kind))waiting();});
-  if(s.kind==='badge'){$('next').textContent='Finish preview ✓';}
+  if(s.kind==='badge'){$('next').textContent='Celebrate →';}
  }
 }
 function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();window.GuidedReward.complete({lessonId:'cube',title:'The Cube',nextLabel:'Continue to The Sphere →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-1-sphere/guided/';});return;}
+ if(index===flow.length-1){stopVoice();GuidedPlatform.complete('cube');window.GuidedReward.complete({lessonId:'cube',title:'The Cube',nextLabel:'Continue to The Sphere →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-1-sphere/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
@@ -164,10 +164,12 @@ $('diagram').addEventListener('close',()=>{if(!voice.ended&&voice.currentTime>0)
 document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
 $('start').onclick=()=>{$('welcome').close();enter();};
-$('welcome').addEventListener('cancel',e=>e.preventDefault());$('welcome').showModal();
+$('welcome').addEventListener('cancel',e=>e.preventDefault());
+(async()=>{if(!await GuidedPlatform.allow('cube'))return; $('welcome').showModal();
 fetch('flow.json?v=realpaper1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
  flow=data;
  try{if(!localStorage.getItem(KEY)){const old=JSON.parse(localStorage.getItem('fei.cube.guided-preview.v1')||'null');if(old){const shift=i=>i>=5?i+2:i;localStorage.setItem(KEY,JSON.stringify({index:shift(old.index||0),unlocked:shift(old.unlocked||0),completed:(old.completed||[]).map(shift)}));}}const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Start drawing →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
+})();
 })();

@@ -45,7 +45,7 @@ function buildScene(s){
  if(interactive){sceneReady=false;$('zoneRing').setAttribute('visibility','hidden');$('sphereSlider').oninput=e=>{const t=Number(e.target.value)/100;$('sphereTone').setAttribute('cx',`${20+t*60}%`);$('sphereSun').setAttribute('transform',`translate(${t*530} 0)`);$('sphereShadow').setAttribute('cx',String(485-t*180));sceneReady=true;if(voice.ended||muted)waiting();};}
  else{const spots=[[345,155],[390,120],[475,220],[490,265],[505,290],[495,365]];document.querySelectorAll('[data-zone]').forEach(button=>button.onclick=()=>{const i=Number(button.dataset.zone);$('zoneRing').setAttribute('cx',spots[i][0]);$('zoneRing').setAttribute('cy',spots[i][1]);document.querySelectorAll('[data-zone]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));$('hint').textContent=button.textContent;});}
  }else if(s.kind==='submit'){
- $('visual').innerHTML='<div class="scene"><img class="upload-preview" hidden alt="Your sphere drawing"><label class="upload-label" for="drawing">＋ Add your drawing</label><input id="drawing" type="file" accept="image/jpeg,image/png,image/webp" hidden><p class="local-note">Preview only · Your photo stays on this page</p><a href="../" target="_blank" rel="noopener">Open regular lesson to submit →</a></div>';
+ $('visual').innerHTML='<div class="scene"><img class="upload-preview" hidden alt="Your sphere drawing"><label class="upload-label" for="drawing">＋ Add your drawing</label><input id="drawing" type="file" accept="image/jpeg,image/png,image/webp" hidden><p class="local-note">Preview only · Your photo stays on this page</p><a href="../?classic=1" target="_blank" rel="noopener">Open regular lesson to submit →</a></div>';
  $('drawing').onchange=()=>{const file=$('drawing').files[0];if(!file)return;if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>20*1024*1024){$('notice').textContent='Choose a JPG, PNG, or WebP image under 20 MB.';$('notice').hidden=false;return;}if(photoURL)URL.revokeObjectURL(photoURL);photoURL=URL.createObjectURL(file);const img=document.querySelector('.upload-preview');img.src=photoURL;img.hidden=false;};
  }else if(s.kind==='reflect'){
  $('visual').innerHTML=`<div class="scene"><img class="upload-preview" src="${photoURL||s.image}" alt="A sphere drawing to reflect on"><p>What do you notice now?</p><textarea aria-label="Optional reflection" placeholder="A thought to keep… (optional)"></textarea></div>`;
@@ -128,13 +128,13 @@ function enter(){
   phase='guidance';buildScene(s);
   // Observation and light stay hands-on. Other scenes wait for the learner after guidance.
   speak(s,()=>{if(sceneReady)waiting();else setMode('YOUR TURN · MOVE THE SUN');});
-  if(s.kind==='badge'){$('next').textContent='Finish preview ✓';}
+  if(s.kind==='badge'){$('next').textContent='Celebrate →';}
  }
 }
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();window.GuidedReward.complete({lessonId:'sphere',title:'The Sphere',nextLabel:'Continue to The Cylinder →',muted,onMutedChange:setMuted}).then(go=>{if(go)location.href='../../lesson-5-cylinder/';});return;}
+ if(index===flow.length-1){stopVoice();GuidedPlatform.complete('sphere');window.GuidedReward.complete({lessonId:'sphere',title:'The Sphere',nextLabel:'Continue to The Cylinder →',muted,onMutedChange:setMuted}).then(go=>{if(go)location.href='../../lesson-5-cylinder/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
@@ -164,10 +164,12 @@ $('diagram').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&
 document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
 $('start').onclick=()=>{$('welcome').close();enter();};
-$('welcome').addEventListener('cancel',e=>e.preventDefault());$('welcome').showModal();
+$('welcome').addEventListener('cancel',e=>e.preventDefault());
+(async()=>{if(!await GuidedPlatform.allow('sphere'))return; $('welcome').showModal();
 fetch('flow.json?v=sphere-1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
  flow=data;
  try{ const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your sphere →':'Let’s draw a sphere →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
+})();
 })();

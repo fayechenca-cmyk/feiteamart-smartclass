@@ -31,7 +31,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='badge'?'Finish preview ✓':index===flow.length-1?'Start The Cube →':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='badge'?'Celebrate →':index===flow.length-1?'Start The Cube →':'Continue →';}
 function buildScene(s){
  $('media').hidden=true;$('visual').innerHTML='';
  if(s.kind==='photo'){
@@ -127,14 +127,14 @@ function enter(){
   phase='guidance';buildScene(s);
   // Observation and light stay hands-on. Other scenes wait for the learner after guidance.
   speak(s,()=>{if(!['anatomy','light'].includes(s.kind))waiting();});
-  if(s.kind==='badge'){$('next').textContent='Finish preview ✓';}
+  if(s.kind==='badge'){$('next').textContent='Celebrate →';}
  }
 }
 function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();if(practiceOnly){location.href='../../lesson-3-cube/guided/';return;}window.GuidedReward.complete({lessonId:'preparation',title:'Preparation',nextLabel:'Continue to The Cube →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-3-cube/guided/';});return;}
+ if(index===flow.length-1){stopVoice();if(practiceOnly){location.href='../../lesson-3-cube/guided/';return;}GuidedPlatform.complete('preparation');window.GuidedReward.complete({lessonId:'preparation',title:'Preparation',nextLabel:'Continue to The Cube →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-3-cube/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
@@ -162,7 +162,8 @@ $('diagram').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&
 document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
 $('start').onclick=()=>{$('welcome').close();enter();};
-$('welcome').addEventListener('cancel',e=>e.preventDefault());$('welcome').showModal();
+$('welcome').addEventListener('cancel',e=>e.preventDefault());
+(async()=>{if(!await GuidedPlatform.allow('preparation'))return; $('welcome').showModal();
 fetch('flow.json?v=hatching-15').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
  flow=data;
  try{
@@ -174,4 +175,5 @@ fetch('flow.json?v=hatching-15').then(r=>{if(!r.ok)throw Error('Flow unavailable
  if(practiceOnly){index=Math.max(12,index);unlocked=Math.max(12,unlocked);$('welcome').querySelector('h2').textContent='One pattern at a time.';$('welcome').querySelector('p').textContent='Watch the teacher. Compare the example. Try it at your pace.';$('welcome').querySelector('img').src=flow[12].frame;}
  $('start').disabled=false;$('start').textContent=practiceOnly?'Start hatching →':index?'Continue your journey →':'Let’s get ready →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
+})();
 })();

@@ -31,7 +31,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Preview complete ✓':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Continue to light and dark →':'Continue →';}
 
 // ── Live teaching overlay (replaces the old flattened key-N.svg PNGs
 // with real SVG elements drawn over the checkpoint frame, so they scale
@@ -169,7 +169,7 @@ function enter(){
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();$('next').textContent='Preview complete ✓';$('next').disabled=true;setMode('WELL DONE');return;}
+ if(index===flow.length-1){stopVoice();location.href='../?classic=1&from=guided-outline';return;}
  index++;enter();
 }
 $('next').onclick=next;
