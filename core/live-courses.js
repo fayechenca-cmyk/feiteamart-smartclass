@@ -27,17 +27,17 @@ window.LIVE_COURSES = [
     title: 'Foundation of Sketch A',
     subtitle: 'Form, Light & Perspective',
     totalClasses: 10,
-    price: '$180 CAD',
+    price: '',
     stripeUrl: 'https://buy.stripe.com/7sYcN67T70i65YecSqd7q0g',
     startNote: ''
   },
   {
     id: 'sketch-b',
     title: 'Foundation of Sketch B',
-    subtitle: 'TBD_B',
+    subtitle: 'Still Life and Texture',
     totalClasses: 10,
-    price: '$180 CAD',
-    stripeUrl: 'TBD_STRIPE_B',
+    price: '',
+    stripeUrl: 'https://buy.stripe.com/6oU7sMgpDgh4cmCg4Cd7q0h',
     startNote: "Starting soon — we'll let you know the week before the first class."
   },
   {
@@ -45,7 +45,7 @@ window.LIVE_COURSES = [
     title: 'Foundation of Sketch C',
     subtitle: 'TBD_C',
     totalClasses: 10,
-    price: '$180 CAD',
+    price: '',
     stripeUrl: 'TBD_STRIPE_C',
     startNote: "Starting soon — we'll let you know the week before the first class."
   },
@@ -54,7 +54,7 @@ window.LIVE_COURSES = [
     title: 'Foundation of Sketch D',
     subtitle: 'TBD_D',
     totalClasses: 10,
-    price: '$180 CAD',
+    price: '',
     stripeUrl: 'TBD_STRIPE_D',
     startNote: "Starting soon — we'll let you know the week before the first class."
   }

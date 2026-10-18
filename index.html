@@ -3511,7 +3511,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
         <div class="live-class-enroll-title">${liveClassEscapeHtml(course.title)}</div>
         ${realSubtitle ? `<div class="live-class-enroll-subtitle">${liveClassEscapeHtml(realSubtitle)}</div>` : ''}
         <div class="live-class-enroll-meta">${course.totalClasses} live sessions on Zoom · max 4 students</div>
-        <div class="live-class-enroll-price">${liveClassEscapeHtml(course.price)}</div>
+        ${course.price ? `<div class="live-class-enroll-price">${liveClassEscapeHtml(course.price)}</div>` : ''}
         ${noteHtml}
         ${btnHtml}
       </div>
