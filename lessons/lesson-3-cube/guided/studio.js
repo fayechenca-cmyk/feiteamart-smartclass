@@ -78,7 +78,7 @@ function finishClip(){
 function createPlayer(s){
  if(uid===s.uid&&player){startClip(s);return;}
  uid=s.uid;$('media').innerHTML='';
- const iframe=document.createElement('iframe');iframe.title='Mrs. Dawn’s cube demonstration';iframe.allow='autoplay; fullscreen; picture-in-picture';iframe.tabIndex=-1;
+ const iframe=document.createElement('iframe');iframe.title='Teacher’s cube demonstration';iframe.allow='autoplay; fullscreen; picture-in-picture';iframe.tabIndex=-1;
  iframe.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${s.uid}/iframe?autoplay=false&muted=${muted}&controls=false&preload=auto`;
  $('media').append(iframe);
  if(typeof Stream!=='function'){
@@ -117,7 +117,7 @@ function enter(){
  $('reference').hidden=s.kind!=='draw';$('analysis').hidden=s.kind!=='draw';
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
  if(s.kind==='intro'||s.kind==='draw'){
-  phase='watching';setMode('WATCH WITH MRS. DAWN');$('media').hidden=false;$('visual').innerHTML='';
+  phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src=s.frame;$('referenceImage').alt=s.title+' — stage reference';}
   createPlayer(s);
  }else{
