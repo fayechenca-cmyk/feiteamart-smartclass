@@ -133,10 +133,11 @@ function enter(){
   if(s.kind==='badge'){$('next').textContent='Finish preview ✓';}
  }
 }
+function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();$('next').textContent='Preview complete ✓';$('next').disabled=true;setMode('WELL DONE');return;}
+ if(index===flow.length-1){stopVoice();window.GuidedReward.complete({lessonId:'cube',title:'The Cube',nextLabel:'Continue to The Sphere →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-1-sphere/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;

@@ -130,10 +130,11 @@ function enter(){
   if(s.kind==='badge'){$('next').textContent='Finish preview ✓';}
  }
 }
+function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();location.href='../../lesson-3-cube/guided/';return;}
+ if(index===flow.length-1){stopVoice();if(practiceOnly){location.href='../../lesson-3-cube/guided/';return;}window.GuidedReward.complete({lessonId:'preparation',title:'Preparation',nextLabel:'Continue to The Cube →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-3-cube/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
