@@ -60,25 +60,69 @@ actually shows (an eraser, not previously logged anywhere):
 
 7 watch moments + 1 end-of-video Try = within "roughly 5–8 per video."
 
-## Video 2 — Emphasizing Light and Dark on the Structure (381.67 s) — first-pass reading, to confirm when building commit 2
+## Video 2 — Emphasizing Light and Dark on the Structure (381.67 s) — fully aligned, built in commit 2
 
 The drawing does **not** get filled tonal shading here — the teacher goes
 back over the Video 1 outline with heavier, more confident line *weight*
 on the shadow-side edges of each point, which is what "emphasizing light
 and dark on the structure" means in this lesson (actual value shading is
-Video 3's job). Confirmed at full-frame resolution at the 378 s mark.
+Video 3's job). Confirmed by re-checking the full-resolution final frame
+(378s/381s): the interior facets are still bare paper, no fill at all —
+edges only, exactly as the first-pass reading guessed.
 
-- 0–~45 s: first heavier pass, one point's shadow-side edge (f0001–f0016)
-- ~45–~140 s: sweeping the same heavier line across the remaining points
-- ~140–~230 s: continues toward the lower/base points
-- ~230 s: a brief pause with hands off the page (f0101–f0109) — possibly
-  stepping back to compare; worth a short check-in moment
-- ~230–381.67 s: finishing pass across all points, ending on the full
-  structure with clear light/dark edge weight throughout
+**Two corrections found on the full re-pass, replacing the first-pass guess:**
+- **Pencil, confirmed by reading the grade text on the barrel at full
+  resolution (45s):** it reads **HB**, not 2B, and the same barrel (same
+  barcode, same grey houndstooth ferrule band) is on-screen at every
+  checked timestamp from 45s to 270s — there is no pencil swap in this
+  video. The heavier look is pressure on the same HB, not a softer
+  graphite. Corrected in the narration (Video 1's HB carries straight
+  through, "just pressed harder" rather than naming a new pencil).
+- **The step-back pause is ~300–345s, hands fully off the page by
+  ~327s**, not ~230s as first guessed from 3-second thumbnails — hands
+  are still clearly on the page working the top point through 270–300s.
+  Confirmed via a full every-3-second pass plus full-resolution spot
+  checks at 264s/267s/270s/300s/321s/324s/327s/330s: continuous pencil
+  contact up to ~324s, hand lifted and pencil in the air by 327–345s,
+  back down by ~348s.
 
-Expect ~6 moments once re-reviewed frame-by-frame for commit 2: first-dark
-highlight (must-have), 3–4 cadence check-ins across the sweep, one
-step-back moment, end-of-video Try.
+**A third find, not in the first-pass notes at all: a brief eraser touch
+at ~144–159s**, at the bottom point (confirmed at full resolution — a
+white block eraser, not a second pencil, touching right at the bottom
+point's tip, pixel-matched against the established star-polygon
+coordinates). Much shorter than Video 1's eraser use (~15s vs ~24s), so
+it's folded into one step's narration as "a quick clean-up" rather than
+treated as its own must-have moment.
+
+**Light direction, confirmed from the footage, not assumed:** every
+frame across the whole video shows the same lighting gradient — brighter
+on the left, dimmer toward the right edge of the page — consistent with
+the codebase's existing top-left-lighting convention. Used directly in
+the "Light side, shadow side" moment's narration and overlay (a light
+arrow from the upper-left corner, plus a dashed light-side edge next to
+a solid shadow-side edge on the same point).
+
+Built as 7 draw micro-steps + milestone (mirrors Video 1's 7 + milestone):
+
+- **0–45s — Find the darkest edges first** (must-have: biggest darks
+  before detail). HB pencil, same as before, pressed heavier on one
+  point's shadow-side edge.
+- **45–100s — Move point to point** (must-have: a moment each time the
+  teacher moves to a new point).
+- **100–145s — Light side, shadow side** (must-have: light/dark overlay,
+  light-direction arrow).
+- **145–205s — A quick clean-up, then keep going** (the ~144–159s eraser
+  touch at the bottom point, folded into this step's narration).
+- **205–270s — Leave the paper white here** (must-have: untouched
+  highlights, linked explicitly to the foil-shine payoff).
+- **270–327s — Take a breath and compare** (the real ~300–327s pause,
+  used as the natural clip boundary; narration adds the arm's-length/
+  squint tip).
+- **327–381.67s — Structure is ready for tone** (finishing pass + the
+  stick/neck getting heavier too; end-of-video Try only, no new watch
+  moment, same pattern as Video 1's final step).
+
+7 watch moments + 1 end-of-video Try, same shape as Video 1.
 
 ## Video 3 — Painting the Tone Along the Form (707.03 s) — first-pass reading, to confirm when building commit 3
 

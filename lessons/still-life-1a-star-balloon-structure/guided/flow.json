@@ -277,5 +277,221 @@
     "hint": "Your outline is ready \u2014 next time, we bring in the light and dark.",
     "say": "Your outline is ready. That's the hardest part done \u2014 next time, we bring in the light and dark.",
     "audio": "audio/s99-milestone.mp3"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Find the darkest edges first",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 0,
+    "clipEnd": 45,
+    "frame": "frames/v2-45s.jpg",
+    "watchAudio": "audio/v2-01-watch.mp3",
+    "watchSay": "Before any small detail, the teacher finds the darkest edge on just one point \u2014 still the same HB pencil as before, just pressed harder. The biggest darks always come first.",
+    "audio": "audio/v2-01-try.mp3",
+    "say": "Choose one point of your own star. With your HB, press a little heavier along its shadow-side edge \u2014 just that edge, no shading yet. Take your time.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M586 601 L358 308"
+        }
+      ],
+      "arrow": {
+        "d": "M200 450 Q280 400 350 340"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 01",
+        "title": "Find the darkest edges first",
+        "sub": "The biggest darks come first, before detail."
+      }
+    },
+    "stepResult": "frames/v2-45s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Move point to point",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 45,
+    "clipEnd": 100,
+    "frame": "frames/v2-100s.jpg",
+    "watchAudio": "audio/v2-02-watch.mp3",
+    "watchSay": "Now the teacher moves to a different point and repeats the same heavier edge \u2014 one point at a time, not all at once.",
+    "audio": "audio/v2-02-try.mp3",
+    "say": "Pick another point and do the same: one heavier edge on its shadow side. Keep moving around your star. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M842 396 L586 601"
+        }
+      ],
+      "arrow": {
+        "d": "M250 480 Q400 520 560 580"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 02",
+        "title": "Move point to point",
+        "sub": "One point at a time, all the way around."
+      }
+    },
+    "stepResult": "frames/v2-100s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Light side, shadow side",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 100,
+    "clipEnd": 145,
+    "frame": "frames/v2-145s.jpg",
+    "watchAudio": "audio/v2-03-watch.mp3",
+    "watchSay": "The light here comes from the upper left. So each point has a light side facing it, and a shadow side turned away. Only the shadow side gets this heavier line.",
+    "audio": "audio/v2-03-try.mp3",
+    "say": "Find your own light direction, then decide which side of each point faces it and which falls in shadow. Keep the heavier line only on the shadow side. Tap Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M150 120 L420 270"
+        },
+        {
+          "d": "M555 58 L907 156",
+          "dash": true
+        },
+        {
+          "d": "M907 156 L842 396"
+        }
+      ],
+      "arrow": {
+        "d": "M1000 110 Q950 120 910 150"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 03",
+        "title": "Light side, shadow side",
+        "sub": "Light from the upper left \u2014 only the shadow side darkens."
+      }
+    },
+    "stepResult": "frames/v2-145s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "A quick clean-up, then keep going",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 145,
+    "clipEnd": 205,
+    "frame": "frames/v2-205s.jpg",
+    "watchAudio": "audio/v2-04-watch.mp3",
+    "watchSay": "A quick touch with the eraser tidies the bottom point \u2014 then the teacher keeps going, same as before. Even a quick fix is part of the process.",
+    "audio": "audio/v2-04-try.mp3",
+    "say": "If a line needs tidying, erase it lightly, then add your heavier edge to another point. No rush.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 586,
+          "cy": 601,
+          "rx": 95,
+          "ry": 75,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M300 500 Q420 560 540 590"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 04",
+        "title": "A quick clean-up, then keep going",
+        "sub": "Tidy a line, then move to the next point."
+      }
+    },
+    "stepResult": "frames/v2-205s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Leave the paper white here",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 205,
+    "clipEnd": 270,
+    "frame": "frames/v2-270s.jpg",
+    "watchAudio": "audio/v2-05-watch.mp3",
+    "watchSay": "Notice what's happening inside each point \u2014 nothing. The paper stays white there. Later, that white becomes the bright shine of the foil, so we protect it now.",
+    "audio": "audio/v2-05-try.mp3",
+    "say": "Keep the inside of each shape empty for now. Leave the paper white there, and only darken the edges. I'll wait.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 700,
+          "cy": 430,
+          "rx": 110,
+          "ry": 95,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M1080 380 Q950 400 830 420"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 05",
+        "title": "Leave the paper white here",
+        "sub": "That white becomes the foil's bright shine."
+      }
+    },
+    "stepResult": "frames/v2-270s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Take a breath and compare",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 270,
+    "clipEnd": 327,
+    "frame": "frames/v2-327s.jpg",
+    "watchAudio": "audio/v2-06-watch.mp3",
+    "watchSay": "The teacher stops and looks \u2014 hands off the page for a moment. Stepping back is part of the process too, not just the drawing.",
+    "audio": "audio/v2-06-try.mp3",
+    "say": "Hold your own drawing at arm's length, or squint at it \u2014 that makes the light and dark easier to see. Compare all the way around your star. I'll wait.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M555 58 L907 156 L842 396 L586 601 L358 308 L447 140 Z",
+          "dash": true
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 06",
+        "title": "Take a breath and compare",
+        "sub": "Arm's length or a squint \u2014 light and dark pop."
+      }
+    },
+    "stepResult": "frames/v2-327s-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Structure is ready for tone",
+    "kind": "draw",
+    "uid": "62c44412628bc716886ffcef6c89af2c",
+    "start": 327,
+    "clipEnd": 381.67,
+    "frame": "frames/v2-end.jpg",
+    "watchAudio": "audio/v2-end-watch.mp3",
+    "watchSay": "A few more edges, and the light and dark are set across the whole structure \u2014 ready for tone.",
+    "audio": "audio/v2-end-try.mp3",
+    "say": "Take one more look at your whole star before we bring in the full tone. Tap Continue when you're ready.",
+    "overlay": {
+      "card": {
+        "kicker": "LIGHT & DARK COMPLETE",
+        "title": "Clear edges, protected highlights",
+        "sub": "Ready for tone."
+      }
+    },
+    "stepResult": "frames/v2-end-ref.jpg"
+  },
+  {
+    "chapter": "Light and Dark on the Structure",
+    "title": "Light and dark complete",
+    "kind": "milestone",
+    "hint": "Light and dark are in place \u2014 next, we build the tone across the whole form.",
+    "say": "Light and dark are in place. That's real progress. Next, we build the tone across the whole form.",
+    "audio": "audio/s98-video2-milestone.mp3"
   }
 ]

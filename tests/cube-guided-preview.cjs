@@ -4,9 +4,25 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const flow=JSON.parse(fs.readFileSync('lessons/lesson-3-cube/guided/flow.json'));
 const url=process.env.PREVIEW_URL||'http://127.0.0.1:18816/lessons/lesson-3-cube/guided/';
+// Hard rule (Oct 2026): no test may ever reach the live Supabase project. See
+// tests/balloon-guided-preview.cjs's mockSupabase() for why (a prior test run
+// leaked real writes to a real student's account via the anon key).
+const SUPABASE_HOST='rudztwseatwayhztbarj.supabase.co';
+function mockSupabase(page){
+ const hits=[];
+ page.on('request',req=>{if(req.url().includes(SUPABASE_HOST))hits.push(req.url());});
+ page.route(`https://${SUPABASE_HOST}/**`,route=>{
+  const req=route.request();
+  const body=req.url().includes('/rest/v1/student_progress')&&req.method()==='GET'?'[]':'{}';
+  return route.fulfill({status:200,contentType:'application/json',headers:{'x-mocked':'1'},body});
+ });
+ return hits;
+}
+
 (async()=>{
  const browser=await chromium.launch({headless:true});
  const page=await browser.newPage({viewport:{width:1440,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const supabaseHits=mockSupabase(page);
  await page.route('https://embed.cloudflarestream.com/**',r=>r.fulfill({contentType:'text/javascript',body:`window.Stream=()=>{const events={};const p={currentTime:0,paused:true,muted:false,play(){this.paused=false;events.play?.();return Promise.resolve()},pause(){this.paused=true},addEventListener(n,f){events[n]=f}};window.fakePlayer=p;window.firePlayer=(n)=>events[n]?.();setTimeout(()=>events.loadedmetadata?.(),50);return p;};`}));
  await page.route('https://customer-*/**',r=>r.fulfill({contentType:'text/html',body:'<body style="background:#333;color:white">Teacher video (test player)</body>'}));
  await page.goto(url);await page.locator('#start:not([disabled])').waitFor();await page.click('#start');

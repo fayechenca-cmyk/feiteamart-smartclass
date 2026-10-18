@@ -10241,26 +10241,33 @@ if (_existingProfile) {
     }
   }
 
-  // The guided outline is Video 1 only. Continue at Video 2, never mark
-  // the entire balloon lesson complete at this handoff.
-  let guidedOutlineDone = false;
+  // The guided flow currently covers Videos 1-2. Continue at Video 3,
+  // never mark the entire balloon lesson complete at this handoff.
+  let guidedTargetVideo = 0;
   try {
-    // Index 12, not 11: the guided flow gained an 8th draw micro-step
-    // ("Erasing the guide lines") on Oct 2026, shifting the "Outline
-    // complete" milestone from flow.json index 11 to 12 -- see the
-    // overlay-fix commit. Keep this in sync with flow.json's length.
+    // Index 20, not 12: the guided flow gained Video 2 (7 more draw
+    // micro-steps plus its own "Light and dark complete" milestone) on
+    // Oct 2026, moving the handoff forward from after Video 1 to after
+    // Video 2 -- see the Video 2 commit. Index 12 (Video 1's own
+    // "Outline complete" milestone) is kept as a fallback so progress
+    // saved before Video 2 existed still resumes correctly, at Video 2
+    // instead of Video 3. Keep both in sync with flow.json's length.
     const saved = (UserProfile.current()?.completedSteps || {})['guided:fei.balloon.guided-preview.v1'] || {};
-    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(12);
+    const done = saved.completed || [];
+    if (new URLSearchParams(location.search).get('from') === 'guided-outline') {
+      if (done.includes(20)) guidedTargetVideo = 3;
+      else if (done.includes(12)) guidedTargetVideo = 2;
+    }
   } catch (_) {}
-  if (guidedOutlineDone) {
-    state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === 2);
+  if (guidedTargetVideo) {
+    state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === guidedTargetVideo);
     for (let i = 0; i < state.currentStepIndex; i++) if (!state.completedSteps.includes(i)) state.completedSteps.push(i);
     UserProfile.update({currentLesson: LESSON.id, currentStepIdx: state.currentStepIndex});
   }
   renderStep();
   resetSleep();
   applyPaidUrlIfPresent();
-  if (guidedOutlineDone) return;
+  if (guidedTargetVideo) return;
   StudentRoster.load().finally(() => {
     setTimeout(() => {
       showWelcomePage();

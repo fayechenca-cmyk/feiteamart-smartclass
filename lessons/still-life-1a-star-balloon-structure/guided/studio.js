@@ -31,7 +31,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}window.GuidedUX?.tick(voice.currentTime);
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Continue to light and dark →':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Continue to tone →':'Continue →';}
 
 // ── Live teaching overlay (replaces the old flattened key-N.svg PNGs
 // with real SVG elements drawn over the checkpoint frame, so they scale
