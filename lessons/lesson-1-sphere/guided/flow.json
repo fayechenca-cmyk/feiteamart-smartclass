@@ -1,13 +1,14 @@
 [
   {
     "id": "welcome",
-    "title": "From flat faces to a round form",
+    "title": "Meet the sphere",
     "chapter": "Welcome",
-    "say": "Welcome back! The cube helped us notice flat faces. Now we’ll explore a sphere, where light changes gently across a curved surface. We’ll build the circle, find the shadow, and bring out that roundness. This is one useful drawing skill, not a test of whether you’re an artist. Take it a little at a time. I’m here with you.",
+    "say": "",
     "hint": "The Sphere · Your paper, your pace",
-    "kind": "photo",
+    "kind": "intro",
     "image": "../../../assets/sketch-support/finals/sphere.jpg",
-    "audio": "audio/welcome.mp3"
+    "uid": "d866fd9e2d2daec8e5dd52b2512d5f06",
+    "clipEnd": 37.5
   },
   {
     "id": "zones",
@@ -17,7 +18,33 @@
     "hint": "Tap a zone to find it",
     "kind": "zones",
     "image": "../../../assets/sketch-support/finals/sphere.jpg",
-    "audio": "audio/zones.mp3"
+    "audio": "audio/zones.mp3",
+    "cues": [
+      {
+        "time": 0.478,
+        "zone": 0
+      },
+      {
+        "time": 2.623,
+        "zone": 1
+      },
+      {
+        "time": 5.282,
+        "zone": 2
+      },
+      {
+        "time": 10.833,
+        "zone": 3
+      },
+      {
+        "time": 11.961,
+        "zone": 4
+      },
+      {
+        "time": 17.439,
+        "zone": 5
+      }
+    ]
   },
   {
     "id": "light",
@@ -37,7 +64,35 @@
     "hint": "Light construction · Gentle layers",
     "kind": "photo",
     "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png",
-    "audio": "audio/tools.mp3"
+    "audio": "audio/tools.mp3",
+    "materialScene": true,
+    "cues": [
+      {
+        "time": 0.368,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 1.471,
+        "tool": "paper",
+        "label": "paper"
+      },
+      {
+        "time": 4.436,
+        "tool": "tissue",
+        "label": "tissue"
+      },
+      {
+        "time": 6.042,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 9.522,
+        "tool": "pencils",
+        "label": "pencils"
+      }
+    ]
   },
   {
     "id": "ready",
@@ -54,13 +109,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Define the sphere placement",
-    "say": "Let’s pause here. Start by ghosting four light marks where the sphere will sit. These four marks define the size and position. Leave breathing room around the edges of your paper.",
+    "say": "Let’s look at the placement. Start by ghosting four light marks where the sphere will sit. These four marks define the size and position. Leave breathing room around the edges of your paper.",
     "hint": "Mark top, bottom, left, right — plus paper margin.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 0,
     "clipEnd": 27,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=27s&height=720",
-    "audio": "../../../assets/sketch-support/audio/aeb34ad002588f38.mp3",
+    "audio": "audio/demo-1-1-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3774a029cd437a70f_sphere-p1-1-A.PNG",
     "analysisB": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f304e5b89e889a0b49_sphere-p1-1-B.PNG"
   },
@@ -69,13 +124,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Measure left and right",
-    "say": "Let’s pause here. Hold your pencil horizontally. Measure from the center to the left mark, then to the right mark. They should be equal — if not, adjust.",
+    "say": "A quick check before you go on. Hold your pencil horizontally. Measure from the center to the left mark, then to the right mark. They should be equal — if not, adjust.",
     "hint": "Use your pencil to compare distances from the center.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 27,
     "clipEnd": 49,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=49s&height=720",
-    "audio": "../../../assets/sketch-support/audio/de424453483202b2.mp3",
+    "audio": "audio/demo-1-2-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3263f5c484d920b88_sphere-p1-2.PNG"
   },
   {
@@ -83,13 +138,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Measure top and bottom",
-    "say": "Let’s pause here. Rotate your pencil vertically. Compare distance from center to top, then to bottom. Equal distances = a true sphere, not an oval.",
+    "say": "Take a breath and compare. Rotate your pencil vertically. Compare distance from center to top, then to bottom. Equal distances = a true sphere, not an oval.",
     "hint": "Now check vertically — same pencil method.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 49,
     "clipEnd": 82,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=82s&height=720",
-    "audio": "../../../assets/sketch-support/audio/eed6f97d8f9d3833.mp3",
+    "audio": "audio/demo-1-3-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3f703985a58e5e0fc_sphere-p1-3.PNG"
   },
   {
@@ -97,13 +152,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Find the diagonal points",
-    "say": "Let’s pause here. Use the same pencil-radius to locate four diagonal guide points (NE, NW, SE, SW). These eight points together define the circle.",
+    "say": "Here’s something worth noticing. Use the same pencil-radius to locate four diagonal guide points (NE, NW, SE, SW). These eight points together define the circle.",
     "hint": "Same radius — now on the diagonals.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 82,
     "clipEnd": 124,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=124s&height=720",
-    "audio": "../../../assets/sketch-support/audio/2125d572d5a03866.mp3",
+    "audio": "audio/demo-1-4-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f8cff549172e4a3156_sphere-p1-4.PNG"
   },
   {
@@ -111,13 +166,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "See the full framework",
-    "say": "Let’s pause here. This is the scaffolding underneath every well-drawn sphere. The cross gives you center. The eight points give you the curve. Trust the structure.",
+    "say": "Give yourself a moment here. This is the scaffolding underneath every well-drawn sphere. The cross gives you center. The eight points give you the curve. Trust the structure.",
     "hint": "Center cross + diameter + radius + 8 guide points.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 124,
     "clipEnd": 158,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=158s&height=720",
-    "audio": "../../../assets/sketch-support/audio/a2e66e80cd61e9bb.mp3",
+    "audio": "audio/demo-1-5-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f8d3e0f538d9a44618_sphere-p1-5.PNG"
   },
   {
@@ -125,13 +180,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Cut with straight tangents first",
-    "say": "Let’s pause here. Beginner mistake: drawing a curve straight away. Instead, connect your eight points with short straight lines first. A circle is just many small straight cuts.",
+    "say": "Look closely at the teacher’s marks. Beginner mistake: drawing a curve straight away. Instead, connect your eight points with short straight lines first. A circle is just many small straight cuts.",
     "hint": "Connect points with short straight lines — not curves yet.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 158,
     "clipEnd": 169,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=169s&height=720",
-    "audio": "../../../assets/sketch-support/audio/b3b328b89d598917.mp3",
+    "audio": "audio/demo-1-6-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f3b6ed3822d1c72b35_sphere-p1-6.PNG"
   },
   {
@@ -139,13 +194,13 @@
     "kind": "draw",
     "chapter": "Build the circle",
     "title": "Refine into a clean curve",
-    "say": "Let’s pause here. Once your tangent cuts are right, gently round the corners. Don't force perfection — let the curve emerge from the geometry you built.",
+    "say": "Ready for a small adjustment? Once your tangent cuts are right, gently round the corners. Don't force perfection — let the curve emerge from the geometry you built.",
     "hint": "Now soften the straight cuts into a smooth circle.",
     "uid": "cddd24e7b238689489c4506b2f6c682e",
     "start": 169,
     "clipEnd": 254,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cddd24e7b238689489c4506b2f6c682e/thumbnails/thumbnail.jpg?time=254s&height=720",
-    "audio": "../../../assets/sketch-support/audio/5f37225c1a3e575e.mp3",
+    "audio": "audio/demo-1-7-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f340fdd86811d3e04c_sphere-p1-7-A.PNG",
     "analysisB": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0699f381aaee0e8382341c_sphere-p1-7-B.PNG"
   },
@@ -178,13 +233,13 @@
     "kind": "draw",
     "chapter": "Place the shadows",
     "title": "Erase the cutting lines",
-    "say": "Let’s pause here. After cutting the sphere with straight tangents, use your eraser to clean away the leftover construction lines. This refinement makes the outer edge feel round, smooth, and natural — not geometric.",
+    "say": "This little detail makes a difference. After cutting the sphere with straight tangents, use your eraser to clean away the leftover construction lines. This refinement makes the outer edge feel round, smooth, and natural — not geometric.",
     "hint": "Clean up the outer edge — make the circle round and natural.",
     "uid": "b05a527d319caec065da12e98a48a5e7",
     "start": 0,
     "clipEnd": 38,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b05a527d319caec065da12e98a48a5e7/thumbnails/thumbnail.jpg?time=38s&height=720",
-    "audio": "../../../assets/sketch-support/audio/e5901c1042f0e132.mp3",
+    "audio": "audio/demo-2-1-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a069e351885b35ebdaebe0f_sphere-p2-1.PNG"
   },
   {
@@ -192,13 +247,13 @@
     "kind": "draw",
     "chapter": "Place the shadows",
     "title": "Cast shadow + sphere together",
-    "say": "Let’s pause here. Draw the cast shadow at the same time as you finish the sphere. They're not two separate elements — they're one connected structure. The shadow grounds the sphere; the sphere casts the shadow.",
+    "say": "Let’s look at the placement. Draw the cast shadow at the same time as you finish the sphere. They're not two separate elements — they're one connected structure. The shadow grounds the sphere; the sphere casts the shadow.",
     "hint": "The shadow is part of the same system as the sphere.",
     "uid": "b05a527d319caec065da12e98a48a5e7",
     "start": 38,
     "clipEnd": 66,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b05a527d319caec065da12e98a48a5e7/thumbnails/thumbnail.jpg?time=66s&height=720",
-    "audio": "../../../assets/sketch-support/audio/339b58ca95e8c9b5.mp3",
+    "audio": "audio/demo-2-2-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a069e3563c30db721ad4ace_sphere-p2-2.PNG"
   },
   {
@@ -206,13 +261,13 @@
     "kind": "draw",
     "chapter": "Place the shadows",
     "title": "Mark the terminator line",
-    "say": "Let’s pause here. As soon as the form is drawn, use the terminator line to clearly separate the light side from the shadow side. This single line is what makes a sphere read as three-dimensional.",
+    "say": "A quick check before you go on. As soon as the form is drawn, use the terminator line to clearly separate the light side from the shadow side. This single line is what makes a sphere read as three-dimensional.",
     "hint": "Divide the sphere — light side vs shadow side.",
     "uid": "b05a527d319caec065da12e98a48a5e7",
     "start": 66,
     "clipEnd": 106,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b05a527d319caec065da12e98a48a5e7/thumbnails/thumbnail.jpg?time=106s&height=720",
-    "audio": "../../../assets/sketch-support/audio/d560189770158cf4.mp3",
+    "audio": "audio/demo-2-3-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a069e35430fd1c81a77a588_sphere-p2-3.PNG"
   },
   {
@@ -220,13 +275,13 @@
     "kind": "draw",
     "chapter": "Place the shadows",
     "title": "Strengthen the terminator",
-    "say": "Let’s pause here. Return to the terminator line and reinforce it. Strengthening this boundary is what creates strong contrast between the light side and the shadow side — and that contrast is what gives the sphere its volume.",
+    "say": "Take a breath and compare. Return to the terminator line and reinforce it. Strengthening this boundary is what creates strong contrast between the light side and the shadow side — and that contrast is what gives the sphere its volume.",
     "hint": "Go back to the terminator and darken it more.",
     "uid": "b05a527d319caec065da12e98a48a5e7",
     "start": 106,
     "clipEnd": 158,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b05a527d319caec065da12e98a48a5e7/thumbnails/thumbnail.jpg?time=158s&height=720",
-    "audio": "../../../assets/sketch-support/audio/fad5de6ac0596a06.mp3",
+    "audio": "audio/demo-2-4-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a069e35db5d7823f80f9019_sphere-p2-4.PNG"
   },
   {
@@ -234,13 +289,13 @@
     "kind": "draw",
     "chapter": "Place the shadows",
     "title": "Sharpen the shadow contrast",
-    "say": "Let’s pause here. Now move to the cast shadow below the sphere and strengthen its main contrast line. Making the shadow side firmly darker than the light side is what completes the illusion of form sitting in space.",
+    "say": "Here’s something worth noticing. Now move to the cast shadow below the sphere and strengthen its main contrast line. Making the shadow side firmly darker than the light side is what completes the illusion of form sitting in space.",
     "hint": "Push the cast shadow darker — make the contrast clear.",
     "uid": "b05a527d319caec065da12e98a48a5e7",
     "start": 158,
     "clipEnd": 178,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b05a527d319caec065da12e98a48a5e7/thumbnails/thumbnail.jpg?time=178s&height=720",
-    "audio": "../../../assets/sketch-support/audio/1e3c21d081b6da9c.mp3",
+    "audio": "audio/demo-2-5-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a069e352a15a452f5b64df6_sphere-p2-5.PNG"
   },
   {
@@ -272,13 +327,13 @@
     "kind": "draw",
     "chapter": "Build the dark tones",
     "title": "Tone inside the terminator",
-    "say": "Let’s pause here. Begin laying tone strictly within the terminator. Don't let your pencil cross over into the light side. This boundary is what gives the sphere its volume.",
+    "say": "Give yourself a moment here. Begin laying tone strictly within the terminator. Don't let your pencil cross over into the light side. This boundary is what gives the sphere its volume.",
     "hint": "Stay inside the dark side — build tone within the terminator line.",
     "uid": "f659c6889bc7c19d027ba2bf2d3ba4e6",
     "start": 0,
     "clipEnd": 54,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f659c6889bc7c19d027ba2bf2d3ba4e6/thumbnails/thumbnail.jpg?time=54s&height=720",
-    "audio": "../../../assets/sketch-support/audio/d974445dc688d15e.mp3",
+    "audio": "audio/demo-3-1-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a07a6bbda9bb109a410e3af_sphere-p3-1.PNG"
   },
   {
@@ -300,13 +355,13 @@
     "kind": "draw",
     "chapter": "Build the dark tones",
     "title": "Tone the shadow as one family",
-    "say": "Let’s pause here. Tone the cast shadow alongside the sphere, not separately. Sphere and shadow belong to the same value family — they should be developed together so they feel unified, not pasted together.",
+    "say": "Look closely at the teacher’s marks. Tone the cast shadow alongside the sphere, not separately. Sphere and shadow belong to the same value family — they should be developed together so they feel unified, not pasted together.",
     "hint": "Fill the cast shadow at the same time — same value family as the sphere.",
     "uid": "f659c6889bc7c19d027ba2bf2d3ba4e6",
     "start": 63,
     "clipEnd": 68,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f659c6889bc7c19d027ba2bf2d3ba4e6/thumbnails/thumbnail.jpg?time=68s&height=720",
-    "audio": "../../../assets/sketch-support/audio/917cc799c80e95f4.mp3",
+    "audio": "audio/demo-3-3-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a07a6bbed03a3570738d52c_sphere-p3-3.PNG"
   },
   {
@@ -314,13 +369,13 @@
     "kind": "draw",
     "chapter": "Build the dark tones",
     "title": "Anchor the sphere to the surface",
-    "say": "Let’s pause here. Once the cast shadow is filled, return to the area where the sphere meets the surface and push that contrast hard. This is the darkest part of the cast shadow — it's what makes the sphere feel grounded, not floating.",
+    "say": "Ready for a small adjustment? Once the cast shadow is filled, return to the area where the sphere meets the surface and push that contrast hard. This is the darkest part of the cast shadow — it's what makes the sphere feel grounded, not floating.",
     "hint": "Strengthen the contact area — make the sphere sit on the table.",
     "uid": "f659c6889bc7c19d027ba2bf2d3ba4e6",
     "start": 68,
     "clipEnd": 76,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f659c6889bc7c19d027ba2bf2d3ba4e6/thumbnails/thumbnail.jpg?time=76s&height=720",
-    "audio": "../../../assets/sketch-support/audio/2b7e7f02a27aafed.mp3",
+    "audio": "audio/demo-3-4-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a07a6bb3a75e8004911a858_sphere-p3-4.PNG"
   },
   {
@@ -328,13 +383,13 @@
     "kind": "draw",
     "chapter": "Build the dark tones",
     "title": "Shadow gradation — near to far",
-    "say": "Let’s pause here. Finish by strengthening the shadow nearest to us, then gradate it lighter as it moves away. This near-to-far gradation stretches the perception of space — the shadow becomes the tool that pulls the eye into depth.",
+    "say": "This little detail makes a difference. Finish by strengthening the shadow nearest to us, then gradate it lighter as it moves away. This near-to-far gradation stretches the perception of space — the shadow becomes the tool that pulls the eye into depth.",
     "hint": "Closest part of the shadow = darkest. Gradate outward to extend depth.",
     "uid": "f659c6889bc7c19d027ba2bf2d3ba4e6",
     "start": 76,
     "clipEnd": 87,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f659c6889bc7c19d027ba2bf2d3ba4e6/thumbnails/thumbnail.jpg?time=87s&height=720",
-    "audio": "../../../assets/sketch-support/audio/1f40d480fad619d6.mp3",
+    "audio": "audio/demo-3-5-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a07a6bba8a9875aa404df9c_sphere-p3-5.PNG"
   },
   {
@@ -366,13 +421,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Build the light-gray halftone band",
-    "say": "Let’s pause here. This is the halftone area — a band of value that extends from the terminator into the light side. Wrap it gently around the whole sphere. Switch to a lighter pencil (HB or 2H) — this is not a line, it's an entire surface that helps the light side transition naturally.",
+    "say": "Let’s look at the placement. This is the halftone area — a band of value that extends from the terminator into the light side. Wrap it gently around the whole sphere. Switch to a lighter pencil (HB or 2H) — this is not a line, it's an entire surface that helps the light side transition naturally.",
     "hint": "Wrap a light gray band from terminator into the light side.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 0,
     "clipEnd": 80,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=80s&height=720",
-    "audio": "../../../assets/sketch-support/audio/408647b464d6d749.mp3",
+    "audio": "audio/demo-4-1-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99eea9a3646fb7becee1_sphere-p4-3.png",
     "analysisB": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee0be6d55a1d541fec_sphere-p4-1B.png"
   },
@@ -381,13 +436,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Cross-hatch to unify the tones",
-    "say": "Let’s pause here. When you tone over your own strokes in the same direction, the result can feel rigid. Mrs. Dawn now adds strokes in the opposite direction — cross-hatching. This blending pass unifies the earlier tones into a softer, more continuous surface.",
+    "say": "A quick check before you go on. When you tone over your own strokes in the same direction, the result can feel rigid. Mrs. Dawn now adds strokes in the opposite direction — cross-hatching. This blending pass unifies the earlier tones into a softer, more continuous surface.",
     "hint": "Hatch against your previous stroke direction to blend values.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 80,
     "clipEnd": 99,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=99s&height=720",
-    "audio": "../../../assets/sketch-support/audio/dbb3970419064945.mp3",
+    "audio": "audio/demo-4-2-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99f4fb4b33348d568a3f_sphere-p4-2.png"
   },
   {
@@ -395,13 +450,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Soften the terminator into the shadow",
-    "say": "Let’s pause here. A common mistake: drawing the terminator as a sharp, rigid line or block. Mrs. Dawn pushes that area repeatedly — not just darkening it, but also blending it gradually into the shadow side. The terminator should feel like a natural transition, not a wall.",
+    "say": "Take a breath and compare. A common mistake: drawing the terminator as a sharp, rigid line or block. Mrs. Dawn pushes that area repeatedly — not just darkening it, but also blending it gradually into the shadow side. The terminator should feel like a natural transition, not a wall.",
     "hint": "Don't leave the terminator as a hard line — connect it to the dark side.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 99,
     "clipEnd": 141,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=141s&height=720",
-    "audio": "../../../assets/sketch-support/audio/57b98742232685c4.mp3",
+    "audio": "audio/demo-4-3-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a9e0b6b3f24f341be69c6_sphere-p4-3.png"
   },
   {
@@ -409,13 +464,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "It's a terminator BAND, not a line",
-    "say": "Let’s pause here. Look carefully — Mrs. Dawn defines a clear terminator AREA, not a terminator line. This band acts as a bridge between the light side and the shadow side. It's what makes the sphere pop forward in 3D, and it's the key visual link between the two value zones.",
+    "say": "Here’s something worth noticing. Look carefully — Mrs. Dawn defines a clear terminator AREA, not a terminator line. This band acts as a bridge between the light side and the shadow side. It's what makes the sphere pop forward in 3D, and it's the key visual link between the two value zones.",
     "hint": "The dark-light boundary is a surface, not an edge.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 141,
     "clipEnd": 173,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=173s&height=720",
-    "audio": "../../../assets/sketch-support/audio/2b3aae8d6ba2e63a.mp3",
+    "audio": "audio/demo-4-4-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99f482d04d82fecc18c9_sphere-p4-4.png"
   },
   {
@@ -423,13 +478,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Switch to 2B for stronger work",
-    "say": "Let’s pause here. Mrs. Dawn explicitly switches to a 2B pencil. The HB has carried you this far; the 2B will let you push the values that need to feel firmer and richer.",
+    "say": "Give yourself a moment here. Mrs. Dawn explicitly switches to a 2B pencil. The HB has carried you this far; the 2B will let you push the values that need to feel firmer and richer.",
     "hint": "Change pencils — now 2B for the deeper details.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 173,
     "clipEnd": 203,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=203s&height=720",
-    "audio": "../../../assets/sketch-support/audio/44c993eedd8aefd6.mp3",
+    "audio": "audio/demo-4-5-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee884daf4240df791c_sphere-p4-5.png"
   },
   {
@@ -437,13 +492,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Radiate from the terminator outward",
-    "say": "Let’s pause here. With 2B, Mrs. Dawn strengthens transitions in both directions — from the terminator toward the light side, and from the terminator toward the dark side. This radiating gradient is what gives the sphere strong perspective. She also strengthens the cast shadow with the same pencil.",
+    "say": "Look closely at the teacher’s marks. With 2B, Mrs. Dawn strengthens transitions in both directions — from the terminator toward the light side, and from the terminator toward the dark side. This radiating gradient is what gives the sphere strong perspective. She also strengthens the cast shadow with the same pencil.",
     "hint": "Use 2B to spread values from the terminator into both light and dark.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 203,
     "clipEnd": 248,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=248s&height=720",
-    "audio": "../../../assets/sketch-support/audio/00e2d55becae4182.mp3",
+    "audio": "audio/demo-4-6-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee8add156140f4c24b_sphere-p4-6.png"
   },
   {
@@ -451,13 +506,13 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Bring out the blender",
-    "say": "Let’s pause here. Mrs. Dawn introduces a blending tool — a blending stump if you have one, or a tissue or napkin works fine. This tool unifies and softens all the tones you've built up. The drawing should feel more like a smooth surface than a series of pencil strokes.",
+    "say": "Ready for a small adjustment? Mrs. Dawn introduces a blending tool — a blending stump if you have one, or a tissue or napkin works fine. This tool unifies and softens all the tones you've built up. The drawing should feel more like a smooth surface than a series of pencil strokes.",
     "hint": "Blender / tissue / napkin — softens the whole surface.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 248,
     "clipEnd": 316,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=316s&height=720",
-    "audio": "../../../assets/sketch-support/audio/7dc66f0f8dd87574.mp3",
+    "audio": "audio/demo-4-7-guide.mp3",
     "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a99ee48a20b4c5c83e9a4_sphere-p4-7.png"
   },
   {
@@ -465,27 +520,28 @@
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Follow your stroke direction",
-    "say": "Let’s pause here. Important: when blending, follow the direction of your pencil strokes. Sweep gently in the same direction. Do not press hard, and do not blend randomly across the surface — that creates a muddy, dirty drawing. Light, directional sweeps only.",
+    "say": "This little detail makes a difference. Important: when blending, follow the direction of your pencil strokes. Sweep gently in the same direction. Do not press hard, and do not blend randomly across the surface — that creates a muddy, dirty drawing. Light, directional sweeps only.",
     "hint": "Blend along the direction of your strokes — never randomly.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 316,
     "clipEnd": 337,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=337s&height=720",
-    "audio": "../../../assets/sketch-support/audio/36c8622a569ba443.mp3"
+    "audio": "audio/demo-4-8-guide.mp3"
   },
   {
     "id": "demo-4-9",
     "kind": "draw",
     "chapter": "Soften the transitions",
     "title": "Optional: re-touch with HB",
-    "say": "Let’s pause here. This step is optional but recommended. Mrs. Dawn returns to the HB pencil and gently presses the strongest tones back into the paper. This subtly tightens the whole drawing and makes it feel more natural — less like raw pencil, more like a unified surface.",
+    "say": "Let’s look at the placement. This step is optional but recommended. Mrs. Dawn returns to the HB pencil and gently presses the strongest tones back into the paper. This subtly tightens the whole drawing and makes it feel more natural — less like raw pencil, more like a unified surface.",
     "hint": "Press strong tones back into the paper with light HB strokes.",
     "uid": "193d127866f1ace07a7667af81f14961",
     "start": 337,
     "clipEnd": 362,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/193d127866f1ace07a7667af81f14961/thumbnails/thumbnail.jpg?time=362s&height=720",
-    "audio": "../../../assets/sketch-support/audio/7a74b145b3beb4da.mp3",
-    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a9efc9225802f312bdc0b_sphere-p4-8.png"
+    "audio": "audio/demo-4-9-guide.mp3",
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a0a9efc9225802f312bdc0b_sphere-p4-8.png",
+    "optional": true
   },
   {
     "id": "chapter-4-end",
@@ -509,13 +565,14 @@
     "hint": "One thoughtful step forward ✓",
     "kind": "milestone",
     "image": "../../../assets/sketch-support/finals/sphere.jpg",
-    "audio": "audio/cheer-4.mp3"
+    "audio": "audio/cheer-4.mp3",
+    "coreComplete": true
   },
   {
     "id": "submit",
     "title": "Keep your sphere drawing",
     "chapter": "Your work",
-    "say": "Take a photo if you’d like to keep a preview of your drawing here. This preview stays on this page. Use the regular lesson link if you want to submit it for your teacher to review. You can also continue without adding a photo.",
+    "say": "Ready to share your drawing? Choose a clear photo, then tap the send button. Wait for the submitted message, so you know your work has arrived. You can do all of this right here. Or continue without a photo and come back when you are ready.",
     "hint": "Your drawing · Your progress",
     "kind": "submit",
     "image": "../../../assets/sketch-support/finals/sphere.jpg",

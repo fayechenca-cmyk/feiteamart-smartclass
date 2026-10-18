@@ -6,7 +6,7 @@ window.GuidedPlatform = {
    const result=await window.FEIAccess.canOpenLesson('skills',lessonId);
    if(result.allowed){
     this.lesson=lessonId;this.profile=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null');
-    if(!this.profile){const session=await window.FEIAuth?.getSession();if(session?.user?.id){this.profile={id:session.user.id,supabaseUserId:session.user.id,studentCode:null,completedLessons:[],completedSteps:{},currentLesson:lessonId,currentStepIdx:0};sessionStorage.setItem('fei_user_profile',JSON.stringify(this.profile));}}
+    if(!this.profile){const session=await window.FEIAuth?.getSession();if(session?.user?.id){this.profile={id:session.user.id,supabaseUserId:session.user.id,email:session.user.email,name:session.user.user_metadata?.full_name||session.user.user_metadata?.name||null,studentCode:null,completedLessons:[],completedSteps:{},currentLesson:lessonId,currentStepIdx:0};sessionStorage.setItem('fei_user_profile',JSON.stringify(this.profile));}}
     if(this.profile)return true;
     location.replace('../../../?signin=required');return false;
    }
@@ -94,7 +94,7 @@ window.GuidedPlatform = {
  async complete(lessonId) {
   if(!this.profile){this.profile=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null');}
   if(!this.profile||this.isolated)return false;
-  this.justCompleted=this.profile.completedLessons?.includes(lessonId)?null:lessonId;
+  if(!this.profile.completedLessons?.includes(lessonId))this.justCompleted=lessonId;
   this.profile.completedLessons=[...new Set([...(this.profile.completedLessons||[]),lessonId])];
   this.profile.lastSeenAt=Date.now();
   return this._store();

@@ -35,7 +35,15 @@
     "say": "Let’s get your pencils ready. Two H for light construction. H B for sketching and gentle finishing. Two B, three B, four B, and six B give us a range of darker tones. Find them in your kit. There is no hurry. Press continue when you have them.",
     "hint": "2H · HB · 2B · 3B · 4B · 6B",
     "focus": "pencils",
-    "audio": "audio/s03.mp3"
+    "audio": "audio/s03.mp3",
+    "materialScene": true,
+    "cues": [
+      {
+        "time": 0.515,
+        "tool": "pencils",
+        "label": "pencils"
+      }
+    ]
   },
   {
     "id": "s04",
@@ -45,7 +53,30 @@
     "say": "This is a blending stump. Its pointed paper tip helps you soften graphite. A folded tissue works too. Put your sketch paper and eraser beside you. We will blend gently, so the light and dark faces stay separate.",
     "hint": "Blending stump · Tissue · Paper",
     "focus": "blend",
-    "audio": "audio/s04.mp3"
+    "audio": "audio/s04.mp3",
+    "materialScene": true,
+    "cues": [
+      {
+        "time": 2.549,
+        "tool": "paper",
+        "label": "paper"
+      },
+      {
+        "time": 6.189,
+        "tool": "tissue",
+        "label": "tissue"
+      },
+      {
+        "time": 8.211,
+        "tool": "paper",
+        "label": "paper"
+      },
+      {
+        "time": 9.081,
+        "tool": "eraser",
+        "label": "eraser"
+      }
+    ]
   },
   {
     "id": "paper-sides",
@@ -62,7 +93,7 @@
     "title": "Make room for your drawing",
     "chapter": "Get ready",
     "hint": "A4 · 210 × 297 mm",
-    "say": "We are using A four sketch paper, twenty-one by twenty-nine point seven centimetres. But you can use another size if you prefer. Just adjust the size of your cube and leave some breathing room around it. Set your paper down with the rougher side facing up. Ready? Let’s get comfortable and draw.",
+    "say": "We are using sketch paper in size A, four. That is the letter A, followed by four. It measures twenty-one by twenty-nine point seven centimetres. Another size works too. Leave some space around your cube, and place the more textured side facing up.",
     "audio": "audio/paper-size.mp3"
   },
   {
@@ -351,7 +382,8 @@
     "optional": false,
     "audio": "audio/s20.mp3",
     "frame": "frames/s20.jpg",
-    "clipEnd": 208.5
+    "clipEnd": 208.5,
+    "coreComplete": true
   },
   {
     "id": "s21",
@@ -485,7 +517,7 @@
     "kind": "submit",
     "title": "Look at what you made",
     "chapter": "Your drawing",
-    "say": "Check your perspective, your three values, and the cast shadow. Take a photo in even light. In this design preview, the photo stays on this page. Your regular lesson is still the place to submit it to your teacher.",
+    "say": "Ready to share your drawing? Choose a clear photo, then tap the send button. Wait for the submitted message, so you know your work has arrived. You can do all of this right here. Or continue without a photo and come back when you are ready.",
     "hint": "Perspective · Three values · Cast shadow",
     "audio": "audio/s28.mp3"
   },

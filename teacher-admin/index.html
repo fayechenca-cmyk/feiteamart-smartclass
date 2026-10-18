@@ -1285,6 +1285,30 @@
     }
   }
 
+  // Keep the review queue discoverable without overwriting a teacher's draft.
+  const incomingNotice = document.createElement('button');
+  incomingNotice.hidden = true;
+  incomingNotice.style.cssText = 'position:fixed;right:20px;bottom:24px;z-index:200;padding:16px 22px;border:0;border-radius:22px;background:#A9CEA7;color:#17182D;font-weight:800;box-shadow:0 8px 25px #17182d33;cursor:pointer';
+  incomingNotice.setAttribute('aria-live','polite');
+  incomingNotice.onclick = async () => {
+    if ([...document.querySelectorAll('.feedback-textarea')].some(el=>el.value.trim()) && !confirm('Refresh the queue? Copy your unsent feedback first.')) return;
+    incomingNotice.hidden=true; await loadData();
+  };
+  document.body.appendChild(incomingNotice);
+  let checkingIncoming=false;
+  setInterval(async()=>{
+    if(checkingIncoming || document.hidden || !appState.loaded || dashboard.style.display==='none')return;
+    checkingIncoming=true;
+    try {
+      const res=await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/${SUBMISSIONS_TABLE}?select=id&order=created_at.desc&limit=100`,{headers:sbHeaders()});
+      if(!res.ok)return;
+      const rows=await res.json(),known=new Set(appState.submissions.map(row=>row.id));
+      const count=rows.filter(row=>!known.has(row.id)).length;
+      incomingNotice.hidden=!count;
+      incomingNotice.textContent=count+' new artwork submission'+(count===1?'':'s')+' · View';
+    } catch {} finally {checkingIncoming=false;}
+  },30000);
+
   // ── Filters / views ───────────────────────────────────────────
 
   function updateNavActiveStates() {

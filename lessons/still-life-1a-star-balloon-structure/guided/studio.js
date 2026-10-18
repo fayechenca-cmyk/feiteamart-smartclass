@@ -1,24 +1,24 @@
-/* Isolated design experiment: no platform progress, submissions, or badge writes. */
+/* Guided lesson with account progress, optional practice and in-lesson submission. */
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
 const root = '../../../';
 const LESSON_ID = 'still-life-1a-star-balloon-structure';
 const KEY = 'fei.balloon.guided-preview.v1';
-let flow=[], index=0, unlocked=0, completed=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
+let flow=[], index=0, unlocked=0, completed=new Set(), skipped=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=false, watchVoiceActive=false;
 const voice=$('voice');
 let soundContext=null;
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
-function save(){GuidedPlatform.save({index,unlocked,completed:[...completed]},KEY);}
+function save(){GuidedPlatform.save({index,unlocked,completed:[...completed],skipped:[...skipped]},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
-function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${completed.has(i)?'done':i===index?'current':''}" title="${s.title}"></span>`).join(''); }
+function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':''}" title="${s.title}"></span>`).join(''); }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];}
 function speak(step,done){
  stopVoice(); voiceDone=done||null;
- if(!step.audio){done?.();return;}
+ window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio;voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-2';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=muted;}else{$('next').disabled=false;phase='waiting';}};
@@ -28,7 +28,7 @@ voice.addEventListener('timeupdate',()=>{
  if(!captions.length||!isFinite(voice.duration))return;
  const total=captions.reduce((n,t)=>n+t.length,0), pos=voice.currentTime/voice.duration*total;
  let running=0;const c=captions.find(t=>(running+=t.length)>pos)||captions.at(-1);
- if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}
+ if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}window.GuidedUX?.tick(voice.currentTime);
 });
 function setMode(text){$('mode').textContent=text;}
 function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Continue to light and dark →':'Continue →';}
@@ -108,7 +108,7 @@ function finishClip(){
  waiting();$('clipControls').hidden=true;$('media').hidden=true;
  $('visual').innerHTML=overlaySvg(s.overlay,s.frame);
  $('replay').hidden=false;
- speak(s);
+ window.GuidedUX?.pause(s);speak(s);
 }
 function createPlayer(s){
  if(uid===s.uid&&player){startClip(s);return;}
@@ -151,20 +151,20 @@ function startClip(s){
 }
 function enter(){
  epoch++;clearTimeout(watchdog);stopVoice();player?.pause();
- const s=flow[index];$('clipControls').hidden=true;save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
+ const s=flow[index];window.GuidedUX?.reset(s);$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent=s.optional?'Skip optional step →':'Skip this step →';$('finishCore').hidden=!s.optional||!flow.some(x=>x.kind==='submit');$('clipControls').hidden=true;save();$('title').textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'');$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  // Oct 2026: each step now shows THAT STEP'S result (a clear frame near
  // its own clip end, picked so the hand doesn't cover the drawing) --
  // not the single finished drawing. The finished drawing is reserved
  // for the welcome screen only. Image only, no caption.
- $('reference').hidden=s.kind!=='draw';$('analysis').hidden=true;
+ $('reference').hidden=s.kind!=='draw';$('analysis').hidden=s.kind!=='draw';
  if(s.kind==='draw'){$('referenceImage').src=s.stepResult||s.frame;$('referenceImage').alt='Your teacher’s drawing after this step';}
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
  if(s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   createPlayer(s);
  }else{
-  phase='guidance';buildScene(s);
+  phase='guidance';buildScene(s);window.GuidedUX?.scene(s);
   speak(s,()=>{waiting();});
  }
 }
@@ -175,6 +175,12 @@ function next(){
  index++;enter();
 }
 $('next').onclick=next;
+$('back').onclick=()=>{if(index>0){index--;enter();}};
+$('skipStep').onclick=()=>{if(index>=flow.length-1)return;skipped.add(index);unlocked=Math.max(unlocked,index+1);index++;enter();};
+$('finishCore').onclick=()=>{let target=flow.findIndex((x,i)=>i>index&&x.kind==='submit');if(target<0)target=flow.findIndex((x,i)=>i>index&&x.kind==='reflect');if(target<0)return;for(let i=index;i<target;i++)if(flow[i].optional)skipped.add(i);unlocked=Math.max(unlocked,target);index=target;enter();};
+$('referenceImage').onclick=()=>{$('analysis').onclick();};
+$('referenceImage').tabIndex=0;$('referenceImage').setAttribute('role','button');$('referenceImage').setAttribute('aria-label','Enlarge reference image');$('referenceImage').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('analysis').onclick();}};
+
 $('replay').onclick=()=>enter();
 $('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watching')return;speak(s,()=>{if(phase==='guidance')waiting();});};
 $('sound').onclick=()=>{muted=!muted;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');};
@@ -183,9 +189,9 @@ function openMap(){
  player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
  flow.forEach((s,i)=>{
   if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter;$('mapItems').append(h);}
-  const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=i>unlocked;
+  const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
   if(s.frame){const img=document.createElement('img');img.src=s.frame;img.alt='';img.loading='lazy';b.append(img);}
-  const label=document.createElement('span');label.textContent=s.title;b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':b.disabled?'·':String(i+1);b.append(check);
+  const label=document.createElement('span');label.textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'')+(skipped.has(i)?' · Skipped':'');b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':skipped.has(i)?'↷':String(i+1);b.append(check);
   b.onclick=()=>{$('map').close();index=i;unlocked=Math.max(unlocked,i);enter();};$('mapItems').append(b);
  });$('map').showModal();
 }
@@ -242,9 +248,9 @@ $('welcome').addEventListener('cancel',e=>e.preventDefault());
  const allowed=await GuidedPlatform.allow('still-life-1a-star-balloon-structure');
  if(!allowed)return; // redirecting away
  $('welcome').showModal();
- fetch('flow.json?v=1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+ fetch('flow.json?v=ux-2').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
   flow=data;
-  try{const p=await GuidedPlatform.restore('still-life-1a-star-balloon-structure',KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+  try{const p=await GuidedPlatform.restore('still-life-1a-star-balloon-structure',KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
   $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Start drawing →';
  }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
 })();

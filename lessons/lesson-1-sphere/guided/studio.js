@@ -1,24 +1,24 @@
-/* Isolated design experiment: no platform progress, submissions, or badge writes. */
+/* Guided lesson with account progress, optional practice and in-lesson submission. */
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
 const root = '../../../';
 const KEY='fei.sphere.guided-preview.v1';
 let sceneReady=true;
-let flow=[], index=0, unlocked=0, completed=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
+let flow=[], index=0, unlocked=0, completed=new Set(), skipped=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=false, watchVoiceActive=false;
 const voice=$('voice');
 let soundContext=null;
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
-function save(){GuidedPlatform.save({index,unlocked,completed:[...completed]},KEY);}
+function save(){GuidedPlatform.save({index,unlocked,completed:[...completed],skipped:[...skipped]},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
-function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${completed.has(i)?'done':i===index?'current':''}" title="${s.title}"></span>`).join(''); }
+function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':''}" title="${s.title}"></span>`).join(''); }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];}
 function speak(step,done){
  stopVoice(); voiceDone=done||null;
- if(!step.audio){done?.();return;}
+ window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio;voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-2';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=muted;}else{$('next').disabled=false;phase='waiting';}};
@@ -28,7 +28,7 @@ voice.addEventListener('timeupdate',()=>{
  if(!captions.length||!isFinite(voice.duration))return;
  const total=captions.reduce((n,t)=>n+t.length,0), pos=voice.currentTime/voice.duration*total;
  let running=0;const c=captions.find(t=>(running+=t.length)>pos)||captions.at(-1);
- if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}
+ if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}window.GuidedUX?.tick(voice.currentTime);
 });
 function setMode(text){$('mode').textContent=text;}
 function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=index===flow.length-1?'Celebrate →':'Continue →';}
@@ -45,8 +45,7 @@ function buildScene(s){
  if(interactive){sceneReady=false;$('zoneRing').setAttribute('visibility','hidden');$('sphereSlider').oninput=e=>{const t=Number(e.target.value)/100;$('sphereTone').setAttribute('cx',`${20+t*60}%`);$('sphereSun').setAttribute('transform',`translate(${t*530} 0)`);$('sphereShadow').setAttribute('cx',String(485-t*180));sceneReady=true;if(voice.ended||muted)waiting();};}
  else{const spots=[[345,155],[390,120],[475,220],[490,265],[505,290],[495,365]];document.querySelectorAll('[data-zone]').forEach(button=>button.onclick=()=>{const i=Number(button.dataset.zone);$('zoneRing').setAttribute('cx',spots[i][0]);$('zoneRing').setAttribute('cy',spots[i][1]);document.querySelectorAll('[data-zone]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));$('hint').textContent=button.textContent;});}
  }else if(s.kind==='submit'){
- $('visual').innerHTML='<div class="scene"><img class="upload-preview" hidden alt="Your sphere drawing"><label class="upload-label" for="drawing">＋ Add your drawing</label><input id="drawing" type="file" accept="image/jpeg,image/png,image/webp" hidden><p class="local-note">Preview only · Your photo stays on this page</p><a href="../?classic=1" target="_blank" rel="noopener">Open regular lesson to submit →</a></div>';
- $('drawing').onchange=()=>{const file=$('drawing').files[0];if(!file)return;if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size>20*1024*1024){$('notice').textContent='Choose a JPG, PNG, or WebP image under 20 MB.';$('notice').hidden=false;return;}if(photoURL)URL.revokeObjectURL(photoURL);photoURL=URL.createObjectURL(file);const img=document.querySelector('.upload-preview');img.src=photoURL;img.hidden=false;};
+ window.GuidedSubmit.mount($('visual'),{lessonId:'sphere',title:'The Sphere',onPhoto:url=>{photoURL=url}});
  }else if(s.kind==='reflect'){
  $('visual').innerHTML=`<div class="scene"><img class="upload-preview" src="${photoURL||s.image}" alt="A sphere drawing to reflect on"><p>What do you notice now?</p><textarea aria-label="Optional reflection" placeholder="A thought to keep… (optional)"></textarea></div>`;
  }
@@ -73,7 +72,7 @@ function finishClip(){
  if(s.kind==='intro'){mark();index++;enter();return;}
  waiting();$('clipControls').hidden=true;$('media').hidden=true;$('visual').innerHTML=`<img src="${s.frame}" alt="${s.title}: teacher’s drawing at this checkpoint">`;
  $('referenceImage').src=s.analysis||s.frame; $('referenceImage').alt=s.analysis?'Teaching diagram for '+s.title:s.title+' — stage reference'; $('analysis').hidden=false;$('alternateAnalysis').hidden=!s.analysisB;$('replay').hidden=false;
- speak(s);
+ window.GuidedUX?.pause(s);speak(s);
 }
 function createPlayer(s){
  if(uid===s.uid&&player){startClip(s);return;}
@@ -116,16 +115,16 @@ function startClip(s){
 }
 function enter(){
  epoch++;sceneReady=true;clearTimeout(watchdog);stopVoice();player?.pause();
- const s=flow[index];$('skip').hidden=!s.optional;$('clipControls').hidden=true;save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
+ const s=flow[index];window.GuidedUX?.reset(s);$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent=s.optional?'Skip optional step →':'Skip this step →';$('finishCore').hidden=!s.optional||!flow.some(x=>x.kind==='submit');$('skip').hidden=true;$('clipControls').hidden=true;save();$('title').textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'');$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
- $('reference').hidden=true;$('analysis').hidden=true;showPattern(s);
+ $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
  if(s.kind==='intro'||s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src=s.frame;$('referenceImage').alt=s.title+' — stage reference';}
   createPlayer(s);
  }else{
-  phase='guidance';buildScene(s);
+  phase='guidance';buildScene(s);window.GuidedUX?.scene(s);
   // Observation and light stay hands-on. Other scenes wait for the learner after guidance.
   speak(s,()=>{if(sceneReady)waiting();else setMode('YOUR TURN · MOVE THE SUN');});
   if(s.kind==='badge'){$('next').textContent='Celebrate →';}
@@ -134,10 +133,17 @@ function enter(){
 function next(){
  if($('next').disabled)return;
  mark();
+ if(flow[index].coreComplete)GuidedPlatform.complete('sphere');
  if(index===flow.length-1){stopVoice();GuidedPlatform.complete('sphere');window.GuidedReward.complete({lessonId:'sphere',title:'The Sphere',nextLabel:'Continue to The Cylinder →',muted,onMutedChange:setMuted}).then(async go=>{await GuidedPlatform.flush();if(go)location.href='../../lesson-5-cylinder/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
+$('back').onclick=()=>{if(index>0){index--;enter();}};
+$('skipStep').onclick=()=>{if(index>=flow.length-1)return;skipped.add(index);unlocked=Math.max(unlocked,index+1);index++;enter();};
+$('finishCore').onclick=()=>{let target=flow.findIndex((x,i)=>i>index&&x.kind==='submit');if(target<0)target=flow.findIndex((x,i)=>i>index&&x.kind==='reflect');if(target<0)return;for(let i=index;i<target;i++)if(flow[i].optional)skipped.add(i);unlocked=Math.max(unlocked,target);index=target;enter();};
+$('referenceImage').onclick=()=>{$('analysis').onclick();};
+$('referenceImage').tabIndex=0;$('referenceImage').setAttribute('role','button');$('referenceImage').setAttribute('aria-label','Enlarge reference image');$('referenceImage').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('analysis').onclick();}};
+
 $('skip').textContent='Skip optional finishing';$('skip').onclick=()=>{if(!flow[index].optional)return;index=flow.findIndex(s=>s.kind==='reflect');unlocked=Math.max(unlocked,index);enter();};
 $('replay').onclick=()=>enter();
 $('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watching')return;speak(s,()=>{if(phase==='guidance'&&sceneReady)waiting();});};
@@ -147,18 +153,18 @@ $('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTo
 function openMap(){
  player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
  flow.forEach((s,i)=>{
-  if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter+(s.optional?' · Optional':'');$('mapItems').append(h);}
-  const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=i>unlocked;
+  if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter+(s.optional&&!/optional/i.test(chapter)?' · Optional':'');$('mapItems').append(h);}
+  const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
   // Optional refinements can be bypassed only after the core drawing is finished.
 
   if(s.frame){const img=document.createElement('img');img.src=s.frame;img.alt='';img.loading='lazy';b.append(img);}
-  const label=document.createElement('span');label.textContent=s.title;b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':b.disabled?'·':String(i+1);b.append(check);
+  const label=document.createElement('span');label.textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'')+(skipped.has(i)?' · Skipped':'');b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':skipped.has(i)?'↷':String(i+1);b.append(check);
   b.onclick=()=>{$('map').close();index=i;unlocked=Math.max(unlocked,i);enter();};$('mapItems').append(b);
  });$('map').showModal();
 }
 $('mapButton').onclick=openMap;$('closeMap').onclick=()=>$('map').close();
 $('map').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').hidden=false;});if(phase==='watching'){$('resume').hidden=false;$('resume').textContent='Resume playback';}});
-$('alternateAnalysis').onclick=()=>{const s=flow[index];$('referenceImage').src=$('referenceImage').getAttribute('src')===s.analysisB?s.analysis:s.analysisB;};
+$('alternateAnalysis').onclick=()=>{const s=flow[index];$('referenceImage').src=$('referenceImage').getAttribute('src')===s.analysisB?s.analysis:s.analysisB;const mainAnalysis=document.querySelector('.analysis-stage img');if(mainAnalysis)mainAnalysis.src=$('referenceImage').src;};
 $('analysis').onclick=()=>{voice.pause();$('diagram').querySelector('img').src=$('referenceImage').src;$('diagram').showModal();};$('closeDiagram').onclick=()=>$('diagram').close();
 $('diagram').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').textContent='Resume guidance';$('resume').hidden=false;});});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
@@ -166,9 +172,9 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('sphere'))return; $('welcome').showModal();
-fetch('flow.json?v=sphere-1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+fetch('flow.json?v=ux-2').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
- try{ const p=await GuidedPlatform.restore('sphere',KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+ try{ const p=await GuidedPlatform.restore('sphere',KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your sphere →':'Let’s draw a sphere →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
 })();

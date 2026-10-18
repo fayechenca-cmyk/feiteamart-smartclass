@@ -20,7 +20,7 @@ const FEIProgress = {
    if(Array.isArray(value)) out[key]=[...new Set([...(Array.isArray(prior)?prior:[]),...value])];
    else if(value && typeof value==='object' && key.startsWith('guided:')) {
     const x=prior && typeof prior==='object'&&!Array.isArray(prior)?prior:{};
-    out[key]={...x,...value,index:Math.max(x.index||0,value.index||0),unlocked:Math.max(x.unlocked||0,value.unlocked||0),completed:[...new Set([...(x.completed||[]),...(value.completed||[])])],updatedAt:Math.max(x.updatedAt||0,value.updatedAt||0)};
+    out[key]={...x,...value,index:Math.max(x.index||0,value.index||0),unlocked:Math.max(x.unlocked||0,value.unlocked||0),completed:[...new Set([...(x.completed||[]),...(value.completed||[])])],skipped:[...new Set([...(x.skipped||[]),...(value.skipped||[])])],updatedAt:Math.max(x.updatedAt||0,value.updatedAt||0)};
    } else if(key==='__cursor') out[key]=!prior || (value.updatedAt||0)>=(prior.updatedAt||0)?value:prior;
    else out[key]=value;
   }

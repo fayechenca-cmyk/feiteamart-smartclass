@@ -17,7 +17,20 @@
     "hint": "2H · HB · 2B · 3B · 4B · 6B",
     "kind": "photo",
     "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png",
-    "audio": "audio/p01.mp3"
+    "audio": "audio/p01.mp3",
+    "materialScene": true,
+    "cues": [
+      {
+        "time": 0.49,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 7.096,
+        "tool": "pencils",
+        "label": "pencils"
+      }
+    ]
   },
   {
     "id": "p02",
@@ -27,7 +40,30 @@
     "hint": "Blending tool · Kneaded eraser · Regular eraser",
     "kind": "photo",
     "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png",
-    "audio": "audio/p02.mp3"
+    "audio": "audio/p02.mp3",
+    "materialScene": true,
+    "cues": [
+      {
+        "time": 1.936,
+        "tool": "tissue",
+        "label": "tissue"
+      },
+      {
+        "time": 4.351,
+        "tool": "eraser",
+        "label": "eraser"
+      },
+      {
+        "time": 7.377,
+        "tool": "eraser",
+        "label": "eraser"
+      },
+      {
+        "time": 12.708,
+        "tool": "tape",
+        "label": "tape"
+      }
+    ]
   },
   {
     "id": "p03",
@@ -43,7 +79,7 @@
     "id": "p04",
     "title": "Choose your paper size",
     "chapter": "Materials",
-    "say": "A4 is a handy starting size: twenty-one by twenty-nine point seven centimetres. Letter size works too, and you can choose another size you enjoy. Keep a spare piece nearby for practice marks. Put your chosen drawing side facing up.",
+    "say": "Choose paper in size A, four. That is the letter A, followed by four: twenty-one by twenty-nine point seven centimetres. We use sketch paper for its texture. Letter size or another size is fine too. Keep a spare sheet nearby for practice marks.",
     "hint": "A4 · Another size works too",
     "kind": "paperSize",
     "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a173bd23acbf487b452a628_49dc1cbc-f5e2-4aa3-a113-5d89a228a165.png",
@@ -71,7 +107,7 @@
     "uid": "9b335ebd533cbfdab6a608255a1c202c",
     "start": 0,
     "clipEnd": 7.693999999999999,
-    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/thumbnails/thumbnail.jpg?time=6.7&height=720",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9b335ebd533cbfdab6a608255a1c202c/thumbnails/thumbnail.jpg?time=7.2s&height=720",
     "optional": false
   },
   {
@@ -86,7 +122,7 @@
     "uid": "5fee79867ca52d1ec9b26654bb3bc0e5",
     "start": 0,
     "clipEnd": 75.29199999999999,
-    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/thumbnails/thumbnail.jpg?time=74.3&height=720",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/5fee79867ca52d1ec9b26654bb3bc0e5/thumbnails/thumbnail.jpg?time=74.3s&height=720",
     "optional": true
   },
   {
@@ -502,7 +538,7 @@
     "uid": "cf7834125b757d86d0965702c6550202",
     "start": 0,
     "clipEnd": 295.9,
-    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/thumbnails/thumbnail.jpg?time=294.9&height=720",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/cf7834125b757d86d0965702c6550202/thumbnails/thumbnail.jpg?time=294.9s&height=720",
     "optional": false
   },
   {
