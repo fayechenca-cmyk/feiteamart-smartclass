@@ -10,7 +10,7 @@ let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=fa
 const voice=$('voice');
 let soundContext=null;
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({index,unlocked,completed:[...completed]}));}catch{}}
+function save(){GuidedPlatform.save({index,unlocked,completed:[...completed]},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
 function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${completed.has(i)?'done':i===index?'current':''}" title="${s.title}"></span>`).join(''); }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];}
@@ -169,7 +169,7 @@ function enter(){
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();location.href='../?classic=1&from=guided-outline';return;}
+ if(index===flow.length-1){stopVoice();GuidedPlatform.flush().then(()=>{location.href='../?classic=1&from=guided-outline';});return;}
  index++;enter();
 }
 $('next').onclick=next;
@@ -237,12 +237,12 @@ $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 
 (async function init(){
- const allowed=await gateAccess();
+ const allowed=await GuidedPlatform.allow('still-life-1a-star-balloon-structure');
  if(!allowed)return; // redirecting away
  $('welcome').showModal();
- fetch('flow.json?v=1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
+ fetch('flow.json?v=1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
   flow=data;
-  try{const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+  try{const p=await GuidedPlatform.restore('still-life-1a-star-balloon-structure',KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
   $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Start drawing →';
  }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
 })();

@@ -10,7 +10,7 @@ let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=fa
 const voice=$('voice');
 let soundContext=null;
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({index,unlocked,completed:[...completed]}));}catch{}}
+function save(){GuidedPlatform.save({index,unlocked,completed:[...completed]},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
 function progress(){ $('progress').innerHTML=flow.map((s,i)=>`<span class="${completed.has(i)?'done':i===index?'current':''}" title="${s.title}"></span>`).join(''); }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];}
@@ -134,7 +134,7 @@ function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.mu
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();if(practiceOnly){location.href='../../lesson-3-cube/guided/';return;}GuidedPlatform.complete('preparation');window.GuidedReward.complete({lessonId:'preparation',title:'Preparation',nextLabel:'Continue to The Cube →',muted,onMutedChange:setRewardMuted}).then(go=>{if(go)location.href='../../lesson-3-cube/guided/';});return;}
+ if(index===flow.length-1){stopVoice();if(practiceOnly){location.href='../../lesson-3-cube/guided/';return;}GuidedPlatform.complete('preparation');window.GuidedReward.complete({lessonId:'preparation',title:'Preparation',nextLabel:'Continue to The Cube →',muted,onMutedChange:setRewardMuted}).then(async go=>{await GuidedPlatform.flush();if(go)location.href='../../lesson-3-cube/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
@@ -164,14 +164,14 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('preparation'))return; $('welcome').showModal();
-fetch('flow.json?v=hatching-15').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(data=>{
+fetch('flow.json?v=hatching-15').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
  try{
  if(!localStorage.getItem(KEY)&&!practiceOnly){
   const old=JSON.parse(localStorage.getItem('fei.preparation.guided-preview.v1')||'null');
   if(old){const shift=i=>i<12?i:i<18?12:i+9;localStorage.setItem(KEY,JSON.stringify({index:shift(old.index||0),unlocked:shift(old.unlocked||0),completed:(old.completed||[]).filter(i=>i<12||i>=18).map(shift)}));}
  }
- const p=JSON.parse(localStorage.getItem(KEY)||'{}');unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+ const p=await GuidedPlatform.restore('preparation',KEY,flow.length,{isolated:practiceOnly});unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  if(practiceOnly){index=Math.max(12,index);unlocked=Math.max(12,unlocked);$('welcome').querySelector('h2').textContent='One pattern at a time.';$('welcome').querySelector('p').textContent='Watch the teacher. Compare the example. Try it at your pace.';$('welcome').querySelector('img').src=flow[12].frame;}
  $('start').disabled=false;$('start').textContent=practiceOnly?'Start hatching →':index?'Continue your journey →':'Let’s get ready →';
 }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});

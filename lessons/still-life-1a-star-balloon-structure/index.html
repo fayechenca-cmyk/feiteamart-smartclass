@@ -10245,7 +10245,7 @@ if (_existingProfile) {
   // the entire balloon lesson complete at this handoff.
   let guidedOutlineDone = false;
   try {
-    const saved = JSON.parse(localStorage.getItem('fei.balloon.guided-preview.v1') || '{}');
+    const saved = (UserProfile.current()?.completedSteps || {})['guided:fei.balloon.guided-preview.v1'] || {};
     guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(11);
   } catch (_) {}
   if (guidedOutlineDone) {

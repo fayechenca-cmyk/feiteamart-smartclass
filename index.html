@@ -2297,7 +2297,8 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 <script src="core/auth.js"></script>
 <script src="core/onboarding.js?v=11"></script>
 <script src="core/access.js"></script>
-<script src="core/progress.js"></script>
+<script src="core/progress.js?v=durable-1"></script>
+<script src="core/guided-platform.js?v=durable-1"></script>
 <script src="core/badge-catalog.js?v=learning-journey-1"></script>
 <script src="core/course-badge-registry.js?v=learning-journey-1"></script>
 <script src="core/art-learning-profile.js"></script>
@@ -3782,7 +3783,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   // per-browser convenience only, so storage failures are ignored.
   const FS_L2_INTRO_KEY = 'fei_fs_level2_intro_watched';
   function fsLevel2IntroWatched() {
-    try { return localStorage.getItem(FS_L2_INTRO_KEY) === '1'; } catch (e) { return false; }
+    return !!userProfile?.completedSteps?.['foundation:level2-intro']?.includes(0);
   }
   function insertLevel2Intro(container) {
     const divider = [...container.querySelectorAll('.path-group-divider')]
@@ -3805,7 +3806,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       dialog.dataset.wired = '1';
       dialog.addEventListener('close', () => video.pause());
       video.addEventListener('ended', () => {
-        try { localStorage.setItem(FS_L2_INTRO_KEY, '1'); } catch (e) {}
+        if(userProfile){userProfile.completedSteps={...(userProfile.completedSteps||{}),'foundation:level2-intro':[0]};saveProfile(userProfile);FEIProgress.saveFromProfile(userProfile);}
         dialog.close();
         renderDrawingPath();
       });
@@ -3869,7 +3870,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       {n:4,title:'Portrait and Facial Structure',line:'Find the forms and proportions of a face.',badge:'portrait_master',href:'lessons/sketch-branches/?branch=portrait'}
     ];
     const introIdentity=userProfile.supabaseUserId||userProfile.studentCode||userProfile.learnerId;
-    let introDone=!!userProfile.foundationIntroComplete;
+    let introDone=!!userProfile.foundationIntroComplete || !!userProfile.completedSteps?.['foundation:intro']?.includes(0);
     try{if(introIdentity)introDone ||= localStorage.getItem('fei.sketch.intro:'+introIdentity)==='complete'}catch{}
 
     const activeStep = !introDone ? 0 : step1.doneCount < step1.totalCount ? 1 : step2.doneCount < step2.totalCount ? 2 : 3;
@@ -3884,9 +3885,11 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   window.completeFoundationIntro = function(){
     if(!userProfile)return;
     userProfile.foundationIntroComplete=true;
+    userProfile.completedSteps={...(userProfile.completedSteps||{}),'foundation:intro':[0]};
     const identity=userProfile.supabaseUserId||userProfile.studentCode||userProfile.learnerId;
     try{if(identity)localStorage.setItem('fei.sketch.intro:'+identity,'complete')}catch{}
     saveProfile(userProfile);
+    FEIProgress.saveFromProfile(userProfile);
     renderFoundationMap();
   };
   
@@ -3900,7 +3903,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     btn.disabled = input.value.trim().length < 3;
   }
   
-  function attemptSignIn() {
+  async function attemptSignIn() {
     const input = document.getElementById('signin-code');
     const error = document.getElementById('signin-error');
     const code = input.value.trim().toUpperCase();
@@ -3925,7 +3928,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       existing = window._restoreProfileBackup(code);  // code (no @) → looks up backup by code
     }
     
-    const profile = {
+    let profile = {
       id: code,
       studentCode: code,
       name: match.displayName,
@@ -3936,6 +3939,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       currentLesson: existing ? existing.currentLesson : 'cube',
       currentStepIdx: existing ? existing.currentStepIdx : 0,
       completedLessons: existing ? (existing.completedLessons || []) : [],
+      completedSteps: existing ? (existing.completedSteps || {}) : {},
       totalXP: existing ? (existing.totalXP || 0) : 0,
       createdAt: existing ? existing.createdAt : Date.now(),
       lastSeenAt: Date.now()
@@ -3943,7 +3947,10 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     console.log('[Login] Profile created:', JSON.stringify(profile));
 
     console.log('[Login] Saving to localStorage...');
+    profile = await FEIProgress.loadForProfile(profile);
+    profile = await GuidedPlatform.recoverLegacy(profile);
     saveProfile(profile);
+    FEIProgress.saveFromProfile(profile);
     console.log('[Login] sessionStorage saved:', sessionStorage.getItem('fei_user_profile')?.substring(0, 100));
 
     showHome();
@@ -4028,6 +4035,8 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
         }
       } catch (e) { console.warn('[signOut] backup failed', e); }
       
+      if (window.FEIProgress) await FEIProgress.flush();
+
       // 1. Try Supabase signOut (silent if not configured)
       try {
         if (window.FEIAuth && window.FEIAuth._isConfigured()) {
@@ -4227,6 +4236,8 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       catch (e) { return null; }
     })();
     
+    if (existing && existing.supabaseUserId !== user.id && existing.id !== user.id) existing = null;
+
     // ROUND 51a (per Faye): BUG 3 fix — If no existing profile, look for a
     // backup keyed by email (saved in _doSignOut). This restores progress
     // for users who signed out and signed back in with the same email.
@@ -4251,6 +4262,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       currentLesson: existing ? existing.currentLesson : 'cube',
       currentStepIdx: existing ? existing.currentStepIdx : 0,
       completedLessons: existing ? (existing.completedLessons || []) : [],
+      completedSteps: existing ? (existing.completedSteps || {}) : {},
       totalXP: existing ? (existing.totalXP || 0) : 0,
       visitCount: ((existing && existing.visitCount) || 0) + 1,
       createdAt: existing ? existing.createdAt : Date.now(),
@@ -4319,8 +4331,9 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     // tier (membershipType/isLiveClass) so it survives across devices —
     // not just at the moment of payment.
     if (hasStudentCodeSession()) return;
-    profile = progressResult.profile;
+    profile = await GuidedPlatform.recoverLegacy(progressResult.profile);
     saveProfile(profile);
+    FEIProgress.saveFromProfile(profile);
 
     if (accessResult) {
       const status = accessResult.status;
@@ -4503,6 +4516,12 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   // INIT
   // ═══════════════════════════════════════════════════════════
 
+  window.addEventListener('pageshow', async event => {
+    if (!event.persisted) return;
+    loadProfile();
+    if (userProfile) { saveProfile(await FEIProgress.loadForProfile(userProfile)); showHome(); }
+  });
+
   window.FEIStudentDashboard.mount({ getProfile: () => userProfile, getRecord: findStudentRecord });
 
   (async function init() {
@@ -4620,6 +4639,9 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 
     // 2. Fall back to legacy access-code profile
     if (userProfile) {
+      const restored = await FEIProgress.loadForProfile(userProfile);
+      saveProfile(await GuidedPlatform.recoverLegacy(restored));
+      FEIProgress.saveFromProfile(userProfile);
       if (justPaid) {
         // legacy paid path — access-code students already have full access;
         // plan is just recorded locally so isLiveClassStudent() picks it up.

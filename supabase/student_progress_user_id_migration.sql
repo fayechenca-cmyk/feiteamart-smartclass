@@ -28,14 +28,17 @@
 alter table student_progress
   add column if not exists user_id uuid references auth.users(id) on delete cascade;
 
--- Partial unique index (not a plain unique constraint) because most
--- existing rows have user_id = null (legacy student_code rows) — a
--- normal unique constraint would only allow ONE null-user_id row total.
--- This is also what FEIProgress's upsert (Prefer: resolution=merge-
--- duplicates) needs to target via on_conflict=user_id for real accounts.
-create unique index if not exists student_progress_user_id_idx
-  on student_progress (user_id)
-  where user_id is not null;
+-- PostgreSQL's normal unique indexes allow multiple NULLs. A partial
+-- index cannot be inferred by PostgREST's plain on_conflict=user_id.
+-- Use a full unique index if this optional migration is installed.
+create unique index if not exists student_progress_user_id_unique
+  on student_progress (user_id);
+
+-- Oct 17 verification: user_id is NOT present on the deployed table.
+-- core/progress.js therefore saves account progress under a reserved
+-- student_code key auth:<Supabase user UUID>. It also reads user_id rows
+-- when available, preserving data if this migration is installed later.
+-- No migration is required for the current durable-progress release.
 
 -- No new RLS policies needed: student_progress already has permissive
 -- anon read/insert/update policies (the existing student_code flow
