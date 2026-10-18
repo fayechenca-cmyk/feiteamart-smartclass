@@ -65,6 +65,28 @@
 (function (global) {
   'use strict';
 
+  // Oct 2026 — security fix: captured synchronously at script-load time
+  // (document.currentScript is only valid during a script's own top-level
+  // execution, never inside a later async callback), so _loadRoster()
+  // below can resolve core/student-access-codes.js as a sibling of THIS
+  // file regardless of how many '../' the including page needed — no
+  // hardcoded depth assumption, works from index.html, lessons/X/, and
+  // lessons/X/guided/ alike.
+  const _selfScriptUrl = (function () {
+    if (global.document && global.document.currentScript && global.document.currentScript.src) {
+      return global.document.currentScript.src;
+    }
+    // Fallback for the rare case a bundler/loader clears currentScript:
+    // find the <script> tag whose src ends in access.js.
+    try {
+      const scripts = global.document.getElementsByTagName('script');
+      for (let i = 0; i < scripts.length; i++) {
+        if (/\/access\.js(\?|$)/.test(scripts[i].src)) return scripts[i].src;
+      }
+    } catch (e) {}
+    return null;
+  })();
+
   const FREE_SKILLS = ['preparation', 'cube'];
   const FREE_CREATION_LIMIT = 3;
 
@@ -125,15 +147,76 @@
     return global.FEIAuth.getClient();
   }
 
-  function _isLegacyAccessCode() {
-    // Returns true if there's a legacy access-code profile in sessionStorage AND no Supabase session.
-    // fei_user_profile lives in sessionStorage (see index.html saveProfile()) — this used to read
-    // localStorage, a leftover from before that migration, which meant it always returned false.
+  // Oct 2026 — security fix: a profile's studentCode/isAdmin/isLiveClass/
+  // tier used to be trusted verbatim from sessionStorage, with no check
+  // that the code was ever actually issued. index.html's real sign-in
+  // form (attemptSignIn()) already validates against this exact roster
+  // and derives these same flags from the match — but that's a front-door
+  // check only; anything writing straight to sessionStorage (e.g. devtools)
+  // bypassed it entirely, since this file (the actual paywall enforcement
+  // layer) never re-checked. Confirmed live: a made-up studentCode got
+  // full_access to paid Foundation/Zodiac/Ink-Animal content. Fixed by
+  // re-deriving tier here from the SAME roster file, the same way
+  // index.html's StudentRoster/validStudents already does (fetch as text,
+  // regex-parse — core/student-access-codes.js is an ES module export,
+  // not loadable via a plain <script> tag here) — never from the client-
+  // supplied isAdmin/isLiveClass fields. Case-insensitive, matching
+  // attemptSignIn()'s own input.toUpperCase() normalization.
+  let _rosterCache = null;
+  let _rosterPromise = null;
+  async function _loadRoster() {
+    if (_rosterCache) return _rosterCache;
+    if (_rosterPromise) return _rosterPromise;
+    _rosterPromise = (async () => {
+      const map = new Map();
+      try {
+        const rosterUrl = _selfScriptUrl
+          ? new URL('student-access-codes.js', _selfScriptUrl).href
+          : 'core/student-access-codes.js';
+        const res = await fetch(rosterUrl, { cache: 'no-cache' });
+        if (res.ok) {
+          const text = await res.text();
+          const blockRegex = /\{[^{}]*\}/g;
+          let block;
+          while ((block = blockRegex.exec(text)) !== null) {
+            const blockText = block[0];
+            const idMatch = blockText.match(/id\s*:\s*["']([^"']+)["']/);
+            if (!idMatch) continue;
+            const liveClassMatch = blockText.match(/isLiveClass\s*:\s*(true|false)/);
+            const adminMatch = blockText.match(/isAdmin\s*:\s*(true|false)/);
+            map.set(idMatch[1].toUpperCase(), {
+              isLiveClass: liveClassMatch ? liveClassMatch[1] === 'true' : false,
+              isAdmin: adminMatch ? adminMatch[1] === 'true' : false
+            });
+          }
+        } else {
+          console.warn('[FEIAccess] roster fetch failed, HTTP ' + res.status);
+        }
+      } catch (e) {
+        console.warn('[FEIAccess] roster fetch failed', e);
+      }
+      _rosterCache = map; // cache even an empty map — fails closed below, doesn't retry every call
+      return map;
+    })();
+    return _rosterPromise;
+  }
+
+  // Returns true only for a sessionStorage profile whose studentCode is
+  // actually on the roster. Fails closed (false) if the code isn't found
+  // OR if the roster itself couldn't be loaded — an unverifiable code
+  // must never be treated as a paid legacy student, matching
+  // InkAnimalAccess.hasPurchased()'s own "fail closed on a real paywall
+  // check" philosophy, not this file's usual fail-open-on-lookup-error
+  // default (that default is for availability once identity is already
+  // established, not for establishing identity in the first place).
+  async function _isLegacyAccessCode() {
     try {
       const raw = global.sessionStorage.getItem('fei_user_profile');
       if (!raw) return false;
       const p = JSON.parse(raw);
-      return !!(p && p.studentCode && p.tier);
+      if (!(p && p.studentCode && p.tier)) return false;
+      const roster = await _loadRoster();
+      return roster.has(String(p.studentCode).toUpperCase());
     } catch (e) { return false; }
   }
 
@@ -152,16 +235,24 @@
   // isLiveClassStudent() override for Sketch, don't go through this) —
   // this is additive, read directly by course files (e.g. Zodiac) that
   // need the finer distinction.
-  function _legacyProfileFlags() {
+  //
+  // Oct 2026: isLiveClass/isAdmin now come from the roster match, never
+  // from the client-supplied profile fields — see _isLegacyAccessCode()
+  // above. studentCode is normalized to uppercase so it keeps matching
+  // RESTRICTED_LEGACY_CODES/STEP1_ONLY_LEGACY_CODES (both all-caps)
+  // regardless of how the code was typed, same as attemptSignIn() already
+  // normalizes at sign-in time.
+  async function _legacyProfileFlags() {
     try {
       const raw = global.sessionStorage.getItem('fei_user_profile');
       if (!raw) return { isLiveClass: false, isAdmin: false, studentCode: null };
       const p = JSON.parse(raw);
-      return {
-        isLiveClass: !!(p && p.isLiveClass),
-        isAdmin: !!(p && p.isAdmin),
-        studentCode: (p && p.studentCode) || null
-      };
+      if (!(p && p.studentCode)) return { isLiveClass: false, isAdmin: false, studentCode: null };
+      const code = String(p.studentCode).toUpperCase();
+      const roster = await _loadRoster();
+      const match = roster.get(code);
+      if (!match) return { isLiveClass: false, isAdmin: false, studentCode: null };
+      return { isLiveClass: !!match.isLiveClass, isAdmin: !!match.isAdmin, studentCode: code };
     } catch (e) { return { isLiveClass: false, isAdmin: false, studentCode: null }; }
   }
 
@@ -236,8 +327,8 @@
 
   async function getStatus() {
     // Legacy access-code students bypass everything
-    if (_isLegacyAccessCode()) {
-      const flags = _legacyProfileFlags();
+    if (await _isLegacyAccessCode()) {
+      const flags = await _legacyProfileFlags();
       const isRestricted = RESTRICTED_LEGACY_CODES.includes(flags.studentCode);
 
       // Oct 2026: admin-tier codes (FAYE-00, DAWN-16) bypass the
@@ -464,8 +555,8 @@
   // course_purchases row. canOpenLesson's isStep1OnlyLegacy branch above
   // relies on this distinction directly.
   async function getLiveEnrollments() {
-    if (_isLegacyAccessCode()) {
-      const flags = _legacyProfileFlags();
+    if (await _isLegacyAccessCode()) {
+      const flags = await _legacyProfileFlags();
       const key = 'code:' + (flags.studentCode || '');
       if (_liveEnrollmentsCacheKey === key && _liveEnrollmentsCache) return _liveEnrollmentsCache;
       const result = [];
@@ -553,8 +644,8 @@
     _liveEnrollmentsCache = null; // stale after a successful insert below
     _liveEnrollmentsCacheKey = null;
 
-    if (_isLegacyAccessCode()) {
-      const flags = _legacyProfileFlags();
+    if (await _isLegacyAccessCode()) {
+      const flags = await _legacyProfileFlags();
       if (!flags.studentCode) return;
       const sb = _supabase();
       try {
@@ -601,7 +692,7 @@
 
     let row, matchColumn, matchValue;
 
-    if (_isLegacyAccessCode()) {
+    if (await _isLegacyAccessCode()) {
       // Oct 2026: admin-tier codes never hit the Creation cap, so
       // there is nothing to record for them — skip the write (and
       // avoid creating a spurious smartclass_access row for FAYE-00/
@@ -609,7 +700,7 @@
       // meant for cap usage). Every other legacy code now gets a real
       // row, keyed by student_code, same as the Supabase-user path
       // below keys by user_id.
-      const flags = _legacyProfileFlags();
+      const flags = await _legacyProfileFlags();
       if (flags.isAdmin || !flags.studentCode) return;
       row = await _fetchOrCreateRowByCode(flags.studentCode);
       matchColumn = 'student_code';
@@ -647,7 +738,7 @@
   // Stripe success redirect (?plan=X). All three unlock full access the same
   // way; plan is stored as membership_type so isLiveClass can be derived.
   async function markPaid(plan) {
-    if (_isLegacyAccessCode()) return;
+    if (await _isLegacyAccessCode()) return;
     const user = global.FEIAuth ? await global.FEIAuth.getUser() : null;
     if (!user) return;
     const sb = _supabase();
