@@ -24,9 +24,9 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:18817/lessons/still-life-1a
   await page.click('#next');
  }
 
- // Steps 4-10: the 7 Video 1 micro-steps.
+ // Steps 4-11: the 8 Video 1 micro-steps.
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- for(let i=4;i<11;i++){
+ for(let i=4;i<12;i++){
   const step=flow[i];
   await page.waitForFunction(t=>document.getElementById('title').textContent===t,step.title);
   assert.equal(await page.locator('#next').isDisabled(),true,'Cannot continue before video boundary: '+step.title);
@@ -61,11 +61,11 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:18817/lessons/still-life-1a
    await page.click('#mapButton');assert(await page.locator('#map button.map-step').last().isDisabled(),'Future steps stay locked in the map');await page.click('#closeMap');
   }
   await page.click('#next');
-  if(i<10)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
+  if(i<11)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
  }
 
- // Step 11: milestone -- praises effort, becomes the final "preview complete" step.
- await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[11].title);
+ // Step 12: milestone -- praises effort, becomes the final "preview complete" step.
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[12].title);
  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
  await page.click('#next');
  assert.equal(await page.locator('#next').textContent(),'Preview complete ✓');

@@ -10245,8 +10245,12 @@ if (_existingProfile) {
   // the entire balloon lesson complete at this handoff.
   let guidedOutlineDone = false;
   try {
+    // Index 12, not 11: the guided flow gained an 8th draw micro-step
+    // ("Erasing the guide lines") on Oct 2026, shifting the "Outline
+    // complete" milestone from flow.json index 11 to 12 -- see the
+    // overlay-fix commit. Keep this in sync with flow.json's length.
     const saved = (UserProfile.current()?.completedSteps || {})['guided:fei.balloon.guided-preview.v1'] || {};
-    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(11);
+    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(12);
   } catch (_) {}
   if (guidedOutlineDone) {
     state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === 2);

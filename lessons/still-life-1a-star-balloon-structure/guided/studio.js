@@ -153,10 +153,12 @@ function enter(){
  epoch++;clearTimeout(watchdog);stopVoice();player?.pause();
  const s=flow[index];$('clipControls').hidden=true;save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
- // Section 3 layout standard: the finished drawing sits beside the
- // video throughout, constant, no caption -- not a per-moment diagram.
+ // Oct 2026: each step now shows THAT STEP'S result (a clear frame near
+ // its own clip end, picked so the hand doesn't cover the drawing) --
+ // not the single finished drawing. The finished drawing is reserved
+ // for the welcome screen only. Image only, no caption.
  $('reference').hidden=s.kind!=='draw';$('analysis').hidden=true;
- if(s.kind==='draw'){$('referenceImage').src=root+'assets/sketch-support/finals/balloon.jpg';$('referenceImage').alt='Teacher’s finished foil star balloon drawing';}
+ if(s.kind==='draw'){$('referenceImage').src=s.stepResult||s.frame;$('referenceImage').alt='Your teacher’s drawing after this step';}
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
  if(s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';

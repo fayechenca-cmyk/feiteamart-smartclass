@@ -23,7 +23,7 @@ c.phase='waiting';c.player.currentTime=178;vm.runInContext('checkClip()',c);asse
 
 // flow.json media integrity: in-order, no skipped time, every mp3 present and non-trivial.
 const flow=JSON.parse(fs.readFileSync(dir+'flow.json'));
-assert.equal(flow.length,12);
+assert.equal(flow.length,13);
 let lastEnd=0, draws=0;
 for(const s of flow){
  if(s.uid){
@@ -32,11 +32,12 @@ for(const s of flow){
   assert(s.clipEnd>(s.start||0),'clipEnd must be after start: '+s.title);
   lastEnd=s.clipEnd;
   assert(fs.existsSync(dir+s.frame),'checkpoint frame missing: '+s.frame);
+  assert(fs.existsSync(dir+s.stepResult),'step-result reference image missing: '+s.stepResult);
   assert(fs.statSync(dir+s.watchAudio).size>1000,'watch audio missing/too small: '+s.watchAudio);
  }
  if(s.audio) assert(fs.statSync(dir+s.audio).size>1000,'audio missing/too small: '+s.audio);
 }
-assert.equal(draws,7,'Video 1 should have 7 draw micro-steps (6 moments + end checkpoint)');
+assert.equal(draws,8,'Video 1 should have 8 draw micro-steps (7 moments + end checkpoint)');
 assert.equal(Math.round(lastEnd*100),38646,'last draw step must reach the full 386.46s video duration');
 
 // Same no-native-controls convention as Cube.
@@ -46,4 +47,4 @@ assert(source.includes('controls=false'));assert(!source.includes('controls=true
 assert(source.includes("canOpenLesson('skills',LESSON_ID)"),'must gate with the real entitlement check');
 assert(source.includes("LESSON_ID = 'still-life-1a-star-balloon-structure'"));
 
-console.log('PASS: out-of-step seek/ended cannot bypass a checkpoint; watch-narration starts once; 12-stage flow (7 Video-1 draws, contiguous 0-386.46s) and access gate verified.');
+console.log('PASS: out-of-step seek/ended cannot bypass a checkpoint; watch-narration starts once; 13-stage flow (8 Video-1 draws, contiguous 0-386.46s) and access gate verified.');
