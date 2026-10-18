@@ -2532,6 +2532,30 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
       showMaterialArtsCourses();
       return;
     }
+    // Oct 2026: a lesson page's own gate (e.g. the balloon guided
+    // preview's gateAccess()) can send a signed-out visitor here with
+    // ?signin=required&returnTo=<path relative to index.html, no
+    // leading slash>, so sign-in sends them back to where they started
+    // instead of stranding them on the dashboard. The relative form
+    // (not an absolute location.pathname) is deliberate: it resolves
+    // against index.html's own directory, i.e. the real site root,
+    // without this code needing to know the deploy base (GitHub Pages'
+    // /feiteamart-smartclass/ prefix included). Scoped to THIS one
+    // param only -- intentionally not a platform-wide "last page"
+    // redirect system. Same-site check: reject a leading "/" (rules
+    // out an absolute path AND a protocol-relative "//host/..." in one
+    // check) and reject any ":" (rules out javascript:/http(s): etc.)
+    // -- what's left can only resolve to a same-origin relative path.
+    const returnToParam = new URLSearchParams(location.search).get("returnTo");
+    if (returnToParam && !returnToParam.startsWith("/") && !returnToParam.includes(":")) {
+      const returnUrl = new URL(location.href);
+      returnUrl.searchParams.delete("returnTo");
+      returnUrl.searchParams.delete("signin");
+      returnUrl.searchParams.delete("from");
+      history.replaceState(null, "", returnUrl.pathname + returnUrl.search + returnUrl.hash);
+      location.href = returnToParam;
+      return;
+    }
     window.scrollTo(0, 0);
   }
   window.showHome = showHome;

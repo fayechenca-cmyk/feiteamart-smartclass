@@ -215,7 +215,17 @@ async function gateAccess(){
    const check=await window.FEIAccess.canOpenLesson('skills',LESSON_ID);
    if(check.allowed)return true;
    const home=root;
-   if(check.reason==='not_signed_in'){location.href=home+'?signin=required&from='+encodeURIComponent('skills:'+LESSON_ID);}
+   if(check.reason==='not_signed_in'){
+    // returnTo is a path RELATIVE to index.html's own location (no
+    // leading slash) -- not an absolute location.pathname -- so it
+    // resolves correctly under any deploy base without index.html
+    // needing to know what that base is (GitHub Pages' repo-name
+    // prefix included). The browser resolves this relative URL against
+    // index.html's own directory, i.e. the site root, the same way
+    // `root` above resolves this page's path back up to home.
+    const returnTo=encodeURIComponent('lessons/'+LESSON_ID+'/guided/');
+    location.href=home+'?signin=required&from='+encodeURIComponent('skills:'+LESSON_ID)+'&returnTo='+returnTo;
+   }
    else{location.href=home+'?paywall=skills&lesson='+encodeURIComponent(LESSON_ID);}
    return false;
   }
