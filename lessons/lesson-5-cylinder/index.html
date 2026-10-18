@@ -3466,6 +3466,16 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
   .members-lock-icon-large { font-size: 50px; }
 }
 </style>
+<!-- Login-fix-era note (Oct 2026): this Step 1 lesson had no page-level
+     entitlement gate at all (only the in-page, never-wired-to-real-auth
+     AccessControl preview/unlocked UI-feature flag below, which never
+     blocks page load -- see the Step 1 gate-fix commit message). Add
+     the real gate: core/auth.js + core/access.js, then
+     FEIAccess.gateLessonPage('skills', LESSON_SKILL_ID) wraps the
+     existing start-up call below, same pattern already used by the
+     Step 2 lessons. -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
 <script src="../../core/foundation-a-path.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
@@ -11182,15 +11192,34 @@ if (_existingProfile) {
   }
 }
 
-renderStep();
-resetSleep();
+// Oct 2026: self-gates with the real Foundation of Sketch entitlement
+// check (FEIAccess.gateLessonPage('skills', 'cylinder')), the same
+// primitive the dashboard's own click-time guard already uses before
+// a student ever reaches this page. This redirects away before
+// anything below runs if the student is not entitled. Fails open (lets
+// the student through) if the check itself errors, matching
+// gateLessonPage's own documented philosophy -- better to let one
+// extra visitor through than break a paid student's flow on a bug.
+(async function gateThenStart() {
+  if (window.FEIAccess && typeof window.FEIAccess.gateLessonPage === 'function') {
+    try {
+      const ok = await window.FEIAccess.gateLessonPage('skills', 'cylinder');
+      if (!ok) return; // redirecting away
+    } catch (e) {
+      console.warn('[gateThenStart] gate check failed, allowing through', e);
+    }
+  }
 
-// Load student roster early, then show Welcome Page (handles both new + returning visitor cases)
-StudentRoster.load().finally(() => {
-  setTimeout(() => {
-    showWelcomePage();
-  }, 200);
-});
+  renderStep();
+  resetSleep();
+
+  // Load student roster early, then show Welcome Page (handles both new + returning visitor cases)
+  StudentRoster.load().finally(() => {
+    setTimeout(() => {
+      showWelcomePage();
+    }, 200);
+  });
+})();
 
 
 // ═══════════════════════════════════════════════════════════════
