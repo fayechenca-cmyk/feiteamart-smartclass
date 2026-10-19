@@ -31,7 +31,7 @@
    // Stable id makes retry safe if the server saved the row but the response was lost.
    const rows=await request('/rest/v1/student_submissions?on_conflict=id',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'resolution=ignore-duplicates,return=representation'},body:JSON.stringify({
     id:draft.id,student_code:profile.studentCode||null,user_name:profile.name||null,user_email:profile.email||null,
-    ...(profile.supabaseUserId?{user_id:profile.supabaseUserId}:{}),course_id:'foundation-a',lesson_id:options.lessonId,lesson_title:options.title,image_url:draft.imageUrl,status:'submitted'
+    ...(profile.supabaseUserId?{user_id:profile.supabaseUserId}:{}),course_id:options.courseId||'foundation-a',lesson_id:options.lessonId,lesson_title:options.title,image_url:draft.imageUrl,status:'submitted'
    })});
    draft.record=rows?.[0]||{id:draft.id};
   }

@@ -5,18 +5,39 @@ const KEY='fei.guided.course-rewards.v1';let memory=[],context=null,active=null;
 function ids(){return (window.FOUNDATION_A_PATH||[]).map(x=>x.id);}
 function read(){try{const p=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null');return (p?.completedLessons||[]).filter(x=>ids().includes(x));}catch{return [];}}
 function record(id){const after=[...new Set(read())],added=window.GuidedPlatform?.justCompleted===id;if(added)window.GuidedPlatform.justCompleted=null;return {before:Math.max(0,after.length-(added?1:0)),after:after.length,total:ids().length||11,added};}
+// Alternate counting path for a course outside FOUNDATION_A_PATH (e.g. Still
+// Life): `groups` is an array of lesson-id arrays, one per course "unit" --
+// a unit counts as done only once every id in its own group is completed
+// (lets a multi-lesson unit like Pillow count as one of five, not two).
+// Used only when options.progressGroups is passed; every existing caller
+// (Preparation/Cube/Sphere/Cylinder/Cone/Intersecting) never passes it and
+// is unaffected.
+function recordGroups(id,groups){
+ let completed=[];try{completed=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null')?.completedLessons||[];}catch{}
+ const after=groups.filter(g=>g.every(x=>completed.includes(x))).length,added=window.GuidedPlatform?.justCompleted===id;
+ if(added)window.GuidedPlatform.justCompleted=null;
+ return {before:Math.max(0,after-(added?1:0)),after,total:groups.length,added};
+}
 function fanfare(muted){if(muted)return null;try{context ||= new (window.AudioContext||window.webkitAudioContext)();context.resume();const master=context.createGain();master.gain.value=.18;master.connect(context.destination);const base=context.currentTime;
 [[523.25,0,.16],[659.25,.18,.16],[783.99,.36,.18],[1046.5,.58,.75],[659.25,.58,.75],[783.99,.58,.75]].forEach(([hz,delay,duration])=>{const o=context.createOscillator(),g=context.createGain(),t=base+delay;o.type='triangle';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.35,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+duration);o.connect(g).connect(master);o.start(t);o.stop(t+duration+.03);});return master;}catch{return null;}}
 window.GuidedReward={record,read,complete(options){
  if(active)return active;
- const state=options.preview?{before:0,after:1,total:ids().length||11,added:true}:record(options.lessonId),badge=(window.BADGE_CATALOG||[]).find(x=>x.id==='basic_sketch');
+ const groups=options.progressGroups;
+ const state=options.preview?{before:0,after:1,total:(groups?groups.length:ids().length)||11,added:true}:(groups?recordGroups(options.lessonId,groups):record(options.lessonId));
+ const badge=(window.BADGE_CATALOG||[]).find(x=>x.id===(options.badgeId||'basic_sketch'));
+ const courseLabel=options.courseLabel||'Form & Structure';
+ // No badge artwork yet (e.g. Still Life's `still_life` badge) -- fall back
+ // to its catalog emoji instead of an empty/broken <img>, same medal circles.
+ const medalMarkup=badge?.imgUrl
+  ?`<div class="medal-base"><img alt="" src="${badge.imgUrl}"></div><div class="medal-color"><img alt="${badge.title} badge artwork${badge.artist?' '+badge.artist.replace(/^Des\./,'designed'):''}" src="${badge.imgUrl}"></div>`
+  :`<div class="medal-base medal-emoji" aria-hidden="true">${badge?.emoji||'✦'}</div><div class="medal-color medal-emoji" aria-hidden="true">${badge?.emoji||'✦'}</div>`;
  let muted=!!options.muted,sound=null;
  const dialog=document.createElement('dialog');dialog.className='guided-reward';dialog.setAttribute('aria-labelledby','rewardTitle');
- dialog.innerHTML=`<div class="reward-sparkles" aria-hidden="true"><svg viewBox="0 0 100 100">${Array.from({length:20},(_,i)=>{const a=(i*18-90)*Math.PI/180;return `<circle cx="${50+40*Math.cos(a)}" cy="${50+40*Math.sin(a)}" r="3" style="--dot:${i}"/>`;}).join('')}</svg></div><small>ONE MORE STEP ON YOUR JOURNEY</small><h2 id="rewardTitle"></h2><div class="reward-artchi"><img class="reward-character" src="../../../core/dashboard-artchi.svg" alt="Artchi holding your growing sketch medal"><div class="reward-medal"><div class="medal-base"><img alt="" src="${badge?.imgUrl||''}"></div><div class="medal-color"><img alt="Basic Sketch badge artwork by Alex" src="${badge?.imgUrl||''}"></div><i class="medal-hand left"></i><i class="medal-hand right"></i></div></div><p class="reward-message"></p><div class="reward-segments" aria-label="Course journey progress"></div><p class="reward-count" aria-live="polite"></p><button class="reward-continue primary"></button><button class="reward-sound"></button><small class="reward-local">Your account’s learning journey</small>`;
+ dialog.innerHTML=`<div class="reward-sparkles" aria-hidden="true"><svg viewBox="0 0 100 100">${Array.from({length:20},(_,i)=>{const a=(i*18-90)*Math.PI/180;return `<circle cx="${50+40*Math.cos(a)}" cy="${50+40*Math.sin(a)}" r="3" style="--dot:${i}"/>`;}).join('')}</svg></div><small>ONE MORE STEP ON YOUR JOURNEY</small><h2 id="rewardTitle"></h2><div class="reward-artchi"><img class="reward-character" src="../../../core/dashboard-artchi.svg" alt="Artchi holding your growing sketch medal"><div class="reward-medal">${medalMarkup}<i class="medal-hand left"></i><i class="medal-hand right"></i></div></div><p class="reward-message"></p><div class="reward-segments" aria-label="Course journey progress"></div><p class="reward-count" aria-live="polite"></p><button class="reward-continue primary"></button><button class="reward-sound"></button><small class="reward-local">Your account’s learning journey</small>`;
  if(options.preview)dialog.querySelector('.reward-local').textContent='Animation preview · no progress saved';
  dialog.querySelector('h2').textContent=options.title+' complete!';
  dialog.querySelector('.reward-message').textContent=state.added?'You kept going. A little more colour is yours.':'Your colour is already saved. Lovely to see you practise again.';
- dialog.querySelector('.reward-count').textContent=`${state.after} / ${state.total} lessons · Form & Structure`;
+ dialog.querySelector('.reward-count').textContent=`${state.after} / ${state.total} lessons · ${courseLabel}`;
  dialog.querySelector('.reward-segments').innerHTML=Array.from({length:state.total},(_,i)=>`<span class="${i<state.before?'lit':i<state.after?'new':''}"></span>`).join('');
  const color=dialog.querySelector('.medal-color');color.style.clipPath=`inset(${100-state.before/state.total*100}% 0 0)`;
  const next=dialog.querySelector('.reward-continue');next.textContent=options.nextLabel||'Continue →';
