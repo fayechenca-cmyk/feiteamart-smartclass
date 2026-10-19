@@ -23,7 +23,7 @@ c.phase='waiting';c.player.currentTime=178;vm.runInContext('checkClip()',c);asse
 
 // flow.json media integrity: in-order per video, no skipped time, every mp3 present and non-trivial.
 const flow=JSON.parse(fs.readFileSync(dir+'flow.json'));
-assert.equal(flow.length,32);
+assert.equal(flow.length,36);
 const lastEndByUid={}, drawsByUid={};
 let draws=0;
 for(const s of flow){
@@ -36,17 +36,28 @@ for(const s of flow){
   lastEndByUid[s.uid]=s.clipEnd;
   assert(fs.existsSync(dir+s.frame),'checkpoint frame missing: '+s.frame);
   assert(fs.existsSync(dir+s.stepResult),'step-result reference image missing: '+s.stepResult);
-  assert(fs.statSync(dir+s.watchAudio).size>1000,'watch audio missing/too small: '+s.watchAudio);
  }
+ // watchAudio can appear on a non-draw scene too (e.g. Video 4's "compare" step,
+ // which has no clip to watch but still separates a noticing-phase from the ask).
+ if(s.watchAudio) assert(fs.statSync(dir+s.watchAudio).size>1000,'watch audio missing/too small: '+s.watchAudio);
  if(s.audio) assert(fs.statSync(dir+s.audio).size>1000,'audio missing/too small: '+s.audio);
 }
-assert.equal(draws,25,'Video 1 (8) + Video 2 (7) + Video 3 (10) draw micro-steps');
+assert.equal(draws,27,'Video 1 (8) + Video 2 (7) + Video 3 (10) + Video 4 (2) draw micro-steps');
 assert.equal(drawsByUid['6bb909b0169fb6e58f666c8e2abb6ad2'],8,'Video 1 should have 8 draw micro-steps (7 moments + end checkpoint)');
 assert.equal(drawsByUid['62c44412628bc716886ffcef6c89af2c'],7,'Video 2 should have 7 draw micro-steps (6 moments + end checkpoint)');
 assert.equal(drawsByUid['f89c61f01b4a82b84da097d32fc8c2df'],10,'Video 3 should have 10 draw micro-steps (9 moments + end checkpoint)');
+assert.equal(drawsByUid['262207c274235c4eb3e73df8ece30a92'],2,'Video 4 should have 2 draw micro-steps (short video, no cadence check-ins needed)');
 assert.equal(Math.round(lastEndByUid['6bb909b0169fb6e58f666c8e2abb6ad2']*100),38646,'Video 1 must reach its full 386.46s duration');
 assert.equal(Math.round(lastEndByUid['62c44412628bc716886ffcef6c89af2c']*100),38167,'Video 2 must reach its full 381.67s duration');
 assert.equal(Math.round(lastEndByUid['f89c61f01b4a82b84da097d32fc8c2df']*100),70703,'Video 3 must reach its full 707.03s duration');
+assert.equal(Math.round(lastEndByUid['262207c274235c4eb3e73df8ece30a92']*100),2618,'Video 4 must reach its full 26.18s duration');
+
+// Video 4's "compare" step is a new non-video scene kind: no uid/clip, but it
+// does carry its own compare.before/compare.after images, which must exist.
+const compareStep=flow.find(s=>s.kind==='compare');
+assert(compareStep,'expected a compare-kind step for Video 4\'s before/after');
+assert(fs.existsSync(dir+compareStep.compare.before),'compare "before" image missing');
+assert(fs.existsSync(dir+compareStep.compare.after),'compare "after" image missing');
 
 // Same no-native-controls convention as Cube.
 assert(source.includes('controls=false'));assert(!source.includes('controls=true'));
@@ -55,4 +66,4 @@ assert(source.includes('controls=false'));assert(!source.includes('controls=true
 assert(source.includes("canOpenLesson('skills',LESSON_ID)"),'must gate with the real entitlement check');
 assert(source.includes("LESSON_ID = 'still-life-1a-star-balloon-structure'"));
 
-console.log('PASS: out-of-step seek/ended cannot bypass a checkpoint; watch-narration starts once; 32-stage flow (8 Video-1 + 7 Video-2 + 10 Video-3 draws, each contiguous across its own duration) and access gate verified.');
+console.log('PASS: out-of-step seek/ended cannot bypass a checkpoint; watch-narration starts once; 36-stage flow (8 Video-1 + 7 Video-2 + 10 Video-3 + 2 Video-4 draws, each contiguous across its own duration, plus Video 4\'s compare step) and access gate verified.');

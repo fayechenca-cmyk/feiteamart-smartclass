@@ -87,6 +87,8 @@ function buildScene(s){
  }else if(s.kind==='materials'){
   const rect=s.focus==='pencils'?'x="75" y="24" width="750" height="940"':'x="855" y="25" width="640" height="785"';
   $('visual').innerHTML=`<div class="scene material"><svg viewBox="0 0 1536 1024" role="img" aria-label="Six labelled pencils, two paper blending stumps, and sketch paper"><image href="${root}assets/sketch-support/toolkit/drawing-tools.png" width="1536" height="1024"/><rect ${rect} rx="24" fill="none" stroke="#dcaa49" stroke-width="7" class="tool-glow"/></svg></div>`;
+ }else if(s.kind==='compare'){
+  $('visual').innerHTML=`<div class="compare-scene"><figure><img src="${s.compare.before}" alt="The drawing before blending"><figcaption>BEFORE</figcaption></figure><figure><img src="${s.compare.after}" alt="The drawing after blending"><figcaption>AFTER</figcaption></figure></div>`;
  }else if(s.kind==='paper'){
   $('visual').innerHTML=`<div class="scene real-paper-scene"><div class="paper-photo-grid"><figure class="paper-context"><img src="paper/sketch-pad.webp" alt="An open sketch-paper pad with pencils on its real paper sheets"><figcaption>Sketch paper</figcaption></figure><button class="paper-photo" data-paper="textured" aria-label="Enlarge textured sketch paper photograph"><img src="paper/textured.webp" alt="Close-up photograph of the tooth on cotton sketch paper"><strong>More texture</strong><span>Notice the tiny bumps</span></button><button class="paper-photo" data-paper="smooth" aria-label="Enlarge smoother drawing paper photograph"><img src="paper/smooth.webp" alt="Close-up photograph of a pencil resting on fine-grained, smoother drawing paper"><strong>Smoother surface</strong><span>A finer grain</span></button></div><div class="paper-photo-credit">Two paper samples · Feel both sides of your own sheet.<br><a href="https://www.hahnemuehle.shop/the-collection-sketch/10625161" target="_blank" rel="noopener">Photos: Hahnemühle — Sketch</a> · <a href="https://www.hahnemuehle.shop/en/dessin/10628192" target="_blank" rel="noopener">Dessin</a></div></div>`;
   document.querySelectorAll('[data-paper]').forEach(button=>button.onclick=()=>{voice.pause();const img=$('diagram').querySelector('img');img.src='paper/'+button.dataset.paper+'.webp';img.alt=button.querySelector('img').alt;$('diagram').showModal();});
@@ -165,7 +167,12 @@ function enter(){
   createPlayer(s);
  }else{
   phase='guidance';buildScene(s);window.GuidedUX?.scene(s);
-  speak(s,()=>{waiting();});
+  // A non-video scene can still have a two-phase narration (watchAudio
+  // first, then the usual audio/say) -- e.g. the before/after compare
+  // scene, which has no clip to "watch" but still separates what the
+  // student notices from what they're asked to do next.
+  if(s.watchAudio)speak({audio:s.watchAudio,say:s.watchSay},()=>{speak(s,()=>{waiting();});});
+  else speak(s,()=>{waiting();});
  }
 }
 function next(){

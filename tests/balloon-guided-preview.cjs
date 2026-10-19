@@ -53,9 +53,10 @@ function mockSupabase(page){
  }
 
  // Steps 4-11: the 8 Video 1 micro-steps, 13-19: the 7 Video 2 micro-steps,
- // 21-30: the 10 Video 3 micro-steps -- same checkpoint mechanics for all three.
+ // 21-30: the 10 Video 3 micro-steps, 32-33: the 2 Video 4 micro-steps --
+ // same checkpoint mechanics for all four.
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- const ranges=[[4,12],[13,20],[21,31]];
+ const ranges=[[4,12],[13,20],[21,31],[32,34]];
  for(const [lo,hi] of ranges){
  for(let i=lo;i<hi;i++){
   const step=flow[i];
@@ -96,8 +97,8 @@ function mockSupabase(page){
    // -- every step is reachable, not just unlocked ones -- so nothing here is disabled.
    await page.click('#mapButton');assert.equal(await page.locator('#map button.map-step').last().isDisabled(),false,'Journey map should let the student jump anywhere');await page.click('#closeMap');
   }
-  if(i===13||i===21){
-   const tag=i===13?'v2':'v3';
+  if(i===13||i===21||i===32){
+   const tag=i===13?'v2':i===21?'v3':'v4';
    for(const [w,h,label] of [[1440,900,`desktop-${tag}`],[1024,768,`ipad-${tag}`]]){
     await page.setViewportSize({width:w,height:h});await page.screenshot({path:`/tmp/balloon-guided-${label}.png`});
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No horizontal overflow at '+label);
@@ -109,17 +110,44 @@ function mockSupabase(page){
  }
  // Each video's own milestone (index === hi) continues into the next video
  // unless it's the true final step (the last range's milestone, flow.length-1).
- const isFinalMilestone=hi===flow.length-1;
- await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[hi].title);
+ // Video 4's range ends on its "compare" step instead (index 34, handled
+ // separately below, since it isn't a milestone and has no clip to resume).
+ if(flow[hi].kind==='milestone'){
+  const isFinalMilestone=hi===flow.length-1;
+  await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[hi].title);
+  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
+  if(isFinalMilestone){
+   assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
+  }else{
+   assert.notEqual(await page.locator('#next').textContent(),'Continue to tone →','A non-final video milestone must not look like the final step: '+flow[hi].title);
+  }
+  await page.click('#next');
+  if(!isFinalMilestone)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
+ }
+ }
+
+ // Step 34: Video 4's "Before and after" compare step -- no clip, but a
+ // two-phase narration (watchAudio first, then the usual audio/say), and a
+ // before/after image pair instead of the live SVG overlay.
+ const compareStep=flow[34];
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,compareStep.title);
+ assert.equal(await page.locator('#next').isDisabled(),true,'Cannot continue before the compare narration ends');
+ let compareSrc=await page.locator('#voice').getAttribute('src');
+ assert.equal(noQuery(compareSrc),compareStep.watchAudio,'Compare watch-narration audio mismatch');
  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
- if(isFinalMilestone){
-  assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
- }else{
-  assert.notEqual(await page.locator('#next').textContent(),'Continue to tone →','A non-final video milestone must not look like the final step: '+flow[hi].title);
- }
+ assert.equal(await page.locator('#next').isDisabled(),true,'Should still wait for the second (try) narration phase');
+ compareSrc=await page.locator('#voice').getAttribute('src');
+ assert.equal(noQuery(compareSrc),compareStep.audio,'Compare try-prompt audio mismatch');
+ await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
+ assert.equal(await page.locator('#next').isEnabled(),true);
+ assert.equal(await page.locator('.compare-scene figure').count(),2,'Expected two before/after images in the compare scene');
  await page.click('#next');
- if(!isFinalMilestone)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- }
+
+ // Step 35: Video 4's own milestone -- now the final "preview complete" step.
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[35].title);
+ await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
+ assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
+ await page.click('#next');
  // Oct 2026: progress now lives in the account profile (sessionStorage +
  // GuidedPlatform), not the old bare localStorage key -- that key reads
  // null today (see the mock-fetch cleanup commit).

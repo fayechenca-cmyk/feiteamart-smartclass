@@ -63,5 +63,12 @@ dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{c
 /* Tissue intro -- a small hand-drawn icon (no icon library, nothing to
    license), shown once before Video 4 is reached. */
 .tissue-scene svg{width:min(46%,260px)}
+
+/* Before/after compare scene (Video 4's wrap-up, no clip playing) --
+   the same drawing's two states side by side, each labelled. */
+.compare-scene{position:absolute;inset:0;display:flex;gap:10px;padding:14px}
+.compare-scene figure{flex:1;min-width:0;margin:0;position:relative;display:flex}
+.compare-scene img{width:100%;height:100%;object-fit:contain;border-radius:10px}
+.compare-scene figcaption{position:absolute;top:10px;left:10px;background:#ffffffee;color:#273044;font:bold 13px Arial,sans-serif;letter-spacing:.08em;padding:4px 11px;border-radius:8px}
 @media(prefers-reduced-motion:reduce){.og-draw,.og-fade,.og-pulse{animation:none!important;opacity:1!important}}
-@media(max-width:700px){.encouragement>img{width:90px;height:90px}.og-title{font-size:16px}.og-sub{font-size:13px}.og-kicker{font-size:12px}}
+@media(max-width:700px){.encouragement>img{width:90px;height:90px}.og-title{font-size:16px}.og-sub{font-size:13px}.og-kicker{font-size:12px}.compare-scene{flex-direction:column;gap:6px;padding:8px}}

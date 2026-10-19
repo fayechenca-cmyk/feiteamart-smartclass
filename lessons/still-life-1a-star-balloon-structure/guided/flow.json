@@ -836,5 +836,99 @@
     "hint": "Tone is built across the whole form \u2014 next, we blend it smooth with a tissue.",
     "say": "Tone is built across the whole star, with every highlight protected. That's real patience. Next, we blend it smooth with a tissue.",
     "audio": "audio/s97-video3-milestone.mp3"
+  },
+  {
+    "chapter": "Blending with a Tissue",
+    "title": "A clean corner, light pressure",
+    "kind": "draw",
+    "uid": "262207c274235c4eb3e73df8ece30a92",
+    "start": 0,
+    "clipEnd": 14,
+    "frame": "frames/v4-14s.jpg",
+    "watchAudio": "audio/v4-01-watch.mp3",
+    "watchSay": "The teacher folds the tissue to a clean corner, and blends along the form \u2014 never in circles \u2014 with a light touch.",
+    "audio": "audio/v4-01-try.mp3",
+    "say": "Fold your tissue to a clean corner and blend one area along the form. Light pressure. Take your time.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 687,
+          "cy": 363,
+          "rx": 60,
+          "ry": 47,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M820 440 Q760 410 715 385"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 01",
+        "title": "A clean corner, light pressure",
+        "sub": "Blend along the form, not in circles."
+      }
+    },
+    "stepResult": "frames/v4-14s-ref.jpg"
+  },
+  {
+    "chapter": "Blending with a Tissue",
+    "title": "Keep the highlight clean",
+    "kind": "draw",
+    "uid": "262207c274235c4eb3e73df8ece30a92",
+    "start": 14,
+    "clipEnd": 26.18,
+    "frame": "frames/v4-end.jpg",
+    "watchAudio": "audio/v4-02-watch.mp3",
+    "watchSay": "Close to the highlight \u2014 but never across it. Then the next area.",
+    "audio": "audio/v4-02-try.mp3",
+    "say": "Blend each area the same way, right up to the highlight, never over it. Do the whole star. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 567,
+          "cy": 417,
+          "rx": 63,
+          "ry": 37,
+          "ellipse": true
+        },
+        {
+          "cx": 687,
+          "cy": 363,
+          "rx": 60,
+          "ry": 47,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M700 470 Q630 450 580 430"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 02",
+        "title": "Keep the highlight clean",
+        "sub": "Every highlight stays protected, area by area."
+      }
+    },
+    "stepResult": "frames/v4-end-ref.jpg"
+  },
+  {
+    "chapter": "Blending with a Tissue",
+    "title": "Before and after",
+    "kind": "compare",
+    "watchAudio": "audio/v4-03-watch.mp3",
+    "watchSay": "Softer \u2014 but the contrast is still there. Smooth, not flat.",
+    "audio": "audio/v4-03-try.mp3",
+    "say": "Compare your drawing with before. If a highlight turned grey, press a kneaded eraser on it gently to lift it back. Tap Continue when you're ready.",
+    "compare": {
+      "before": "frames/v4-before.jpg",
+      "after": "frames/v4-after.jpg"
+    }
+  },
+  {
+    "chapter": "Blending with a Tissue",
+    "title": "Blending complete",
+    "kind": "milestone",
+    "hint": "Your tone is smooth, and the contrast is still there \u2014 next, we add the darkest details.",
+    "say": "Your tone is smooth, and the contrast is still there. That's the balance foil needs. Next, we add the darkest details.",
+    "audio": "audio/s96-video4-milestone.mp3"
   }
 ]

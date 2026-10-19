@@ -167,25 +167,33 @@ Built as 9 watch moments + 1 end-of-video Try, following the explicit
 the usual 7-ish — the brief's own allowance for this outlier-length
 video.
 
-## Video 4 — Blending with a Tissue (26.18 s) — fully reviewed
+## Video 4 — Blending with a Tissue (26.18 s) — fully aligned, built in commit 4
 
-Short and unambiguous. f0001 (0 s) already shows a small folded white
-tissue between thumb and fingers, rubbing the shaded point directly along
-the form (not in circles); by f0009 (24 s, last frame) the same area reads
-noticeably softer, with the paper-white highlight patch still visibly
-protected next to the darkest rubbed value — exactly the "bright highlight
-next to dark reflection, crisp edge" foil language from the brief.
+Re-confirmed at 1080p, second-by-second: a small folded white tissue
+appears from 0s, held between thumb and fingers. It is not idle in one
+spot — it moves across three distinct areas within the 26.18s (right-
+center facet through ~14s, lower-left facet ~14-20s, the stick/neck
+~20-26s), always blending along the form, never in circles, and in
+every case staying right up to the edge of a protected highlight
+without ever crossing into it. The true first frame (0s) and true last
+frame (26.18s) are both hand-clear — comparing them directly: the tone
+reads noticeably softer, but the dark-to-light jump beside each
+highlight is still clearly there, not flattened. Confirms the central
+teaching idea directly: blend within each dark patch, never across a
+highlight; after blending, the contrast must still be there.
 
-- 0–~8 s: tissue appears, folded to a small clean corner, first blend
-  strokes (must-have moment)
-- ~8–18 s: continues along the form, light pressure
-- ~18–26.18 s: before/after is visible by comparing the first and last
-  frame directly (no separate "before" video segment exists — the
-  before/after comparison moment will pair frame 1 against the final
-  frame, per the brief's "two frames side by side")
+Shares Video 3's exact camera framing (pixel-confirmed: the top point
+lands at the same coordinates in both videos' footage), so Video 3's
+measured star polygon and highlight-ellipse coordinates carry over
+directly — no re-measuring needed this time.
 
-Only video short enough that 2 watch moments + end Try fully covers it;
-no risk of an empty-feeling commit 4.
+Built as 2 draw micro-steps (0–14s, 14–26.18s) + a new non-video
+"compare" step (true first frame vs. true last frame, labelled
+Before/After, no clip attached) + milestone. Confirmed each watchSay's
+actual generated audio duration is shorter than its clip window before
+building (7.0s and 4.0s against 14s and 12.18s windows), so the teacher
+clip is never cut off mid-narration. Only video short enough that 2
+watch moments + the compare step + end Try fully covers it.
 
 ## Video 5 — Painting the Details (994.82 s) — first-pass reading, to confirm when building commit 5
 
