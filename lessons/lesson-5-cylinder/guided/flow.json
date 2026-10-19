@@ -1,0 +1,1629 @@
+[
+  {
+    "id": "welcome",
+    "title": "Meet the cylinder",
+    "chapter": "Welcome",
+    "kind": "intro",
+    "src": "../intro/meet-the-cylinder.mp4",
+    "start": 0,
+    "clipEnd": 83.193,
+    "say": "",
+    "hint": "Flat top · Curved side · One solid form"
+  },
+  {
+    "id": "tools",
+    "title": "Your tools, ready to go",
+    "chapter": "Get ready",
+    "say": "Welcome back! Keep your pencils beside you: 2H or HB for light construction, then 2B and 3B for deeper tones. Have your tissue and eraser nearby. Set out your sketch paper, with the texture you prefer facing up. The same tools you used for the cube and sphere will work here.",
+    "hint": "Pencils · Tissue · Eraser · Sketch paper",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/tools.mp3",
+    "materialScene": true,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Welcome back Keep your pencils beside you 2H or"
+      },
+      {
+        "time": 4.252,
+        "text": "HB for light construction then 2B and 3B for"
+      },
+      {
+        "time": 7.647,
+        "text": "deeper tones Have your tissue and eraser nearby Set"
+      },
+      {
+        "time": 11.52,
+        "text": "out your sketch paper with the texture you prefer"
+      },
+      {
+        "time": 14.02,
+        "text": "facing up The same tools you used for the"
+      },
+      {
+        "time": 16.36,
+        "text": "cube and sphere will work here"
+      }
+    ],
+    "cues": [
+      {
+        "time": 1.593,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 9.118,
+        "tool": "tissue",
+        "label": "tissue"
+      },
+      {
+        "time": 9.988,
+        "tool": "eraser",
+        "label": "eraser"
+      },
+      {
+        "time": 12.12,
+        "tool": "paper",
+        "label": "paper"
+      }
+    ]
+  },
+  {
+    "id": "ready",
+    "title": "A little space for your cylinder",
+    "chapter": "Get ready",
+    "say": "Relax your shoulders and leave a comfortable margin on your page. Today we will build the frame, shape the ellipses, and connect the cylinder to its shadow. Watch one small part, then try it. There is no countdown. Press Continue whenever you feel ready.",
+    "hint": "Watch · Try · Continue when ready",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/ready.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Relax your shoulders and leave a comfortable margin on"
+      },
+      {
+        "time": 3.125,
+        "text": "your page Today we will build the frame shape"
+      },
+      {
+        "time": 6.213,
+        "text": "the ellipses and connect the cylinder to its shadow"
+      },
+      {
+        "time": 9.511,
+        "text": "Watch one small part then try it There is"
+      },
+      {
+        "time": 12.61,
+        "text": "no countdown Press Continue whenever you feel ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-1",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Measure left & right with your pencil",
+    "hint": "Use your pencil as a tool to check symmetry.",
+    "say": "Take a closer look. Just like we practiced before — use your pencil as a measuring tool. Compare left to right so the cylinder begins with a stable, balanced frame from the very first stroke. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-1-1.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 0,
+    "clipEnd": 37,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba32520df7140a900627_cylinder-p1-1.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=37s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Take a closer look Just like we practiced before"
+      },
+      {
+        "time": 3.26,
+        "text": "use your pencil as a measuring tool Compare left"
+      },
+      {
+        "time": 6.201,
+        "text": "to right so the cylinder begins with a stable"
+      },
+      {
+        "time": 9.154,
+        "text": "balanced frame from the very first stroke Try that"
+      },
+      {
+        "time": 12.194,
+        "text": "on your page I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-2",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Mark the top, bottom, left and right",
+    "hint": "Leave a comfortable margin around the drawing.",
+    "say": "Here is something worth noticing. These four marks place the cylinder on your page. Compare the space around them. You can adjust the size now, before adding detail. Take your time, then press Continue.",
+    "audio": "audio/demo-1-2.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 37,
+    "clipEnd": 62,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33abbf0829ce7122ed_cylinder-p1-2.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=62s&height=720",
+    "captions": [
+      {
+        "time": 0.11,
+        "text": "Here is something worth noticing These four marks place"
+      },
+      {
+        "time": 3.505,
+        "text": "the cylinder on your page Compare the space around"
+      },
+      {
+        "time": 6.36,
+        "text": "them You can adjust the size now before adding"
+      },
+      {
+        "time": 9.044,
+        "text": "detail Take your time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-3",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Box the cylinder in a rectangle",
+    "hint": "Draw the outer rectangle that holds the entire form.",
+    "say": "Your turn to try this. The teacher draws a long rectangle around where the cylinder will sit. This rectangle gives the cylinder a clear, direct answer for its size — no guessing. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-1-3.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 62,
+    "clipEnd": 108,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33d59268daae03a17d_cylinder-p1-3.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=108s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Your turn to try this The teacher draws a"
+      },
+      {
+        "time": 2.708,
+        "text": "long rectangle around where the cylinder will sit This"
+      },
+      {
+        "time": 5.931,
+        "text": "rectangle gives the cylinder a clear direct answer for"
+      },
+      {
+        "time": 9.216,
+        "text": "its size no guessing Make a small adjustment if"
+      },
+      {
+        "time": 12.476,
+        "text": "you need one Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-4",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Check that top & bottom match",
+    "hint": "Pencil-measure to verify equal areas above and below.",
+    "say": "Watch this small change. The teacher finds a point and measures with the pencil — checking whether the top section matches the area of the bottom. Equal proportions = a believable cylinder. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-1-4.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 108,
+    "clipEnd": 116,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba3310f4c6d18bd77a16_cylinder-p1-4.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=116s&height=720",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch this small change The teacher finds a point"
+      },
+      {
+        "time": 3.297,
+        "text": "and measures with the pencil checking whether the top"
+      },
+      {
+        "time": 5.723,
+        "text": "section matches the area of the bottom Equal proportions"
+      },
+      {
+        "time": 9.804,
+        "text": "= a believable cylinder No rush Finish this part"
+      },
+      {
+        "time": 13.848,
+        "text": "at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-5",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Frame where the front curve will sit",
+    "hint": "Build sub-frames above and below to locate the ellipses.",
+    "say": "Let us check one detail. The teacher draws specific guide frames at the top and bottom. These tell you exactly where the front curve should arc through. With this scaffolding, your pencil moves with confidence. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-1-5.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 116,
+    "clipEnd": 141,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba337b14dc76774f73bb_cylinder-p1-5.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=141s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Let us check one detail The teacher draws specific"
+      },
+      {
+        "time": 3.174,
+        "text": "guide frames at the top and bottom These tell"
+      },
+      {
+        "time": 5.784,
+        "text": "you exactly where the front curve should arc through"
+      },
+      {
+        "time": 8.689,
+        "text": "With this scaffolding your pencil moves with confidence Try"
+      },
+      {
+        "time": 12.721,
+        "text": "that on your page I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-6",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Cut with straight tangents — not curves yet",
+    "hint": "Draw the upper edge as a series of short straight lines.",
+    "say": "Notice what the teacher has just done. Just like with the sphere — circles and ellipses are very hard for beginners. The teacher uses straight tangent cuts first to find the right angles, then softens them into a curve. Take your time, then press Continue.",
+    "audio": "audio/demo-1-6.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 141,
+    "clipEnd": 196,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33decfe598f02c0825_cylinder-p1-6.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=196s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Notice what the teacher has just done Just like"
+      },
+      {
+        "time": 2.586,
+        "text": "with the sphere circles and ellipses are very hard"
+      },
+      {
+        "time": 6.078,
+        "text": "for beginners The teacher uses straight tangent cuts first"
+      },
+      {
+        "time": 9.301,
+        "text": "to find the right angles then softens them into"
+      },
+      {
+        "time": 11.826,
+        "text": "a curve Take your time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-7",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Find the bottom curve points",
+    "hint": "Mark high and low points of the bottom arc, symmetrically.",
+    "say": "A little drawing check. The teacher locates the starting points for the bottom ellipse. Find the highest and lowest points of the curve — and they must be perfectly left-right symmetric. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-1-7.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 196,
+    "clipEnd": 206,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba330a22dc454686b1f7_cylinder-p1-7.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=206s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "A little drawing check The teacher locates the starting"
+      },
+      {
+        "time": 3.113,
+        "text": "points for the bottom ellipse Find the highest and"
+      },
+      {
+        "time": 6.201,
+        "text": "lowest points of the curve and they must be"
+      },
+      {
+        "time": 8.591,
+        "text": "perfectly left-right symmetric Make a small adjustment if you"
+      },
+      {
+        "time": 12.034,
+        "text": "need one Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-8",
+    "kind": "draw",
+    "chapter": "Build the cylinder",
+    "title": "Compare the two ellipses",
+    "hint": "Keep their centre lines aligned.",
+    "say": "Take a closer look. Compare the curves at the top and bottom. Both should be smooth and left-right balanced, with no pointed corners. The lower ellipse may look more open because it is farther below eye level. Follow the teacher’s viewpoint rather than flattening either curve. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-1-8.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 206,
+    "clipEnd": 230,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a10ba33c8f6338c6fec8373_cylinder-p1-8.PNG",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=230s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Take a closer look Compare the curves at the"
+      },
+      {
+        "time": 2.635,
+        "text": "top and bottom Both should be smooth and left-right"
+      },
+      {
+        "time": 5.919,
+        "text": "balanced with no pointed corners The lower ellipse may"
+      },
+      {
+        "time": 9.755,
+        "text": "look more open because it is farther below eye"
+      },
+      {
+        "time": 12.328,
+        "text": "level Follow the teacher’s viewpoint rather than flattening either"
+      },
+      {
+        "time": 15.931,
+        "text": "curve No rush Finish this part at your own"
+      },
+      {
+        "time": 18.922,
+        "text": "pace"
+      }
+    ]
+  },
+  {
+    "id": "chapter-1-end",
+    "title": "Your cylinder framework",
+    "chapter": "Build the cylinder",
+    "say": "Look over your framework. Are the sides balanced and the curves comfortable? Make any small adjustment you want before we move into shadow.",
+    "hint": "Your turn · Take your time",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/chapter-1-end.mp3",
+    "uid": "ba31784be13c1abc6875e4ce3c576502",
+    "start": 230,
+    "clipEnd": 235.692,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/ba31784be13c1abc6875e4ce3c576502/thumbnails/thumbnail.jpg?time=235.192s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look over your framework Are the sides balanced and"
+      },
+      {
+        "time": 3.309,
+        "text": "the curves comfortable Make any small adjustment you want"
+      },
+      {
+        "time": 6.605,
+        "text": "before we move into shadow"
+      }
+    ]
+  },
+  {
+    "id": "cheer-1",
+    "title": "Your cylinder framework",
+    "chapter": "A little encouragement",
+    "say": "That blank page now has a clear structure. You have done the patient part: measuring before shading. Wiggle your fingers, take a breath, and let us find the light.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/cheer-1.mp3",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "That blank page now has a clear structure You"
+      },
+      {
+        "time": 2.941,
+        "text": "have done the patient part measuring before shading Wiggle"
+      },
+      {
+        "time": 6.642,
+        "text": "your fingers take a breath and let us find"
+      },
+      {
+        "time": 9.51,
+        "text": "the light"
+      }
+    ]
+  },
+  {
+    "id": "demo-2-1",
+    "kind": "draw",
+    "chapter": "Find light and shadow",
+    "title": "Start the terminator with 2B",
+    "hint": "Use a 2B pencil — vertical strokes along the cylinder.",
+    "say": "Here is something worth noticing. Switch to a 2B pencil. The terminator on a cylinder runs vertically — let your pencil strokes follow that direction, sweeping down along the form. Keep it light at first; you can deepen it later. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-2-1.mp3",
+    "uid": "7041b79d8a1c9260ff1edafe698c3803",
+    "start": 0,
+    "clipEnd": 59,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a150cff57ab2b328aed8d9e_cylinder-p2-1.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7041b79d8a1c9260ff1edafe698c3803/thumbnails/thumbnail.jpg?time=59s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Here is something worth noticing Switch to a 2B"
+      },
+      {
+        "time": 3.395,
+        "text": "pencil The terminator on a cylinder runs vertically let"
+      },
+      {
+        "time": 7.083,
+        "text": "your pencil strokes follow that direction sweeping down along"
+      },
+      {
+        "time": 10.502,
+        "text": "the form Keep it light at first you can"
+      },
+      {
+        "time": 13.431,
+        "text": "deepen it later No rush Finish this part at"
+      },
+      {
+        "time": 16.556,
+        "text": "your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-2-2",
+    "kind": "draw",
+    "chapter": "Find light and shadow",
+    "title": "Map the cast shadow with the form",
+    "hint": "Cylinder and cast shadow belong together.",
+    "say": "Your turn to try this. The cast shadow is where the cylinder blocks light from reaching the table. Place its outline beside the cylinder while you establish the shadow on the curved side. Develop them together. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-2-2.mp3",
+    "uid": "7041b79d8a1c9260ff1edafe698c3803",
+    "start": 59,
+    "clipEnd": 103,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a150cffcd95e08fee877a80_cylinder-p2-2.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7041b79d8a1c9260ff1edafe698c3803/thumbnails/thumbnail.jpg?time=103s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Your turn to try this The cast shadow is"
+      },
+      {
+        "time": 2.831,
+        "text": "where the cylinder blocks light from reaching the table"
+      },
+      {
+        "time": 5.674,
+        "text": "Place its outline beside the cylinder while you establish"
+      },
+      {
+        "time": 8.64,
+        "text": "the shadow on the curved side Develop them together"
+      },
+      {
+        "time": 12.414,
+        "text": "Try that on your page I will wait for"
+      },
+      {
+        "time": 14.89,
+        "text": "you"
+      }
+    ]
+  },
+  {
+    "id": "chapter-2-end",
+    "title": "A connected shadow map",
+    "chapter": "Find light and shadow",
+    "say": "Check your shadow map beside the teacher’s example. Keep these early marks light enough to adjust. When it feels clear, let us begin adding tone.",
+    "hint": "Your turn · Take your time",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/chapter-2-end.mp3",
+    "uid": "7041b79d8a1c9260ff1edafe698c3803",
+    "start": 103,
+    "clipEnd": 117.496,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7041b79d8a1c9260ff1edafe698c3803/thumbnails/thumbnail.jpg?time=116.996s&height=720",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Check your shadow map beside the teacher’s example Keep"
+      },
+      {
+        "time": 3.309,
+        "text": "these early marks light enough to adjust When it"
+      },
+      {
+        "time": 6.324,
+        "text": "feels clear let us begin adding tone"
+      }
+    ]
+  },
+  {
+    "id": "cheer-2",
+    "title": "A connected shadow map",
+    "chapter": "A little encouragement",
+    "say": "You have given the cylinder a shadow to sit on. It is starting to feel solid. Keep that light side clean as we build the darker tones.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/cheer-2.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You have given the cylinder a shadow to sit"
+      },
+      {
+        "time": 1.887,
+        "text": "on It is starting to feel solid Keep that"
+      },
+      {
+        "time": 4.718,
+        "text": "light side clean as we build the darker tones"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-1",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Rough-shade the dark side with 2B",
+    "hint": "Quick vertical strokes across the terminator + dark zone.",
+    "say": "Your turn to try this. Take a 2B pencil and lay down a quick pass of tone across the dark side, vertical strokes following the cylinder's direction. This is rough shading — it doesn't need to be pretty. Just lay it in fast and uniform. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-3-1.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 0,
+    "clipEnd": 29,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d106b87a439721cfd655_cylinder-p3-1.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=29s&height=720",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Your turn to try this Take a 2B pencil"
+      },
+      {
+        "time": 3.015,
+        "text": "and lay down a quick pass of tone across"
+      },
+      {
+        "time": 5.221,
+        "text": "the dark side vertical strokes following the cylinder's direction"
+      },
+      {
+        "time": 9.252,
+        "text": "This is rough shading it doesn't need to be"
+      },
+      {
+        "time": 11.226,
+        "text": "pretty Just lay it in fast and uniform Make"
+      },
+      {
+        "time": 14.399,
+        "text": "a small adjustment if you need one Continue when"
+      },
+      {
+        "time": 17.402,
+        "text": "you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-2",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Always develop the shadow at the same time",
+    "hint": "Cast shadow + cylinder dark side = one family.",
+    "say": "Watch this small change. The cylinder and its shadow always develop together — never separately. Use the same stroke direction so the eye reads them as one unified scene. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-3-2.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 29,
+    "clipEnd": 65,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d10547a78a203811f60e_cylinder-p3-2.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=65s&height=720",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Watch this small change The cylinder and its shadow"
+      },
+      {
+        "time": 3.505,
+        "text": "always develop together never separately Use the same stroke"
+      },
+      {
+        "time": 7.941,
+        "text": "direction so the eye reads them as one unified"
+      },
+      {
+        "time": 10.699,
+        "text": "scene No rush Finish this part at your own"
+      },
+      {
+        "time": 13.713,
+        "text": "pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-3",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Strengthen the shadow contrast",
+    "hint": "Go back into the shadow to push the value.",
+    "say": "Let us check one detail. Return to the cast shadow and deepen it. This stronger contrast anchors the cylinder to the surface and gives the whole drawing more visual punch. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-3-3.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 65,
+    "clipEnd": 84,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d10560e05e8170ba3683_cylinder-p3-3.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=84s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Let us check one detail Return to the cast"
+      },
+      {
+        "time": 2.647,
+        "text": "shadow and deepen it This stronger contrast anchors the"
+      },
+      {
+        "time": 6.262,
+        "text": "cylinder to the surface and gives the whole drawing"
+      },
+      {
+        "time": 9.167,
+        "text": "more visual punch Try that on your page I"
+      },
+      {
+        "time": 12.561,
+        "text": "will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-4",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Add horizontal strokes — bridge for later",
+    "hint": "Stiff lines kill the form. Crossing strokes build a bridge.",
+    "say": "Notice what the teacher has just done. Even though we strengthened the terminator, it shouldn't look stiff. Add horizontal strokes across it now — these will become the bridge to the light side later, making the eventual transition feel natural. Take your time, then press Continue.",
+    "audio": "audio/demo-3-4.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 84,
+    "clipEnd": 101,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105ccdbffbe39551509_cylinder-p3-4.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=101s&height=720",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Notice what the teacher has just done Even though"
+      },
+      {
+        "time": 2.708,
+        "text": "we strengthened the terminator it shouldn't look stiff Add"
+      },
+      {
+        "time": 6.311,
+        "text": "horizontal strokes across it now these will become the"
+      },
+      {
+        "time": 9.338,
+        "text": "bridge to the light side later making the eventual"
+      },
+      {
+        "time": 12.169,
+        "text": "transition feel natural Take your time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-5",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Blend with paper, following the strokes",
+    "hint": "Use rolled paper as a blender — same direction as your strokes.",
+    "say": "A little drawing check. Just like with the sphere and cube, take a piece of rolled paper (or tissue) and blend along the direction of your strokes. This unifies the tone without losing the form direction. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-3-5.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 101,
+    "clipEnd": 120,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1058aaa7747c7052742_cylinder-p3-5.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=120s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "A little drawing check Just like with the sphere"
+      },
+      {
+        "time": 2.806,
+        "text": "and cube take a piece of rolled paper or"
+      },
+      {
+        "time": 5.38,
+        "text": "tissue and blend along the direction of your strokes"
+      },
+      {
+        "time": 8.762,
+        "text": "This unifies the tone without losing the form direction"
+      },
+      {
+        "time": 12.169,
+        "text": "Make a small adjustment if you need one Continue"
+      },
+      {
+        "time": 14.853,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-6",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Switch to 3B for deeper values",
+    "hint": "Same controlled layers · Softer pencil",
+    "say": "Take a closer look. Use 3B to deepen the areas that need more contrast. Keep your pressure controlled and your hatching deliberate. You can change stroke direction in later layers without scribbling. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-3-6.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 120,
+    "clipEnd": 148,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1058622c0a06901c44b_cylinder-p3-6.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=148s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Take a closer look Use 3B to deepen the"
+      },
+      {
+        "time": 2.806,
+        "text": "areas that need more contrast Keep your pressure controlled"
+      },
+      {
+        "time": 6.691,
+        "text": "and your hatching deliberate You can change stroke direction"
+      },
+      {
+        "time": 9.89,
+        "text": "in later layers without scribbling No rush Finish this"
+      },
+      {
+        "time": 13.591,
+        "text": "part at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-7",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Vertical strokes turn the line into a band",
+    "hint": "The terminator stops being a line — it becomes a zone.",
+    "say": "Here is something worth noticing. Lay more vertical strokes through the dark side. The terminator stops reading as a single line and becomes a band of value — that's what makes the form feel three-dimensional. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-3-7.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 148,
+    "clipEnd": 180,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105107ebd374fc4fa02_cylinder-p3-7.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=180s&height=720",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Here is something worth noticing Lay more vertical strokes"
+      },
+      {
+        "time": 3.738,
+        "text": "through the dark side The terminator stops reading as"
+      },
+      {
+        "time": 6.593,
+        "text": "a single line and becomes a band of value"
+      },
+      {
+        "time": 9.534,
+        "text": "that's what makes the form feel three-dimensional Try that"
+      },
+      {
+        "time": 12.794,
+        "text": "on your page I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-8",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Horizontal strokes again — keep building the bridge",
+    "hint": "Cross-hatch the band to soften toward the light side.",
+    "say": "Your turn to try this. Add another pass of horizontal strokes. We're building the bridge between dark and light — the gentler the transition, the more believable the form. Take your time, then press Continue.",
+    "audio": "audio/demo-3-8.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 180,
+    "clipEnd": 219,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1043c685de27a119d5d_cylinder-p3-8.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=219s&height=720",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Your turn to try this Add another pass of"
+      },
+      {
+        "time": 3.26,
+        "text": "horizontal strokes We're building the bridge between dark and"
+      },
+      {
+        "time": 6.618,
+        "text": "light the gentler the transition the more believable the"
+      },
+      {
+        "time": 10.172,
+        "text": "form Take your time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-9",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Shadow — denser, cleaner strokes",
+    "hint": "Not rough sketching anymore — controlled hatching.",
+    "say": "Watch this small change. Return to the cast shadow one more time. This time the strokes are denser, more deliberate, more controlled. The whole drawing becomes cleaner and more crisp. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-3-9.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 219,
+    "clipEnd": 256,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105a0fd03fab621d3fe_cylinder-p3-9png.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=256s&height=720",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Watch this small change Return to the cast shadow"
+      },
+      {
+        "time": 3.321,
+        "text": "one more time This time the strokes are denser"
+      },
+      {
+        "time": 6.299,
+        "text": "more deliberate more controlled The whole drawing becomes cleaner"
+      },
+      {
+        "time": 10.11,
+        "text": "and more crisp Make a small adjustment if you"
+      },
+      {
+        "time": 12.806,
+        "text": "need one Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-10",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Switch to HB or 2H for the light side",
+    "hint": "Light pencil for the half-light zone — choose by your touch.",
+    "say": "Let us check one detail. Switch to HB or 2H — pick based on how heavy your touch is. Heavy hand → 2H. Light hand → HB. Lightly start hatching the half-light area with vertical, parallel strokes. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-3-10.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 256,
+    "clipEnd": 267,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d10560e05e8170ba3686_cylinder-p3-10.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=267s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Let us check one detail Switch to HB or"
+      },
+      {
+        "time": 3.1,
+        "text": "2H pick based on how heavy your touch is"
+      },
+      {
+        "time": 6.556,
+        "text": "Heavy hand 2H Light hand HB Lightly start hatching"
+      },
+      {
+        "time": 11.581,
+        "text": "the half-light area with vertical parallel strokes No rush"
+      },
+      {
+        "time": 16.103,
+        "text": "Finish this part at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-11",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Build the bridge: dark → light gradation",
+    "hint": "HB or 2H continues the gradation from terminator to highlight.",
+    "say": "Notice what the teacher has just done. This is the key move: the gradation from dark to light. Use HB if your touch is light, 2H if your touch is heavy. Smooth, continuous transition wraps the cylinder. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-3-11.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 267,
+    "clipEnd": 311,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105071ec63adb460ac8_cylinder-p3-11.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=311s&height=720",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Notice what the teacher has just done This is"
+      },
+      {
+        "time": 2.843,
+        "text": "the key move the gradation from dark to light"
+      },
+      {
+        "time": 6.274,
+        "text": "Use HB if your touch is light 2H if"
+      },
+      {
+        "time": 9.105,
+        "text": "your touch is heavy Smooth continuous transition wraps the"
+      },
+      {
+        "time": 13.101,
+        "text": "cylinder Try that on your page I will wait"
+      },
+      {
+        "time": 16.201,
+        "text": "for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-12",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Use 2H to refine details",
+    "hint": "Switch to 2H for fine carving.",
+    "say": "A little drawing check. For more refined detail work, switch to 2H. The lighter graphite lets you sharpen and define without darkening areas you don't want darker. Take your time, then press Continue.",
+    "audio": "audio/demo-3-12.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 311,
+    "clipEnd": 364,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1058fd979fc6190544d_cylinder-p3-12.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=364s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "A little drawing check For more refined detail work"
+      },
+      {
+        "time": 3.554,
+        "text": "switch to 2H The lighter graphite lets you sharpen"
+      },
+      {
+        "time": 7.169,
+        "text": "and define without darkening areas you don't want darker"
+      },
+      {
+        "time": 10.392,
+        "text": "Take your time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-13",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Diagonal strokes on the dark side with 2B",
+    "hint": "Now diagonal hatching builds the gradation from the shadow side.",
+    "say": "Take a closer look. Bring 2B back. Build the gradation in the dark side with diagonal strokes going up. The change in stroke direction reinforces the form's curve. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-3-13.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 364,
+    "clipEnd": 391,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d10560e05e8170ba365b_cylinder-p3-13.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=391s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Take a closer look Bring 2B back Build the"
+      },
+      {
+        "time": 3.37,
+        "text": "gradation in the dark side with diagonal strokes going"
+      },
+      {
+        "time": 6.373,
+        "text": "up The change in stroke direction reinforces the form's"
+      },
+      {
+        "time": 9.743,
+        "text": "curve Make a small adjustment if you need one"
+      },
+      {
+        "time": 12.966,
+        "text": "Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-14",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Light side gets 2H treatment",
+    "hint": "Continue refining the light side with 2H.",
+    "say": "Here is something worth noticing. Use 2H to add the finishing touches on the light side. Strokes stay parallel and gentle — this is the lightest value zone. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-3-14.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 391,
+    "clipEnd": 411,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d108b8c4f004869c2c62_cylinder-p3-14.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=411s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Here is something worth noticing Use 2H to add"
+      },
+      {
+        "time": 3.493,
+        "text": "the finishing touches on the light side Strokes stay"
+      },
+      {
+        "time": 6.569,
+        "text": "parallel and gentle this is the lightest value zone"
+      },
+      {
+        "time": 10.735,
+        "text": "No rush Finish this part at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-15",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Keep the outer edge gentle",
+    "hint": "Compare edges; do not outline everything.",
+    "say": "Your turn to try this. Look at the outside edge beside the darker band within the cylinder. Avoid tracing the whole silhouette with one heavy line. Compare the values on either side of each edge, and soften it where the teacher keeps the contrast gentle. Try that on your page. I will wait for you.",
+    "audio": "audio/demo-3-15.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 411,
+    "clipEnd": 490,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1058aaa7747c70526ef_cylinder-p3-15.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=490s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Your turn to try this Look at the outside"
+      },
+      {
+        "time": 2.561,
+        "text": "edge beside the darker band within the cylinder Avoid"
+      },
+      {
+        "time": 5.846,
+        "text": "tracing the whole silhouette with one heavy line Compare"
+      },
+      {
+        "time": 9.375,
+        "text": "the values on either side of each edge and"
+      },
+      {
+        "time": 11.961,
+        "text": "soften it where the teacher keeps the contrast gentle"
+      },
+      {
+        "time": 15.159,
+        "text": "Try that on your page I will wait for"
+      },
+      {
+        "time": 17.39,
+        "text": "you"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-16",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Clean diagonal shading pass",
+    "hint": "Tidy diagonal strokes — even, parallel, controlled.",
+    "say": "Watch this small change. Use diagonal strokes for a clean shading pass. You should see a tidy, parallel band of hatching — this is the controlled finish that separates a polished drawing from a sketch. Take your time, then press Continue.",
+    "audio": "audio/demo-3-16.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 490,
+    "clipEnd": 500,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105a0fd03fab621d3dc_cylinder-p3-16.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=500s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch this small change Use diagonal strokes for a"
+      },
+      {
+        "time": 3.652,
+        "text": "clean shading pass You should see a tidy parallel"
+      },
+      {
+        "time": 7.169,
+        "text": "band of hatching this is the controlled finish that"
+      },
+      {
+        "time": 10.208,
+        "text": "separates a polished drawing from a sketch Take your"
+      },
+      {
+        "time": 13.015,
+        "text": "time then press Continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-17",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Switch back to 2B",
+    "hint": "One more pass with 2B for value depth.",
+    "say": "Let us check one detail. Switch back to 2B to add some final depth where needed. Brief and surgical — only the spots that need pushing. Make a small adjustment if you need one. Continue when you are ready.",
+    "audio": "audio/demo-3-17.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 500,
+    "clipEnd": 507,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d105404927320e67d87d_cylinder-p3-17.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=507s&height=720",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Let us check one detail Switch back to 2B"
+      },
+      {
+        "time": 3.015,
+        "text": "to add some final depth where needed Brief and"
+      },
+      {
+        "time": 6.091,
+        "text": "surgical only the spots that need pushing Make a"
+      },
+      {
+        "time": 9.252,
+        "text": "small adjustment if you need one Continue when you"
+      },
+      {
+        "time": 12.586,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-18",
+    "kind": "draw",
+    "chapter": "Build the tones",
+    "title": "Final blending pass",
+    "hint": "Blend everything together with paper or tissue.",
+    "say": "Notice what the teacher has just done. Final blending — use paper or tissue to unify the surface one last time. After this, the dark side of the cylinder reads as a continuous, three-dimensional form. No rush. Finish this part at your own pace.",
+    "audio": "audio/demo-3-18.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 507,
+    "clipEnd": 567,
+    "analysis": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a14d1057f2b64fcbf1187f8_cylinder-p3-18.png",
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=567s&height=720",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Notice what the teacher has just done Final blending"
+      },
+      {
+        "time": 3.958,
+        "text": "use paper or tissue to unify the surface one"
+      },
+      {
+        "time": 6.716,
+        "text": "last time After this the dark side of the"
+      },
+      {
+        "time": 9.73,
+        "text": "cylinder reads as a continuous three-dimensional form No rush"
+      },
+      {
+        "time": 14.51,
+        "text": "Finish this part at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "chapter-3-end",
+    "title": "Your rounded cylinder",
+    "chapter": "Build the tones",
+    "say": "Compare the light side and the shadow side. Protect the lighter area, and let the darker tones turn gently around the curve. You can pause here for as long as you need.",
+    "hint": "Your turn · Take your time",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/chapter-3-end.mp3",
+    "uid": "9add7a539ac67b520577be264a5a0efb",
+    "start": 567,
+    "clipEnd": 579.596,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9add7a539ac67b520577be264a5a0efb/thumbnails/thumbnail.jpg?time=579.096s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Compare the light side and the shadow side Protect"
+      },
+      {
+        "time": 3.64,
+        "text": "the lighter area and let the darker tones turn"
+      },
+      {
+        "time": 6.434,
+        "text": "gently around the curve You can pause here for"
+      },
+      {
+        "time": 9.118,
+        "text": "as long as you need"
+      }
+    ]
+  },
+  {
+    "id": "cheer-3",
+    "title": "Your rounded cylinder",
+    "chapter": "A little encouragement",
+    "say": "Look how those little layers have made the side feel round. That is your practice showing up on the page. One short check of the top edge, and your core drawing is complete.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/cheer-3.mp3",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Look how those little layers have made the side"
+      },
+      {
+        "time": 2.243,
+        "text": "feel round That is your practice showing up on"
+      },
+      {
+        "time": 4.804,
+        "text": "the page One short check of the top edge"
+      },
+      {
+        "time": 7.696,
+        "text": "and your core drawing is complete"
+      }
+    ]
+  },
+  {
+    "id": "top-edge",
+    "title": "Refine the top edge",
+    "chapter": "Finish the form",
+    "say": "Look at the edge where the flat top meets the curved side. The teacher makes a small, controlled adjustment here. Keep the ellipse smooth, without turning the whole rim into a heavy outline. Check your own top edge, then step back and see the solid form you have made.",
+    "hint": "Flat top · Curved side · Gentle edge",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/top-edge.mp3",
+    "uid": "7f14e8ccbc6831ec6710578bf58f3d6c",
+    "start": 0,
+    "clipEnd": 21.39,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7f14e8ccbc6831ec6710578bf58f3d6c/thumbnails/thumbnail.jpg?time=18s&height=720",
+    "focus": "rim",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look at the edge where the flat top meets"
+      },
+      {
+        "time": 2.145,
+        "text": "the curved side The teacher makes a small controlled"
+      },
+      {
+        "time": 5.196,
+        "text": "adjustment here Keep the ellipse smooth without turning the"
+      },
+      {
+        "time": 8.664,
+        "text": "whole rim into a heavy outline Check your own"
+      },
+      {
+        "time": 11.667,
+        "text": "top edge then step back and see the solid"
+      },
+      {
+        "time": 14.559,
+        "text": "form you have made"
+      }
+    ]
+  },
+  {
+    "id": "core-complete",
+    "title": "Your cylinder is complete",
+    "chapter": "A little encouragement",
+    "say": "You have built the cylinder, connected its shadow, and brought out its roundness. That counts as completing this drawing. The background is an optional extra. You can explore it later, or share your work and move on. Well done for staying with it.",
+    "hint": "Core drawing complete",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/core-complete.mp3",
+    "coreComplete": true,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You have built the cylinder connected its shadow and"
+      },
+      {
+        "time": 3.297,
+        "text": "brought out its roundness That counts as completing this"
+      },
+      {
+        "time": 6.483,
+        "text": "drawing The background is an optional extra You can"
+      },
+      {
+        "time": 9.976,
+        "text": "explore it later or share your work and move"
+      },
+      {
+        "time": 12.377,
+        "text": "on Well done for staying with it"
+      }
+    ]
+  },
+  {
+    "id": "submit",
+    "title": "Share your cylinder",
+    "chapter": "Your work",
+    "say": "Ready to share? Choose a clear photo of your cylinder, then tap the send button. Wait for the submitted message so you know your work has arrived. You can also continue without a photo and come back later.",
+    "hint": "Your drawing · Your progress",
+    "kind": "submit",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/submit.mp3",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Ready to share Choose a clear photo of your"
+      },
+      {
+        "time": 2.316,
+        "text": "cylinder then tap the send button Wait for the"
+      },
+      {
+        "time": 5.294,
+        "text": "submitted message so you know your work has arrived"
+      },
+      {
+        "time": 8.505,
+        "text": "You can also continue without a photo and come"
+      },
+      {
+        "time": 10.809,
+        "text": "back later"
+      }
+    ]
+  },
+  {
+    "id": "optional-1",
+    "title": "Build tone around the silhouette",
+    "chapter": "Go further · Optional",
+    "say": "Watch the teacher add tone just outside the cylinder. Keep your pencil marks in the background, and protect the lighter face of the object. You can try a small patch first. This whole background section is optional.",
+    "hint": "Optional · Explore or skip",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/optional-1.mp3",
+    "uid": "60af4a289c320b82ab88e3bbd830f644",
+    "start": 0,
+    "clipEnd": 225,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/thumbnails/thumbnail.jpg?time=224.500s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Watch the teacher add tone just outside the cylinder"
+      },
+      {
+        "time": 3.37,
+        "text": "Keep your pencil marks in the background and protect"
+      },
+      {
+        "time": 6.152,
+        "text": "the lighter face of the object You can try"
+      },
+      {
+        "time": 8.554,
+        "text": "a small patch first This whole background section is"
+      },
+      {
+        "time": 11.752,
+        "text": "optional"
+      }
+    ]
+  },
+  {
+    "id": "optional-2",
+    "title": "Extend the surrounding tones",
+    "chapter": "Go further · Optional",
+    "say": "Now the shading spreads farther across the paper and down to the tabletop. Compare that quieter background with the darker cast shadow. Keep the object as the main focus. Try as much or as little as you like.",
+    "hint": "Optional · Explore or skip",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/optional-2.mp3",
+    "uid": "60af4a289c320b82ab88e3bbd830f644",
+    "start": 225,
+    "clipEnd": 450,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/thumbnails/thumbnail.jpg?time=449.500s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Now the shading spreads farther across the paper and"
+      },
+      {
+        "time": 3.162,
+        "text": "down to the tabletop Compare that quieter background with"
+      },
+      {
+        "time": 6.458,
+        "text": "the darker cast shadow Keep the object as the"
+      },
+      {
+        "time": 9.179,
+        "text": "main focus Try as much or as little as"
+      },
+      {
+        "time": 12.549,
+        "text": "you like"
+      }
+    ]
+  },
+  {
+    "id": "optional-3",
+    "title": "Refine the background edges",
+    "chapter": "Go further · Optional",
+    "say": "Notice the small adjustments around the base and upper edge. The teacher is balancing the surroundings with the cylinder, rather than drawing a thick outline around it. Stop when you like the balance. Your main drawing is already complete.",
+    "hint": "Optional · Explore or skip",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/optional-3.mp3",
+    "uid": "60af4a289c320b82ab88e3bbd830f644",
+    "start": 450,
+    "clipEnd": 678.496,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/60af4a289c320b82ab88e3bbd830f644/thumbnails/thumbnail.jpg?time=677.996s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Notice the small adjustments around the base and upper"
+      },
+      {
+        "time": 3.027,
+        "text": "edge The teacher is balancing the surroundings with the"
+      },
+      {
+        "time": 6.029,
+        "text": "cylinder rather than drawing a thick outline around it"
+      },
+      {
+        "time": 9.706,
+        "text": "Stop when you like the balance Your main drawing"
+      },
+      {
+        "time": 12.488,
+        "text": "is already complete"
+      }
+    ]
+  },
+  {
+    "id": "perspective",
+    "title": "Cylinders can lie on their sides",
+    "chapter": "Look again",
+    "say": "One more thing to notice. A bottle or paper roll does not always stand upright. When it lies on its side, the centre line tilts and the ellipses look different. Look at this example. Where would you place the centre line? You do not need to draw another one now. Just take that curiosity with you.",
+    "hint": "Notice the centre line and ellipses",
+    "kind": "photo",
+    "image": "https://cdn.prod.website-files.com/67b17a6580f358f0c7dd29f4/6a2f2876de5c19bff7636ef9_13220361129964829691.jpg",
+    "audio": "audio/perspective.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "One more thing to notice A bottle or paper"
+      },
+      {
+        "time": 2.868,
+        "text": "roll does not always stand upright When it lies"
+      },
+      {
+        "time": 5.882,
+        "text": "on its side the centre line tilts and the"
+      },
+      {
+        "time": 8.321,
+        "text": "ellipses look different Look at this example Where would"
+      },
+      {
+        "time": 11.814,
+        "text": "you place the centre line You do not need"
+      },
+      {
+        "time": 13.958,
+        "text": "to draw another one now Just take that curiosity"
+      },
+      {
+        "time": 16.703,
+        "text": "with you"
+      }
+    ]
+  },
+  {
+    "id": "reflect",
+    "title": "Take this with you",
+    "chapter": "Look again",
+    "say": "Look for a mug, a candle, or a simple can around you. Can you see the flat top, the curved side, and the way light changes across them? You now have a way to begin drawing those objects. Keep looking, and let one small observation lead to the next.",
+    "hint": "What do you notice now?",
+    "kind": "reflect",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/reflect.mp3",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Look for a mug a candle or a simple"
+      },
+      {
+        "time": 3.076,
+        "text": "can around you Can you see the flat top"
+      },
+      {
+        "time": 5.846,
+        "text": "the curved side and the way light changes across"
+      },
+      {
+        "time": 8.137,
+        "text": "them You now have a way to begin drawing"
+      },
+      {
+        "time": 10.404,
+        "text": "those objects Keep looking and let one small observation"
+      },
+      {
+        "time": 14.314,
+        "text": "lead to the next"
+      }
+    ]
+  },
+  {
+    "id": "complete",
+    "title": "You made a cylinder",
+    "chapter": "Finish",
+    "say": "You stayed with your drawing, one thoughtful step at a time. It does not need to be perfect to be worth celebrating. Press Continue and Artchi has a little reward for you. Next, we will meet the cone.",
+    "hint": "The Cylinder · Ready to celebrate",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cylinder.jpg",
+    "audio": "audio/complete.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You stayed with your drawing one thoughtful step at"
+      },
+      {
+        "time": 2.218,
+        "text": "a time It does not need to be perfect"
+      },
+      {
+        "time": 4.571,
+        "text": "to be worth celebrating Press Continue and Artchi has"
+      },
+      {
+        "time": 7.88,
+        "text": "a little reward for you Next we will meet"
+      },
+      {
+        "time": 10.245,
+        "text": "the cone"
+      }
+    ]
+  }
+]

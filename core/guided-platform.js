@@ -23,7 +23,7 @@ window.GuidedPlatform = {
   status.onclick=()=>{if(this.profile)FEIProgress.saveFromProfile(this.profile);};
   window.addEventListener('fei:progress-sync',e=>show(e.detail.state));show(FEIProgress.syncState||'saving');document.body.append(status);
  },
- async restore(lessonId,key,count,{isolated=false}={}) {
+ async restore(lessonId,key,count,{isolated=false,classicStepMap=null,classicCompletedAt=null}={}) {
   this.lesson=lessonId;this.isolated=isolated;this._status();
   const profile=JSON.parse(sessionStorage.getItem('fei_user_profile')||'null');
   if(!profile)return {};
@@ -41,6 +41,16 @@ window.GuidedPlatform = {
   }
   // Already completed on the old course: keep all ticks and allow revisiting.
   if(!isolated && this.profile.completedLessons?.includes(lessonId))return {index:count-1,unlocked:count-1,completed:Array.from({length:count},(_,i)=>i)};
+  // Preserve the old lesson cursor when a course first adopts guided microsteps.
+  if(!isolated && classicStepMap && this.profile.currentLesson===lessonId && Number(this.profile.currentStepIdx)>0){
+   const oldIndex=Number(this.profile.currentStepIdx), mapped=classicStepMap[oldIndex];
+   if(Number.isInteger(mapped)&&mapped>=0&&mapped<count){
+    const migrated={index:mapped,unlocked:mapped,completed:Array.from({length:mapped},(_,i)=>i),skipped:[],migratedFromClassic:oldIndex};
+    this.save(migrated,key);
+    if(classicCompletedAt!==null&&oldIndex>=classicCompletedAt)await this.complete(lessonId);
+    return migrated;
+   }
+  }
   return {};
  },
  async recoverLegacy(profile) {

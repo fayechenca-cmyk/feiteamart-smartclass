@@ -57,7 +57,7 @@
       title: 'The Cylinder',
       subtitle: 'Geometric form',
       emoji: '◗',
-      href: 'lessons/lesson-5-cylinder/',
+      href: 'lessons/lesson-5-cylinder/guided/',
       ready: true,
       level: 1
     },
