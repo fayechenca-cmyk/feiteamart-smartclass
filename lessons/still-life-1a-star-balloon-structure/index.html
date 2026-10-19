@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>if (!new URLSearchParams(location.search).has('classic')) location.replace('guided/' + location.search + location.hash);</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FEI TeamArt · Foundation of Sketch · Step 2 · Foil Star Balloon</title>
@@ -3001,6 +3002,12 @@ body { font-family: 'Open Sans', sans-serif; background: linear-gradient(135deg,
 .pause-actions { display: flex; gap: 8px; justify-content: center; flex-direction: column; }
 .pause-actions .btn { padding: 11px 16px; font-size: 10px; width: 100%; }
 </style>
+<!-- Login-fix-era note (Oct 2026): gateThenStart() below calls
+     FEIAccess.gateLessonPage(), but that only works if FEIAccess is
+     actually loaded -- these two were missing, so the gate silently
+     no-op'd and this paid lesson was open to any direct URL hit. -->
+<script src="../../core/auth.js"></script>
+<script src="../../core/access.js"></script>
 <script src="../../core/submissions.js"></script>
 <script src="../../core/progress.js"></script>
 <script src="../../core/teacher-submission.js"></script>
@@ -10234,9 +10241,22 @@ if (_existingProfile) {
     }
   }
 
+  // The guided outline is Video 1 only. Continue at Video 2, never mark
+  // the entire balloon lesson complete at this handoff.
+  let guidedOutlineDone = false;
+  try {
+    const saved = JSON.parse(localStorage.getItem('fei.balloon.guided-preview.v1') || '{}');
+    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(11);
+  } catch (_) {}
+  if (guidedOutlineDone) {
+    state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === 2);
+    for (let i = 0; i < state.currentStepIndex; i++) if (!state.completedSteps.includes(i)) state.completedSteps.push(i);
+    UserProfile.update({currentLesson: LESSON.id, currentStepIdx: state.currentStepIndex});
+  }
   renderStep();
   resetSleep();
   applyPaidUrlIfPresent();
+  if (guidedOutlineDone) return;
   StudentRoster.load().finally(() => {
     setTimeout(() => {
       showWelcomePage();

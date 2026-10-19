@@ -24,7 +24,7 @@
 
   const FALLBACK = Array.isArray(window.FEI_ART_HISTORY_CURRICULUM) ? window.FEI_ART_HISTORY_CURRICULUM : [];
 
-  const trackKeys = TRACKS ? Object.keys(TRACKS).filter(k => TRACKS[k] && Array.isArray(TRACKS[k].lessons)) : [];
+  const trackKeys = TRACKS ? Object.keys(TRACKS).filter(k => TRACKS[k] && Array.isArray(TRACKS[k].lessons) && !TRACKS[k].hidden) : [];
   const hasTracks = TRACKS && trackKeys.length > 0;
 
   // ---------- state
@@ -44,10 +44,11 @@
   }
 
   function normalizeProgress(p, total) {
-    const unlocked = Math.max(1, Math.min(total || 1, safeNum(p?.unlocked, 1)));
+    let unlocked = Math.max(1, Math.min(total || 1, safeNum(p?.unlocked, 1)));
     const completed = Array.isArray(p?.completed)
       ? [...new Set(p.completed.map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= total))]
       : [];
+    while (unlocked < total && completed.includes(unlocked)) unlocked++;
     return { unlocked, completed };
   }
 
@@ -95,6 +96,14 @@
       // ignore
     }
 
+    // Keep the old China record; map its completed lessons into the expanded timeline once.
+    if (TRACKS?.asia && state.progress.china && !state.progress.asia) {
+      const old = (state.progress.china.completed || []).map(Number);
+      const completed = TRACKS.asia.lessons.filter(l => old.includes(l.sourceChineseId)).map(l => l.id);
+      const next = TRACKS.asia.lessons.find(l => !completed.includes(l.id));
+      state.progress.asia = { completed, unlocked: next?.id || TRACKS.asia.lessons.length };
+    }
+    if (state.activeTrack === "china" && TRACKS?.asia) state.activeTrack = "asia";
     // validate tracks/progress
     if (hasTracks && !trackKeys.includes(state.activeTrack)) state.activeTrack = trackKeys[0];
     if (hasTracks) trackKeys.forEach(k => ensureProgress(k));
@@ -116,7 +125,7 @@
         <div class="fei-brand-tag">ART THEORY · HISTORY CLASS</div>
         <h1 class="fei-track-title">Every artwork has a story.</h1>
         <p class="fei-track-desc"><span id="track-student">Student</span>, choose a history path. Look closely, discover new ideas, and build your own creative perspective.</p>
-        <div class="fei-track-grid" id="track-grid"></div>
+        <p class="fei-free-note">Always free · Open to everyone<br><small>Our guides connect independently published videos, artworks, and learning resources.</small></p><div class="fei-track-grid" id="track-grid"></div><a class="fei-sources-link" href="media-notes.html">Media sources &amp; image credits ↗</a>
       </div>
     </div>
 
@@ -129,7 +138,7 @@
       <section class="fei-journey-hero">
         <div><div class="fei-brand-tag">YOUR ART HISTORY PATH</div>
           <h1 id="track-pill">Western Art History</h1>
-          <p>From the first marks to new media. Discover art, one story at a time.</p>
+          <p id="track-description"></p><p class="fei-free-note">Always free · Open to everyone</p>
           <button id="btn-continue" class="fei-primary">Start learning →</button>
         </div>
         <div id="history-badge" class="fei-reward-token" role="status"></div>
@@ -140,7 +149,7 @@
         <p>Watch · Explore · Create · Challenge</p>
         <div class="fei-progress-line"><span id="display-name"></span><span id="progress-display"></span></div>
         <progress id="history-progress" value="0" max="36" aria-label="Completed lessons"></progress>
-        <small>Pass each lesson’s Challenge to unlock the next circle. Return to completed lessons anytime.</small>
+        <small>Browse every video and resource freely. Pass each Challenge in order to advance your guided path.</small>
       </section>
       <div class="fei-map-scroll">
         <div class="fei-board-viewport">
@@ -213,6 +222,11 @@
   function hide(el) { el.classList.add("fei-hidden"); }
 
   function switchTab(tabName) {
+    if (tabName !== "study") {
+      $$("#tab-study iframe").forEach(frame => {
+        frame.contentWindow?.postMessage(JSON.stringify({ event: "command", func: "pauseVideo", args: [] }), "https://www.youtube.com");
+      });
+    }
     $$(".fei-tab").forEach(t => t.classList.remove("active"));
     $$(".fei-view").forEach(v => v.classList.remove("active"));
     root.querySelector(`.fei-tab[data-tab="${tabName}"]`)?.classList.add("active");
@@ -241,7 +255,10 @@
     const source = new URL(url);
     const start = source.searchParams.get("start") || source.searchParams.get("t");
     const seconds = /^\d+s?$/.test(start || "") ? parseInt(start, 10) : 0;
-    return `https://www.youtube.com/embed/${id}${seconds ? `?start=${seconds}` : ""}`;
+    const params = new URLSearchParams({ enablejsapi: "1" });
+    if (seconds) params.set("start", String(seconds));
+    if (/^https?:$/.test(location.protocol)) params.set("origin", location.origin);
+    return `https://www.youtube.com/embed/${id}?${params}`;
   }
 
   function escapeMediaText(value) {
@@ -283,12 +300,12 @@
       const card = document.createElement("button");
       card.type = "button";
       card.className = "fei-track-card";
-      card.disabled = k === "china";
+
       card.innerHTML = `
-        <span class="fei-track-symbol" aria-hidden="true">${k === "china" ? `<svg viewBox="0 0 64 64" width="58" height="58" fill="none" aria-hidden="true"><path d="M14 16c8-4 28-4 36 0v32c-8-4-28-4-36 0Z" fill="#fff8eb" stroke="#ac9275" stroke-width="2"/><path d="M14 12v40M50 12v40" stroke="#ac9275" stroke-width="5" stroke-linecap="round"/><path d="M25 39c8-1 5-15 16-18M26 39c4-8 10-12 15-18" stroke="#4b6c62" stroke-width="2.5" stroke-linecap="round"/><path d="m31 30-7-4 3 7m8-7 1-6" stroke="#4b6c62" stroke-width="2"/><rect x="39" y="39" width="6" height="6" rx="1" fill="#b96059"/></svg>` : "✦"}</span>
+        <span class="fei-track-symbol" aria-hidden="true">${k === "asia" ? `<svg viewBox="0 0 64 64" width="58" height="58" fill="none" aria-hidden="true"><path d="M14 16c8-4 28-4 36 0v32c-8-4-28-4-36 0Z" fill="#fff8eb" stroke="#ac9275" stroke-width="2"/><path d="M14 12v40M50 12v40" stroke="#ac9275" stroke-width="5" stroke-linecap="round"/><path d="M25 39c8-1 5-15 16-18M26 39c4-8 10-12 15-18" stroke="#4b6c62" stroke-width="2.5" stroke-linecap="round"/><path d="m31 30-7-4 3 7m8-7 1-6" stroke="#4b6c62" stroke-width="2"/><rect x="39" y="39" width="6" height="6" rx="1" fill="#b96059"/></svg>` : "✦"}</span>
         <span class="t">${meta.label}</span>
-        <span class="s">${k === "china" ? "A new history path is taking shape." : "36 stories, from ancient worlds to contemporary art."}</span>
-        <span class="mini">${k === "china" ? "Coming soon" : `${p.completed.length}/${total} completed · Explore path →`}</span>
+        <span class="s">${escapeMediaText(meta.desc)}</span>
+        <span class="mini">${p.completed.length}/${total} completed · Explore path →</span>
       `;
       card.addEventListener("click", () => {
         state.activeTrack = k;
@@ -301,13 +318,13 @@
   }
 
   function showMap() {
-    if (state.activeTrack === "china") return showTrackSelect();
     hide($("#fei-track-view"));
     show($("#fei-map-view"));
 
     const meta = getTrackMeta(state.activeTrack);
     $("#display-name").textContent = state.name || "Student";
     $("#track-pill").textContent = meta.label;
+    $("#track-description").textContent = meta.desc;
 
     renderMap();
   }
@@ -324,11 +341,11 @@
     $("#history-progress").max = lessons.length || 1;
     $("#history-progress").value = count;
     $("#current-label").textContent = finished ? "YOUR PATH IS COMPLETE" : "YOU ARE HERE";
-    $("#current-title").textContent = finished ? "36 stories. A new way of seeing." : `Lesson ${current?.id || 1} · ${current?.title || "Welcome"}`;
+    $("#current-title").textContent = finished ? `${lessons.length} stories. A new way of seeing.` : `Lesson ${current?.id || 1} · ${current?.title || "Welcome"}`;
     $("#btn-continue").textContent = finished ? "Revisit the final lesson →" : count ? "Continue learning →" : "Start learning →";
     $("#btn-continue").onclick = () => current && openLevel(current);
     $("#history-badge").classList.toggle("earned", finished);
-    $("#history-badge").innerHTML = `<span aria-hidden="true">🏺</span><strong>Art History badge</strong><small>${finished ? "Badge earned · Well done!" : `${count} / ${lessons.length} lessons · Keep exploring`}</small>`;
+    $("#history-badge").innerHTML = `<span aria-hidden="true">${state.activeTrack === "asia" ? "🖌️" : "🏺"}</span><strong>${state.activeTrack === "asia" ? "Asian Art History path badge" : "Art History badge"}</strong><small>${finished ? "Badge earned · Well done!" : `${count} / ${lessons.length} lessons · Keep exploring`}</small>`;
     const container = $("#map-container");
     container.innerHTML = "";
     lessons.forEach(lesson => {
@@ -340,18 +357,18 @@
       const item = document.createElement("li");
       item.className = `fei-path-stop ${done ? "completed" : unlocked ? "unlocked" : "locked"}${active ? " current" : ""}`;
       item.innerHTML = `
-        <button class="fei-lesson-circle" ${unlocked ? "" : "disabled"} ${active ? 'aria-current="step"' : ""} aria-label="${escapeMediaText(`${done ? "Revisit" : unlocked ? "Open" : "Locked"} lesson ${id}: ${lesson.title}`)}">
+        <button class="fei-lesson-circle" ${active ? 'aria-current="step"' : ""} aria-label="${escapeMediaText(`${done ? "Revisit" : unlocked ? "Open" : "Preview"} lesson ${id}: ${lesson.title}`)}">
           ${photo?.src ? `<img src="${escapeMediaText(photo.src)}" alt="" loading="lazy">` : ""}
           <span class="fei-circle-number">${done ? "✓" : id}</span>
         </button>
         <div class="fei-stop-content">
-          <span class="fei-stop-status">${done ? "✓ Completed" : active ? "Your next discovery" : unlocked ? "Ready to explore" : "Locked · Complete the previous lesson"}</span>
+          <span class="fei-stop-status">${done ? "✓ Completed" : active ? "Your next discovery" : unlocked ? "Ready to explore" : "Explore freely · Challenge unlocks in sequence"}</span>
           <h2>${escapeMediaText(lesson.title)}</h2>
-          <p>${escapeMediaText(lesson.era)}</p>
-          ${unlocked ? `<button class="fei-open-lesson">${done ? "Revisit lesson" : "Explore lesson"} →</button>` : ""}
-          ${photo?.generated ? `<details class="fei-map-credit"><summary>About this illustration</summary><p>${escapeMediaText(photo.title)}<br>AI-assisted teaching illustration, not a historical artwork.<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">How this image was made</a></p></details>` : photo?.src ? `<details class="fei-map-credit"><summary>Image credit</summary><p>${escapeMediaText(photo.title)} · ${escapeMediaText(photo.credit)}<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">Source</a> · <a href="${escapeMediaText(photo.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(photo.license)}</a><br>Reduced-size preview; original proportions preserved.</p></details>` : ""}
+          <p>${escapeMediaText(lesson.era)}</p>${lesson.regions ? `<p class="fei-region-tag">${escapeMediaText(lesson.regions.join(" · "))}</p>` : ""}
+          <button class="fei-open-lesson">${done ? "Revisit lesson" : unlocked ? "Explore lesson" : "Browse video & resources"} →</button>
+          ${(photo?.generated || photo?.illustration) ? `<details class="fei-map-credit"><summary>About this illustration</summary><p>${escapeMediaText(photo.title)}<br>${photo.generated ? "AI-assisted teaching illustration" : "Original teaching diagram"}, not a historical artwork.<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">How this image was made</a></p></details>` : photo?.src ? `<details class="fei-map-credit"><summary>Image credit</summary><p>${escapeMediaText(photo.title)} · ${escapeMediaText(photo.credit)}<br><a href="${escapeMediaText(photo.sourceUrl)}" target="_blank" rel="noopener">Source</a> · <a href="${escapeMediaText(photo.licenseUrl)}" target="_blank" rel="noopener">${escapeMediaText(photo.license)}</a><br>Reduced-size preview; original proportions preserved.</p></details>` : ""}
         </div>`;
-      if (unlocked) item.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openLevel(lesson)));
+      item.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openLevel(lesson)));
       container.appendChild(item);
     });
   }
@@ -368,7 +385,6 @@
   }
 
   function openLevel(lesson) {
-    if (state.activeTrack === "china") return;
     returnFocus = document.activeElement;
     currentLevelId = safeNum(lesson.id, 0);
     show($("#fei-modal"));
@@ -378,7 +394,7 @@
     $("#btn-close").focus();
 
     $("#m-title").textContent = lesson.title || "";
-    $("#m-era").textContent = lesson.era || "";
+    $("#m-era").textContent = [lesson.era, lesson.regions?.join(" · ")].filter(Boolean).join(" · ");
 
     // video
     const videoBox = $("#m-video-box");
@@ -422,7 +438,7 @@
     videoCredit.hidden = !source;
 
     // lecture
-    $("#m-lecture-content").innerHTML = lesson.lecture || "";
+    $("#m-lecture-content").innerHTML = (lesson.lecture || "") + (lesson.comparison ? `<section class="fei-comparison"><h3>${escapeMediaText(lesson.comparison.title)}</h3><p>${escapeMediaText(lesson.comparison.intro)}</p><div class="fei-comparison-grid">${lesson.comparison.pairs.map(pair => `<article><h4>${escapeMediaText(pair.label)}</h4><p>${escapeMediaText(pair.detail)}</p></article>`).join("")}</div><p><strong>Try this:</strong> ${escapeMediaText(lesson.comparison.prompt)}</p></section>` : "");
 
     // images
     $("#m-images").innerHTML = (lesson.galleryNote ? `<p class="fei-gallery-note">${escapeMediaText(lesson.galleryNote)}</p>` : "") +
@@ -430,7 +446,7 @@
         const item = typeof image === "string" ? { src: image, title: lesson.title } : image;
         return `<figure class="fei-gallery-item">
           <div class="fei-img-box"><img src="${escapeMediaText(item.src)}" alt="${escapeMediaText(item.title)}" loading="lazy" /></div>
-          ${item.generated ? `<figcaption><strong>${escapeMediaText(item.title)}</strong><span>AI-assisted teaching illustration for FEI TeamArt.</span><small>Concept illustration, not a historical artwork or an artist’s portrait.</small><a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">About this illustration ↗</a></figcaption>` : item.sourceUrl ? `<figcaption>
+          ${(item.generated || item.illustration) ? `<figcaption><strong>${escapeMediaText(item.title)}</strong><span>${item.generated ? "AI-assisted teaching illustration" : "Original teaching diagram"} for FEI TeamArt.</span><small>Concept illustration, not a historical artwork or an artist’s portrait.</small><a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">About this illustration ↗</a></figcaption>` : item.sourceUrl ? `<figcaption>
             <strong>${escapeMediaText(item.title)}</strong>
             <span>${escapeMediaText(item.credit)}</span>
             <a href="${escapeMediaText(item.sourceUrl)}" target="_blank" rel="noopener">Image source ↗</a> ·
@@ -459,6 +475,9 @@
     $("#m-mission-text").innerHTML = lesson.mission || "";
 
     renderQuiz(lesson);
+    const preview = Number(lesson.id) > state.progress[state.activeTrack].unlocked;
+    $("#btn-submit").disabled = preview;
+    if (preview) $("#m-feedback").innerHTML = '<div class="fei-feedback">Videos, gallery, and activities are freely available. Complete the earlier Challenges to record this step on your guided path.</div>';
   }
 
   function renderQuiz(lesson) {
@@ -490,7 +509,7 @@
   function handleSubmit() {
     const lessons = getLessons(state.activeTrack);
     const lesson = lessons.find(l => safeNum(l.id, 0) === currentLevelId);
-    if (!lesson) return;
+    if (!lesson || currentLevelId > state.progress[state.activeTrack].unlocked) return;
 
     const quiz = lesson.quiz || [];
     const items = $$(".fei-quiz-item");
@@ -524,7 +543,7 @@
       if (!prog.completed.includes(currentLevelId)) {
         prog.completed.push(currentLevelId);
         prog.unlocked = Math.max(prog.unlocked, Math.min(total, currentLevelId + 1));
-        state.progress[state.activeTrack] = prog;
+        state.progress[state.activeTrack] = normalizeProgress(prog, total);
         saveState();
         renderMap();
         setTimeout(closeModal, 650);
@@ -532,7 +551,7 @@
         // write into the shared Art GPS profile so the homepage badge grid
         // and Artchi's celebration reflect real progress, not just this
         // widget's own local track state
-        if (typeof artHistoryMarkLessonComplete === "function") {
+        if (state.activeTrack === "western" && typeof artHistoryMarkLessonComplete === "function") {
           const courseId = `art-history-${state.activeTrack}-${currentLevelId}`;
           const badgeResult = artHistoryMarkLessonComplete(courseId);
           if (badgeResult.justUnlocked && typeof showArtchiBubble === "function") {

@@ -30,7 +30,7 @@
       title: 'Preparation',
       subtitle: 'Before you draw',
       emoji: '✏️',
-      href: 'lessons/preparation/',
+      href: 'lessons/preparation/guided/',
       ready: true,
       level: 1
     },
@@ -39,7 +39,7 @@
       title: 'The Cube',
       subtitle: 'Geometric form',
       emoji: '◧',
-      href: 'lessons/lesson-3-cube/',
+      href: 'lessons/lesson-3-cube/guided/',
       ready: true,
       level: 1
     },
@@ -48,7 +48,7 @@
       title: 'The Sphere',
       subtitle: 'Geometric form',
       emoji: '⬤',
-      href: 'lessons/lesson-1-sphere/',
+      href: 'lessons/lesson-1-sphere/guided/',
       ready: true,
       level: 1
     },

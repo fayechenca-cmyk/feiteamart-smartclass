@@ -53,7 +53,7 @@
     // A+B split (like glass below), but the teacher delivered the real
     // footage as one 5-video sequence instead — the still-life-1b-*
     // id/page was retired, this is now a single unified lesson.
-    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon', href: 'lessons/still-life-1a-star-balloon-structure/', ready: true },
+    { id: 'still-life-1a-star-balloon-structure', title: 'Foil Star Balloon', href: 'lessons/still-life-1a-star-balloon-structure/guided/', ready: true },
     // Glass Cup and Bottle: same consolidation as the balloon above —
     // rebuilt as one 4-step lesson (structure, composition, texture,
     // finish); still-life-2b-* id/page retired.
