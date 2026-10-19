@@ -388,7 +388,7 @@
     "watchAudio": "audio/v2-04-watch.mp3",
     "watchSay": "Here the teacher lightens a line that didn't match, and looks again. Observing means checking and correcting.",
     "audio": "audio/v2-04-try.mp3",
-    "say": "If an edge doesn't match what you see, lighten it and look again. No rush.",
+    "say": "If an edge doesn't match what you see, lighten it and look again. There's no rush.",
     "overlay": {
       "guides": [
         {
@@ -580,7 +580,7 @@
     "watchAudio": "audio/v3-03-watch.mp3",
     "watchSay": "Notice the tone builds in thin layers, not one heavy pass \u2014 the teacher goes over the same area more than once, always following the same curve.",
     "audio": "audio/v3-03-try.mp3",
-    "say": "Build your own tone the same way: light layers, more than one pass, rather than pressing hard once. No rush.",
+    "say": "Build your own tone the same way: light layers, more than one pass, rather than pressing hard once. Take it slowly.",
     "overlay": {
       "guides": [
         {
@@ -752,7 +752,7 @@
     "watchAudio": "audio/v3-08-watch.mp3",
     "watchSay": "Right next to each protected highlight, the tone jumps noticeably darker \u2014 the dark sits right next to the light, patch by patch, not a smooth fade. That's real contrast already; the darkest, crispest accents still come later, with a 6B pencil.",
     "audio": "audio/v3-08-try.mp3",
-    "say": "Push the tone darker right beside your own protected highlights. The bigger the jump, the brighter they'll read. No rush.",
+    "say": "Push the tone darker right beside your own protected highlights. The bigger the jump, the brighter they'll read. There's no rush.",
     "overlay": {
       "guides": [
         {
