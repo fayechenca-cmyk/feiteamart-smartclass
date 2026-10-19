@@ -4,9 +4,10 @@
     "title": "Your pencils",
     "kind": "materials",
     "focus": "pencils",
-    "hint": "Four pencils, chosen by value.",
-    "say": "Four pencils today, chosen by value: two-H and H-B for your brightest areas, two-B for the mid-tones, and six-B for your very darkest darks. We'll use all four, one at a time.",
-    "audio": "audio/s00-pencils.mp3"
+    "hint": "Four pencils, chosen by value, plus a white eraser.",
+    "say": "Four pencils today, chosen by value: two-H and H-B for your brightest areas, two-B for the mid-tones, and six-B for your very darkest darks. We'll use all four, one at a time. You'll also want a white eraser -- or an eraser pencil if you have one -- for lifting sharp highlights later on.",
+    "audio": "audio/s00-pencils.mp3",
+    "showEraser": true
   },
   {
     "chapter": "Materials",
@@ -930,5 +931,462 @@
     "hint": "Your tone is smooth, and the contrast is still there \u2014 next, we add the darkest details.",
     "say": "Your tone is smooth, and the contrast is still there. That's the balance foil needs. Next, we add the darkest details.",
     "audio": "audio/s96-video4-milestone.mp3"
+  },
+  {
+    "chapter": "Folds & Deepest Darks",
+    "title": "Folds set the rhythm",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 0,
+    "clipEnd": 60,
+    "frame": "frames/v5-60s.jpg",
+    "watchAudio": "audio/v5-01-watch.mp3",
+    "watchSay": "Folds sit roughly parallel to each other, with some long and some short. That variety gives them rhythm. They are not all the same. Every fold follows the direction of the balloon's surface. Where the surface curves, draw the fold as a curve. Where it runs straight down, draw it straight. Observe first, then draw.",
+    "audio": "audio/v5-01-try.mp3",
+    "say": "Pick up your 6B and look at your own star's folds first. Which are long, which are short? Which curve, which run straight? Observe, then draw just one or two.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M520 140 L560 230"
+        },
+        {
+          "d": "M650 130 Q710 190 760 230"
+        }
+      ],
+      "arrow": {
+        "d": "M1050 120 Q950 150 790 190"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 01",
+        "title": "Folds set the rhythm",
+        "sub": "Long and short, curved and straight."
+      }
+    },
+    "stepResult": "frames/v5-60s-ref.jpg"
+  },
+  {
+    "chapter": "Folds & Deepest Darks",
+    "title": "A fold between two points deepens",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 60,
+    "clipEnd": 130,
+    "frame": "frames/v5-130s.jpg",
+    "watchAudio": "audio/v5-02-watch.mp3",
+    "watchSay": "Between the top point and the upper-right point, the surface folds inward -- the pencil presses hardest right there, in the crease itself, not on the flat panel beside it.",
+    "audio": "audio/v5-02-try.mp3",
+    "say": "Choose one fold on your own star and press hardest only in the crease. Let the panel on either side stay lighter.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M640 125 Q715 195 775 235"
+        }
+      ],
+      "arrow": {
+        "d": "M1000 200 Q900 210 790 225"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 02",
+        "title": "A fold between two points deepens",
+        "sub": "Press hardest right in the crease."
+      }
+    },
+    "stepResult": "frames/v5-130s-ref.jpg"
+  },
+  {
+    "chapter": "Folds & Deepest Darks",
+    "title": "Lifting a crisp highlight",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 130,
+    "clipEnd": 202,
+    "frame": "frames/v5-202s.jpg",
+    "watchAudio": "audio/v5-03-watch.mp3",
+    "watchSay": "Watch the teacher pick up a white block eraser. Pressed corner-first right beside the fold just drawn, it lifts a thin, bright highlight -- dark fold, bright edge, side by side. Draw, then lift, and watch the fold get squeezed out by the light.",
+    "audio": "audio/v5-03-try.mp3",
+    "say": "Use a sharp edge -- the corner of a white eraser, an eraser pencil, or a kneaded eraser pinched to a point -- to lift a thin highlight right beside the fold.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 490,
+          "cy": 300,
+          "rx": 48,
+          "ry": 36,
+          "ellipse": true
+        },
+        {
+          "d": "M465 290 L420 330",
+          "dash": true
+        }
+      ],
+      "arrow": {
+        "d": "M250 150 Q350 220 440 280"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 03",
+        "title": "Lifting a crisp highlight",
+        "sub": "Dark fold, bright edge, side by side."
+      }
+    },
+    "stepResult": "frames/v5-202s-ref.jpg"
+  },
+  {
+    "chapter": "Crisp Edges & Highlights",
+    "title": "Fold, then lift -- again",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 202,
+    "clipEnd": 280,
+    "frame": "frames/v5-280s.jpg",
+    "watchAudio": "audio/v5-04-watch.mp3",
+    "watchSay": "On the left point, the same rhythm repeats -- fold drawn dark, then a thin highlight lifted right beside it. Fold, lift, fold, lift. Watch the texture of the foil start to appear.",
+    "audio": "audio/v5-04-try.mp3",
+    "say": "Try the same pair on your own left point: darken the fold, then lift a highlight beside it. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M376 324 L465 290"
+        },
+        {
+          "cx": 410,
+          "cy": 300,
+          "rx": 46,
+          "ry": 36,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M220 420 Q300 360 390 310"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 04",
+        "title": "Fold, then lift -- again",
+        "sub": "The same rhythm, a different point."
+      }
+    },
+    "stepResult": "frames/v5-280s-ref.jpg"
+  },
+  {
+    "chapter": "Crisp Edges & Highlights",
+    "title": "The left point's edge gets dense new hatching",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 280,
+    "clipEnd": 360,
+    "frame": "frames/v5-360s.jpg",
+    "watchAudio": "audio/v5-05-watch.mp3",
+    "watchSay": "New hatch marks build up fast along the left point's edge -- so much pressure that the pencil wears down to a stub and needs sharpening again before the next pass.",
+    "audio": "audio/v5-05-try.mp3",
+    "say": "Add a few hatch strokes of your own along one edge. If your pencil goes dull, stop and sharpen it -- a sharp point keeps the dark crisp.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M420 350 L560 450"
+        }
+      ],
+      "arrow": {
+        "d": "M250 500 Q350 460 430 400"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 05",
+        "title": "The left point's edge gets dense new hatching",
+        "sub": "So much pressure the pencil wears down."
+      }
+    },
+    "stepResult": "frames/v5-360s-ref.jpg"
+  },
+  {
+    "chapter": "Crisp Edges & Highlights",
+    "title": "A clear look before going further",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 360,
+    "clipEnd": 430,
+    "frame": "frames/v5-430s.jpg",
+    "watchAudio": "audio/v5-06-watch.mp3",
+    "watchSay": "Hands lift for just a moment -- a chance to check the whole star at arm's length. Is the dark staying concentrated in the folds, or spreading everywhere?",
+    "audio": "audio/v5-06-try.mp3",
+    "say": "Hold your own drawing at arm's length. If the dark is spreading past the folds, that's worth noticing now, before adding more.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M570 65 L913 153 L908 515 L580 588 L376 324 L465 290 Z",
+          "dash": true
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 06",
+        "title": "A clear look before going further",
+        "sub": "Checking the dark against the light."
+      }
+    },
+    "stepResult": "frames/v5-430s-ref.jpg"
+  },
+  {
+    "chapter": "Crisp Edges & Highlights",
+    "title": "Freshly sharpened, back to the bottom point",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 430,
+    "clipEnd": 490,
+    "frame": "frames/v5-490s.jpg",
+    "watchAudio": "audio/v5-07-watch.mp3",
+    "watchSay": "Pencil freshly sharpened, the teacher moves to the bottom point, right where it meets the stick, and starts the same dark-fold pass there.",
+    "audio": "audio/v5-07-try.mp3",
+    "say": "Move to your own bottom point and begin the same pass -- dark in the fold, light protected beside it.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M580 588 L650 560"
+        }
+      ],
+      "arrow": {
+        "d": "M300 560 Q450 580 560 585"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 07",
+        "title": "Freshly sharpened, back to the bottom point",
+        "sub": "Right where the point meets the stick."
+      }
+    },
+    "stepResult": "frames/v5-490s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "The stick gets its dark pass",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 490,
+    "clipEnd": 605,
+    "frame": "frames/v5-605s.jpg",
+    "watchAudio": "audio/v5-08-watch.mp3",
+    "watchSay": "The stick gets its own dark pass with the pencil -- more than one layer, since it's one of the darkest parts of the whole drawing.",
+    "audio": "audio/v5-08-try.mp3",
+    "say": "Give your own stick a few layers too. It can go darker than almost anywhere else on the page.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M600 592 L645 655"
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 08",
+        "title": "The stick gets its dark pass",
+        "sub": "One of the darkest parts of the page."
+      }
+    },
+    "stepResult": "frames/v5-605s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "The seam beside the stick turns crisp",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 605,
+    "clipEnd": 680,
+    "frame": "frames/v5-680s.jpg",
+    "watchAudio": "audio/v5-09-watch.mp3",
+    "watchSay": "The same white block eraser reappears here, lifting a highlight right at the seam beside the stick -- then the pencil crosshatches around it, pass after pass, until the edge turns crisp.",
+    "audio": "audio/v5-09-try.mp3",
+    "say": "Try the same combination again: lift a highlight with your eraser's edge, then crosshatch around it until the line feels crisp.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M820 460 Q865 490 905 513"
+        },
+        {
+          "cx": 850,
+          "cy": 460,
+          "rx": 35,
+          "ry": 25,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M1080 420 Q980 450 920 480"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 09",
+        "title": "The seam beside the stick turns crisp",
+        "sub": "The same eraser, lifting the edge sharp."
+      }
+    },
+    "stepResult": "frames/v5-680s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "A pause to check the contrast",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 680,
+    "clipEnd": 760,
+    "frame": "frames/v5-750s.jpg",
+    "watchAudio": "audio/v5-10-watch.mp3",
+    "watchSay": "The pencil lifts off the page for a moment, hovering right over the crosshatching just finished -- one more check that the dark-to-light jump is still strong.",
+    "audio": "audio/v5-10-try.mp3",
+    "say": "Pause here too. Look at what you just darkened -- is the contrast beside it still crisp?",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 850,
+          "cy": 470,
+          "rx": 55,
+          "ry": 45,
+          "ellipse": true
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 10",
+        "title": "A pause to check the contrast",
+        "sub": "Still sharp, still dark enough?"
+      }
+    },
+    "stepResult": "frames/v5-750s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "Back on the bottom point",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 760,
+    "clipEnd": 875,
+    "frame": "frames/v5-875s.jpg",
+    "watchAudio": "audio/v5-11-watch.mp3",
+    "watchSay": "Work continues on the bottom point, deepening what's already dark rather than spreading new tone thin across the page.",
+    "audio": "audio/v5-11-try.mp3",
+    "say": "Keep deepening darks you've already started, rather than opening up new areas everywhere.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M580 588 L540 520"
+        }
+      ],
+      "arrow": {
+        "d": "M280 520 Q400 560 520 570"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 11",
+        "title": "Back on the bottom point",
+        "sub": "Deepening, not spreading thin."
+      }
+    },
+    "stepResult": "frames/v5-875s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "A last touch of tissue",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 875,
+    "clipEnd": 925,
+    "frame": "frames/v5-925s.jpg",
+    "watchAudio": "audio/v5-12-watch.mp3",
+    "watchSay": "A tissue comes back out, just for a moment, to soften one facet near the lower-right point -- but even now, it stops right at the edge of the dark, never smoothing into it.",
+    "audio": "audio/v5-12-try.mp3",
+    "say": "If an area feels too sharp-edged all over, a very light tissue touch can help -- but keep it away from your darkest accents.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 800,
+          "cy": 330,
+          "rx": 55,
+          "ry": 40,
+          "ellipse": true
+        },
+        {
+          "d": "M760 300 L840 365",
+          "dash": true
+        }
+      ],
+      "arrow": {
+        "d": "M1050 280 Q950 300 860 325"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 12",
+        "title": "A last touch of tissue",
+        "sub": "Stopping right at the edge of the dark."
+      }
+    },
+    "stepResult": "frames/v5-925s-ref.jpg"
+  },
+  {
+    "chapter": "Seam & Stick",
+    "title": "Knowing when to stop",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 925,
+    "clipEnd": 990,
+    "frame": "frames/v5-990s.jpg",
+    "watchAudio": "audio/v5-13-watch.mp3",
+    "watchSay": "Only a few small touches now. Knowing when to stop is a skill too -- overworking makes the foil look dull and muddy.",
+    "audio": "audio/v5-13-try.mp3",
+    "say": "Look for one or two places that still need it. If nothing does, you're done.",
+    "overlay": {
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 13",
+        "title": "Knowing when to stop",
+        "sub": "A skill, not a shortcut."
+      }
+    },
+    "stepResult": "frames/v5-990s-ref.jpg"
+  },
+  {
+    "chapter": "Final Compare",
+    "title": "Compare with the teacher's finished drawing",
+    "kind": "draw",
+    "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
+    "start": 990,
+    "clipEnd": 994.82,
+    "frame": "frames/v5-end.jpg",
+    "watchAudio": "audio/v5-14-watch.mp3",
+    "watchSay": "Hands fully clear now -- here's the finished drawing: folds dark, highlights crisp, foil complete.",
+    "audio": "audio/v5-14-try.mp3",
+    "say": "Put your drawing beside the teacher's finished one. Where does yours shine? Pick one thing you're proud of.",
+    "stepResult": "frames/v5-end-ref.jpg"
+  },
+  {
+    "chapter": "Final Compare",
+    "title": "Details complete",
+    "kind": "milestone",
+    "hint": "Every fold is dark, every highlight crisp \u2014 the foil is complete.",
+    "say": "Every fold is dark, every highlight crisp. That strong contrast is what makes foil look like foil. You've finished the drawing.",
+    "audio": "audio/s95-video5-milestone.mp3"
+  },
+  {
+    "chapter": "Final Compare",
+    "title": "Look how far you've come",
+    "kind": "recap",
+    "recap": [
+      {
+        "src": "frames/v1-end-ref.jpg",
+        "label": "Outline"
+      },
+      {
+        "src": "frames/v2-end-ref.jpg",
+        "label": "Observed edges"
+      },
+      {
+        "src": "frames/v3-end-ref.jpg",
+        "label": "Tone"
+      },
+      {
+        "src": "frames/v4-after.jpg",
+        "label": "Blend"
+      },
+      {
+        "src": "frames/v5-end-ref.jpg",
+        "label": "Details"
+      }
+    ],
+    "say": "Five stages, one drawing: outline, observed edges, tone, blend, and now, details. Look how far you've come.",
+    "audio": "audio/s94-recap.mp3"
+  },
+  {
+    "chapter": "Final Compare",
+    "title": "Share your drawing",
+    "kind": "submit",
+    "hint": "Outline \u00b7 Observed edges \u00b7 Tone \u00b7 Blend \u00b7 Details",
+    "say": "Ready to share your finished balloon? Choose a clear photo, then tap send. You can also continue without one and come back later.",
+    "audio": "audio/s93-submit.mp3"
   }
 ]

@@ -31,7 +31,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}window.GuidedUX?.tick(voice.currentTime);
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=flow[index]?.kind==='milestone'&&index===flow.length-1?'Continue to tone →':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=index===flow.length-1?'Celebrate →':'Continue →';}
 
 // ── Live teaching overlay (replaces the old flattened key-N.svg PNGs
 // with real SVG elements drawn over the checkpoint frame, so they scale
@@ -41,14 +41,17 @@ function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('nex
 // card:{kicker,title,sub} }. viewBox always matches the key-N.svg
 // convention, 1280x720, so it lines up with the 16:9 teacher video.
 function overlaySvg(spec, frameSrc){
- if(!spec) return '';
- const guides=(spec.guides||[]).map((g,i)=>{
+ // A step can legitimately have no overlay at all (Video 5's final "compare
+ // with the finished drawing" moment -- nothing to point at) -- the
+ // checkpoint frame must still show, just with an empty guide layer, not a
+ // blank visual area.
+ const guides=(spec?.guides||[]).map((g,i)=>{
   if(g.ellipse) return `<ellipse class="og-ellipse og-fade" style="animation-delay:${.2+i*.15}s" cx="${g.cx}" cy="${g.cy}" rx="${g.rx}" ry="${g.ry}"/>`;
   return `<path class="og-guide${g.dash?' dash':''}${g.old?' old':''} og-draw" style="--og-len:900;animation-delay:${.15+i*.15}s" d="${g.d}"/>`;
  }).join('');
- const arrow=spec.arrow?`<path class="og-arrow og-fade" style="animation-delay:${.6+(spec.guides?.length||0)*.15}s" d="${spec.arrow.d}"/>`:'';
- const card=spec.card?`<g class="og-fade" style="animation-delay:.9s"><rect class="og-card-bg" x="25" y="22" width="420" height="116" rx="16"/><rect class="og-card-accent" x="25" y="22" width="7" height="116" rx="3"/><text class="og-kicker" x="48" y="56">${spec.card.kicker}</text><text class="og-title" x="48" y="88">${spec.card.title}</text><text class="og-sub" x="48" y="117">${spec.card.sub}</text></g>`:'';
- return `<div class="overlay-wrap"><img src="${frameSrc}" alt=""><svg class="overlay-svg" viewBox="0 0 1280 720" role="img" aria-label="${spec.card?spec.card.title:'Teaching guide'}"><defs><marker id="og-tip" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#00d5b0" stroke-width="2"/></marker></defs>${guides}${arrow}${card}</svg></div>`;
+ const arrow=spec?.arrow?`<path class="og-arrow og-fade" style="animation-delay:${.6+(spec.guides?.length||0)*.15}s" d="${spec.arrow.d}"/>`:'';
+ const card=spec?.card?`<g class="og-fade" style="animation-delay:.9s"><rect class="og-card-bg" x="25" y="22" width="420" height="116" rx="16"/><rect class="og-card-accent" x="25" y="22" width="7" height="116" rx="3"/><text class="og-kicker" x="48" y="56">${spec.card.kicker}</text><text class="og-title" x="48" y="88">${spec.card.title}</text><text class="og-sub" x="48" y="117">${spec.card.sub}</text></g>`:'';
+ return `<div class="overlay-wrap"><img src="${frameSrc}" alt=""><svg class="overlay-svg" viewBox="0 0 1280 720" role="img" aria-label="${spec?.card?spec.card.title:'Teaching guide'}"><defs><marker id="og-tip" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="#00d5b0" stroke-width="2"/></marker></defs>${guides}${arrow}${card}</svg></div>`;
 }
 
 // ── Placement scene (Section 3, moment A) -- an animated overlay shown
@@ -86,9 +89,18 @@ function buildScene(s){
   if(!muted&&!completed.has(index))chime();
  }else if(s.kind==='materials'){
   const rect=s.focus==='pencils'?'x="75" y="24" width="750" height="940"':'x="855" y="25" width="640" height="785"';
-  $('visual').innerHTML=`<div class="scene material"><svg viewBox="0 0 1536 1024" role="img" aria-label="Six labelled pencils, two paper blending stumps, and sketch paper"><image href="${root}assets/sketch-support/toolkit/drawing-tools.png" width="1536" height="1024"/><rect ${rect} rx="24" fill="none" stroke="#dcaa49" stroke-width="7" class="tool-glow"/></svg></div>`;
+  // The shared toolkit photo (assets/sketch-support/toolkit/drawing-tools.png)
+  // has no eraser in it -- unlike pencils/stumps, there is no real photo
+  // region to spotlight, so this draws a small hand-drawn icon instead (same
+  // approach as tissueScene() below for the tissue, which has the same gap).
+  const eraser=s.showEraser?`<div class="eraser-callout"><svg viewBox="0 0 90 60" role="img" aria-label="A white block eraser, partly unwrapped"><rect x="8" y="10" width="74" height="40" rx="6" fill="#fdfdfb" stroke="#8d8577" stroke-width="2.5"/><path d="M8 32h74" stroke="#c23b3b" stroke-width="2.5"/><path d="M8 20h30M8 44h22" stroke="#c23b3b" stroke-width="1.6" opacity=".6"/></svg><span>White eraser (or an eraser pencil)</span></div>`:'';
+  $('visual').innerHTML=`<div class="scene material"><svg viewBox="0 0 1536 1024" role="img" aria-label="Six labelled pencils, two paper blending stumps, and sketch paper"><image href="${root}assets/sketch-support/toolkit/drawing-tools.png" width="1536" height="1024"/><rect ${rect} rx="24" fill="none" stroke="#dcaa49" stroke-width="7" class="tool-glow"/></svg>${eraser}</div>`;
  }else if(s.kind==='compare'){
   $('visual').innerHTML=`<div class="compare-scene"><figure><img src="${s.compare.before}" alt="The drawing before blending"><figcaption>BEFORE</figcaption></figure><figure><img src="${s.compare.after}" alt="The drawing after blending"><figcaption>AFTER</figcaption></figure></div>`;
+ }else if(s.kind==='recap'){
+  $('visual').innerHTML=`<div class="recap-scene">${s.recap.map(r=>`<figure><img src="${r.src}" alt="Your drawing's ${r.label.toLowerCase()} stage"><figcaption>${r.label}</figcaption></figure>`).join('')}</div>`;
+ }else if(s.kind==='submit'){
+  window.GuidedSubmit.mount($('visual'),{lessonId:LESSON_ID,title:'The Foil Star Balloon',courseId:'still-life',onPhoto:url=>{photoURL=url;}});
  }else if(s.kind==='paper'){
   $('visual').innerHTML=`<div class="scene real-paper-scene"><div class="paper-photo-grid"><figure class="paper-context"><img src="paper/sketch-pad.webp" alt="An open sketch-paper pad with pencils on its real paper sheets"><figcaption>Sketch paper</figcaption></figure><button class="paper-photo" data-paper="textured" aria-label="Enlarge textured sketch paper photograph"><img src="paper/textured.webp" alt="Close-up photograph of the tooth on cotton sketch paper"><strong>More texture</strong><span>Notice the tiny bumps</span></button><button class="paper-photo" data-paper="smooth" aria-label="Enlarge smoother drawing paper photograph"><img src="paper/smooth.webp" alt="Close-up photograph of a pencil resting on fine-grained, smoother drawing paper"><strong>Smoother surface</strong><span>A finer grain</span></button></div><div class="paper-photo-credit">Two paper samples · Feel both sides of your own sheet.<br><a href="https://www.hahnemuehle.shop/the-collection-sketch/10625161" target="_blank" rel="noopener">Photos: Hahnemühle — Sketch</a> · <a href="https://www.hahnemuehle.shop/en/dessin/10628192" target="_blank" rel="noopener">Dessin</a></div></div>`;
   document.querySelectorAll('[data-paper]').forEach(button=>button.onclick=()=>{voice.pause();const img=$('diagram').querySelector('img');img.src='paper/'+button.dataset.paper+'.webp';img.alt=button.querySelector('img').alt;$('diagram').showModal();});
@@ -175,10 +187,32 @@ function enter(){
   else speak(s,()=>{waiting();});
  }
 }
+function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
+// Still Life's own five-painting course, not Foundation of Sketch's 11 --
+// see core/course-badge-registry.js's still_life entry (currently stale:
+// references a retired lesson id and omits this one -- flagged to Faye,
+// not fixed here) for why this list lives here instead of reusing that
+// registry. A multi-lesson painting (Pillow) is one array, not two, so it
+// only counts once toward the five, matching how Faye wants progress shown.
+const STILL_LIFE_PROGRESS_GROUPS=[
+ ['still-life-1a-star-balloon-structure'],
+ ['still-life-2a-glass-structure'],
+ ['still-life-3a-pillow-structure','still-life-3b-pillow-texture'],
+ ['still-life-4a-dog-structure'],
+ ['still-life-5a-frame-structure'],
+];
 function next(){
  if($('next').disabled)return;
  mark();
- if(index===flow.length-1){stopVoice();GuidedPlatform.flush().then(()=>{location.href='../?classic=1&from=guided-outline';});return;}
+ if(index===flow.length-1){
+  stopVoice();
+  GuidedPlatform.complete(LESSON_ID);
+  window.GuidedReward.complete({
+   lessonId:LESSON_ID,title:'The Foil Star Balloon',badgeId:'still_life',courseLabel:'Still Life and Texture',
+   progressGroups:STILL_LIFE_PROGRESS_GROUPS,nextLabel:'Back to Still Life →',muted,onMutedChange:setRewardMuted,
+  }).then(async go=>{await GuidedPlatform.flush();if(go)location.href=root+'lessons/still-life/';});
+  return;
+ }
  index++;enter();
 }
 $('next').onclick=next;

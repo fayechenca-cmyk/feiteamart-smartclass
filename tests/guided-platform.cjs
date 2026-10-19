@@ -12,6 +12,10 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
  for(const folder of ['preparation','lesson-3-cube','lesson-1-sphere','still-life-1a-star-balloon-structure']){
  const html=fs.readFileSync(`lessons/${folder}/index.html`,'utf8');assert(html.includes("has('classic')"));assert(html.includes("location.replace('guided/'"));
  }
- const balloon=fs.readFileSync('lessons/still-life-1a-star-balloon-structure/guided/studio.js','utf8');assert(balloon.includes("location.href='../?classic=1&from=guided-outline'"));assert(!balloon.includes('GuidedPlatform.complete'));
- console.log('PASS: access gate, idempotent profile completion, original-link routing, and partial Balloon continuation.');
+ // Video 5 is built now -- Balloon ends for real (GuidedPlatform.complete +
+ // GuidedReward + a redirect to the Still Life course map), never handing off
+ // to the classic lesson any more (that was only ever a placeholder for the
+ // gap before Video 5 existed).
+ const balloon=fs.readFileSync('lessons/still-life-1a-star-balloon-structure/guided/studio.js','utf8');assert(!balloon.includes('classic=1&from=guided-outline'));assert(balloon.includes("GuidedPlatform.complete(LESSON_ID)"));
+ console.log('PASS: access gate, idempotent profile completion, original-link routing, and Balloon\'s real completion (no more classic handoff).');
 })().catch(e=>{console.error(e);process.exit(1)});

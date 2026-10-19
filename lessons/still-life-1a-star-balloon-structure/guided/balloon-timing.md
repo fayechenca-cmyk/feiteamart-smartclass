@@ -195,44 +195,80 @@ building (7.0s and 4.0s against 14s and 12.18s windows), so the teacher
 clip is never cut off mid-narration. Only video short enough that 2
 watch moments + the compare step + end Try fully covers it.
 
-## Video 5 — Painting the Details (994.82 s) — first-pass reading, to confirm when building commit 5
+## Video 5 — Painting the Details (994.82 s) — fully aligned, built in commit 5
 
-By far the longest video. Opens already mid-dark-accent: f0001 shows a
-visibly thick, near-black pencil barrel (6B) laying in a dark accent at
-the top point within the first 3 seconds — "darkest accents with 6B" is
-the very first thing in this video, not something to find later. A white
-tool (eraser, not pencil — confirmed shape/colour) appears around
-f0147–151 (~438–450 s). Near the end (f0294–303, ~879–906 s) both hands
-lift away from the page for several frames — a strong candidate for the
-"final step-back comparison" must-have — before a last fine-detail pass
-through to f0332 (994.82 s).
+By far the longest video, and the one with the most first-pass guesses
+corrected by a full frame-by-frame pass (see "Corrections" below). Opens
+already mid-dark-accent: a visibly thick, near-black pencil barrel (6B,
+pink/salmon grade-band paint near the ferrule) lays in a dark accent at
+the top point within the first 3 seconds — confirmed at every checked
+timestamp from 0s through 980s, with no swap to a different pencil
+anywhere in this video (it visibly wears down between re-sharpenings —
+short stub by ~360s, fresh again by ~480s — same barrel throughout).
 
-- 0–~15 s: 6B dark accents begin immediately (must-have moment, opens the
-  video)
-- ~15–~438 s: darkest accents continue across multiple points (cadence
-  check-ins needed roughly every 60–75 s given this stretch — expect 5–6
-  here alone)
-- ~438–~450 s: eraser appears — sharp highlight lift (must-have moment)
-- ~450–~879 s: continued detail work, including the seam and the
-  stick/neck at the bottom (exact timing of each TBD frame-by-frame for
-  commit 5)
-- ~879–906 s: hands lift away — final step-back comparison (must-have
-  moment)
-- ~906–994.82 s: last fine-detail pass, end Try
+**The eraser tool, confirmed, not a pencil-shaped "eraser pencil":** at
+~202s and again at ~608s the teacher picks up the same stubby white
+block eraser (paper sleeve, partially peeled) used in Videos 1–2 —
+pressed corner-first beside a fold to lift a thin highlight, then the
+pencil crosshatches around that lift until the edge turns crisp. No
+cylindrical, sharpenable eraser tool appears anywhere in this footage;
+the brief's narration was adjusted to describe what the teacher actually
+holds (a block eraser) while keeping "a sharp edge — block eraser corner,
+eraser pencil, or kneaded eraser pinched to a point" as the general
+*principle* taught, since any of those genuinely work.
 
-Given the cadence rule (no stretch over ~60–75 s) a video this long will
-need noticeably more than "5–8" moments — expect 12–15. The brief's "5–8
-per video" is a general guideline; the explicit 60–75 s cadence rule is
-the hard constraint it's weighed against for this one outlier video.
+**Corrections found on the full re-pass, replacing first-pass guesses:**
+- The eraser does **not** first appear at ~438–450s as the first-pass
+  thumbnail read guessed — frame-confirmed at ~202s instead (matching the
+  brief's own "3:22" instruction), reappearing once more at ~608s.
+- The "final step-back comparison" is **not** at ~879–906s — hands are
+  still actively working there (a tissue reappears at ~900–920s, blending
+  the lower-right facet, stopping right at the edge of the dark). The
+  real intermittent-small-touches stretch, confirmed frame-by-frame, is
+  ~935–990s: brief isolated touches at the right point (~935s) and top
+  point (~980s), hands lifting between each — this is where "knowing
+  when to stop" belongs, not two separate must-haves.
+- A tissue touch at ~900–920s is real and was not in the original
+  reading at all — kept as its own moment since it ties back to Video 4's
+  blending rule (soften, never cross a highlight).
+
+**Star polygon re-measured for this video specifically** — close to but
+not identical to Video 3/4's framing (confirmed: drawing V3's exact
+polygon onto a clean Video 5 frame visibly missed the real points, worst
+at the bottom point). New points (1280×720 viewBox), each individually
+verified by drawing the proposed coordinates back onto the real frame
+before finalizing: top(570,65), upperRight(913,153), lowerRight(908,515),
+bottom(580,588), left(376,324), upperLeft(465,290).
+
+- 0–202s: 6B dark accents begin immediately at the top point (must-have),
+  then a fold between the top and upper-right points deepens
+- 130–202s: the block eraser's first appearance — lifting a crisp
+  highlight beside a fold (must-have)
+- 202–490s: the same fold-then-lift rhythm repeats on the left point,
+  dense new hatching wears the pencil down to a stub (resharpened), a
+  brief hands-off check-in, then the freshly sharpened pencil moves to
+  the bottom point
+- 490–680s: the stick gets its own dark pass, then the block eraser
+  reappears at the seam beside the stick, pencil crosshatching around it
+  until crisp
+- 680–925s: a pause to check the contrast, continued work deepening the
+  bottom point, then the tissue touch described above
+- 925–990s: only small, isolated touches — "knowing when to stop"
+  (must-have)
+- 990–994.82s: hands fully clear, finished drawing — compare with the
+  teacher's own finished piece (must-have)
+
+14 draw micro-steps (not the usual 7-ish) — the explicit 60–75s cadence
+rule the brief itself calls out as the hard constraint for this one
+outlier-length video, same reasoning as Video 3's 9+1.
 
 ## What I could not confirm from 3-second contact sheets alone
 
 - Video 2's exact step-back timing and Video 3's exact pencil-change
-  second are first-pass readings from thumbnails, not frame-perfect yet.
-  I'll re-check both against full-resolution frames when building commits
-  2 and 3, the same way I already did for Video 1's eraser window and
-  Video 5's opening 6B accent and step-back moment (all three confirmed
-  at full frame resolution, not just thumbnail size).
-- No stretch of any video shows a visible second eraser beyond the two
-  noted above (Video 1 ~165–189 s, Video 5 ~438–450 s) — if a closer pass
-  finds another, I'll add it rather than invent a count.
+  second were first-pass readings from thumbnails, confirmed against
+  full-resolution frames when building commits 2 and 3 respectively (see
+  their own sections above).
+- No stretch of any video shows a visible eraser beyond the four now
+  confirmed (Video 1 ~165–189s, Video 2 ~144–159s, Video 5 ~202s and
+  ~608s) — if a closer pass ever finds another, it should be added rather
+  than an invented count assumed.

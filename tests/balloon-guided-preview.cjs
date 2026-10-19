@@ -37,7 +37,11 @@ function mockSupabase(page){
  // student's account, since corrected) -- mock the roster fetch with a disposable
  // fixture code that exists nowhere outside this test.
  await page.route('**/core/student-access-codes.js',r=>r.fulfill({contentType:'text/javascript',body:'export default [{id:"PWTEST-00"}];'}));
- await page.addInitScript(()=>{sessionStorage.setItem('fei_user_profile',JSON.stringify({studentCode:'PWTEST-00',tier:'member'}));});
+ // addInitScript re-runs on every navigation (including the final redirect to
+ // the Still Life landing page) -- only seed the fixture profile if one isn't
+ // already there, so the real completedLessons/completedSteps written during
+ // the flow survive that redirect instead of being reset back to the fixture.
+ await page.addInitScript(()=>{if(!sessionStorage.getItem('fei_user_profile'))sessionStorage.setItem('fei_user_profile',JSON.stringify({studentCode:'PWTEST-00',tier:'member'}));});
  await page.route('https://embed.cloudflarestream.com/**',r=>r.fulfill({contentType:'text/javascript',body:`window.Stream=()=>{const events={};const p={currentTime:0,paused:true,muted:false,play(){this.paused=false;events.play?.();return Promise.resolve()},pause(){this.paused=true},addEventListener(n,f){events[n]=f}};window.fakePlayer=p;window.firePlayer=(n)=>events[n]?.();setTimeout(()=>events.loadedmetadata?.(),50);return p;};`}));
  await page.route('https://customer-*/**',r=>r.fulfill({contentType:'text/html',body:'<body style="background:#333;color:white">Teacher video (test player)</body>'}));
  await page.goto(url);await page.locator('#start:not([disabled])').waitFor();await page.click('#start');
@@ -53,11 +57,10 @@ function mockSupabase(page){
  }
 
  // Steps 4-11: the 8 Video 1 micro-steps, 13-19: the 7 Video 2 micro-steps,
- // 21-30: the 10 Video 3 micro-steps, 32-33: the 2 Video 4 micro-steps --
- // same checkpoint mechanics for all four.
+ // 21-30: the 10 Video 3 micro-steps, 32-33: the 2 Video 4 micro-steps,
+ // 36-49: the 14 Video 5 micro-steps -- same checkpoint mechanics for all five.
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- const ranges=[[4,12],[13,20],[21,31],[32,34]];
- for(const [lo,hi] of ranges){
+ async function processRange(lo,hi){
  for(let i=lo;i<hi;i++){
   const step=flow[i];
   await page.waitForFunction(t=>document.getElementById('title').textContent===t,step.title);
@@ -97,8 +100,8 @@ function mockSupabase(page){
    // -- every step is reachable, not just unlocked ones -- so nothing here is disabled.
    await page.click('#mapButton');assert.equal(await page.locator('#map button.map-step').last().isDisabled(),false,'Journey map should let the student jump anywhere');await page.click('#closeMap');
   }
-  if(i===13||i===21||i===32){
-   const tag=i===13?'v2':i===21?'v3':'v4';
+  if(i===13||i===21||i===32||i===36){
+   const tag=i===13?'v2':i===21?'v3':i===32?'v4':'v5';
    for(const [w,h,label] of [[1440,900,`desktop-${tag}`],[1024,768,`ipad-${tag}`]]){
     await page.setViewportSize({width:w,height:h});await page.screenshot({path:`/tmp/balloon-guided-${label}.png`});
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No horizontal overflow at '+label);
@@ -108,23 +111,21 @@ function mockSupabase(page){
   await page.click('#next');
   if(i<hi-1)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
  }
- // Each video's own milestone (index === hi) continues into the next video
- // unless it's the true final step (the last range's milestone, flow.length-1).
- // Video 4's range ends on its "compare" step instead (index 34, handled
- // separately below, since it isn't a milestone and has no clip to resume).
+ // Each video's own milestone (index === hi) continues forward -- into the
+ // next video if the next step is itself a draw step, otherwise (Video 5's
+ // milestone, followed by the recap/submit ending, not another video) it
+ // just advances without waiting on a teacher clip that was never going to
+ // resume. None of these is the true final step any more -- the flow now
+ // always ends on its own submit step (see the tail below), never a milestone.
  if(flow[hi].kind==='milestone'){
-  const isFinalMilestone=hi===flow.length-1;
   await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[hi].title);
   await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
-  if(isFinalMilestone){
-   assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
-  }else{
-   assert.notEqual(await page.locator('#next').textContent(),'Continue to tone →','A non-final video milestone must not look like the final step: '+flow[hi].title);
-  }
+  assert.notEqual(await page.locator('#next').textContent(),'Celebrate →','Only the real final (submit) step should say Celebrate: '+flow[hi].title);
   await page.click('#next');
-  if(!isFinalMilestone)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
+  if(flow[hi+1]?.kind==='draw')await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
  }
  }
+ await processRange(4,12);await processRange(13,20);await processRange(21,31);await processRange(32,34);
 
  // Step 34: Video 4's "Before and after" compare step -- no clip, but a
  // two-phase narration (watchAudio first, then the usual audio/say), and a
@@ -143,16 +144,54 @@ function mockSupabase(page){
  assert.equal(await page.locator('.compare-scene figure').count(),2,'Expected two before/after images in the compare scene');
  await page.click('#next');
 
- // Step 35: Video 4's own milestone -- now the final "preview complete" step.
+ // Step 35: Video 4's own milestone -- continues into Video 5 now that it's
+ // built (no more classic-lesson handoff here).
  await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[35].title);
  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
- assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
+ assert.notEqual(await page.locator('#next').textContent(),'Celebrate →','Video 4\'s milestone is no longer the final step');
  await page.click('#next');
+ await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
+
+ // Steps 36-49: the 14 Video 5 micro-steps, same mechanics as every other video.
+ await processRange(36,50);
+
+ // Step 51: the recap scene -- five stage-result images (outline, observed
+ // edges, tone, blend, details), narrated, no clip/overlay (new scene kind).
+ const recapIndex=flow.findIndex(s=>s.kind==='recap');
+ assert.equal(recapIndex,51);
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[recapIndex].title);
+ assert.equal(await page.locator('#next').isDisabled(),true,'Cannot continue before the recap narration ends');
+ await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
+ assert.equal(await page.locator('#next').isEnabled(),true);
+ assert.equal(await page.locator('.recap-scene figure').count(),5,'Expected all five stage-result images in the recap');
+ await page.click('#next');
+
+ // Step 52: the submit step -- the flow's real last step now. Continuing
+ // without sending a photo must still work, same as every other lesson.
+ assert.equal(recapIndex+1,flow.length-1,'submit must immediately follow recap and be the flow\'s last step');
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[flow.length-1].title);
+ assert.equal(await page.locator('#next').isDisabled(),true,'Cannot continue before the submit intro narration ends');
+ await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
+ assert.equal(await page.locator('#next').isEnabled(),true,'Continuing without sending a photo must still be allowed');
+ assert.equal(await page.locator('.submission-panel').count(),1,'Expected the real submission panel');
+ assert.equal(await page.locator('#next').textContent(),'Celebrate →','The true final step must say Celebrate');
+
+ // Clicking Celebrate on the real final step must open the real GuidedReward
+ // dialog -- Still Life's own progress numbers and emoji-fallback badge
+ // (still_life has no artwork yet) -- never the old classic-lesson handoff.
+ await page.click('#next');
+ await page.waitForSelector('dialog.guided-reward[open]');
+ assert.equal((await page.locator('.reward-count').textContent()).trim(),'1 / 5 lessons · Still Life and Texture');
+ assert.equal(await page.locator('.medal-emoji').count(),2,'still_life has no badge image yet -- both medal circles should use the emoji fallback');
+ await page.click('.reward-continue');
+ await page.waitForFunction(()=>/\/lessons\/still-life\/?$/.test(location.pathname),{timeout:8000});
+
  // Oct 2026: progress now lives in the account profile (sessionStorage +
  // GuidedPlatform), not the old bare localStorage key -- that key reads
  // null today (see the mock-fetch cleanup commit).
- const state=await page.evaluate(()=>JSON.parse(sessionStorage.getItem('fei_user_profile')).completedSteps['guided:fei.balloon.guided-preview.v1']);
- assert.equal(state.completed.length,flow.length);
+ const state=await page.evaluate(()=>JSON.parse(sessionStorage.getItem('fei_user_profile')));
+ assert(state.completedLessons.includes('still-life-1a-star-balloon-structure'),'finishing the real last step must record real lesson completion');
+ assert.equal(state.completedSteps['guided:fei.balloon.guided-preview.v1'].completed.length,flow.length);
  assert.deepEqual(errors,[]);
  assert(supabaseHits.length>0,'expected the mocked Supabase host to actually be exercised (restore/save) -- a zero count likely means the route pattern stopped matching');
  console.log(`Supabase requests intercepted, zero reached the real network: ${supabaseHits.length}`);
