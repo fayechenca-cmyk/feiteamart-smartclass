@@ -38,6 +38,7 @@ dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{c
 .overlay-svg image{width:100%;height:100%;object-fit:contain}
 .og-guide{fill:none;stroke:#1262ff;stroke-width:5;stroke-linecap:round}
 .og-guide.dash{stroke-dasharray:14 10}
+.og-guide.old{stroke:#5b6b94;stroke-dasharray:8 7;opacity:.85}
 .og-ellipse{fill:#a78bfa22;stroke:#1262ff;stroke-width:5;stroke-dasharray:12 9}
 .og-arrow{fill:none;stroke:#00d5b0;stroke-width:5;marker-end:url(#og-tip)}
 .og-card-bg{fill:#ffffffee}

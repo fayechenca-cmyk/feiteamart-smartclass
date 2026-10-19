@@ -44,7 +44,7 @@ function overlaySvg(spec, frameSrc){
  if(!spec) return '';
  const guides=(spec.guides||[]).map((g,i)=>{
   if(g.ellipse) return `<ellipse class="og-ellipse og-fade" style="animation-delay:${.2+i*.15}s" cx="${g.cx}" cy="${g.cy}" rx="${g.rx}" ry="${g.ry}"/>`;
-  return `<path class="og-guide${g.dash?' dash':''} og-draw" style="--og-len:900;animation-delay:${.15+i*.15}s" d="${g.d}"/>`;
+  return `<path class="og-guide${g.dash?' dash':''}${g.old?' old':''} og-draw" style="--og-len:900;animation-delay:${.15+i*.15}s" d="${g.d}"/>`;
  }).join('');
  const arrow=spec.arrow?`<path class="og-arrow og-fade" style="animation-delay:${.6+(spec.guides?.length||0)*.15}s" d="${spec.arrow.d}"/>`:'';
  const card=spec.card?`<g class="og-fade" style="animation-delay:.9s"><rect class="og-card-bg" x="25" y="22" width="420" height="116" rx="16"/><rect class="og-card-accent" x="25" y="22" width="7" height="116" rx="3"/><text class="og-kicker" x="48" y="56">${spec.card.kicker}</text><text class="og-title" x="48" y="88">${spec.card.title}</text><text class="og-sub" x="48" y="117">${spec.card.sub}</text></g>`:'';

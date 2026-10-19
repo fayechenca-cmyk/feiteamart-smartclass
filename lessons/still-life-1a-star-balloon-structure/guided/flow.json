@@ -280,20 +280,25 @@
   },
   {
     "chapter": "Light and Dark on the Structure",
-    "title": "Find the darkest edges first",
+    "title": "Look closely at the edge",
     "kind": "draw",
     "uid": "62c44412628bc716886ffcef6c89af2c",
     "start": 0,
     "clipEnd": 45,
     "frame": "frames/v2-45s.jpg",
     "watchAudio": "audio/v2-01-watch.mp3",
-    "watchSay": "Before any small detail, the teacher finds the darkest edge on just one point \u2014 still the same HB pencil as before, just pressed harder. The biggest darks always come first.",
+    "watchSay": "In the outline, straight lines helped us find the big shape fast. Now the teacher slows down and looks closely at the edge. Still life is all about detail \u2014 every bump and dent in the foil is worth seeing.",
     "audio": "audio/v2-01-try.mp3",
-    "say": "Choose one point of your own star. With your HB, press a little heavier along its shadow-side edge \u2014 just that edge, no shading yet. Take your time.",
+    "say": "Look at the reference. Find one edge that isn't straight. Take your time.",
     "overlay": {
       "guides": [
         {
-          "d": "M586 601 L358 308"
+          "d": "M358 308 L586 601",
+          "dash": true,
+          "old": true
+        },
+        {
+          "d": "M358 308 Q427 332 433 405 Q437 482 509 501 Q575 530 586 601"
         }
       ],
       "arrow": {
@@ -301,8 +306,8 @@
       },
       "card": {
         "kicker": "LOOK CLOSELY \u00b7 01",
-        "title": "Find the darkest edges first",
-        "sub": "The biggest darks come first, before detail."
+        "title": "Look closely at the edge",
+        "sub": "A straight guess, next to what's really there."
       }
     },
     "stepResult": "frames/v2-45s-ref.jpg"
@@ -316,9 +321,9 @@
     "clipEnd": 100,
     "frame": "frames/v2-100s.jpg",
     "watchAudio": "audio/v2-02-watch.mp3",
-    "watchSay": "Now the teacher moves to a different point and repeats the same heavier edge \u2014 one point at a time, not all at once.",
+    "watchSay": "The teacher follows the outer edge one point at a time. Where the foil bulges, the line bulges. Where it dents, the line dips in. Once it matches what's really there, it gets darker.",
     "audio": "audio/v2-02-try.mp3",
-    "say": "Pick another point and do the same: one heavier edge on its shadow side. Keep moving around your star. Go at your own pace.",
+    "say": "Pick one point. Follow its edge slowly \u2014 look, then draw the bumps you see. Darken it only once you're sure.",
     "overlay": {
       "guides": [
         {
@@ -345,9 +350,9 @@
     "clipEnd": 145,
     "frame": "frames/v2-145s.jpg",
     "watchAudio": "audio/v2-03-watch.mp3",
-    "watchSay": "The light here comes from the upper left. So each point has a light side facing it, and a shadow side turned away. Only the shadow side gets this heavier line.",
+    "watchSay": "The light here comes from the upper left, so each point has a light side and a shadow side. Once an edge is confirmed, it's mostly the shadow side that gets darker.",
     "audio": "audio/v2-03-try.mp3",
-    "say": "Find your own light direction, then decide which side of each point faces it and which falls in shadow. Keep the heavier line only on the shadow side. Tap Continue when you're ready.",
+    "say": "Find your own light direction, then look closely at each edge before you darken it \u2014 mostly on the shadow side. Tap Continue when you're ready.",
     "overlay": {
       "guides": [
         {
@@ -367,7 +372,7 @@
       "card": {
         "kicker": "LOOK CLOSELY \u00b7 03",
         "title": "Light side, shadow side",
-        "sub": "Light from the upper left \u2014 only the shadow side darkens."
+        "sub": "Light from the upper left \u2014 confirmed edges darken on the shadow side."
       }
     },
     "stepResult": "frames/v2-145s-ref.jpg"
@@ -381,9 +386,9 @@
     "clipEnd": 205,
     "frame": "frames/v2-205s.jpg",
     "watchAudio": "audio/v2-04-watch.mp3",
-    "watchSay": "A quick touch with the eraser tidies the bottom point \u2014 then the teacher keeps going, same as before. Even a quick fix is part of the process.",
+    "watchSay": "Here the teacher lightens a line that didn't match, and looks again. Observing means checking and correcting.",
     "audio": "audio/v2-04-try.mp3",
-    "say": "If a line needs tidying, erase it lightly, then add your heavier edge to another point. No rush.",
+    "say": "If an edge doesn't match what you see, lighten it and look again. No rush.",
     "overlay": {
       "guides": [
         {
@@ -400,7 +405,7 @@
       "card": {
         "kicker": "LOOK CLOSELY \u00b7 04",
         "title": "A quick clean-up, then keep going",
-        "sub": "Tidy a line, then move to the next point."
+        "sub": "Check against what you see, then correct."
       }
     },
     "stepResult": "frames/v2-205s-ref.jpg"
@@ -414,9 +419,9 @@
     "clipEnd": 270,
     "frame": "frames/v2-270s.jpg",
     "watchAudio": "audio/v2-05-watch.mp3",
-    "watchSay": "Notice what's happening inside each point \u2014 nothing. The paper stays white there. Later, that white becomes the bright shine of the foil, so we protect it now.",
+    "watchSay": "Notice what's happening inside each point \u2014 nothing, not yet. Right now only the edge is being refined. That white paper stays white, and later it becomes the bright shine of the foil.",
     "audio": "audio/v2-05-try.mp3",
-    "say": "Keep the inside of each shape empty for now. Leave the paper white there, and only darken the edges. I'll wait.",
+    "say": "Keep the inside of each shape empty for now \u2014 just refine the edge. Leave the paper white there. I'll wait.",
     "overlay": {
       "guides": [
         {
@@ -433,7 +438,7 @@
       "card": {
         "kicker": "LOOK CLOSELY \u00b7 05",
         "title": "Leave the paper white here",
-        "sub": "That white becomes the foil's bright shine."
+        "sub": "Only the edge is being refined \u2014 this stays white."
       }
     },
     "stepResult": "frames/v2-270s-ref.jpg"
@@ -447,9 +452,9 @@
     "clipEnd": 327,
     "frame": "frames/v2-327s.jpg",
     "watchAudio": "audio/v2-06-watch.mp3",
-    "watchSay": "The teacher stops and looks \u2014 hands off the page for a moment. Stepping back is part of the process too, not just the drawing.",
+    "watchSay": "The teacher stops and looks \u2014 hands off the page, comparing the drawing against the real foil edge. Checking is part of observing, not just the drawing itself.",
     "audio": "audio/v2-06-try.mp3",
-    "say": "Hold your own drawing at arm's length, or squint at it \u2014 that makes the light and dark easier to see. Compare all the way around your star. I'll wait.",
+    "say": "Hold your drawing at arm's length and compare it with the reference. Are any edges still too smooth or too straight? Foil edges wave.",
     "overlay": {
       "guides": [
         {
@@ -460,27 +465,27 @@
       "card": {
         "kicker": "LOOK CLOSELY \u00b7 06",
         "title": "Take a breath and compare",
-        "sub": "Arm's length or a squint \u2014 light and dark pop."
+        "sub": "Check your edges against the reference."
       }
     },
     "stepResult": "frames/v2-327s-ref.jpg"
   },
   {
     "chapter": "Light and Dark on the Structure",
-    "title": "Structure is ready for tone",
+    "title": "Edges confirmed",
     "kind": "draw",
     "uid": "62c44412628bc716886ffcef6c89af2c",
     "start": 327,
     "clipEnd": 381.67,
     "frame": "frames/v2-end.jpg",
     "watchAudio": "audio/v2-end-watch.mp3",
-    "watchSay": "A few more edges, and the light and dark are set across the whole structure \u2014 ready for tone.",
+    "watchSay": "A few more edges checked and confirmed, and the whole outline now matches what the teacher really sees \u2014 ready for tone.",
     "audio": "audio/v2-end-try.mp3",
-    "say": "Take one more look at your whole star before we bring in the full tone. Tap Continue when you're ready.",
+    "say": "Take one more look at your whole star \u2014 every edge checked against what you see. Tap Continue when you're ready.",
     "overlay": {
       "card": {
-        "kicker": "LIGHT & DARK COMPLETE",
-        "title": "Clear edges, protected highlights",
+        "kicker": "EDGES CONFIRMED",
+        "title": "Every edge checked against reality",
         "sub": "Ready for tone."
       }
     },
@@ -490,8 +495,8 @@
     "chapter": "Light and Dark on the Structure",
     "title": "Light and dark complete",
     "kind": "milestone",
-    "hint": "Light and dark are in place \u2014 next, we build the tone across the whole form.",
-    "say": "Light and dark are in place. That's real progress. Next, we build the tone across the whole form.",
+    "hint": "Your edges now follow what you really see \u2014 next, we build the tone across the whole form.",
+    "say": "Your edges now follow what you really see. That's real observation. Next, we build the tone across the whole form.",
     "audio": "audio/s98-video2-milestone.mp3"
   }
 ]
