@@ -124,27 +124,48 @@ Built as 7 draw micro-steps + milestone (mirrors Video 1's 7 + milestone):
 
 7 watch moments + 1 end-of-video Try, same shape as Video 1.
 
-## Video 3 — Painting the Tone Along the Form (707.03 s) — first-pass reading, to confirm when building commit 3
+## Video 3 — Painting the Tone Along the Form (707.03 s) — fully aligned, built in commit 3
 
-Longest video after Video 5. Starts with the same thin pencil as Video 1;
-a visibly darker, thicker barrel appears by the ~336 s mark (f0113–120)
-and stays in use through the rest of the video. By the final minutes
-(f0193–236, ~576–705 s) the tone is rich and a **clear untouched-white
-highlight patch** is visible and deliberately preserved on the upper-right
-point (f0196–200) — confirms the "protecting the brightest highlights"
-must-have directly from the footage.
+Longest video after Video 5. The first-pass guess of a pencil change at
+~336 s did **not** hold up: grade text read directly off the barrel at
+336 s, 339 s, 400 s, 450 s, 500 s, 576 s and 707 s all show the same HB
+as Videos 1–2, same barcode, same ferrule band — no swap anywhere in
+this video. Tone deepens entirely through more layers on the same
+pencil, confirmed and narrated as such ("still the same HB").
 
-- 0–~150 s: light tone pass begins, 2H/HB-weight pencil, stroke direction
-  following each point's curve
-- ~150–~336 s: tone builds across more of the form, pencil change to 2B
-  around ~336 s (needs frame-by-frame confirmation, not just contact-sheet
-  reading, before commit 3)
-- ~336–~576 s: deepest mid-tones built up, strokes still following form
-- ~576–707 s: highlight areas deliberately left/kept white while
-  surrounding tone deepens; final pass
+A second correction found while re-reviewing the full star, not just
+the "upper-right point" the first pass guessed: there are **two**
+separate protected-highlight patches by the final frames (707 s),
+pixel-measured at the center-left and center-right facets, both kept
+paper-white while the tone around each deepens sharply (dark right
+next to light, patch by patch — not a smooth gradient). The brief's
+stronger "crisp, near-black" contrast is confirmed absent here (HB
+tops out at a moderate value) and confirmed present in Video 5 instead
+— a genuinely different, darker-barreled pencil is on screen within
+the first 2 seconds of that footage (visually distinct from the white
+HB barrel; full grade-text read deferred to Video 5's own build).
 
-Expect ~7–8 moments: stroke-direction-follows-curve, each pencil change,
-protect-the-highlights, 2–3 cadence check-ins given the length, end Try.
+**Star polygon re-measured for this video specifically** — Video 3's
+framing sits slightly differently than Videos 1–2 (confirmed by
+pixel-measuring all six points directly off the clean 707 s frame with
+a coordinate grid; reusing the Video 1 polygon put the hexagram guide
+visibly off the real points). New points (1280×720 viewBox): top
+(563,85), upperRight (903,173), lowerRight (890,527), bottom (567,600),
+left (377,335), upperLeft (433,300).
+
+- 0–300 s: tone pass begins and builds gradually, stroke direction
+  following each point's own curve, same HB throughout, moving across
+  multiple points rather than finishing one at a time
+- 300–450 s: continues building in layers across the whole star
+- 450–600 s: both highlight patches clearly protected, sharp
+  dark-to-light jumps on either side of each
+- 600–707 s: final connecting pass across the whole form, contrast
+  kept (not smoothed away)
+
+Built as 9 watch moments + 1 end-of-video Try, following the explicit
+60–75 s cadence cap (707 s ÷ ~75 s ≈ 9.4 minimum segments) rather than
+the usual 7-ish — the brief's own allowance for this outlier-length
+video.
 
 ## Video 4 — Blending with a Tissue (26.18 s) — fully reviewed
 

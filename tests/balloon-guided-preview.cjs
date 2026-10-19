@@ -52,10 +52,11 @@ function mockSupabase(page){
   await page.click('#next');
  }
 
- // Steps 4-11: the 8 Video 1 micro-steps, then 13-19: the 7 Video 2
- // micro-steps -- same checkpoint mechanics for both videos.
+ // Steps 4-11: the 8 Video 1 micro-steps, 13-19: the 7 Video 2 micro-steps,
+ // 21-30: the 10 Video 3 micro-steps -- same checkpoint mechanics for all three.
  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- for(const [lo,hi] of [[4,12],[13,20]]){
+ const ranges=[[4,12],[13,20],[21,31]];
+ for(const [lo,hi] of ranges){
  for(let i=lo;i<hi;i++){
   const step=flow[i];
   await page.waitForFunction(t=>document.getElementById('title').textContent===t,step.title);
@@ -95,8 +96,9 @@ function mockSupabase(page){
    // -- every step is reachable, not just unlocked ones -- so nothing here is disabled.
    await page.click('#mapButton');assert.equal(await page.locator('#map button.map-step').last().isDisabled(),false,'Journey map should let the student jump anywhere');await page.click('#closeMap');
   }
-  if(i===13){
-   for(const [w,h,label] of [[1440,900,'desktop-v2'],[1024,768,'ipad-v2']]){
+  if(i===13||i===21){
+   const tag=i===13?'v2':'v3';
+   for(const [w,h,label] of [[1440,900,`desktop-${tag}`],[1024,768,`ipad-${tag}`]]){
     await page.setViewportSize({width:w,height:h});await page.screenshot({path:`/tmp/balloon-guided-${label}.png`});
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No horizontal overflow at '+label);
    }
@@ -105,22 +107,19 @@ function mockSupabase(page){
   await page.click('#next');
   if(i<hi-1)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
  }
- if(lo===4){
-  // Step 12: Video 1's own milestone is no longer the final step -- it
-  // now continues straight into Video 2 instead of handing off to classic.
-  await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[12].title);
-  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
-  assert.notEqual(await page.locator('#next').textContent(),'Continue to tone →','Video 1 milestone must not look like the final step');
-  await page.click('#next');
-  await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
- }
- }
-
- // Step 20: Video 2's milestone -- now the final "preview complete" step.
- await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[20].title);
+ // Each video's own milestone (index === hi) continues into the next video
+ // unless it's the true final step (the last range's milestone, flow.length-1).
+ const isFinalMilestone=hi===flow.length-1;
+ await page.waitForFunction(t=>document.getElementById('title').textContent===t,flow[hi].title);
  await page.evaluate(()=>document.getElementById('voice').dispatchEvent(new Event('ended')));
- assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
+ if(isFinalMilestone){
+  assert.equal(await page.locator('#next').textContent(),'Continue to tone →');
+ }else{
+  assert.notEqual(await page.locator('#next').textContent(),'Continue to tone →','A non-final video milestone must not look like the final step: '+flow[hi].title);
+ }
  await page.click('#next');
+ if(!isFinalMilestone)await page.waitForFunction(()=>window.fakePlayer&&!window.fakePlayer.paused);
+ }
  // Oct 2026: progress now lives in the account profile (sessionStorage +
  // GuidedPlatform), not the old bare localStorage key -- that key reads
  // null today (see the mock-fetch cleanup commit).

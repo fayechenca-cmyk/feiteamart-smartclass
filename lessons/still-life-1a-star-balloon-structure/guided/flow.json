@@ -498,5 +498,343 @@
     "hint": "Your edges now follow what you really see \u2014 next, we build the tone across the whole form.",
     "say": "Your edges now follow what you really see. That's real observation. Next, we build the tone across the whole form.",
     "audio": "audio/s98-video2-milestone.mp3"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Stroke direction follows the form",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 0,
+    "clipEnd": 75,
+    "frame": "frames/v3-75s.jpg",
+    "watchAudio": "audio/v3-01-watch.mp3",
+    "watchSay": "Watch the direction of these strokes \u2014 they follow the curve of each puffed section, not a flat grid. Tone that follows the form is what makes it look round, not flat.",
+    "audio": "audio/v3-01-try.mp3",
+    "say": "Choose one section of your own star. Stroke in the direction that section curves, not straight up and down. Take your time.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M599 124 L619 210"
+        },
+        {
+          "d": "M574 130 L594 216"
+        },
+        {
+          "d": "M548 136 L568 222"
+        }
+      ],
+      "arrow": {
+        "d": "M570 115 Q570 182 600 241"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 01",
+        "title": "Stroke direction follows the form",
+        "sub": "Strokes run with the curve, not against it."
+      }
+    },
+    "stepResult": "frames/v3-75s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Keep following each curve",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 75,
+    "clipEnd": 150,
+    "frame": "frames/v3-150s.jpg",
+    "watchAudio": "audio/v3-02-watch.mp3",
+    "watchSay": "Same idea, a new section \u2014 the stroke direction changes because the curve changes.",
+    "audio": "audio/v3-02-try.mp3",
+    "say": "Move to another section. Let your strokes follow that section's own curve. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M866 225 L770 281"
+        },
+        {
+          "d": "M852 202 L757 258"
+        },
+        {
+          "d": "M839 180 L744 236"
+        }
+      ],
+      "arrow": {
+        "d": "M869 193 Q792 221 729 274"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 02",
+        "title": "Keep following each curve",
+        "sub": "A different section, a different direction."
+      }
+    },
+    "stepResult": "frames/v3-150s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Build it gradually",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 150,
+    "clipEnd": 225,
+    "frame": "frames/v3-225s.jpg",
+    "watchAudio": "audio/v3-03-watch.mp3",
+    "watchSay": "Notice the tone builds in thin layers, not one heavy pass \u2014 the teacher goes over the same area more than once, always following the same curve.",
+    "audio": "audio/v3-03-try.mp3",
+    "say": "Build your own tone the same way: light layers, more than one pass, rather than pressing hard once. No rush.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M827 514 L736 449"
+        },
+        {
+          "d": "M842 493 L751 428"
+        },
+        {
+          "d": "M857 472 L766 407"
+        }
+      ],
+      "arrow": {
+        "d": "M858 504 Q800 444 724 409"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 03",
+        "title": "Build it gradually",
+        "sub": "Thin layers, more than one pass."
+      }
+    },
+    "stepResult": "frames/v3-225s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Another section, same patience",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 225,
+    "clipEnd": 300,
+    "frame": "frames/v3-300s.jpg",
+    "watchAudio": "audio/v3-04-watch.mp3",
+    "watchSay": "Now another section gets the same gradual build-up, strokes still following its curve.",
+    "audio": "audio/v3-04-try.mp3",
+    "say": "Pick another section and keep layering lightly, following its curve. Tap Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M421 309 L505 310"
+        },
+        {
+          "d": "M421 335 L504 336"
+        },
+        {
+          "d": "M421 361 L504 362"
+        }
+      ],
+      "arrow": {
+        "d": "M406 335 Q468 351 529 336"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 04",
+        "title": "Another section, same patience",
+        "sub": "Still light layers, still following the curve."
+      }
+    },
+    "stepResult": "frames/v3-300s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Still the same pencil",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 300,
+    "clipEnd": 375,
+    "frame": "frames/v3-375s.jpg",
+    "watchAudio": "audio/v3-05-watch.mp3",
+    "watchSay": "Still the same HB \u2014 the deeper tone comes from more layers, not a softer pencil.",
+    "audio": "audio/v3-05-try.mp3",
+    "say": "Keep building with your own HB. Add another layer wherever it still looks too light. I'll wait.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M551 547 L570 458"
+        },
+        {
+          "d": "M577 553 L596 463"
+        },
+        {
+          "d": "M602 558 L621 468"
+        }
+      ],
+      "arrow": {
+        "d": "M574 568 Q602 506 601 437"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 05",
+        "title": "Still the same pencil",
+        "sub": "More layers, not a softer pencil."
+      }
+    },
+    "stepResult": "frames/v3-375s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Keep the whole star moving together",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 375,
+    "clipEnd": 450,
+    "frame": "frames/v3-450s.jpg",
+    "watchAudio": "audio/v3-06-watch.mp3",
+    "watchSay": "The teacher doesn't finish one point before starting the next \u2014 tone builds across the whole star together.",
+    "audio": "audio/v3-06-try.mp3",
+    "say": "Don't chase one perfect section \u2014 add a little tone to several areas, then come back. Take your time.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M563 85 L903 173 L890 527 L567 600 L377 335 L433 300 Z",
+          "dash": true
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 06",
+        "title": "Keep the whole star moving together",
+        "sub": "A little tone everywhere, not one point finished."
+      }
+    },
+    "stepResult": "frames/v3-450s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Protect each highlight",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 450,
+    "clipEnd": 525,
+    "frame": "frames/v3-525s.jpg",
+    "watchAudio": "audio/v3-07-watch.mp3",
+    "watchSay": "Look closely \u2014 it's not just one bright spot. Each puffed section keeps its own highlight, left white while the tone around it deepens.",
+    "audio": "audio/v3-07-try.mp3",
+    "say": "Find each section's own brightest spot and leave it alone, even as you darken what's around it. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 567,
+          "cy": 417,
+          "rx": 63,
+          "ry": 37,
+          "ellipse": true
+        },
+        {
+          "cx": 687,
+          "cy": 363,
+          "rx": 60,
+          "ry": 47,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M1100 250 Q900 300 750 380"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 07",
+        "title": "Protect each highlight",
+        "sub": "Every section keeps its own bright spot."
+      }
+    },
+    "stepResult": "frames/v3-525s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Deepen the darks near each highlight",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 525,
+    "clipEnd": 600,
+    "frame": "frames/v3-600s.jpg",
+    "watchAudio": "audio/v3-08-watch.mp3",
+    "watchSay": "Right next to each protected highlight, the tone jumps noticeably darker \u2014 the dark sits right next to the light, patch by patch, not a smooth fade. That's real contrast already; the darkest, crispest accents still come later, with a 6B pencil.",
+    "audio": "audio/v3-08-try.mp3",
+    "say": "Push the tone darker right beside your own protected highlights. The bigger the jump, the brighter they'll read. No rush.",
+    "overlay": {
+      "guides": [
+        {
+          "cx": 567,
+          "cy": 417,
+          "rx": 63,
+          "ry": 37,
+          "ellipse": true
+        },
+        {
+          "cx": 687,
+          "cy": 363,
+          "rx": 60,
+          "ry": 47,
+          "ellipse": true
+        }
+      ],
+      "arrow": {
+        "d": "M1100 250 Q900 300 750 380"
+      },
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 08",
+        "title": "Deepen the darks near each highlight",
+        "sub": "Dark next to light, patch by patch."
+      }
+    },
+    "stepResult": "frames/v3-600s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Last layers across the form",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 600,
+    "clipEnd": 670,
+    "frame": "frames/v3-670s.jpg",
+    "watchAudio": "audio/v3-09-watch.mp3",
+    "watchSay": "A final round across the whole star \u2014 connecting the tones and filling any area that's still too pale. The contrast stays.",
+    "audio": "audio/v3-09-try.mp3",
+    "say": "Take one more pass. Fill the areas that still look thin, but keep your highlights white and your darks strong.",
+    "overlay": {
+      "guides": [
+        {
+          "d": "M563 85 L903 173 L890 527 L567 600 L377 335 L433 300 Z",
+          "dash": true
+        }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY \u00b7 09",
+        "title": "Last layers across the form",
+        "sub": "Connect the tones \u2014 keep the contrast."
+      }
+    },
+    "stepResult": "frames/v3-670s-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Ready for the tissue",
+    "kind": "draw",
+    "uid": "f89c61f01b4a82b84da097d32fc8c2df",
+    "start": 670,
+    "clipEnd": 707.03,
+    "frame": "frames/v3-end.jpg",
+    "watchAudio": "audio/v3-end-watch.mp3",
+    "watchSay": "Tone is built across the whole form now, with each highlight protected \u2014 next, a tissue will blend it smooth.",
+    "audio": "audio/v3-end-try.mp3",
+    "say": "Take one more look at your whole star before we blend it smooth. Tap Continue when you're ready.",
+    "overlay": {
+      "card": {
+        "kicker": "TONE COMPLETE",
+        "title": "Every highlight protected",
+        "sub": "Ready for the tissue."
+      }
+    },
+    "stepResult": "frames/v3-end-ref.jpg"
+  },
+  {
+    "chapter": "Tone Along the Form",
+    "title": "Tone complete",
+    "kind": "milestone",
+    "hint": "Tone is built across the whole form \u2014 next, we blend it smooth with a tissue.",
+    "say": "Tone is built across the whole star, with every highlight protected. That's real patience. Next, we blend it smooth with a tissue.",
+    "audio": "audio/s97-video3-milestone.mp3"
   }
 ]

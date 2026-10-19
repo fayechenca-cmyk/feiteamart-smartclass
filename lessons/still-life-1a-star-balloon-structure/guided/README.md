@@ -4,32 +4,40 @@ An isolated experiment at `lessons/still-life-1a-star-balloon-structure/guided/`
 The existing regular lesson (`../index.html`) is unchanged except for the
 handoff point (see "Classic-lesson handoff" below). Built so far:
 welcome/materials/tissue/paper + Video 1 ("Outlining the Shape") + Video 2
-("Emphasizing Light and Dark on the Structure") complete. Videos 3–5 ship
-in later commits (see balloon-timing.md for the full five-video plan).
+("Emphasizing Light and Dark on the Structure") + Video 3 ("Painting the
+Tone Along the Form") complete. Videos 4–5 ship in later commits (see
+balloon-timing.md for the full five-video plan).
 
 ## Learning flow (so far)
 
 Welcome → pencils (HB/2B/2H/6B, by value) → tissue (what it's for, used in
 Video 4) → feel your paper → **placement** (animated: where the balloon
 sits) → Video 1 in 7 micro-steps + milestone → Video 2 in 7 micro-steps +
-milestone → (handoff to the classic lesson at Video 3, until Video 3 ships
-here too).
+milestone → Video 3 in 10 micro-steps + milestone → (handoff to the
+classic lesson at Video 4, until Video 4 ships here too).
 
-Every second of Video 1 (386.46s) and Video 2 (381.67s) streams in order;
-no time range is skipped in either. Four of Video 1's seven moments (tilt
-guide lines 45s, soft curves 150s, seam 270s, folds 330s) are the same
-ones already curated in the regular lesson's `VIDEO_PAUSES`, reused
-verbatim. Two are new, found while reviewing the footage frame-by-frame
-(see balloon-timing.md): blocking in the whole shape at ~90s (closes an
-otherwise 105-second gap between the two existing moments — well past the
-~60–75s cadence rule), and a real eraser the teacher uses at ~165–189s
-that wasn't logged anywhere before. Video 2 has no `VIDEO_PAUSES` entries
-to reuse (never curated before this commit) — all seven of its moments
-were found and timed from scratch, including a correction mid-build: the
-step-back pause first read as ~230s from 3-second thumbnails, but a full
-frame-by-frame pass placed it at ~300–327s instead (see balloon-timing.md
-for the full account, including the HB-pencil-not-2B correction and the
-brief ~144–159s eraser touch).
+Every second of Video 1 (386.46s), Video 2 (381.67s) and Video 3 (707.03s)
+streams in order; no time range is skipped in any of them. Four of Video
+1's seven moments (tilt guide lines 45s, soft curves 150s, seam 270s,
+folds 330s) are the same ones already curated in the regular lesson's
+`VIDEO_PAUSES`, reused verbatim. Two are new, found while reviewing the
+footage frame-by-frame (see balloon-timing.md): blocking in the whole
+shape at ~90s (closes an otherwise 105-second gap between the two existing
+moments — well past the ~60–75s cadence rule), and a real eraser the
+teacher uses at ~165–189s that wasn't logged anywhere before. Videos 2 and
+3 have no `VIDEO_PAUSES` entries to reuse (never curated before these
+commits) — every one of their moments was found and timed from scratch,
+including corrections made mid-build each time: Video 2's step-back pause
+first read as ~230s from 3-second thumbnails but a full frame-by-frame
+pass placed it at ~300–327s instead, and Video 3's first-pass guess of a
+~336s pencil change to 2B did not hold up under a full re-check (still HB
+throughout — see balloon-timing.md for the full account of both, plus
+Video 2's HB-not-2B correction and brief ~144–159s eraser touch). Video
+3's star-polygon overlay coordinates were also re-measured from scratch
+against its own footage rather than reused from Video 1/2 — the camera
+framing shifts slightly between videos, confirmed by a visible mismatch
+on first build, then fixed with a pixel-grid measurement directly off a
+clean Video 3 frame.
 
 ## Classic-lesson handoff
 
@@ -38,10 +46,11 @@ default (unless `?classic=1` is present). When a student finishes the
 last step here, this page redirects back with `?classic=1&from=guided-
 outline`, and the classic lesson's `gateThenStart()` reads this preview's
 own saved progress to decide where the classic lesson should resume —
-Video 3, now that Video 2 is done here, not Video 1. See the comment
+Video 4, now that Video 3 is done here, not Video 1 or 2. See the comment
 above `gateThenStart()` in the classic `index.html` for the exact index
-mapping (20 for "finished Video 2", 12 kept as a fallback for progress
-saved back when the handoff was still after Video 1 only).
+mapping (31 for "finished Video 3", 20 and 12 kept as fallbacks for
+progress saved back when the handoff stopped after Video 2 or Video 1
+respectively).
 
 Each teaching moment follows the Watch → Try rhythm from the Preparation
 guided preview: the teacher clip plays, a short ducked narration plays
@@ -129,12 +138,12 @@ flow.json; generated via `scripts/build-balloon-guided-audio.py`.
 check: out-of-range seek/`ended` can never unlock or complete a
 checkpoint, the ducked watch-narration starts exactly once per clip, each
 video's draw steps are contiguous across that video's own real duration
-with no gaps (386.46s for Video 1, 381.67s for Video 2 — tracked
-per-uid, since the two videos' own timelines both start at 0), every
+with no gaps (386.46s for Video 1, 381.67s for Video 2, 707.03s for Video
+3 — tracked per-uid, since each video's own timeline starts at 0), every
 referenced frame/audio file exists and is non-trivial, native video
 controls stay off, and the access gate targets this lesson's own id.
 
-`node tests/balloon-guided-preview.cjs` — a full run through all 21
+`node tests/balloon-guided-preview.cjs` — a full run through all 32
 stages against a deterministic Cloudflare Stream mock (Playwright):
 narration-gates each non-video scene, confirms teacher-audio ducking
 starts/ends around each watch-narration, confirms an out-of-range seek
@@ -143,11 +152,12 @@ live SVG overlay (not a flattened image) is present at a checkpoint,
 confirms the reference pane shows that step's own result (not a single
 constant image), checks desktop/iPad/phone/landscape layouts for
 horizontal overflow and in-bounds controls, checks mute and the
-intentionally-unlocked Journey map, confirms Video 1's own milestone no
-longer hands off to classic (it continues straight into Video 2) while
-Video 2's milestone now does, and finally confirms an unauthenticated
-visitor is redirected away before any of this loads. Hard rule, enforced
-in the test itself: it must never reach the live Supabase project — every
-request to it is intercepted (Playwright guarantees a routed request
+intentionally-unlocked Journey map, confirms Video 1's and Video 2's own
+milestones no longer hand off to classic (each continues straight into
+the next video) while Video 3's milestone now does, and finally confirms
+an unauthenticated visitor is redirected away before any of this loads.
+Hard rule, enforced in the test itself: it must never reach the live
+Supabase project — every request to it is intercepted (Playwright
+guarantees a routed request
 never reaches the real network) and the test asserts the mock was
 actually exercised, not just silently skipped.
