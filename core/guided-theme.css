@@ -1,0 +1,159 @@
+/* Shared visual theme for every guided studio (preparation, sphere, cube,
+ * balloon), from Faye's own artwork: lively, saturated, flat colour blocks
+ * with dark ink outlines -- no grey wash, no gradients. Loaded last (after
+ * each lesson's own studio.css and core/guided-ux.css) so its rules win the
+ * cascade at equal specificity, without needing !important.
+ *
+ * The four lessons' studio.css files share one base layout (copy-pasted,
+ * not actually shared) plus an identical light-theme override block, so one
+ * file here can safely re-skin all four. Deliberately NOT touched: the
+ * teaching overlay's guide-line/arrow/highlight colours (.og-guide,
+ * .og-arrow, .og-ellipse) -- those must stay readable against a pencil
+ * drawing regardless of UI theme, per Faye's instruction.
+ *
+ * Text colour rule, checked numerically (WCAG relative-luminance formula),
+ * not by eye: every token here except --ink is a light-to-medium pastel,
+ * so pastel-on-pastel text (e.g. --lav on --peach) measures ~2:1 contrast
+ * and fails AA even at the large-text 3:1 threshold -- only --ink clears
+ * AA against all eight of the others (5.75:1 to 14.17:1). So despite
+ * "--lav (labels, chapter titles)" / "--peri (...current step)" reading
+ * like text-colour instructions, every token below is used as a
+ * background, border, fill or accent only; all text stays --ink, per
+ * Faye's own "text is always ink" rule taken literally and completely.
+ */
+:root{
+ color-scheme:light;
+ --paper:#FBF8E4; --lime:#F1F0B8; --peri:#8F9AEA; --lav:#A697DD;
+ --sky:#A4C6DE; --leaf:#A9D18E; --peach:#F8DFB3; --blush:#F1A9A1; --ink:#26252E;
+ /* Legacy token names still referenced via var() in each lesson's own
+    studio.css -- remapped here so anything not explicitly overridden below
+    still lands on the new palette instead of the old dashboard colours.
+    --gold used to double as a text colour in a few places, so it maps to
+    --ink, not --lav, as a safe default for any reference this file missed. */
+ --bg:var(--paper); --panel:var(--peach); --muted:var(--ink);
+ --mint:var(--leaf); --gold:var(--ink);
+}
+
+/* Flat page background -- no radial-gradient wash. */
+body{background:var(--paper)}
+
+/* Header band. */
+header{background:var(--lime);border-bottom:2px solid var(--ink)}
+header>a{color:var(--ink)}
+header small{color:var(--ink)}
+h1{color:var(--ink)}
+#mode{color:var(--ink)}
+#caption{color:var(--ink)}
+
+/* Buttons: flat fill, ink outline, ink text everywhere -- never white on a
+ * coloured button. */
+button{border:2px solid var(--ink);background:var(--paper);color:var(--ink)}
+button:hover{background:var(--lime)}
+button:disabled{opacity:.45;background:var(--paper);color:var(--ink)}
+.primary{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+.primary:hover{background:#a3acf0}
+.primary:disabled{background:var(--paper);color:var(--ink)}
+.controls>#skipStep{color:var(--ink);border-style:dashed;border-color:var(--ink)}
+.controls>#finishCore{background:var(--leaf);color:var(--ink);border-color:var(--ink)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline-color:var(--ink)}
+
+/* Video frame / reference image: flat fill, ink outline, no purple glow. */
+#stage{background:var(--paper);border:2px solid var(--ink);box-shadow:none}
+#stage,#visual{background:var(--paper)}
+#reference img{border:2px solid var(--ink)}
+#media iframe{pointer-events:none}
+
+/* Progress segments: flat ink-outlined pills, leaf = done, peri = current. */
+#progress span{background:var(--paper);border:1px solid var(--ink)}
+#progress .done{background:var(--leaf)}
+#progress .current{background:var(--peri)}
+#progress .skipped{background:var(--sky)}
+
+/* Dialogs (welcome, map, diagram) and the milestone/scene card background:
+ * flat peach, ink outline, no blur backdrop. */
+dialog{background:var(--peach);color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+dialog::backdrop{background:rgba(38,37,46,.55);backdrop-filter:none}
+#welcome>div{background:var(--peach)}
+#mapItems h3{color:var(--ink)}
+.map-step{border:2px solid transparent;background:var(--paper)}
+.map-step.current{border-color:var(--peri)}
+.map-step b{color:var(--ink)}
+.map-step span{color:var(--ink)}
+#diagram>button{background:var(--sky);color:var(--ink);border:2px solid var(--ink)}
+
+.scene{background:var(--peach)}
+.scene label{color:var(--ink)}
+.scene textarea{background:var(--paper);color:var(--ink);border:2px solid var(--ink)}
+.scene .big-symbol{color:var(--ink)}
+.scene .local-note{color:var(--ink)}
+.scene a,.paper-photo-credit a,.real-paper-size a{color:var(--ink)}
+.encouragement h2{color:var(--ink)}
+.milestone-star{color:var(--ink)}
+.encouragement p{color:var(--ink)}
+.upload-label{background:var(--peri);color:var(--ink)}
+
+/* Notices / resume pill / clip scrubber: flat sky, ink outline. */
+#notice{background:var(--sky);color:var(--ink);border:2px solid var(--ink)}
+#resume{background:var(--sky);color:var(--ink);border:2px solid var(--ink)}
+#clipControls{background:var(--sky);color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+#clipSeek{accent-color:var(--peri)}
+
+/* Teaching-overlay card (the "LOOK CLOSELY" popup) -- the card chrome gets
+ * the new theme; the guide-line/arrow/highlight colours it sits over do
+ * not change, so they stay legible against the pencil drawing. */
+.og-card-bg{fill:var(--peach);stroke:var(--ink);stroke-width:2}
+.og-card-accent{fill:var(--lav)}
+.og-kicker{fill:var(--ink)}
+.og-title{fill:var(--ink)}
+.og-sub{fill:var(--ink)}
+
+/* core/guided-ux.css: the small Artchi teaching-tip bubble, material/
+ * analysis canvases, submission panel, completion dots. */
+.teaching-tip{background:var(--peach);color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+.teaching-tip small{color:var(--ink)}
+.teaching-tip button{color:var(--ink)}
+.material-canvas{background:var(--paper)}
+.material-canvas rect{stroke:var(--peri);filter:none}
+.material-canvas>strong{background:var(--sky);color:var(--ink)}
+.analysis-stage{background:var(--paper)}
+.completion-orbit circle{fill:var(--peri)}
+.completion-orbit circle:nth-child(3n){fill:var(--leaf)}
+.completion-orbit>span{color:var(--ink)}
+.submission-panel select,.submission-panel textarea{border:2px solid var(--ink);background:var(--paper);color:var(--ink)}
+.submission-panel [role=status]{background:var(--leaf);color:var(--ink)}
+.submission-panel .error{background:var(--blush);color:var(--ink)}
+.submission-panel label{color:var(--ink)}
+.submission-panel button{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+.submission-panel .ai-note{color:var(--ink)}
+.submission-panel .feedback-result{background:var(--paper);color:var(--ink);border:2px solid var(--ink)}
+#cloudProgress{background:var(--sky)!important;color:var(--ink)!important}
+
+/* core/guided-reward.css: the completion celebration -- flat blush, ink
+ * outline, a hard flat "sticker" shadow instead of a soft glow, and ink
+ * text on the continue button (was white on purple). */
+.guided-reward{background:var(--blush);color:var(--ink);border:2px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.guided-reward::backdrop{background:rgba(38,37,46,.55);backdrop-filter:none}
+.guided-reward small{color:var(--ink)}
+.reward-sparkles span{color:var(--ink)}
+.reward-sparkles circle{fill:var(--peri)}
+.reward-sparkles circle:nth-child(3n){fill:var(--leaf)}
+.medal-base{border-color:var(--ink);background:var(--paper);filter:none;opacity:1}
+.medal-color{border-color:var(--ink);background:var(--peri)}
+.medal-hand{background:var(--peach);box-shadow:none}
+.reward-message{color:var(--ink)}
+.reward-segments span{background:var(--paper);border:1px solid var(--ink)}
+.reward-segments .lit{background:var(--leaf)}
+.reward-lit .reward-segments .new{background:var(--peri);box-shadow:none}
+.reward-count{color:var(--ink)}
+.guided-reward .reward-continue{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+.reward-sound{border-color:var(--ink);color:var(--ink);background:var(--paper)}
+
+/* Per-lesson bespoke widgets (not in the shared base layer, so the
+ * selector-matches-cascade trick above doesn't reach them): sphere's zone
+ * buttons/labels, preparation's paper/pattern cards. Same ink-text rule. */
+.paper-card strong,.paper-photo strong,.real-paper-size strong,
+.paper-context figcaption,#patternReference strong{color:var(--ink)}
+.zone-buttons button{color:var(--ink);background:var(--paper);border:2px solid var(--ink)}
+.zone-buttons [aria-pressed=true]{background:var(--peri);color:var(--ink)}
+.sphere-scene label{color:var(--ink)}
+#alternateAnalysis{background:var(--sky);color:var(--ink)}
