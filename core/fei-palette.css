@@ -1,0 +1,17 @@
+/* FEI TeamArt shared colour palette -- one source of truth for the whole
+ * platform (guided studios, dashboard, app shell), from Faye's own artwork:
+ * lively and saturated, flat colour blocks, dark ink outlines. No gradients,
+ * no grey wash, text always ink (checked against every other token with
+ * the WCAG relative-luminance formula: ink clears AA, 5.75:1-14.17:1,
+ * against all eight of the others; none of the others reliably clear AA
+ * against each other, so they are backgrounds/borders/fills only -- never
+ * a text colour).
+ *
+ * Loaded once per page, before any page-specific theme file (e.g.
+ * core/guided-theme.css) that uses these tokens.
+ */
+:root{
+ color-scheme:light;
+ --paper:#FBF8E4; --lime:#F1F0B8; --peri:#8F9AEA; --lav:#A697DD;
+ --sky:#A4C6DE; --leaf:#A9D18E; --peach:#F8DFB3; --blush:#F1A9A1; --ink:#26252E;
+}

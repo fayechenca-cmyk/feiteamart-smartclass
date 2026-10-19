@@ -2,7 +2,10 @@
  * balloon), from Faye's own artwork: lively, saturated, flat colour blocks
  * with dark ink outlines -- no grey wash, no gradients. Loaded last (after
  * each lesson's own studio.css and core/guided-ux.css) so its rules win the
- * cascade at equal specificity, without needing !important.
+ * cascade at equal specificity, without needing !important. The colour
+ * tokens themselves live in core/fei-palette.css (shared with the
+ * dashboard/app shell, loaded before this file) -- this file only maps
+ * them onto guided-studio-specific selectors.
  *
  * The four lessons' studio.css files share one base layout (copy-pasted,
  * not actually shared) plus an identical light-theme override block, so one
@@ -22,9 +25,6 @@
  * Faye's own "text is always ink" rule taken literally and completely.
  */
 :root{
- color-scheme:light;
- --paper:#FBF8E4; --lime:#F1F0B8; --peri:#8F9AEA; --lav:#A697DD;
- --sky:#A4C6DE; --leaf:#A9D18E; --peach:#F8DFB3; --blush:#F1A9A1; --ink:#26252E;
  /* Legacy token names still referenced via var() in each lesson's own
     studio.css -- remapped here so anything not explicitly overridden below
     still lands on the new palette instead of the old dashboard colours.
