@@ -1,0 +1,1569 @@
+[
+  {
+    "id": "welcome",
+    "title": "Meet the cone",
+    "chapter": "Welcome",
+    "kind": "intro",
+    "src": "../intro/meet-the-cone.mp4",
+    "start": 0,
+    "clipEnd": 31.86,
+    "say": "",
+    "hint": "One point · A round base · A new form"
+  },
+  {
+    "id": "tools",
+    "title": "Your familiar drawing tools",
+    "chapter": "Get ready",
+    "say": "Welcome back! Keep your pencils nearby. An H B pencil is a good choice for light construction. A softer pencil can help you build darker tones later. Have your eraser ready for small adjustments, and keep a clean tissue for optional blending. Use your sketch paper, with room around the drawing.",
+    "hint": "Pencils · Eraser · Tissue · Sketch paper",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/tools.mp3",
+    "materialScene": true,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Welcome back Keep your pencils nearby An H B"
+      },
+      {
+        "time": 3.689,
+        "text": "pencil is a good choice for light construction A"
+      },
+      {
+        "time": 6.569,
+        "text": "softer pencil can help you build darker tones later"
+      },
+      {
+        "time": 9.73,
+        "text": "Have your eraser ready for small adjustments and keep"
+      },
+      {
+        "time": 12.831,
+        "text": "a clean tissue for optional blending Use your sketch"
+      },
+      {
+        "time": 16.14,
+        "text": "paper with room around the drawing"
+      }
+    ],
+    "cues": [
+      {
+        "time": 1.679,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 10.012,
+        "tool": "eraser",
+        "label": "eraser"
+      },
+      {
+        "time": 13.211,
+        "tool": "tissue",
+        "label": "tissue"
+      },
+      {
+        "time": 16.14,
+        "tool": "paper",
+        "label": "paper"
+      }
+    ]
+  },
+  {
+    "id": "ready",
+    "title": "Make room to change your mind",
+    "chapter": "Get ready",
+    "say": "Today, watch how often the teacher checks and adjusts the drawing. Those changes are part of the process. You can do the same. Keep your first marks light, relax your hand, and take each little step at your own pace.",
+    "hint": "Light marks are easy to adjust",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/ready.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Today watch how often the teacher checks and adjusts"
+      },
+      {
+        "time": 3.297,
+        "text": "the drawing Those changes are part of the process"
+      },
+      {
+        "time": 6.679,
+        "text": "You can do the same Keep your first marks"
+      },
+      {
+        "time": 9.179,
+        "text": "light relax your hand and take each little step"
+      },
+      {
+        "time": 12.843,
+        "text": "at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-1",
+    "title": "Build an upside-down T",
+    "chapter": "Build the framework",
+    "say": "See the upside-down T? The upright line gives us a centre, and the line across the bottom helps place the base. Together, they give the cone a balanced framework to grow from. Try these light guides with your H B pencil. They do not need to be perfect. Take your time. Continue when you are ready.",
+    "hint": "A centre line and base guide give you a framework.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-1.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 0,
+    "clipEnd": 25,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=25s&height=720",
+    "optional": false,
+    "analysis": "t-frame.svg",
+    "toolLabel": "HB · light construction",
+    "toolWord": "pencil",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "See the upside-down T The upright line gives us"
+      },
+      {
+        "time": 2.819,
+        "text": "a centre and the line across the bottom helps"
+      },
+      {
+        "time": 5.49,
+        "text": "place the base Together they give the cone a"
+      },
+      {
+        "time": 8.554,
+        "text": "balanced framework to grow from Try these light guides"
+      },
+      {
+        "time": 12.034,
+        "text": "with your H B pencil They do not need"
+      },
+      {
+        "time": 14.461,
+        "text": "to be perfect Take your time Continue when you"
+      },
+      {
+        "time": 17.61,
+        "text": "are ready"
+      }
+    ],
+    "toolTime": 12.819
+  },
+  {
+    "id": "demo-1-2",
+    "title": "Compare height and width",
+    "chapter": "Build the framework",
+    "say": "Here is a useful drawing check. See the teacher adjusting the base width? Compare the height with the width, and keep the tip above the centre of the base. Your drawing does not need to be right on the first try. These small corrections help it become more balanced. Try that on your page. I will wait for you.",
+    "hint": "Keep the cone balanced around its centre.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-2.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 25,
+    "clipEnd": 40,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=40s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v1-40.svg",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Here is a useful drawing check See the teacher"
+      },
+      {
+        "time": 3.15,
+        "text": "adjusting the base width Compare the height with the"
+      },
+      {
+        "time": 5.625,
+        "text": "width and keep the tip above the centre of"
+      },
+      {
+        "time": 8.297,
+        "text": "the base Your drawing does not need to be"
+      },
+      {
+        "time": 10.846,
+        "text": "right on the first try These small corrections help"
+      },
+      {
+        "time": 13.664,
+        "text": "it become more balanced Try that on your page"
+      },
+      {
+        "time": 17.083,
+        "text": "I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-3",
+    "title": "Adjusting is part of drawing",
+    "chapter": "Build the framework",
+    "say": "Notice the teacher checking the width again, around forty-eight and fifty-eight seconds. The first marks are a starting point. Use your pencil to compare the distances on either side of the centre. A small change can make the proportions more accurate. Make a small adjustment if you want to, then continue.",
+    "hint": "Compare, adjust, and compare again.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-3.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 40,
+    "clipEnd": 58,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=58s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Notice the teacher checking the width again around forty-eight"
+      },
+      {
+        "time": 3.468,
+        "text": "and fifty-eight seconds The first marks are a starting"
+      },
+      {
+        "time": 6.581,
+        "text": "point Use your pencil to compare the distances on"
+      },
+      {
+        "time": 10.123,
+        "text": "either side of the centre A small change can"
+      },
+      {
+        "time": 12.647,
+        "text": "make the proportions more accurate Make a small adjustment"
+      },
+      {
+        "time": 15.956,
+        "text": "if you want to then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-4",
+    "title": "Take your time with proportions",
+    "chapter": "Build the framework",
+    "say": "The teacher is still adjusting, at one minute nineteen and again around one minute thirty. That is normal. Compare your height and base width with the reference on the right. Use your pencil to measure, and change a mark if you need to. You are learning to look, not racing to finish. Take your time. Continue when you are ready.",
+    "hint": "Use your pencil to check the right-hand reference.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-4.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 58,
+    "clipEnd": 90,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=90s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "The teacher is still adjusting at one minute nineteen"
+      },
+      {
+        "time": 2.929,
+        "text": "and again around one minute thirty That is normal"
+      },
+      {
+        "time": 6.507,
+        "text": "Compare your height and base width with the reference"
+      },
+      {
+        "time": 9.13,
+        "text": "on the right Use your pencil to measure and"
+      },
+      {
+        "time": 11.654,
+        "text": "change a mark if you need to You are"
+      },
+      {
+        "time": 13.554,
+        "text": "learning to look not racing to finish Take your"
+      },
+      {
+        "time": 16.446,
+        "text": "time Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-5",
+    "title": "Check both sides of the axis",
+    "chapter": "Build the framework",
+    "say": "Let us compare with your drawing. Look at the small width marks on either side of the centre line. Compare those distances before drawing the sides. A small correction now is easier than repairing a shaded cone. Try that on your page. I will wait for you.",
+    "hint": "Compare left and right before joining them.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-5.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 90,
+    "clipEnd": 100,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=100s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v1-100.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Let us compare with your drawing Look at the"
+      },
+      {
+        "time": 2.316,
+        "text": "small width marks on either side of the centre"
+      },
+      {
+        "time": 4.89,
+        "text": "line Compare those distances before drawing the sides A"
+      },
+      {
+        "time": 9.203,
+        "text": "small correction now is easier than repairing a shaded"
+      },
+      {
+        "time": 12.194,
+        "text": "cone Try that on your page I will wait"
+      },
+      {
+        "time": 15.306,
+        "text": "for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-6",
+    "title": "Connect the tip to the base",
+    "chapter": "Build the framework",
+    "say": "Look at this little detail. The teacher connects the top point to the two outer limits of the base. Keep these construction lines light. They establish the overall taper before the curved base is refined. Make a small adjustment if you want to, then continue.",
+    "hint": "Light straight guides first.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-6.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 100,
+    "clipEnd": 130,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=130s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v1-130.svg",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Look at this little detail The teacher connects the"
+      },
+      {
+        "time": 2.917,
+        "text": "top point to the two outer limits of the"
+      },
+      {
+        "time": 5.0,
+        "text": "base Keep these construction lines light They establish the"
+      },
+      {
+        "time": 9.289,
+        "text": "overall taper before the curved base is refined Make"
+      },
+      {
+        "time": 12.402,
+        "text": "a small adjustment if you want to then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-7",
+    "title": "Round the base into an ellipse",
+    "chapter": "Build the framework",
+    "say": "Here is a useful drawing check. The circular base appears as an ellipse from this viewpoint. Notice the curve across the front. Round the ends gently instead of closing them into sharp points. Take your time. Continue when you are ready.",
+    "hint": "Avoid sharp corners at the ends.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-1-7.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 130,
+    "clipEnd": 175,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=175s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v1-175.svg",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Here is a useful drawing check The circular base"
+      },
+      {
+        "time": 3.162,
+        "text": "appears as an ellipse from this viewpoint Notice the"
+      },
+      {
+        "time": 6.164,
+        "text": "curve across the front Round the ends gently instead"
+      },
+      {
+        "time": 9.179,
+        "text": "of closing them into sharp points Take your time"
+      },
+      {
+        "time": 12.537,
+        "text": "Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "chapter-1-end",
+    "title": "Check your framework",
+    "chapter": "Build the framework",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-1-end.mp3",
+    "uid": "7b4009c2092517f6ba7521bda4f357b7",
+    "start": 175,
+    "clipEnd": 184.594,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7b4009c2092517f6ba7521bda4f357b7/thumbnails/thumbnail.jpg?time=184.094s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "cheer-1",
+    "title": "Your practice is showing",
+    "chapter": "A little encouragement",
+    "say": "You have given your cone a balanced framework. Every careful adjustment helped. Let your hand relax for a moment, then we will explore the light.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/cheer-1.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You have given your cone a balanced framework Every"
+      },
+      {
+        "time": 3.002,
+        "text": "careful adjustment helped Let your hand relax for a"
+      },
+      {
+        "time": 5.993,
+        "text": "moment then we will explore the light"
+      }
+    ]
+  },
+  {
+    "id": "demo-2-1",
+    "title": "Lift the construction marks",
+    "chapter": "Prepare the light and shadow",
+    "say": "Here is a useful drawing check. The teacher is using an eraser to lift construction marks near the base. Remove only the guides you no longer need. Keep the curved outline readable and avoid rubbing hard enough to damage the paper. Try that on your page. I will wait for you.",
+    "hint": "Erase gently; keep the useful outline.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-2-1.mp3",
+    "uid": "498edab4049a13c4fa46e55b811c326a",
+    "start": 0,
+    "clipEnd": 10,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/498edab4049a13c4fa46e55b811c326a/thumbnails/thumbnail.jpg?time=10s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v2-10.svg",
+    "toolLabel": "Eraser · gentle pressure",
+    "toolWord": "eraser",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Here is a useful drawing check The teacher is"
+      },
+      {
+        "time": 3.162,
+        "text": "using an eraser to lift construction marks near the"
+      },
+      {
+        "time": 5.882,
+        "text": "base Remove only the guides you no longer need"
+      },
+      {
+        "time": 9.436,
+        "text": "Keep the curved outline readable and avoid rubbing hard"
+      },
+      {
+        "time": 12.439,
+        "text": "enough to damage the paper Try that on your"
+      },
+      {
+        "time": 14.951,
+        "text": "page I will wait for you"
+      }
+    ],
+    "toolTime": 3.542
+  },
+  {
+    "id": "demo-2-2",
+    "title": "Check the front curve",
+    "chapter": "Prepare the light and shadow",
+    "say": "Notice what just changed. Pause and compare the front edge of the base with your drawing. It curves smoothly across the form. Keep that curve consistent so the cone feels round and rests naturally on the surface. Make a small adjustment if you want to, then continue.",
+    "hint": "One smooth curve, not a flat bottom.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-2-2.mp3",
+    "uid": "498edab4049a13c4fa46e55b811c326a",
+    "start": 10,
+    "clipEnd": 40,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/498edab4049a13c4fa46e55b811c326a/thumbnails/thumbnail.jpg?time=40s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v2-40.svg",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Notice what just changed Pause and compare the front"
+      },
+      {
+        "time": 3.554,
+        "text": "edge of the base with your drawing It curves"
+      },
+      {
+        "time": 5.735,
+        "text": "smoothly across the form Keep that curve consistent so"
+      },
+      {
+        "time": 9.596,
+        "text": "the cone feels round and rests naturally on the"
+      },
+      {
+        "time": 12.157,
+        "text": "surface Make a small adjustment if you want to"
+      },
+      {
+        "time": 15.257,
+        "text": "then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-2-3",
+    "title": "Place the light–shadow boundary",
+    "chapter": "Prepare the light and shadow",
+    "say": "Your turn to give this a try. This inner line maps where the cone turns away from the light. Notice how it approaches the tip. It is a guide for a tonal transition, not a dark outline to leave on the finished cone. Take your time. Continue when you are ready.",
+    "hint": "The shadow narrows toward the tip.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-2-3.mp3",
+    "uid": "498edab4049a13c4fa46e55b811c326a",
+    "start": 40,
+    "clipEnd": 70,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/498edab4049a13c4fa46e55b811c326a/thumbnails/thumbnail.jpg?time=70s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v2-70.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Your turn to give this a try This inner"
+      },
+      {
+        "time": 2.39,
+        "text": "line maps where the cone turns away from the"
+      },
+      {
+        "time": 4.902,
+        "text": "light Notice how it approaches the tip It is"
+      },
+      {
+        "time": 7.953,
+        "text": "a guide for a tonal transition not a dark"
+      },
+      {
+        "time": 10.637,
+        "text": "outline to leave on the finished cone Take your"
+      },
+      {
+        "time": 13.444,
+        "text": "time Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "chapter-2-end",
+    "title": "Check your shadow plan",
+    "chapter": "Prepare the light and shadow",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-2-end.mp3",
+    "uid": "498edab4049a13c4fa46e55b811c326a",
+    "start": 70,
+    "clipEnd": 82.29,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/498edab4049a13c4fa46e55b811c326a/thumbnails/thumbnail.jpg?time=81.790s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-1",
+    "title": "Connect the cast shadow",
+    "chapter": "Connect the dark areas",
+    "say": "Notice what just changed. The teacher shades the cast shadow beside the base. Keep the shadow connected to the cone, rather than floating away from it. Build the tone with several light passes. Make a small adjustment if you want to, then continue.",
+    "hint": "The shadow begins at the contact point.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-3-1.mp3",
+    "uid": "6fc2839fd4bc21fa6eabdc66a6cab942",
+    "start": 0,
+    "clipEnd": 20,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6fc2839fd4bc21fa6eabdc66a6cab942/thumbnails/thumbnail.jpg?time=20s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v3-20.svg",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Notice what just changed The teacher shades the cast"
+      },
+      {
+        "time": 3.125,
+        "text": "shadow beside the base Keep the shadow connected to"
+      },
+      {
+        "time": 6.238,
+        "text": "the cone rather than floating away from it Build"
+      },
+      {
+        "time": 9.547,
+        "text": "the tone with several light passes Make a small"
+      },
+      {
+        "time": 12.574,
+        "text": "adjustment if you want to then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-2",
+    "title": "Establish the dark side",
+    "chapter": "Connect the dark areas",
+    "say": "Your turn to give this a try. Build a clear dark area on the side that turns away from the light. Compare this with the still-light area. Keep the difference readable before adding softer middle tones. Take your time. Continue when you are ready.",
+    "hint": "Keep the light area clear.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-3-2.mp3",
+    "uid": "6fc2839fd4bc21fa6eabdc66a6cab942",
+    "start": 20,
+    "clipEnd": 65,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6fc2839fd4bc21fa6eabdc66a6cab942/thumbnails/thumbnail.jpg?time=65s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v3-65.svg",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Your turn to give this a try Build a"
+      },
+      {
+        "time": 2.108,
+        "text": "clear dark area on the side that turns away"
+      },
+      {
+        "time": 4.706,
+        "text": "from the light Compare this with the still-light area"
+      },
+      {
+        "time": 8.125,
+        "text": "Keep the difference readable before adding softer middle tones"
+      },
+      {
+        "time": 11.728,
+        "text": "Take your time Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "chapter-3-end",
+    "title": "Check your dark areas",
+    "chapter": "Connect the dark areas",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-3-end.mp3",
+    "uid": "6fc2839fd4bc21fa6eabdc66a6cab942",
+    "start": 65,
+    "clipEnd": 80.7,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6fc2839fd4bc21fa6eabdc66a6cab942/thumbnails/thumbnail.jpg?time=80.200s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "cheer-3",
+    "title": "Your practice is showing",
+    "chapter": "A little encouragement",
+    "say": "Those darker areas are giving your cone weight. You have moved from a few light guides to a form you can recognise. Keep going, one small layer at a time.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/cheer-3.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Those darker areas are giving your cone weight You"
+      },
+      {
+        "time": 2.929,
+        "text": "have moved from a few light guides to a"
+      },
+      {
+        "time": 4.914,
+        "text": "form you can recognise Keep going one small layer"
+      },
+      {
+        "time": 8.591,
+        "text": "at a time"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-1",
+    "title": "Layer your pencil marks",
+    "chapter": "Turn the surface with tone",
+    "say": "Your turn to give this a try. Watch how the teacher returns to the same area with light strokes. Build the dark gradually instead of pressing hard in one pass. This keeps the paper workable and the tone easier to adjust. Take your time. Continue when you are ready.",
+    "hint": "Several light passes give you control.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-4-1.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 0,
+    "clipEnd": 70,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=70s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v4-70.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Your turn to give this a try Watch how"
+      },
+      {
+        "time": 2.243,
+        "text": "the teacher returns to the same area with light"
+      },
+      {
+        "time": 4.914,
+        "text": "strokes Build the dark gradually instead of pressing hard"
+      },
+      {
+        "time": 8.444,
+        "text": "in one pass This keeps the paper workable and"
+      },
+      {
+        "time": 11.544,
+        "text": "the tone easier to adjust Take your time Continue"
+      },
+      {
+        "time": 15.368,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-2",
+    "title": "Let the marks follow the taper",
+    "chapter": "Turn the surface with tone",
+    "say": "Let us compare with your drawing. Near the tip, the shaded area becomes narrower. Keep your marks controlled as they approach that point. Avoid a heavy knot of graphite at the top. Try that on your page. I will wait for you.",
+    "hint": "The form narrows as it rises.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-4-2.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 70,
+    "clipEnd": 160,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=160s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v4-160.svg",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Let us compare with your drawing Near the tip"
+      },
+      {
+        "time": 2.941,
+        "text": "the shaded area becomes narrower Keep your marks controlled"
+      },
+      {
+        "time": 7.01,
+        "text": "as they approach that point Avoid a heavy knot"
+      },
+      {
+        "time": 10.061,
+        "text": "of graphite at the top Try that on your"
+      },
+      {
+        "time": 12.524,
+        "text": "page I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-3",
+    "title": "Build the middle tone",
+    "chapter": "Turn the surface with tone",
+    "say": "Look at this little detail. Now look between the light area and the darker band. These middle tones help the surface turn toward the shadow. Add them gradually so the cone does not look like two flat cut-out shapes. If you need a lighter touch, try an H B or two H pencil. This is a suggestion for your drawing; compare the value rather than pressing harder. Make a small adjustment if you want to, then continue.",
+    "hint": "Bridge light and shadow gradually.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-4-3.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 160,
+    "clipEnd": 250,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=250s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v4-250.svg",
+    "toolLabel": "Try HB / 2H · lighter pressure",
+    "toolWord": "pencil",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Look at this little detail Now look between the"
+      },
+      {
+        "time": 2.623,
+        "text": "light area and the darker band These middle tones"
+      },
+      {
+        "time": 6.029,
+        "text": "help the surface turn toward the shadow Add them"
+      },
+      {
+        "time": 8.787,
+        "text": "gradually so the cone does not look like two"
+      },
+      {
+        "time": 11.581,
+        "text": "flat cut-out shapes If you need a lighter touch"
+      },
+      {
+        "time": 14.73,
+        "text": "try an H B or two H pencil This"
+      },
+      {
+        "time": 17.635,
+        "text": "is a suggestion for your drawing compare the value"
+      },
+      {
+        "time": 20.404,
+        "text": "rather than pressing harder Make a small adjustment if"
+      },
+      {
+        "time": 23.468,
+        "text": "you want to then continue"
+      }
+    ],
+    "toolTime": 16.556
+  },
+  {
+    "id": "demo-4-4",
+    "title": "Soften the transition",
+    "chapter": "Turn the surface with tone",
+    "say": "Here is a useful drawing check. Use overlapping light pencil marks to connect neighbouring tones. Keep the light area lighter, and let the transition become smoother. Softening a transition does not mean making the whole cone the same grey. Take your time. Continue when you are ready.",
+    "hint": "Blend with pencil strokes before rubbing.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-4-4.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 250,
+    "clipEnd": 370,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=370s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v4-370.svg",
+    "captions": [
+      {
+        "time": 0.11,
+        "text": "Here is a useful drawing check Use overlapping light"
+      },
+      {
+        "time": 3.627,
+        "text": "pencil marks to connect neighbouring tones Keep the light"
+      },
+      {
+        "time": 7.304,
+        "text": "area lighter and let the transition become smoother Softening"
+      },
+      {
+        "time": 11.029,
+        "text": "a transition does not mean making the whole cone"
+      },
+      {
+        "time": 13.603,
+        "text": "the same grey Take your time Continue when you"
+      },
+      {
+        "time": 16.838,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-5",
+    "title": "Keep the base grounded",
+    "chapter": "Turn the surface with tone",
+    "say": "Notice what just changed. Look at the darker contact along the bottom. It helps the cone sit on the table. Keep this accent controlled, rather than outlining the entire cone with an equally dark line. Try that on your page. I will wait for you.",
+    "hint": "Compare the contact edge with the side.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-4-5.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 370,
+    "clipEnd": 490,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=490s&height=720",
+    "optional": false,
+    "analysis": "../../../assets/sketch-support/cone/v4-490.svg",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Notice what just changed Look at the darker contact"
+      },
+      {
+        "time": 3.088,
+        "text": "along the bottom It helps the cone sit on"
+      },
+      {
+        "time": 5.502,
+        "text": "the table Keep this accent controlled rather than outlining"
+      },
+      {
+        "time": 9.449,
+        "text": "the entire cone with an equally dark line Try"
+      },
+      {
+        "time": 12.77,
+        "text": "that on your page I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "chapter-4-end",
+    "title": "Check your rounded form",
+    "chapter": "Turn the surface with tone",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-4-end.mp3",
+    "uid": "256f7d6adb99fb2b99fa6b1bba71a179",
+    "start": 490,
+    "clipEnd": 539.396,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/256f7d6adb99fb2b99fa6b1bba71a179/thumbnails/thumbnail.jpg?time=538.896s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "core-complete",
+    "title": "Your cone is complete",
+    "chapter": "A little encouragement",
+    "say": "You have built the framework, shaped the base, and turned the surface with light and shadow. That is your core drawing complete! The background, tissue blending and final polish are optional extras. You can explore them now, or share your work and move on.",
+    "hint": "Core drawing complete",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/core-complete.mp3",
+    "coreComplete": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "You have built the framework shaped the base and"
+      },
+      {
+        "time": 2.475,
+        "text": "turned the surface with light and shadow That is"
+      },
+      {
+        "time": 5.343,
+        "text": "your core drawing complete The background tissue blending and"
+      },
+      {
+        "time": 9.265,
+        "text": "final polish are optional extras You can explore them"
+      },
+      {
+        "time": 12.561,
+        "text": "now or share your work and move on"
+      }
+    ]
+  },
+  {
+    "id": "submit",
+    "title": "Share your cone",
+    "chapter": "Your work",
+    "say": "Choose a clear photo of your drawing, then tap the send button. Wait for the submitted message so you know it has arrived. You can also continue without a photo and return later. Your drawing already counts.",
+    "hint": "Your drawing · Your progress",
+    "kind": "submit",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/submit.mp3",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Choose a clear photo of your drawing then tap"
+      },
+      {
+        "time": 2.586,
+        "text": "the send button Wait for the submitted message so"
+      },
+      {
+        "time": 5.662,
+        "text": "you know it has arrived You can also continue"
+      },
+      {
+        "time": 8.211,
+        "text": "without a photo and return later Your drawing already"
+      },
+      {
+        "time": 11.495,
+        "text": "counts"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-1",
+    "title": "Use the background to reveal the edge",
+    "chapter": "Background and blending · Optional",
+    "say": "Let us compare with your drawing. The teacher adds tone outside the light side of the cone. This contrast helps the light edge become visible without a thick outline. Keep the background marks outside the form. Try that on your page. I will wait for you.",
+    "hint": "Dark beside light makes the form clearer.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-1.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 0,
+    "clipEnd": 70,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=70s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-70.svg",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Let us compare with your drawing The teacher adds"
+      },
+      {
+        "time": 2.904,
+        "text": "tone outside the light side of the cone This"
+      },
+      {
+        "time": 5.588,
+        "text": "contrast helps the light edge become visible without a"
+      },
+      {
+        "time": 8.517,
+        "text": "thick outline Keep the background marks outside the form"
+      },
+      {
+        "time": 12.279,
+        "text": "Try that on your page I will wait for"
+      },
+      {
+        "time": 14.571,
+        "text": "you"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-2",
+    "title": "Keep broad marks consistent",
+    "chapter": "Background and blending · Optional",
+    "say": "Look at this little detail. Notice the broad diagonal strokes around the cone. Use a consistent direction and gentle pressure to establish the surrounding tone. Check that the cone still stands out clearly. Make a small adjustment if you want to, then continue.",
+    "hint": "Build an even surrounding tone.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-2.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 70,
+    "clipEnd": 190,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=190s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-190.svg",
+    "captions": [
+      {
+        "time": 0.05,
+        "text": "Look at this little detail Notice the broad diagonal"
+      },
+      {
+        "time": 3.248,
+        "text": "strokes around the cone Use a consistent direction and"
+      },
+      {
+        "time": 6.434,
+        "text": "gentle pressure to establish the surrounding tone Check that"
+      },
+      {
+        "time": 9.951,
+        "text": "the cone still stands out clearly Make a small"
+      },
+      {
+        "time": 12.954,
+        "text": "adjustment if you want to then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-3",
+    "title": "Check the cast-shadow shape",
+    "chapter": "Background and blending · Optional",
+    "say": "Here is a useful drawing check. Compare the cast shadow with the base. Its darkest contact stays near the object, while the outer area can soften. Avoid turning it into a hard, equally dark border. Take your time. Continue when you are ready.",
+    "hint": "Keep it attached; soften farther away.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-3.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 190,
+    "clipEnd": 310,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=310s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-310.svg",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Here is a useful drawing check Compare the cast"
+      },
+      {
+        "time": 3.113,
+        "text": "shadow with the base Its darkest contact stays near"
+      },
+      {
+        "time": 6.385,
+        "text": "the object while the outer area can soften Avoid"
+      },
+      {
+        "time": 10.086,
+        "text": "turning it into a hard equally dark border Take"
+      },
+      {
+        "time": 13.603,
+        "text": "your time Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-4",
+    "title": "Compare the whole value pattern",
+    "chapter": "Background and blending · Optional",
+    "say": "Notice what just changed. Step back for a moment. Compare the light area, the middle transition, and the shadow. The background should support those differences, not compete with the cone. Try that on your page. I will wait for you.",
+    "hint": "Light side, turning tone, dark side.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-4.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 310,
+    "clipEnd": 490,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=490s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-490.svg",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Notice what just changed Step back for a moment"
+      },
+      {
+        "time": 3.248,
+        "text": "Compare the light area the middle transition and the"
+      },
+      {
+        "time": 6.127,
+        "text": "shadow The background should support those differences not compete"
+      },
+      {
+        "time": 10.012,
+        "text": "with the cone Try that on your page I"
+      },
+      {
+        "time": 12.99,
+        "text": "will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-5",
+    "title": "Blend gently with tissue",
+    "chapter": "Background and blending · Optional",
+    "say": "Your turn to give this a try. Here the teacher uses tissue over a fingertip to soften the graphite. Use gentle pressure and short controlled movements. Keep a clean part of the tissue over light areas, so you do not drag dark graphite into them. Make a small adjustment if you want to, then continue.",
+    "hint": "Soften graphite without losing the form.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-5.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 490,
+    "clipEnd": 520,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=520s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-520.svg",
+    "toolLabel": "Clean tissue · gentle pressure",
+    "toolWord": "tissue",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Your turn to give this a try Here the"
+      },
+      {
+        "time": 2.047,
+        "text": "teacher uses tissue over a fingertip to soften the"
+      },
+      {
+        "time": 4.963,
+        "text": "graphite Use gentle pressure and short controlled movements Keep"
+      },
+      {
+        "time": 9.399,
+        "text": "a clean part of the tissue over light areas"
+      },
+      {
+        "time": 11.728,
+        "text": "so you do not drag dark graphite into them"
+      },
+      {
+        "time": 14.277,
+        "text": "Make a small adjustment if you want to then"
+      },
+      {
+        "time": 16.287,
+        "text": "continue"
+      }
+    ],
+    "toolTime": 2.647
+  },
+  {
+    "id": "demo-5-6",
+    "title": "Return to the pencil after blending",
+    "chapter": "Background and blending · Optional",
+    "say": "Let us compare with your drawing. After blending, return to the pencil to strengthen selected tones and edges. Do not redraw every outline. Restore only the details that help the form read clearly. Take your time. Continue when you are ready.",
+    "hint": "Restore the structure you still need.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-6.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 520,
+    "clipEnd": 640,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=640s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-640.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Let us compare with your drawing After blending return"
+      },
+      {
+        "time": 3.493,
+        "text": "to the pencil to strengthen selected tones and edges"
+      },
+      {
+        "time": 7.047,
+        "text": "Do not redraw every outline Restore only the details"
+      },
+      {
+        "time": 10.883,
+        "text": "that help the form read clearly Take your time"
+      },
+      {
+        "time": 14.069,
+        "text": "Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-7",
+    "title": "Balance the background",
+    "chapter": "Background and blending · Optional",
+    "say": "Look at this little detail. Compare the background on both sides. Adjust it gradually so it supports the lighter and darker parts of the cone. Keep checking the whole drawing instead of darkening one small area too much. Try that on your page. I will wait for you.",
+    "hint": "Keep attention on the cone.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-5-7.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 640,
+    "clipEnd": 820,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=820s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v5-820.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look at this little detail Compare the background on"
+      },
+      {
+        "time": 3.064,
+        "text": "both sides Adjust it gradually so it supports the"
+      },
+      {
+        "time": 6.385,
+        "text": "lighter and darker parts of the cone Keep checking"
+      },
+      {
+        "time": 9.424,
+        "text": "the whole drawing instead of darkening one small area"
+      },
+      {
+        "time": 12.243,
+        "text": "too much Try that on your page I will"
+      },
+      {
+        "time": 15.221,
+        "text": "wait for you"
+      }
+    ]
+  },
+  {
+    "id": "chapter-5-end",
+    "title": "Check your background",
+    "chapter": "Background and blending · Optional",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-5-end.mp3",
+    "uid": "f4c8dcb6c8bf78bec8c89046b850b000",
+    "start": 820,
+    "clipEnd": 874.392,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/f4c8dcb6c8bf78bec8c89046b850b000/thumbnails/thumbnail.jpg?time=873.892s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-1",
+    "title": "Refine the turning tone",
+    "chapter": "Final refinements · Optional",
+    "say": "Look at this little detail. These final pencil touches refine the transition near the lower side. Compare neighbouring tones and make small changes. Preserve the difference between the lit surface and the shadow. Make a small adjustment if you want to, then continue.",
+    "hint": "Small changes can make the curve clearer.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-6-1.mp3",
+    "uid": "9ee03efb74cce27368752b9644cc3dd4",
+    "start": 0,
+    "clipEnd": 10,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9ee03efb74cce27368752b9644cc3dd4/thumbnails/thumbnail.jpg?time=10s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v6-10.svg",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Look at this little detail These final pencil touches"
+      },
+      {
+        "time": 3.235,
+        "text": "refine the transition near the lower side Compare neighbouring"
+      },
+      {
+        "time": 6.703,
+        "text": "tones and make small changes Preserve the difference between"
+      },
+      {
+        "time": 10.907,
+        "text": "the lit surface and the shadow Make a small"
+      },
+      {
+        "time": 13.713,
+        "text": "adjustment if you want to then continue"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-2",
+    "title": "Finish the contact edge",
+    "chapter": "Final refinements · Optional",
+    "say": "Here is a useful drawing check. Check the contact at the base one last time. A controlled dark accent anchors the cone. Then step back and compare the tip, the curved side, and the ellipse as one complete form. Take your time. Continue when you are ready.",
+    "hint": "A grounded base, not a heavy outline.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/demo-6-2.mp3",
+    "uid": "9ee03efb74cce27368752b9644cc3dd4",
+    "start": 10,
+    "clipEnd": 40,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9ee03efb74cce27368752b9644cc3dd4/thumbnails/thumbnail.jpg?time=40s&height=720",
+    "optional": true,
+    "analysis": "../../../assets/sketch-support/cone/v6-40.svg",
+    "captions": [
+      {
+        "time": 0.11,
+        "text": "Here is a useful drawing check Check the contact"
+      },
+      {
+        "time": 3.15,
+        "text": "at the base one last time A controlled dark"
+      },
+      {
+        "time": 6.176,
+        "text": "accent anchors the cone Then step back and compare"
+      },
+      {
+        "time": 9.473,
+        "text": "the tip the curved side and the ellipse as"
+      },
+      {
+        "time": 12.279,
+        "text": "one complete form Take your time Continue when you"
+      },
+      {
+        "time": 15.797,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "chapter-6-end",
+    "title": "Check your finished cone",
+    "chapter": "Final refinements · Optional",
+    "say": "Watch the last small adjustments. Then compare your drawing with the reference. Keep what is working, and gently adjust anything you want to improve. There is no need to rush.",
+    "hint": "Watch · Compare · Adjust",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/chapter-6-end.mp3",
+    "uid": "9ee03efb74cce27368752b9644cc3dd4",
+    "start": 40,
+    "clipEnd": 57.996,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9ee03efb74cce27368752b9644cc3dd4/thumbnails/thumbnail.jpg?time=57.496s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last small adjustments Then compare your drawing"
+      },
+      {
+        "time": 3.444,
+        "text": "with the reference Keep what is working and gently"
+      },
+      {
+        "time": 6.495,
+        "text": "adjust anything you want to improve There is no"
+      },
+      {
+        "time": 9.241,
+        "text": "need to rush"
+      }
+    ]
+  },
+  {
+    "id": "reflect",
+    "title": "Find a cone around you",
+    "chapter": "Look again",
+    "say": "Think of an ice cream cone, a party hat, or the nose of a toy rocket. Where is the point? Where is the round base? You now have a way to begin drawing those shapes. What would you like to try next?",
+    "hint": "What will you notice next?",
+    "kind": "reflect",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/reflect.mp3",
+    "captions": [
+      {
+        "time": 0.123,
+        "text": "Think of an ice cream cone a party hat"
+      },
+      {
+        "time": 2.929,
+        "text": "or the nose of a toy rocket Where is"
+      },
+      {
+        "time": 5.392,
+        "text": "the point Where is the round base You now"
+      },
+      {
+        "time": 8.529,
+        "text": "have a way to begin drawing those shapes What"
+      },
+      {
+        "time": 11.189,
+        "text": "would you like to try next"
+      }
+    ]
+  },
+  {
+    "id": "complete",
+    "title": "You made a cone",
+    "chapter": "Finish",
+    "say": "You looked, measured, adjusted, and kept going. That is how drawing grows. Your cone does not need to be perfect to deserve a celebration. Artchi has a reward for you. Next we will explore how different forms meet.",
+    "hint": "The Cone · Ready to celebrate",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/cone.jpg",
+    "audio": "audio/complete.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You looked measured adjusted and kept going That is"
+      },
+      {
+        "time": 3.627,
+        "text": "how drawing grows Your cone does not need to"
+      },
+      {
+        "time": 6.556,
+        "text": "be perfect to deserve a celebration Artchi has a"
+      },
+      {
+        "time": 9.73,
+        "text": "reward for you Next we will explore how different"
+      },
+      {
+        "time": 12.586,
+        "text": "forms meet"
+      }
+    ]
+  }
+]

@@ -66,7 +66,7 @@
       title: 'The Cone',
       subtitle: 'Geometric form',
       emoji: '🔺',
-      href: 'lessons/lesson-7-cone/',
+      href: 'lessons/lesson-7-cone/guided/',
       ready: true,
       level: 1
     },
