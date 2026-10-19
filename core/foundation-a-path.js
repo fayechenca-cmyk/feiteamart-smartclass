@@ -75,7 +75,7 @@
       title: 'Intersecting Geometry',
       subtitle: 'Two forms, one space',
       emoji: '💎',
-      href: 'lessons/lesson-9-intersecting/',
+      href: 'lessons/lesson-9-intersecting/guided/',
       ready: true,
       level: 1
     },

@@ -10,7 +10,7 @@ window.GuidedUX=(()=>{
   if(s.materialScene){document.getElementById('visual').innerHTML=`<div class="material-canvas"><svg viewBox="0 0 1448 1086" role="img" aria-label="Pencils, eraser, tissue and artist tape on sketch paper"><image href="${tools}" width="1448" height="1086"/><rect id="materialFocus" x="980" y="100" width="315" height="800" rx="22"/></svg><strong id="materialLabel">Your tools</strong></div>`;}
   if(s.kind==='milestone'||s.kind==='badge'){
    const symbol=document.querySelector('.milestone-star,.big-symbol');
-   if(symbol)symbol.outerHTML=dots(location.pathname.includes('cube')?'Cube':location.pathname.includes('sphere')?'Sphere':location.pathname.includes('cylinder')?'Cylinder':location.pathname.includes('cone')?'Cone':'Ready');
+   if(symbol)symbol.outerHTML=dots(location.pathname.includes('cube')?'Cube':location.pathname.includes('sphere')?'Sphere':location.pathname.includes('cylinder')?'Cylinder':location.pathname.includes('cone')?'Cone':location.pathname.includes('intersecting')?'Two forms':'Ready');
   }
  }
  function narrate(s){spoken=s;last=-1;tick(0);}

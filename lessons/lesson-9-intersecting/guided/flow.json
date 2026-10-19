@@ -1,0 +1,1331 @@
+[
+  {
+    "id": "welcome",
+    "title": "Two forms, one space",
+    "chapter": "Welcome",
+    "say": "Welcome back! You already know the cone and the cylinder. Today we will put them together. Watch how the cylinder passes through the cone, and how each form affects what we can see of the other. We will take our time with the new parts: perspective, overlap, and the shadows where they meet.",
+    "hint": "Cone + cylinder · A shared space",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/welcome.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Welcome back You already know the cone and the"
+      },
+      {
+        "time": 2.745,
+        "text": "cylinder Today we will put them together Watch how"
+      },
+      {
+        "time": 6.042,
+        "text": "the cylinder passes through the cone and how each"
+      },
+      {
+        "time": 8.848,
+        "text": "form affects what we can see of the other"
+      },
+      {
+        "time": 11.078,
+        "text": "We will take our time with the new parts"
+      },
+      {
+        "time": 13.346,
+        "text": "perspective overlap and the shadows where they meet"
+      }
+    ]
+  },
+  {
+    "id": "tools",
+    "title": "Keep your familiar tools nearby",
+    "chapter": "Get ready",
+    "say": "Keep your pencils and eraser close by. Use light construction marks on your sketch paper, and leave space on both sides for the cylinder. We will spend less time repeating the basics today, and more time looking at how these two forms fit together.",
+    "hint": "Light marks · Room on both sides",
+    "kind": "photo",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/tools.mp3",
+    "materialScene": true,
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Keep your pencils and eraser close by Use light"
+      },
+      {
+        "time": 3.86,
+        "text": "construction marks on your sketch paper and leave space"
+      },
+      {
+        "time": 6.765,
+        "text": "on both sides for the cylinder We will spend"
+      },
+      {
+        "time": 9.338,
+        "text": "less time repeating the basics today and more time"
+      },
+      {
+        "time": 12.476,
+        "text": "looking at how these two forms fit together"
+      }
+    ],
+    "cues": [
+      {
+        "time": 0.368,
+        "tool": "pencils",
+        "label": "pencils"
+      },
+      {
+        "time": 1.777,
+        "tool": "eraser",
+        "label": "eraser"
+      },
+      {
+        "time": 5.208,
+        "tool": "paper",
+        "label": "paper"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-1",
+    "title": "Place the whole drawing",
+    "chapter": "Build the two forms",
+    "say": "Use the familiar centre and base guides. This time, leave extra space on the left and right. We are composing the whole combined object, not just a cone. Try that on your page. Continue when you are ready.",
+    "hint": "Leave room for the cylinder on both sides.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-1.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 0,
+    "clipEnd": 60,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=60s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Use the familiar centre and base guides This time"
+      },
+      {
+        "time": 4.203,
+        "text": "leave extra space on the left and right We"
+      },
+      {
+        "time": 6.728,
+        "text": "are composing the whole combined object not just a"
+      },
+      {
+        "time": 9.498,
+        "text": "cone Try that on your page Continue when you"
+      },
+      {
+        "time": 12.88,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-2",
+    "title": "A familiar cone framework",
+    "chapter": "Build the two forms",
+    "say": "You have done this in the last lesson. Check the height, width and smooth base ellipse. Make any small correction you need. We are about to build across this framework. Take your time. I will wait for you.",
+    "hint": "A short check, then something new.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-2.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 60,
+    "clipEnd": 180,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=180s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "You have done this in the last lesson Check"
+      },
+      {
+        "time": 2.525,
+        "text": "the height width and smooth base ellipse Make any"
+      },
+      {
+        "time": 6.213,
+        "text": "small correction you need We are about to build"
+      },
+      {
+        "time": 8.689,
+        "text": "across this framework Take your time I will wait"
+      },
+      {
+        "time": 11.985,
+        "text": "for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-3",
+    "title": "Set the direction of the cylinder",
+    "chapter": "Build the two forms",
+    "say": "These sloping guide lines set the direction and width of the cylinder. They are not a box in the finished drawing. Compare their tilt with the reference, and keep them light enough to change. Check the whole direction before shaping the ends. Adjust what you need, then we will move on.",
+    "hint": "The box-like guides are a scaffold.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-3.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 180,
+    "clipEnd": 300,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=300s&height=720",
+    "optional": false,
+    "analysis": "analysis/v1-300.svg",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "These sloping guide lines set the direction and width"
+      },
+      {
+        "time": 2.929,
+        "text": "of the cylinder They are not a box in"
+      },
+      {
+        "time": 5.024,
+        "text": "the finished drawing Compare their tilt with the reference"
+      },
+      {
+        "time": 8.002,
+        "text": "and keep them light enough to change Check the"
+      },
+      {
+        "time": 11.14,
+        "text": "whole direction before shaping the ends Adjust what you"
+      },
+      {
+        "time": 14.816,
+        "text": "need then we will move on"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-4",
+    "title": "Turn the end into an ellipse",
+    "chapter": "Build the two forms",
+    "say": "The circular end looks like an ellipse from this viewpoint. Compare its height, width and tilt with the teacher. It belongs to the sloping cylinder, so do not draw an unrelated upright oval. Shape it gently within the guides. Try that on your page. Continue when you are ready.",
+    "hint": "A round end seen at an angle.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-4.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 300,
+    "clipEnd": 420,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=420s&height=720",
+    "optional": false,
+    "analysis": "analysis/v1-420.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "The circular end looks like an ellipse from this"
+      },
+      {
+        "time": 2.451,
+        "text": "viewpoint Compare its height width and tilt with the"
+      },
+      {
+        "time": 5.944,
+        "text": "teacher It belongs to the sloping cylinder so do"
+      },
+      {
+        "time": 9.338,
+        "text": "not draw an unrelated upright oval Shape it gently"
+      },
+      {
+        "time": 13.125,
+        "text": "within the guides Try that on your page Continue"
+      },
+      {
+        "time": 16.789,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-5",
+    "title": "Check both ends together",
+    "chapter": "Build the two forms",
+    "say": "Compare the two end ellipses and the long sides connecting them. They describe one cylinder passing across the cone. Check their alignment as a pair. Keep the hidden construction light for now. Take your time. I will wait for you.",
+    "hint": "One cylinder, not two separate ovals.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-5.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 420,
+    "clipEnd": 480,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=480s&height=720",
+    "optional": false,
+    "analysis": "analysis/v1-480.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Compare the two end ellipses and the long sides"
+      },
+      {
+        "time": 3.113,
+        "text": "connecting them They describe one cylinder passing across the"
+      },
+      {
+        "time": 6.642,
+        "text": "cone Check their alignment as a pair Keep the"
+      },
+      {
+        "time": 9.902,
+        "text": "hidden construction light for now Take your time I"
+      },
+      {
+        "time": 13.235,
+        "text": "will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-1-6",
+    "title": "Find where the surfaces meet",
+    "chapter": "Build the two forms",
+    "say": "Look at the curved meeting line on the right. It shows where the cylinder emerges from the cone. This is not a straight cut across the page. Compare its curve with the reference and follow the two surfaces. Adjust what you need, then we will move on.",
+    "hint": "An intersection follows both surfaces.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-1-6.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 480,
+    "clipEnd": 540,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=540s&height=720",
+    "optional": false,
+    "analysis": "analysis/v1-540.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look at the curved meeting line on the right"
+      },
+      {
+        "time": 2.537,
+        "text": "It shows where the cylinder emerges from the cone"
+      },
+      {
+        "time": 5.429,
+        "text": "This is not a straight cut across the page"
+      },
+      {
+        "time": 8.027,
+        "text": "Compare its curve with the reference and follow the"
+      },
+      {
+        "time": 10.662,
+        "text": "two surfaces Adjust what you need then we will"
+      },
+      {
+        "time": 13.787,
+        "text": "move on"
+      }
+    ]
+  },
+  {
+    "id": "chapter-1-end",
+    "title": "Your connected framework",
+    "chapter": "Build the two forms",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-1-end.mp3",
+    "uid": "2c36a16d19be6f2553f5c880216af308",
+    "start": 540,
+    "clipEnd": 554.792,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/2c36a16d19be6f2553f5c880216af308/thumbnails/thumbnail.jpg?time=554.292s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "cheer-1",
+    "title": "You are bringing the forms together",
+    "chapter": "A little encouragement",
+    "say": "You have worked out how the two forms share the page. That careful looking is the important part. Relax your hand for a moment. Next, we will clear the hidden guides.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/cheer-1.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "You have worked out how the two forms share"
+      },
+      {
+        "time": 1.985,
+        "text": "the page That careful looking is the important part"
+      },
+      {
+        "time": 5.405,
+        "text": "Relax your hand for a moment Next we will"
+      },
+      {
+        "time": 8.137,
+        "text": "clear the hidden guides"
+      }
+    ]
+  },
+  {
+    "id": "demo-2-1",
+    "title": "Erase only the hidden guides",
+    "chapter": "Clear the hidden lines",
+    "say": "The eraser is removing construction lines that would not show on the solid object. Before you rub, follow the line and ask: would I actually see this part? Lift it gently. Keep the outer edges and the curved meeting line. Take your time. I will wait for you.",
+    "hint": "Keep the visible edges.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-2-1.mp3",
+    "uid": "743ba6387f06bf56643ceb0a69ea14fa",
+    "start": 0,
+    "clipEnd": 30,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/743ba6387f06bf56643ceb0a69ea14fa/thumbnails/thumbnail.jpg?time=30s&height=720",
+    "optional": false,
+    "analysis": "analysis/v2-30.svg",
+    "toolLabel": "Eraser · lift hidden guides",
+    "toolWord": "eraser",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The eraser is removing construction lines that would not"
+      },
+      {
+        "time": 2.99,
+        "text": "show on the solid object Before you rub follow"
+      },
+      {
+        "time": 6.042,
+        "text": "the line and ask would I actually see this"
+      },
+      {
+        "time": 8.713,
+        "text": "part Lift it gently Keep the outer edges and"
+      },
+      {
+        "time": 12.488,
+        "text": "the curved meeting line Take your time I will"
+      },
+      {
+        "time": 15.49,
+        "text": "wait for you"
+      }
+    ],
+    "toolTime": 0.11
+  },
+  {
+    "id": "demo-2-2",
+    "title": "Plan light across both forms",
+    "chapter": "Clear the hidden lines",
+    "say": "Now the teacher marks the areas that will turn into shadow. Follow the cone and the cylinder separately, but keep one shared light direction. These are guides for changes in tone, not heavy outlines. Adjust what you need, then we will move on.",
+    "hint": "One light, two connected shapes.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-2-2.mp3",
+    "uid": "743ba6387f06bf56643ceb0a69ea14fa",
+    "start": 30,
+    "clipEnd": 90,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/743ba6387f06bf56643ceb0a69ea14fa/thumbnails/thumbnail.jpg?time=90s&height=720",
+    "optional": false,
+    "analysis": "analysis/v2-90.svg",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Now the teacher marks the areas that will turn"
+      },
+      {
+        "time": 2.218,
+        "text": "into shadow Follow the cone and the cylinder separately"
+      },
+      {
+        "time": 5.735,
+        "text": "but keep one shared light direction These are guides"
+      },
+      {
+        "time": 9.02,
+        "text": "for changes in tone not heavy outlines Adjust what"
+      },
+      {
+        "time": 12.537,
+        "text": "you need then we will move on"
+      }
+    ]
+  },
+  {
+    "id": "chapter-2-end",
+    "title": "A readable solid form",
+    "chapter": "Clear the hidden lines",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-2-end.mp3",
+    "uid": "743ba6387f06bf56643ceb0a69ea14fa",
+    "start": 90,
+    "clipEnd": 112.492,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/743ba6387f06bf56643ceb0a69ea14fa/thumbnails/thumbnail.jpg?time=111.992s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-1",
+    "title": "Begin with a clear dark family",
+    "chapter": "Map connected shadows",
+    "say": "Notice the first darker band on the cone. The teacher is establishing a clear value difference before adding all the middle tones. You know how to layer pencil marks. Here, compare the value across the whole object. Adjust what you need, then we will move on.",
+    "hint": "Keep the light areas clean.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-3-1.mp3",
+    "uid": "3715a0604e39ec1facc0432a5f56a0d7",
+    "start": 0,
+    "clipEnd": 60,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3715a0604e39ec1facc0432a5f56a0d7/thumbnails/thumbnail.jpg?time=60s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Notice the first darker band on the cone The"
+      },
+      {
+        "time": 2.917,
+        "text": "teacher is establishing a clear value difference before adding"
+      },
+      {
+        "time": 6.422,
+        "text": "all the middle tones You know how to layer"
+      },
+      {
+        "time": 8.787,
+        "text": "pencil marks Here compare the value across the whole"
+      },
+      {
+        "time": 12.255,
+        "text": "object Adjust what you need then we will move"
+      },
+      {
+        "time": 15.135,
+        "text": "on"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-2",
+    "title": "A cylinder casts onto the cone",
+    "chapter": "Map connected shadows",
+    "say": "Look beneath the projecting cylinder. It blocks light and casts a shadow onto the cone. That shadow helps the two forms feel connected. Compare its shape carefully; it is different from the shaded underside of the cylinder. Try that on your page. Continue when you are ready.",
+    "hint": "The shadow belongs to the surface below it.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-3-2.mp3",
+    "uid": "3715a0604e39ec1facc0432a5f56a0d7",
+    "start": 60,
+    "clipEnd": 120,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3715a0604e39ec1facc0432a5f56a0d7/thumbnails/thumbnail.jpg?time=120s&height=720",
+    "optional": false,
+    "analysis": "analysis/v3-120.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look beneath the projecting cylinder It blocks light and"
+      },
+      {
+        "time": 3.517,
+        "text": "casts a shadow onto the cone That shadow helps"
+      },
+      {
+        "time": 6.556,
+        "text": "the two forms feel connected Compare its shape carefully"
+      },
+      {
+        "time": 10.686,
+        "text": "it is different from the shaded underside of the"
+      },
+      {
+        "time": 12.806,
+        "text": "cylinder Try that on your page Continue when you"
+      },
+      {
+        "time": 16.299,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-3",
+    "title": "Connect the two visible ends",
+    "chapter": "Map connected shadows",
+    "say": "The teacher now develops the darker underside on the left. Compare it with the right-hand side. The cone hides the middle of the cylinder, but the visible ends should still feel part of one object. Take your time. I will wait for you.",
+    "hint": "Both ends belong to the same form.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-3-3.mp3",
+    "uid": "3715a0604e39ec1facc0432a5f56a0d7",
+    "start": 120,
+    "clipEnd": 180,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3715a0604e39ec1facc0432a5f56a0d7/thumbnails/thumbnail.jpg?time=180s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The teacher now develops the darker underside on the"
+      },
+      {
+        "time": 2.77,
+        "text": "left Compare it with the right-hand side The cone"
+      },
+      {
+        "time": 6.422,
+        "text": "hides the middle of the cylinder but the visible"
+      },
+      {
+        "time": 9.069,
+        "text": "ends should still feel part of one object Take"
+      },
+      {
+        "time": 12.304,
+        "text": "your time I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-3-4",
+    "title": "Anchor the object to the table",
+    "chapter": "Map connected shadows",
+    "say": "This wider shadow falls on the tabletop. Keep it connected to the base. Compare it with the smaller shadow on the cone: the two shadows fall on different surfaces. Adjust what you need, then we will move on.",
+    "hint": "The cast shadow meets the base.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-3-4.mp3",
+    "uid": "3715a0604e39ec1facc0432a5f56a0d7",
+    "start": 180,
+    "clipEnd": 240,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3715a0604e39ec1facc0432a5f56a0d7/thumbnails/thumbnail.jpg?time=240s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "This wider shadow falls on the tabletop Keep it"
+      },
+      {
+        "time": 3.027,
+        "text": "connected to the base Compare it with the smaller"
+      },
+      {
+        "time": 5.833,
+        "text": "shadow on the cone the two shadows fall on"
+      },
+      {
+        "time": 9.069,
+        "text": "different surfaces Adjust what you need then we will"
+      },
+      {
+        "time": 12.194,
+        "text": "move on"
+      }
+    ]
+  },
+  {
+    "id": "chapter-3-end",
+    "title": "Your shadow map",
+    "chapter": "Map connected shadows",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-3-end.mp3",
+    "uid": "3715a0604e39ec1facc0432a5f56a0d7",
+    "start": 240,
+    "clipEnd": 275.092,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3715a0604e39ec1facc0432a5f56a0d7/thumbnails/thumbnail.jpg?time=274.592s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "cheer-3",
+    "title": "You are bringing the forms together",
+    "chapter": "A little encouragement",
+    "say": "Look how the shadows connect the two shapes. This is more than drawing them side by side. You are making them belong in the same space. Keep going, one thoughtful adjustment at a time.",
+    "hint": "One thoughtful step forward",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/cheer-3.mp3",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Look how the shadows connect the two shapes This"
+      },
+      {
+        "time": 2.953,
+        "text": "is more than drawing them side by side You"
+      },
+      {
+        "time": 5.441,
+        "text": "are making them belong in the same space Keep"
+      },
+      {
+        "time": 8.223,
+        "text": "going one thoughtful adjustment at a time"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-1",
+    "title": "Turn the cylinder with tone",
+    "chapter": "Develop the turning tones",
+    "say": "The teacher builds the round side with overlapping pencil marks. Keep the top lighter and the underside darker. Compare the transition rather than tracing a dark border around the cylinder. Try that on your page. Continue when you are ready.",
+    "hint": "Lighter above, darker underneath.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-4-1.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 0,
+    "clipEnd": 120,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=120s&height=720",
+    "optional": false,
+    "analysis": "analysis/v4-120.svg",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "The teacher builds the round side with overlapping pencil"
+      },
+      {
+        "time": 3.088,
+        "text": "marks Keep the top lighter and the underside darker"
+      },
+      {
+        "time": 6.912,
+        "text": "Compare the transition rather than tracing a dark border"
+      },
+      {
+        "time": 9.963,
+        "text": "around the cylinder Try that on your page Continue"
+      },
+      {
+        "time": 13.689,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-2",
+    "title": "Separate surface tone from cast shadow",
+    "chapter": "Develop the turning tones",
+    "say": "Here, the shaded cylinder and the shadow on the cone sit close together. Keep looking at which surface each patch belongs to. Small value changes can separate them without a heavy outline. Take your time. I will wait for you.",
+    "hint": "Look just beneath the cylinder.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-4-2.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 120,
+    "clipEnd": 240,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=240s&height=720",
+    "optional": false,
+    "analysis": "analysis/v4-240.svg",
+    "captions": [
+      {
+        "time": 0.135,
+        "text": "Here the shaded cylinder and the shadow on the"
+      },
+      {
+        "time": 3.088,
+        "text": "cone sit close together Keep looking at which surface"
+      },
+      {
+        "time": 6.569,
+        "text": "each patch belongs to Small value changes can separate"
+      },
+      {
+        "time": 10.098,
+        "text": "them without a heavy outline Take your time I"
+      },
+      {
+        "time": 13.591,
+        "text": "will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-3",
+    "title": "Keep the cone turning",
+    "chapter": "Develop the turning tones",
+    "say": "The teacher returns to the cone to balance its tones with the cylinder. This is a comparison step, not a new object. Keep the light area readable and build the middle tones gradually. Adjust what you need, then we will move on.",
+    "hint": "Protect the lighter strip.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-4-3.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 240,
+    "clipEnd": 420,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=420s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The teacher returns to the cone to balance its"
+      },
+      {
+        "time": 2.451,
+        "text": "tones with the cylinder This is a comparison step"
+      },
+      {
+        "time": 5.613,
+        "text": "not a new object Keep the light area readable"
+      },
+      {
+        "time": 8.774,
+        "text": "and build the middle tones gradually Adjust what you"
+      },
+      {
+        "time": 11.679,
+        "text": "need then we will move on"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-4",
+    "title": "Compare the whole value pattern",
+    "chapter": "Develop the turning tones",
+    "say": "Take a short step back. Can you still read the cone, the cylinder, and their meeting line? Keep the cylinder end distinct from its curved side. Adjust only what helps the forms become clearer. Try that on your page. Continue when you are ready.",
+    "hint": "Check the forms before adding more dark.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-4-4.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 420,
+    "clipEnd": 600,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=600s&height=720",
+    "optional": false,
+    "analysis": "analysis/v4-600.svg",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Take a short step back Can you still read"
+      },
+      {
+        "time": 2.672,
+        "text": "the cone the cylinder and their meeting line Keep"
+      },
+      {
+        "time": 5.257,
+        "text": "the cylinder end distinct from its curved side Adjust"
+      },
+      {
+        "time": 8.701,
+        "text": "only what helps the forms become clearer Try that"
+      },
+      {
+        "time": 11.691,
+        "text": "on your page Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-4-5",
+    "title": "A light pencil for small refinements",
+    "chapter": "Develop the turning tones",
+    "say": "The teacher is using a two H pencil here for small adjustments near the join. Notice the light pressure. A harder pencil can help refine the transition, but it does not need to scratch a dark line into the paper. Take your time. I will wait for you.",
+    "hint": "2H · controlled finishing touches",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-4-5.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 600,
+    "clipEnd": 720,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=720s&height=720",
+    "optional": false,
+    "analysis": "analysis/v4-720.svg",
+    "toolLabel": "2H · light pressure",
+    "toolWord": "pencil",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The teacher is using a two H pencil here"
+      },
+      {
+        "time": 2.414,
+        "text": "for small adjustments near the join Notice the light"
+      },
+      {
+        "time": 5.576,
+        "text": "pressure A harder pencil can help refine the transition"
+      },
+      {
+        "time": 9.228,
+        "text": "but it does not need to scratch a dark"
+      },
+      {
+        "time": 11.287,
+        "text": "line into the paper Take your time I will"
+      },
+      {
+        "time": 14.265,
+        "text": "wait for you"
+      }
+    ],
+    "toolTime": 1.863
+  },
+  {
+    "id": "chapter-4-end",
+    "title": "Your combined forms",
+    "chapter": "Develop the turning tones",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-4-end.mp3",
+    "uid": "6b19fac385b997ace28845ab7e069792",
+    "start": 720,
+    "clipEnd": 726.294,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6b19fac385b997ace28845ab7e069792/thumbnails/thumbnail.jpg?time=725.794s&height=720",
+    "optional": false,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "core-complete",
+    "title": "Your intersecting forms are complete",
+    "chapter": "A little encouragement",
+    "say": "You have built the forms, checked their perspective, and connected them with light and shadow. Your core drawing is complete. The background and extra finishing are optional. You can explore them, or share your work and move on.",
+    "hint": "Core drawing complete",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/core-complete.mp3",
+    "coreComplete": true,
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "You have built the forms checked their perspective and"
+      },
+      {
+        "time": 2.978,
+        "text": "connected them with light and shadow Your core drawing"
+      },
+      {
+        "time": 6.262,
+        "text": "is complete The background and extra finishing are optional"
+      },
+      {
+        "time": 10.257,
+        "text": "You can explore them or share your work and"
+      },
+      {
+        "time": 12.451,
+        "text": "move on"
+      }
+    ]
+  },
+  {
+    "id": "submit",
+    "title": "Share your intersecting forms",
+    "chapter": "Your work",
+    "say": "Choose a clear photo, then tap the send button. Wait for the submitted message so you know your work has arrived. You can also continue without a photo and return later.",
+    "hint": "Your drawing · Your progress",
+    "kind": "submit",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/submit.mp3",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Choose a clear photo then tap the send button"
+      },
+      {
+        "time": 3.137,
+        "text": "Wait for the submitted message so you know your"
+      },
+      {
+        "time": 5.588,
+        "text": "work has arrived You can also continue without a"
+      },
+      {
+        "time": 8.223,
+        "text": "photo and return later"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-1",
+    "title": "Let the background reveal the edge",
+    "chapter": "Surrounding tone · Optional",
+    "say": "The core drawing is already complete. If you want to explore the background, watch how tone beside the light edge helps it stand out. Keep these marks outside the object. You can skip this whole section. Take your time. I will wait for you.",
+    "hint": "Optional · keep marks outside the object.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-5-1.mp3",
+    "uid": "32d949378ac3f3e5a35e25e522ad58ba",
+    "start": 0,
+    "clipEnd": 120,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/32d949378ac3f3e5a35e25e522ad58ba/thumbnails/thumbnail.jpg?time=120s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "The core drawing is already complete If you want"
+      },
+      {
+        "time": 2.721,
+        "text": "to explore the background watch how tone beside the"
+      },
+      {
+        "time": 5.662,
+        "text": "light edge helps it stand out Keep these marks"
+      },
+      {
+        "time": 9.032,
+        "text": "outside the object You can skip this whole section"
+      },
+      {
+        "time": 12.377,
+        "text": "Take your time I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-5-2",
+    "title": "Extend the surrounding tone",
+    "chapter": "Surrounding tone · Optional",
+    "say": "The surrounding marks spread across the paper. Keep the direction and pressure comfortable. Look back at the two forms often, so the background supports them instead of taking over. Adjust what you need, then we will move on.",
+    "hint": "Optional · the forms stay the focus.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-5-2.mp3",
+    "uid": "32d949378ac3f3e5a35e25e522ad58ba",
+    "start": 120,
+    "clipEnd": 240,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/32d949378ac3f3e5a35e25e522ad58ba/thumbnails/thumbnail.jpg?time=240s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The surrounding marks spread across the paper Keep the"
+      },
+      {
+        "time": 3.064,
+        "text": "direction and pressure comfortable Look back at the two"
+      },
+      {
+        "time": 6.152,
+        "text": "forms often so the background supports them instead of"
+      },
+      {
+        "time": 9.265,
+        "text": "taking over Adjust what you need then we will"
+      },
+      {
+        "time": 12.059,
+        "text": "move on"
+      }
+    ]
+  },
+  {
+    "id": "chapter-5-end",
+    "title": "Your surrounding tone",
+    "chapter": "Surrounding tone · Optional",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-5-end.mp3",
+    "uid": "32d949378ac3f3e5a35e25e522ad58ba",
+    "start": 240,
+    "clipEnd": 358.096,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/32d949378ac3f3e5a35e25e522ad58ba/thumbnails/thumbnail.jpg?time=357.596s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-1",
+    "title": "Balance the surrounding values",
+    "chapter": "Refine the whole drawing · Optional",
+    "say": "The teacher deepens selected parts of the background. Compare them with the light edge of the cone and the cylinder. You do not need to make every area equally dark. Adjust what you need, then we will move on.",
+    "hint": "Optional · compare, then adjust.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-6-1.mp3",
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "start": 0,
+    "clipEnd": 180,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=180s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "The teacher deepens selected parts of the background Compare"
+      },
+      {
+        "time": 3.517,
+        "text": "them with the light edge of the cone and"
+      },
+      {
+        "time": 5.882,
+        "text": "the cylinder You do not need to make every"
+      },
+      {
+        "time": 8.333,
+        "text": "area equally dark Adjust what you need then we"
+      },
+      {
+        "time": 11.507,
+        "text": "will move on"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-2",
+    "title": "Refine edges selectively",
+    "chapter": "Refine the whole drawing · Optional",
+    "say": "Watch the small adjustments where the forms meet their surroundings. Some edges need a little contrast; others can stay gentle. Keep checking the whole drawing. Try that on your page. Continue when you are ready.",
+    "hint": "Optional · avoid outlining everything.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-6-2.mp3",
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "start": 180,
+    "clipEnd": 360,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=360s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Watch the small adjustments where the forms meet their"
+      },
+      {
+        "time": 2.647,
+        "text": "surroundings Some edges need a little contrast others can"
+      },
+      {
+        "time": 7.096,
+        "text": "stay gentle Keep checking the whole drawing Try that"
+      },
+      {
+        "time": 10.772,
+        "text": "on your page Continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-3",
+    "title": "Reconnect the base and shadow",
+    "chapter": "Refine the whole drawing · Optional",
+    "say": "The teacher returns to the base and tabletop shadow. This brings the surroundings and the object back together. Keep the strongest contact close to the object, and let quieter areas stay softer. Take your time. I will wait for you.",
+    "hint": "Optional · a grounded object.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-6-3.mp3",
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "start": 360,
+    "clipEnd": 540,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=540s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The teacher returns to the base and tabletop shadow"
+      },
+      {
+        "time": 3.407,
+        "text": "This brings the surroundings and the object back together"
+      },
+      {
+        "time": 6.667,
+        "text": "Keep the strongest contact close to the object and"
+      },
+      {
+        "time": 9.669,
+        "text": "let quieter areas stay softer Take your time I"
+      },
+      {
+        "time": 13.235,
+        "text": "will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "demo-6-4",
+    "title": "Preserve the lighter surfaces",
+    "chapter": "Refine the whole drawing · Optional",
+    "say": "After all these darker adjustments, check the lighter cylinder end and the light strip on the cone. Their contrast gives the forms their shape. Stop when the drawing feels clear to you. Adjust what you need, then we will move on.",
+    "hint": "Optional · a final comparison.",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/demo-6-4.mp3",
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "start": 540,
+    "clipEnd": 720,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=720s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "After all these darker adjustments check the lighter cylinder"
+      },
+      {
+        "time": 3.321,
+        "text": "end and the light strip on the cone Their"
+      },
+      {
+        "time": 5.821,
+        "text": "contrast gives the forms their shape Stop when the"
+      },
+      {
+        "time": 9.277,
+        "text": "drawing feels clear to you Adjust what you need"
+      },
+      {
+        "time": 12.635,
+        "text": "then we will move on"
+      }
+    ]
+  },
+  {
+    "id": "chapter-6-end",
+    "title": "Your finishing check",
+    "chapter": "Refine the whole drawing · Optional",
+    "say": "Watch the last small changes, then compare your drawing. Keep what is working, and make only the adjustments you need. Continue at your own pace.",
+    "hint": "Compare · Adjust · Continue",
+    "kind": "draw",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/chapter-6-end.mp3",
+    "uid": "461fd8b29296d6057422dcc5d405a3e1",
+    "start": 720,
+    "clipEnd": 797.096,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/461fd8b29296d6057422dcc5d405a3e1/thumbnails/thumbnail.jpg?time=796.596s&height=720",
+    "optional": true,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Watch the last small changes then compare your drawing"
+      },
+      {
+        "time": 3.664,
+        "text": "Keep what is working and make only the adjustments"
+      },
+      {
+        "time": 6.14,
+        "text": "you need Continue at your own pace"
+      }
+    ]
+  },
+  {
+    "id": "reflect",
+    "title": "Look for forms that meet",
+    "chapter": "Look again",
+    "say": "Look around for an object made from more than one simple form. Where does one part disappear behind another? Where does it cast a shadow? You now have a way to investigate that, one shape at a time.",
+    "hint": "What would you build from two forms?",
+    "kind": "reflect",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/reflect.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Look around for an object made from more than"
+      },
+      {
+        "time": 2.071,
+        "text": "one simple form Where does one part disappear behind"
+      },
+      {
+        "time": 5.38,
+        "text": "another Where does it cast a shadow You now"
+      },
+      {
+        "time": 8.235,
+        "text": "have a way to investigate that one shape at"
+      },
+      {
+        "time": 10.551,
+        "text": "a time"
+      }
+    ]
+  },
+  {
+    "id": "complete",
+    "title": "Two forms, one achievement",
+    "chapter": "Finish",
+    "say": "You stayed with a more complex drawing and worked out how its parts belong together. That deserves a celebration. Artchi has a reward for you. Next, we will take these skills into drawing a gift box.",
+    "hint": "Intersecting Geometry · Well done",
+    "kind": "milestone",
+    "image": "../../../assets/sketch-support/finals/intersecting.jpg",
+    "audio": "audio/complete.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You stayed with a more complex drawing and worked"
+      },
+      {
+        "time": 2.855,
+        "text": "out how its parts belong together That deserves a"
+      },
+      {
+        "time": 5.723,
+        "text": "celebration Artchi has a reward for you Next we"
+      },
+      {
+        "time": 9.498,
+        "text": "will take these skills into drawing a gift box"
+      }
+    ]
+  }
+]
