@@ -180,5 +180,5 @@
 @media(prefers-reduced-motion:reduce){#student-shell .studio-continue a b{transition:none;transform:none}}
 
 /* Keep the quiet homepage palette; let the original studio drawing carry the colour at the page's base. */
-#student-shell .dashboard-content {background-color:#fffdf9;background-image:linear-gradient(#fffdf933,#fffdf933),url('../assets/dashboard/dashboard-home-illustration.jpg');background-position:center bottom;background-repeat:no-repeat;background-size:100% auto}
+#student-shell .dashboard-content {background-color:#fffdf9;background-image:linear-gradient(135deg,rgba(245,243,255,.55) 0%,rgba(236,254,255,.45) 50%,rgba(254,243,247,.55) 100%),url('../assets/dashboard/dashboard-home-illustration.jpg');background-position:center bottom;background-repeat:no-repeat;background-size:100% auto}
 @media(max-width:680px){#student-shell .dashboard-content {background-size:auto 430px}}
