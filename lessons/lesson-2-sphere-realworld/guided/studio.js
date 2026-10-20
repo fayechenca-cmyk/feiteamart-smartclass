@@ -12,6 +12,19 @@ let playerReady=false,playerFailed=false;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=false, watchVoiceActive=false;
 const voice=$('voice');
 let soundContext=null;
+let introMusicGain=null;
+function introMusic(){
+ if(muted)return;
+ try{
+  soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();
+  const ctx=soundContext, t=ctx.currentTime+.04;
+  introMusicGain=ctx.createGain();introMusicGain.gain.setValueAtTime(.22,t);introMusicGain.connect(ctx.destination);
+  // A small, warm four-bar motif under the spoken introduction.
+  const notes=[392,523.25,659.25,523.25,440,587.33,698.46,587.33,392,523.25,659.25,783.99,698.46,587.33,523.25,392];
+  notes.forEach((hz,i)=>{const at=t+i*.42,o=ctx.createOscillator(),g=ctx.createGain();o.type='triangle';o.frequency.value=hz;g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(.05,at+.025);g.gain.exponentialRampToValueAtTime(.0001,at+.36);o.connect(g).connect(introMusicGain);o.start(at);o.stop(at+.38);});
+ }catch{}
+}
+function stopIntroMusic(){if(!introMusicGain||!soundContext)return;introMusicGain.gain.setTargetAtTime(0,soundContext.currentTime,.18);introMusicGain=null;}
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
 function save(){GuidedPlatform.save({index,unlocked,completed:[...completed],skipped:[...skipped]},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
@@ -79,14 +92,15 @@ function beginWatchVoice(){
 function playbackState(paused){
  $('videoTap').setAttribute('aria-label',paused?'Play teacher video':'Pause teacher video');
  $('playPause').textContent=paused?'▶':'Ⅱ';$('playPause').setAttribute('aria-label',paused?'Play demonstration':'Pause demonstration');
- $('resume').textContent='Tap to play';$('resume').hidden=!paused;
+ $('resume').hidden=true;
 }
 function resumeTogether(){
  if(!playerReady||playerFailed){uid=null;createPlayer(flow[index]);return;}
  playbackState(false);
- if(watchVoiceActive&&!voice.ended)voice.play().catch(()=>{$('resume').hidden=false;});
- Promise.resolve(player?.play()).catch(()=>{$('resume').hidden=false;});
+ if(watchVoiceActive&&!voice.ended)voice.play().catch(()=>{});
+ Promise.resolve(player?.play()).catch(()=>showNativePlayHint());
 }
+function showNativePlayHint(){if(phase!=='watching')return;$('resume').hidden=true;$('notice').hidden=false;$('notice').textContent='Tap the play button in the video to watch your teacher.';}
 function finishClip(){
  if(phase!=='watching')return;
  player?.pause();clearTimeout(watchdog);stopVoice();watchVoiceActive=false;
@@ -100,19 +114,19 @@ function finishClip(){
 function createPlayer(s){
  const identity=s.uid||s.src;
  if(uid===identity&&player&&playerReady&&!playerFailed){startClip(s);return;}
- uid=identity;playerReady=false;playerFailed=false;$('videoTap').hidden=false;$('videoTap').disabled=true;$('media').innerHTML='';$('notice').textContent='Loading teacher video…';$('notice').hidden=false;
+ uid=identity;playerReady=false;playerFailed=false;$('videoTap').hidden=true;$('media').innerHTML='';$('notice').textContent='Loading teacher video…';$('notice').hidden=false;
  const media=document.createElement(s.src?'video':'iframe');
  media.title='Teacher’s apple demonstration';media.tabIndex=-1;
- if(s.src){media.src=s.src;media.playsInline=true;media.preload='auto';media.controls=false;const track=document.createElement('track');track.kind='captions';track.label='English';track.srclang='en';track.src='../intro/captions.vtt';track.default=true;track.addEventListener('load',()=>{track.track.mode='hidden';track.track.oncuechange=()=>{if(player===media&&phase==='watching')$('caption').textContent=Array.from(track.track.activeCues||[]).map(c=>c.text).join(' ');};});media.append(track);}
- else {media.allow='autoplay; fullscreen; picture-in-picture';media.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${s.uid}/iframe?autoplay=false&muted=${muted}&controls=false&preload=auto`;}
+ if(s.src){media.src=s.src;media.playsInline=true;media.preload='auto';media.controls=true;const track=document.createElement('track');track.kind='captions';track.label='English';track.srclang='en';track.src='../intro/captions.vtt';track.default=true;track.addEventListener('load',()=>{track.track.mode='hidden';track.track.oncuechange=()=>{if(player===media&&phase==='watching')$('caption').textContent=Array.from(track.track.activeCues||[]).map(c=>c.text).join(' ');};});media.append(track);}
+ else {media.allow='autoplay; fullscreen; picture-in-picture';media.src=`https://customer-a78os4oj56dr67ab.cloudflarestream.com/${s.uid}/iframe?autoplay=false&muted=${muted}&controls=true&preload=auto`;}
  $('media').append(media);
  if(!s.src&&typeof Stream!=='function'){$('notice').hidden=false;$('notice').textContent='The video player could not load. Check your connection and reload to try again.';$('resume').textContent='Reload video';$('resume').hidden=false;playerFailed=true;return;}
  player=s.src?media:Stream(media);const thisPlayer=player;
- player.addEventListener('loadedmetadata',()=>{if(player===thisPlayer&&!playerReady&&(flow[index].uid||flow[index].src)===identity){playerReady=true;clearTimeout(watchdog);$('notice').hidden=true;$('videoTap').disabled=false;startClip(flow[index]);}});
+ player.addEventListener('loadedmetadata',()=>{if(player===thisPlayer&&!playerReady&&(flow[index].uid||flow[index].src)===identity){playerReady=true;clearTimeout(watchdog);$('notice').hidden=true;startClip(flow[index]);}});
  player.addEventListener('timeupdate',()=>{if(player===thisPlayer)checkClip();});
  player.addEventListener('pause',()=>{if(player===thisPlayer&&phase==='watching'){if(watchVoiceActive)voice.pause();playbackState(true);}});
  player.addEventListener('waiting',()=>{if(player===thisPlayer&&watchVoiceActive)voice.pause();});
- player.addEventListener('playing',()=>{if(player===thisPlayer&&phase==='watching'){$('notice').hidden=true;playbackState(false);}if(player===thisPlayer&&watchVoiceActive&&voice.paused)voice.play().catch(()=>{$('resume').hidden=false;});});
+ player.addEventListener('playing',()=>{if(player===thisPlayer&&phase==='watching'){$('notice').hidden=true;playbackState(false);}if(player===thisPlayer&&watchVoiceActive&&voice.paused)voice.play().catch(()=>{});});
  player.addEventListener('ended',()=>{if(player===thisPlayer)checkClip(true);});
  player.addEventListener('play',()=>{if(player===thisPlayer){clearTimeout(watchdog);$('resume').hidden=true;$('playPause').textContent='Ⅱ';$('playPause').setAttribute('aria-label','Pause demonstration');}});
  player.addEventListener('error',()=>{if(player!==thisPlayer)return;playerFailed=true;playerReady=false;$('resume').textContent='Reload video';$('resume').hidden=false;$('notice').hidden=false;$('notice').textContent='The teacher video could not load. Use Replay to try again.';$('replay').hidden=false;});
@@ -132,16 +146,17 @@ $('playPause').onclick=()=>{if(!player||phase!=='watching')return;if(player.paus
 $('videoTap').onclick=()=>{$('playPause').onclick();};
 $('clipSeek').oninput=()=>{if(!player||phase!=='watching')return;const s=flow[index];player.currentTime=Math.max(s.start||0,Math.min(s.clipEnd-.15,Number($('clipSeek').value)));};
 function startClip(s){
- phase='watching';$('videoTap').hidden=false;$('videoTap').disabled=false;$('media').hidden=false;$('visual').innerHTML='';$('resume').hidden=true;
+ phase='watching';$('videoTap').hidden=true;$('media').hidden=false;$('visual').innerHTML='';$('resume').hidden=true;
  $('clipControls').hidden=false;$('clipSeek').min=s.start||0;$('clipSeek').max=s.clipEnd-.15;$('clipSeek').value=s.start||0;$('clipTime').textContent=`0 / ${Math.ceil(s.clipEnd-(s.start||0))}s`;
  watchNarrated=false;watchVoiceActive=false;player.muted=muted||!!s.watchAudio;player.currentTime=s.start||0;
  const token=epoch;
- Promise.resolve(player.play()).catch(()=>{if(token===epoch){$('resume').textContent='Tap to play';$('resume').hidden=false;}});
- clearTimeout(watchdog);watchdog=setTimeout(()=>{if(token===epoch&&phase==='watching'&&player.paused){$('resume').textContent='Tap to play';$('resume').hidden=false;}},5000);
+ Promise.resolve(player.play()).catch(()=>{if(token===epoch)showNativePlayHint();});
+ clearTimeout(watchdog);watchdog=setTimeout(()=>{if(token===epoch&&phase==='watching'&&player.paused)showNativePlayHint();},5000);
 }
 function enter(){
  epoch++;$('videoTap').hidden=true;$('stepPreview').textContent='';sceneReady=true;clearTimeout(watchdog);stopVoice();player?.pause();
  const s=flow[index];window.GuidedUX?.reset(s);$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent='Skip this step →';$('finishCore').hidden=true;$('skip').hidden=true;$('clipControls').hidden=true;save();$('title').textContent=s.title;$('hint').textContent=s.hint||'';
+ if(index>2)stopIntroMusic();
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
  setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
@@ -173,7 +188,7 @@ $('referenceImage').tabIndex=0;$('referenceImage').setAttribute('role','button')
 $('skip').textContent='Skip optional finishing';$('skip').onclick=()=>{if(!flow[index].optional)return;index=flow.findIndex(s=>s.kind==='reflect');unlocked=Math.max(unlocked,index);enter();};
 $('replay').onclick=()=>{if(playerFailed){uid=null;playerReady=false;}enter();};
 $('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watching')return;speak(s,()=>{if(phase==='guidance'&&sceneReady)waiting();});};
-function setMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
+function setMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;if(introMusicGain&&soundContext)introMusicGain.gain.setTargetAtTime(muted?0:.22,soundContext.currentTime,.06);$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 $('sound').onclick=()=>setMuted(!muted);
 $('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTogether();}else voice.play().catch(()=>{$('resume').hidden=false;});};
 function openMap(){
@@ -195,7 +210,7 @@ $('analysis').onclick=()=>{player?.pause();voice.pause();$('diagram').querySelec
 $('diagram').addEventListener('close',()=>{if(phase==='watching'){$('resume').textContent='Resume playback';$('resume').hidden=false;}if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').textContent='Resume guidance';$('resume').hidden=false;});});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
 window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
-$('start').onclick=()=>{$('welcome').close();enter();};
+$('start').onclick=()=>{$('welcome').close();if(index<=2)introMusic();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('apple'))return; $('welcome').showModal();
 fetch('flow.json?v=apple-1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{

@@ -56,3 +56,13 @@ body{grid-template-columns:minmax(0,1fr)}header,main,footer{min-width:0}#progres
 @media(max-width:700px){.apple-explore,.apple-notice{gap:6px;padding:12px}.apple-turner>button{width:42px;height:42px;font-size:28px}.apple-photo{width:100%;max-height:calc(100% - 140px)}.apple-clues{font-size:11px}.apple-clue{min-height:44px}}
 @media(prefers-reduced-motion:reduce){.apple-hotspot{animation:none}}
 .apple-clues button{padding:7px 13px;border-radius:24px;background:#f1e8fc;color:#514078;border:1px solid #c5b6de;font-size:13px}.apple-clues button[aria-pressed=true]{background:#dbf0e5;color:#285d48;border-color:#7ab99f}
+/* Keep the real Stream play control touchable; no transparent layer covers the video. */
+#media iframe{pointer-events:auto}
+#videoTap{display:none!important}
+.apple-reference-frame{width:100%;max-height:85%;display:grid;place-items:center}
+.apple-reference-frame:has(#referenceImage[src="reference-apple.jpg"]){aspect-ratio:1.35;overflow:hidden;border-radius:14px;background:#fffdf5;flex:none;max-height:none}
+#reference .apple-reference-frame:has(#referenceImage[src="reference-apple.jpg"]) #referenceImage{display:block;width:100%;height:100%;max-height:none;max-width:none;object-fit:cover;transform:scale(1.19) translateY(-3%);cursor:zoom-in}
+.apple-photo{width:min(100%,620px);height:min(100%,330px);max-height:calc(100% - 115px);aspect-ratio:1.8;flex:none}
+.apple-photo-inner{position:absolute;inset:0;transform:scale(1.1) translateY(1%)}
+.apple-photo-inner>img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:700px){.apple-reference-frame{width:min(56%,250px);height:100%}.apple-reference-frame:has(#referenceImage[src="reference-apple.jpg"]){aspect-ratio:auto}.apple-photo{width:100%;height:min(100%,280px);max-height:calc(100% - 125px);aspect-ratio:1.8}}
