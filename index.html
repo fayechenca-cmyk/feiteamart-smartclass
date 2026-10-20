@@ -796,6 +796,58 @@
     background: var(--ink-veryfaint); color: var(--ink-soft); cursor: not-allowed;
   }
 
+  /* ═══ LIVE CLASS GRADUATION CARD ═══
+     Shown instead of "ALL CAUGHT UP" when every one of a course's
+     sessions is in the past (see renderLiveClassNextCard() below) --
+     written with the flat --fei-* palette from the start (Faye's Oct
+     2026 theme), not retrofitted, since this is brand-new UI. A flat
+     leaf panel with an ink border and ink text, not var(--fei-ink) on
+     var(--fei-ink) -- this sits inside .live-class-vip-section, which
+     is itself a solid ink fill with paper text (core/dashboard-theme.css),
+     so it needs to be its own opaque light panel to stay legible. */
+  .live-class-graduation {
+    text-align: center;
+    background: var(--fei-leaf); color: var(--fei-ink);
+    border: 2px solid var(--fei-ink); border-radius: 14px;
+    padding: 20px 18px;
+  }
+  .live-class-graduation-medal {
+    width: 72px; height: 72px; margin: 0 auto 10px;
+    border-radius: 50%; border: 2px solid var(--fei-ink);
+    background: var(--fei-paper); overflow: hidden;
+    display: grid; place-items: center; font-size: 34px;
+  }
+  .live-class-graduation-medal img { width: 100%; height: 100%; object-fit: cover; }
+  .live-class-graduation-new .live-class-graduation-medal {
+    animation: liveClassGraduationGlow 2.2s ease-in-out 3;
+  }
+  @keyframes liveClassGraduationGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(38,37,46,0); }
+    50% { box-shadow: 0 0 0 10px rgba(38,37,46,.18); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .live-class-graduation-new .live-class-graduation-medal { animation: none; }
+  }
+  .live-class-graduation-kicker {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 900;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--fei-ink); margin-bottom: 6px;
+  }
+  .live-class-graduation-title {
+    font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 800;
+    color: var(--fei-ink); margin-bottom: 8px;
+  }
+  .live-class-graduation-text {
+    font-size: 12.5px; line-height: 1.6; color: var(--fei-ink);
+    margin: 0 auto 14px; max-width: 420px;
+  }
+  .live-class-graduation-cta {
+    display: inline-block; background: var(--fei-peri); color: var(--fei-ink);
+    border: 2px solid var(--fei-ink); border-radius: 22px; padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 12px;
+    text-decoration: none;
+  }
+  .live-class-graduation-cta:hover { background: #a3acf0; }
+
   /* ═══ TRACK CARDS (Skills / Creation) ═══ */
   .tracks {
     display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
@@ -3210,8 +3262,60 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   }
   window.goToSmartClassLesson = goToSmartClassLesson;
 
-  function renderLiveClassNextCard(next, schedule) {
+  // Reuses the badge registry's existing Step 1 artwork (basic_sketch, no
+  // new badge/asset) and the same flat-palette/ink-outline visual language
+  // as core/guided-reward.js's celebration, hand-authored here rather than
+  // literally invoking that file -- it's a modal system wired to a single
+  // guided-lesson page's own #voice/GuidedPlatform, not reusable as-is for
+  // an inline dashboard card. "Small" on purpose: a quiet glow + chime,
+  // once per course (localStorage-gated, see renderLiveClassSection()
+  // below), not a repeating animation or a popup every visit.
+  function renderLiveClassGraduationCard(course) {
+    const badge = (window.BADGE_CATALOG || []).find(b => b.id === 'basic_sketch');
+    const stillLifeHref = window.FOUNDATION_STILL_LIFE_LANDING_HREF || 'lessons/still-life/';
+    const seenKey = 'fei.liveclass.graduated.' + course.id;
+    let firstTime = false;
+    try { firstTime = !localStorage.getItem(seenKey); if (firstTime) localStorage.setItem(seenKey, '1'); } catch (e) {}
+    const medal = (badge && badge.imgUrl)
+      ? `<img src="${liveClassEscapeHtml(badge.imgUrl)}" alt="${liveClassEscapeHtml(badge.title || 'Basic Sketch')} badge">`
+      : '🎓';
+    return `
+      <div class="live-class-graduation${firstTime ? ' live-class-graduation-new' : ''}">
+        <div class="live-class-graduation-medal">${medal}</div>
+        <div class="live-class-graduation-kicker">🎓 STEP 1 COMPLETE</div>
+        <div class="live-class-graduation-title">You finished Form and Structure!</div>
+        <p class="live-class-graduation-text">The first step is the quietest one — and the most important. Everything you draw from now on stands on it. You're ready for the next step: Still Life and Texture.</p>
+        <a class="live-class-graduation-cta" href="${liveClassEscapeHtml(stillLifeHref)}">See what's next →</a>
+      </div>
+    `;
+  }
+
+  // Same three-note chime already used across the guided studios
+  // (523.25/659.25/783.99 Hz triangle tones) -- a quiet, one-time sound
+  // for the graduation moment, not a new sound design.
+  function playLiveClassGraduationChime() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const master = ctx.createGain(); master.gain.value = 0.12; master.connect(ctx.destination);
+      const base = ctx.currentTime;
+      [[523.25, 0], [659.25, 0.12], [783.99, 0.24]].forEach(([hz, delay]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), t = base + delay;
+        o.type = 'triangle'; o.frequency.value = hz;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.3, t + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+        o.connect(g).connect(master); o.start(t); o.stop(t + 0.55);
+      });
+    } catch (e) {}
+  }
+
+  function renderLiveClassNextCard(next, schedule, course) {
     if (!next) {
+      // Graduation, not just a quiet week: every session this course has
+      // is already in the past (not merely unscheduled -- see the
+      // caller, which only passes a `next` of null either way, so the
+      // distinction has to be made here against the course's own total).
+      if (course && schedule.getPast().length === course.totalClasses) {
+        return renderLiveClassGraduationCard(course);
+      }
       return `
         <div class="live-class-next-label">ALL CAUGHT UP</div>
         <div class="live-class-next-title">No upcoming session scheduled right now.</div>
@@ -3513,7 +3617,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
     return `
       <div class="live-class-vip-section">
         ${header}
-        <div class="live-class-next-card">${renderLiveClassNextCard(next, schedule)}</div>
+        <div class="live-class-next-card">${renderLiveClassNextCard(next, schedule, course)}</div>
         <div class="live-class-sessions-list">${sessionsHtml}</div>
         ${toggleBtn}
       </div>
@@ -3588,6 +3692,7 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
 
     catalog.innerHTML = blocks.join('');
     section.style.display = 'block';
+    catalog.querySelectorAll('.live-class-graduation-new').forEach(() => playLiveClassGraduationChime());
   }
   window.renderLiveClassSection = renderLiveClassSection;
 
