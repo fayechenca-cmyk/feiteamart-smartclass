@@ -179,43 +179,6 @@
 @media(max-width:680px){#student-shell .explore-hero{padding:14px}#student-shell .studio-continue{margin:0 16px 18px;padding:14px}#student-shell .studio-continue a b{padding:0 12px;min-height:44px}#student-shell .studio-direction::before,#student-shell .studio-direction::after{top:180px}}
 @media(prefers-reduced-motion:reduce){#student-shell .studio-continue a b{transition:none;transform:none}}
 
-/* Lively dashboard palette, sampled from the studio-home illustration:
-   clear blue, violet, leaf green, pink, and warm cream. */
-#student-shell {--dash-ink:#17182f;--dash-purple:#5140a0;--dash-muted:#454b68;--dash-line:#b9dba3;background:#efffd1}
-#student-shell .dashboard-content {background:#fffdf6}
-#student-shell .dashboard-sidebar {background:#d9f6bd;border-color:#a7d78d}
-#student-shell .dashboard-avatar {background:#b9e777}
-#student-shell .dashboard-nav a[aria-current=page] {background:#5140a0;box-shadow:0 6px 18px #5140a040}
-#student-shell .dashboard-nav a:hover:not([aria-current=page]) {background:#b9e777;color:#17182f}
-#student-shell .dashboard-button.primary {background:#5140a0;box-shadow:0 5px 14px #5140a038}
-#student-shell .dashboard-special a {background:#b9e777;border-color:#87c86a}
-#student-shell .explore-hero {background:#d8f6bb;border-color:#9bd674;box-shadow:0 8px 22px #77ad5024}
-#student-shell .explore-invitation .dashboard-button {background:#fffdf6;border-color:#9fcf83}
-
-#student-shell .start-course-list li:nth-child(3n+1) a {background:#e5f7ff;border-color:#83cbea}
-#student-shell .start-course-list li:nth-child(3n+2) a {background:#f0e8ff;border-color:#b6a0e8}
-#student-shell .start-course-list li:nth-child(3n) a {background:#fff0d6;border-color:#f1bd79}
-#student-shell .start-course-list a {box-shadow:0 5px 15px #17182f12}
-#student-shell .start-course-list a:hover {border-color:#5140a0;box-shadow:0 9px 22px #5140a024}
-#student-shell .start-recommend-heading button {background:#bceef6;border-color:#78c8df}
-
-#student-shell .studio-direction {background:#9eddf5;border-color:#62bfdf;box-shadow:0 13px 30px #287fa126}
-#student-shell .creation-direction {background:#d4baf0;border-color:#a48ad2;box-shadow:0 13px 30px #6e4f9726}
-#student-shell .studio-direction::before {opacity:.67}
-#student-shell .studio-direction::after {background:#87d6f274}
-#student-shell .creation-direction::after {background:#c8a7ee70}
-#student-shell .studio-direction .track-age-pill {background:#fffdf6d9;border-color:#ffffff}
-#student-shell .studio-direction .explore-portal-link {background:#fffdf6;color:#312c60;border-color:#ffffff;box-shadow:0 5px 13px #24355d21}
-#student-shell .creation-direction .explore-portal-link {color:#382354}
-
-#student-shell .studio-continue {background:#fffdf6e8;border-color:#ffffff;box-shadow:0 8px 22px #22315a20}
-#student-shell .studio-continue a {border-color:#bcd4dc;background:#ffffffa8}
-#student-shell .studio-continue a b {border-color:#5140a0;background:#5140a0;box-shadow:0 0 0 4px #a7dfffaa,0 6px 18px #5140a05c}
-#student-shell .creation-direction .studio-continue a b {background:#7545a6;border-color:#7545a6;box-shadow:0 0 0 4px #f2b5d280,0 6px 18px #7545a65e}
-#student-shell .studio-continue a:hover b,#student-shell .studio-continue a:focus-visible b {background:#39297f;box-shadow:0 0 0 5px #b8eaf6,0 8px 24px #5140a075}
-#student-shell .creation-direction .studio-continue a:hover b,#student-shell .creation-direction .studio-continue a:focus-visible b {background:#57307e;box-shadow:0 0 0 5px #f5c3d9,0 8px 24px #7545a67a}
-
-#student-shell .skill-gallery .subtrack:nth-child(4n+1) {border-color:#78c8e6}
-#student-shell .skill-gallery .subtrack:nth-child(4n+2) {border-color:#b89de8}
-#student-shell .skill-gallery .subtrack:nth-child(4n+3) {border-color:#9bd66e}
-#student-shell .skill-gallery .subtrack:nth-child(4n) {border-color:#f0bb76}
+/* Keep the quiet homepage palette; let the original studio drawing carry the colour at the page's base. */
+#student-shell .dashboard-content {background-color:#fffdf9;background-image:linear-gradient(to bottom,#fffdf9 0%,#fffdf9 57%,#fffdf9cc 72%,transparent 88%),url('../assets/dashboard/dashboard-home-illustration.jpg');background-position:center top,center bottom;background-repeat:no-repeat;background-size:100% 100%,100% auto}
+@media(max-width:680px){#student-shell .dashboard-content {background-size:100% 100%,auto 430px}}
