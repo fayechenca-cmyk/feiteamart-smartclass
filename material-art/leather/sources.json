@@ -1,0 +1,166 @@
+{
+  "images": {
+    "cat-finished": {
+      "filename": "completed reference pic.jpg",
+      "id": "5d4e9c6d-221e-480b-02f2-7561dd9d7500",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/5d4e9c6d-221e-480b-02f2-7561dd9d7500/public"
+    },
+    "cat-original": {
+      "filename": "cat original.jpg",
+      "id": "d190aa6c-e263-4279-289b-dc7880c43600",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/d190aa6c-e263-4279-289b-dc7880c43600/public"
+    },
+    "cat-print": {
+      "filename": "cat outline for print.jpg",
+      "id": "b4f219f5-c743-4a1a-f74c-be12c96d9500",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/b4f219f5-c743-4a1a-f74c-be12c96d9500/public"
+    },
+    "eye-print": {
+      "filename": "triangle eye for print.jpg",
+      "id": "01d29f68-b917-4ae8-502b-b768599a1400",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/01d29f68-b917-4ae8-502b-b768599a1400/public"
+    },
+    "dog-black": {
+      "filename": "Black Dog.jpg",
+      "id": "463655fe-1f40-4aa8-53e3-f1fdb278b000",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/463655fe-1f40-4aa8-53e3-f1fdb278b000/public"
+    },
+    "dog-bright": {
+      "filename": "Brightness Adjusted Version.jpg",
+      "id": "0f0d734c-1810-4c4c-db51-2cfc14569700",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0f0d734c-1810-4c4c-db51-2cfc14569700/public"
+    },
+    "dog-original": {
+      "filename": "Original Black Dog Photo.jpg",
+      "id": "bfe572fd-de7e-4255-e2b5-7a524cdecb00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/bfe572fd-de7e-4255-e2b5-7a524cdecb00/public"
+    },
+    "dog-print": {
+      "filename": "Outline (Line Drawing).jpg",
+      "id": "f6e523c5-dc82-4c3c-9b82-8a2118581200",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/f6e523c5-dc82-4c3c-9b82-8a2118581200/public"
+    },
+    "dog-carving": {
+      "filename": "Black Dog Carving Reference.jpg",
+      "id": "8d23ec75-838f-4ad8-4764-d235562d5c00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8d23ec75-838f-4ad8-4764-d235562d5c00/public"
+    },
+    "sheet-1": {
+      "filename": "1.jpg",
+      "id": "5948bc14-b49f-4d5f-a338-08f48d00eb00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/5948bc14-b49f-4d5f-a338-08f48d00eb00/public"
+    },
+    "sheet-2": {
+      "filename": "2.jpg",
+      "id": "0db9f4c9-40b6-4e37-8968-ab6f79308f00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0db9f4c9-40b6-4e37-8968-ab6f79308f00/public"
+    },
+    "sheet-3": {
+      "filename": "3.jpg",
+      "id": "b151ab31-22db-4988-aeac-db2043bc6800",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/b151ab31-22db-4988-aeac-db2043bc6800/public"
+    },
+    "sheet-4": {
+      "filename": "4.jpg",
+      "id": "a687eb32-1f41-4faa-6f08-4da6b37de200",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/a687eb32-1f41-4faa-6f08-4da6b37de200/public"
+    },
+    "sheet-5": {
+      "filename": "5.jpg",
+      "id": "2ebdf9f7-c3a4-4861-16c5-f7d549a31600",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2ebdf9f7-c3a4-4861-16c5-f7d549a31600/public"
+    },
+    "sheet-6": {
+      "filename": "6.jpg",
+      "id": "701c74bc-2925-4ba2-acd7-d540cb670a00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/701c74bc-2925-4ba2-acd7-d540cb670a00/public"
+    },
+    "sheet-7": {
+      "filename": "7.jpg",
+      "id": "61a42f5a-cd08-4274-ac7d-09bb42ea6500",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/61a42f5a-cd08-4274-ac7d-09bb42ea6500/public"
+    },
+    "sheet-8": {
+      "filename": "8.jpg",
+      "id": "2192e57d-f62b-40ca-0f08-235e8adc9c00",
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2192e57d-f62b-40ca-0f08-235e8adc9c00/public"
+    }
+  },
+  "videos": {
+    "materials": {
+      "filename": "Materials Preperation.mp4",
+      "id": "b41dc714d460f8d2c6b45d83dbf5e4a0",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b41dc714d460f8d2c6b45d83dbf5e4a0"
+    },
+    "eye": {
+      "filename": "eye.mp4",
+      "id": "8f5b14f934ac7e98a44badf4d1d57f78",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/8f5b14f934ac7e98a44badf4d1d57f78"
+    },
+    "cat-outline": {
+      "filename": "1 Outlining & Shaping.mp4",
+      "id": "98119427db033f7f225e9c6ea60ac8ed",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/98119427db033f7f225e9c6ea60ac8ed"
+    },
+    "cat-carving": {
+      "filename": "2 Carving.mp4",
+      "id": "e8590f29eada2dcfda7125417e72bee9",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/e8590f29eada2dcfda7125417e72bee9"
+    },
+    "cat-color": {
+      "filename": "3 colouring.mp4",
+      "id": "92e80d8dcfd7eb438e44dbe88f829324",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/92e80d8dcfd7eb438e44dbe88f829324"
+    },
+    "cat-frame": {
+      "filename": "4Frame Making.mp4",
+      "id": "1ffae0c95020a7261ee7d1f8bce9697f",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1ffae0c95020a7261ee7d1f8bce9697f"
+    },
+    "dog-photoshop": {
+      "filename": "1 Photoshop Rendering.mp4",
+      "id": "23565172ed6500364f86dde18e886e0f",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/23565172ed6500364f86dde18e886e0f"
+    },
+    "dog-procreate": {
+      "filename": "2 Procreate Outlining.mp4",
+      "id": "204f4f819894f5f86d070186e8f9f439",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/204f4f819894f5f86d070186e8f9f439"
+    },
+    "dog-masking": {
+      "filename": "3 Masking.mp4",
+      "id": "b17e2dd04c6ca765346bcb6773ce3a17",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/b17e2dd04c6ca765346bcb6773ce3a17"
+    },
+    "dog-tracing": {
+      "filename": "4 Tracing and Embossing.mp4",
+      "id": "e2f9f52ae0ccaf96e3eeaf29a994a986",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/e2f9f52ae0ccaf96e3eeaf29a994a986"
+    },
+    "dog-shaping": {
+      "filename": "5 Shaping.mp4",
+      "id": "62fd961115b33ef66fd2b4e003f3687b",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/62fd961115b33ef66fd2b4e003f3687b"
+    },
+    "dog-color": {
+      "filename": "6colouring.mp4",
+      "id": "86acd9e369f6f0b7ddd77da244ba9006",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/86acd9e369f6f0b7ddd77da244ba9006"
+    },
+    "dog-frame": {
+      "filename": "7 frame making.mp4",
+      "id": "665581967450b09909732e64c6591d25",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/665581967450b09909732e64c6591d25"
+    },
+    "dog-carving-reference": {
+      "filename": "Black Dog Carving Reference.mp4",
+      "id": "6a357528f54d9a24be71c68cd7361f6d",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/6a357528f54d9a24be71c68cd7361f6d"
+    },
+    "dog-finished": {
+      "filename": "Black Dog Finished Work Reference.mp4",
+      "id": "9f60b4dfb981e501361b4b5d3144cb75",
+      "base": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/9f60b4dfb981e501361b4b5d3144cb75"
+    }
+  }
+}
