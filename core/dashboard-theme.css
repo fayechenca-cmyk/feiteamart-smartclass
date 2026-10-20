@@ -1,0 +1,106 @@
+/* Faye's flat visual theme, extended from the guided studios to the
+ * student dashboard home screen (course cards included -- same markup,
+ * same screen; see core/student-dashboard.js's showHome()). Loaded last
+ * (after core/student-dashboard.css and core/dashboard-explore.css) so
+ * its rules win the cascade at equal specificity, without !important.
+ * Tokens live in core/fei-palette.css, loaded just before this file --
+ * same nine shared tokens the guided studios use, one source of truth
+ * for colour across the whole platform.
+ *
+ * Text colour rule, same as guided-theme.css, checked numerically (WCAG
+ * relative-luminance formula) rather than by eye: every token here
+ * except --ink is a light-to-medium pastel, so only --ink clears AA
+ * against all eight of the others (5.75:1 to 14.17:1). Every rule below
+ * keeps text --ink; the named tokens are backgrounds/borders/fills only.
+ *
+ * Deliberately NOT touched: students' artwork, teacher photos, and real
+ * course thumbnails (.start-course-list img, .track-emoji/.portal-photo
+ * img, .skill-gallery img) -- colour/outline changes stop at the card
+ * chrome around them. .studio-direction/.creation-direction's own photo
+ * backdrop (skill-background.jpg/creation-background.jpg) and its
+ * existing translucent colour wash are pre-existing, necessary for text
+ * legibility over a photo, and are left exactly as they already were --
+ * this file adds no new overlay on top of them. Layout and behaviour are
+ * unchanged throughout; only colour, borders and shadows change.
+ */
+#student-shell{
+ --dash-ink:var(--ink); --dash-purple:var(--ink); --dash-muted:var(--ink);
+ --dash-line:var(--ink);
+ background:var(--paper); color:var(--ink);
+}
+/* .dashboard-content's own background is deliberately left alone here --
+ * Faye's own later commits (same day) gave it a gradient + illustrated
+ * studio-artwork backdrop on purpose; this file only flattens the card
+ * chrome that sits on top of it, not that backdrop itself. */
+
+/* Sidebar */
+#student-shell .dashboard-sidebar{background:var(--lime);border-right:2px solid var(--ink);border-color:var(--ink)}
+#student-shell .dashboard-avatar{background:var(--leaf)}
+#student-shell .dashboard-nav a{color:var(--ink)}
+#student-shell .dashboard-nav a[aria-current=page]{background:var(--peri);color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+#student-shell .dashboard-nav a:hover:not([aria-current=page]){background:var(--paper);color:var(--ink)}
+#student-shell .dashboard-special a{background:var(--peach);border:2px solid var(--ink)}
+#student-shell .dashboard-special small,#student-shell .dashboard-small{color:var(--ink)}
+
+/* Headings, links, buttons -- flat fill, ink outline, ink text, never
+ * white-on-colour. */
+#student-shell .dashboard-link,#student-shell .dashboard-button,#student-shell #hero-name,#student-shell .hero-name{color:var(--ink)}
+#student-shell .dashboard-button{background:var(--paper);border:2px solid var(--ink);box-shadow:none}
+#student-shell .dashboard-button.primary{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+#student-shell .dashboard-tabs a[aria-current=page]{color:var(--ink);border-color:var(--ink)}
+
+/* Panels: ALP shape card, goal card, badges, profile form -- flat peach,
+ * ink outline, no soft glow. */
+#student-shell .dashboard-panel,#student-shell .dashboard-shape-panel{background:var(--peach);border:2px solid var(--ink);box-shadow:none}
+#student-shell .dashboard-badge-preview a{background:var(--paper);border:2px solid var(--ink)}
+#student-shell .dashboard-badge-preview a:hover{background:var(--lime);border-color:var(--ink)}
+#student-shell .dashboard-badge-symbol{background:var(--sky);color:var(--ink)}
+#student-shell .dashboard-profile-form input[type=text],#student-shell .dashboard-profile-form textarea{border:2px solid var(--ink);background:var(--paper);color:var(--ink)}
+#student-shell .dashboard-avatar-options span{background:var(--paper);border:2px solid var(--ink)}
+#student-shell .dashboard-avatar-options input:checked+span{border-color:var(--ink);background:var(--leaf)}
+
+/* Explore hero banner */
+#student-shell .explore-hero{background:var(--lime);border:2px solid var(--ink);border-radius:16px;box-shadow:none}
+#student-shell .explore-invitation .dashboard-button{border:2px solid var(--ink);background:var(--paper);border-radius:999px}
+
+/* "Pick up where you left off" course cards -- real course thumbnails
+ * (img) are untouched; only the card chrome flattens. */
+#student-shell .start-course-list a{background:var(--paper);border:2px solid var(--ink);box-shadow:none;color:var(--ink)}
+#student-shell .start-course-list a:hover{border-color:var(--ink);box-shadow:4px 4px 0 var(--ink);transform:translateY(-2px)}
+#student-shell .pick-copy small,#student-shell .start-recommend-heading p{color:var(--ink)}
+#student-shell .pick-copy .pick-label,#student-shell .pick-copy b{color:var(--ink)}
+#student-shell .start-recommend-heading button{color:var(--ink);border:2px solid var(--ink);background:var(--paper)}
+
+/* Skills/Creation track cards -- the decorative corner triangle is a
+ * flat colour shape, not a photo, so it's safe to re-skin; the nested
+ * photo-collage path (.studio-direction, handled below) is separate and
+ * keeps its own real course photos untouched. */
+#student-shell .explore-portals .track-card{background:var(--sky);color:var(--ink);border:2px solid var(--ink);border-radius:16px;box-shadow:none}
+#student-shell .explore-portals .track-creation{background:var(--peach);color:var(--ink)}
+#student-shell .explore-portals .track-card:before{background:var(--paper);opacity:.6}
+#student-shell .explore-portals .track-age-pill{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+#student-shell .explore-portals .track-quote,#student-shell .explore-portals .track-description,#student-shell .explore-portals .track-progress{color:var(--ink);opacity:1}
+#student-shell .explore-portal-link{color:var(--ink)}
+
+/* The two big "Skills" / "Creation" portal doors -- same flat ink-outline
+ * card chrome; their photo backdrop (::before) and its existing
+ * legibility wash (::after) are intentionally left alone, see file header. */
+#student-shell .studio-direction{background:var(--sky);border:2px solid var(--ink);border-radius:16px;box-shadow:none}
+#student-shell .creation-direction{background:var(--peach)}
+#student-shell .studio-direction .track-card,#student-shell .studio-direction .track-card:hover{background:transparent;color:var(--ink)}
+#student-shell .studio-direction .track-age-pill{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+#student-shell .studio-direction .track-quote,#student-shell .studio-direction .track-description{color:var(--ink);opacity:1}
+#student-shell .studio-direction .explore-portal-link{background:var(--paper);border:2px solid var(--ink);color:var(--ink);box-shadow:none}
+#student-shell .studio-continue{background:var(--paper);border:2px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);backdrop-filter:none}
+#student-shell .studio-continue h3,#student-shell .studio-continue h3 span,#student-shell .studio-continue p{color:var(--ink);opacity:1}
+#student-shell .studio-continue a{border-color:var(--ink);color:var(--ink)}
+#student-shell .studio-continue a b{border:2px solid var(--ink);background:var(--peri);color:var(--ink);box-shadow:none}
+#student-shell .studio-continue a:hover b,#student-shell .studio-continue a:focus-visible b{background:var(--leaf);box-shadow:none;transform:none}
+
+/* Skill gallery (subtrack cards) -- real course photos untouched, flat
+ * card chrome around them. */
+#student-shell .skill-gallery .subtrack{background:var(--paper);border:2px solid var(--ink);box-shadow:none;border-radius:12px}
+#student-shell .skill-gallery .subtrack-name,#student-shell .skill-gallery .subtrack-arrow{color:var(--ink)}
+#student-shell .skill-gallery-description,#student-shell .skill-gallery .subtrack-meta{color:var(--ink)}
+
+#student-shell a:focus-visible,#student-shell button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
