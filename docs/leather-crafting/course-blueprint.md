@@ -2,15 +2,15 @@
 
 Local preview: `http://127.0.0.1:8042/material-art/leather/`.
 
-Status: working local Smart Class, 201 learner checkpoints. Introduction → Materials → Eye → Cat → Dog. Dog Coloring is pending a corrected source upload from the owner. Not published. The repository already has unresolved merge conflicts in the homepage and shared guided files; this work does not resolve them.
+Status: published Smart Class, 210 learner checkpoints. Introduction → Materials → Eye → Cat → Dog. The corrected Dog Coloring source is now divided into nine guided video steps.
 
 ## Implemented experience
 
-- Course-only introduction: YouTube `mgzobpAW4Zo`, excerpt 00:16–00:51.5. No teacher biography, sales pitch, or obsolete flower/panda project sequence.
+- The complete original teacher introduction plays before the interactive overview. It is followed by four moves, three projects, and the watch/make/check rhythm.
 - Eight numbered material photographs were found, rather than seven. All eight have English image labels and a zoomable tool-board gallery. Tool sizes shown in the photos are preserved; differences from the video are explained in the relevant prompt.
 - Portrait teacher video and reference side by side on tablet/desktop; stacked on phones. Video uses contain sizing, preserving the hands. Fullscreen control is available where the browser allows it.
 - Reviewed action boundaries for Materials and Eye. Cat and Dog chapter steps are based on the spoken transcript and visual reference sampling. Extended silent Cat Carving practice subdivisions still need a final continuous editorial watch before release; they are not claimed as frame-accurate lesson transitions.
-- Each video step pauses at its endpoint. Watching never awards completion: the learner must confirm their own work. Replay, seeking, speed controls, reference zoom, original narration, quiet mode, and a course map are available.
+- Each video step pauses at its endpoint. The material tour and selected significant checkpoints request learner confirmation; ordinary video steps can continue without repeated checkboxes. Replay, seeking, speed controls, reference zoom, original narration, quiet mode, and a course map are available.
 - Material tool hotspots; selected portrait-reference hotspots; actual demonstration stills for other steps. These are per-step reference cues, not object tracking in the video.
 - Eye, Cat, and Dog original printable patterns open at the relevant steps. Eye's outer triangle is checked against 6 cm. Cat/Dog source sheets have no verified print-scale metadata, so the learner must check the fit before cutting.
 - Drying checkpoints preserve the wait in the lesson. Shared two-needle stitching is revisited from Eye. The Dog frame-making upload shows the Cat technique; the learner-facing note identifies this reuse.
@@ -26,7 +26,7 @@ Guide playback follows video time, pause, seeking, buffering, and playback speed
 
 ## Source issues
 
-1. **Dog Coloring** (`86acd9e369f6f0b7ddd77da244ba9006`): decoded video samples at 60 and 720 seconds show the same frozen dye-bottle frame. Thumbnails at multiple later points match. Audio becomes silent after its short introduction. Video rendition duration is about 1573 seconds while audio is about 3112 seconds. The owner is downloading a replacement. The course reserves a pending step, allows preview of framing, and cannot award full course completion through that pending step.
+1. **Dog Coloring**: the defective upload (`86acd9e369f6f0b7ddd77da244ba9006`) was replaced with `f32f4d9ba0323f18895b279f2764a031`. The replacement is 26:13. Sampled frames from 00:01 through 26:00 show the teacher continuing through base color, eyes, ears, gray highlights, and final details. Its HLS manifest has an audio rendition through the video end. The course now covers it in nine sequential steps and no longer blocks Dog completion.
 2. **Cat Carving** (`e8590f29eada2dcfda7125417e72bee9`): actual video is about 3431 seconds; audio rendition is about 5954 seconds. Later video stills show continuing handwork, while the English audio is silent. The lesson ends within the actual video and never exposes the silent padded tail or ASR hallucinations. Extended carving practice needs final continuous editorial review and fuller narration.
 3. **Dog Frame Making** repeats the Cat framing technique but its supplied picture and English audio do not align at the same timestamps (the 500-second frame is still skiving). The course therefore uses the verified Cat Frame source for both projects and explicitly labels it as shared technique.
 4. No standalone Cat Carving Reference image was found among the relevant hosted images inspected. Actual carving-video stills and the original/finished Cat images are used instead.
@@ -45,6 +45,6 @@ Build the base data with `projects.py`, then `build_course.py`. The builder reap
 
 ## Validation and remaining release work
 
-Browser checks cover real Cloudflare playback, endpoint pause, learner confirmation and continuation, reference zoom pausing, and tablet/phone layouts. Static validation checks all 201 steps and their media bounds. Review notes will record any remaining issues rather than treating a locally working preview as a published course.
+Browser checks cover real Cloudflare playback, endpoint pause, learner confirmation and continuation, reference zoom pausing, and tablet/phone layouts. Static validation checks all 210 steps and their media bounds.
 
-Before release: replace and segment Dog Coloring; continuously review the extended silent Cat Carving sections; review the new voice by listening; expand Cat/Dog narration if full replacement is required; resolve the pre-existing repository merge through the owner's normal integration workflow; then run release checks and deploy.
+Remaining editorial review: continuously watch the extended Cat Carving sections and expand Cat/Dog English narration if full replacement of the original audio becomes necessary.
