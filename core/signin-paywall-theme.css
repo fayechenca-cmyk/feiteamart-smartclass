@@ -6,8 +6,8 @@
  * theme files already applied here).
  *
  * Text colour rule, same as every other theme file in this set, checked
- * numerically: only --ink clears AA against all eight pastel tokens, so
- * every rule below keeps text --ink -- with one standard exception, left
+ * numerically: only --fei-ink clears AA against all eight pastel tokens, so
+ * every rule below keeps text --fei-ink -- with one standard exception, left
  * alone deliberately: a true ink-FILLED button (.signin-btn, .badge-
  * unlock-view-btn) keeps white text, the same way a solid near-black
  * background always has, regardless of theme -- that is not the
@@ -20,22 +20,22 @@
  */
 
 /* Sign-in card + intro panel */
-.signin-card{background:var(--paper);border:2px solid var(--ink);box-shadow:none}
-.signin-kicker{color:var(--ink)}
-.signin-input{border:2px solid var(--ink)}
-.signin-input:focus{border-color:var(--peri)}
-.signin-help a{color:var(--ink)}
-.signin-intro{background:var(--paper);backdrop-filter:none;-webkit-backdrop-filter:none;border:2px solid var(--ink);box-shadow:none}
-.auth-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
-.google-btn{border:2px solid var(--ink)}
-.auth-divider span{background:var(--paper)}
-.signin-info{color:var(--ink);background:var(--lav)}
-.access-code-section{border-top-color:var(--ink)}
+.signin-card{background:var(--fei-paper);border:2px solid var(--fei-ink);box-shadow:none}
+.signin-kicker{color:var(--fei-ink)}
+.signin-input{border:2px solid var(--fei-ink)}
+.signin-input:focus{border-color:var(--fei-peri)}
+.signin-help a{color:var(--fei-ink)}
+.signin-intro{background:var(--fei-paper);backdrop-filter:none;-webkit-backdrop-filter:none;border:2px solid var(--fei-ink);box-shadow:none}
+.auth-tab.active{color:var(--fei-ink);border-bottom-color:var(--fei-ink)}
+.google-btn{border:2px solid var(--fei-ink)}
+.auth-divider span{background:var(--fei-paper)}
+.signin-info{color:var(--fei-ink);background:var(--fei-lav)}
+.access-code-section{border-top-color:var(--fei-ink)}
 
 /* Paywall + badge-detail modals (same mechanics, same fix) */
 .paywall-modal,.badge-detail-modal{background:rgba(38,37,46,.55);backdrop-filter:none}
-.paywall-card,.badge-detail-card{background:var(--paper);border:2px solid var(--ink);box-shadow:none}
-.paywall-cta{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+.paywall-card,.badge-detail-card{background:var(--fei-paper);border:2px solid var(--fei-ink);box-shadow:none}
+.paywall-cta{background:var(--fei-peri);color:var(--fei-ink);border:2px solid var(--fei-ink)}
 .paywall-cta:hover{background:#a3acf0}
-.paywall-dismiss{color:var(--ink)}
-.paywall-dismiss:hover{color:var(--ink)}
+.paywall-dismiss{color:var(--fei-ink)}
+.paywall-dismiss:hover{color:var(--fei-ink)}

@@ -7,11 +7,21 @@
  * against each other, so they are backgrounds/borders/fills only -- never
  * a text colour).
  *
+ * Every token is prefixed --fei- on purpose (Oct 2026 rename): the first
+ * version used bare names (--ink, --paper, ...), and on pages that already
+ * defined their OWN --ink/--paper for unrelated purposes (root index.html's
+ * legacy --ink:#1a1d2b/--paper:#fafaf8, used by screens this palette never
+ * meant to touch), this file's :root block silently won the cascade just by
+ * loading later in the document -- shifting body's background sitewide
+ * without any of those screens being deliberately restyled. The --fei-
+ * prefix makes a collision like that impossible again: nothing else on any
+ * page defines a variable spelled --fei-ink.
+ *
  * Loaded once per page, before any page-specific theme file (e.g.
  * core/guided-theme.css) that uses these tokens.
  */
 :root{
  color-scheme:light;
- --paper:#FBF8E4; --lime:#F1F0B8; --peri:#8F9AEA; --lav:#A697DD;
- --sky:#A4C6DE; --leaf:#A9D18E; --peach:#F8DFB3; --blush:#F1A9A1; --ink:#26252E;
+ --fei-paper:#FBF8E4; --fei-lime:#F1F0B8; --fei-peri:#8F9AEA; --fei-lav:#A697DD;
+ --fei-sky:#A4C6DE; --fei-leaf:#A9D18E; --fei-peach:#F8DFB3; --fei-blush:#F1A9A1; --fei-ink:#26252E;
 }
