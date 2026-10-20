@@ -84,7 +84,7 @@
       title: 'Gift Box',
       subtitle: 'Cube · gift box',
       emoji: '🎁',
-      href: 'lessons/lesson-4-giftbox/',
+      href: 'lessons/lesson-4-giftbox/guided/',
       ready: true,
       level: 2
     },

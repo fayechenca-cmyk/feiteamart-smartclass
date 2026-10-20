@@ -164,7 +164,7 @@ function next(){
  if($('next').disabled)return;
  mark();
  if(flow[index].coreComplete)GuidedPlatform.complete('intersecting');
- if(index===flow.length-1){stopVoice();GuidedPlatform.complete('intersecting');window.GuidedReward.complete({lessonId:'intersecting',title:'Intersecting Geometry',nextLabel:'Continue to Gift Box →',muted,onMutedChange:setMuted}).then(async go=>{await GuidedPlatform.flush();if(go)location.href='../../lesson-4-giftbox/';});return;}
+ if(index===flow.length-1){stopVoice();GuidedPlatform.complete('intersecting');window.GuidedReward.complete({lessonId:'intersecting',title:'Intersecting Geometry',nextLabel:'Continue to Gift Box →',muted,onMutedChange:setMuted}).then(async go=>{await GuidedPlatform.flush();if(go)location.href='../../lesson-4-giftbox/guided/';});return;}
  index++;enter();
 }
 $('next').onclick=next;
