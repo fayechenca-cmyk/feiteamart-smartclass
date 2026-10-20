@@ -1,0 +1,1674 @@
+[
+  {
+    "id": "welcome",
+    "title": "A new level: real objects",
+    "chapter": "Meet the apple",
+    "say": "You have learned to see the cube, sphere, cone, and cylinder. Now let's use that knowledge with a real object. Now we will study an apple. It grows from the sphere you know, but it leans, dips around the stem, and has its own uneven shape. Let's look before we draw.",
+    "hint": "A sphere becomes a real apple",
+    "kind": "photo",
+    "image": "reference-apple.jpg",
+    "audio": "audio/welcome.mp3",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "You have learned to see the cube sphere cone"
+      },
+      {
+        "time": 2.279,
+        "text": "and cylinder Now let's use that knowledge with a"
+      },
+      {
+        "time": 5.368,
+        "text": "real object Now we will study an apple It"
+      },
+      {
+        "time": 8.456,
+        "text": "grows from the sphere you know but it leans"
+      },
+      {
+        "time": 11.078,
+        "text": "dips around the stem and has its own uneven"
+      },
+      {
+        "time": 13.885,
+        "text": "shape Let's look before we draw"
+      }
+    ]
+  },
+  {
+    "id": "rotate",
+    "title": "Turn it and look again",
+    "chapter": "Meet the apple",
+    "say": "Turn this apple with your finger or the arrows. Watch the top dip and the uneven shoulders move around the form. A real apple doesn't stay perfectly round from every view. Find a view you like, then bring that careful looking into your drawing.",
+    "hint": "Turn · Notice the dip · Compare both sides",
+    "kind": "appleRotate",
+    "image": "reference-apple.jpg",
+    "audio": "audio/rotate.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Turn this apple with your finger or the arrows"
+      },
+      {
+        "time": 2.843,
+        "text": "Watch the top dip and the uneven shoulders move"
+      },
+      {
+        "time": 5.821,
+        "text": "around the form A real apple doesn't stay perfectly"
+      },
+      {
+        "time": 8.983,
+        "text": "round from every view Find a view you like"
+      },
+      {
+        "time": 12.365,
+        "text": "then bring that careful looking into your drawing"
+      }
+    ]
+  },
+  {
+    "id": "notice",
+    "title": "Find the form under the skin",
+    "chapter": "Meet the apple",
+    "say": "Here is your teacher's finished drawing. Tap the three spots to find the stem dip, the turning surface, and the shadow that anchors it to the table. You already know the sphere's light and dark. Now notice how those ideas follow an apple's less perfect surface.",
+    "hint": "Tap the three clues in the drawing",
+    "kind": "appleNotice",
+    "image": "reference-apple.jpg",
+    "audio": "audio/notice.mp3",
+    "captions": [
+      {
+        "time": 0.147,
+        "text": "Here is your teacher's finished drawing Tap the three"
+      },
+      {
+        "time": 3.113,
+        "text": "spots to find the stem dip the turning surface"
+      },
+      {
+        "time": 6.262,
+        "text": "and the shadow that anchors it to the table"
+      },
+      {
+        "time": 8.627,
+        "text": "You already know the sphere's light and dark Now"
+      },
+      {
+        "time": 11.458,
+        "text": "notice how those ideas follow an apple's less perfect"
+      },
+      {
+        "time": 14.804,
+        "text": "surface"
+      }
+    ]
+  },
+  {
+    "id": "tools",
+    "title": "Keep the familiar tools close",
+    "chapter": "Get ready",
+    "say": "Bring your sketch paper, pencils, and eraser. Start with a light pencil for construction. We will switch pencils when the value grows darker, and keep the light areas clean. Choose the textured side of your paper if you want the graphite to grip it.",
+    "hint": "Paper · Pencils · Eraser",
+    "kind": "photo",
+    "image": "reference-apple.jpg",
+    "audio": "audio/tools.mp3",
+    "materialScene": true,
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Bring your sketch paper pencils and eraser Start with"
+      },
+      {
+        "time": 3.885,
+        "text": "a light pencil for construction We will switch pencils"
+      },
+      {
+        "time": 7.255,
+        "text": "when the value grows darker and keep the light"
+      },
+      {
+        "time": 9.706,
+        "text": "areas clean Choose the textured side of your paper"
+      },
+      {
+        "time": 12.843,
+        "text": "if you want the graphite to grip it"
+      }
+    ]
+  },
+  {
+    "id": "video-1-start",
+    "title": "Build the apple as a sphere",
+    "chapter": "Build an apple from the sphere",
+    "say": "Watch the teacher begin with a light framework. We are still thinking about a sphere, but we will adjust the contour for this particular apple.",
+    "hint": "Watch your teacher, then draw with them",
+    "kind": "chapter",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-start.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Watch the teacher begin with a light framework We"
+      },
+      {
+        "time": 3.088,
+        "text": "are still thinking about a sphere but we will"
+      },
+      {
+        "time": 4.939,
+        "text": "adjust the contour for this particular apple"
+      }
+    ]
+  },
+  {
+    "id": "video-1-1",
+    "title": "Use broken tangent lines",
+    "chapter": "Build an apple from the sphere",
+    "say": "Early on, short straight marks can find the apple's structure more clearly than one perfect circle. Keep them light; the curve can come later. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Use broken tangent lines",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-1.mp3",
+    "uid": "36a67d11fec318fed06ee4c6dea15b9f",
+    "start": 0,
+    "clipEnd": 60.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/36a67d11fec318fed06ee4c6dea15b9f/thumbnails/thumbnail.jpg?time=60.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/9284cdea-0340-4c3b-723a-7e1aecd48700/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Early on short straight marks can find the apple's"
+      },
+      {
+        "time": 3.076,
+        "text": "structure more clearly than one perfect circle Keep them"
+      },
+      {
+        "time": 6.826,
+        "text": "light the curve can come later Take your time"
+      },
+      {
+        "time": 10.061,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 12.855,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-1-2",
+    "title": "Plan the stem shadow now",
+    "chapter": "Build an apple from the sphere",
+    "say": "Look at the small dip around the stem. Mark its shadow lightly now so you know how that top surface turns. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Plan the stem shadow now",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-2.mp3",
+    "uid": "36a67d11fec318fed06ee4c6dea15b9f",
+    "start": 60.0,
+    "clipEnd": 111.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/36a67d11fec318fed06ee4c6dea15b9f/thumbnails/thumbnail.jpg?time=111.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/a895f1c1-dbc1-4efe-e421-0e1d26a1a500/public",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Look at the small dip around the stem Mark"
+      },
+      {
+        "time": 2.414,
+        "text": "its shadow lightly now so you know how that"
+      },
+      {
+        "time": 4.877,
+        "text": "top surface turns Take your time with this on"
+      },
+      {
+        "time": 7.512,
+        "text": "your page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-1-3",
+    "title": "More than a sphere",
+    "chapter": "Build an apple from the sphere",
+    "say": "The apple body undulates — its terminator line shifts with texture and form. Not a smooth round curve. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "More than a sphere",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-3.mp3",
+    "uid": "36a67d11fec318fed06ee4c6dea15b9f",
+    "start": 111.0,
+    "clipEnd": 146.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/36a67d11fec318fed06ee4c6dea15b9f/thumbnails/thumbnail.jpg?time=146.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/3db9642a-6b60-42e0-021f-e1d42db16200/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The apple body undulates its terminator line shifts with"
+      },
+      {
+        "time": 3.346,
+        "text": "texture and form Not a smooth round curve Take"
+      },
+      {
+        "time": 7.414,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 10.429,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-1-4",
+    "title": "Sketch light, don't machine it",
+    "chapter": "Build an apple from the sphere",
+    "say": "Drawing light and shadow is analysis, not mechanics. This step builds your understanding of the object's real form. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Sketch light, don't machine it",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-4.mp3",
+    "uid": "36a67d11fec318fed06ee4c6dea15b9f",
+    "start": 146.0,
+    "clipEnd": 168.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/36a67d11fec318fed06ee4c6dea15b9f/thumbnails/thumbnail.jpg?time=168.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8ffc25f4-81ac-4664-ee30-d0377c649f00/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Drawing light and shadow is analysis not mechanics This"
+      },
+      {
+        "time": 4.216,
+        "text": "step builds your understanding of the object's real form"
+      },
+      {
+        "time": 7.365,
+        "text": "Take your time with this on your page Press"
+      },
+      {
+        "time": 9.865,
+        "text": "continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-1-end",
+    "title": "A framework with character",
+    "chapter": "Build an apple from the sphere",
+    "say": "Watch the last change in this part, then compare your apple with your teacher's. Adjust what you need. I will wait for you.",
+    "hint": "Look · Compare · Continue",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-1-end.mp3",
+    "uid": "36a67d11fec318fed06ee4c6dea15b9f",
+    "start": 168.0,
+    "clipEnd": 214.392,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/36a67d11fec318fed06ee4c6dea15b9f/thumbnails/thumbnail.jpg?time=213.89s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last change in this part then compare"
+      },
+      {
+        "time": 2.696,
+        "text": "your apple with your teacher's Adjust what you need"
+      },
+      {
+        "time": 5.882,
+        "text": "I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "cheer-1",
+    "title": "Look how far you have come",
+    "chapter": "Your progress",
+    "say": "You have turned a simple sphere into a specific apple shape. That is a new kind of seeing. Nice work! Take a breath before we look at light.",
+    "hint": "A thoughtful step forward",
+    "kind": "milestone",
+    "image": "reference-apple.jpg",
+    "audio": "audio/cheer-1.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "You have turned a simple sphere into a specific"
+      },
+      {
+        "time": 2.757,
+        "text": "apple shape That is a new kind of seeing"
+      },
+      {
+        "time": 5.638,
+        "text": "Nice work Take a breath before we look at"
+      },
+      {
+        "time": 8.26,
+        "text": "light"
+      }
+    ]
+  },
+  {
+    "id": "video-2-start",
+    "title": "Place light and shadow",
+    "chapter": "Find light and the cast shadow",
+    "say": "Watch the teacher connect the light boundary on the apple to the shadow on the table. It is one light source across both surfaces.",
+    "hint": "Watch your teacher, then draw with them",
+    "kind": "chapter",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-2-start.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Watch the teacher connect the light boundary on the"
+      },
+      {
+        "time": 2.672,
+        "text": "apple to the shadow on the table It is"
+      },
+      {
+        "time": 5.0,
+        "text": "one light source across both surfaces"
+      }
+    ]
+  },
+  {
+    "id": "video-2-end",
+    "title": "One light across two surfaces",
+    "chapter": "Find light and the cast shadow",
+    "say": "Watch the last change in this part, then compare your apple with your teacher's. Adjust what you need. I will wait for you.",
+    "hint": "Look · Compare · Continue",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-2-end.mp3",
+    "uid": "48d26d29be17352e09ef95a5f15ad4db",
+    "start": 0,
+    "clipEnd": 25.894,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/48d26d29be17352e09ef95a5f15ad4db/thumbnails/thumbnail.jpg?time=25.39s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Watch the last change in this part then compare"
+      },
+      {
+        "time": 2.733,
+        "text": "your apple with your teacher's Adjust what you need"
+      },
+      {
+        "time": 5.895,
+        "text": "I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "video-3-start",
+    "title": "Begin the dark side",
+    "chapter": "Shape the dark family",
+    "say": "Now build the darker family with controlled strokes. Follow the apple's curve as you work.",
+    "hint": "Watch your teacher, then draw with them",
+    "kind": "chapter",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-3-start.mp3",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Now build the darker family with controlled strokes Follow"
+      },
+      {
+        "time": 3.885,
+        "text": "the apple's curve as you work"
+      }
+    ]
+  },
+  {
+    "id": "video-3-1",
+    "title": "Hatching follows the terminator",
+    "chapter": "Shape the dark family",
+    "say": "Follow the turning edge with your pencil strokes. Their direction helps describe the apple's rounded skin. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Hatching follows the terminator",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-3-1.mp3",
+    "uid": "96957a10b5f155f3cff46b67b18dfdbf",
+    "start": 0,
+    "clipEnd": 42.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/96957a10b5f155f3cff46b67b18dfdbf/thumbnails/thumbnail.jpg?time=42.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/273ce457-f074-456d-7928-0abdc9f82f00/public",
+    "captions": [
+      {
+        "time": 0.172,
+        "text": "Follow the turning edge with your pencil strokes Their"
+      },
+      {
+        "time": 3.272,
+        "text": "direction helps describe the apple's rounded skin Take your"
+      },
+      {
+        "time": 6.654,
+        "text": "time with this on your page Press continue when"
+      },
+      {
+        "time": 9.62,
+        "text": "you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-3-2",
+    "title": "Darken with 2B",
+    "chapter": "Shape the dark family",
+    "say": "Now the teacher switches to two B. Build the shadow in layers. You can always deepen it; you cannot easily undo heavy pressure. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Darken with 2B",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-3-2.mp3",
+    "uid": "96957a10b5f155f3cff46b67b18dfdbf",
+    "start": 42.0,
+    "clipEnd": 112.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/96957a10b5f155f3cff46b67b18dfdbf/thumbnails/thumbnail.jpg?time=112.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2a8d2b1d-b4ec-44a4-57e7-5e98443b0a00/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Now the teacher switches to two B Build the"
+      },
+      {
+        "time": 2.782,
+        "text": "shadow in layers You can always deepen it you"
+      },
+      {
+        "time": 5.735,
+        "text": "cannot easily undo heavy pressure Take your time with"
+      },
+      {
+        "time": 9.118,
+        "text": "this on your page Press continue when you are"
+      },
+      {
+        "time": 11.899,
+        "text": "ready"
+      }
+    ]
+  },
+  {
+    "id": "video-3-3",
+    "title": "Strokes that build texture",
+    "chapter": "Shape the dark family",
+    "say": "Those extra strokes are following the apple's surface. Let them make volume and texture together. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Strokes that build texture",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-3-3.mp3",
+    "uid": "96957a10b5f155f3cff46b67b18dfdbf",
+    "start": 112.0,
+    "clipEnd": 170.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/96957a10b5f155f3cff46b67b18dfdbf/thumbnails/thumbnail.jpg?time=170.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/0e21e23b-7619-444d-af39-60a703e72600/public",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Those extra strokes are following the apple's surface Let"
+      },
+      {
+        "time": 3.358,
+        "text": "them make volume and texture together Take your time"
+      },
+      {
+        "time": 6.422,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 9.228,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-3-4",
+    "title": "Observe, don't chase the outline",
+    "chapter": "Shape the dark family",
+    "say": "Unlike basic forms, the apple has specific texture and direction. Observe the stem groove, dimples, body undulations — feel it. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Observe, don't chase the outline",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-3-4.mp3",
+    "uid": "96957a10b5f155f3cff46b67b18dfdbf",
+    "start": 170.0,
+    "clipEnd": 193.842,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/96957a10b5f155f3cff46b67b18dfdbf/thumbnails/thumbnail.jpg?time=193.84s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/c090b327-850f-4ffd-4af0-28aed5579600/public",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "Unlike basic forms the apple has specific texture and"
+      },
+      {
+        "time": 3.615,
+        "text": "direction Observe the stem groove dimples body undulations feel"
+      },
+      {
+        "time": 8.48,
+        "text": "it Take your time with this on your page"
+      },
+      {
+        "time": 11.262,
+        "text": "Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "cheer-3",
+    "title": "Look how far you have come",
+    "chapter": "Your progress",
+    "say": "Your apple has weight now. You built that one careful layer at a time. Relax your hand; next we will make the light side turn.",
+    "hint": "A thoughtful step forward",
+    "kind": "milestone",
+    "image": "reference-apple.jpg",
+    "audio": "audio/cheer-3.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Your apple has weight now You built that one"
+      },
+      {
+        "time": 2.708,
+        "text": "careful layer at a time Relax your hand next"
+      },
+      {
+        "time": 6.238,
+        "text": "we will make the light side turn"
+      }
+    ]
+  },
+  {
+    "id": "video-4-start",
+    "title": "Build the middle tones",
+    "chapter": "Turn the light into form",
+    "say": "These middle tones make the surface turn. Notice how the teacher protects the highlight and works around the top dip.",
+    "hint": "Watch your teacher, then draw with them",
+    "kind": "chapter",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-start.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "These middle tones make the surface turn Notice how"
+      },
+      {
+        "time": 3.186,
+        "text": "the teacher protects the highlight and works around the"
+      },
+      {
+        "time": 5.772,
+        "text": "top dip"
+      }
+    ]
+  },
+  {
+    "id": "video-4-1",
+    "title": "Build the light side first",
+    "chapter": "Turn the light into form",
+    "say": "Start the lighter value as a connected surface. Keep enough paper showing where the highlight will sit. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Build the light side first",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-1.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 0,
+    "clipEnd": 34.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=34.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ff422449-206c-4b9b-43ee-be1ba60b2700/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Start the lighter value as a connected surface Keep"
+      },
+      {
+        "time": 3.333,
+        "text": "enough paper showing where the highlight will sit Take"
+      },
+      {
+        "time": 6.14,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 9.252,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-2",
+    "title": "Soften the terminator",
+    "chapter": "Turn the light into form",
+    "say": "This is a turning band, not a dark line. Use a light pencil and gentle pressure to soften the change from dark to light. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Soften the terminator",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-2.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 34.0,
+    "clipEnd": 55.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=55.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/083f74b9-d447-49fb-70e8-9f89ae7c8300/public",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "This is a turning band not a dark line"
+      },
+      {
+        "time": 3.051,
+        "text": "Use a light pencil and gentle pressure to soften"
+      },
+      {
+        "time": 5.797,
+        "text": "the change from dark to light Take your time"
+      },
+      {
+        "time": 8.346,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 11.189,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-3",
+    "title": "Light tone above the terminator",
+    "chapter": "Turn the light into form",
+    "say": "Move softly upward from the turning band. The value gets lighter as the surface faces the light. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Light tone above the terminator",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-3.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 55.0,
+    "clipEnd": 84.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=84.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ba3aed0e-0159-4d94-eda6-6949b3018000/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Move softly upward from the turning band The value"
+      },
+      {
+        "time": 3.272,
+        "text": "gets lighter as the surface faces the light Take"
+      },
+      {
+        "time": 6.532,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 9.755,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-4",
+    "title": "Top plane lifts as one",
+    "chapter": "Turn the light into form",
+    "say": "The top is not flat. Watch the direction of the pencil as it follows the surface rising toward the stem. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Top plane lifts as one",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-4.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 84.0,
+    "clipEnd": 165.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=165.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/2f4bc0fd-e337-4c7c-f569-94186a7f7a00/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "The top is not flat Watch the direction of"
+      },
+      {
+        "time": 2.672,
+        "text": "the pencil as it follows the surface rising toward"
+      },
+      {
+        "time": 5.76,
+        "text": "the stem Take your time with this on your"
+      },
+      {
+        "time": 7.953,
+        "text": "page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-5",
+    "title": "Cross-hatch for volume",
+    "chapter": "Turn the light into form",
+    "say": "The teacher layers strokes in more than one direction. Keep the pressure gentle so the apple stays round, not striped. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Cross-hatch for volume",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-5.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 165.0,
+    "clipEnd": 194.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=194.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/145e1a59-e869-4d87-6431-4e41fdeda500/public",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "The teacher layers strokes in more than one direction"
+      },
+      {
+        "time": 3.015,
+        "text": "Keep the pressure gentle so the apple stays round"
+      },
+      {
+        "time": 6.532,
+        "text": "not striped Take your time with this on your"
+      },
+      {
+        "time": 8.885,
+        "text": "page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-6",
+    "title": "Highlight is sculpted",
+    "chapter": "Turn the light into form",
+    "say": "Save and shape a small light area. You are building it by controlling the tones around it. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Highlight is sculpted",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-6.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 194.0,
+    "clipEnd": 230.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=230.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8ae55b66-e280-4676-88b9-2e8e73c1f500/public",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Save and shape a small light area You are"
+      },
+      {
+        "time": 3.297,
+        "text": "building it by controlling the tones around it Take"
+      },
+      {
+        "time": 6.176,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 9.24,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-7",
+    "title": "Light side done first",
+    "chapter": "Turn the light into form",
+    "say": "Compare the lit side before adding more dark. The light shape gives you a target for every shadow. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Light side done first",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-7.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 230.0,
+    "clipEnd": 253.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=253.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cfeece99-2f41-4ef0-380e-b02e30094700/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Compare the lit side before adding more dark The"
+      },
+      {
+        "time": 2.966,
+        "text": "light shape gives you a target for every shadow"
+      },
+      {
+        "time": 6.287,
+        "text": "Take your time with this on your page Press"
+      },
+      {
+        "time": 8.811,
+        "text": "continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-8",
+    "title": "Switch to 2B, start the shadow",
+    "chapter": "Turn the light into form",
+    "say": "Two B again. Follow the uneven turning boundary you observed, then deepen the shadow gradually. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Switch to 2B, start the shadow",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-8.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 253.0,
+    "clipEnd": 302.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=302.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8f942afd-8e6e-4a4d-a9b0-07f61e134c00/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Two B again Follow the uneven turning boundary you"
+      },
+      {
+        "time": 3.542,
+        "text": "observed then deepen the shadow gradually Take your time"
+      },
+      {
+        "time": 7.426,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 10.368,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-9",
+    "title": "Terminator becomes a band",
+    "chapter": "Turn the light into form",
+    "say": "Notice how this boundary widens into a soft transition. Your strokes curve around the apple. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Terminator becomes a band",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-9.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 302.0,
+    "clipEnd": 363.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=363.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8f6b1ce8-02b5-45bb-2266-1da0a15fc500/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Notice how this boundary widens into a soft transition"
+      },
+      {
+        "time": 3.627,
+        "text": "Your strokes curve around the apple Take your time"
+      },
+      {
+        "time": 6.422,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 9.277,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-10",
+    "title": "Block in the shadow simply",
+    "chapter": "Turn the light into form",
+    "say": "Give the dark side and the table shadow a broad first pass. Check that the apple still feels grounded. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Block in the shadow simply",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-10.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 363.0,
+    "clipEnd": 440.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=440.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/9ddb66c6-a966-4095-8f14-dec670c66500/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Give the dark side and the table shadow a"
+      },
+      {
+        "time": 2.696,
+        "text": "broad first pass Check that the apple still feels"
+      },
+      {
+        "time": 5.846,
+        "text": "grounded Take your time with this on your page"
+      },
+      {
+        "time": 8.897,
+        "text": "Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-11",
+    "title": "Refine the stem cavity edges",
+    "chapter": "Turn the light into form",
+    "say": "Look close at the top dip. Its inside edge, outside edge, and soft middle turn in different ways. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Refine the stem cavity edges",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-11.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 440.0,
+    "clipEnd": 477.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=477.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/3be6a084-c079-46eb-a28f-d9f0b869b200/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Look close at the top dip Its inside edge outside"
+      },
+      {
+        "time": 3.958,
+        "text": "edge and soft middle turn in different ways Take"
+      },
+      {
+        "time": 7.034,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 10.159,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-12",
+    "title": "HB for the outer edge",
+    "chapter": "Turn the light into form",
+    "say": "Use H B with gentle pressure at the contour. Let value describe the edge instead of a hard outline. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "HB for the outer edge",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-12.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 477.0,
+    "clipEnd": 492.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=492.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cb29435e-e29f-4418-03da-da12665cb400/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Use H B with gentle pressure at the contour"
+      },
+      {
+        "time": 3.039,
+        "text": "Let value describe the edge instead of a hard"
+      },
+      {
+        "time": 5.784,
+        "text": "outline Take your time with this on your page"
+      },
+      {
+        "time": 8.811,
+        "text": "Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-13",
+    "title": "Deepen the cavity",
+    "chapter": "Turn the light into form",
+    "say": "The small dark shape near the stem gives the dip depth. Compare it with the larger dark family before you commit. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Deepen the cavity",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-13.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 492.0,
+    "clipEnd": 542.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=542.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8474451d-d13b-4732-5346-009de58f4600/public",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "The small dark shape near the stem gives the"
+      },
+      {
+        "time": 2.353,
+        "text": "dip depth Compare it with the larger dark family"
+      },
+      {
+        "time": 5.711,
+        "text": "before you commit Take your time with this on"
+      },
+      {
+        "time": 8.174,
+        "text": "your page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-14",
+    "title": "Bridge cavity to body",
+    "chapter": "Turn the light into form",
+    "say": "Curve your strokes out of the cavity and into the body. The top belongs to the same apple. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Bridge cavity to body",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-14.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 542.0,
+    "clipEnd": 564.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=564.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ffd258fd-0730-4fd5-59de-e8b12075b700/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Curve your strokes out of the cavity and into"
+      },
+      {
+        "time": 2.647,
+        "text": "the body The top belongs to the same apple"
+      },
+      {
+        "time": 5.821,
+        "text": "Take your time with this on your page Press"
+      },
+      {
+        "time": 8.321,
+        "text": "continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-15",
+    "title": "Stem casts a shadow",
+    "chapter": "Turn the light into form",
+    "say": "Look beneath the stem for its tiny cast shadow. A small, placed dark can say a lot. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Stem casts a shadow",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-15.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 564.0,
+    "clipEnd": 612.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=612.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/28e300ff-fdb7-4ccb-b827-c60c20700b00/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Look beneath the stem for its tiny cast shadow"
+      },
+      {
+        "time": 3.248,
+        "text": "A small placed dark can say a lot Take"
+      },
+      {
+        "time": 6.103,
+        "text": "your time with this on your page Press continue"
+      },
+      {
+        "time": 9.314,
+        "text": "when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-16",
+    "title": "Final touches near dimple",
+    "chapter": "Turn the light into form",
+    "say": "Use H or H B for a few final adjustments. Stop when the relationships are clear. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Final touches near dimple",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-16.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 612.0,
+    "clipEnd": 623.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=623.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/79ce2aa7-c771-4c41-e6a5-ce60f9d4ea00/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Use H or H B for a few final"
+      },
+      {
+        "time": 2.414,
+        "text": "adjustments Stop when the relationships are clear Take your"
+      },
+      {
+        "time": 6.164,
+        "text": "time with this on your page Press continue when"
+      },
+      {
+        "time": 9.252,
+        "text": "you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-4-end",
+    "title": "A rounded, lit apple",
+    "chapter": "Turn the light into form",
+    "say": "Watch the last change in this part, then compare your apple with your teacher's. Adjust what you need. I will wait for you.",
+    "hint": "Look · Compare · Continue",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-4-end.mp3",
+    "uid": "3fd21d90c042aeb0ac83c4b51d3a098d",
+    "start": 623.0,
+    "clipEnd": 660.196,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/3fd21d90c042aeb0ac83c4b51d3a098d/thumbnails/thumbnail.jpg?time=659.70s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last change in this part then compare"
+      },
+      {
+        "time": 2.696,
+        "text": "your apple with your teacher's Adjust what you need"
+      },
+      {
+        "time": 5.882,
+        "text": "I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "video-5-start",
+    "title": "Refine the apple",
+    "chapter": "Refine the surface",
+    "say": "This is the final long pass. The stem cavity, curved strokes, and soft reflected light make this apple specific rather than generic.",
+    "hint": "Watch your teacher, then draw with them",
+    "kind": "chapter",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-start.mp3",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "This is the final long pass The stem cavity"
+      },
+      {
+        "time": 3.517,
+        "text": "curved strokes and soft reflected light make this apple"
+      },
+      {
+        "time": 6.851,
+        "text": "specific rather than generic"
+      }
+    ]
+  },
+  {
+    "id": "video-5-1",
+    "title": "Start light — use 2H",
+    "chapter": "Refine the surface",
+    "say": "Begin this pass with two H and almost no pressure. We can still change our minds. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Start light — use 2H",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-1.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 0,
+    "clipEnd": 14.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=14.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/03d48f0e-61f1-49d5-4f86-252be6aea100/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Begin this pass with two H and almost no"
+      },
+      {
+        "time": 2.635,
+        "text": "pressure We can still change our minds Take your"
+      },
+      {
+        "time": 5.993,
+        "text": "time with this on your page Press continue when"
+      },
+      {
+        "time": 9.142,
+        "text": "you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-2",
+    "title": "Re-strengthen the terminator — switch to HB",
+    "chapter": "Refine the surface",
+    "say": "The turning band may have faded under the light tones. With H B, bring some contrast back where it helps the form. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Re-strengthen the terminator — switch to HB",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-2.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 14.0,
+    "clipEnd": 34.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=34.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/66d90554-e931-4aea-9949-d6af5fcee000/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "The turning band may have faded under the light"
+      },
+      {
+        "time": 2.488,
+        "text": "tones With H B bring some contrast back where"
+      },
+      {
+        "time": 5.981,
+        "text": "it helps the form Take your time with this"
+      },
+      {
+        "time": 8.235,
+        "text": "on your page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-3",
+    "title": "Wrap the light-grey zone as one surface",
+    "chapter": "Refine the surface",
+    "say": "Follow this light grey area around the apple as one connected skin. It turns, rather than stopping at a line. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Wrap the light-grey zone as one surface",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-3.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 34.0,
+    "clipEnd": 57.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=57.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/8dc82639-1c24-4bd5-2cba-f4d6373b5800/public",
+    "captions": [
+      {
+        "time": 0.196,
+        "text": "Follow this light grey area around the apple as"
+      },
+      {
+        "time": 3.076,
+        "text": "one connected skin It turns rather than stopping at"
+      },
+      {
+        "time": 6.752,
+        "text": "a line Take your time with this on your"
+      },
+      {
+        "time": 9.007,
+        "text": "page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-4",
+    "title": "Build the bridge — dimple to terminator",
+    "chapter": "Refine the surface",
+    "say": "Watch the curved path from the stem dip toward the turning boundary. That connection makes the top feel attached to the body. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Build the bridge — dimple to terminator",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-4.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 57.0,
+    "clipEnd": 145.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=145.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/54f9bf9f-eea7-45a8-bcbf-dfef25b71900/public",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the curved path from the stem dip toward"
+      },
+      {
+        "time": 2.598,
+        "text": "the turning boundary That connection makes the top feel"
+      },
+      {
+        "time": 5.846,
+        "text": "attached to the body Take your time with this"
+      },
+      {
+        "time": 8.382,
+        "text": "on your page Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-5",
+    "title": "Follow the apple's direction — HB",
+    "chapter": "Refine the surface",
+    "say": "Before every stroke, observe which way the surface curves. The apple is a sphere — your pencil direction should follow its form. Never go randomly. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Follow the apple's direction — HB",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-5.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 145.0,
+    "clipEnd": 194.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=194.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/248510c0-241c-4b95-d1c1-439c82521b00/public",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Before every stroke observe which way the surface curves"
+      },
+      {
+        "time": 4.301,
+        "text": "The apple is a sphere your pencil direction should"
+      },
+      {
+        "time": 7.194,
+        "text": "follow its form Never go randomly Take your time"
+      },
+      {
+        "time": 10.527,
+        "text": "with this on your page Press continue when you"
+      },
+      {
+        "time": 13.37,
+        "text": "are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-6",
+    "title": "Tone down the reflected light",
+    "chapter": "Refine the surface",
+    "say": "Reflected light can easily become too bright. Keep it gentler than the main highlight so the apple feels solid. Take your time with this on your page. Press continue when you are ready.",
+    "hint": "Tone down the reflected light",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-6.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 194.0,
+    "clipEnd": 314.0,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=314.00s&height=720",
+    "analysis": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/56869cf4-0ca2-461e-d963-dbf6001a3300/public",
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "Reflected light can easily become too bright Keep it"
+      },
+      {
+        "time": 3.578,
+        "text": "gentler than the main highlight so the apple feels"
+      },
+      {
+        "time": 6.471,
+        "text": "solid Take your time with this on your page"
+      },
+      {
+        "time": 9.902,
+        "text": "Press continue when you are ready"
+      }
+    ]
+  },
+  {
+    "id": "video-5-7",
+    "title": "Keep the dark side connected",
+    "chapter": "Refine the surface",
+    "say": "Watch the teacher work back into the apple’s darker right side. Compare it with the gentle reflected light below. They are different values, but they belong to one turning surface. Take your time; I will wait while you make that adjustment.",
+    "hint": "Keep the dark side connected",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-7.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 314,
+    "clipEnd": 480,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=480s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Watch the teacher work back into the apple’s darker"
+      },
+      {
+        "time": 2.953,
+        "text": "right side Compare it with the gentle reflected light"
+      },
+      {
+        "time": 6.091,
+        "text": "below They are different values but they belong to"
+      },
+      {
+        "time": 8.762,
+        "text": "one turning surface Take your time I will wait"
+      },
+      {
+        "time": 11.985,
+        "text": "while you make that adjustment"
+      }
+    ]
+  },
+  {
+    "id": "video-5-8",
+    "title": "Ground the apple with its shadow",
+    "chapter": "Refine the surface",
+    "say": "The teacher strengthens the cast shadow on the table. Keep it attached to the apple where they meet, and let it soften as it moves away. Take your time; I will wait while you make that adjustment.",
+    "hint": "Ground the apple with its shadow",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-8.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 480,
+    "clipEnd": 640,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=640s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "The teacher strengthens the cast shadow on the table"
+      },
+      {
+        "time": 3.076,
+        "text": "Keep it attached to the apple where they meet"
+      },
+      {
+        "time": 5.527,
+        "text": "and let it soften as it moves away Take"
+      },
+      {
+        "time": 8.174,
+        "text": "your time I will wait while you make that"
+      },
+      {
+        "time": 10.123,
+        "text": "adjustment"
+      }
+    ]
+  },
+  {
+    "id": "video-5-9",
+    "title": "Return to the stem cavity",
+    "chapter": "Refine the surface",
+    "say": "Watch the last small changes around the stem. That dark dip and its light edge give the top of the apple its specific shape. Take your time; I will wait while you make that adjustment.",
+    "hint": "Return to the stem cavity",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-9.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 640,
+    "clipEnd": 720,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=720s&height=720",
+    "captions": [
+      {
+        "time": 0.061,
+        "text": "Watch the last small changes around the stem That"
+      },
+      {
+        "time": 3.027,
+        "text": "dark dip and its light edge give the top"
+      },
+      {
+        "time": 5.331,
+        "text": "of the apple its specific shape Take your time"
+      },
+      {
+        "time": 8.517,
+        "text": "I will wait while you make that adjustment"
+      }
+    ]
+  },
+  {
+    "id": "video-5-10",
+    "title": "Check the whole apple",
+    "chapter": "Refine the surface",
+    "say": "Step back and compare the light side, dark side, small stem dip and shadow as one drawing. Add only the marks that make the form clearer. Take your time; I will wait while you make that adjustment.",
+    "hint": "Check the whole apple",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-10.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 720,
+    "clipEnd": 800,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=800s&height=720",
+    "captions": [
+      {
+        "time": 0.086,
+        "text": "Step back and compare the light side dark side"
+      },
+      {
+        "time": 3.542,
+        "text": "small stem dip and shadow as one drawing Add"
+      },
+      {
+        "time": 7.01,
+        "text": "only the marks that make the form clearer Take"
+      },
+      {
+        "time": 9.522,
+        "text": "your time I will wait while you make that"
+      },
+      {
+        "time": 11.654,
+        "text": "adjustment"
+      }
+    ]
+  },
+  {
+    "id": "video-5-end",
+    "title": "Your finished apple",
+    "chapter": "Refine the surface",
+    "say": "Watch the last change in this part, then compare your apple with your teacher's. Adjust what you need. I will wait for you.",
+    "hint": "Look · Compare · Continue",
+    "kind": "draw",
+    "image": "reference-apple.jpg",
+    "audio": "audio/video-5-end.mp3",
+    "uid": "1206cc85d15f437c02a5846f84a97781",
+    "start": 800,
+    "clipEnd": 847.894,
+    "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1206cc85d15f437c02a5846f84a97781/thumbnails/thumbnail.jpg?time=847.39s&height=720",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Watch the last change in this part then compare"
+      },
+      {
+        "time": 2.696,
+        "text": "your apple with your teacher's Adjust what you need"
+      },
+      {
+        "time": 5.882,
+        "text": "I will wait for you"
+      }
+    ]
+  },
+  {
+    "id": "core-complete",
+    "title": "Your apple is complete",
+    "chapter": "Your progress",
+    "say": "You have used the sphere as a foundation, then followed the real apple's own shape, light, and texture. Your drawing is complete. Let Artchi celebrate this one with you.",
+    "hint": "The Apple · Core complete",
+    "kind": "milestone",
+    "image": "reference-apple.jpg",
+    "audio": "audio/core-complete.mp3",
+    "coreComplete": true,
+    "captions": [
+      {
+        "time": 0.049,
+        "text": "You have used the sphere as a foundation then"
+      },
+      {
+        "time": 2.5,
+        "text": "followed the real apple's own shape light and texture"
+      },
+      {
+        "time": 6.471,
+        "text": "Your drawing is complete Let Artchi celebrate this one"
+      },
+      {
+        "time": 9.804,
+        "text": "with you"
+      }
+    ]
+  },
+  {
+    "id": "submit",
+    "title": "Share your apple drawing",
+    "chapter": "Your work",
+    "say": "If you want feedback, choose a clear photo and tap the send button. Wait for the confirmation. Your lesson is complete even if you choose to return to the photo later.",
+    "hint": "Your drawing · Your choice",
+    "kind": "submit",
+    "image": "reference-apple.jpg",
+    "audio": "audio/submit.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "If you want feedback choose a clear photo and"
+      },
+      {
+        "time": 2.745,
+        "text": "tap the send button Wait for the confirmation Your"
+      },
+      {
+        "time": 5.956,
+        "text": "lesson is complete even if you choose to return"
+      },
+      {
+        "time": 8.603,
+        "text": "to the photo later"
+      }
+    ]
+  },
+  {
+    "id": "reflect",
+    "title": "Look again at an everyday apple",
+    "chapter": "Look again",
+    "say": "Next time you see an apple, turn it in your hand. Where does it resemble a sphere? Where does it become its own shape? That observation is a skill you can take into every still life.",
+    "hint": "The sphere was only the beginning",
+    "kind": "reflect",
+    "image": "reference-apple.jpg",
+    "audio": "audio/reflect.mp3",
+    "captions": [
+      {
+        "time": 0.074,
+        "text": "Next time you see an apple turn it in"
+      },
+      {
+        "time": 1.912,
+        "text": "your hand Where does it resemble a sphere Where"
+      },
+      {
+        "time": 4.976,
+        "text": "does it become its own shape That observation is"
+      },
+      {
+        "time": 8.052,
+        "text": "a skill you can take into every still life"
+      }
+    ]
+  },
+  {
+    "id": "complete",
+    "title": "You drew a real object",
+    "chapter": "Finish",
+    "say": "A real apple asks you to observe, revise, and choose. You did all three. Enjoy your reward, and carry that careful eye into the next object.",
+    "hint": "Apple master · Well done",
+    "kind": "milestone",
+    "image": "reference-apple.jpg",
+    "audio": "audio/complete.mp3",
+    "captions": [
+      {
+        "time": 0.098,
+        "text": "A real apple asks you to observe revise and"
+      },
+      {
+        "time": 3.125,
+        "text": "choose You did all three Enjoy your reward and"
+      },
+      {
+        "time": 7.255,
+        "text": "carry that careful eye into the next object"
+      }
+    ]
+  }
+]

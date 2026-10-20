@@ -102,7 +102,7 @@
       title: 'The Apple',
       subtitle: 'Sphere · real world',
       emoji: '🍎',
-      href: 'lessons/lesson-2-sphere-realworld/',
+      href: 'lessons/lesson-2-sphere-realworld/guided/',
       ready: true,
       level: 2
     },
