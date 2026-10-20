@@ -51,7 +51,11 @@
 
 /* Panels: ALP shape card, goal card, badges, profile form -- flat peach,
  * ink outline, no soft glow. */
-#student-shell .dashboard-panel,#student-shell .dashboard-shape-panel{background:var(--peach);border:2px solid var(--ink);box-shadow:none}
+#student-shell .dashboard-panel{background:var(--peach);border:2px solid var(--ink);box-shadow:none}
+/* Art Learning Profile radar panel (.dashboard-shape-panel) is
+ * deliberately left out of the rule above -- Faye asked to keep its
+ * colours (the mint-to-peach radial gradient, and the radar SVG's own
+ * inline dimension colours in student-dashboard.js) exactly as they are. */
 #student-shell .dashboard-badge-preview a{background:var(--paper);border:2px solid var(--ink)}
 #student-shell .dashboard-badge-preview a:hover{background:var(--lime);border-color:var(--ink)}
 #student-shell .dashboard-badge-symbol{background:var(--sky);color:var(--ink)}

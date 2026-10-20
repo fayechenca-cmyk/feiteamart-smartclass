@@ -1,0 +1,67 @@
+/* Faye's flat visual theme, extended to the course-map screens: the
+ * Foundation course map (inside #student-shell) and the Still Life
+ * landing page (lessons/still-life/index.html), which share
+ * core/sketch-map.css -- restyled once here, benefiting both. Loaded
+ * last (after sketch-map.css, and after the Still Life page's own two
+ * inline <style> blocks) so its rules win the cascade at equal
+ * specificity, without !important. Tokens live in core/fei-palette.css,
+ * loaded just before this file.
+ *
+ * Text colour rule, same as guided-theme.css and dashboard-theme.css,
+ * checked numerically: every token here except --ink is a light pastel,
+ * so only --ink clears AA against all eight of the others. Every rule
+ * below keeps text --ink; the named tokens are backgrounds/borders only.
+ * The one deliberate exception: .level-intro-play, a play-button control
+ * sitting over an arbitrary video thumbnail frame, keeps its translucent
+ * dark circle + white glyph -- the same reasoning as a video player's own
+ * pause button needing contrast against whatever frame is underneath,
+ * not a decorative colour choice.
+ *
+ * Deliberately NOT touched: every course/lesson thumbnail photo
+ * (.sketch-branch img, .node-icon img, course preview images) and the
+ * Art Learning Profile radar panel (out of scope for this screen).
+ * Layout and behaviour unchanged throughout; colour/borders only.
+ */
+
+/* Foundation map + Still Life landing shared hero/cards (core/sketch-map.css) */
+.sketch-hero{background:var(--lime);border:2px solid var(--ink)}
+.sketch-eyebrow{color:var(--ink)}
+.sketch-badge img{box-shadow:none;border:2px solid var(--ink)}
+.sketch-badge small{color:var(--ink)}
+.sketch-branch{background:var(--paper);border:2px solid var(--ink)}
+.sketch-branch:hover{border-color:var(--ink)}
+.sketch-branch small{color:var(--ink)}
+.sketch-branch progress{accent-color:var(--peri)}
+.sketch-action{background:var(--peri);color:var(--ink);border:2px solid var(--ink)}
+.sketch-current{background:var(--sky);border:2px solid var(--ink)}
+
+/* Foundation map's own path nodes */
+#foundation-map-nodes{border-left-color:var(--ink)}
+.foundation-step{background:var(--leaf);color:var(--ink)}
+#foundation-map-nodes .current{background:var(--sky);border-color:var(--ink)}
+#foundation-map-nodes .done .foundation-step{background:var(--leaf);color:var(--ink)}
+#foundation-map-nodes .upcoming{background:var(--peach)}
+#foundation-intro-dialog,.fs-level-intro-dialog{background:var(--peach);color:var(--ink);border:2px solid var(--ink);box-shadow:none}
+#foundation-intro-dialog::backdrop,.fs-level-intro-dialog::backdrop{background:rgba(38,37,46,.55);backdrop-filter:none}
+
+/* Still Life's own lesson-row package (shared with other sketch-package pages) */
+.sketch-package .path-node{background:var(--paper);border:2px solid var(--ink)}
+.sketch-package .path-node.current{background:var(--sky);border-color:var(--ink)}
+.sketch-package .node-kicker{color:var(--ink)}
+.sketch-package .node-tag{color:var(--ink)}
+.sketch-package .done .node-kicker{color:var(--ink)}
+#drawing-screen .node-icon,.sketch-package .node-icon{background:var(--leaf)}
+.node-icon .lesson-check{background:var(--leaf);color:var(--ink);border-color:var(--paper)}
+.path-group-divider{color:var(--ink);border-top-color:var(--ink)}
+
+/* Still Life landing page's own inline-style classes (lessons/still-life/index.html) */
+.sl-painting{background:var(--paper);border:2px solid var(--ink)}
+.sl-painting.sl-painting-done{background:var(--leaf);border-color:var(--ink)}
+.sl-painting-badge{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+.sl-painting-done .sl-painting-badge{background:var(--paper);color:var(--ink)}
+.sl-lesson{border-top-color:var(--ink)}
+.sl-lesson-icon{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+.sl-lesson.done .sl-lesson-icon{background:var(--leaf);color:var(--ink)}
+.sl-lesson.done .sl-lesson-part{color:var(--ink)}
+.sl-lesson.current .sl-lesson-arrow{color:var(--ink)}
+.sl-header-kicker{color:var(--ink)}
