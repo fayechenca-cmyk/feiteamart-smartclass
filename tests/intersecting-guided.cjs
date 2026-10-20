@@ -3,7 +3,7 @@ const dir='lessons/lesson-9-intersecting/guided/',flow=JSON.parse(fs.readFileSyn
 const source=fs.readFileSync(dir+'studio.js','utf8');
 function harness(){
  const elements={};let player,reward,saved,completed=[];
- function el(){return {hidden:false,disabled:false,ended:true,style:{},classList:{add(){}},listeners:{},addEventListener(n,f){this.listeners[n]=f},setAttribute(){},getAttribute(){return this.src},append(){},querySelector(){return el()},querySelectorAll(){return []},showModal(){},close(){},pause(){this.paused=true},play(){this.paused=false;return Promise.resolve()}}}
+ function el(){return {children:[],hidden:false,disabled:false,ended:true,style:{},classList:{add(){}},listeners:{},addEventListener(n,f){this.listeners[n]=f},setAttribute(){},getAttribute(){return this.src},append(child){this.children.push(child)},querySelector(){return el()},querySelectorAll(){return []},showModal(){},close(){},pause(){this.paused=true},play(){this.paused=false;return Promise.resolve()}}}
  const $=id=>elements[id]??=el();
  const context={GuidedPlatform:{allow:async()=>true,restore:async()=>({}),save(s){saved=s},complete(id){completed.push(id)},flush:async()=>{}},document:{getElementById:$,querySelector:()=>null,querySelectorAll:()=>[],createElement(type){const node=el();if(type==='video')player=node;return node;},addEventListener(){}},window:{GuidedSubmit:{mount(){}},addEventListener(){},GuidedReward:{complete(o){reward=o;return Promise.resolve(true)}}},localStorage:{getItem(){return null},setItem(){}},location:{search:''},URL,URLSearchParams,console,setTimeout:()=>1,clearTimeout(){},fetch:async()=>({ok:true,json:async()=>flow}),Stream(){player=el();return player}};
  vm.runInNewContext(source,context);
@@ -27,5 +27,10 @@ function finish(h,s){if(s.uid||s.src){h.player.listeners.loadedmetadata();h.play
  for(const [uid,duration] of Object.entries(durations)){const steps=flow.filter(s=>s.uid===uid);assert.equal(steps[0].start,0);steps.forEach((s,i)=>{assert(s.clipEnd>s.start);if(i)assert.equal(s.start,steps[i-1].clipEnd)});assert(Math.abs(steps.at(-1).clipEnd-duration)<.01);}
  assert(source.includes("GuidedPlatform.allow('intersecting')"));
  const construction=flow.filter(s=>s.uid===Object.keys(durations)[0]);for(const t of [60,180,300,420,480,540])assert(construction.some(s=>s.clipEnd===t),'missing teacher-requested checkpoint '+t);for(const s of flow.filter(s=>s.analysis))assert(fs.existsSync(path.resolve(dir,s.analysis)),s.analysis);
+ const nav=harness();await new Promise(setImmediate);nav.$('start').onclick();
+ nav.$('progress').children.slice(-flow.length)[7].onclick();assert.equal(nav.$('title').textContent,flow[7].title);assert.equal(nav.saved.completed.length,0,'jump must not create completion');
+ nav.player.listeners.loadedmetadata();assert.equal(nav.$('videoTap').hidden,false);nav.$('videoTap').onclick();assert.equal(nav.player.paused,true);nav.player.listeners.pause();assert.equal(nav.$('resume').hidden,false);nav.$('resume').onclick();assert.equal(nav.player.paused,false);
+ const oldPlayer=nav.player;oldPlayer.listeners.error();assert.equal(nav.$('resume').textContent,'Reload video');nav.$('resume').onclick();assert.notEqual(nav.player,oldPlayer,'retry must create a fresh player');nav.player.listeners.loadedmetadata();assert.equal(nav.player.paused,false);
+ nav.$('progress').children.slice(-flow.length)[2].onclick();assert.equal(nav.$('title').textContent,flow[2].title);assert.equal(nav.saved.completed.length,0);nav.player.currentTime=flow[2].clipEnd;nav.player.listeners.timeupdate();assert.equal(nav.$('videoTap').hidden,true,'tap surface cannot cover a pause diagram');
  console.log('PASS: Intersecting Geometry 37 stages, narrated opening, 11 grounded analysis diagrams, all six videos uncut, timed captions, Back/Skip, optional background bypass preserves reflection, and Gift Box continuation.');
 })().catch(e=>{console.error(e);process.exit(1)});
