@@ -108,3 +108,57 @@
 #student-shell .skill-gallery-description,#student-shell .skill-gallery .subtrack-meta{color:var(--fei-ink)}
 
 #student-shell a:focus-visible,#student-shell button:focus-visible{outline:3px solid var(--fei-ink);outline-offset:3px}
+
+/* ── Live Classes ──
+ * Not-yet-enrolled catalog card: flat paper, ink border, ink text
+ * throughout already (gold text/button swapped for the shared peri
+ * accent so it matches every other primary action on the platform). */
+#student-shell .live-class-enroll-card{background:var(--fei-paper);border:2px solid var(--fei-ink);box-shadow:none}
+#student-shell .live-class-enroll-kicker{color:var(--fei-ink)}
+#student-shell .live-class-enroll-btn{background:var(--fei-peri);color:var(--fei-ink);border:2px solid var(--fei-ink)}
+#student-shell .live-class-enroll-btn:hover{background:#a3acf0}
+#student-shell .live-class-enroll-btn:disabled{background:var(--fei-paper);color:var(--fei-ink);border-color:var(--fei-ink);opacity:.45}
+/* Enrolled "VIP" card: a solid flat ink fill (never a gradient) is one of
+ * the two places on this platform where white/paper text on a dark fill
+ * is correct, not a violation -- same reasoning as .signin-btn. Gold
+ * accents become leaf (still a clear accent against the dark fill, but
+ * from the shared palette instead of a one-off gold). */
+#student-shell .live-class-vip-section{background:var(--fei-ink);border:2px solid var(--fei-ink);color:var(--fei-paper)}
+#student-shell .live-class-vip-kicker,#student-shell .live-class-next-label{color:var(--fei-leaf)}
+#student-shell .live-class-next-card{background:rgba(251,248,228,.08);border:1px solid rgba(251,248,228,.25)}
+#student-shell .live-class-zoom-btn{background:var(--fei-leaf);color:var(--fei-ink);border:2px solid var(--fei-ink)}
+#student-shell .live-class-materials-btn{border:1px solid rgba(251,248,228,.4);color:var(--fei-paper)}
+#student-shell .live-class-submit-btn{border:1px solid var(--fei-leaf);color:var(--fei-leaf)}
+#student-shell .live-class-session-row-num,#student-shell .live-class-smart-ref{color:rgba(251,248,228,.75)}
+
+/* ── My Journey tabs: Studio, Feedback, Badges, Student Art Journey ──
+ * (Overview's ALP radar panel is out of scope, see above.) */
+#student-shell .studio-card{background:var(--fei-paper);border:2px solid var(--fei-ink);box-shadow:none}
+#student-shell .studio-cta{color:var(--fei-ink)}
+#student-shell .studio-stat-value{color:var(--fei-ink)}
+#student-shell .studio-tag{color:var(--fei-ink);background:var(--fei-lav)}
+#student-shell .studio-badge-progress-row{color:var(--fei-ink)}
+#student-shell .studio-badge-progress .track-bar,#student-shell .studio-grid .track-bar{background:var(--fei-paper);border:1px solid var(--fei-ink)}
+#student-shell .studio-badge-progress .track-fill,#student-shell .studio-grid .track-fill{background:var(--fei-peri)}
+#student-shell .badge-credit{color:var(--fei-ink)}
+/* Polaroid-style frames for real student artwork (Studio tab's Student
+ * Art Journey card) -- the photos themselves are untouched, only the
+ * mat's border/shadow flattens. */
+#student-shell .spotlight-frame,#student-shell .portfolio-frame{box-shadow:none;border:2px solid var(--fei-ink)}
+#student-shell .spotlight-caption,#student-shell .portfolio-title{color:var(--fei-ink)}
+#student-shell .studio-portfolio-btn{background:var(--fei-peri);color:var(--fei-ink);border:2px solid var(--fei-ink)}
+/* The Feedback tab's journey map + teacher-note card. */
+#student-shell #student-learning-map{background:var(--fei-lime);border:2px solid var(--fei-ink)}
+#student-shell .journey-heading small,#student-shell .journey-next small,#student-shell .journey-group-divider{color:var(--fei-ink)}
+#student-shell .journey-stop{background:var(--fei-paper);border:2px solid var(--fei-ink)}
+#student-shell .journey-stop span{background:var(--fei-leaf);color:var(--fei-ink)}
+#student-shell .journey-stop.current{border-color:var(--fei-ink);background:var(--fei-sky);box-shadow:none}
+#student-shell .journey-stop.current span{background:var(--fei-peri)}
+#student-shell .journey-stop.complete span{background:var(--fei-leaf);color:var(--fei-ink)}
+#student-shell .journey-next>div{background:var(--fei-paper)}
+#student-shell .journey-next a,#student-shell .journey-next button{color:var(--fei-ink)}
+#student-shell .feedback-notif-card{border:2px solid var(--fei-ink);background:var(--fei-paper)}
+#student-shell .feedback-notif-kicker{color:var(--fei-ink)}
+#student-shell .feedback-notif-comment{border-left:3px solid var(--fei-ink);background:var(--fei-peach)}
+#student-shell .badge-unlock-banner{background:var(--fei-peach);border:2px solid var(--fei-ink);box-shadow:none}
+#student-shell .badge-unlock-view-btn{background:var(--fei-ink);color:var(--fei-paper)}
