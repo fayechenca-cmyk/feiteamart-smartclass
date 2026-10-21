@@ -1,0 +1,120 @@
+[
+  {
+    "chapter": "Materials",
+    "title": "Your pencils",
+    "kind": "materials",
+    "focus": "pencils",
+    "hint": "HB, 2B and 6B (or any 3B-6B), plus a white eraser.",
+    "say": "Three pencils today: an H-B for your lightest greys, a two-B for the mid-tones, and a six-B for your darkest darks -- any pencil from three-B to six-B works there, so use whatever you have sharp. You'll also want a tissue for blending, and a white eraser -- or an eraser pencil, or a kneaded eraser pinched to a point -- for lifting highlights. Keep all three pencils sharp; we'll stop to sharpen more than once.",
+    "audio": "audio/s00-pencils.mp3",
+    "showEraser": true
+  },
+  {
+    "chapter": "Materials",
+    "title": "A tissue for blending",
+    "kind": "tissue",
+    "hint": "You'll reach for this later.",
+    "say": "A small tissue blends your shading smooth once the tone is built up. We'll get there in a few steps -- for now, just know it's coming.",
+    "audio": "audio/s01-tissue.mp3"
+  },
+  {
+    "chapter": "Materials",
+    "title": "Feel your paper",
+    "kind": "paper",
+    "hint": "A little tooth helps the pencil grip.",
+    "say": "Feel your own paper before you start. A little tooth helps the pencil grip -- that's what lets you build smooth, layered grey without the surface going shiny.",
+    "audio": "audio/s02-paper.mp3"
+  },
+  {
+    "chapter": "Structure",
+    "title": "A steady centre line, then measure",
+    "kind": "draw",
+    "uid": "ee4e226d6074e8f3aeb4c236994b1d01",
+    "start": 0,
+    "clipEnd": 58,
+    "frame": "frames/v1-58s.jpg",
+    "watchAudio": "audio/v1-01-watch.mp3",
+    "watchSay": "Before a single curve, the teacher marks the key heights straight down the centre line -- rim, neck, and base -- then transfers one measured width out to each side.",
+    "audio": "audio/v1-01-try.mp3",
+    "say": "Mark your own centre line, step off the key heights down it, then transfer the same width to both sides with a small tick. Take your time.",
+    "overlay": {
+      "guides": [
+        { "d": "M645 102 L645 623", "dash": true, "tone": "peri" },
+        { "d": "M602 102 L688 102", "dash": true, "tone": "peri" },
+        { "d": "M582 155 L690 155", "dash": true, "tone": "peri" },
+        { "d": "M582 225 L690 225", "dash": true, "tone": "peri" },
+        { "d": "M585 623 L693 623", "dash": true, "tone": "peri" },
+        { "d": "M504 314 L504 414", "dash": true, "tone": "peri" },
+        { "d": "M781 316 L781 412", "dash": true, "tone": "peri" }
+      ],
+      "arrow": { "d": "M760 363 Q645 375 530 363", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "A steady centre line, then measure",
+        "sub": "Every key height marked, then the same width on both sides."
+      }
+    },
+    "stepResult": "frames/v1-58s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Square the round: straight lines find the bottle",
+    "kind": "draw",
+    "uid": "ee4e226d6074e8f3aeb4c236994b1d01",
+    "start": 58,
+    "clipEnd": 108,
+    "frame": "frames/v1-108s.jpg",
+    "watchAudio": "audio/v1-02-watch.mp3",
+    "watchSay": "Notice there's no curve yet -- the rim, the neck, the shoulder and the body all start as short straight segments, tangent to where the round parts will be.",
+    "audio": "audio/v1-02-try.mp3",
+    "say": "Try the same approach on your own bottle: block in the rim, neck, shoulder and body with short straight lines first. Go at your own pace.",
+    "overlay": {
+      "guides": [
+        { "d": "M590 105 L700 105 L700 158 L590 158 Z", "dash": true, "tone": "peri" },
+        { "d": "M600 158 L600 230 M689 158 L689 230", "dash": true, "tone": "peri" },
+        { "d": "M600 230 L508 310 M689 230 L772 278", "dash": true, "tone": "peri" },
+        { "d": "M508 310 L520 600 M772 278 L752 600", "dash": true, "tone": "peri" }
+      ],
+      "arrow": { "d": "M420 260 Q460 280 500 305", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "Square the round: straight lines find the bottle",
+        "sub": "Short straight segments, not one single curve."
+      }
+    },
+    "stepResult": "frames/v1-108s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Base down, then step back and check",
+    "kind": "draw",
+    "uid": "ee4e226d6074e8f3aeb4c236994b1d01",
+    "start": 108,
+    "clipEnd": 147.244,
+    "frame": "frames/v1-end.jpg",
+    "watchAudio": "audio/v1-03-watch.mp3",
+    "watchSay": "Hands come off the page for a moment -- one last look at the whole bottle, checking that both sides still match the centre line before moving on.",
+    "audio": "audio/v1-03-try.mp3",
+    "say": "Hold your own drawing at arm's length and check both sides against your centre line. Tap Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 628, "cy": 618, "rx": 122, "ry": 20, "ellipse": true, "tone": "blush" },
+        { "d": "M590 105 L700 105 L700 158 L689 158 L689 230 L772 278 L742 637 L517 637 L508 310 L600 230 L600 158 L590 158 Z", "dash": true, "old": true, "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "STRUCTURE COMPLETE",
+        "title": "A steady shape, checked against itself",
+        "sub": "Ready to place it on the page."
+      }
+    },
+    "stepResult": "frames/v1-end.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Structure complete",
+    "kind": "milestone",
+    "hint": "Straight lines gave you a steady bottle — next, composition: where it sits on the page.",
+    "say": "Straight lines gave you a steady bottle shape. That control now carries into every curve ahead. Next, we bring in composition — where it sits on the page.",
+    "audio": "audio/s99-milestone.mp3"
+  }
+]
