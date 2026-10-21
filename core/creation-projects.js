@@ -1,13 +1,23 @@
-/* Presentation overrides; canonical titles and routes remain in the Studio. */
+/*
+ * Gallery imagery is intentionally stricter than the Studio: only a teacher's
+ * verified finished artwork may appear as a Make Something project cover.
+ * Process stills, video frames, historical references and in-progress work
+ * stay out of this map. Projects without a record render the honest fallback.
+ */
 window.FEICreationAssets = {
-  "covers": {
-    "carle-colorful-chameleon": "../assets/dashboard/chameleon.jpg",
-    "rousseau-jungle": "../assets/dashboard/rousseau.jpg",
-    "yokai-in-the-great-wave": "../assets/dashboard/yokai.jpg",
-    "dream-art-studio": "../assets/creation-intro/handcraft.jpg",
-    "color-bloom-collage": "../lessons/color-bloom-collage/assets/teacher-flower-collage.png",
-    "miro-draw-without-knowing": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ab48768d-112b-4b15-e726-7e6f83548300/public",
-    "my-magical-city": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/a38239e5-5338-4c84-c103-d0dae2c58c00/public"
+  "finalArtworkCovers": {
+    "carle-colorful-chameleon": {
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/cf313ccd-d1e3-4f62-dc9e-2150b3a22500/public",
+      "alt": "Mrs. Dawn's finished chameleon collage artwork"
+    },
+    "color-bloom-collage": {
+      "url": "../lessons/color-bloom-collage/assets/teacher-flower-collage.png",
+      "alt": "Teacher's finished watercolor flower collage"
+    },
+    "miro-draw-without-knowing": {
+      "url": "https://imagedelivery.net/IoNSXjEbekGjbxAZrhrYGQ/ab48768d-112b-4b15-e726-7e6f83548300/public",
+      "alt": "Mrs. Dawn's finished Miró-inspired watercolor artwork"
+    }
   },
   "materials": {
     "yokai-in-the-great-wave": [

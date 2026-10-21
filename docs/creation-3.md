@@ -23,9 +23,9 @@ Continuation reads existing profile completedSteps/currentStepIdx, opened course
 
 ## Artwork inventory
 
-Verified existing references used: local Chameleon, Rousseau paper jungle, Yōkai, Dream Studio teacher video frame, Color Bloom teacher collage; existing lesson CDN references for Miró and Magical City. CDN failures show a labelled fallback. Artwork-bearing projects sort first. Welcome uses existing teacher work and physical painted-paper texture photographs, with no generated art.
+Only verified teacher final artworks may appear in Make Something: Mrs. Dawn's finished Chameleon collage, the finished Color Bloom teacher collage, and Mrs. Dawn's finished Miró-inspired watercolor. CDN failures show a labelled fallback. Artwork-bearing projects sort first. Welcome uses existing teacher work and physical painted-paper texture photographs, with no generated art.
 
-Missing confirmed finished-artwork covers (explicit placeholders): Color Magic; Ink Animal Studio; Dancing Ballerina; Basquiat; Pop Art; Music into Shape; My Sweet Fridge; Make My First Illustration Book; Illustration Through Surrealism. Historical artist reference images and arbitrary video posters are not substituted for teacher results. Materials appear only where already recorded; other previews point to the original teacher guide. Remote reference images still require production availability verification.
+Missing confirmed finished-artwork covers (explicit placeholders): Color Magic; Ink Animal Studio; Dancing Ballerina; Basquiat; Pop Art; Music into Shape; My Sweet Fridge; Make My First Illustration Book; Illustration Through Surrealism; Dream Art Studio; Henri Rousseau; Yōkai in the Great Wave; My Magical City. Dream Studio's video frame, Magical City's `STAGE2` image, Yōkai's existing reference, historical artist images, and arbitrary video posters are intentionally not substituted for teacher final work. Materials appear only where already recorded; other previews point to the original teacher guide. Remote final-artwork references still require production availability verification.
 
 ## Analytics contract and boundaries
 
