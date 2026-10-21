@@ -23,3 +23,22 @@
 #clipTime{font-size:11px;min-width:58px;text-align:right}
 @media(max-width:700px){.stage-col{gap:5px}#clipControls{padding:5px 8px;gap:6px}}
 @media(max-height:500px){.stage-col{gap:4px}#clipControls{padding:4px 10px}}
+/* Clickable progress segments (Oct 2026) -- jump straight to any step,
+   forward or back, same no-lock-check behaviour the Journey map
+   already used. Ported here from the three lessons (gift box,
+   apple/sphere-realworld, intersecting) that already had this pattern
+   on their own, so every guided lesson gets it from one place instead
+   of each carrying its own copy. Each lesson's own studio.js still
+   needs its own `jumpToStep()` + button-based `progress()` (that JS
+   isn't shared across lessons, by this platform's existing design --
+   see core/guided-ux.js's own header comment) and `#stepPreview` div
+   in its footer; only the num layout/color rules live here now. */
+#stepPreview{height:20px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+#progress{overflow-x:auto;gap:3px;padding:3px 0 6px;margin-bottom:5px;scrollbar-width:thin;max-width:100%;min-width:0}
+#progress .step-jump{flex:1 0 22px;min-width:22px;height:27px;padding:0;border:1px solid var(--ink);border-radius:7px;background:var(--cream,#fffdf5);color:var(--ink);font-size:10px;line-height:25px}
+#progress .step-jump.done{background:var(--mint,#b8edd9)}
+#progress .step-jump.current{background:var(--peri,#a99adb);border-width:2px;font-weight:800}
+#progress .step-jump.skipped{border-style:dashed}
+#progress .step-jump:hover,#progress .step-jump:focus-visible{background:var(--lav,#d9cef3)}
+body{grid-template-columns:minmax(0,1fr)}
+header,main,footer{min-width:0}
