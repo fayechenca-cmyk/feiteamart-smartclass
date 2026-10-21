@@ -185,7 +185,7 @@ function enter(){
  // for the welcome screen only. Image only, no caption.
  $('reference').hidden=s.kind!=='draw';$('analysis').hidden=s.kind!=='draw';
  if(s.kind==='draw'){$('referenceImage').src=s.stepResult||s.frame;$('referenceImage').alt='Your teacher’s drawing after this step';}
- setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
+ setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();window.GuidedUX?.stepCounter(flow,index);
  if(s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   createPlayer(s);
