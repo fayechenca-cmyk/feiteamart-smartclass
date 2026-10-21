@@ -6,7 +6,7 @@
   const projects=Object.entries(stations).flatMap(([station,s])=>s.courses.filter(c=>c.available&&COURSE_ROUTES[c.title]).map(c=>({
     ...c, id:COURSE_LESSON_IDS[c.title], route:COURSE_ROUTES[c.title], station,
     category:station==='project'?'storytelling':station==='material'||c.title==='Dancing Ballerina'?'craft':'painting',
-    cover:assets.covers[COURSE_LESSON_IDS[c.title]], materials:assets.materials[COURSE_ROUTES[c.title].split('/').filter(Boolean).at(-1)]||[]
+    cover:assets.finalArtworkCovers[COURSE_LESSON_IDS[c.title]], materials:assets.materials[COURSE_ROUTES[c.title].split('/').filter(Boolean).at(-1)]||[]
   })));
   projects.sort((a,b)=>Number(!!b.cover)-Number(!!a.cover));
   window.FEICreationProjects=projects;
@@ -26,7 +26,7 @@
     if(p.currentStepIdx>0)ids.add(p.currentLesson);
     return projects.filter(x=>ids.has(x.id)&&!(p.completedLessons||[]).includes(x.id));
   }
-  function image(p){return `<div class="c3-art">${p.cover?`<img src="${esc(p.cover)}" alt="${esc(p.title)} — finished artwork reference" loading="lazy">`:''}<span class="c3-missing" ${p.cover?'hidden':''}>Finished artwork photo<br>coming soon</span></div>`}
+  function image(p){return `<div class="c3-art">${p.cover?`<img src="${esc(p.cover.url)}" alt="${esc(p.cover.alt)}" loading="lazy">`:''}<span class="c3-missing" ${p.cover?'hidden':''}>Teacher's finished artwork<br>coming soon</span></div>`}
   function button(p){return `<button class="c3-save" data-save="${p.id}" aria-pressed="${saved().includes(p.id)}" aria-label="Save ${esc(p.title)} for later">${saved().includes(p.id)?'Saved ✓':'Save ♡'}</button>`}
   function continuations(){const list=resumable();return list.length?`<section class="c3-continue"><h2>Continue Learning</h2>${list.map(p=>`<button data-start="${p.id}" data-resume>${esc(p.title)} →</button>`).join('')}</section>`:''}
   root.innerHTML=`<div class="c3-shell"><aside class="c3-sidebar"><a class="c3-brand" href="../">FEI · Art GPS</a><a href="../#dashboard/courses">← Student Dashboard</a><nav aria-label="Creation"><a href="#welcome">Creation</a><a href="#make">Make Something</a><a href="#inspire">Get Inspired</a></nav><p>Make room for<br>your imagination.</p></aside><main id="c3-main" tabindex="-1"></main></div><p id="c3-status" role="status"></p>`;

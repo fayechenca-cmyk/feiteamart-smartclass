@@ -19,6 +19,11 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
  const before=await page.evaluate(()=>sessionStorage.getItem('fei_user_profile'));
  await page.locator('[data-entry=make]').click();await page.locator('#c3-gallery').waitFor();assert.equal(await page.locator('.c3-card').count(),16);
  const projects=await page.evaluate(()=>FEICreationProjects);
+ const covers=projects.filter(p=>p.cover);
+ assert.deepEqual(covers.map(p=>p.id).sort(),['carle-colorful-chameleon','color-bloom-collage','miro-draw-without-knowing']);
+ assert(covers.every(p=>/finished/i.test(p.cover.alt)));
+ assert.equal(projects.filter(p=>!p.cover).length,13);
+ assert.equal(await page.locator('.c3-card img').count(),3);
  for(const p of projects){assert(p.id);const r=await context.request.get(new URL(p.route,base+'creation/').href);assert.equal(r.status(),200,p.title)}
  await page.locator('#c3-search').fill('chameleon');assert.equal(await page.locator('.c3-card').count(),1);
  await page.locator('.c3-card a').click();await page.locator('.c3-preview').waitFor();assert.match(await page.locator('.c3-preview').innerText(),/Painted Paper/);
