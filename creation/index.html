@@ -905,6 +905,7 @@
   }
 </style>
 <link rel="stylesheet" href="../core/creation-discovery.css">
+<link rel="stylesheet" href="../core/inspiration-studio.css">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="creation-discovery">
@@ -2355,6 +2356,7 @@
 
   function scheduleArtchiNextMove() {
     clearTimeout(wanderTimeoutId);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (hoveredStation) return;
 
     const willRest = Math.random() < 0.3;
@@ -2420,6 +2422,10 @@
 <script src="../core/creation-intro.js?v=1"></script>
 <script src="../core/creation-projects.js"></script>
 <script src="../core/creation-events.js"></script>
+<script src="../core/inspiration-photos.js"></script>
+<script src="../core/inspiration-content.js"></script>
+<script src="../core/inspiration-practice.js"></script>
+<script src="../core/inspiration-studio.js"></script>
 <script src="../core/creation-discovery.js"></script>
 </body>
 </html>
