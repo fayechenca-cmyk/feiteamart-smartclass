@@ -182,12 +182,13 @@ function next(){
  if($('next').disabled)return;
  mark();
  if(index===flow.length-1){
+  // Only Video 1 is built so far -- hand off to the classic lesson at
+  // Video 2, same staged approach the balloon studio used while it was
+  // mid-build (see its own git history). Swap this block for the real
+  // GuidedReward.complete() ending once Composition/Texture/Finish are
+  // all built, matching balloon's own eventual "ends for real" commit.
   stopVoice();
-  GuidedPlatform.complete(LESSON_ID);
-  window.GuidedReward.complete({
-   lessonId:LESSON_ID,title:'Glass Cup and Bottle',badgeId:'still_life',courseLabel:'Still Life and Texture',
-   progressGroups:STILL_LIFE_PROGRESS_GROUPS,nextLabel:'Back to Still Life →',muted,onMutedChange:setRewardMuted,
-  }).then(async go=>{await GuidedPlatform.flush();if(go)location.href=root+'lessons/still-life/';});
+  GuidedPlatform.flush().then(()=>{location.href='../?classic=1&from=guided-outline';});
   return;
  }
  index++;enter();

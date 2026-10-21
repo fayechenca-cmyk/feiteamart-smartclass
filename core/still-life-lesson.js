@@ -57,7 +57,7 @@
     // Glass Cup and Bottle: same consolidation as the balloon above —
     // rebuilt as one 4-step lesson (structure, composition, texture,
     // finish); still-life-2b-* id/page retired.
-    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle', href: 'lessons/still-life-2a-glass-structure/', ready: true },
+    { id: 'still-life-2a-glass-structure', title: 'Glass Cup and Bottle', href: 'lessons/still-life-2a-glass-structure/guided/', ready: true },
     { id: 'still-life-3a-pillow-structure', title: 'Pillow · Structure & Composition', href: 'lessons/still-life-3a-pillow-structure/', ready: false },
     { id: 'still-life-3b-pillow-texture', title: 'Pillow · Texture & Finish', href: 'lessons/still-life-3b-pillow-texture/', ready: false },
     // Dog replaces the Plush Toy placeholder in this lineup position
