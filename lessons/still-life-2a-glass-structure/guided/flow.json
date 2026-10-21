@@ -158,12 +158,16 @@
     "say": "Add a couple of short tangent lines at your own neck, the same way. A few straight segments find the curve quicker than guessing an arc.",
     "overlay": {
       "guides": [
-        { "d": "M605 150 L605 230", "dash": true, "tone": "peri" },
-        { "d": "M685 150 L685 230", "dash": true, "tone": "peri" },
-        { "d": "M605 230 L545 255 L500 290", "tone": "peri" },
-        { "d": "M685 230 L730 260 L750 290", "tone": "peri" }
+        { "d": "M589 150 L589 200", "dash": true, "tone": "peri" },
+        { "d": "M677 150 L677 205", "dash": true, "tone": "peri" },
+        { "d": "M589 200 L568 220", "tone": "peri" },
+        { "d": "M568 220 L514 250", "tone": "peri" },
+        { "d": "M514 250 L498 300", "tone": "peri" },
+        { "d": "M677 205 L701 220", "tone": "peri" },
+        { "d": "M701 220 L749 250", "tone": "peri" },
+        { "d": "M749 250 L765 300", "tone": "peri" }
       ],
-      "arrow": { "d": "M420 230 Q470 250 540 258", "tone": "peri" },
+      "arrow": { "d": "M400 270 Q450 275 500 255", "tone": "peri" },
       "card": {
         "kicker": "LOOK CLOSELY · 02",
         "title": "Three tangent lines round the neck",
