@@ -116,5 +116,192 @@
     "hint": "Straight lines gave you a steady bottle — next, composition: where it sits on the page.",
     "say": "Straight lines gave you a steady bottle shape. That control now carries into every curve ahead. Next, we bring in composition — where it sits on the page.",
     "audio": "audio/s99-milestone.mp3"
+  },
+  {
+    "chapter": "Composition",
+    "title": "Check the centre axis",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 0,
+    "clipEnd": 41,
+    "frame": "frames/v2-41s.jpg",
+    "watchAudio": "audio/v2-01-watch.mp3",
+    "watchSay": "A single horizontal line crosses the shoulder here, with a small tick at each end -- checking that both sides still match the centre line, the same distance out.",
+    "audio": "audio/v2-01-try.mp3",
+    "say": "Draw your own check-line across the widest point, with a tick on each side. Compare both distances from your centre line before moving on.",
+    "overlay": {
+      "guides": [
+        { "d": "M505 335 L755 335", "dash": true, "tone": "peri" },
+        { "d": "M505 325 L505 345", "tone": "peri" },
+        { "d": "M755 325 L755 345", "tone": "peri" }
+      ],
+      "arrow": { "d": "M900 400 Q820 370 760 340", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "Check the centre axis",
+        "sub": "The same distance out, on both sides."
+      }
+    },
+    "stepResult": "frames/v2-41s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "Three tangent lines round the neck",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 41,
+    "clipEnd": 72,
+    "frame": "frames/v2-72s.jpg",
+    "watchAudio": "audio/v2-02-watch.mp3",
+    "watchSay": "Like a cylinder, the neck curves inward in perspective -- never flat. Short tangent lines, not one arc: that's ‘square the round,’ and it's faster and more accurate than guessing a curve. One strategy among several, not the only way.",
+    "audio": "audio/v2-02-try.mp3",
+    "say": "Add a couple of short tangent lines at your own neck, the same way. A few straight segments find the curve quicker than guessing an arc.",
+    "overlay": {
+      "guides": [
+        { "d": "M605 150 L605 230", "dash": true, "tone": "peri" },
+        { "d": "M685 150 L685 230", "dash": true, "tone": "peri" },
+        { "d": "M605 230 L545 255 L500 290", "tone": "peri" },
+        { "d": "M685 230 L730 260 L750 290", "tone": "peri" }
+      ],
+      "arrow": { "d": "M420 230 Q470 250 540 258", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "Three tangent lines round the neck",
+        "sub": "Square the round — faster and more accurate than a guess."
+      }
+    },
+    "stepResult": "frames/v2-72s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "The rim becomes an ellipse",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 72,
+    "clipEnd": 145,
+    "frame": "frames/v2-145s.jpg",
+    "watchAudio": "audio/v2-03-watch.mp3",
+    "watchSay": "The rim's straight-sided box from before is now a full ellipse -- the first real curve in the whole drawing.",
+    "audio": "audio/v2-03-try.mp3",
+    "say": "Round your own rim into an ellipse now, the same way. Take it slowly -- this curve sets the tone for the ones still to come.",
+    "overlay": {
+      "guides": [
+        { "cx": 638, "cy": 112, "rx": 60, "ry": 27, "ellipse": true, "tone": "blush" }
+      ],
+      "arrow": { "d": "M850 150 Q740 130 700 115", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "The rim becomes an ellipse",
+        "sub": "The first real curve in the whole drawing."
+      }
+    },
+    "stepResult": "frames/v2-145s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "A quick correction, then keep going",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 145,
+    "clipEnd": 157,
+    "frame": "frames/v2-157s.jpg",
+    "watchAudio": "audio/v2-04-watch.mp3",
+    "watchSay": "Even the teacher corrects a line here. In glass, small details carry real weight: the rim's thickness, a lip that sticks out just slightly, a highlight that will run down the body. Noticing these trains your eye.",
+    "audio": "audio/v2-04-try.mp3",
+    "say": "Check your own rim for the same details -- its thickness, the small lip, where a highlight might run. Adjust anything that needs it, and take your time.",
+    "overlay": {
+      "guides": [
+        { "cx": 625, "cy": 80, "rx": 55, "ry": 25, "ellipse": true, "dash": true, "tone": "blush" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "A quick correction, then keep going",
+        "sub": "Rim thickness, the lip, a highlight still to come."
+      }
+    },
+    "stepResult": "frames/v2-157s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "Tangents become curves",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 157,
+    "clipEnd": 215,
+    "frame": "frames/v2-215s.jpg",
+    "watchAudio": "audio/v2-05-watch.mp3",
+    "watchSay": "The teacher stays right at the rim for a long stretch here -- the straight tangent lines from before slowly round into real curves as the shape gets found, not redrawn all at once.",
+    "audio": "audio/v2-05-try.mp3",
+    "say": "Stay with your own rim a little longer too. Let each straight segment soften into a curve, bit by bit.",
+    "overlay": {
+      "guides": [
+        { "cx": 610, "cy": 75, "rx": 45, "ry": 22, "ellipse": true, "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "Tangents become curves",
+        "sub": "Found slowly, not redrawn all at once."
+      }
+    },
+    "stepResult": "frames/v2-215s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "Base down, left and right",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 215,
+    "clipEnd": 273,
+    "frame": "frames/v2-273s.jpg",
+    "watchAudio": "audio/v2-06-watch.mp3",
+    "watchSay": "Same idea as the cylinder's base: dot the left and right edges first, before any curve. That's how the base's perspective -- and the glass's illusion -- gets found.",
+    "audio": "audio/v2-06-try.mp3",
+    "say": "Mark your own base's left and right edges with a small dot each, the same way. The curve comes next, once those two points are set.",
+    "overlay": {
+      "guides": [
+        { "d": "M545 595 L545 615", "tone": "peri" },
+        { "d": "M718 595 L718 615", "tone": "peri" }
+      ],
+      "arrow": { "d": "M880 500 Q800 550 730 595", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 06",
+        "title": "Base down, left and right",
+        "sub": "Dot the edges first — the curve comes next."
+      }
+    },
+    "stepResult": "frames/v2-273s.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "A steady base, a shadow to ground it",
+    "kind": "draw",
+    "uid": "996b341c737b48b241bfc930b389c1d1",
+    "start": 273,
+    "clipEnd": 310.038,
+    "frame": "frames/v2-end.jpg",
+    "watchAudio": "audio/v2-end-watch.mp3",
+    "watchSay": "The base becomes a full ellipse here too, and a soft cast shadow grounds the bottle on the page.",
+    "audio": "audio/v2-end-try.mp3",
+    "say": "Finish your own base as a full ellipse, then add a light shadow beneath it. Tap Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 630, "cy": 597, "rx": 110, "ry": 18, "ellipse": true, "tone": "blush" },
+        { "d": "M650 560 Q900 590 1150 620", "dash": true, "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "COMPOSITION COMPLETE",
+        "title": "A steady base, a shadow to ground it",
+        "sub": "Ready for texture and light."
+      }
+    },
+    "stepResult": "frames/v2-end.jpg"
+  },
+  {
+    "chapter": "Composition",
+    "title": "Composition complete",
+    "kind": "milestone",
+    "hint": "Every curve came from a straight line or a dotted point first — next, texture and light.",
+    "say": "Every curve on this bottle came from a straight line or a dotted point first -- the centre axis, the neck, the rim, the base. Next, we bring in texture and light.",
+    "audio": "audio/s98-video2-milestone.mp3"
   }
 ]
