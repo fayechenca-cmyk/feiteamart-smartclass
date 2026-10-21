@@ -113,7 +113,11 @@ async function renderStillLifeLanding() {
   const next = FOUNDATION_STILL_LIFE_PATH.find(l=>!completed.includes(l.id));
   const title = next?.ready ? next.title : 'More teacher studies are being prepared';
   document.getElementById('sketch-still-hero').innerHTML=SketchMap.hero('Still Life and Texture','Look closely. Build the form. Bring each surface to life.','realism_expert')+`<section class="sketch-current"><span class="sketch-eyebrow">${next?.ready?'Your next practice':'Next chapter in preparation'}</span><h2>${title}</h2><p>${done}/${FOUNDATION_STILL_LIFE_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?.ready&&hasAccess?`<a class="sketch-action" href="../../${next.href}">Continue practice →</a>`:''}</section>`;
-  document.getElementById('sl-paintings').innerHTML=SketchMap.lessonRows(FOUNDATION_STILL_LIFE_PATH,completed,'../../',hasAccess);
+  // Admin preview (Oct 2026): ONLY FAYE-00, not core/access.js's broader
+  // isAdmin flag (also true for DAWN-16) -- see core/sketch-map.js's own
+  // comment on SketchMap.lessonRows.
+  const isFayeAdmin = String((profile && profile.studentCode) || '').toUpperCase() === 'FAYE-00';
+  document.getElementById('sl-paintings').innerHTML=SketchMap.lessonRows(FOUNDATION_STILL_LIFE_PATH,completed,'../../',hasAccess,undefined,isFayeAdmin);
 }
 renderStillLifeLanding();
 </script>

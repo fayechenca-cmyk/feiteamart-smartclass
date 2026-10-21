@@ -3927,8 +3927,11 @@ Let's start drawing, and have fun.</p><span class="sketch-intro-transcript-note"
   function renderDrawingPath() {
     const completed = userProfile.completedLessons || [];
     const container = document.getElementById('path-nodes');
-    
-    container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed, '', true, (l) => (FOUNDATION_A_LEVELS.find(lv => lv.level === l.level) || {}).label || null);
+    // Admin preview (Oct 2026): ONLY FAYE-00, not core/access.js's
+    // broader isAdmin flag (also true for DAWN-16) -- see
+    // core/sketch-map.js's own comment on SketchMap.lessonRows.
+    const isFayeAdmin = String((userProfile && userProfile.studentCode) || '').toUpperCase() === 'FAYE-00';
+    container.innerHTML = SketchMap.lessonRows(FOUNDATION_A_PATH, completed, '', true, (l) => (FOUNDATION_A_LEVELS.find(lv => lv.level === l.level) || {}).label || null, isFayeAdmin);
     insertLevel2Intro(container);
     const next = pickNextLesson();
     document.getElementById('sketch-form-hero').innerHTML = SketchMap.hero('Form and Structure','Start with a shape. Build your skills. Make something yours.','basic_sketch') + `<section class="sketch-current"><span class="sketch-eyebrow">${next?'Your next practice':'All sessions complete'}</span><h2>${next?next.title:'Your foundation is taking shape'}</h2><p>${completed.filter(id=>FOUNDATION_A_PATH.some(l=>l.id===id)).length}/${FOUNDATION_A_PATH.length} sessions complete · Revisit any completed lesson.</p>${next?`<a class="sketch-action" href="${next.href}" onclick="handleResumeClick(event, '${next.id}', '${next.href}')">Continue practice →</a>`:''}</section>`;
