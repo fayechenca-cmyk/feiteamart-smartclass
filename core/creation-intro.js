@@ -60,5 +60,5 @@
   $('tour-cc').addEventListener('click',()=>{const on=dialog.classList.toggle('captions');$('tour-cc').setAttribute('aria-pressed',String(on))});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause()});window.addEventListener('pagehide',pause);
   let show=true;try{show=localStorage.getItem(storageKey)!=='watched'&&!sessionStorage.getItem(storageKey+'.dismissed')}catch{}
-  if(show)open();
+  if(show && !document.getElementById('creation-app'))open();
 })();

@@ -1,0 +1,82 @@
+/* Creation-only surfaces; palette and type follow the existing dashboard. */
+#creation-app{--ink:#17182f;--ink-soft:#605d6b;--paper:#fffdf9;--line:#e7e2ed;color:var(--ink);font:400 14px/1.65 'Open Sans',sans-serif;user-select:text}
+body.creation-discovery{height:auto;min-height:100%;overflow:auto;background:#fffdf9}
+body.creation-discovery>.stage,body.creation-discovery>.zoom-overlay,body.creation-discovery>.grid-view{display:none!important}
+#creation-app [hidden]{display:none!important}
+#creation-app a{color:inherit;text-decoration:none}
+#creation-app button,#creation-app input{font:inherit;color:inherit}
+#creation-app button{cursor:pointer;min-height:44px;padding:9px 17px;border:1px solid #d6d1dc;border-radius:24px;background:#fffdf9}
+#creation-app a:focus-visible,#creation-app button:focus-visible,#creation-app input:focus-visible,#creation-app summary:focus-visible{outline:3px solid #7560a7;outline-offset:4px}
+#creation-app h1,#creation-app h2,#creation-app strong{font-family:Montserrat,sans-serif}
+#creation-app h1{font-size:clamp(24px,3vw,36px);font-weight:600;line-height:1.3;letter-spacing:-1px;margin:14px 0}
+#creation-app h2{font-size:18px;font-weight:600;line-height:1.45}
+#creation-app p{color:var(--ink-soft);margin:10px 0 22px}
+#creation-app small{font-size:10px;letter-spacing:1.8px;font-weight:700;color:#7560a7}
+.c3-shell{display:grid;grid-template-columns:210px minmax(0,1fr);min-height:100vh}
+.c3-sidebar{background:#faf1cf;padding:35px 22px;border-right:1px solid #e8dfbd}
+.c3-brand{display:block;font:600 19px Montserrat,sans-serif;margin-bottom:36px}
+.c3-sidebar>a:not(.c3-brand){font-size:12px}
+.c3-sidebar nav{display:grid;gap:7px;margin:36px 0}
+.c3-sidebar nav a{padding:12px;border-radius:12px}
+.c3-sidebar nav a[aria-current=page]{background:#e5dff1;font-weight:700}
+.c3-sidebar p{font-size:12px}
+#c3-main{padding:46px clamp(20px,4vw,66px);min-width:0;max-width:1500px;width:100%;margin:auto}
+.c3-choices{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:36px 0 22px}
+.c3-choices>a{background:#e4edf5;border:1px solid #343441;border-radius:24px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.c3-choices>a:nth-child(2){background:#eae4f3}
+.c3-choices h2,.c3-choices p{margin:18px 24px!important}
+.c3-choices h2 span{float:right}
+.c3-choice-photo{display:flex;height:clamp(200px,26vw,350px);gap:5px;padding:16px 16px 0}
+.c3-choice-photo img{width:calc(50% - 3px);object-fit:cover;border-radius:10px}
+.c3-browse{display:inline-block;padding:12px 0;border-bottom:1px solid}
+.c3-tools{display:flex;gap:15px;align-items:end;margin:30px 0 18px;flex-wrap:wrap}
+.c3-tools label{display:grid;gap:7px;font-size:12px;flex:1;min-width:180px}
+.c3-tools input{padding:13px 18px;border:1px solid #d6d1dc;border-radius:12px;background:white;width:100%}
+.c3-filters{display:flex;gap:8px;flex-wrap:wrap}
+#creation-app button[aria-pressed=true]{background:#e5dff1;border-color:#7560a7}
+#c3-count{font-size:12px;margin:22px 0 14px!important}
+.c3-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.c3-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;transition:transform .2s,box-shadow .2s;overflow:hidden;padding-bottom:62px}
+.c3-card>a{display:block;height:100%}
+.c3-art{aspect-ratio:1.12;background:#eee9e1;display:grid;place-items:center;overflow:hidden}
+.c3-art img{width:100%;height:100%;object-fit:contain;transition:transform .2s}
+.c3-missing{text-align:center;color:#635e68;font-size:13px;padding:30px}
+.c3-card-copy{padding:18px}
+.c3-card-copy h2{font-size:16px!important}
+.c3-card-copy p{font-size:12px;margin:8px 0 14px!important}
+.c3-card-copy>span{font-size:12px;font-weight:700}
+.c3-card .c3-save{position:absolute;bottom:15px;left:16px}
+.c3-card:focus-within,.c3-choices>a:focus-visible{transform:translateY(-4px);box-shadow:0 14px 30px #28223920}
+@media(hover:hover){.c3-card:hover,.c3-choices>a:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 14px 30px #28223920}.c3-card:hover img{transform:scale(1.035)}}
+.c3-preview{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;margin:30px 0;align-items:center}
+.c3-preview .c3-art{border-radius:18px}
+.c3-preview h2{margin-top:25px}
+#creation-app .c3-primary{background:#17182f;color:white;margin:10px 8px 10px 0}
+.c3-continue{border-top:1px solid var(--line);padding-top:22px;margin-top:36px}
+.c3-continue button{margin:10px 8px 0 0}
+#c3-status:not(:empty){position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#17182f;color:white;padding:12px 20px;border-radius:14px;z-index:500;max-width:90vw}
+body.c3-inspire #creation-app{position:fixed;inset:0;z-index:15;pointer-events:none}
+body.c3-inspire .c3-shell{display:block}
+body.c3-inspire .c3-sidebar{display:flex;gap:18px;align-items:center;padding:10px 18px;pointer-events:auto;border-bottom:1px solid #d8cfb5}
+body.c3-inspire .c3-brand{margin:0;font-size:15px}
+body.c3-inspire .c3-sidebar nav{display:flex;gap:4px;margin:0}
+body.c3-inspire .c3-sidebar p{display:none}
+body.c3-inspire #c3-main{padding:12px;max-width:700px;margin:0 0 0 auto;pointer-events:none}
+.c3-studio-nav{pointer-events:auto;background:#fffdf9f5;border:1px solid #d6d1dc;padding:16px 20px;border-radius:18px;max-height:40vh;overflow:auto}
+#creation-app .c3-studio-nav h1{font-size:22px;margin:0}
+#creation-app .c3-studio-nav p{font-size:12px;margin:5px 0 10px}
+.c3-experiments,.c3-stations{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.c3-experiments a{background:#e4edf5;padding:12px;border-radius:12px}
+.c3-experiments span,.c3-stations span{display:block;font-size:11px;margin-top:5px}
+.c3-studio-nav summary{cursor:pointer;min-height:44px;padding:10px 0}
+body.c3-inspire .title-block{display:none}
+body.c3-inspire .zoom-overlay,body.c3-inspire .grid-view{z-index:100}
+@media(min-width:1600px){.c3-gallery{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1100px){.c3-shell{grid-template-columns:175px minmax(0,1fr)}.c3-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.c3-preview{grid-template-columns:1fr}}
+@media(max-width:700px){.c3-shell{display:block}.c3-sidebar{padding:16px}.c3-brand{margin:0 0 10px}.c3-sidebar nav{display:flex;flex-wrap:wrap;margin:12px 0 0;gap:0}.c3-sidebar p{display:none}#c3-main{padding:26px 18px}.c3-choices{grid-template-columns:1fr}.c3-choice-photo{height:240px}.c3-gallery{gap:14px}.c3-card-copy{padding:12px}.c3-card-copy h2{font-size:14px!important}body.c3-inspire .c3-sidebar{flex-wrap:wrap;gap:6px}body.c3-inspire .c3-sidebar nav a{padding:7px;font-size:12px}.c3-studio-nav{max-height:34vh}.c3-experiments{grid-template-columns:1fr}}
+@media(max-width:380px){.c3-gallery{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){body.c3-inspire *,#creation-app *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Original SVG course children opt into pointer events: hide their closed overlay too. */
+body.c3-inspire .zoom-overlay:not(.active),body.c3-inspire .grid-view:not(.active){visibility:hidden;pointer-events:none}
+body.c3-inspire .zoom-overlay.active,body.c3-inspire .grid-view.active{visibility:visible}
+body.c3-inspire .course-item:focus-visible,body.c3-inspire .hotspot:focus-visible{outline:3px solid #7560a7;outline-offset:5px}
