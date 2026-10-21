@@ -70,12 +70,12 @@
     "say": "Try the same approach on your own bottle: block in the rim, neck, shoulder and body with short straight lines first. Go at your own pace.",
     "overlay": {
       "guides": [
-        { "d": "M590 105 L700 105 L700 158 L590 158 Z", "dash": true, "tone": "peri" },
-        { "d": "M600 158 L600 230 M689 158 L689 230", "dash": true, "tone": "peri" },
-        { "d": "M600 230 L508 310 M689 230 L772 278", "dash": true, "tone": "peri" },
-        { "d": "M508 310 L520 600 M772 278 L752 600", "dash": true, "tone": "peri" }
+        { "d": "M588 102 L705 102 L705 152 L588 152 Z", "dash": true, "tone": "peri" },
+        { "d": "M600 152 L600 228 M702 152 L702 228", "dash": true, "tone": "peri" },
+        { "d": "M600 228 L540 255 L503 285 L480 350 L495 500 L525 600", "dash": true, "tone": "peri" },
+        { "d": "M702 228 L745 250 L771 275 L793 350 L775 500 L745 600", "dash": true, "tone": "peri" }
       ],
-      "arrow": { "d": "M420 260 Q460 280 500 305", "tone": "peri" },
+      "arrow": { "d": "M400 270 Q440 290 478 320", "tone": "peri" },
       "card": {
         "kicker": "LOOK CLOSELY · 02",
         "title": "Square the round: straight lines find the bottle",
