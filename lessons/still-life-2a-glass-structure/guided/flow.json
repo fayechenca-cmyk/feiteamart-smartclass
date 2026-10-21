@@ -34,7 +34,7 @@
     "clipEnd": 58,
     "frame": "frames/v1-58s.jpg",
     "watchAudio": "audio/v1-01-watch.mp3",
-    "watchSay": "Before a single curve, the teacher marks the key heights straight down the centre line -- rim, neck, and base -- then transfers one measured width out to each side.",
+    "watchSay": "Before a single curve, the key heights get marked straight down the centre line -- rim, neck, and base -- then one measured width transfers out to each side.",
     "audio": "audio/v1-01-try.mp3",
     "say": "Mark your own centre line, step off the key heights down it, then transfer the same width to both sides with a small tick. Take your time.",
     "overlay": {
@@ -210,7 +210,7 @@
     "clipEnd": 157,
     "frame": "frames/v2-157s.jpg",
     "watchAudio": "audio/v2-04-watch.mp3",
-    "watchSay": "Even the teacher corrects a line here. In glass, small details carry real weight: the rim's thickness, a lip that sticks out just slightly, a highlight that will run down the body. Noticing these trains your eye.",
+    "watchSay": "Even a careful hand corrects a line here. In glass, small details carry real weight: the rim's thickness, a lip that sticks out just slightly, a highlight that will run down the body. Noticing these trains your eye.",
     "audio": "audio/v2-04-try.mp3",
     "say": "Check your own rim for the same details -- its thickness, the small lip, where a highlight might run. Adjust anything that needs it, and take your time.",
     "overlay": {
@@ -234,7 +234,7 @@
     "clipEnd": 215,
     "frame": "frames/v2-215s.jpg",
     "watchAudio": "audio/v2-05-watch.mp3",
-    "watchSay": "The teacher stays right at the rim for a long stretch here -- the straight tangent lines from before slowly round into real curves as the shape gets found, not redrawn all at once.",
+    "watchSay": "This stretch stays right at the rim -- the straight tangent lines from before slowly round into real curves as the shape gets found, not redrawn all at once.",
     "audio": "audio/v2-05-try.mp3",
     "say": "Stay with your own rim a little longer too. Let each straight segment soften into a curve, bit by bit.",
     "overlay": {

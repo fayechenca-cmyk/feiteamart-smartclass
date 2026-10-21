@@ -42,7 +42,7 @@
     "clipEnd": 45,
     "frame": "frames/v1-45s.jpg",
     "watchAudio": "audio/v1-01-watch.mp3",
-    "watchSay": "Watch for the tilt \u2014 the teacher's first lines aren't straight up and down. They lean, just slightly, crossing near the middle.",
+    "watchSay": "Notice the tilt here \u2014 these first lines aren't straight up and down. They lean, just slightly, crossing near the middle.",
     "audio": "audio/v1-01-try.mp3",
     "say": "Now your turn \u2014 lightly cross two tilted guide lines near your centre mark. Take your time. I'll wait.",
     "overlay": {
@@ -102,9 +102,9 @@
     "clipEnd": 150,
     "frame": "frames/v1-150s.jpg",
     "watchAudio": "audio/v1-03-watch.mp3",
-    "watchSay": "Watch the teacher keep adjusting the edges \u2014 drawing, checking, and redrawing until the shape feels right. Even teachers correct their lines. That's how a good shape is found.",
+    "watchSay": "Notice the edges keep adjusting here \u2014 drawn, checked, and redrawn until the shape feels right. Even a careful hand corrects its lines. That's how a good shape is found.",
     "audio": "audio/v1-03-try.mp3",
-    "say": "Your turn. Soften each corner into a gentle curve. If a line looks wrong, just adjust it \u2014 the teacher does too. I'll wait.",
+    "say": "Your turn. Soften each corner into a gentle curve. If a line looks wrong, just adjust it \u2014 that's normal, even in a careful drawing. I'll wait.",
     "overlay": {
       "guides": [
         {
@@ -131,7 +131,7 @@
     "clipEnd": 178,
     "frame": "frames/v1-178s.jpg",
     "watchAudio": "audio/v1-04-watch.mp3",
-    "watchSay": "The teacher keeps refining this pass \u2014 a light touch, going back over a line that still needs adjusting before it's final.",
+    "watchSay": "This pass keeps refining \u2014 a light touch, going back over a line that still needs adjusting before it's final.",
     "audio": "audio/v1-04-try.mp3",
     "say": "Keep refining your own lines too, with a light touch. Nothing needs to be perfect yet. I'll wait.",
     "overlay": {
@@ -164,7 +164,7 @@
     "clipEnd": 204,
     "frame": "frames/v1-204s.jpg",
     "watchAudio": "audio/v1-04b-watch.mp3",
-    "watchSay": "Now the teacher erases the guide lines. They helped us find the tilt and the shape at the start. The outline is set now, so we don't need them anymore.",
+    "watchSay": "Now the guide lines get erased. They helped find the tilt and the shape at the start -- the outline is set now, so they're not needed anymore.",
     "audio": "audio/v1-04b-try.mp3",
     "say": "Gently erase your guide lines too, and keep your outline. Take your time.",
     "overlay": {
@@ -288,7 +288,7 @@
     "clipEnd": 45,
     "frame": "frames/v2-45s.jpg",
     "watchAudio": "audio/v2-01-watch.mp3",
-    "watchSay": "In the outline, straight lines helped us find the big shape fast. Now the teacher slows down and looks closely at the edge. Still life is all about detail \u2014 every bump and dent in the foil is worth seeing.",
+    "watchSay": "In the outline, straight lines helped find the big shape fast. Now it's time to slow down and look closely at the edge. Still life is all about detail \u2014 every bump and dent in the foil is worth seeing.",
     "audio": "audio/v2-01-try.mp3",
     "say": "Look at the reference. Find one edge that isn't straight. Take your time.",
     "overlay": {
@@ -322,7 +322,7 @@
     "clipEnd": 100,
     "frame": "frames/v2-100s.jpg",
     "watchAudio": "audio/v2-02-watch.mp3",
-    "watchSay": "The teacher follows the outer edge one point at a time. Where the foil bulges, the line bulges. Where it dents, the line dips in. Once it matches what's really there, it gets darker.",
+    "watchSay": "Here, the outer edge gets followed one point at a time. Where the foil bulges, the line bulges. Where it dents, the line dips in. Once it matches what's really there, it gets darker.",
     "audio": "audio/v2-02-try.mp3",
     "say": "Pick one point. Follow its edge slowly \u2014 look, then draw the bumps you see. Darken it only once you're sure.",
     "overlay": {
@@ -387,7 +387,7 @@
     "clipEnd": 205,
     "frame": "frames/v2-205s.jpg",
     "watchAudio": "audio/v2-04-watch.mp3",
-    "watchSay": "Here the teacher lightens a line that didn't match, and looks again. Observing means checking and correcting.",
+    "watchSay": "Here, a line that didn't match gets lightened, then checked again. Observing means checking and correcting.",
     "audio": "audio/v2-04-try.mp3",
     "say": "If an edge doesn't match what you see, lighten it and look again. There's no rush.",
     "overlay": {
@@ -453,7 +453,7 @@
     "clipEnd": 327,
     "frame": "frames/v2-327s.jpg",
     "watchAudio": "audio/v2-06-watch.mp3",
-    "watchSay": "The teacher stops and looks \u2014 hands off the page, comparing the drawing against the real foil edge. Checking is part of observing, not just the drawing itself.",
+    "watchSay": "Hands come off the page for a moment \u2014 this is a comparison against the real foil edge. Checking is part of observing, not just the drawing itself.",
     "audio": "audio/v2-06-try.mp3",
     "say": "Hold your drawing at arm's length and compare it with the reference. Are any edges still too smooth or too straight? Foil edges wave.",
     "overlay": {
@@ -480,7 +480,7 @@
     "clipEnd": 381.67,
     "frame": "frames/v2-end.jpg",
     "watchAudio": "audio/v2-end-watch.mp3",
-    "watchSay": "A few more edges checked and confirmed, and the whole outline now matches what the teacher really sees \u2014 ready for tone.",
+    "watchSay": "A few more edges checked and confirmed, and the whole outline now matches what's really there \u2014 ready for tone.",
     "audio": "audio/v2-end-try.mp3",
     "say": "Take one more look at your whole star \u2014 every edge checked against what you see. Tap Continue when you're ready.",
     "overlay": {
@@ -579,7 +579,7 @@
     "clipEnd": 225,
     "frame": "frames/v3-225s.jpg",
     "watchAudio": "audio/v3-03-watch.mp3",
-    "watchSay": "Notice the tone builds in thin layers, not one heavy pass \u2014 the teacher goes over the same area more than once, always following the same curve.",
+    "watchSay": "Notice the tone builds in thin layers, not one heavy pass \u2014 the same area gets gone over more than once, always following the same curve.",
     "audio": "audio/v3-03-try.mp3",
     "say": "Build your own tone the same way: light layers, more than one pass, rather than pressing hard once. Take it slowly.",
     "overlay": {
@@ -684,7 +684,7 @@
     "clipEnd": 450,
     "frame": "frames/v3-450s.jpg",
     "watchAudio": "audio/v3-06-watch.mp3",
-    "watchSay": "The teacher doesn't finish one point before starting the next \u2014 tone builds across the whole star together.",
+    "watchSay": "No single point gets finished before the next one starts \u2014 tone builds across the whole star together.",
     "audio": "audio/v3-06-try.mp3",
     "say": "Don't chase one perfect section \u2014 add a little tone to several areas, then come back. Take your time.",
     "overlay": {
@@ -847,7 +847,7 @@
     "clipEnd": 14,
     "frame": "frames/v4-14s.jpg",
     "watchAudio": "audio/v4-01-watch.mp3",
-    "watchSay": "The teacher folds the tissue to a clean corner, and blends along the form \u2014 never in circles \u2014 with a light touch.",
+    "watchSay": "The tissue gets folded to a clean corner, then blended along the form \u2014 never in circles \u2014 with a light touch.",
     "audio": "audio/v4-01-try.mp3",
     "say": "Fold your tissue to a clean corner and blend one area along the form. Light pressure. Take your time.",
     "overlay": {
@@ -1002,7 +1002,7 @@
     "clipEnd": 202,
     "frame": "frames/v5-202s.jpg",
     "watchAudio": "audio/v5-03-watch.mp3",
-    "watchSay": "Watch the teacher pick up a white block eraser. Pressed corner-first right beside the fold just drawn, it lifts a thin, bright highlight -- dark fold, bright edge, side by side. Draw, then lift, and watch the fold get squeezed out by the light.",
+    "watchSay": "Here, a white block eraser comes in. Pressed corner-first right beside the fold just drawn, it lifts a thin, bright highlight -- dark fold, bright edge, side by side. Draw, then lift, and watch the fold get squeezed out by the light.",
     "audio": "audio/v5-03-try.mp3",
     "say": "Use a sharp edge -- the corner of a white eraser, an eraser pencil, or a kneaded eraser pinched to a point -- to lift a thin highlight right beside the fold.",
     "overlay": {
@@ -1131,7 +1131,7 @@
     "clipEnd": 490,
     "frame": "frames/v5-490s.jpg",
     "watchAudio": "audio/v5-07-watch.mp3",
-    "watchSay": "Pencil freshly sharpened, the teacher moves to the bottom point, right where it meets the stick, and starts the same dark-fold pass there.",
+    "watchSay": "Pencil freshly sharpened, attention moves to the bottom point, right where it meets the stick, for the same dark-fold pass there.",
     "audio": "audio/v5-07-try.mp3",
     "say": "Move to your own bottom point and begin the same pass -- dark in the fold, light protected beside it.",
     "overlay": {
@@ -1332,7 +1332,7 @@
   },
   {
     "chapter": "Final Compare",
-    "title": "Compare with the teacher's finished drawing",
+    "title": "Compare with the finished reference",
     "kind": "draw",
     "uid": "6c3dd3cd1d35439b765cd903c0c3b0d2",
     "start": 990,
@@ -1341,7 +1341,7 @@
     "watchAudio": "audio/v5-14-watch.mp3",
     "watchSay": "Hands fully clear now -- here's the finished drawing: folds dark, highlights crisp, foil complete.",
     "audio": "audio/v5-14-try.mp3",
-    "say": "Put your drawing beside the teacher's finished one. Where does yours shine? Pick one thing you're proud of.",
+    "say": "Put your drawing beside the finished reference. Where does yours shine? Pick one thing you're proud of.",
     "stepResult": "frames/v5-end-ref.jpg"
   },
   {
