@@ -83,7 +83,69 @@
     "start": 0,
     "clipEnd": 240,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/e6d268eb444dc4a8e659ea607609c0e3/thumbnails/thumbnail.jpg?time=239s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "outer-marks",
+        "time": 28,
+        "title": "Set the four outer marks",
+        "say": "First, the teacher lightly marks the left, right, top, and bottom of the whole gift box. These four points give our rectangular prism a reliable size before we connect any edges.",
+        "hint": "Four marks set the whole box.",
+        "tip": "Mark the whole box’s left, right, top and bottom before joining any edges.",
+        "audio": "audio/moment-outer-marks.mp3",
+        "focus": "outer-marks"
+      },
+      {
+        "id": "lid-marks",
+        "time": 54,
+        "title": "Mark the lid separately",
+        "say": "Now watch the new marks on the right. These locate the upper and lower corners of the lid, not the whole box. The lid will need its own thickness above the body.",
+        "hint": "Lid marks are different from box marks.",
+        "tip": "These right-side marks locate the lid’s corners, separately from the whole box.",
+        "audio": "audio/moment-lid-marks.mp3",
+        "focus": "lid-marks"
+      },
+      {
+        "id": "base-v",
+        "time": 111,
+        "title": "Find the broad V below",
+        "say": "See that broad V? Its two guides meet at the lower front corner. It helps the teacher find the angle of the bottom edges and establish the whole box framework quickly.",
+        "hint": "The V anchors the lower corner.",
+        "tip": "Two light guides form a broad V at the bottom front corner.",
+        "audio": "audio/moment-base-v.mp3",
+        "focus": "base-v"
+      },
+      {
+        "id": "top-angle",
+        "time": 116,
+        "title": "Measure the top angle",
+        "say": "The teacher holds a pencil against the top edge to compare its direction. Start with nearly parallel edges; then let distant edges come in only a little. A dramatic tilt can make the box feel wrong.",
+        "hint": "Use your pencil to check perspective.",
+        "tip": "Hold your pencil along the top edge. Begin nearly parallel, then narrow gently into the distance.",
+        "audio": "audio/moment-top-angle.mp3",
+        "focus": "top-angle"
+      },
+      {
+        "id": "uprights",
+        "time": 170,
+        "title": "Check the upright edges",
+        "say": "Look at the upright lines. The middle one stays almost vertical on the page. In this view from above, the outer two can lean inward just a little. Begin close to parallel and refine slowly.",
+        "hint": "Middle straight; outer edges gently inward.",
+        "tip": "Keep the middle upright vertical. Let the outer uprights lean in just a little.",
+        "audio": "audio/moment-uprights.mp3",
+        "focus": "uprights"
+      },
+      {
+        "id": "measure-again",
+        "time": 204,
+        "title": "Check before darkening",
+        "say": "The teacher measures again instead of guessing. Hold your pencil along the top edge, then compare the lower edges. Your pencil is your best measuring tool for catching perspective mistakes.",
+        "hint": "Measure, compare, correct.",
+        "tip": "Compare top and bottom angles with your pencil before darkening the lines.",
+        "audio": "audio/moment-measure-again.mp3",
+        "focus": "measure-again"
+      }
+    ]
   },
   {
     "id": "box-1-2",
@@ -98,7 +160,69 @@
     "start": 240,
     "clipEnd": 500,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/e6d268eb444dc4a8e659ea607609c0e3/thumbnails/thumbnail.jpg?time=499s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "lid-thickness",
+        "time": 50,
+        "title": "Let the lid sit over the box",
+        "say": "The lid must sit on top of the box. Notice the narrow line below the top edge: it makes a band of thickness. The body begins behind that band, rather than at the same edge.",
+        "hint": "A narrow band gives the lid thickness.",
+        "tip": "Draw a narrow band under the lid edge; the box body begins behind it.",
+        "audio": "audio/moment-lid-thickness.mp3",
+        "focus": "lid-thickness"
+      },
+      {
+        "id": "ribbon-perspective",
+        "time": 133,
+        "title": "Let ribbon lines follow the box",
+        "say": "The ribbon is attached to the box, so its lines follow the nearby edges. Slanted lines echo slanted edges; upright lines echo uprights. This keeps the ribbon in the same perspective.",
+        "hint": "Ribbon lines follow their neighboring edges.",
+        "tip": "Slanted ribbon lines follow slanted box edges; upright lines follow uprights.",
+        "audio": "audio/moment-ribbon-perspective.mp3",
+        "focus": "ribbon-perspective"
+      },
+      {
+        "id": "ribbon-wrap",
+        "time": 167,
+        "title": "Wrap the ribbon around the body",
+        "say": "Now the band travels down the body. The lid projects slightly forward, while the body sits a little behind it. Shift the ribbon line with that change so it really wraps around the form.",
+        "hint": "Lid forward; body slightly behind.",
+        "tip": "Shift the ribbon where it crosses from the forward lid to the recessed body.",
+        "audio": "audio/moment-ribbon-wrap.mp3",
+        "focus": "ribbon-wrap"
+      },
+      {
+        "id": "star-over-guides",
+        "time": 190,
+        "title": "Sketch over the guide lines",
+        "say": "The teacher does not erase the construction lines before placing the star and bow. Their exact size is still being found. Draw lightly over the guides first; erase the hidden lines once the decoration feels right.",
+        "hint": "Draw first; erase hidden guides later.",
+        "tip": "Keep the box guides while you place the bow and star. Erase hidden lines afterward.",
+        "audio": "audio/moment-star-over-guides.mp3",
+        "focus": "star-over-guides"
+      },
+      {
+        "id": "pentagon-star",
+        "time": 215,
+        "title": "Find a pentagon, then the star",
+        "say": "Instead of drawing five perfect points at once, start with a simple five-sided shape. Cut inward between its corners to find the star. That is easier to place and adjust.",
+        "hint": "Pentagon first, star second.",
+        "tip": "Begin with a five-sided shape, then cut inward to find the star points.",
+        "audio": "audio/moment-pentagon-star.mp3",
+        "focus": "pentagon-star"
+      },
+      {
+        "id": "soft-star",
+        "time": 244,
+        "title": "Soften the little star",
+        "say": "The sharp construction points are becoming gentle curves. A few rounded edges bring this small decoration to life without losing the star shape underneath.",
+        "hint": "Turn sharp guides into soft curves.",
+        "tip": "Round the construction corners so the little star feels soft and alive.",
+        "audio": "audio/moment-soft-star.mp3",
+        "focus": "soft-star"
+      }
+    ]
   },
   {
     "id": "box-1-3",
