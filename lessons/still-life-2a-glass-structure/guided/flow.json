@@ -5,7 +5,7 @@
     "kind": "materials",
     "focus": "pencils",
     "hint": "HB, 2B and 6B (or any 3B-6B), plus a white eraser.",
-    "say": "Three pencils today: an H-B for your lightest greys, a two-B for the mid-tones, and a six-B for your darkest darks -- any pencil from three-B to six-B works there, so use whatever you have sharp. You'll also want a tissue for blending, and a white eraser -- or an eraser pencil, or a kneaded eraser pinched to a point -- for lifting highlights. Keep all three pencils sharp; we'll stop to sharpen more than once.",
+    "say": "Three pencils today: an H-B for your lightest greys, a two-B for the mid-tones, and a six-B for your darkest darks -- any pencil from three-B to six-B works there. Any pencil works; sharpen it only when you need a fine detail. You'll also want a tissue for blending, and a white eraser -- or an eraser pencil, or a kneaded eraser pinched to a point -- for lifting highlights.",
     "audio": "audio/s00-pencils.mp3",
     "showEraser": true
   },
