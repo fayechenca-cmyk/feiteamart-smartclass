@@ -19,7 +19,7 @@ Continuation reads existing profile completedSteps/currentStepIdx, opened course
 - Character / Sketch Board: Ballerina, Basquiat, Pop Art, Yōkai preserved alongside original placeholders.
 - Material / Workbench: Kandinsky, Miró, Dream Studio, Chameleon, Rousseau, Sweet Fridge, Bloom preserved; Trash Reborn and Touch Memory remain placeholders.
 - Books & Stories / Bookshelf: Illustration Book and Surrealism preserved; future story projects remain labelled.
-- Get Inspired offers explicit links to the existing color-mixing experiment and Miró exploration, plus named buttons for all five work areas. This first release reuses original activities; it does not claim new Observation / Light labs exist.
+- Get Inspired now adds six workstations, photographic Quick Sketch, visual memory practice, verified teacher videos and line experiments. Original work areas remain accessible. See [Inspiration Studio implementation](inspiration-studio.md) for the renovation, sources and validation. Light & Mood and Art Thinking activities remain clearly marked drafts.
 
 ## Artwork inventory
 

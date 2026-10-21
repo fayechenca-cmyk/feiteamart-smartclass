@@ -1,0 +1,113 @@
+/* Scoped renovation. All original room artwork remains under #stage. */
+body.c3-inspire{overflow:auto;height:auto;min-height:100%;background:#fffdf9}
+body.c3-inspire #creation-app{position:relative;inset:auto;pointer-events:auto;z-index:auto}
+body.c3-inspire .c3-shell{display:block;min-height:100vh}
+body.c3-inspire .c3-sidebar{position:relative;z-index:20;background:#faf1cf;flex-wrap:wrap}
+body.c3-inspire #c3-main{max-width:1500px;padding:28px clamp(16px,3vw,46px) 36px;margin:0 auto;pointer-events:auto}
+.insp-heading{display:flex;justify-content:space-between;gap:22px;align-items:center;flex-wrap:wrap}
+#creation-app .insp-heading h1{font-size:28px;margin:8px 0}
+#creation-app .insp-heading p{margin:0;font-size:17px}
+.insp-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.insp-actions>a{font-size:12px;padding:12px;border-radius:12px}
+#creation-app .insp-quick{background:#e4def0;border:1.5px solid #373541;box-shadow:3px 3px 0 #373541;font-weight:700}
+.insp-room{position:relative;aspect-ratio:1800/1300;isolation:isolate;border:2px solid #4c463e;border-radius:28px;overflow:hidden;background:#f0e8d9;margin-top:24px;box-shadow:0 10px 0 #e9e1d5,0 24px 38px #37354115}
+.insp-room::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,#fff6ce44,transparent 52%);z-index:2}
+.insp-room #stage{position:absolute;inset:0;background:#eee7d9;overflow:hidden;pointer-events:none;z-index:0;--bg:#f5eddb;--ink:#39343b}
+.insp-room #stage::before{opacity:.12}
+.insp-room .header,.insp-room .title-block,.insp-room .drag-hint,.insp-room .minimap,.insp-room .hotspot{display:none!important}
+.insp-room #roomWrap,.insp-room #roomWrap.fit-mode{position:absolute;left:0;top:0;width:1800px;height:1300px;transform:scale(var(--insp-scale, .65))!important;transform-origin:top left}
+.insp-room #room{position:relative;left:0;top:0;margin:0;width:1800px;height:1300px;transform:none!important}
+.insp-room #room>svg{width:1800px;height:1300px}
+.insp-room .station-art{transition:filter .18s ease}
+.insp-room .insp-highlight{filter:drop-shadow(0 0 13px #fff3b8) brightness(1.12)}
+.insp-room-caption{position:absolute;top:18px;left:24px;font:600 10px Montserrat,sans-serif;letter-spacing:2px;color:#655e51;z-index:3}
+.insp-workstations{position:absolute;inset:0;z-index:4}
+#creation-app .insp-seat{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-10%);width:clamp(155px,15vw,220px);text-align:center;color:#34313a;outline-offset:6px}
+.insp-seat-label{display:grid;gap:3px;border:1.5px solid #48434a;border-radius:14px;padding:11px 10px;background:var(--seat-color);box-shadow:3px 5px 0 #493b3626;transition:box-shadow .18s,translate .18s}
+#creation-app .insp-seat small{color:#635966;font-size:9px;letter-spacing:1px}
+#creation-app .insp-seat strong{font-size:14px;line-height:1.35}
+.insp-seat-label>span{font-size:11px;line-height:1.5}
+.insp-seat b{font-size:10px;margin-top:3px}
+.insp-seat>.insp-mini{display:none}
+.insp-seat:hover .insp-seat-label,.insp-seat:focus-visible .insp-seat-label{translate:0 -3px;box-shadow:4px 8px 0 #493b3633,0 0 0 5px #fff5c980}
+.insp-mini{height:130px;width:160px;flex-shrink:0}
+.insp-artchi-note{display:flex;align-items:center;gap:12px;padding:12px 16px;margin:22px 0 0;max-width:760px;background:#f1edf7;border-radius:18px;border:1px solid #cdc4dc;font-size:12px}
+.insp-artchi-note img{width:48px;height:65px}
+#creation-app .insp-artchi-note p{margin:2px 0 5px}
+.insp-artchi-note>button{margin-left:auto;align-self:start}
+.insp-artchi-note a{font-weight:700;text-decoration:underline!important}
+#creation-app #insp-resume p{margin:16px 0 0;font-size:12px}
+#insp-resume a{font-weight:700;text-decoration:underline!important}
+.insp-footer{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+#creation-app .insp-footer>p{margin:0;flex:1;min-width:220px;font-size:12px}
+.insp-legacy{flex-basis:100%;margin-top:10px;border-top:1px solid #ddd5ca;padding-top:14px}
+.insp-legacy summary{cursor:pointer;min-height:44px;padding:10px 0;font-size:13px}
+.insp-legacy .c3-stations{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+#insp-status:not(:empty){background:#f4eccf;border-radius:12px;padding:12px}
+#creation-app #insp-dialog{position:fixed;inset:0;margin:auto;width:min(960px,calc(100vw - 32px));max-height:calc(100dvh - 40px);height:auto;overflow:auto;border:2px solid #48434a;border-radius:24px;padding:26px;background:#fffdf8;color:#34313a;box-shadow:0 25px 90px #1d19253d;font:14px/1.65 'Open Sans',sans-serif;user-select:text}
+#insp-dialog::backdrop{background:#29233285;backdrop-filter:blur(3px)}
+.insp-panel-header{display:flex;justify-content:space-between;align-items:start;gap:20px;border-bottom:1px solid #e2d9cf;padding-bottom:16px;margin-bottom:16px}
+#creation-app .insp-panel-header h2{font-size:23px;margin:0;max-width:75%}
+#creation-app .insp-panel-header button{white-space:nowrap}
+#creation-app .insp-purpose{font-size:17px;color:#565061;margin:0 0 12px}
+.insp-station-intro{display:flex;align-items:center;gap:24px;background:#f4efe7;border-radius:16px;padding:12px 18px;margin-bottom:18px}
+.insp-station-intro span{font-size:12px;color:#70627e}
+.insp-activity-list{display:grid;gap:14px}
+.insp-activity{display:flex;gap:18px;border:1px solid #ddd5ca;border-radius:16px;padding:16px;background:#fff}
+.insp-activity>img,.insp-activity>.insp-mini{width:130px;height:110px;object-fit:contain;border-radius:10px;background:#f4f0e8}
+.insp-activity h3{font:600 16px Montserrat,sans-serif;margin:0}
+#creation-app .insp-activity p{font-size:12px;margin:5px 0 10px}
+#creation-app .insp-activity a{display:inline-block;border-bottom:2px solid #aaa1c8;font-weight:700;min-height:44px;padding-top:8px}
+.insp-coming{font-size:11px;color:#706a73}
+.insp-draft{background:#f5f2ed}
+.insp-practice-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(220px,1fr);gap:24px}
+.insp-reference{background:#f0ebe2;border:1px solid #ddd5ca;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:360px;padding:14px;margin:0;overflow:hidden}
+.insp-reference img{width:100%;height:350px;object-fit:contain;border-radius:10px}
+.insp-reference figcaption{font-size:11px;padding-top:10px;color:#6b635b}
+#insp-photo-note{text-align:center;max-width:270px;font-size:16px}
+.insp-practice-controls{display:flex;flex-direction:column;gap:10px}
+.inspiration label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600}
+.inspiration select,.inspiration textarea,.inspiration input[type=file]{font:inherit;color:inherit;border:1px solid #c9bfce;border-radius:10px;padding:10px;background:white;width:100%;max-width:100%;min-height:44px}
+.inspiration input:focus-visible,.inspiration select:focus-visible,.inspiration textarea:focus-visible{outline:3px solid #7560a7;outline-offset:3px}
+#creation-app .insp-small{font-size:11px;margin:0}
+.insp-clock{display:flex;align-items:baseline;gap:10px;color:#61507a;padding:7px 0}
+.insp-clock>span{font:600 56px/1 Montserrat,sans-serif;font-variant-numeric:tabular-nums}
+.insp-practice-actions{display:flex;gap:8px;flex-wrap:wrap}
+#creation-app #insp-run{background:#e4def0;border-color:#7560a7}
+#creation-app button:disabled{opacity:.5;cursor:default}
+.insp-reflection{margin-top:24px;background:#f3eedf;border-radius:16px;padding:20px}
+.insp-reflection .insp-actions{margin:14px 0}
+.insp-reflection summary{padding:10px 0;min-height:44px;cursor:pointer}
+#insp-sketch-preview img{display:block;max-height:300px;max-width:100%;margin:14px 0}
+.insp-video-placeholder{padding:32px;border:1px solid #ddd5ca;border-radius:16px;text-align:center;background:#e9e2f1}
+.insp-video{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block}
+.insp-prompt{padding:20px;border:1px solid #d8ccdf;border-radius:16px;background:#f5f0e4}
+.insp-existing-photo{display:block;max-height:300px;max-width:100%;margin:auto;object-fit:contain}
+.insp-line-board{border-radius:18px;border:1px solid #ddd5ca;background:#f3eddf}
+.insp-line-board svg{display:block;width:100%;max-height:320px}
+.insp-line-controls{display:flex;gap:22px;padding:20px 0;flex-wrap:wrap}
+.insp-line-controls label{flex:1;min-width:150px}
+body.c3-inspire .zoom-overlay,body.c3-inspire .grid-view{z-index:100}
+@media(max-width:950px){
+  #creation-app .insp-seat{width:155px}.insp-seat-label{padding:8px}.insp-seat-label>span{font-size:10px}
+  #creation-app .insp-seat strong{font-size:12px}.insp-room-caption{font-size:8px}
+}
+@media(max-width:950px){
+  body.c3-inspire #c3-main{padding:22px 14px}.insp-heading{gap:14px}#creation-app .insp-heading h1{font-size:24px}
+  .insp-room{aspect-ratio:auto;overflow:hidden;padding:0 14px 16px;background:linear-gradient(#f0e3c9 0 200px,#e3c5a4 200px);}
+  .insp-room #insp-room-mount{height:clamp(230px,42vw,360px);position:relative;margin:0 -14px;overflow:hidden;border-bottom:1px solid #bd9872}
+  .insp-room #roomWrap,.insp-room #roomWrap.fit-mode{top:-15px}
+  .insp-room-caption{top:14px;left:14px}
+  .insp-workstations{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:22px 12px;margin-top:16px}
+  #creation-app .insp-seat{position:relative;left:auto;top:auto;transform:none;width:auto;display:flex;flex-direction:column;align-items:center}
+  .insp-seat>.insp-mini{display:block;width:100%;height:115px;filter:drop-shadow(2px 4px 2px #66452d22)}
+  .insp-seat-label{width:100%;flex:1;min-height:122px;align-content:center}
+  .insp-seat-label>span{font-size:11px}#creation-app .insp-seat strong{font-size:13px}
+  .insp-practice-grid{grid-template-columns:1fr}.insp-reference{min-height:220px}.insp-reference img{height:240px}
+  #creation-app #insp-dialog{padding:16px;width:calc(100vw - 16px);max-height:calc(100dvh - 16px);border-radius:18px}
+  #creation-app .insp-panel-header h2{font-size:19px}.insp-panel-header{gap:8px}
+  .insp-activity{gap:12px}.insp-activity>img,.insp-activity>.insp-mini{width:70px;height:80px}
+  .insp-station-intro{gap:10px;padding:10px}.insp-station-intro>.insp-mini{width:90px;height:90px}
+  .insp-artchi-note{font-size:11px;padding:10px;gap:8px}.insp-artchi-note img{width:36px}
+}
+@media(prefers-reduced-motion:reduce){.inspiration *,body.c3-inspire #stage *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.insp-seat:hover .insp-seat-label,.insp-seat:focus-visible .insp-seat-label{translate:none}}

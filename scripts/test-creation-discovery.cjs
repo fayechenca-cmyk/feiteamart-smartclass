@@ -32,10 +32,10 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
  await page.evaluate(()=>sessionStorage.setItem('fei_user_profile',JSON.stringify({studentCode:'OTHER'})));
  await page.locator('[href="#make"]').first().click();await page.locator('#c3-saved').click();assert.equal(await page.locator('.c3-card').count(),0);
  await page.evaluate(p=>sessionStorage.setItem('fei_user_profile',p),before);
- await page.locator('[href="#inspire"]').click();await page.locator('.c3-studio-nav').waitFor();assert.equal(await page.locator('#room-artchi').count(),1);assert.equal(await page.locator('#stage').isVisible(),true);
- await page.locator('.c3-studio-nav summary').click();
+ await page.locator('[href="#inspire"]').click();await page.locator('.inspiration').waitFor();assert.equal(await page.locator('#room-artchi').count(),1);assert.equal(await page.locator('#stage').isVisible(),true);
+ await page.locator('.insp-legacy summary').click();
  for(const id of ['color','shape','character','material','project']){await page.locator(`[data-station=${id}]`).click();assert.equal(await page.locator('#zoomOverlay').evaluate(e=>e.classList.contains('active')),true);await page.keyboard.press('Escape')}
- await page.locator('[href="#welcome"]').click();await page.locator('.c3-choices').waitFor();assert.equal(await page.locator('#stage').isVisible(),false);
+ await page.locator('[href="#welcome"]').first().click();await page.locator('.c3-choices').waitFor();assert.equal(await page.locator('#stage').isVisible(),false);
  for(const width of [320,390,768,1024,1440]){
   await page.setViewportSize({width,height:1000});
   for(const hash of ['welcome','make','project/carle-colorful-chameleon','inspire']){

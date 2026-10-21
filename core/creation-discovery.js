@@ -35,6 +35,7 @@
     const [route='welcome',id]=location.hash.slice(1).split('/');
     if(route!=='project')lastPreview='';
     const space=route==='inspire'?'inspire':route==='make'||route==='project'?'make':'';
+    if(space!=='inspire')window.FEIInspirationStudio?.dispose();
     document.body.classList.toggle('c3-inspire',space==='inspire');
     document.body.classList.toggle('creation-discovery',space!=='inspire');
     closeStation();
@@ -53,7 +54,7 @@
       document.getElementById('c3-search').onchange=()=>track('creation_search_used',{creationSpace:'make'});
       document.getElementById('c3-saved').onclick=()=>{onlySaved=!onlySaved;render()};
     }else if(space==='inspire'){
-      main.innerHTML=`<div class="c3-studio-nav"><h1>Get Inspired</h1><p>Explore a corner of the original Studio, or try a short experiment. No finished artwork required.</p><div class="c3-experiments"><a href="../lessons/color-magic/step-3/" data-experiment="color-mixing"><strong>Material Playground</strong><span>Drag colors together and discover a new mix →</span></a><a href="../lessons/miro-draw-without-knowing/" data-experiment="automatism"><strong>Idea Playground</strong><span>Follow a line and discover a surprising shape →</span></a></div><details><summary>Explore all five Studio work areas</summary><div class="c3-stations">${Object.entries(stations).map(([id,s])=>`<button data-station="${id}"><strong>${esc(s.title)}</strong><span>${esc(s.subtitle)}</span></button>`).join('')}</div><p>Shape activities are still coming soon. All original projects and tools remain in their work areas.</p></details></div>`;
+      window.FEIInspirationStudio.mount(main,location.hash.slice(1).split('/').slice(1));
     }else{
       main.innerHTML=`<small>YOUR CREATIVE SPACE</small><h1>What are you in the mood for today?</h1><p>Choose one, or explore freely.</p><div class="c3-choices"><a href="#make" data-entry="make"><div class="c3-choice-photo"><img src="../assets/creation-intro/handcraft.jpg" alt="Teacher’s handmade miniature art studio"><img src="../assets/dashboard/chameleon.jpg" alt="Teacher’s colorful chameleon collage"></div><h2>Make Something <span>↗</span></h2><p>Pick a project and create it.</p></a><a href="#inspire" data-entry="inspire"><div class="c3-choice-photo"><img src="../lessons/carle-colorful-chameleon/assets/texture-bubble-blue-white.jpg" alt="Painted paper with bubbles and blue marks"><img src="../lessons/carle-colorful-chameleon/assets/texture-press-coral.jpg" alt="Layered green and golden paint textures"></div><h2>Get Inspired <span>↗</span></h2><p>Play, explore and discover.</p></a></div><a class="c3-browse" href="#make">Just Browse →</a>${continuations()}`;
     }
@@ -91,7 +92,7 @@
     const station=e.target.closest('[data-station]');if(station){openStation(station.dataset.station);track('experiment_opened',{creationSpace:'inspire',experimentId:station.dataset.station});document.querySelector('.zoom-close').focus()}
     const experiment=e.target.closest('[data-experiment]');if(experiment)track('experiment_started',{creationSpace:'inspire',experimentId:experiment.dataset.experiment});
   });
-  window.addEventListener('hashchange',()=>{render();main.focus();window.scrollTo(0,0)});
+  window.addEventListener('hashchange',()=>{render();if(!document.getElementById('insp-dialog')?.open)main.focus();window.scrollTo(0,0)});
   function accessibleStudio(){
     document.querySelectorAll('.hotspot, .course-item').forEach(el=>{
       if(el.dataset.c3Keyboard)return;
