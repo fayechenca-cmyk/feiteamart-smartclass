@@ -51,6 +51,7 @@ dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{c
 .og-kicker{font:bold 15px Arial, sans-serif;fill:#7954a7}
 .og-title{font:bold 21px Arial, sans-serif;fill:#273044}
 .og-sub{font:16px Arial, sans-serif;fill:#506175}
+.og-label-n{font:bold 22px Arial, sans-serif;fill:#fffdf5}
 .og-draw{animation:og-draw-on 1.1s ease forwards}
 @keyframes og-draw-on{from{stroke-dashoffset:var(--og-len,600)}to{stroke-dashoffset:0}}
 .og-fade{opacity:0;animation:og-fade-in .6s ease forwards}

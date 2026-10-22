@@ -986,5 +986,162 @@
     "hint": "The nose is fully built now — good place to pause.",
     "say": "The nose is fully built now, with soft gradients and a natural blend into the face. Good place to pause here if you'd like -- next, we go deep into the mouth and neck.",
     "audio": "audio/s95-milestone.mp3"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "Front to back: nose, mouth, eyes, ears",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 0,
+    "clipEnd": 35,
+    "frame": "frames/v6-35s.jpg",
+    "watchAudio": "audio/v6-01-watch.mp3",
+    "watchSay": "Here, the mouth and chin are drawn together, with no special difficulty. Notice the order too: the nose comes first, closest to us. The mouth comes next, with the eyes further behind, and the ears sitting furthest back of all. The skin carrying the whiskers wraps around the mouth, so it gets pushed back a little.",
+    "audio": "audio/v6-01-try.mp3",
+    "say": "Draw your own mouth and chin together the same way. Keep that front-to-back order in mind as you go.",
+    "overlay": {
+      "labels": [
+        { "cx": 610, "cy": 390, "n": 1, "tone": "peri" },
+        { "cx": 610, "cy": 465, "n": 2, "tone": "leaf" },
+        { "cx": 650, "cy": 235, "n": 3, "tone": "blush" },
+        { "cx": 900, "cy": 190, "n": 4, "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "Front to back: nose, mouth, eyes, ears",
+        "sub": "Closest to furthest -- never random."
+      }
+    },
+    "stepResult": "frames/v6-35s.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "The neck, turning like a cylinder",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 35,
+    "clipEnd": 86,
+    "frame": "frames/v6-86s.jpg",
+    "watchAudio": "audio/v6-02-watch.mp3",
+    "watchSay": "Notice the chin and neck drawn together now, strokes following the neck's own direction -- it's a cylinder, so it has to turn, not point randomly. Fur begins here too, on the left side, with strokes crossing over the outline so it stands out.",
+    "audio": "audio/v6-02-try.mp3",
+    "say": "Follow your own neck's turn the same way, then add a few fur strokes crossing the outline on the left side.",
+    "overlay": {
+      "guides": [
+        { "d": "M610 475 Q540 530 480 610", "tone": "peri" },
+        { "cx": 560, "cy": 510, "rx": 90, "ry": 65, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "The neck, turning like a cylinder",
+        "sub": "Fur strokes cross the outline to stand out."
+      }
+    },
+    "stepResult": "frames/v6-86s.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "The neck joins the body; back to the mouth",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 86,
+    "clipEnd": 121,
+    "frame": "frames/v6-121s.jpg",
+    "watchAudio": "audio/v6-03-watch.mp3",
+    "watchSay": "Look at how the neck now joins the body -- still a portrait, but neck and body belong together. Then it's back to the mouth: no feature exists alone, every part of the face relates.",
+    "audio": "audio/v6-03-try.mp3",
+    "say": "Let your own neck join the body the same way, then return to the mouth and keep it connected to everything around it.",
+    "overlay": {
+      "guides": [
+        { "cx": 610, "cy": 465, "rx": 70, "ry": 38, "ellipse": true, "tone": "blush", "dash": true },
+        { "cx": 820, "cy": 550, "rx": 90, "ry": 70, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "The neck joins the body; back to the mouth",
+        "sub": "No feature exists alone."
+      }
+    },
+    "stepResult": "frames/v6-121s.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "Arcs appear",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 121,
+    "clipEnd": 162,
+    "frame": "frames/v6-162s.jpg",
+    "watchAudio": "audio/v6-04-watch.mp3",
+    "watchSay": "Notice arcs appear now -- earlier tangents fixed the form, so arcs are the natural final step. If arcs already feel comfortable to you, you can draw them directly; there's no right answer, whatever feels comfortable is right.",
+    "audio": "audio/v6-04-try.mp3",
+    "say": "Let your own lines curve into arcs now, the same natural way -- tangents or arcs, whichever feels right to you.",
+    "overlay": {
+      "guides": [
+        { "d": "M775 275 Q845 300 855 390", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "Arcs appear",
+        "sub": "Tangents first; arcs are the natural next step."
+      }
+    },
+    "stepResult": "frames/v6-162s.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "The shadow side, one layer of tone",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 162,
+    "clipEnd": 193,
+    "frame": "frames/v6-193s.jpg",
+    "watchAudio": "audio/v6-05-watch.mp3",
+    "watchSay": "What matters here is the shadow side of the face -- like the dark side of a sphere, it's one whole that needs a single layer of tone, not patches.",
+    "audio": "audio/v6-05-try.mp3",
+    "say": "Lay one even layer of tone across your own shadow side the same way -- treat it as one whole surface.",
+    "overlay": {
+      "guides": [
+        { "cx": 860, "cy": 350, "rx": 90, "ry": 100, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "The shadow side, one layer of tone",
+        "sub": "One whole surface, like the dark side of a sphere."
+      }
+    },
+    "stepResult": "frames/v6-193s.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "Fur, laid in as a base",
+    "kind": "draw",
+    "uid": "f7924a0efeee71fe7ffce0bc51e3206d",
+    "start": 193,
+    "clipEnd": 220.32,
+    "frame": "frames/v6-end.jpg",
+    "watchAudio": "audio/v6-end-watch.mp3",
+    "watchSay": "Notice loose, flicked strokes now suggest fur texture, laid in as a base with the 2B -- deep fur work comes later.",
+    "audio": "audio/v6-end-try.mp3",
+    "say": "Finish the face at your own pace. Come back when you're ready for the next step.",
+    "overlay": {
+      "guides": [
+        { "cx": 650, "cy": 550, "rx": 280, "ry": 150, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "MOUTH AND NECK COMPLETE",
+        "title": "Fur, laid in as a base",
+        "sub": "Finish the face at your own pace."
+      }
+    },
+    "stepResult": "frames/v6-end.jpg"
+  },
+  {
+    "chapter": "Mouth and Neck",
+    "title": "Mouth and neck complete",
+    "kind": "milestone",
+    "hint": "The whole face connects now — good place to pause.",
+    "say": "The mouth and neck are built now, connected to everything around them, with a first layer of fur. Good place to pause here if you'd like -- next, we build texture in the ears.",
+    "audio": "audio/s94-milestone.mp3"
   }
 ]
