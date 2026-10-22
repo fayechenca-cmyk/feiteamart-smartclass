@@ -193,7 +193,7 @@ function next(){
  if($('next').disabled)return;
  mark();
  if(index===flow.length-1){
-  // Only the intro + materials + Videos 1-4 are built so far -- hand off
+  // Only the intro + materials + Videos 1-5 are built so far -- hand off
   // to the classic lesson at the next unbuilt video, same staged approach
   // balloon and glass both used while mid-build. Swap this block for the
   // real GuidedReward.complete() ending once all 12 videos are built.

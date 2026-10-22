@@ -785,5 +785,206 @@
     "hint": "Both eyes are fully built now — good place to pause.",
     "say": "Both eyes are fully built now, with real depth and thickness. Good place to pause here if you'd like -- next, we go deep into the nose.",
     "audio": "audio/s96-milestone.mp3"
+  },
+  {
+    "chapter": "Nose",
+    "title": "Follow the skeleton: eye bone to nose",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 0,
+    "clipEnd": 63,
+    "frame": "frames/v5-63s.jpg",
+    "watchAudio": "audio/v5-01-watch.mp3",
+    "watchSay": "Here, a 4B pencil picks up again -- the same soft pencil from the eyes, still light. Notice the right eye's bone and the right ear's structure first, then the lower lid leads straight down into the nose. One area leads to the next; never jump.",
+    "audio": "audio/v5-01-try.mp3",
+    "say": "Follow your own skeleton the same way: right eye bone, right ear, then straight down into the nose. Keep your 4B light.",
+    "overlay": {
+      "guides": [
+        { "d": "M700 280 Q660 340 605 390", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "Follow the skeleton: eye bone to nose",
+        "sub": "One area leads to the next -- never jump."
+      }
+    },
+    "stepResult": "frames/v5-63s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "Nostrils begin -- never filled solid",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 63,
+    "clipEnd": 105,
+    "frame": "frames/v5-105s.jpg",
+    "watchAudio": "audio/v5-02-watch.mp3",
+    "watchSay": "Notice the nostrils stay open here, never filled in solid -- they go from very dark to light grey, or the nose loses its feeling of breathing. Imagine stroking the dog from its face down to its nose -- where does your hand travel? Follow the bones, not just the skin.",
+    "audio": "audio/v5-02-try.mp3",
+    "say": "Shape your own nostrils the same way, dark to light grey, never solid -- let your hand follow the bones, the same path you'd stroke down to the nose.",
+    "overlay": {
+      "guides": [
+        { "cx": 595, "cy": 395, "rx": 55, "ry": 40, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "Nostrils begin -- never filled solid",
+        "sub": "Dark to light grey keeps it breathing."
+      }
+    },
+    "stepResult": "frames/v5-105s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "Nostril value, dark to light",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 105,
+    "clipEnd": 174,
+    "frame": "frames/v5-174s.jpg",
+    "watchAudio": "audio/v5-03-watch.mp3",
+    "watchSay": "Here, the value keeps building dark to light inside each nostril -- that gradient is what keeps the nose feeling soft and alive, never flat.",
+    "audio": "audio/v5-03-try.mp3",
+    "say": "Build your own nostril value the same way -- dark at the opening, lightening as it turns.",
+    "overlay": {
+      "guides": [
+        { "cx": 600, "cy": 392, "rx": 50, "ry": 38, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "Nostril value, dark to light",
+        "sub": "That gradient keeps it soft, not flat."
+      }
+    },
+    "stepResult": "frames/v5-174s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "The highlight, and reflected light saved",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 174,
+    "clipEnd": 220,
+    "frame": "frames/v5-220s.jpg",
+    "watchAudio": "audio/v5-04-watch.mp3",
+    "watchSay": "What matters here is the highlight on the nose, and the reflected light saved around the nostrils -- that saved light is what makes the nose feel real.",
+    "audio": "audio/v5-04-try.mp3",
+    "say": "Save your own highlight and the reflected light around your nostrils before anything covers them.",
+    "overlay": {
+      "guides": [
+        { "cx": 595, "cy": 365, "rx": 12, "ry": 9, "ellipse": true, "tone": "blush", "dash": true },
+        { "cx": 615, "cy": 398, "rx": 45, "ry": 35, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "The highlight, and reflected light saved",
+        "sub": "Saved light makes the nose feel real."
+      }
+    },
+    "stepResult": "frames/v5-220s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "The nose finishes with 4B",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 220,
+    "clipEnd": 265,
+    "frame": "frames/v5-265s.jpg",
+    "watchAudio": "audio/v5-05-watch.mp3",
+    "watchSay": "Notice the nose finishing now, still with the same 4B -- rich, dark values built up slowly, layer by layer.",
+    "audio": "audio/v5-05-try.mp3",
+    "say": "Finish your own nose the same way, layering slowly with the 4B until it feels solid.",
+    "overlay": {
+      "guides": [
+        { "cx": 600, "cy": 392, "rx": 60, "ry": 45, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "The nose finishes with 4B",
+        "sub": "Rich values, layered slowly."
+      }
+    },
+    "stepResult": "frames/v5-265s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "The blending stump arrives",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 265,
+    "clipEnd": 311,
+    "frame": "frames/v5-311s.jpg",
+    "watchAudio": "audio/v5-06-watch.mp3",
+    "watchSay": "Here, the blending stump arrives -- loaded with graphite, it becomes a soft grey pencil of its own. No stump at home? A tissue rolled to a point, or a cotton swab, works just as well.",
+    "audio": "audio/v5-06-try.mp3",
+    "say": "Reach for your own blending stump now -- or a rolled tissue or cotton swab if you don't have one.",
+    "overlay": {
+      "guides": [
+        { "cx": 575, "cy": 430, "rx": 50, "ry": 35, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "A NEW TOOL · 06",
+        "title": "The blending stump arrives",
+        "sub": "No stump? A rolled tissue or cotton swab."
+      }
+    },
+    "stepResult": "frames/v5-311s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "How to blend, three points",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 311,
+    "clipEnd": 356,
+    "frame": "frames/v5-356s.jpg",
+    "watchAudio": "audio/v5-07-watch.mp3",
+    "watchSay": "What matters here is how to blend: use it like a pencil, with light pressure -- the result matches your strokes, only softer. Follow the direction of your strokes, never against them. Start slightly firmer, then lighten, to make a gradation. Watch it carry tone from the eyes down to the nose.",
+    "audio": "audio/v5-07-try.mp3",
+    "say": "Blend your own tone the same way: light pressure, following your strokes, firmer to lighter.",
+    "overlay": {
+      "guides": [
+        { "d": "M560 280 Q600 350 650 420", "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 07",
+        "title": "How to blend, three points",
+        "sub": "Light pressure, with your strokes, firm to soft."
+      }
+    },
+    "stepResult": "frames/v5-356s.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "The stump joins nose to face",
+    "kind": "draw",
+    "uid": "152ba2f3fe58d733c788dcc5ba15a589",
+    "start": 356,
+    "clipEnd": 409.61,
+    "frame": "frames/v5-end.jpg",
+    "watchAudio": "audio/v5-end-watch.mp3",
+    "watchSay": "Notice the stump joins the nose to the face now, for one natural transition -- it's used all the way to the end.",
+    "audio": "audio/v5-end-try.mp3",
+    "say": "Take your time to finish this step. Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 600, "cy": 380, "rx": 180, "ry": 140, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "NOSE COMPLETE",
+        "title": "The nose, softly blended into the face",
+        "sub": "Take your time to finish this step."
+      }
+    },
+    "stepResult": "frames/v5-end.jpg"
+  },
+  {
+    "chapter": "Nose",
+    "title": "Nose complete",
+    "kind": "milestone",
+    "hint": "The nose is fully built now — good place to pause.",
+    "say": "The nose is fully built now, with soft gradients and a natural blend into the face. Good place to pause here if you'd like -- next, we go deep into the mouth and neck.",
+    "audio": "audio/s95-milestone.mp3"
   }
 ]
