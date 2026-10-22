@@ -39,7 +39,7 @@
     "kind": "draw",
     "uid": "48db52a7e71678b1769e95897e55e461",
     "start": 0,
-    "clipEnd": 33,
+    "clipEnd": 25,
     "frame": "frames/v1-25s.jpg",
     "watchAudio": "audio/v1-01-watch.mp3",
     "watchSay": "Here, notice the very first line leans -- the whole head sits on a slant, not upright on the page. This whole outline uses an HB pencil, light and easy to adjust.",
@@ -47,8 +47,8 @@
     "say": "Start your own line with the same lean. Keep your HB light; these early marks are just for finding the angle.",
     "overlay": {
       "guides": [
-        { "d": "M625 88 L535 485", "dash": true, "tone": "peri" },
-        { "d": "M625 88 L695 83", "tone": "peri" }
+        { "d": "M650 90 L588 495", "dash": true, "tone": "peri" },
+        { "d": "M625 88 L670 95", "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 01",
@@ -63,7 +63,7 @@
     "title": "The face as a faceted block",
     "kind": "draw",
     "uid": "48db52a7e71678b1769e95897e55e461",
-    "start": 33,
+    "start": 25,
     "clipEnd": 95,
     "frame": "frames/v1-95s.jpg",
     "watchAudio": "audio/v1-02-watch.mp3",
@@ -72,10 +72,10 @@
     "say": "Block your own head the same way: straight-sided facets, not a smooth oval. Add your own left ear as another flat plane.",
     "overlay": {
       "guides": [
-        { "d": "M480 100 L520 106 L600 93", "tone": "peri" },
-        { "d": "M310 195 L320 270 L345 345", "dash": true, "tone": "peri" }
+        { "d": "M490 90 L542 107 L660 95", "tone": "peri" },
+        { "d": "M315 170 L325 235 L365 360", "dash": true, "tone": "peri" }
       ],
-      "arrow": { "d": "M250 230 Q280 260 310 280", "tone": "peri" },
+      "arrow": { "d": "M245 215 Q275 240 305 258", "tone": "peri" },
       "card": {
         "kicker": "LOOK CLOSELY · 02",
         "title": "The face as a faceted block",
@@ -98,9 +98,9 @@
     "say": "Add your own right ear, then two lines down for the neck and shoulders. Keep every line straight for now.",
     "overlay": {
       "guides": [
-        { "d": "M845 148 L925 260 L955 290 L935 390", "dash": true, "tone": "peri" },
-        { "d": "M460 290 L420 615", "tone": "peri" },
-        { "d": "M845 350 L865 625", "tone": "peri" }
+        { "d": "M795 150 L905 268 L950 323 L915 463", "dash": true, "tone": "peri" },
+        { "d": "M495 288 L445 618", "tone": "peri" },
+        { "d": "M795 353 L825 603", "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 03",
@@ -124,9 +124,9 @@
     "say": "Place your own eye line, nose, and mouth with straight marks. Leave real space between the eyes.",
     "overlay": {
       "guides": [
-        { "d": "M545 290 L705 280", "dash": true, "tone": "peri" },
-        { "d": "M595 385 L630 430 L665 380", "tone": "peri" },
-        { "d": "M560 460 L690 450", "tone": "peri" }
+        { "d": "M507 265 L757 300", "dash": true, "tone": "peri" },
+        { "d": "M567 385 L607 437 L650 382", "tone": "peri" },
+        { "d": "M550 465 L715 460", "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 04",
@@ -150,8 +150,8 @@
     "say": "Mark your own eye corners the same way, then let each eye become its own small frame.",
     "overlay": {
       "guides": [
-        { "d": "M545 290 L548 312", "tone": "peri" },
-        { "d": "M600 273 L600 296", "tone": "peri" }
+        { "d": "M502 256 L502 283", "tone": "peri" },
+        { "d": "M571 261 L571 283", "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 05",
@@ -175,8 +175,8 @@
     "say": "Draw your own upper lid with one firm stroke, then keep the lower lid light. A heavy lower line makes the eye look puffy.",
     "overlay": {
       "guides": [
-        { "d": "M508 227 L565 224", "tone": "peri" },
-        { "d": "M512 275 Q537 288 562 273", "tone": "leaf" }
+        { "d": "M513 231 L573 239", "tone": "peri" },
+        { "d": "M515 269 Q543 283 573 259", "tone": "leaf" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 06",
@@ -233,8 +233,8 @@
     "say": "Add a few small tangents to your own ears' edges, the same light touch.",
     "overlay": {
       "guides": [
-        { "cx": 390, "cy": 230, "rx": 75, "ry": 135, "ellipse": true, "tone": "peri" },
-        { "cx": 835, "cy": 190, "rx": 70, "ry": 115, "ellipse": true, "tone": "peri" }
+        { "cx": 410, "cy": 195, "rx": 110, "ry": 135, "ellipse": true, "tone": "peri" },
+        { "cx": 900, "cy": 250, "rx": 110, "ry": 155, "ellipse": true, "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 01",
@@ -258,7 +258,7 @@
     "say": "If one of your own tangents looks off, adjust it with a new line. No need to erase everything underneath.",
     "overlay": {
       "guides": [
-        { "cx": 835, "cy": 200, "rx": 75, "ry": 120, "ellipse": true, "tone": "peri" },
+        { "cx": 865, "cy": 180, "rx": 95, "ry": 110, "ellipse": true, "tone": "peri" },
         { "cx": 905, "cy": 265, "rx": 25, "ry": 35, "ellipse": true, "tone": "leaf", "dash": true }
       ],
       "card": {
@@ -492,7 +492,7 @@
     "overlay": {
       "guides": [
         { "d": "M585 278 L608 345", "tone": "leaf" },
-        { "d": "M690 282 L650 345", "tone": "leaf" },
+        { "d": "M643 265 L610 360", "tone": "leaf" },
         { "cx": 610, "cy": 442, "rx": 90, "ry": 20, "ellipse": true, "tone": "blush", "dash": true }
       ],
       "card": {
@@ -517,7 +517,7 @@
     "say": "Build the same bone connection on your own right side, then let your cheek shading flow down into the neck the same way.",
     "overlay": {
       "guides": [
-        { "d": "M650 370 Q690 320 715 280", "tone": "peri" },
+        { "d": "M615 360 Q660 320 715 295", "tone": "peri" },
         { "d": "M785 350 Q845 440 815 610", "tone": "leaf" }
       ],
       "card": {
@@ -542,7 +542,7 @@
     "say": "Shade your own ear with planes of tone, the same light pencil, to show where it overlaps the head.",
     "overlay": {
       "guides": [
-        { "cx": 855, "cy": 215, "rx": 110, "ry": 135, "ellipse": true, "tone": "peri", "dash": true }
+        { "cx": 865, "cy": 270, "rx": 110, "ry": 145, "ellipse": true, "tone": "peri", "dash": true }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 06",
@@ -800,7 +800,7 @@
     "say": "Follow your own skeleton the same way: right eye bone, right ear, then straight down into the nose. Keep your 4B light.",
     "overlay": {
       "guides": [
-        { "d": "M700 280 Q660 340 605 390", "tone": "peri" }
+        { "d": "M700 300 Q665 345 585 368", "tone": "peri" }
       ],
       "card": {
         "kicker": "LOOK CLOSELY · 01",
