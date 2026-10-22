@@ -10297,8 +10297,8 @@ if (_existingProfile) {
     }
   }
 
-  // Guided covers intro + materials + Videos 1-3 so far (milestones at flow
-  // indices 11, 19, 27). Land on the first classic video guided hasn't
+  // Guided covers intro + materials + Videos 1-4 so far (milestones at flow
+  // indices 11, 19, 27, 36). Land on the first classic video guided hasn't
   // built yet -- never mark the entire dog lesson complete at this handoff.
   let guidedOutlineDone = false;
   let nextVideoAfterGuided = 2;
@@ -10308,7 +10308,8 @@ if (_existingProfile) {
     // slot, never in raw localStorage under the per-lesson key.
     const saved = (UserProfile.current()?.completedSteps || {})['guided:fei.dog.guided-preview.v1'] || {};
     const completed = saved.completed || [];
-    if (completed.includes(27)) nextVideoAfterGuided = 4;
+    if (completed.includes(36)) nextVideoAfterGuided = 5;
+    else if (completed.includes(27)) nextVideoAfterGuided = 4;
     else if (completed.includes(19)) nextVideoAfterGuided = 3;
     else if (completed.includes(11)) nextVideoAfterGuided = 2;
     else nextVideoAfterGuided = null;
