@@ -7,10 +7,11 @@ const LESSON_ID = 'still-life-4a-dog-structure';
 const KEY = 'fei.dog.guided-preview.v1';
 let flow=[], index=0, unlocked=0, completed=new Set(), skipped=new Set(), player=null, uid=null, phase='idle', muted=false, epoch=0, photoURL=null;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=false, watchVoiceActive=false;
+let introShifted=true; // flips false only while migrating a pre-intro save; see init() below.
 const voice=$('voice');
 let soundContext=null;
 function chime(){try{soundContext ||= new (window.AudioContext||window.webkitAudioContext)();soundContext.resume();[523.25,659.25,783.99].forEach((hz,i)=>{const o=soundContext.createOscillator(),g=soundContext.createGain(),t=soundContext.currentTime+i*.07;o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g).connect(soundContext.destination);o.start(t);o.stop(t+.28);});}catch{}}
-function save(){GuidedPlatform.save({index,unlocked,completed:[...completed],skipped:[...skipped]},KEY);}
+function save(){GuidedPlatform.save({index,unlocked,completed:[...completed],skipped:[...skipped],introShifted},KEY);}
 function mark(){if(!completed.has(index)&&!muted)chime();completed.add(index);unlocked=Math.max(unlocked,Math.min(flow.length-1,index+1));save();progress();}
 function jumpToStep(target){
  if(!Number.isInteger(target)||target<0||target>=flow.length)return;
@@ -73,7 +74,9 @@ function tissueScene(){
 
 function buildScene(s){
  $('media').hidden=true;$('visual').innerHTML='';
- if(s.kind==='tissue'){
+ if(s.kind==='film'){
+  $('visual').innerHTML=`<div class="scene film-scene"><video id="introFilm" src="${s.src}" playsinline></video></div>`;
+ }else if(s.kind==='tissue'){
   $('visual').innerHTML=tissueScene();
  }else if(s.kind==='milestone'){
   $('visual').innerHTML=`<div class="scene encouragement"><img src="../../../core/dashboard-artchi.svg" alt="Artchi"><div class="milestone-star">✦</div><h2>${s.hint}</h2><p>One step at a time.</p></div>`;
@@ -164,13 +167,21 @@ function enter(){
  if(s.kind==='draw'){
   phase='watching';setMode('WATCH CLOSELY');$('media').hidden=false;$('visual').innerHTML='';
   createPlayer(s);
+ }else if(s.kind==='film'){
+  // The intro film carries its own narration and music track -- play it
+  // directly and only enable Continue once it has actually finished,
+  // rather than routing through the separate voice/TTS narration system.
+  phase='film';buildScene(s);window.GuidedUX?.scene(s);
+  const v=document.getElementById('introFilm');v.muted=muted;
+  v.onended=()=>waiting();
+  v.play().catch(()=>{$('resume').hidden=false;$('resume').textContent='Tap to play';});
  }else{
   phase='guidance';buildScene(s);window.GuidedUX?.scene(s);
   if(s.watchAudio)speak({audio:s.watchAudio,say:s.watchSay},()=>{speak(s,()=>{waiting();});});
   else speak(s,()=>{waiting();});
  }
 }
-function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
+function setRewardMuted(value){muted=value;voice.muted=muted;if(player)player.muted=muted;const film=document.getElementById('introFilm');if(film)film.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');}
 const STILL_LIFE_PROGRESS_GROUPS=[
  ['still-life-1a-star-balloon-structure'],
  ['still-life-2a-glass-structure'],
@@ -200,11 +211,11 @@ $('referenceImage').onclick=()=>{$('analysis').onclick();};
 $('referenceImage').tabIndex=0;$('referenceImage').setAttribute('role','button');$('referenceImage').setAttribute('aria-label','Enlarge reference image');$('referenceImage').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('analysis').onclick();}};
 
 $('replay').onclick=()=>enter();
-$('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watching')return;speak(s,()=>{if(phase==='guidance')waiting();});};
-$('sound').onclick=()=>{muted=!muted;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');};
-$('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTogether();}else voice.play().catch(()=>{$('resume').hidden=false;});};
+$('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watching')return;if(s.kind==='film'){const v=document.getElementById('introFilm');if(v){v.currentTime=0;v.play().catch(()=>{});}return;}speak(s,()=>{if(phase==='guidance')waiting();});};
+$('sound').onclick=()=>{muted=!muted;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;const film=document.getElementById('introFilm');if(film)film.muted=muted;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');};
+$('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTogether();}else if(phase==='film'){document.getElementById('introFilm')?.play().catch(()=>{$('resume').hidden=false;});}else voice.play().catch(()=>{$('resume').hidden=false;});};
 function openMap(){
- player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
+ player?.pause();voice.pause();if(phase==='film')document.getElementById('introFilm')?.pause();$('mapItems').innerHTML='';let chapter='';
  flow.forEach((s,i)=>{
   if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter;$('mapItems').append(h);}
   const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
@@ -214,11 +225,11 @@ function openMap(){
  });$('map').showModal();
 }
 $('mapButton').onclick=openMap;$('closeMap').onclick=()=>$('map').close();
-$('map').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').hidden=false;});if(phase==='watching'){$('resume').hidden=false;$('resume').textContent='Resume playback';}});
+$('map').addEventListener('close',()=>{if(phase==='film'){$('resume').hidden=false;$('resume').textContent='Resume playback';return;}if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').hidden=false;});if(phase==='watching'){$('resume').hidden=false;$('resume').textContent='Resume playback';}});
 $('analysis').onclick=()=>{voice.pause();$('diagram').querySelector('img').src=flow[index].frame;$('diagram').showModal();};$('closeDiagram').onclick=()=>$('diagram').close();
 $('diagram').addEventListener('close',()=>{if(phase!=='watching'&&!voice.ended&&voice.currentTime>0)voice.play().catch(()=>{$('resume').textContent='Resume guidance';$('resume').hidden=false;});});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
-window.addEventListener('pagehide',()=>{player?.pause();stopVoice();if(photoURL)URL.revokeObjectURL(photoURL);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){player?.pause();voice.pause();if(phase==='film')document.getElementById('introFilm')?.pause();}else if(phase==='film'){$('resume').textContent='Resume playback';$('resume').hidden=false;}else if(phase==='watching'||(voice.src&&!voice.ended)){$('resume').textContent='Resume playback';$('resume').hidden=false;}});
+window.addEventListener('pagehide',()=>{player?.pause();stopVoice();document.getElementById('introFilm')?.pause();if(photoURL)URL.revokeObjectURL(photoURL);});
 
 // ── Access gate (Foundation of Sketch, Step 2 — paid) ──
 async function gateAccess(){
@@ -247,7 +258,22 @@ $('welcome').addEventListener('cancel',e=>e.preventDefault());
  $('welcome').showModal();
  fetch('flow.json?v=ux-1').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
   flow=data;
-  try{const p=await GuidedPlatform.restore(LESSON_ID,KEY,flow.length);unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
+  try{
+   const p=await GuidedPlatform.restore(LESSON_ID,KEY,flow.length);
+   // One-time migration: the Meet-your-dog intro was inserted as a new
+   // step 0 after some progress may already be saved. A real (non-empty)
+   // saved state that predates this still has every index pointing one
+   // step too early -- shift it forward once so resuming lands on the
+   // same material as before, rather than losing progress or landing on
+   // the wrong step. A brand-new (empty) save needs no shift: it already
+   // starts correctly at the new step 0.
+   if(p&&Object.keys(p).length&&!p.introShifted){
+    p.index=(Number(p.index)||0)+1;p.unlocked=(Number(p.unlocked)||0)+1;
+    p.completed=(Array.isArray(p.completed)?p.completed:[]).map(i=>i+1);
+    p.skipped=(Array.isArray(p.skipped)?p.skipped:[]).map(i=>i+1);
+   }
+   unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));
+  }catch{}
   $('start').disabled=false;$('start').textContent=index?'Continue your journey →':'Start drawing →';
  }).catch(()=>{$('start').textContent='Could not load · Reload to retry';});
 })();

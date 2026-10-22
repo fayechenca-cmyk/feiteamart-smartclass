@@ -1,0 +1,35 @@
+{
+  "segments": [
+    {
+      "name": "photo",
+      "start": 0.0,
+      "duration": 2.0
+    },
+    {
+      "name": "reveal",
+      "start": 1.5,
+      "duration": 1.6
+    },
+    {
+      "name": "outline",
+      "start": 2.6,
+      "duration": 3.5
+    },
+    {
+      "name": "eyes",
+      "start": 5.6,
+      "duration": 3.5
+    },
+    {
+      "name": "fur",
+      "start": 8.6,
+      "duration": 3.5
+    },
+    {
+      "name": "final",
+      "start": 11.6,
+      "duration": 10.4
+    }
+  ],
+  "total_seconds": 22.0
+}

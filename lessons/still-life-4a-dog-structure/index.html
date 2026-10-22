@@ -10301,8 +10301,11 @@ if (_existingProfile) {
   // the entire dog lesson complete at this handoff.
   let guidedOutlineDone = false;
   try {
-    const saved = JSON.parse(localStorage.getItem('fei.dog.guided-preview.v1') || '{}');
-    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(10);
+    // Reads the live session profile, same as balloon's handoff --
+    // guided progress lives in the account profile's completedSteps
+    // slot, never in raw localStorage under the per-lesson key.
+    const saved = (UserProfile.current()?.completedSteps || {})['guided:fei.dog.guided-preview.v1'] || {};
+    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(11);
   } catch (_) {}
   if (guidedOutlineDone) {
     state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === 2);

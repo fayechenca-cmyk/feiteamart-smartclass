@@ -1,5 +1,12 @@
 [
   {
+    "chapter": "Welcome",
+    "title": "Meet your dog",
+    "kind": "film",
+    "src": "../intro/meet-the-dog.mp4",
+    "hint": "A real dog, and the drawing we'll make of it."
+  },
+  {
     "chapter": "Materials",
     "title": "Your pencils",
     "kind": "materials",

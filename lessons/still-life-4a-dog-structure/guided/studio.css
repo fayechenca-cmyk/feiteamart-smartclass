@@ -13,6 +13,7 @@ button{border-color:#d9d0e3;background:#ffffff85}button:hover{background:#ede8f8
 #caption{color:#59536a}
 dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{color:#654d98}.map-step b{color:#426b59}
 .scene{background:radial-gradient(ellipse at 80% 0,#E4FCE4,transparent 60%),linear-gradient(120deg,#f6f3ff,#F9EDDA)}
+.film-scene{padding:0;background:#101318!important}.film-scene video{width:100%;height:100%;object-fit:contain}
 .scene label{color:#654d98}.scene textarea{background:#fffdf8;color:#17182D;border-color:#d9d0e3}.scene .big-symbol{color:#7560a7}
 #notice{background:#fffdf5f5;color:#17182D;border:1px solid #d9d0e3}#reference #analysis{background:#ede8f8;color:#654d98}
 
