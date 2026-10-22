@@ -1,0 +1,215 @@
+[
+  {
+    "chapter": "Materials",
+    "title": "Your pencils",
+    "kind": "materials",
+    "focus": "pencils",
+    "hint": "HB, 2H, 2B, and a dark pencil (4B or 6B, or any 3B-6B).",
+    "say": "Four pencils today: a 2H for your very lightest construction, an HB for the main outline, a 2B for mid-tones, and a dark pencil -- 4B or 6B, or really any pencil from 3B to 6B -- for the darkest areas later on. Any pencil works; sharpen it only when you need a fine detail.",
+    "audio": "audio/s00-pencils.mp3",
+    "showEraser": true,
+    "showStump": true
+  },
+  {
+    "chapter": "Materials",
+    "title": "A blending stick, for later",
+    "kind": "tissue",
+    "hint": "You'll reach for this later.",
+    "say": "A blending stick -- or stump -- blends small grey areas smoothly once the tone is built up. We'll get there in a few steps. For now, just know it's coming, along with a tissue and an eraser.",
+    "audio": "audio/s01-tissue.mp3"
+  },
+  {
+    "chapter": "Materials",
+    "title": "Feel your paper",
+    "kind": "paper",
+    "hint": "A little tooth helps the pencil grip.",
+    "say": "Feel your own paper before you start. A little tooth helps the pencil grip -- that's what lets you build smooth, layered fur and tone later on.",
+    "audio": "audio/s02-paper.mp3"
+  },
+  {
+    "chapter": "Structure",
+    "title": "The tilt axis",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 0,
+    "clipEnd": 33,
+    "frame": "frames/v1-25s.jpg",
+    "watchAudio": "audio/v1-01-watch.mp3",
+    "watchSay": "Here, notice the very first line leans -- the whole head sits on a slant, not upright on the page. This whole outline uses an HB pencil, light and easy to adjust.",
+    "audio": "audio/v1-01-try.mp3",
+    "say": "Start your own line with the same lean. Keep your HB light; these early marks are just for finding the angle.",
+    "overlay": {
+      "guides": [
+        { "d": "M625 88 L535 485", "dash": true, "tone": "peri" },
+        { "d": "M625 88 L695 83", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "The tilt axis",
+        "sub": "The head sits on a slant, not upright."
+      }
+    },
+    "stepResult": "frames/v1-25s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "The face as a faceted block",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 33,
+    "clipEnd": 95,
+    "frame": "frames/v1-95s.jpg",
+    "watchAudio": "audio/v1-02-watch.mp3",
+    "watchSay": "What matters here is the big shape, not detail -- the face becomes one faceted block, like a cut strawberry, with straight planes instead of a curve.",
+    "audio": "audio/v1-02-try.mp3",
+    "say": "Block your own head the same way: straight-sided facets, not a smooth oval. Add your own left ear as another flat plane.",
+    "overlay": {
+      "guides": [
+        { "d": "M480 100 L520 106 L600 93", "tone": "peri" },
+        { "d": "M310 195 L320 270 L345 345", "dash": true, "tone": "peri" }
+      ],
+      "arrow": { "d": "M250 230 Q280 260 310 280", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "The face as a faceted block",
+        "sub": "Straight planes first, like a cut strawberry."
+      }
+    },
+    "stepResult": "frames/v1-95s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Ears and shoulders join the block",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 95,
+    "clipEnd": 165,
+    "frame": "frames/v1-165s.jpg",
+    "watchAudio": "audio/v1-03-watch.mp3",
+    "watchSay": "Look at how the right ear becomes its own plane too, then the neck and shoulders -- the whole dog blocked in before anything gets refined.",
+    "audio": "audio/v1-03-try.mp3",
+    "say": "Add your own right ear, then two lines down for the neck and shoulders. Keep every line straight for now.",
+    "overlay": {
+      "guides": [
+        { "d": "M845 148 L925 260 L955 290 L935 390", "dash": true, "tone": "peri" },
+        { "d": "M460 290 L420 615", "tone": "peri" },
+        { "d": "M845 350 L865 625", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "Ears and shoulders join the block",
+        "sub": "The whole dog blocked in before any detail."
+      }
+    },
+    "stepResult": "frames/v1-165s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Eye line, nose, and mouth placed",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 165,
+    "clipEnd": 240,
+    "frame": "frames/v1-240s.jpg",
+    "watchAudio": "audio/v1-04-watch.mp3",
+    "watchSay": "Notice the eye line crosses straight through the centre, then the nose and mouth each get placed the same way -- all tangent lines, no curves yet.",
+    "audio": "audio/v1-04-try.mp3",
+    "say": "Place your own eye line, nose, and mouth with straight marks. Leave real space between the eyes.",
+    "overlay": {
+      "guides": [
+        { "d": "M545 290 L705 280", "dash": true, "tone": "peri" },
+        { "d": "M595 385 L630 430 L665 380", "tone": "peri" },
+        { "d": "M560 460 L690 450", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "Eye line, nose, and mouth placed",
+        "sub": "All three placed with straight tangent lines."
+      }
+    },
+    "stepResult": "frames/v1-240s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Inner and outer corners first",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 240,
+    "clipEnd": 310,
+    "frame": "frames/v1-310s.jpg",
+    "watchAudio": "audio/v1-05-watch.mp3",
+    "watchSay": "Here, small tick marks find each eye's true corners before any curve begins -- inner corner, then outer.",
+    "audio": "audio/v1-05-try.mp3",
+    "say": "Mark your own eye corners the same way, then let each eye become its own small frame.",
+    "overlay": {
+      "guides": [
+        { "d": "M545 290 L548 312", "tone": "peri" },
+        { "d": "M600 273 L600 296", "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "Inner and outer corners first",
+        "sub": "Small ticks mark each eye's true corners."
+      }
+    },
+    "stepResult": "frames/v1-310s.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Eyelids: firm on top, light below",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 310,
+    "clipEnd": 355,
+    "frame": "frames/v1-end.jpg",
+    "watchAudio": "audio/v1-06-watch.mp3",
+    "watchSay": "What matters here is the contrast: the upper lid gets one firm, confident line, while the lower lid stays light and open -- that's what keeps the eye feeling alive.",
+    "audio": "audio/v1-06-try.mp3",
+    "say": "Draw your own upper lid with one firm stroke, then keep the lower lid light. A heavy lower line makes the eye look puffy.",
+    "overlay": {
+      "guides": [
+        { "d": "M508 227 L565 224", "tone": "peri" },
+        { "d": "M512 275 Q537 288 562 273", "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 06",
+        "title": "Eyelids: firm on top, light below",
+        "sub": "A firm upper line; a light, open lower line."
+      }
+    },
+    "stepResult": "frames/v1-end.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Both eyes finished",
+    "kind": "draw",
+    "uid": "48db52a7e71678b1769e95897e55e461",
+    "start": 355,
+    "clipEnd": 416.157,
+    "frame": "frames/v1-end.jpg",
+    "watchAudio": "audio/v1-end-watch.mp3",
+    "watchSay": "Notice both eyes now have real thickness, not just an outline -- a steady stopping point before anything gets refined further.",
+    "audio": "audio/v1-end-try.mp3",
+    "say": "Take your time to finish this step. Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 537, "cy": 261, "rx": 30, "ry": 26, "ellipse": true, "tone": "blush" },
+        { "cx": 718, "cy": 280, "rx": 31, "ry": 27, "ellipse": true, "tone": "blush" }
+      ],
+      "card": {
+        "kicker": "STRUCTURE COMPLETE",
+        "title": "Both eyes finished, with thickness",
+        "sub": "Take your time to finish this step."
+      }
+    },
+    "stepResult": "frames/v1-end.jpg"
+  },
+  {
+    "chapter": "Structure",
+    "title": "Structure complete",
+    "kind": "milestone",
+    "hint": "The whole dog is blocked in — good place to pause.",
+    "say": "The whole dog is blocked in with straight lines, from the big shape down to the eyes. Good place to pause here if you'd like — next, we add quick detail to the eyes and ears.",
+    "audio": "audio/s99-milestone.mp3"
+  }
+]

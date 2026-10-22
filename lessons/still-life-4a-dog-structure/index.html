@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>if (!new URLSearchParams(location.search).has('classic')) location.replace('guided/' + location.search + location.hash);</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FEI TeamArt · Foundation of Sketch · Step 2 · Dog</title>
@@ -10296,9 +10297,22 @@ if (_existingProfile) {
     }
   }
 
+  // The guided outline is Video 1 only. Continue at Video 2, never mark
+  // the entire dog lesson complete at this handoff.
+  let guidedOutlineDone = false;
+  try {
+    const saved = JSON.parse(localStorage.getItem('fei.dog.guided-preview.v1') || '{}');
+    guidedOutlineDone = new URLSearchParams(location.search).get('from') === 'guided-outline' && (saved.completed || []).includes(10);
+  } catch (_) {}
+  if (guidedOutlineDone) {
+    state.currentStepIndex = LESSON.steps.findIndex(step => step.videoNumber === 2);
+    for (let i = 0; i < state.currentStepIndex; i++) if (!state.completedSteps.includes(i)) state.completedSteps.push(i);
+    UserProfile.update({currentLesson: LESSON.id, currentStepIdx: state.currentStepIndex});
+  }
   renderStep();
   resetSleep();
   applyPaidUrlIfPresent();
+  if (guidedOutlineDone) return;
   StudentRoster.load().finally(() => {
     setTimeout(() => {
       showWelcomePage();
