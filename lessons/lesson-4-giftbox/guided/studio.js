@@ -38,7 +38,7 @@ function speak(step,done){
  stopVoice(); voiceDone=done||null;timedCaptions=step.captions||[];
  window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-2';voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-3';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;$('caption').textContent='';const tip=document.querySelector('.teaching-tip strong');if(tip)tip.textContent=step.hint||step.title;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=true;}else{$('next').disabled=false;phase='waiting';}};
@@ -98,7 +98,20 @@ const momentArt={
  'ribbon-wrap':'<path d="M232 145 L251 143 L251 179 L232 181 Z"/>',
  'star-over-guides':'<circle cx="223" cy="139" r="24"/><path d="M201 139 H245 M223 116 V162"/>',
  'pentagon-star':'<path d="M223 115 L245 132 L237 157 L209 157 L201 132 Z"/><path d="M223 115 L228 132 L245 132 L231 142 L237 157 L223 148 L209 157 L215 142 L201 132 L218 132 Z"/>',
- 'soft-star':'<path d="M223 115 Q227 115 230 130 Q234 131 245 132 Q247 135 232 144 Q236 154 237 157 Q233 161 223 150 Q213 161 209 157 Q210 152 214 144 Q199 134 201 132 Q207 130 216 131 Q220 116 223 115 Z"/>'
+ 'soft-star':'<path d="M223 115 Q227 115 230 130 Q234 131 245 132 Q247 135 232 144 Q236 154 237 157 Q233 161 223 150 Q213 161 209 157 Q210 152 214 144 Q199 134 201 132 Q207 130 216 131 Q220 116 223 115 Z"/>',
+ 'bow-cut-lines':'<path d="M184 88 L198 72 L213 83 L224 101 M232 100 L247 81 L263 80 L272 99"/><circle cx="224" cy="101" r="6"/>',
+ 'bow-balance':'<path d="M224 102 Q211 72 195 72 L185 88 Q184 103 213 107 M232 103 Q249 78 263 80 Q271 84 263 101 Q251 109 232 103"/><circle cx="201" cy="91" r="5"/><circle cx="251" cy="94" r="5"/>',
+ 'bow-soft-curves':'<path d="M224 102 Q213 79 199 75 Q184 75 185 89 Q191 101 213 104 M231 102 Q247 80 260 82 Q270 85 264 98 Q255 106 232 103"/>',
+ 'bow-turned-tail':'<path d="M233 106 Q251 113 264 126 L257 140 Q245 129 234 122"/><path d="M257 140 Q265 131 269 124"/>',
+ 'box-cast-shadow':'<path d="M182 190 Q238 192 304 179 M182 190 Q240 208 346 177"/><circle cx="182" cy="190" r="6"/>',
+ 'star-thickness':'<path d="M221 88 Q226 99 240 101 L234 111 L233 121 L221 117 L211 122 L209 111 L202 103 L216 100 Z"/><path d="M208 122 Q221 128 235 122"/>',
+ 'star-own-smile':'<circle cx="216" cy="100" r="3"/><circle cx="229" cy="100" r="3"/><path d="M217 108 Q223 115 230 108"/>',
+ 'ribbon-creases':'<path d="M185 77 Q203 81 223 100 M193 70 Q210 78 223 100 M237 100 Q252 82 272 84 M237 100 Q251 94 273 97"/>',
+ 'rounded-lid-corner':'<path d="M128 61 L148 99 Q153 104 150 112 Q144 117 150 126"/><circle cx="150" cy="111" r="8"/>',
+ 'star-shadow-start':'<path d="M206 112 Q219 128 236 116 M207 121 Q221 132 238 122"/><circle cx="223" cy="122" r="7"/>',
+ 'pencil-value-choice':'<path d="M151 103 Q155 110 154 119 M207 120 Q220 129 237 121"/><circle cx="152" cy="110" r="8"/><circle cx="222" cy="122" r="8"/>',
+ 'front-to-back':'<circle cx="222" cy="110" r="22"/><path d="M190 82 Q197 65 215 73 M235 80 Q251 69 271 86 M275 95 Q301 96 318 135"/>',
+ 'bow-shadow-next':'<path d="M234 101 Q250 94 273 99 M234 106 Q252 103 274 105 M195 80 Q210 85 222 101"/><circle cx="260" cy="102" r="7"/>'
 };
 function showMoment(moment){
  if(activeMoment||phase!=='watching')return;
@@ -243,7 +256,7 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();music.pause(
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('box'))return; $('welcome').showModal();
-fetch('flow.json?v=box-2').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+fetch('flow.json?v=box-3').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
  try{ const p=await GuidedPlatform.restore('box',KEY,flow.length,{classicStepMap:['welcome','cube-connection','reference-details','tools','observe','box-1-1','box-2-1','box-3-1','box-4-1','submit','optional','celebrate'].map(id=>flow.findIndex(s=>s.id===id)),classicCompletedAt:11});unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your gift box →':'Let’s draw a gift box →';

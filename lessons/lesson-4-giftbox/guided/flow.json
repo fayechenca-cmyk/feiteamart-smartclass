@@ -226,10 +226,10 @@
   },
   {
     "id": "box-1-3",
-    "title": "Make room for the ribbon",
+    "title": "Shape the bow and its shadow",
     "chapter": "Observe the box",
-    "say": "Before adding small details, check the box again. Does the top leave enough room for the crossing ribbon and bow? Make any correction now; changing a line is part of drawing. Take your time. Continue when you are ready.",
-    "hint": "Check the proportions again.",
+    "say": "Now the bow grows from simple shapes into soft loops. Watch both sides together, then notice how the ribbon turns and how the box casts a shadow. The tiny star can have your own expression. Take your time and continue when you're ready.",
+    "hint": "Big shapes · soft loops · a grounding shadow.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-1-3.mp3",
@@ -237,7 +237,79 @@
     "start": 500,
     "clipEnd": 773.39,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/e6d268eb444dc4a8e659ea607609c0e3/thumbnails/thumbnail.jpg?time=772s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "bow-cut-lines",
+        "time": 20,
+        "title": "Find the bow's big shape",
+        "say": "The teacher begins with short straight guide lines around the bow. Think of them as a simple frame. Find the large shape first; the smaller folds can come later.",
+        "hint": "Big shape before small folds.",
+        "tip": "Use light, straight guide lines to place the bow's two large loops first.",
+        "audio": "audio/moment-bow-cut-lines.mp3",
+        "focus": "bow-cut-lines"
+      },
+      {
+        "id": "bow-balance",
+        "time": 42,
+        "title": "Build both sides together",
+        "say": "Keep looking from the left loop to the right. Add a little to one side, then check the other, so one loop doesn't grow much bigger. Your eyes lead the drawing; your hand follows.",
+        "hint": "Look left, then right.",
+        "tip": "Compare both loops as you draw, rather than finishing one side first.",
+        "audio": "audio/moment-bow-balance.mp3",
+        "focus": "bow-balance"
+      },
+      {
+        "id": "bow-soft-curves",
+        "time": 99,
+        "title": "Turn the guides into curves",
+        "say": "Once the loop's size and direction feel right, the teacher softens those straight guides into curved folds. For beginners, finding the shape with light straight lines first can make these curves much easier.",
+        "hint": "Place it first; soften it next.",
+        "tip": "Trace gentle curves over the lightly placed bow loops and inward folds.",
+        "audio": "audio/moment-bow-soft-curves.mp3",
+        "focus": "bow-soft-curves"
+      },
+      {
+        "id": "bow-turned-tail",
+        "time": 175,
+        "title": "Notice the turning ribbon",
+        "say": "The ribbon on the right is turning up, not lying flat on the box. Look at the real gift beside the video. The teacher checks its angle again and again to show that little twist in space.",
+        "hint": "The right ribbon turns in space.",
+        "tip": "Compare the right ribbon with the real gift; adjust its angle to show the twist.",
+        "audio": "audio/moment-bow-turned-tail.mp3",
+        "focus": "bow-turned-tail"
+      },
+      {
+        "id": "box-cast-shadow",
+        "time": 215,
+        "title": "Give the box a shadow",
+        "say": "The teacher now places the shadow beneath the box. A shadow matters as much as the outline: it helps the gift feel solid and resting on the table. Notice how it begins at the box's base and stretches away.",
+        "hint": "The shadow anchors the gift.",
+        "tip": "Start the cast shadow at the bottom edge so the box sits on the table.",
+        "audio": "audio/moment-box-cast-shadow.mp3",
+        "focus": "box-cast-shadow"
+      },
+      {
+        "id": "star-thickness",
+        "time": 248,
+        "title": "Give the star a little depth",
+        "say": "Look closely at the small star. The teacher is adding a second edge and a few careful marks, so it feels like a real decoration sitting in front of the bow. You can enlarge the reference picture to see those details.",
+        "hint": "A second edge gives the star thickness.",
+        "tip": "Follow the star's edge and notice its tiny seams in the enlarged reference.",
+        "audio": "audio/moment-star-thickness.mp3",
+        "focus": "star-thickness"
+      },
+      {
+        "id": "star-own-smile",
+        "time": 264,
+        "title": "Make the little face yours",
+        "say": "The teacher adds a tiny smile. Yours can smile differently, or you can design another expression. This small detail is a lovely place to make the gift your own.",
+        "hint": "Your design belongs here too.",
+        "tip": "Add the smile you see, or invent your own expression for the star.",
+        "audio": "audio/moment-star-own-smile.mp3",
+        "focus": "star-own-smile"
+      }
+    ]
   },
   {
     "id": "break-1",
@@ -251,10 +323,10 @@
   },
   {
     "id": "box-2-1",
-    "title": "Build the rectangular prism",
+    "title": "Round the lid and begin shading",
     "chapter": "Build the form",
-    "say": "Begin with the box framework, just as you did with the cube. This time, measure the stretched proportions carefully. Try it on your paper before continuing. Take your time. Continue when you are ready.",
-    "hint": "Light lines · stretched proportions.",
+    "say": "Our big box shape is ready. Now watch the teacher soften the lid's corners and slowly add depth to the star and ribbon. You can keep your first marks light and build the darker values after the form feels right. Try it on your paper, then continue.",
+    "hint": "Rounded corners · folds · gentle shadows.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-2-1.mp3",
@@ -262,7 +334,69 @@
     "start": 0,
     "clipEnd": 180,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/650be4e24c3b026de83c589413f9098f/thumbnails/thumbnail.jpg?time=179s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "ribbon-creases",
+        "time": 12,
+        "title": "Suggest the ribbon folds",
+        "say": "The teacher adds a few lines where the silk bunches near the star. These are not a copy of every tiny wrinkle. They show the direction of the larger folds, leaving room to refine them later.",
+        "hint": "Show the fold direction, not every wrinkle.",
+        "tip": "Use a few light lines to suggest how the ribbon folds toward the star.",
+        "audio": "audio/moment-ribbon-creases.mp3",
+        "focus": "ribbon-creases"
+      },
+      {
+        "id": "rounded-lid-corner",
+        "time": 34,
+        "title": "Soften the lid's corner",
+        "say": "This gift box has rounded edges in the real reference. Watch the teacher turn a sharp construction corner into a small curve. That simple change makes the drawn box feel more like the object in front of us.",
+        "hint": "A soft curve makes this box feel real.",
+        "tip": "Replace the sharp lid corner with a gentle curve, following the real gift.",
+        "audio": "audio/moment-rounded-lid-corner.mp3",
+        "focus": "rounded-lid-corner"
+      },
+      {
+        "id": "star-shadow-start",
+        "time": 67,
+        "title": "Build shadow with the star",
+        "say": "As the teacher refines the little star, its shadow begins to appear too. Shape and shadow work together. A darker edge beneath the star separates it from the ribbon behind it.",
+        "hint": "Shape and shadow grow together.",
+        "tip": "Darken just below the star to show it sitting in front of the ribbon.",
+        "audio": "audio/moment-star-shadow-start.mp3",
+        "focus": "star-shadow-start"
+      },
+      {
+        "id": "pencil-value-choice",
+        "time": 92,
+        "title": "Choose a pencil that helps you",
+        "say": "There is no one required pencil grade here. H B or two B can both work. A lighter first pass is easier to adjust and erase; once the shape feels right, build a darker value gradually. Notice the result on your paper, not just the number on the pencil.",
+        "hint": "Light first, darker when you're sure.",
+        "tip": "Begin lightly so you can correct the form; build darker values in layers.",
+        "audio": "audio/moment-pencil-value-choice.mp3",
+        "focus": "pencil-value-choice"
+      },
+      {
+        "id": "front-to-back",
+        "time": 139,
+        "title": "See the layers from front to back",
+        "say": "The star sits closest to us, the bow behind it, and the box behind both. The teacher strengthens the star's little edge first to make that overlap clear. You can work in another order, but always keep these layers in mind.",
+        "hint": "Star, bow, then box.",
+        "tip": "Strengthen the star's lower edge to show it in front of the bow.",
+        "audio": "audio/moment-front-to-back.mp3",
+        "focus": "front-to-back"
+      },
+      {
+        "id": "bow-shadow-next",
+        "time": 173,
+        "title": "Carry the shadow into the bow",
+        "say": "Now the teacher moves from the star into the ribbon folds. A little shadow inside the bow helps the fabric turn. Keep comparing each dark mark with the light parts, so the bow stays soft.",
+        "hint": "Shadow gives the bow its turn.",
+        "tip": "Add gentle darks inside the folds while keeping the light parts open.",
+        "audio": "audio/moment-bow-shadow-next.mp3",
+        "focus": "bow-shadow-next"
+      }
+    ]
   },
   {
     "id": "box-2-2",
