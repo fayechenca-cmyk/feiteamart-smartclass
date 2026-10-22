@@ -159,7 +159,7 @@ function enter(){
  if(index>2)stopIntroMusic();
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
- setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();
+ setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();window.GuidedUX?.stepCounter(flow,index);
  if(s.kind==='intro'||s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src=APPLE_REFERENCE;$('referenceImage').alt='Teacher’s finished apple drawing';}

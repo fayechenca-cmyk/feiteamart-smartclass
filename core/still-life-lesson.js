@@ -67,7 +67,7 @@
     // future steps when that footage arrives — ready:true now is
     // intentional, publishing what exists rather than waiting for
     // the full set.
-    { id: 'still-life-4a-dog-structure', title: 'Dog', href: 'lessons/still-life-4a-dog-structure/', ready: true },
+    { id: 'still-life-4a-dog-structure', title: 'Dog', href: 'lessons/still-life-4a-dog-structure/guided/', ready: true },
     // Wooden Photo Frame replaces the Tree placeholder in this lineup
     // position (per Faye — same object category/wood-grain texture
     // focus as originally planned, different object). Same single-entry

@@ -15,7 +15,14 @@
    Specificity note: `.stage-col #stage` (0,1,1) deliberately outranks
    each lesson's bare `#stage{flex:0 1 77%}` (0,0,1) so the override
    applies regardless of each file's own link order. */
-.stage-col{display:flex;flex-direction:column;gap:8px;flex:0 1 77%;min-width:0;min-height:0}
+/* align-self:stretch is the actual fix for the clip-bar/stage overlap
+   found while building the step counter below: main{align-items:center}
+   never stretched .stage-col to a definite height, so #stage's own
+   max-height:100% (each lesson's base CSS, unchanged) had nothing
+   definite to resolve against and the aspect-ratio box could grow
+   past whatever room the footer actually had -- worst on a milestone's
+   longer heading, which is what surfaced it. */
+.stage-col{display:flex;flex-direction:column;gap:8px;flex:0 1 77%;min-width:0;min-height:0;align-self:stretch}
 .stage-col #stage{flex:1 1 auto;min-height:0}
 #clipControls{position:static;display:flex;align-items:center;gap:12px;padding:8px 14px;border-radius:24px;background:#fffdf5ed;color:#17182D;box-shadow:0 2px 8px #17182D15;flex-shrink:0;width:100%;box-sizing:border-box}
 #clipControls button{padding:5px 12px;min-width:42px}
@@ -42,3 +49,4 @@
 #progress .step-jump:hover,#progress .step-jump:focus-visible{background:var(--lav,#d9cef3)}
 body{grid-template-columns:minmax(0,1fr)}
 header,main,footer{min-width:0}
+#stepCounter{font-size:11px;letter-spacing:.04em;color:var(--ink);opacity:.72;margin-bottom:3px}

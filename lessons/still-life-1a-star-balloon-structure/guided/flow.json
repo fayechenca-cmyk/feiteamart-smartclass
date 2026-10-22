@@ -275,8 +275,8 @@
     "chapter": "Outlining the Shape",
     "title": "Outline complete",
     "kind": "milestone",
-    "hint": "Your outline is ready \u2014 next time, we bring in the light and dark.",
-    "say": "Your outline is ready. That's the hardest part done \u2014 next time, we bring in the light and dark.",
+    "hint": "Your outline is ready \u2014 good place to pause.",
+    "say": "Your outline is ready. That's the hardest part done. Good place to pause here if you'd like \u2014 next time, we bring in the light and dark.",
     "audio": "audio/s99-milestone.mp3"
   },
   {
@@ -496,8 +496,8 @@
     "chapter": "Light and Dark on the Structure",
     "title": "Light and dark complete",
     "kind": "milestone",
-    "hint": "Your edges now follow what you really see \u2014 next, we build the tone across the whole form.",
-    "say": "Your edges now follow what you really see. That's real observation. Next, we build the tone across the whole form.",
+    "hint": "Your edges now match what you really see \u2014 good place to pause.",
+    "say": "Your edges now follow what you really see. That's real observation. Good place to pause here if you'd like \u2014 next, we build the tone across the whole form.",
     "audio": "audio/s98-video2-milestone.mp3"
   },
   {
@@ -834,8 +834,8 @@
     "chapter": "Tone Along the Form",
     "title": "Tone complete",
     "kind": "milestone",
-    "hint": "Tone is built across the whole form \u2014 next, we blend it smooth with a tissue.",
-    "say": "Tone is built across the whole star, with every highlight protected. That's real patience. Next, we blend it smooth with a tissue.",
+    "hint": "Tone is built across the whole form \u2014 good place to pause.",
+    "say": "Tone is built across the whole star, with every highlight protected. That's real patience. Good place to pause here if you'd like \u2014 next, we blend it smooth with a tissue.",
     "audio": "audio/s97-video3-milestone.mp3"
   },
   {
@@ -928,8 +928,8 @@
     "chapter": "Blending with a Tissue",
     "title": "Blending complete",
     "kind": "milestone",
-    "hint": "Your tone is smooth, and the contrast is still there \u2014 next, we add the darkest details.",
-    "say": "Your tone is smooth, and the contrast is still there. That's the balance foil needs. Next, we add the darkest details.",
+    "hint": "Tone is smooth, contrast still there \u2014 good place to pause.",
+    "say": "Your tone is smooth, and the contrast is still there. That's the balance foil needs. Good place to pause here if you'd like \u2014 next, we add the darkest details.",
     "audio": "audio/s96-video4-milestone.mp3"
   },
   {

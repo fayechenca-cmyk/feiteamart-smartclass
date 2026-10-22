@@ -21,6 +21,29 @@ window.GuidedUX=(()=>{
   if(cue.zone!==undefined){const button=document.querySelector(`[data-zone="${cue.zone}"]`);button?.click();const ring=document.getElementById('zoneRing');if(ring){ring.classList.remove('cue-pulse');void ring.getBoundingClientRect();ring.classList.add('cue-pulse');}}
   if(cue.tool){const box=boxes[cue.tool],rect=document.getElementById('materialFocus');if(rect&&box){['x','y','width','height'].forEach((attr,i)=>rect.setAttribute(attr,box[i]));document.getElementById('materialLabel').textContent=cue.label||cue.tool;}}
  }
+ // Visible end point (Oct 2026): a persistent "Step X of N · Chapter Y
+ // of Z" line. Needed because the existing setMode() chapter/position
+ // string in each lesson's own enter() is overwritten almost
+ // immediately by a status line ("WATCH WITH YOUR TEACHER", "YOUR TURN
+ // · TAKE YOUR TIME") -- students never actually got to read it. This
+ // writes to its own #stepCounter element instead, which nothing else
+ // touches, so it stays visible for the whole step. Called once per
+ // lesson's own enter(), right where it already calls progress().
+ function stepCounter(flow,index){
+  const el=document.getElementById('stepCounter');if(!el||!flow.length)return;
+  const chapter=flow[index]?.chapter||'';
+  const chapterSteps=flow.reduce((a,s,i)=>{if(s.chapter===chapter)a.push(i);return a;},[]);
+  const posInChapter=chapterSteps.indexOf(index)+1;
+  // Approximate time left in this chapter: real clip length for the
+  // remaining draw steps (clipEnd-start), ignoring narration-only steps
+  // -- a rough lower bound, not exact, but enough to see a finish line.
+  const remaining=chapterSteps.filter(i=>i>=index).reduce((sum,i)=>{
+   const s=flow[i];return sum+(s.kind==='draw'&&s.clipEnd!=null?Math.max(0,s.clipEnd-(s.start||0)):0);
+  },0);
+  const mins=Math.round(remaining/60);
+  const timeLeft=remaining>20?` · ~${mins<1?'1':mins} min left`:'';
+  el.textContent=`Step ${index+1} of ${flow.length} · ${chapter} ${posInChapter} of ${chapterSteps.length}${timeLeft}`;
+ }
  function pause(s){
   const stage=document.getElementById('visual');
   // The exact authored annotated frame fills the main teaching stage.
@@ -31,5 +54,5 @@ window.GuidedUX=(()=>{
   card.querySelector('button').onclick=()=>card.remove();stage.append(card);
   const reference=document.getElementById('referenceImage');if(reference)reference.style.cursor='zoom-in';
  }
- return {reset,scene,narrate,tick,pause,dots};
+ return {reset,scene,narrate,tick,pause,dots,stepCounter};
 })();
