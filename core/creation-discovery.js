@@ -38,6 +38,7 @@
     if(space!=='inspire')window.FEIInspirationStudio?.dispose();
     document.body.classList.toggle('c3-inspire',space==='inspire');
     document.body.classList.toggle('creation-discovery',space!=='inspire');
+    document.documentElement.classList.toggle('creation-discovery',space!=='inspire');
     closeStation();
     if(space&&space!==lastSpace){track('creation_space_entered',{creationSpace:space});if(lastSpace)track('creation_space_switched',{creationSpace:space});}
     lastSpace=space;

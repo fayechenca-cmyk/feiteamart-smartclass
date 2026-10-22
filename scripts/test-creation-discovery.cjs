@@ -18,6 +18,18 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
  assert.equal(await page.locator('#creation-tour').evaluate(e=>e.open),false);
  const before=await page.evaluate(()=>sessionStorage.getItem('fei_user_profile'));
  await page.locator('[data-entry=make]').click();await page.locator('#c3-gallery').waitFor();assert.equal(await page.locator('.c3-card').count(),17);
+ // Real wheel input catches root overflow locks that programmatic scrolling misses.
+ for(const width of [1440,390]){
+  await page.setViewportSize({width,height:800});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.mouse.move(Math.min(width-30,900),600);
+  await page.mouse.wheel(0,1200);
+  await page.waitForFunction(()=>window.scrollY>100,{},{timeout:3000});
+  await page.mouse.wheel(0,100000);
+  await page.waitForFunction(()=>window.scrollY+innerHeight>=document.documentElement.scrollHeight-5,{},{timeout:3000});
+ }
+ await page.setViewportSize({width:1440,height:1000});
+ await page.evaluate(()=>window.scrollTo(0,0));
  const projects=await page.evaluate(()=>FEICreationProjects);
  const covers=projects.filter(p=>p.cover);
  assert.equal(covers.length,16);assert.equal(projects.filter(p=>!p.cover).length,0);

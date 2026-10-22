@@ -1,5 +1,6 @@
 /* Creation-only surfaces; palette and type follow the existing dashboard. */
 #creation-app{--ink:#17182f;--ink-soft:#605d6b;--paper:#fffdf9;--line:#e7e2ed;color:var(--ink);font:400 14px/1.65 'Open Sans',sans-serif;user-select:text}
+html.creation-discovery{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
 body.creation-discovery{height:auto;min-height:100%;overflow:auto;background:#fffdf9}
 body.creation-discovery>.stage,body.creation-discovery>.zoom-overlay,body.creation-discovery>.grid-view{display:none!important}
 #creation-app [hidden]{display:none!important}
