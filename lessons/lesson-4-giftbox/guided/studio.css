@@ -59,3 +59,10 @@ dialog::backdrop{background:#17182D70}dialog{border-color:#e7e2ed}#mapItems h3{c
 @keyframes moment-mark{50%{stroke:#3c9b7d;stroke-width:4.5;filter:drop-shadow(0 0 6px #82cdb2)}}@keyframes moment-arrive{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
 @media(max-width:700px){.moment-overlay{padding:8px;background:none}.moment-card{width:min(66%,240px);min-width:0;padding:9px 10px;border-radius:13px}.moment-card small{font-size:8px}.moment-card h2{font-size:15px;margin:4px 0}.moment-card p{font-size:11px;margin-bottom:6px}.moment-card button{font-size:10px;padding:5px 7px}.moment-focus path,.moment-focus circle{stroke-width:4}}
 @media(prefers-reduced-motion:reduce){.moment-focus path,.moment-focus circle,.moment-card{animation:none}}
+.stage-col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:8px}
+.stage-col #stage{flex:1;min-height:0}
+body{grid-template-columns:minmax(0,1fr)}
+main#studio{width:100%;min-width:0}
+main#studio #reference{flex:0 0 23%;min-width:0}
+footer{min-width:0}
+#progress{max-width:100%;overflow-x:auto}
