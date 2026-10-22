@@ -40,10 +40,17 @@
   font-size: 11px;
 }
 
+#progress i.skipped { background: #d8cee7; }
+#back:disabled { opacity: .35; }
+#skip { border-style: dashed; color: #6a5a7b; }
+.map-step.skipped { background: #f5f1fa; border-style: dashed; }
+
 @media (max-width: 820px) {
   header { flex-wrap: wrap; }
   header > div { min-width: 180px; }
   #guideSound, #sound { font-size: 9px; }
+  .controls { justify-content: stretch; }
+  .controls button { flex: 1; min-width: 0; padding-inline: 8px; }
   .listen { grid-column: 1 / -1; margin: 3px 0 5px; padding: 6px 10px; }
   .material-note { grid-column: 1 / -1; }
 }
