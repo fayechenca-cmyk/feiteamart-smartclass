@@ -583,5 +583,207 @@
     "hint": "Light and dark now shape the whole head — good place to pause.",
     "say": "Light and dark now wrap the whole head, with real bone structure underneath the surface. Good place to pause here if you'd like -- next, we go deep into just the eyes.",
     "audio": "audio/s97-milestone.mp3"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "A softer, darker pencil arrives",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 0,
+    "clipEnd": 43,
+    "frame": "frames/v4-43s.jpg",
+    "watchAudio": "audio/v4-01-watch.mp3",
+    "watchSay": "Here, notice the pencil change -- a softer 4B now, but only for the darks, and still used lightly. A soft pencil goes darker on its own, so there's no need to press. It lays down smooth, natural tone with hardly any visible strokes.",
+    "audio": "audio/v4-01-try.mp3",
+    "say": "Pick up your own 4B and keep the same light touch. Let the softness of the pencil do the work, not your pressure.",
+    "overlay": {
+      "guides": [
+        { "cx": 535, "cy": 242, "rx": 50, "ry": 40, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "A softer, darker pencil arrives",
+        "sub": "4B stays light at first -- it goes dark on its own."
+      }
+    },
+    "stepResult": "frames/v4-43s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "The eye rebuilt: highlight, then pupil",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 43,
+    "clipEnd": 119,
+    "frame": "frames/v4-119s.jpg",
+    "watchAudio": "audio/v4-02-watch.mp3",
+    "watchSay": "Notice the eye rebuilt in order -- the highlight restated first, then the darkest pupil around it, kept light, not dead. Tone graduates inward from the outline, and the corners are drawn slowly.",
+    "audio": "audio/v4-02-try.mp3",
+    "say": "Rebuild your own eye the same way: highlight first, then the pupil around it, graduating inward.",
+    "overlay": {
+      "guides": [
+        { "cx": 542, "cy": 226, "rx": 9, "ry": 7, "ellipse": true, "tone": "blush", "dash": true },
+        { "cx": 557, "cy": 240, "rx": 42, "ry": 36, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "The eye rebuilt: highlight, then pupil",
+        "sub": "Corners drawn slowly, around the highlight."
+      }
+    },
+    "stepResult": "frames/v4-119s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Thickness, built slowly",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 119,
+    "clipEnd": 196,
+    "frame": "frames/v4-196s.jpg",
+    "watchAudio": "audio/v4-03-watch.mp3",
+    "watchSay": "Here, thickness builds slowly -- the lower lid first, light and patient, then the upper lid's layered thickness building upward as well as inward. This kind of detail takes patience.",
+    "audio": "audio/v4-03-try.mp3",
+    "say": "Build your own lid thickness slowly too: lower lid first, light, then the upper lid layered with more weight.",
+    "overlay": {
+      "guides": [
+        { "cx": 556, "cy": 240, "rx": 48, "ry": 40, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "Thickness, built slowly",
+        "sub": "Lower lid first, then the upper lid's weight."
+      }
+    },
+    "stepResult": "frames/v4-196s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "The upper lid, like an umbrella",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 196,
+    "clipEnd": 269,
+    "frame": "frames/v4-269s.jpg",
+    "watchAudio": "audio/v4-04-watch.mp3",
+    "watchSay": "What matters here is the upper lid -- like an umbrella, it shades the eyeball, so the eye sits under the lid instead of glaring bright. The left eye is finished now.",
+    "audio": "audio/v4-04-try.mp3",
+    "say": "Take your time on this eye. Continue whenever it feels ready.",
+    "overlay": {
+      "guides": [
+        { "d": "M500 215 Q550 193 602 216", "tone": "peri" },
+        { "cx": 552, "cy": 250, "rx": 56, "ry": 50, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "LEFT EYE COMPLETE",
+        "title": "The upper lid, like an umbrella",
+        "sub": "It shades the eye -- take your time here."
+      }
+    },
+    "stepResult": "frames/v4-269s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Between the eyes, with 2B",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 269,
+    "clipEnd": 313,
+    "frame": "frames/v4-313s.jpg",
+    "watchAudio": "audio/v4-05-watch.mp3",
+    "watchSay": "Notice the pencil goes back to 2B between the eyes -- the eye never stands alone. Bone, muscle, and fold are drawn together: draw the top, look at the bottom; draw the left, look at the right.",
+    "audio": "audio/v4-05-try.mp3",
+    "say": "Connect your own eyes with the same 2B before moving on -- bone and muscle drawn together, never isolated.",
+    "overlay": {
+      "guides": [
+        { "d": "M562 243 L670 248", "dash": true, "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "Between the eyes, with 2B",
+        "sub": "The eye never stands alone."
+      }
+    },
+    "stepResult": "frames/v4-313s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Right eye: highlight, then pupil",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 313,
+    "clipEnd": 390,
+    "frame": "frames/v4-390s.jpg",
+    "watchAudio": "audio/v4-06-watch.mp3",
+    "watchSay": "Same as the left eye -- highlight first, then the pupil, with the 4B back in hand.",
+    "audio": "audio/v4-06-try.mp3",
+    "say": "Build your own right eye the same way. Take the time you need.",
+    "overlay": {
+      "guides": [
+        { "cx": 722, "cy": 268, "rx": 44, "ry": 38, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 06",
+        "title": "Right eye: highlight, then pupil",
+        "sub": "Same as the left eye."
+      }
+    },
+    "stepResult": "frames/v4-390s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Right eye: thickness, the same way",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 390,
+    "clipEnd": 450,
+    "frame": "frames/v4-450s.jpg",
+    "watchAudio": "audio/v4-07-watch.mp3",
+    "watchSay": "Same lid thickness as before -- lower lid, then the upper lid's weight, built slowly.",
+    "audio": "audio/v4-07-try.mp3",
+    "say": "Give your own right eye the same patient thickness.",
+    "overlay": {
+      "guides": [
+        { "cx": 728, "cy": 262, "rx": 48, "ry": 42, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 07",
+        "title": "Right eye: thickness, the same way",
+        "sub": "Lower lid, then the upper lid's weight."
+      }
+    },
+    "stepResult": "frames/v4-450s.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Both eyes finished",
+    "kind": "draw",
+    "uid": "2337732f108d82be7399fcfdeb03d253",
+    "start": 450,
+    "clipEnd": 520.59,
+    "frame": "frames/v4-end.jpg",
+    "watchAudio": "audio/v4-end-watch.mp3",
+    "watchSay": "Notice both eyes now finished, each sitting under its own shading lid. A clear rest here before the next video.",
+    "audio": "audio/v4-end-try.mp3",
+    "say": "Take your time to finish this step. Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 630, "cy": 255, "rx": 155, "ry": 65, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "EYES COMPLETE",
+        "title": "Both eyes finished, with real depth",
+        "sub": "Take your time to finish this step."
+      }
+    },
+    "stepResult": "frames/v4-end.jpg"
+  },
+  {
+    "chapter": "Eyes",
+    "title": "Eyes complete",
+    "kind": "milestone",
+    "hint": "Both eyes are fully built now — good place to pause.",
+    "say": "Both eyes are fully built now, with real depth and thickness. Good place to pause here if you'd like -- next, we go deep into the nose.",
+    "audio": "audio/s96-milestone.mp3"
   }
 ]
