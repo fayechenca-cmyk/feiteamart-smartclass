@@ -211,5 +211,189 @@
     "hint": "The whole dog is blocked in — good place to pause.",
     "say": "The whole dog is blocked in with straight lines, from the big shape down to the eyes. Good place to pause here if you'd like — next, we add quick detail to the eyes and ears.",
     "audio": "audio/s99-milestone.mp3"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Ear thickness, with small tangents",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 0,
+    "clipEnd": 48,
+    "frame": "frames/v2-48s.jpg",
+    "watchAudio": "audio/v2-01-watch.mp3",
+    "watchSay": "This pass uses a light pencil -- 2H or HB -- small tangent lines only, nothing heavy yet. Notice each ear gets a little thickness: short straight tangents, not one long curve.",
+    "audio": "audio/v2-01-try.mp3",
+    "say": "Add a few small tangents to your own ears' edges, the same light touch.",
+    "overlay": {
+      "guides": [
+        { "cx": 390, "cy": 230, "rx": 75, "ry": 135, "ellipse": true, "tone": "peri" },
+        { "cx": 835, "cy": 190, "rx": 70, "ry": 115, "ellipse": true, "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "Ear thickness, with small tangents",
+        "sub": "Short straight tangents, not one long curve."
+      }
+    },
+    "stepResult": "frames/v2-48s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "A correction — and that's normal",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 48,
+    "clipEnd": 90,
+    "frame": "frames/v2-90s.jpg",
+    "watchAudio": "audio/v2-02-watch.mp3",
+    "watchSay": "Watch the right ear get the same small tangents. Then notice a quick correction -- even a careful hand adjusts a line here. That's normal; kept tangents underneath can still look beautiful.",
+    "audio": "audio/v2-02-try.mp3",
+    "say": "If one of your own tangents looks off, adjust it with a new line. No need to erase everything underneath.",
+    "overlay": {
+      "guides": [
+        { "cx": 835, "cy": 200, "rx": 75, "ry": 120, "ellipse": true, "tone": "peri" },
+        { "cx": 905, "cy": 265, "rx": 25, "ry": 35, "ellipse": true, "tone": "leaf", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "A correction — and that's normal",
+        "sub": "Kept tangents underneath can still look beautiful."
+      }
+    },
+    "stepResult": "frames/v2-90s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Nose and nostrils, still tangents",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 90,
+    "clipEnd": 163,
+    "frame": "frames/v2-163s.jpg",
+    "watchAudio": "audio/v2-03-watch.mp3",
+    "watchSay": "Here, the nose and nostrils are built the same way: small straight tangents first. A tangent or an arc both work here -- there's no right or wrong, tangents are simply easier starting out.",
+    "audio": "audio/v2-03-try.mp3",
+    "say": "Shape your own nostrils with small tangent lines. If an arc already feels natural to you, that works just as well.",
+    "overlay": {
+      "guides": [
+        { "cx": 610, "cy": 392, "rx": 55, "ry": 42, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "Nose and nostrils, still tangents",
+        "sub": "Tangents are simply easier starting out."
+      }
+    },
+    "stepResult": "frames/v2-163s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Eye detail begins",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 163,
+    "clipEnd": 245,
+    "frame": "frames/v2-245s.jpg",
+    "watchAudio": "audio/v2-04-watch.mp3",
+    "watchSay": "Notice the eye work begins here -- remember, an eye isn't a line, it's a surface with real thickness, almost like a little dome. The same light pencil shapes it.",
+    "audio": "audio/v2-04-try.mp3",
+    "say": "Begin shaping your own eye as a surface, not an outline -- give it that same gentle thickness.",
+    "overlay": {
+      "guides": [
+        { "cx": 725, "cy": 272, "rx": 38, "ry": 32, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "Eye detail begins",
+        "sub": "An eye is a surface, not a line."
+      }
+    },
+    "stepResult": "frames/v2-245s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Highlight, then the darkest pupil",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 245,
+    "clipEnd": 300,
+    "frame": "frames/v2-300s.jpg",
+    "watchAudio": "audio/v2-05-watch.mp3",
+    "watchSay": "What matters here is order: the highlight goes in early, while there's still room for it -- then the darkest point of the pupil, then the greys around it. Put the highlight in early, or the eye ends up lifeless.",
+    "audio": "audio/v2-05-try.mp3",
+    "say": "In your own eye, reserve the highlight first, then add the darkest pupil, then build the greys around it.",
+    "overlay": {
+      "guides": [
+        { "cx": 725, "cy": 270, "rx": 42, "ry": 36, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "inset": [
+        { "src": "frames/v2-inset-highlight.jpg", "label": "Highlight first", "alt": "The eye with a small reserved highlight" },
+        { "src": "frames/v2-inset-pupil.jpg", "label": "Darkest pupil", "alt": "The eye with the pupil darkened" },
+        { "src": "frames/v2-inset-greys.jpg", "label": "Then the greys", "alt": "The eye with grey tone built up around the pupil" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "Highlight, then the darkest pupil",
+        "sub": "Early, or the eye ends up lifeless."
+      }
+    },
+    "stepResult": "frames/v2-300s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "The outer corner links to the lid",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 300,
+    "clipEnd": 362,
+    "frame": "frames/v2-362s.jpg",
+    "watchAudio": "audio/v2-06-watch.mp3",
+    "watchSay": "Here, the outer corner gets strengthened until it connects with the eyelid above -- eye, lid, and brow bone all drawn together, like one family, never alone. The left eye gets the very same approach.",
+    "audio": "audio/v2-06-try.mp3",
+    "say": "Strengthen your own outer corner until it meets the lid, then bring the left eye along the same way -- eye, lid, and brow together.",
+    "overlay": {
+      "guides": [
+        { "cx": 560, "cy": 245, "rx": 55, "ry": 60, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "arrow": { "d": "M760 285 Q766 265 760 248", "tone": "peri" },
+      "card": {
+        "kicker": "LOOK CLOSELY · 06",
+        "title": "The outer corner links to the lid",
+        "sub": "Eye, lid, and brow drawn together, like a family."
+      }
+    },
+    "stepResult": "frames/v2-362s.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Both eyes finished",
+    "kind": "draw",
+    "uid": "ea9d20472e8085281505641bc47b64e7",
+    "start": 362,
+    "clipEnd": 432.829,
+    "frame": "frames/v2-end.jpg",
+    "watchAudio": "audio/v2-end-watch.mp3",
+    "watchSay": "Notice both eyes now carry real tone: inner and outer corners, a light lower lid, the highlight, the darkest pupil, and the greys around it -- the same order, for the second eye too.",
+    "audio": "audio/v2-end-try.mp3",
+    "say": "Take your time to finish this step. Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 640, "cy": 255, "rx": 145, "ry": 65, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "EYES AND EARS COMPLETE",
+        "title": "Both eyes finished, with tone",
+        "sub": "Take your time to finish this step."
+      }
+    },
+    "stepResult": "frames/v2-end.jpg"
+  },
+  {
+    "chapter": "Eyes and Ears",
+    "title": "Eyes and ears complete",
+    "kind": "milestone",
+    "hint": "Eyes and ears have real tone — good place to pause.",
+    "say": "Both eyes and ears now have real detail and tone. Good place to pause here if you'd like -- next, we build the light and dark across the whole face.",
+    "audio": "audio/s98-milestone.mp3"
   }
 ]

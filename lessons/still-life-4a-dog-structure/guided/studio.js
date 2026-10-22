@@ -60,7 +60,11 @@ function overlaySvg(spec, frameSrc){
  const arrow=spec?.arrow?`<path class="og-arrow og-fade" style="animation-delay:${.6+(spec.guides?.length||0)*.15}s;stroke:${TONES[arrowTone]}" marker-end="url(#og-tip-${arrowTone})" d="${spec.arrow.d}"/>`:'';
  const card=spec?.card?`<g class="og-fade" style="animation-delay:.9s"><rect class="og-card-bg" x="25" y="22" width="420" height="116" rx="16"/><rect class="og-card-accent" x="25" y="22" width="7" height="116" rx="3"/><text class="og-kicker" x="48" y="56">${spec.card.kicker}</text><text class="og-title" x="48" y="88">${spec.card.title}</text><text class="og-sub" x="48" y="117">${spec.card.sub}</text></g>`:'';
  const markers=Object.entries(TONES).map(([name,hex])=>`<marker id="og-tip-${name}" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 L8 5 L1 9" fill="none" stroke="${hex}" stroke-width="2"/></marker>`).join('');
- return `<div class="overlay-wrap"><img src="${frameSrc}" alt=""><svg class="overlay-svg" viewBox="0 0 1280 720" role="img" aria-label="${spec?.card?spec.card.title:'Teaching guide'}"><defs>${markers}</defs>${guides}${arrow}${card}</svg></div>`;
+ // Zoomed inset filmstrip -- used once in this lesson (Video 2, the eye
+ // highlight/pupil/greys moment) to show the real build-up order beside
+ // the full frame, since that sequence is too small to read in the main view.
+ const inset=spec?.inset?`<div class="og-inset">${spec.inset.map((f,i)=>`<figure style="animation-delay:${1.1+i*.25}s"><img src="${f.src}" alt="${f.alt}"><figcaption>${f.label}</figcaption></figure>`).join('')}</div>`:'';
+ return `<div class="overlay-wrap"><img src="${frameSrc}" alt=""><svg class="overlay-svg" viewBox="0 0 1280 720" role="img" aria-label="${spec?.card?spec.card.title:'Teaching guide'}"><defs>${markers}</defs>${guides}${arrow}${card}</svg>${inset}</div>`;
 }
 
 function tissueScene(){
