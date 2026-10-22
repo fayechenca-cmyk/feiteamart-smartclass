@@ -30,7 +30,8 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
    await page.locator(`[data-seat="${id}"]`).focus();await page.keyboard.press('Enter');await page.locator('#insp-dialog[open]').waitFor();
    assert.equal(await page.locator('.insp-draft a').count(),0);await page.keyboard.press('Escape');await page.locator('#insp-dialog[open]').waitFor({state:'hidden'});
   }
-  await page.locator('.insp-quick').click();await page.locator('#insp-run:not([disabled])').waitFor();
+  await page.locator('.insp-quick').click();await page.locator('#insp-quantity').waitFor();
+  await page.locator('#insp-quantity').selectOption('1');await page.locator('[data-pick-photo]').first().click();await page.locator('#insp-run:not([disabled])').waitFor();
   await page.clock.install();
   await page.locator('#insp-duration').selectOption('30');await page.locator('#insp-run:not([disabled])').click();
   await page.clock.runFor(5300);assert.equal(await page.locator('#insp-seconds').textContent(),'25');
@@ -39,16 +40,16 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
   await page.locator('#insp-dialog [href="#inspire/activity/quick-sketch"]').click();await page.locator('#insp-run:not([disabled])').waitFor();assert.equal(await page.locator('#insp-seconds').textContent(),paused);
   await page.reload();await page.locator('#insp-run:not([disabled])').waitFor();assert.equal(await page.locator('#insp-seconds').textContent(),paused);
   await page.clock.install();await page.locator('#insp-run').click();await page.clock.runFor(26000);
-  await page.locator('#insp-reflection').waitFor();assert.match(await page.locator('#insp-practice').innerText(),/Practice complete/);
+  await page.locator('#insp-reflection').waitFor();assert.match(await page.locator('#insp-practice').innerText(),/Set complete/);
   assert.equal(await page.evaluate(()=>captured.filter(e=>e.event==='inspiration_activity_completed').length),1);
   await page.locator('#insp-reflection').fill('<b>A curved edge</b>');await page.locator('#insp-save-note').click();
   assert.match(await page.locator('#insp-practice-status').innerText(),/saved/);
   await page.locator('#insp-restart').click();assert.equal(await page.locator('#insp-seconds').textContent(),'30');
   for(const category of ['flowers','animals']) {
-   await page.locator('#insp-category').selectOption(category);await page.locator('#insp-run:not([disabled])').waitFor();
+   await page.locator('#insp-clear-set').click();await page.locator('#insp-category').selectOption(category);await page.locator('[data-pick-photo]').first().click();await page.locator('#insp-run:not([disabled])').waitFor();
    assert.match(await page.locator('#insp-reference-image').getAttribute('src'),new RegExp('/'+category+'-'));
   }
-  await page.locator('#insp-reference').selectOption('custom');assert.equal(await page.locator('#insp-run').isDisabled(),true);
+  await page.locator('#insp-clear-set').click();assert.equal(await page.locator('#insp-run').isDisabled(),true);
   // Use the known local photograph as a stand-in for a user's chosen animal photograph.
   await page.locator('#insp-photo-input').setInputFiles(require('node:path').resolve(__dirname,'../material-art/cardboard/assets/pencils.png'));
   await page.locator('#insp-run:not([disabled])').waitFor();await page.locator('#insp-run').click();await page.clock.runFor(1000);await page.locator('#insp-run').click();
@@ -57,7 +58,7 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
   const stored=await page.evaluate(()=>Object.fromEntries(Object.entries(localStorage)));
   assert(!JSON.stringify(stored).includes('blob:'));assert(!JSON.stringify(stored).includes('data:image'));
   await page.evaluate(()=>sessionStorage.setItem('fei_user_profile',JSON.stringify({studentCode:'SECOND-STUDENT'})));
-  await page.reload();await page.locator('#insp-run:not([disabled])').waitFor();assert.equal(await page.locator('#insp-seconds').textContent(),'60');
+  await page.reload();await page.locator('#insp-quantity').waitFor();assert.equal(await page.locator('#insp-seconds').textContent(),'60');assert.equal(await page.locator('[data-remove-photo]').count(),0);
   await page.evaluate(p=>{sessionStorage.setItem('fei_user_profile',p);location.hash='inspire/activity/memory-practice';},profile);
   await page.locator('#insp-run:not([disabled])').waitFor();await page.clock.install();await page.locator('#insp-run').click();await page.clock.runFor(10000);
   await page.locator('#insp-reveal').waitFor();assert.equal(await page.locator('#insp-reference-image').isVisible(),false);
@@ -93,7 +94,7 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
   await page.setViewportSize({width:1440,height:1050});await page.screenshot({path:'/tmp/inspiration-desktop.png',fullPage:true});
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/tmp/inspiration-mobile.png',fullPage:true});
   await page.locator('.insp-quick').click();await page.locator('#insp-practice').waitFor();
-  await page.locator('#insp-restart').click();await page.locator('#insp-category').selectOption('flowers');await page.locator('#insp-run:not([disabled])').waitFor();
+  await page.locator('#insp-restart').click();await page.locator('#insp-clear-set').click();await page.locator('#insp-category').selectOption('flowers');await page.locator('[data-pick-photo]').first().click();await page.locator('#insp-run:not([disabled])').waitFor();
   await page.screenshot({path:'/tmp/inspiration-practice.png',fullPage:true});
   assert.equal(await page.evaluate(()=>sessionStorage.getItem('fei_user_profile')),profile);
   assert(!JSON.stringify(await page.evaluate(()=>captured)).includes('A curved edge'));

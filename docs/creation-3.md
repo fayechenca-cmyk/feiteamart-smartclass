@@ -1,5 +1,7 @@
 # Creation 3.0 implementation and audit
 
+Current gallery update: [complete artworks and Quick Sketch sets](creation-gallery-and-sketch-sets.md) supersedes this initial release's three-cover/missing-artwork inventory. All 16 destinations now have images, including the explicitly approved student-book examples and shared Skill Zodiac course.
+
 ## Architecture / preservation map
 
 Audited before editing: static HTML/CSS/JS site, no package build. `index.html` and `core/student-dashboard.js` own the dashboard and hash routes. `core/dashboard-explore.js` owns Skill/Creation entrances and continuation lists. None are modified by this change. Existing uncommitted dashboard CSS and leather course work are excluded.

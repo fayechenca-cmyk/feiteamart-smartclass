@@ -17,13 +17,21 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
  await page.locator('.c3-choices').waitFor();
  assert.equal(await page.locator('#creation-tour').evaluate(e=>e.open),false);
  const before=await page.evaluate(()=>sessionStorage.getItem('fei_user_profile'));
- await page.locator('[data-entry=make]').click();await page.locator('#c3-gallery').waitFor();assert.equal(await page.locator('.c3-card').count(),16);
+ await page.locator('[data-entry=make]').click();await page.locator('#c3-gallery').waitFor();assert.equal(await page.locator('.c3-card').count(),17);
  const projects=await page.evaluate(()=>FEICreationProjects);
  const covers=projects.filter(p=>p.cover);
- assert.deepEqual(covers.map(p=>p.id).sort(),['carle-colorful-chameleon','color-bloom-collage','miro-draw-without-knowing']);
- assert(covers.every(p=>/finished/i.test(p.cover.alt)));
- assert.equal(projects.filter(p=>!p.cover).length,13);
- assert.equal(await page.locator('.c3-card img').count(),3);
+ assert.equal(covers.length,16);assert.equal(projects.filter(p=>!p.cover).length,0);
+ assert.equal(await page.locator('.c3-card img').count(),17);
+ assert(projects.find(p=>p.id==='zodiac-skill').gateInLesson);
+ assert(!projects.some(p=>p.id==='ink-animal-studio'));
+ for(const p of projects)assert(p.categories.length>0);
+ for(const img of await page.locator('.c3-card img').all()){
+  const response=await context.request.get(new URL(await img.getAttribute('src'),base+'creation/').href);assert.equal(response.status(),200);
+ }
+ await page.locator('[data-filter=handcrafts]').click();assert(await page.locator('.c3-card').count()>3);assert.match(await page.locator('#c3-gallery').innerText(),/Dream Art Studio/);
+ await page.locator('[data-filter=learn-from-masters]').click();await page.locator('#c3-artist').selectOption('Paul Klee');assert.equal(await page.locator('.c3-card').count(),1);
+ await page.locator('[data-filter=all]').click();await page.locator('#c3-artist').selectOption('all');
+ await page.locator('#c3-search').fill('Illustration Book');assert.equal(await page.locator('.c3-card').count(),2);assert.match(await page.locator('#c3-gallery').innerText(),/Coraline/);assert.match(await page.locator('#c3-gallery').innerText(),/Alicia/);assert.match(await page.locator('#c3-gallery').innerText(),/Ongoing/);
  for(const p of projects){assert(p.id);const r=await context.request.get(new URL(p.route,base+'creation/').href);assert.equal(r.status(),200,p.title)}
  await page.locator('#c3-search').fill('chameleon');assert.equal(await page.locator('.c3-card').count(),1);
  await page.locator('.c3-card a').click();await page.locator('.c3-preview').waitFor();assert.match(await page.locator('.c3-preview').innerText(),/Painted Paper/);
@@ -49,7 +57,8 @@ const base=process.env.DASHBOARD_TEST_URL||'http://127.0.0.1:8037/';
  assert.equal(await page.evaluate(()=>sessionStorage.getItem('fei_user_profile')),before);
  await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>location.hash='welcome');await page.waitForTimeout(100);
  await page.screenshot({path:'/tmp/creation-welcome.png',fullPage:true});
- await page.evaluate(()=>location.hash='make');await page.waitForTimeout(100);if(await page.locator('#c3-saved').getAttribute('aria-pressed')==='true')await page.locator('#c3-saved').click();await page.screenshot({path:'/tmp/creation-gallery.png',fullPage:true});
+ await page.evaluate(()=>location.hash='make');await page.waitForTimeout(100);if(await page.locator('#c3-saved').getAttribute('aria-pressed')==='true')await page.locator('#c3-saved').click();await page.locator('#c3-search').fill('');
+ await page.locator('.c3-card').last().scrollIntoViewIfNeeded();await page.waitForFunction(()=>[...document.querySelectorAll('.c3-card img')].every(i=>i.complete&&i.naturalWidth));await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:'/tmp/creation-gallery.png',fullPage:true});
  await page.evaluate(()=>{window.deny=true;location.hash='project/dream-art-studio'});await page.locator('[data-start="dream-art-studio"]').click();await page.waitForURL('**/upgrade/**');
  assert.deepEqual(errors,[]);console.log('PASS: 16 routes, gallery/search, preview, bookmarks/account isolation, Studio/5 stations, 20 responsive checks, progress preservation, access denial, opt-in analytics and event deduplication.');
  await browser.close();

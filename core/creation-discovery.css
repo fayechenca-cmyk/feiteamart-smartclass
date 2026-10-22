@@ -35,11 +35,18 @@ body.creation-discovery>.stage,body.creation-discovery>.zoom-overlay,body.creati
 .c3-filters{display:flex;gap:8px;flex-wrap:wrap}
 #creation-app button[aria-pressed=true]{background:#e5dff1;border-color:#7560a7}
 #c3-count{font-size:12px;margin:22px 0 14px!important}
-.c3-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.c3-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;transition:transform .2s,box-shadow .2s;overflow:hidden;padding-bottom:62px}
-.c3-card>a{display:block;height:100%}
-.c3-art{aspect-ratio:1.12;background:#eee9e1;display:grid;place-items:center;overflow:hidden}
-.c3-art img{width:100%;height:100%;object-fit:contain;transition:transform .2s}
+.c3-gallery{columns:3;column-gap:24px}
+.c3-card{position:relative;display:inline-block;vertical-align:top;width:100%;margin:0 0 24px;break-inside:avoid;background:#fff;border:1px solid var(--line);border-radius:18px;transition:box-shadow .2s;overflow:hidden;padding-bottom:62px}
+.c3-card>a{display:block}
+.c3-art{position:relative;background:#eee9e1;overflow:hidden}
+.c3-art img{display:block;width:100%;height:auto;object-fit:contain}
+.c3-art-crop img{position:absolute;max-width:none}
+.c3-art:has(.c3-missing:not([hidden])){min-height:160px;display:grid;place-items:center}
+.c3-tools select{padding:13px 12px;border:1px solid #d6d1dc;border-radius:12px;background:white;color:inherit;font:inherit;width:100%}
+.c3-tools .c3-artist-filter{flex:0 1 230px}
+.c3-card-copy>span{display:block;margin-top:6px}
+.c3-project-status{color:#7560a7;font-weight:700}
+.c3-preview figure{margin:0 0 24px}.c3-preview figcaption{font-size:12px;margin-top:8px}
 .c3-missing{text-align:center;color:#635e68;font-size:13px;padding:30px}
 .c3-card-copy{padding:18px}
 .c3-card-copy h2{font-size:16px!important}
@@ -47,7 +54,7 @@ body.creation-discovery>.stage,body.creation-discovery>.zoom-overlay,body.creati
 .c3-card-copy>span{font-size:12px;font-weight:700}
 .c3-card .c3-save{position:absolute;bottom:15px;left:16px}
 .c3-card:focus-within,.c3-choices>a:focus-visible{transform:translateY(-4px);box-shadow:0 14px 30px #28223920}
-@media(hover:hover){.c3-card:hover,.c3-choices>a:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 14px 30px #28223920}.c3-card:hover img{transform:scale(1.035)}}
+@media(hover:hover){.c3-card:hover,.c3-choices>a:hover{box-shadow:0 14px 30px #28223920}}
 .c3-preview{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;margin:30px 0;align-items:center}
 .c3-preview .c3-art{border-radius:18px}
 .c3-preview h2{margin-top:25px}
@@ -71,10 +78,10 @@ body.c3-inspire #c3-main{padding:12px;max-width:700px;margin:0 0 0 auto;pointer-
 .c3-studio-nav summary{cursor:pointer;min-height:44px;padding:10px 0}
 body.c3-inspire .title-block{display:none}
 body.c3-inspire .zoom-overlay,body.c3-inspire .grid-view{z-index:100}
-@media(min-width:1600px){.c3-gallery{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:1100px){.c3-shell{grid-template-columns:175px minmax(0,1fr)}.c3-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.c3-preview{grid-template-columns:1fr}}
+@media(min-width:1600px){.c3-gallery{columns:4}}
+@media(max-width:1100px){.c3-shell{grid-template-columns:175px minmax(0,1fr)}.c3-gallery{columns:2}.c3-preview{grid-template-columns:1fr}}
 @media(max-width:700px){.c3-shell{display:block}.c3-sidebar{padding:16px}.c3-brand{margin:0 0 10px}.c3-sidebar nav{display:flex;flex-wrap:wrap;margin:12px 0 0;gap:0}.c3-sidebar p{display:none}#c3-main{padding:26px 18px}.c3-choices{grid-template-columns:1fr}.c3-choice-photo{height:240px}.c3-gallery{gap:14px}.c3-card-copy{padding:12px}.c3-card-copy h2{font-size:14px!important}body.c3-inspire .c3-sidebar{flex-wrap:wrap;gap:6px}body.c3-inspire .c3-sidebar nav a{padding:7px;font-size:12px}.c3-studio-nav{max-height:34vh}.c3-experiments{grid-template-columns:1fr}}
-@media(max-width:380px){.c3-gallery{grid-template-columns:1fr}}
+@media(max-width:380px){.c3-gallery{columns:1}}
 @media(prefers-reduced-motion:reduce){body.c3-inspire *,#creation-app *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 /* Original SVG course children opt into pointer events: hide their closed overlay too. */
 body.c3-inspire .zoom-overlay:not(.active),body.c3-inspire .grid-view:not(.active){visibility:hidden;pointer-events:none}

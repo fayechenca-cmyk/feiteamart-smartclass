@@ -28,6 +28,12 @@
     const refs=window.FEIInspirationContent.references;
     if(!['animals','flowers','objects'].includes(value.category))return null;
     if(value.reference!=='custom'&&!refs.some(r=>r.id===value.reference))return null;
+    if(id==='quick-sketch'&&value.version===2){
+      if(![1,2,5,10,15,20].includes(value.quantity)||!Array.isArray(value.queue)||value.queue.length>value.quantity)return null;
+      if(new Set(value.queue).size!==value.queue.length||value.queue.some(key=>key!=='custom'&&!refs.some(r=>r.id===key)))return null;
+      if(!Number.isInteger(value.index)||value.index<0||value.index>=value.quantity||!Number.isInteger(value.completed)||value.completed<0||value.completed>value.quantity)return null;
+      if(value.phase!=='ready'&&(value.queue.length!==value.quantity||value.reference!==value.queue[value.index]))return null;
+    }
     return {...value,reflection:typeof value.reflection==='string'?value.reflection.slice(0,500):''};
   }
   function save(id,value) {const data=read();data[id]=value;return write(data);}

@@ -3,21 +3,21 @@
   const root=document.getElementById('creation-app');
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const assets=window.FEICreationAssets;
-  const projects=Object.entries(stations).flatMap(([station,s])=>s.courses.filter(c=>c.available&&COURSE_ROUTES[c.title]).map(c=>({
-    ...c, id:COURSE_LESSON_IDS[c.title], route:COURSE_ROUTES[c.title], station,
-    category:station==='project'?'storytelling':station==='material'||c.title==='Dancing Ballerina'?'craft':'painting',
-    cover:assets.finalArtworkCovers[COURSE_LESSON_IDS[c.title]], materials:assets.materials[COURSE_ROUTES[c.title].split('/').filter(Boolean).at(-1)]||[]
-  })));
-  projects.sort((a,b)=>Number(!!b.cover)-Number(!!a.cover));
+  const projects=Object.entries(stations).flatMap(([station,s])=>s.courses.filter(c=>c.available&&COURSE_ROUTES[c.title]).map(c=>{
+    const originalId=COURSE_LESSON_IDS[c.title],details=assets.details?.[originalId]||{},id=details.id||originalId;
+    return {...c,id,sourceTitle:c.title,route:COURSE_ROUTES[c.title],station,...details,
+      categories:details.categories||['painting'],category:details.categories?.[0]||'painting',
+      cover:assets.finalArtworkCovers[id],materials:assets.materials[COURSE_ROUTES[c.title].split('/').filter(Boolean).at(-1)]||[]};
+  }));
   window.FEICreationProjects=projects;
-  const labels={all:'All Projects',painting:'Painting & Drawing',craft:'Craft & 3D',storytelling:'Storytelling'};
+  const labels={all:'All Artworks',handcrafts:'Handcrafts','learn-from-masters':'Learn from Masters',painting:'Painting & Drawing',illustration:'Illustration & Stories'};
   const track=window.FEICreationEvents.track;
   function profile(){try{return JSON.parse(sessionStorage.getItem('fei_user_profile'))||{}}catch{return {}}}
   function identity(){const p=profile();return p.supabaseUserId||p.studentCode||p.learnerId||p.id||null}
   function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
   function saveKey(){return 'feiCreation.saved.v1:'+encodeURIComponent(identity())}
   function saved(){const list=identity()?read(saveKey(),[]):[];return Array.isArray(list)?list.filter(id=>projects.some(p=>p.id===id)):[]}
-  let category='all',query='',onlySaved=false,lastSpace='',busy=false,lastPreview='';
+  let category='all',query='',artist='all',onlySaved=false,lastSpace='',busy=false,lastPreview='';
   const opened=new Set();
   function resumable(){
     const p=profile(),who=identity(); if(!who)return [];
@@ -26,7 +26,7 @@
     if(p.currentStepIdx>0)ids.add(p.currentLesson);
     return projects.filter(x=>ids.has(x.id)&&!(p.completedLessons||[]).includes(x.id));
   }
-  function image(p){return `<div class="c3-art">${p.cover?`<img src="${esc(p.cover.url)}" alt="${esc(p.cover.alt)}" loading="lazy">`:''}<span class="c3-missing" ${p.cover?'hidden':''}>Teacher's finished artwork<br>coming soon</span></div>`}
+  function image(p){const c=p.cover,crop=c?.crop;return `<div class="c3-art${crop?' c3-art-crop':''}" ${crop?`style="aspect-ratio:${c.width*crop[2]}/${c.height*crop[3]}"`:''}>${c?`<img src="${esc(c.url)}" alt="${esc(c.alt)}" ${c.width?`width="${c.width}" height="${c.height}"`:''} ${crop?`style="width:${100/crop[2]}%;left:${-100*crop[0]/crop[2]}%;top:${-100*crop[1]/crop[3]}%;height:auto"`:''} loading="lazy">`:''}<span class="c3-missing" ${c?'hidden':''}>Artwork preview unavailable</span></div>`}
   function button(p){return `<button class="c3-save" data-save="${p.id}" aria-pressed="${saved().includes(p.id)}" aria-label="Save ${esc(p.title)} for later">${saved().includes(p.id)?'Saved ✓':'Save ♡'}</button>`}
   function continuations(){const list=resumable();return list.length?`<section class="c3-continue"><h2>Continue Learning</h2>${list.map(p=>`<button data-start="${p.id}" data-resume>${esc(p.title)} →</button>`).join('')}</section>`:''}
   root.innerHTML=`<div class="c3-shell"><aside class="c3-sidebar"><a class="c3-brand" href="../">FEI · Art GPS</a><a href="../#dashboard/courses">← Student Dashboard</a><nav aria-label="Creation"><a href="#welcome">Creation</a><a href="#make">Make Something</a><a href="#inspire">Get Inspired</a></nav><p>Make room for<br>your imagination.</p></aside><main id="c3-main" tabindex="-1"></main></div><p id="c3-status" role="status"></p>`;
@@ -44,14 +44,15 @@
     root.querySelectorAll('nav a').forEach(a=>a.setAttribute('aria-current',a.hash==='#'+(space||'welcome')?'page':'false'));
     if(route==='project'&&projects.some(p=>p.id===id)){
       const p=projects.find(p=>p.id===id);
-      main.innerHTML=`<a href="#make">← Back to Gallery</a><article class="c3-preview">${image(p)}<div><small>MAKE SOMETHING · ${labels[p.category]}</small><h1>${esc(p.title)}</h1><p>${esc(p.desc)}</p><h2>Materials</h2><p>${p.materials.length?p.materials.map(esc).join(' · '):'See the teacher’s material guide inside this project.'}</p><p>Explore the idea, then make it your own. Your choices belong here.</p><button class="c3-primary" data-start="${p.id}">${resumable().some(x=>x.id===p.id)?'Continue Making':'Start Making'} →</button>${button(p)}</div></article>`;
+      main.innerHTML=`<a href="#make">← Back to Gallery</a><article class="c3-preview"><div>${p.examples?p.examples.map(ex=>`<figure>${image({...p,cover:ex.cover})}<figcaption>${esc(ex.label)}</figcaption></figure>`).join(''):image(p)}</div><div><small>MAKE SOMETHING · ${p.categories.map(k=>labels[k]).join(' · ')}</small><h1>${esc(p.title)}</h1>${p.status?`<p class="c3-project-status"><strong>${p.status}</strong> · ${p.statusNote}</p>`:''}${p.crossListing?`<p>${p.crossListing} · same course and progress</p>`:''}<p>${esc(p.desc)}</p><h2>Materials</h2><p>${p.materials.length?p.materials.map(esc).join(' · '):'See the teacher’s material guide inside this project.'}</p><p>Explore the idea, then make it your own. Your choices belong here.</p><button class="c3-primary" data-start="${p.id}">${p.status?'Explore Available Steps':resumable().some(x=>x.id===p.id)?'Continue Making':'Start Making'} →</button>${button(p)}</div></article>`;
       if(lastPreview!==p.id)track('project_opened',{creationSpace:'make',projectId:p.id,category:p.category});
       lastPreview=p.id;
     }else if(space==='make'){
-      main.innerHTML=`<small>CREATION / MAKE SOMETHING</small><h1>What would you love to make?</h1><p>Pick an artwork. Bring your own ideas.</p><div class="c3-tools"><label>Find a project<input type="search" id="c3-search" placeholder="Search artworks or materials" value="${esc(query)}"></label><button id="c3-saved" aria-pressed="${onlySaved}">Saved for later ♡</button></div><div class="c3-filters" aria-label="Project categories">${Object.entries(labels).filter(([k])=>k==='all'||projects.some(p=>p.category===k)).map(([k,v])=>`<button data-filter="${k}" aria-pressed="${category===k}">${v}</button>`).join('')}</div><p id="c3-count" aria-live="polite"></p><div id="c3-gallery" class="c3-gallery"></div>${continuations()}`;
+      main.innerHTML=`<small>CREATION / MAKE SOMETHING</small><h1>What would you love to make?</h1><p>Browse the finished works. Find an idea that speaks to you.</p><div class="c3-tools"><label>Find a project<input type="search" id="c3-search" placeholder="Search artworks, artists or materials" value="${esc(query)}"></label><label class="c3-artist-filter">Artist inspiration<select id="c3-artist"><option value="all">All artists</option>${[...new Set(projects.map(p=>p.artist).filter(Boolean))].sort().map(a=>`<option ${artist===a?'selected':''} value="${esc(a)}">${esc(a)}</option>`).join('')}</select></label><button id="c3-saved" aria-pressed="${onlySaved}">Saved for later ♡</button></div><div class="c3-filters" aria-label="Project categories">${Object.entries(labels).map(([k,v])=>`<button data-filter="${k}" aria-pressed="${category===k}">${v}</button>`).join('')}</div><p id="c3-count" aria-live="polite"></p><div id="c3-gallery" class="c3-gallery"></div>${continuations()}`;
       drawGallery();
       document.getElementById('c3-search').oninput=e=>{query=e.target.value;drawGallery()};
       document.getElementById('c3-search').onchange=()=>track('creation_search_used',{creationSpace:'make'});
+      document.getElementById('c3-artist').onchange=e=>{artist=e.target.value;drawGallery();};
       document.getElementById('c3-saved').onclick=()=>{onlySaved=!onlySaved;render()};
     }else if(space==='inspire'){
       window.FEIInspirationStudio.mount(main,location.hash.slice(1).split('/').slice(1));
@@ -62,14 +63,16 @@
   }
   function imageFallbacks(){root.querySelectorAll('.c3-art img').forEach(img=>img.onerror=()=>{img.hidden=true;img.nextElementSibling.hidden=false})}
   function drawGallery(){
-    const list=projects.filter(p=>(category==='all'||p.category===category)&&(!onlySaved||saved().includes(p.id))&&[p.title,p.desc,...p.materials,...(p.tags||[])].join(' ').toLowerCase().includes(query.toLowerCase().trim()));
-    document.getElementById('c3-count').textContent=list.length+' projects'+(!list.length?' · Try another search or category.':'');
-    document.getElementById('c3-gallery').innerHTML=list.map(p=>`<article class="c3-card"><a href="#project/${p.id}">${image(p)}<div class="c3-card-copy"><h2>${esc(p.title)}</h2><p>${esc((p.tags||[]).slice(0,3).join(' · ')||labels[p.category])}</p><span>Explore Project →</span></div></a>${button(p)}</article>`).join('');imageFallbacks();
+    const list=projects.filter(p=>(category==='all'||p.categories.includes(category))&&(artist==='all'||p.artist===artist)&&(!onlySaved||saved().includes(p.id))&&[p.title,p.desc,p.artist,...p.categories.map(k=>labels[k]),...(p.examples||[]).map(ex=>ex.label),...p.materials,...(p.tags||[])].join(' ').toLowerCase().includes(query.toLowerCase().trim()));
+    const pins=list.flatMap(p=>p.examples?p.examples.map(ex=>({...p,cover:ex.cover,exampleLabel:ex.label})):[p]);
+    document.getElementById('c3-count').textContent=pins.length+' artworks · '+list.length+' projects'+(!list.length?' · Try another search or category.':'');
+    document.getElementById('c3-gallery').innerHTML=pins.map(p=>`<article class="c3-card"><a href="#project/${p.id}">${image(p)}<div class="c3-card-copy">${p.exampleLabel?`<small>${esc(p.exampleLabel)}</small>`:''}<h2>${esc(p.title)}</h2><p>${p.categories.map(k=>labels[k]).join(' · ')}</p>${p.status?`<span class="c3-project-status">${p.status}</span>`:''}${p.crossListing?`<span>${p.crossListing}</span>`:''}<span>Explore Project →</span></div></a>${button(p)}</article>`).join('');imageFallbacks();
   }
   function status(text){document.getElementById('c3-status').textContent=text}
   async function start(p,resume=false){
     if(busy)return;busy=true;
     try{
+      if(p.gateInLesson){track('project_started',{creationSpace:'make',projectId:p.id});location.href=p.route;return;}
       if(!window.FEIAccess)throw new Error('Access service unavailable');
       await FEIAccess.init();const access=await FEIAccess.canOpenLesson('creation',p.id);
       if(!access.allowed){location.href=access.reason==='not_signed_in'?'../?next='+encodeURIComponent('creation/#project/'+p.id):'../upgrade/?reason=paywall_creation&branch=creation';return}
@@ -79,7 +82,7 @@
     }catch{status('We could not check access. Please try again.')}finally{busy=false}
   }
   // Existing Studio course interactions retain their renderer and use the same guarded start.
-  window.enterCourse=title=>{const p=projects.find(x=>x.title===title);if(p)return start(p,resumable().some(x=>x.id===p.id))};
+  window.enterCourse=title=>{const p=projects.find(x=>x.sourceTitle===title);if(p)return start(p,resumable().some(x=>x.id===p.id))};
   root.addEventListener('click',e=>{
     const save=e.target.closest('[data-save]');if(save){
       if(!identity()){status('Sign in from the Student Dashboard to save projects.');return}

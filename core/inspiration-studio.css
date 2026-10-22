@@ -73,6 +73,20 @@ body.c3-inspire #c3-main{max-width:1500px;padding:28px clamp(16px,3vw,46px) 36px
 .insp-clock{display:flex;align-items:baseline;gap:10px;color:#61507a;padding:7px 0}
 .insp-clock>span{font:600 56px/1 Montserrat,sans-serif;font-variant-numeric:tabular-nums}
 .insp-practice-actions{display:flex;gap:8px;flex-wrap:wrap}
+.insp-set-builder{margin:18px 0 26px}
+.insp-set-start{position:sticky;top:0;z-index:2;background:#fffdf8;padding:10px 0}
+#creation-app #insp-start-set{background:#e4def0;border-color:#7560a7;font-weight:700}
+.insp-set-settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.insp-photo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0;max-height:420px;overflow:auto;padding:5px}
+#creation-app .insp-photo-grid button{position:relative;padding:5px;border-radius:12px;min-width:0;text-align:left}
+.insp-photo-grid img{display:block;width:100%;height:115px;object-fit:contain;background:#eee8de;border-radius:8px}
+.insp-photo-grid span{display:block;font-size:10px;line-height:1.4;margin:6px 3px}
+.insp-photo-grid b{position:absolute;top:8px;right:8px;background:#fffdf4;border:1px solid #7560a7;border-radius:50%;min-width:23px;text-align:center}
+.insp-selected{padding:14px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#creation-app .insp-selected button{font-size:11px;padding:7px 10px;min-height:36px}
+.insp-set-builder summary{cursor:pointer;padding:12px 0}
+.insp-practice-controls progress{width:100%;accent-color:#7560a7}
+@media(max-width:700px){.insp-set-settings{grid-template-columns:1fr}.insp-photo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.insp-photo-grid img{height:85px}}
 #creation-app #insp-run{background:#e4def0;border-color:#7560a7}
 #creation-app button:disabled{opacity:.5;cursor:default}
 .insp-reflection{margin-top:24px;background:#f3eedf;border-radius:16px;padding:20px}

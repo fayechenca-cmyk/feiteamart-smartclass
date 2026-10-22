@@ -1,5 +1,7 @@
 # Get Inspired · implementation and handoff
 
+Quick Sketch now supports selected multi-image sets; see [current gallery and set update](creation-gallery-and-sketch-sets.md). The single-image flow and Make Something missing-cover list below describe the initial release.
+
 ## Scope and preserved inventory
 
 Static HTML/CSS/JavaScript on the existing `feat/creation-3-discovery` branch. No dependencies, database, authentication, Dashboard, Skill, Foundation C, LFC navigation or lesson progress schemas changed. The Dashboard palette and Make Something final-artwork-only cover policy are unchanged. No production deployment.

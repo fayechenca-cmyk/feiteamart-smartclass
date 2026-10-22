@@ -9,6 +9,7 @@
   let host=null,dialog=null,currentRoute=null,clock=null,practice=null,activity=null,owner=null;
   let observer=null,customPhoto=null,resultPhoto=null,photoReady=false,photoGeneration=0,practiceStorageAvailable=true;
   let activeAttempt=null,lineState={angle:0,width:4,count:5},lastFocus=null;
+  let sketchSession=null;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function emit(name,record={},eventId) {
     return FEICreationEvents.track(name,{creationSpace:'inspire',stationId:record.stationId,activityId:record.id,activityType:record.mode,category:practice?.category,...record},eventId);
@@ -26,7 +27,8 @@
     if(clock?.running){clock.pause();practice.remaining=clock.remaining;practice.phase='paused';savePractice();if(announce)status('Paused while you were away. Resume when you are ready.');}
   }
   function stopActivity() {
-    if(activity){
+    sketchSession?.dispose();sketchSession=null;
+    if(activity&&activity.kind!=='sketch'){
       pausePractice();
       emit('inspiration_activity_exited',{...activity,completionStatus:practice?.phase==='complete'?'complete':'exited'},activeAttempt?activeAttempt+':exit':undefined);
       if(practice)savePractice();
@@ -166,6 +168,11 @@
   }
   function newPractice(category='animals',reference=content.references.find(r=>r.category===category)?.id||'custom',duration=60){return {phase:'ready',category,reference,duration,remaining:activity.kind==='memory'?10000:duration*1000,attemptId:crypto.randomUUID(),reflection:''};}
   function openPractice() {
+    if(activity.kind==='sketch'){
+      const record=activity;
+      showPanel(`${panelHeader(activity.title,true)}<div id="insp-practice"></div>`);wireClose(activity.stationId);
+      sketchSession=new FEISketchSession(document.getElementById('insp-practice'),(name,props,eventId)=>emit(name,{...record,...props},eventId));return;
+    }
     practice=store.load(activity.id)||newPractice();activeAttempt=practice.attemptId;
     showPanel(`${panelHeader(activity.title,true)}<div id="insp-practice"></div>`);wireClose(activity.stationId);renderPractice();
   }
