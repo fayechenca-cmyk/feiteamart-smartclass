@@ -26,10 +26,16 @@
   border-color: #8fba8d;
 }
 
-.material-scene img {
-  object-fit: cover;
-  object-position: 45% 50%;
-}
+.material-scene { grid-template-columns: minmax(0, 2fr) minmax(230px, .85fr); }
+.material-photo { position: relative; width: 100%; height: auto; aspect-ratio: 1374 / 1145; align-self: center; border-radius: 18px; overflow: hidden; background: #efe9df; }
+.material-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.material-glow { position: absolute; opacity: 0; border: 4px solid #fff; border-radius: 18px; box-shadow: 0 0 0 6px #7f6bb8, 0 0 28px 13px #fff9; pointer-events: none; animation: material-focus 25s ease-in-out 1 forwards; }
+.material-glow.paint { left: 5%; top: 5%; width: 90%; height: 61%; animation-delay: 0s; }
+.material-glow.paper { left: 2%; top: 1%; width: 96%; height: 97%; animation-delay: 5s; }
+.material-glow.brushes { left: 20%; top: 53%; width: 61%; height: 15%; animation-delay: 10s; }
+.material-glow.water { left: 57%; top: 69%; width: 35%; height: 29%; animation-delay: 15s; }
+.material-glow.towel { left: 18%; top: 70%; width: 39%; height: 27%; animation-delay: 20s; }
+@keyframes material-focus { 0%,18% { opacity: 1; transform: scale(1); } 23%,100% { opacity: 0; transform: scale(1.015); } }
 
 .material-note {
   margin: 4px 0 0 !important;
@@ -53,4 +59,6 @@
   .controls button { flex: 1; min-width: 0; padding-inline: 8px; }
   .listen { grid-column: 1 / -1; margin: 3px 0 5px; padding: 6px 10px; }
   .material-note { grid-column: 1 / -1; }
+  .material-scene { grid-template-columns: 1fr; }
+  .material-photo { min-height: 0; }
 }
