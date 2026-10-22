@@ -402,5 +402,186 @@
     "hint": "Eyes and ears have real tone — good place to pause.",
     "say": "Both eyes and ears now have real detail and tone. Good place to pause here if you'd like -- next, we build the light and dark across the whole face.",
     "audio": "audio/s98-milestone.mp3"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Tone begins, with a highlight saved",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 0,
+    "clipEnd": 63,
+    "frame": "frames/v3-63s.jpg",
+    "watchAudio": "audio/v3-01-watch.mp3",
+    "watchSay": "Here, notice the very first layer of tone goes on with a 2H pencil -- a harder pencil that stays light on purpose, since the darkest marks come later. Even the nose gets a tiny highlight saved early, a spot of bare paper that will carry its shine all the way to the end.",
+    "audio": "audio/v3-01-try.mp3",
+    "say": "Lay your own first layer of tone with a 2H, light across the whole head. Save a small highlight on your nose before tone covers it.",
+    "overlay": {
+      "guides": [
+        { "cx": 596, "cy": 372, "rx": 15, "ry": 11, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 01",
+        "title": "Tone begins, with a highlight saved",
+        "sub": "A 2H pencil keeps the first layer light."
+      }
+    },
+    "stepResult": "frames/v3-63s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "The nose becomes four planes",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 63,
+    "clipEnd": 145,
+    "frame": "frames/v3-145s.jpg",
+    "watchAudio": "audio/v3-02-watch.mp3",
+    "watchSay": "What matters here is the nose as four clear planes -- top, front, left, and right -- not one rounded shape. Planes this clear are what make the whole nose feel solid.",
+    "audio": "audio/v3-02-try.mp3",
+    "say": "Divide your own nose into the same four planes with straight lines, then let the nostrils go dark enough to hold their shape.",
+    "overlay": {
+      "guides": [
+        { "d": "M562 370 L609 346 L656 370", "tone": "peri" },
+        { "d": "M609 346 L604 420", "dash": true, "tone": "peri" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 02",
+        "title": "The nose becomes four planes",
+        "sub": "Top, front, left, and right."
+      }
+    },
+    "stepResult": "frames/v3-145s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Bone and socket, one side at a time",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 145,
+    "clipEnd": 242,
+    "frame": "frames/v3-242s.jpg",
+    "watchAudio": "audio/v3-03-watch.mp3",
+    "watchSay": "Look at how the work moves in close now -- one eye socket, one side of the forehead at a time. This dog's bones show clearly, so finding the socket and brow bone here is what keeps the whole structure accurate.",
+    "audio": "audio/v3-03-try.mp3",
+    "say": "Work in close on your own eye socket too -- the hollow around the eye, and the bone of the brow above it.",
+    "overlay": {
+      "guides": [
+        { "cx": 558, "cy": 250, "rx": 55, "ry": 48, "ellipse": true, "tone": "peri", "dash": true },
+        { "cx": 730, "cy": 258, "rx": 55, "ry": 48, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 03",
+        "title": "Bone and socket, one side at a time",
+        "sub": "Close work on one socket, then the other."
+      }
+    },
+    "stepResult": "frames/v3-242s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Eyes and nose relate",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 242,
+    "clipEnd": 297,
+    "frame": "frames/v3-297s.jpg",
+    "watchAudio": "audio/v3-04-watch.mp3",
+    "watchSay": "Notice the eyes and nose coming forward together now, almost like one protruding block. Whiskers are already suggested beneath the nose too -- early, the same family of features, never alone.",
+    "audio": "audio/v3-04-try.mp3",
+    "say": "Connect your own eyes down toward the nose bridge with light lines, and add a few whisker marks beneath the nose.",
+    "overlay": {
+      "guides": [
+        { "d": "M585 278 L608 345", "tone": "leaf" },
+        { "d": "M690 282 L650 345", "tone": "leaf" },
+        { "cx": 610, "cy": 442, "rx": 90, "ry": 20, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 04",
+        "title": "Eyes and nose relate",
+        "sub": "Eyes, nose, and now whiskers -- never alone."
+      }
+    },
+    "stepResult": "frames/v3-297s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Nose bone to eye, cheek to neck",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 297,
+    "clipEnd": 375,
+    "frame": "frames/v3-375s.jpg",
+    "watchAudio": "audio/v3-05-watch.mp3",
+    "watchSay": "Here, tone works around to the right side -- the nose bone linking eye and nose, with real bone thickness, not a thin wrinkle line. Then notice the cheek's shading carry straight down into the neck, one connected surface, no hard edge where they meet.",
+    "audio": "audio/v3-05-try.mp3",
+    "say": "Build the same bone connection on your own right side, then let your cheek shading flow down into the neck the same way.",
+    "overlay": {
+      "guides": [
+        { "d": "M650 370 Q690 320 715 280", "tone": "peri" },
+        { "d": "M785 350 Q845 440 815 610", "tone": "leaf" }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 05",
+        "title": "Nose bone to eye, cheek to neck",
+        "sub": "Bones have thickness; surfaces turn, not jump."
+      }
+    },
+    "stepResult": "frames/v3-375s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Ear and head, plane by plane",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 375,
+    "clipEnd": 482,
+    "frame": "frames/v3-482s.jpg",
+    "watchAudio": "audio/v3-06-watch.mp3",
+    "watchSay": "Notice the ear gets the same treatment now -- planes of tone, not outlines, to show what sits in front of the head and what falls behind it. The same light pencil follows the ear's own thickness all the way down.",
+    "audio": "audio/v3-06-try.mp3",
+    "say": "Shade your own ear with planes of tone, the same light pencil, to show where it overlaps the head.",
+    "overlay": {
+      "guides": [
+        { "cx": 855, "cy": 215, "rx": 110, "ry": 135, "ellipse": true, "tone": "peri", "dash": true }
+      ],
+      "card": {
+        "kicker": "LOOK CLOSELY · 06",
+        "title": "Ear and head, plane by plane",
+        "sub": "Tone shows what's in front, and what falls behind."
+      }
+    },
+    "stepResult": "frames/v3-482s.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "The neck has its own direction",
+    "kind": "draw",
+    "uid": "f4b0d0a59dd9eb12efa9e1075690c7f3",
+    "start": 482,
+    "clipEnd": 526.62,
+    "frame": "frames/v3-end.jpg",
+    "watchAudio": "audio/v3-end-watch.mp3",
+    "watchSay": "Look at how the neck follows its own muscle direction now -- neck and shoulder as one plane, sitting in shadow since the light falls from the upper left.",
+    "audio": "audio/v3-end-try.mp3",
+    "say": "Take your time to finish this step. Continue when you're ready.",
+    "overlay": {
+      "guides": [
+        { "cx": 800, "cy": 600, "rx": 280, "ry": 140, "ellipse": true, "tone": "blush", "dash": true }
+      ],
+      "card": {
+        "kicker": "TONE COMPLETE",
+        "title": "Light and dark across the whole head",
+        "sub": "Take your time to finish this step."
+      }
+    },
+    "stepResult": "frames/v3-end.jpg"
+  },
+  {
+    "chapter": "Tone",
+    "title": "Tone complete",
+    "kind": "milestone",
+    "hint": "Light and dark now shape the whole head — good place to pause.",
+    "say": "Light and dark now wrap the whole head, with real bone structure underneath the surface. Good place to pause here if you'd like -- next, we go deep into just the eyes.",
+    "audio": "audio/s97-milestone.mp3"
   }
 ]

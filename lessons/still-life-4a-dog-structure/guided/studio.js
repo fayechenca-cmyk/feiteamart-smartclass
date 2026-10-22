@@ -193,10 +193,10 @@ function next(){
  if($('next').disabled)return;
  mark();
  if(index===flow.length-1){
-  // Only the intro + materials + Video 1 are built so far -- hand off
-  // to the classic lesson at Video 2, same staged approach balloon and
-  // glass both used while mid-build. Swap this block for the real
-  // GuidedReward.complete() ending once all 12 videos are built.
+  // Only the intro + materials + Videos 1-3 are built so far -- hand off
+  // to the classic lesson at the next unbuilt video, same staged approach
+  // balloon and glass both used while mid-build. Swap this block for the
+  // real GuidedReward.complete() ending once all 12 videos are built.
   stopVoice();
   GuidedPlatform.flush().then(()=>{location.href='../?classic=1&from=guided-outline';});
   return;
