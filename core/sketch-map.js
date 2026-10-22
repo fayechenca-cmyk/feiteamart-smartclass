@@ -29,8 +29,8 @@ SketchMap.lessonRows=function(list,completed,prefix='',access=true,groupLabelFn,
   const adminOpen=isAdmin&&l.ready&&!done;
   const state=!l.ready?'coming':done?'done':(current||adminOpen)&&access?'current':'locked';
   const clickable=state==='done'||state==='current';
-  const key=l.id.startsWith('still-life-1')?'balloon':l.id.startsWith('still-life-2')?'glass':l.id;
-  const art=['cube','sphere','cylinder','apple','cone','intersecting','cup','icecream','box','papercrane','balloon','glass'].includes(key)?`assets/sketch-map/${key}.jpg`:key==='preparation'?'assets/sketch-map/preparation.png':null;
+  const key=l.id.startsWith('still-life-1')?'balloon':l.id.startsWith('still-life-2')?'glass':l.id.startsWith('still-life-4')?'dog':l.id.startsWith('still-life-5')?'frame':l.id;
+  const art=['cube','sphere','cylinder','apple','cone','intersecting','cup','icecream','box','papercrane','balloon','glass','dog','frame'].includes(key)?`assets/sketch-map/${key}.jpg`:key==='preparation'?'assets/sketch-map/preparation.png':null;
   let dividerHtml='';
   if(typeof groupLabelFn==='function'){
    const label=groupLabelFn(l,i);
