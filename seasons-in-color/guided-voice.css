@@ -1,0 +1,49 @@
+#media {
+  overflow: hidden;
+  background: #eeeaf1;
+}
+
+#media iframe {
+  width: 102%;
+  height: 102%;
+  transform: rotate(-1deg) scale(1.018);
+  transform-origin: center;
+}
+
+.listen {
+  display: block;
+  margin: 0 0 18px;
+  padding: 8px 13px;
+  border-color: #cfc5df;
+  color: #55466f;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f8f5fc;
+}
+
+.listen.speaking {
+  background: #e9f4e7;
+  border-color: #8fba8d;
+}
+
+.material-scene img {
+  object-fit: cover;
+  object-position: 45% 50%;
+}
+
+.material-note {
+  margin: 4px 0 0 !important;
+  padding: 10px 12px;
+  border-radius: 13px;
+  background: #fff;
+  color: #625b6a !important;
+  font-size: 11px;
+}
+
+@media (max-width: 820px) {
+  header { flex-wrap: wrap; }
+  header > div { min-width: 180px; }
+  #guideSound, #sound { font-size: 9px; }
+  .listen { grid-column: 1 / -1; margin: 3px 0 5px; padding: 6px 10px; }
+  .material-note { grid-column: 1 / -1; }
+}
