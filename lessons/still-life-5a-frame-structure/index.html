@@ -5064,23 +5064,18 @@ const LFC_HOOKS = {
 const LESSON = {
   id: 'still-life-5a-frame-structure',
   title: 'Wooden Photo Frame',
-  totalXP: 45,
+  totalXP: 60,
   ageGroups: ['kids', 'teen', 'adult'],
   fullyFree: false,
   membersOnly: true,
-  // Only 3 of the teacher's raw videos have arrived so far — Structure
-  // and Composition, Tone, and Finish. A 4th video (Texture / wood-grain
-  // detail, possibly split into 1-2 sub-clips once delivered) has not
-  // arrived yet; per Faye, it will be inserted as a new step BETWEEN
-  // Tone and Finish when it does, shifting Finish from step 3 to step 4
-  // (or 5 if Texture becomes two sub-clips) — same incremental,
-  // build-only-what-exists pattern as Dog above. Nothing here hardcodes
-  // 3 as a final count: partLabel's "video N of 3" text and totalXP
-  // (30 + 5 * videoSegment count, same formula as every sibling lesson)
-  // are the only two places that will need a hand-update at that point,
-  // same as Dog's own labels needed updating as more of ITS videos
-  // arrived — not a structural assumption anywhere in the engine itself.
-  badge: { name: 'Wooden Photo Frame Structure Starter', emoji: '🖼️', desc: 'You drew the structure and composition of a wooden photo frame, laid down its overall tone, and finished with darker values and blending.' },
+  // All 6 of the teacher's raw videos have arrived: Structure and
+  // Composition, Tone, Depth and Reflection, Shadow and Detail, Wood
+  // Grain Texture, and Finish. The three middle videos were inserted
+  // between Tone and Finish per Faye, verified frame-by-frame to
+  // connect cleanly in this order (each one's opening frame matches
+  // the previous one's closing frame exactly) and named for what the
+  // footage actually shows, same incremental pattern as Dog above.
+  badge: { name: 'Wooden Photo Frame Structure Starter', emoji: '🖼️', desc: 'You drew the structure and composition of a wooden photo frame, laid down its overall tone, deepened its shadow and reflection, built up the wood grain texture, and finished with darker values and blending.' },
   steps: [
     {
       part: 'OPEN',
@@ -5095,7 +5090,7 @@ const LESSON = {
       partLabel: 'Part a · look closely',
       type: 'reference',
       title: 'Outline first',
-      intro: 'The teacher draws the frame\'s structure and composition, lays down the overall tone, then finishes with darker values and blending.',
+      intro: 'The teacher draws the frame\'s structure and composition, lays down the overall tone, deepens its shadow and reflection, builds up the wood grain texture, then finishes with darker values and blending.',
       xp: 0
     },
     {
@@ -5116,7 +5111,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 1 of 3',
+      partLabel: 'Part b · teacher demo · video 1 of 6',
       type: 'videoSegment',
       videoId: '13992693af283a0c0ee42e4599f1237c',
       videoNumber: 1,
@@ -5129,7 +5124,7 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 2 of 3',
+      partLabel: 'Part b · teacher demo · video 2 of 6',
       type: 'videoSegment',
       videoId: '59c29289750a2382429f3cbd6ee6144a',
       videoNumber: 2,
@@ -5142,10 +5137,49 @@ const LESSON = {
     },
     {
       part: 'B',
-      partLabel: 'Part b · teacher demo · video 3 of 3',
+      partLabel: 'Part b · teacher demo · video 3 of 6',
+      type: 'videoSegment',
+      videoId: '8d2b0fe1e50338c868c855229e1e7fe0',
+      videoNumber: 3,
+      videoTitle: 'Depth and Reflection',
+      stepName: 'Depth and Reflection',
+      teacher: 'Mrs. Dawn',
+      title: 'Depth and Reflection',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 4 of 6',
+      type: 'videoSegment',
+      videoId: '310df0b49496a89909ee5f2163eba37d',
+      videoNumber: 4,
+      videoTitle: 'Shadow and Detail',
+      stepName: 'Shadow and Detail',
+      teacher: 'Mrs. Dawn',
+      title: 'Shadow and Detail',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 5 of 6',
+      type: 'videoSegment',
+      videoId: 'bc5f238dca8e909e2a2d47037aeedd4d',
+      videoNumber: 5,
+      videoTitle: 'Wood Grain Texture',
+      stepName: 'Wood Grain Texture',
+      teacher: 'Mrs. Dawn',
+      title: 'Wood Grain Texture',
+      intro: 'This is the teacher\'s own way of drawing it — not the only way.',
+      xp: 5
+    },
+    {
+      part: 'B',
+      partLabel: 'Part b · teacher demo · video 6 of 6',
       type: 'videoSegment',
       videoId: '186f55022c3300d847cf673ded9303a5',
-      videoNumber: 3,
+      videoNumber: 6,
       videoTitle: 'Finish',
       stepName: 'Finish',
       teacher: 'Mrs. Dawn',
