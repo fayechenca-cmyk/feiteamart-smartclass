@@ -18,13 +18,9 @@ function jumpToStep(target){
  index=target;unlocked=Math.max(unlocked,target);enter();
 }
 function progress(){
- const bar=$('progress');bar.innerHTML='';
- flow.forEach((step,i)=>{
-  const b=document.createElement('button');b.type='button';b.className='step-jump '+(i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':'');
-  const label=`${i+1}. ${step.title}${step.optional?' · Optional':''}`;
-  b.textContent=String(i+1);b.title=label;b.setAttribute('aria-label','Jump to '+label);if(i===index)b.setAttribute('aria-current','step');
-  b.onclick=()=>jumpToStep(i);b.onmouseenter=b.onfocus=()=>{$('stepPreview').textContent=label;};b.onmouseleave=b.onblur=()=>{$('stepPreview').textContent='';};bar.append(b);
- });
+ // Stages (Oct 2026): scoped to the current stage's own steps only --
+ // see core/guided-ux.js's own header comment for the grouping rule.
+ window.GuidedUX?.stageProgress(flow,index,completed,skipped,jumpToStep);
 }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];timedCaptions=[];}
 function speak(step,done){
@@ -137,7 +133,7 @@ function enter(){
  const s=flow[index];window.GuidedUX?.reset(s);$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent=s.optional?'Skip optional step →':'Skip this step →';$('finishCore').hidden=!s.optional&&s.kind!=='submit';$('finishCore').textContent='Continue without background →';$('skip').hidden=true;$('clipControls').hidden=true;save();$('title').textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'');$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
- setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();window.GuidedUX?.stepCounter(flow,index);
+ setMode(s.chapter.toUpperCase());progress();window.GuidedUX?.stepCounter(flow,index);window.GuidedUX?.stageDots(flow,index,completed);
  if(s.kind==='intro'||s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src=s.frame;$('referenceImage').alt=s.title+' — stage reference';}
@@ -170,9 +166,10 @@ function setMuted(value){muted=value;voice.muted=muted;if(player)player.muted=mu
 $('sound').onclick=()=>setMuted(!muted);
 $('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTogether();}else voice.play().catch(()=>{$('resume').hidden=false;});};
 function openMap(){
- player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
+ player?.pause();voice.pause();$('mapItems').innerHTML='';
+ const stageGroups=window.GuidedUX?.mapStageGroups(flow)||[];let gi=0;
  flow.forEach((s,i)=>{
-  if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter+(s.optional&&!/optional/i.test(chapter)?' · Optional':'');$('mapItems').append(h);}
+  if(gi<stageGroups.length&&i===stageGroups[gi].start){const name=stageGroups[gi].name;const h=document.createElement('h3');h.textContent=name+(s.optional&&!/optional/i.test(name)?' · Optional':'');$('mapItems').append(h);gi++;}
   const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
   // Optional refinements can be bypassed only after the core drawing is finished.
 

@@ -42,7 +42,7 @@ function progress(){
   dot.title=`Part ${n+1}: ${p.title}`;dot.setAttribute('aria-label',`${p.title}, part ${n+1} of ${parts.length}${done?', completed':n===partIndex?', current':''}`);
   track.append(dot);
  });
- $('partName').textContent=`Part ${partIndex+1} of ${parts.length} · ${part.title}`;
+ $('partName').textContent=part.title;
  flow.forEach((step,i)=>{
   if(i<part.start||i>part.end)return;
   const b=document.createElement('button');b.type='button';b.className='step-jump '+(i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':'');
@@ -50,7 +50,7 @@ function progress(){
   b.textContent=String(i+1);b.title=label;b.setAttribute('aria-label','Jump to '+label);if(i===index)b.setAttribute('aria-current','step');
   b.onclick=()=>jumpToStep(i);b.onmouseenter=b.onfocus=()=>{$('stepPreview').textContent=label;};b.onmouseleave=b.onblur=()=>{$('stepPreview').textContent='';};bar.append(b);
  });
- $('stepCounter').textContent=`Step ${index+1} · ${index-part.start+1} of ${part.end-part.start+1} in this part`;
+ $('stepCounter').textContent=`${part.title} · ${index-part.start+1} of ${part.end-part.start+1}`;
 }
 
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];timedCaptions=[];}
@@ -243,7 +243,7 @@ function enter(){
  const s=flow[index];window.GuidedUX?.reset(s);if(index<3&&music.paused)introMusic();if(index>4)stopIntroMusic();$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent=s.optional?'Skip optional step →':'Skip this step →';$('finishCore').hidden=!s.optional&&s.kind!=='submit';$('finishCore').textContent='Continue without background →';$('skip').hidden=true;$('clipControls').hidden=true;save();$('title').textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'');$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
- setMode(`${s.chapter.toUpperCase()} · STEP ${index+1}`);progress();$('pauseLesson').hidden=!(s.kind==='milestone'&&index<flow.length-1);
+ setMode(s.chapter.toUpperCase());progress();$('pauseLesson').hidden=!(s.kind==='milestone'&&index<flow.length-1);
  if(s.kind==='intro'||s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src='reference-giftbox.png';$('referenceImage').alt='Real gift box reference';}

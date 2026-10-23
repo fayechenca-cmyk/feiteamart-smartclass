@@ -17,13 +17,9 @@ function jumpToStep(target){
  index=target;unlocked=Math.max(unlocked,target);enter();
 }
 function progress(){
- const bar=$('progress');bar.innerHTML='';
- flow.forEach((step,i)=>{
-  const b=document.createElement('button');b.type='button';b.className='step-jump '+(i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':'');
-  const label=`${i+1}. ${step.title}${step.optional?' · Optional':''}`;
-  b.textContent=String(i+1);b.title=label;b.setAttribute('aria-label','Jump to '+label);if(i===index)b.setAttribute('aria-current','step');
-  b.onclick=()=>jumpToStep(i);b.onmouseenter=b.onfocus=()=>{$('stepPreview').textContent=label;};b.onmouseleave=b.onblur=()=>{$('stepPreview').textContent='';};bar.append(b);
- });
+ // Stages (Oct 2026): scoped to the current stage's own steps only --
+ // see core/guided-ux.js's own header comment for the grouping rule.
+ window.GuidedUX?.stageProgress(flow,index,completed,skipped,jumpToStep);
 }
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];}
 function speak(step,done){
@@ -185,7 +181,7 @@ function enter(){
  // for the welcome screen only. Image only, no caption.
  $('reference').hidden=s.kind!=='draw';$('analysis').hidden=s.kind!=='draw';
  if(s.kind==='draw'){$('referenceImage').src=s.stepResult||s.frame;$('referenceImage').alt='Your teacher’s drawing after this step';}
- setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();window.GuidedUX?.stepCounter(flow,index);
+ setMode(s.chapter.toUpperCase());progress();window.GuidedUX?.stepCounter(flow,index);window.GuidedUX?.stageDots(flow,index,completed);
  if(s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   createPlayer(s);
@@ -239,9 +235,10 @@ $('artchi').onclick=()=>{const s=flow[index];if(s.kind==='draw'&&phase==='watchi
 $('sound').onclick=()=>{muted=!muted;voice.muted=muted;if(player)player.muted=muted||watchVoiceActive;$('sound').textContent=muted?'Sound off':'Sound on';$('sound').setAttribute('aria-pressed',String(muted));$('sound').setAttribute('aria-label',muted?'Enable sound':'Mute sound');};
 $('resume').onclick=()=>{$('resume').hidden=true;if(phase==='watching'){resumeTogether();}else voice.play().catch(()=>{$('resume').hidden=false;});};
 function openMap(){
- player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
+ player?.pause();voice.pause();$('mapItems').innerHTML='';
+ const stageGroups=window.GuidedUX?.mapStageGroups(flow)||[];let gi=0;
  flow.forEach((s,i)=>{
-  if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter;$('mapItems').append(h);}
+  if(gi<stageGroups.length&&i===stageGroups[gi].start){const h=document.createElement('h3');h.textContent=stageGroups[gi].name;$('mapItems').append(h);gi++;}
   const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
   if(s.frame){const img=document.createElement('img');img.src=s.frame;img.alt='';img.loading='lazy';b.append(img);}
   const label=document.createElement('span');label.textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'')+(skipped.has(i)?' · Skipped':'');b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':skipped.has(i)?'↷':String(i+1);b.append(check);
