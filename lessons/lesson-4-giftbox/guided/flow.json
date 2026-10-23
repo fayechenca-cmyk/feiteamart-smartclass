@@ -773,10 +773,10 @@
   },
   {
     "id": "box-4-2",
-    "title": "Refine the bow and pattern",
+    "title": "Give the star its soft texture",
     "chapter": "Finishing details",
-    "say": "Here the teacher refines the bow and wrapping pattern. Look for the small changes that help the fabric feel soft. You do not have to copy every mark. Have a look, add what your drawing needs, and we’ll move on.",
-    "hint": "Make it this gift box.",
+    "say": "Now notice the little plush star. It feels different from the smooth, silky bow. A 2H pencil can help you add its pale texture with almost no pressure. Try tiny side-to-side zigzags and small circular movements, especially across the light-gray areas. Let the marks stay airy so the bright side still glows. We will look at this close up, then move on.",
+    "hint": "Soft star · light zigzags · tiny circles.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-4-2.mp3",
@@ -784,7 +784,29 @@
     "start": 240,
     "clipEnd": 480,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7c6090590f645d78bd35033ffcd9ec25/thumbnails/thumbnail.jpg?time=479s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-star-zigzag",
+        "time": 40,
+        "title": "Soft star, different texture",
+        "say": "Look closely at the little star. The bow is smooth and silky, but this star has a soft, almost fuzzy surface. With a 2H or another light pencil, make tiny side-to-side zigzag marks. Keep them so gentle that the bright paper still shows through.",
+        "hint": "Tiny zigzags, almost no pressure.",
+        "tip": "The star is fuzzy; the bow is smooth.",
+        "audio": "audio/moment-gift-star-zigzag.mp3",
+        "focus": "gift-star-zigzag"
+      },
+      {
+        "id": "gift-star-circles",
+        "time": 110,
+        "title": "Build the light gray softly",
+        "say": "On the star’s light-gray side, let the pencil move in tiny circles as well as short zigzags. Work slowly and lightly, one veil of graphite at a time. The soft movement gives the little star its plush feeling without making it as dark or glossy as the ribbon.",
+        "hint": "Tiny circles in the light-gray area.",
+        "tip": "Build the light gray with small, gentle circles.",
+        "audio": "audio/moment-gift-star-circles.mp3",
+        "focus": "gift-star-circles"
+      }
+    ]
   },
   {
     "id": "box-4-3",

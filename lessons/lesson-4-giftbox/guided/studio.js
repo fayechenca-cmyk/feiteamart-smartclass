@@ -58,7 +58,7 @@ function speak(step,done){
  stopVoice(); voiceDone=done||null;timedCaptions=step.captions||[];
  window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-5';voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-6';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;$('caption').textContent='';const tip=document.querySelector('.teaching-tip strong');if(tip)tip.textContent=step.hint||step.title;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=true;}else{$('next').disabled=false;phase='waiting';}};
@@ -161,7 +161,9 @@ const momentArt={
  'gift-twenty-edge-light':'<path d="M145 133 L302 122 M146 140 L302 129"/><circle cx="246" cy="127" r="11"/>',
  'gift-twenty-band-light':'<path d="M213 69 L232 138 M219 68 L238 137"/><circle cx="227" cy="114" r="11"/>',
  'gift-twenty-eraser-light':'<path d="M146 136 L302 124"/><circle cx="294" cy="125" r="13"/>',
- 'gift-twenty-tail-edge':'<path d="M226 108 Q244 110 263 130 Q262 142 250 147"/><circle cx="256" cy="135" r="12"/>'
+ 'gift-twenty-tail-edge':'<path d="M226 108 Q244 110 263 130 Q262 142 250 147"/><circle cx="256" cy="135" r="12"/>',
+ 'gift-star-zigzag':'<circle cx="224" cy="110" r="25"/><path d="M210 105 l5 4 l5 -4 l5 4 l5 -4 M213 114 l5 4 l5 -4 l5 4"/>',
+ 'gift-star-circles':'<circle cx="224" cy="110" r="25"/><circle cx="214" cy="109" r="5"/><circle cx="223" cy="115" r="5"/><circle cx="232" cy="107" r="5"/>'
 };
 function showMoment(moment){
  if(activeMoment||phase!=='watching')return;
@@ -322,7 +324,7 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();music.pause(
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('box'))return; $('welcome').showModal();
-fetch('flow.json?v=box-5').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+fetch('flow.json?v=box-6').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
  try{ const p=await GuidedPlatform.restore('box',KEY,flow.length,{classicStepMap:['welcome','cube-connection','reference-details','tools','observe','box-1-1','box-2-1','box-3-1','box-4-1','submit','optional','celebrate'].map(id=>flow.findIndex(s=>s.id===id)),classicCompletedAt:11});unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your gift box →':'Let’s draw a gift box →';
