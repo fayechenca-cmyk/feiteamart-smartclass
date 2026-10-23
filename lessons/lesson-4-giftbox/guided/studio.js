@@ -58,7 +58,7 @@ function speak(step,done){
  stopVoice(); voiceDone=done||null;timedCaptions=step.captions||[];
  window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-4';voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-5';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;$('caption').textContent='';const tip=document.querySelector('.teaching-tip strong');if(tip)tip.textContent=step.hint||step.title;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=true;}else{$('next').disabled=false;phase='waiting';}};
@@ -152,13 +152,22 @@ const momentArt={
  'gift-value-boundary':'<path d="M190 97 Q208 107 220 112 M236 112 Q250 118 268 134 M150 148 L310 137"/><circle cx="236" cy="113" r="7"/>',
  'gift-straps-in-front':'<path d="M220 135 L242 133 L242 188 L220 191 Z M151 145 L311 132 M151 157 L311 144"/><circle cx="232" cy="146" r="7"/>',
  'gift-ground-shadow':'<path d="M175 218 L312 207 L347 223 Q269 240 175 231 Z"/><path d="M178 223 Q248 229 312 211"/>',
- 'gift-tissue-soften':'<path d="M178 220 Q251 228 348 215 M182 232 Q264 240 353 224"/><circle cx="259" cy="228" r="9"/>'
+ 'gift-tissue-soften':'<path d="M178 220 Q251 228 348 215 M182 232 Q264 240 353 224"/><circle cx="259" cy="228" r="9"/>',
+ 'gift-soft-v-turn':'<circle cx="159" cy="163" r="17"/><path d="M145 146 Q149 158 160 166 Q169 174 176 177"/>',
+ 'gift-band-wrap-turn':'<path d="M288 131 Q296 136 300 143 L300 177"/><circle cx="299" cy="145" r="13"/>',
+ 'gift-bow-edge-breathes':'<path d="M175 78 Q193 65 218 96 Q204 105 181 95"/><circle cx="190" cy="81" r="11"/>',
+ 'gift-tail-drapes':'<path d="M226 106 Q246 108 260 125 Q265 137 253 143"/><circle cx="253" cy="130" r="12"/>',
+ 'gift-twenty-one-direction':'<path d="M170 152 L318 132 M170 157 L318 137 M170 162 L318 142"/><circle cx="172" cy="153" r="12"/>',
+ 'gift-twenty-edge-light':'<path d="M145 133 L302 122 M146 140 L302 129"/><circle cx="246" cy="127" r="11"/>',
+ 'gift-twenty-band-light':'<path d="M213 69 L232 138 M219 68 L238 137"/><circle cx="227" cy="114" r="11"/>',
+ 'gift-twenty-eraser-light':'<path d="M146 136 L302 124"/><circle cx="294" cy="125" r="13"/>',
+ 'gift-twenty-tail-edge':'<path d="M226 108 Q244 110 263 130 Q262 142 250 147"/><circle cx="256" cy="135" r="12"/>'
 };
 function showMoment(moment){
  if(activeMoment||phase!=='watching')return;
  activeMoment=moment;seenMoments.add(moment.id);player?.pause();$('resume').hidden=true;$('clipControls').hidden=true;
  const overlay=document.createElement('div');overlay.id='momentOverlay';overlay.className='moment-overlay';
- overlay.innerHTML=`<svg class="moment-focus" viewBox="0 0 480 270" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${momentArt[moment.focus]||''}</svg><aside class="moment-card"><small>LOOK AT THIS MOMENT</small><h2>${moment.title}</h2><p>${moment.tip||moment.hint}</p><div><button type="button" class="moment-replay">↺ Hear again</button><button type="button" class="moment-continue">Continue watching →</button></div></aside>`;
+ overlay.innerHTML=`<svg class="moment-focus" viewBox="0 0 480 270" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${momentArt[moment.focus]||''}</svg>${moment.zoom?`<div class="moment-zoom" style="background-image:url('${moment.zoom}')" aria-label="Enlarged teacher drawing detail"><span>SOFT CORNER · CLOSE UP</span></div>`:''}<aside class="moment-card"><small>LOOK AT THIS MOMENT</small><h2>${moment.title}</h2><p>${moment.tip||moment.hint}</p><div><button type="button" class="moment-replay">↺ Hear again</button><button type="button" class="moment-continue">Continue watching →</button></div></aside>`;
  $('stage').append(overlay);
  overlay.querySelector('.moment-replay').onclick=()=>speak(moment);
  overlay.querySelector('.moment-continue').onclick=closeMoment;
@@ -313,7 +322,7 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();music.pause(
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('box'))return; $('welcome').showModal();
-fetch('flow.json?v=box-4').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+fetch('flow.json?v=box-5').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
  try{ const p=await GuidedPlatform.restore('box',KEY,flow.length,{classicStepMap:['welcome','cube-connection','reference-details','tools','observe','box-1-1','box-2-1','box-3-1','box-4-1','submit','optional','celebrate'].map(id=>flow.findIndex(s=>s.id===id)),classicCompletedAt:11});unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your gift box →':'Let’s draw a gift box →';

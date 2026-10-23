@@ -91,3 +91,8 @@ footer{min-width:0}
 .map-part[open] summary{background:#eee8f8}
 .map-part-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px}
 @media(max-width:700px){.map-part-steps{grid-template-columns:1fr}.map-part summary{font-size:13px;padding:11px}}
+
+.moment-zoom{position:absolute;left:15px;top:15px;width:clamp(150px,24%,265px);aspect-ratio:1.35;background-color:#fff;background-size:330%;background-position:38% 68%;border:3px solid #fff9dc;border-radius:16px;box-shadow:0 8px 28px #17182d80;pointer-events:none;overflow:hidden;animation:moment-arrive .35s ease-out}
+.moment-zoom span{position:absolute;left:5px;bottom:5px;padding:3px 6px;border-radius:8px;background:#fff9dc;color:#252038;font-size:10px;font-weight:800;letter-spacing:.04em}
+@media(max-width:700px){.moment-zoom{left:7px;top:7px;width:32%;border-width:2px}.moment-zoom span{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.moment-zoom{animation:none}}

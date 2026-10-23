@@ -74,7 +74,7 @@
     "id": "box-1-1",
     "title": "Find the big shape",
     "chapter": "Observe the box",
-    "say": "Watch how the teacher finds the overall width and height. Compare with the real gift box. Keep your first lines light; we can change them. Take your time. Continue when you are ready.",
+    "say": "Watch how the teacher measures the full width and height against the real gift box. Those first lines are light because we can still change them. Find your four outer marks, then I’ll meet you at the lid.",
     "hint": "Width before decoration.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -151,7 +151,7 @@
     "id": "box-1-2",
     "title": "Check the top and sides",
     "chapter": "Observe the box",
-    "say": "The top and side planes tell us where this box sits in space. Follow each edge back and check its angle against the reference. Stop here and compare your three visible faces. Take your time. Continue when you are ready.",
+    "say": "The top and side planes show how the box sits in space. Follow each edge back and compare its angle with the reference. Check your three visible faces. Ready for the ribbon?",
     "hint": "Top · front · side.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -228,7 +228,7 @@
     "id": "box-1-3",
     "title": "Shape the bow and its shadow",
     "chapter": "Observe the box",
-    "say": "Now the bow grows from simple shapes into soft loops. Watch both sides together, then notice how the ribbon turns and how the box casts a shadow. The tiny star can have your own expression. Take your time and continue when you're ready.",
+    "say": "The bow begins as simple shapes, then softens into loops. Keep both sides in view and watch the ribbon turn. The little star can wear your own expression. Let’s carry that into the next move.",
     "hint": "Big shapes · soft loops · a grounding shadow.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -717,7 +717,7 @@
     "id": "box-4-1",
     "title": "Strengthen the important edges",
     "chapter": "Finishing details",
-    "say": "The structure is already there. Now choose a few edges to make clearer. Keep the drawing lively; you do not need to darken every line. Take your time. Continue when you are ready.",
+    "say": "The main structure is here. The teacher uses a soft pencil for a few important edges; 6B works with a light hand, while 3B or 4B may suit a firmer touch. We will look closely at a soft corner and the bow. Leave some lines quiet so the ribbon can breathe.",
     "hint": "A few clear edges are enough.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -726,13 +726,56 @@
     "start": 0,
     "clipEnd": 240,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7c6090590f645d78bd35033ffcd9ec25/thumbnails/thumbnail.jpg?time=239s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-soft-v-turn",
+        "time": 35,
+        "title": "A soft turn, not a sharp V",
+        "say": "See this tiny V-shaped turn at the front corner? It shows the box has thickness. The teacher rounds it gently instead of cutting a hard point. Look at the enlarged detail, then try that soft turn in your drawing.",
+        "hint": "Round the thick corner gently.",
+        "tip": "This small rounded turn gives the box thickness.",
+        "audio": "audio/moment-gift-soft-v-turn.mp3",
+        "focus": "gift-soft-v-turn",
+        "zoom": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7c6090590f645d78bd35033ffcd9ec25/thumbnails/thumbnail.jpg?time=35s&width=960"
+      },
+      {
+        "id": "gift-band-wrap-turn",
+        "time": 104,
+        "title": "Let the band turn with the box",
+        "say": "The band does not stop at the corner. Its line curves over the edge and continues down the next face. A small turn like this makes the wrapping feel as if it really hugs the box.",
+        "hint": "Follow the band around the turn.",
+        "tip": "Curve the band over the corner.",
+        "audio": "audio/moment-gift-band-wrap-turn.mp3",
+        "focus": "gift-band-wrap-turn"
+      },
+      {
+        "id": "gift-bow-edge-breathes",
+        "time": 190,
+        "title": "Let the left loop breathe",
+        "say": "Watch the left bow loop. Its outline is not one dark stripe. It grows stronger where the ribbon rises or folds, then softens between those points. Light and firm marks together make the loop feel full of air.",
+        "hint": "Vary the pressure around the loop.",
+        "tip": "Strong at the folds; soft between them.",
+        "audio": "audio/moment-gift-bow-edge-breathes.mp3",
+        "focus": "gift-bow-edge-breathes"
+      },
+      {
+        "id": "gift-tail-drapes",
+        "time": 230,
+        "title": "Let the right tail settle",
+        "say": "The right ribbon tail falls over the box. Follow its edge with a light, stronger, then lighter touch so it looks as though it naturally rests on the surface. Let your hand relax before the next part.",
+        "hint": "Make the tail drape naturally.",
+        "tip": "A changing edge helps the tail settle onto the box.",
+        "audio": "audio/moment-gift-tail-drapes.mp3",
+        "focus": "gift-tail-drapes"
+      }
+    ]
   },
   {
     "id": "box-4-2",
     "title": "Refine the bow and pattern",
     "chapter": "Finishing details",
-    "say": "Look at the bow loops, ribbon tails, tiny star and wrapping pattern. Add only what helps this gift box feel like the real object. Take your time. Continue when you are ready.",
+    "say": "Here the teacher refines the bow and wrapping pattern. Look for the small changes that help the fabric feel soft. You do not have to copy every mark. Have a look, add what your drawing needs, and we’ll move on.",
     "hint": "Make it this gift box.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -747,7 +790,7 @@
     "id": "box-4-3",
     "title": "Balance texture and contrast",
     "chapter": "Finishing details",
-    "say": "Step back and compare light, middle and dark areas. Refine the paper texture and deepest folds without covering your highlights. Take your time. Continue when you are ready.",
+    "say": "Now a very light touch. A 2H can help you lay pale, tidy strokes in one direction. Leave the thin highlights along the box edge and ribbon; lift some back with the eraser if you need to. The teacher’s box is not mathematically perfect, and yours need not be either. A gentle adjustment to a far edge is enough. Let’s finish with a fresh look.",
     "hint": "Light · middle · dark.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
@@ -756,13 +799,65 @@
     "start": 480,
     "clipEnd": 700,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/7c6090590f645d78bd35033ffcd9ec25/thumbnails/thumbnail.jpg?time=699s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-twenty-one-direction",
+        "time": 33,
+        "title": "Keep the strokes calm",
+        "say": "The teacher is barely touching the paper. Try a 2H or another light pencil, and move your strokes in one steady direction. Leave the thin pale edge of the lid clear: that little strip tells us the lid has thickness.",
+        "hint": "Pale strokes; one direction.",
+        "tip": "Keep a fine highlight along the lid edge.",
+        "audio": "audio/moment-gift-twenty-one-direction.mp3",
+        "focus": "gift-twenty-one-direction"
+      },
+      {
+        "id": "gift-twenty-edge-light",
+        "time": 61,
+        "title": "Save the next bright edge",
+        "say": "Here is another little highlight where the light-gray face meets the darker turn. Do not shade over it. A narrow light edge can make this simple box feel surprisingly real.",
+        "hint": "Leave a narrow highlight.",
+        "tip": "Keep the box edge lighter than the face beside it.",
+        "audio": "audio/moment-gift-twenty-edge-light.mp3",
+        "focus": "gift-twenty-edge-light"
+      },
+      {
+        "id": "gift-twenty-band-light",
+        "time": 85,
+        "title": "A brighter strip on the band",
+        "say": "The wrapping band sits on top of the box, so its light edge can be even brighter. Move very softly around that narrow strip. Imagine your pencil brushing the surface, not pressing into it.",
+        "hint": "Keep the band’s top edge bright.",
+        "tip": "The band highlight sits above the box highlight.",
+        "audio": "audio/moment-gift-twenty-band-light.mp3",
+        "focus": "gift-twenty-band-light"
+      },
+      {
+        "id": "gift-twenty-eraser-light",
+        "time": 114,
+        "title": "Lift the light back out",
+        "say": "Now the eraser lifts a little graphite from the box edge. Use a gentle touch and stop as soon as the light appears. That clean sliver is enough.",
+        "hint": "Erase softly to reveal the edge.",
+        "tip": "Lift a narrow highlight; do not scrub.",
+        "audio": "audio/moment-gift-twenty-eraser-light.mp3",
+        "focus": "gift-twenty-eraser-light"
+      },
+      {
+        "id": "gift-twenty-tail-edge",
+        "time": 147,
+        "title": "The tail edge changes weight",
+        "say": "Look at the right ribbon tail. Its outline becomes dark, then light, then dark again. This changing pressure helps the tail fold and rest naturally on the box. You may pause here and compare your own edge.",
+        "hint": "Dark, light, dark around the fold.",
+        "tip": "Vary the contour so the ribbon does not look flat.",
+        "audio": "audio/moment-gift-twenty-tail-edge.mp3",
+        "focus": "gift-twenty-tail-edge"
+      }
+    ]
   },
   {
     "id": "box-4-4",
     "title": "One final look",
     "chapter": "Finishing details",
-    "say": "You made a rectangular prism feel like a present. Check the corners, the ribbon crossing and the shadow beneath. If those read clearly, your core drawing is done. Take your time. Continue when you are ready.",
+    "say": "Take one step back from your gift box. Can you see the lid, the ribbon crossing, and the shadow beneath? If those read clearly, the core drawing is complete. Give your hand a rest, then come celebrate what you made.",
     "hint": "Wonderful work. Your box is complete.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
