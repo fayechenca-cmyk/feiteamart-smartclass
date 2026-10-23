@@ -66,3 +66,28 @@ main#studio{width:100%;min-width:0}
 main#studio #reference{flex:0 0 23%;min-width:0}
 footer{min-width:0}
 #progress{max-width:100%;overflow-x:auto}
+.part-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:3px;color:#51416e;font-size:12px}
+#partName{font-weight:800;letter-spacing:.02em}
+#partTrack{display:flex;gap:5px;flex-shrink:0}
+.part-dot{width:21px;height:21px;display:grid;place-items:center;border:2px solid #bca9d9;border-radius:50%;background:#fffdf5;color:#67558a;font-size:10px;font-weight:800;line-height:1}
+.part-dot.done{background:#a9cea7;border-color:#6ca27f;color:#183e31}
+.part-dot.current{background:#7560a7;border-color:#7560a7;color:#fff;box-shadow:0 0 0 3px #d9cbee}
+#progress .step-jump{min-height:30px;font-size:12px;font-weight:750}
+#progress .step-jump.current{box-shadow:0 0 0 2px #e6dbf3}
+#pauseLesson{background:#edf5e9;color:#28523b;border-color:#8ab597;font-weight:700}
+#partBreak{width:min(92vw,490px);text-align:center;padding:24px 28px 28px;background:#fffdf5;border:2px solid #c7b7e2;box-shadow:0 18px 65px #17182d45}
+#partBreak>img{width:72px;height:72px;object-fit:contain}
+#partBreakOrbit{height:95px;display:grid;place-items:center;margin:-5px 0}
+#partBreakOrbit .completion-orbit{width:92px;height:92px}
+#partBreakOrbit .completion-orbit>span{font-size:16px}
+#partBreak h2{font-size:clamp(23px,3vw,32px);margin:8px 0;color:#342a4b}
+#partBreak p{font-size:15px;line-height:1.45;color:#625a70;max-width:370px;margin:0 auto 18px}
+.part-break-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.part-break-actions button{min-width:135px}
+@media(max-width:700px){.part-heading{font-size:10px}.part-dot{width:18px;height:18px;font-size:9px}#progress .step-jump{min-height:28px}#partBreak{padding:18px}.part-break-actions button{min-width:120px}}
+#mapItems{display:block;max-height:min(68dvh,610px);overflow:auto}
+.map-part{margin:8px 0;border:1px solid #d9cde5;border-radius:14px;background:#fffdf8;overflow:hidden}
+.map-part summary{cursor:pointer;padding:13px 16px;font-size:15px;font-weight:800;color:#4e3f6a;list-style-position:inside}
+.map-part[open] summary{background:#eee8f8}
+.map-part-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:12px}
+@media(max-width:700px){.map-part-steps{grid-template-columns:1fr}.map-part summary{font-size:13px;padding:11px}}

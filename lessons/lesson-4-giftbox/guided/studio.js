@@ -10,6 +10,15 @@ let timedCaptions=[];
 let playerReady=false,playerFailed=false;
 let voiceDone=null, captions=[], lastCaption='', watchdog=null, watchNarrated=false, watchVoiceActive=false;
 let activeMoment=null, seenMoments=new Set();
+const parts=[
+ {start:0,end:4,title:'See & prepare'},
+ {start:5,end:8,title:'Sketch the box'},
+ {start:9,end:12,title:'Build the details'},
+ {start:13,end:16,title:'Light & shadow'},
+ {start:17,end:23,title:'Finish & share'}
+];
+const partFor=i=>parts.findIndex(p=>i>=p.start&&i<=p.end);
+const partComplete=p=>Array.from({length:p.end-p.start+1},(_,i)=>p.start+i).every(i=>completed.has(i)||skipped.has(i));
 const voice=$('voice');
 const music=$('introMusic');
 let musicGain=null;
@@ -25,12 +34,23 @@ function jumpToStep(target){
 }
 function progress(){
  const bar=$('progress');bar.innerHTML='';
+ const partIndex=partFor(index),part=parts[partIndex];
+ const track=$('partTrack');track.innerHTML='';
+ parts.forEach((p,n)=>{
+  const done=partComplete(p),dot=document.createElement('span');dot.className='part-dot'+(n===partIndex?' current':done?' done':'');
+  dot.textContent=done&&n!==partIndex?'✓':String(n+1);
+  dot.title=`Part ${n+1}: ${p.title}`;dot.setAttribute('aria-label',`${p.title}, part ${n+1} of ${parts.length}${done?', completed':n===partIndex?', current':''}`);
+  track.append(dot);
+ });
+ $('partName').textContent=`Part ${partIndex+1} of ${parts.length} · ${part.title}`;
  flow.forEach((step,i)=>{
+  if(i<part.start||i>part.end)return;
   const b=document.createElement('button');b.type='button';b.className='step-jump '+(i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':'');
   const label=`${i+1}. ${step.title}${step.optional?' · Optional':''}`;
   b.textContent=String(i+1);b.title=label;b.setAttribute('aria-label','Jump to '+label);if(i===index)b.setAttribute('aria-current','step');
   b.onclick=()=>jumpToStep(i);b.onmouseenter=b.onfocus=()=>{$('stepPreview').textContent=label;};b.onmouseleave=b.onblur=()=>{$('stepPreview').textContent='';};bar.append(b);
  });
+ $('stepCounter').textContent=`Step ${index+1} · ${index-part.start+1} of ${part.end-part.start+1} in this part`;
 }
 
 function stopVoice(){voice.pause();voice.onended=null;voice.onerror=null;voiceDone=null;$('caption').textContent='';captions=[];timedCaptions=[];}
@@ -52,7 +72,7 @@ voice.addEventListener('timeupdate',()=>{
  if(c!==lastCaption){$('caption').textContent=c;lastCaption=c;}window.GuidedUX?.tick(voice.currentTime);
 });
 function setMode(text){$('mode').textContent=text;}
-function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=index===flow.length-1?'Celebrate →':flow[index].kind==='submit'?'Try optional background →':'Continue →';}
+function waiting(){phase='waiting';setMode('YOUR TURN · TAKE YOUR TIME');$('next').disabled=false;$('next').textContent=index===flow.length-1?'Celebrate →':flow[index].kind==='milestone'?'Start next part →':flow[index].kind==='submit'?'Try optional background →':'Continue →';}
 function buildScene(s){
  $('media').hidden=true;$('visual').innerHTML='';
  if(s.kind==='giftIntro'){
@@ -202,7 +222,7 @@ function enter(){
  const s=flow[index];window.GuidedUX?.reset(s);if(index<3&&music.paused)introMusic();if(index>4)stopIntroMusic();$('back').disabled=index===0;$('skipStep').hidden=index===flow.length-1;$('skipStep').textContent=s.optional?'Skip optional step →':'Skip this step →';$('finishCore').hidden=!s.optional&&s.kind!=='submit';$('finishCore').textContent='Continue without background →';$('skip').hidden=true;$('clipControls').hidden=true;save();$('title').textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'');$('hint').textContent=s.hint||'';
  $('notice').hidden=true;$('resume').hidden=true;$('next').disabled=true;$('next').textContent='Continue →';$('replay').hidden=false;
  $('reference').hidden=true;$('analysis').hidden=s.kind!=='draw';showPattern(s);
- setMode(`${s.chapter.toUpperCase()} · ${index+1} / ${flow.length}`);progress();window.GuidedUX?.stepCounter(flow,index);
+ setMode(`${s.chapter.toUpperCase()} · STEP ${index+1}`);progress();$('pauseLesson').hidden=!(s.kind==='milestone'&&index<flow.length-1);
  if(s.kind==='intro'||s.kind==='draw'){
   phase='watching';setMode('WATCH WITH YOUR TEACHER');$('media').hidden=false;$('visual').innerHTML='';
   if(s.kind==='draw'){$('referenceImage').src='reference-giftbox.png';$('referenceImage').alt='Real gift box reference';}
@@ -219,11 +239,20 @@ function next(){
  mark();
  if(flow[index].coreComplete)GuidedPlatform.complete('box');
  if(index===flow.length-1){stopVoice();GuidedPlatform.complete('box');window.GuidedReward.complete({lessonId:'box',title:'Gift Box',nextLabel:'Return to the course map →',muted,onMutedChange:setMuted}).then(async go=>{await GuidedPlatform.flush();if(go)location.href='../../../#dashboard/courses/foundation-map';});return;}
+ if(index===4){index++;save();showPartBreak();return;}
  index++;enter();
 }
 $('next').onclick=next;
+function showPartBreak(){
+ const box=$('partBreak');$('partBreakOrbit').innerHTML=window.GuidedUX?.dots('Ready')||'✦';
+ if(!muted)chime();box.showModal();
+}
+$('partBreak').addEventListener('cancel',e=>e.preventDefault());
+$('partContinue').onclick=()=>{$('partBreak').close();enter();};
+$('partPause').onclick=async()=>{$('partBreak').close();await GuidedPlatform.flush();location.href='../../../#dashboard/courses/foundation-map';};
+$('pauseLesson').onclick=async()=>{mark();index++;save();await GuidedPlatform.flush();location.href='../../../#dashboard/courses/foundation-map';};
 $('back').onclick=()=>{if(index>0){index--;enter();}};
-$('skipStep').onclick=()=>{if(index>=flow.length-1)return;skipped.add(index);unlocked=Math.max(unlocked,index+1);index++;enter();};
+$('skipStep').onclick=()=>{if(index>=flow.length-1)return;skipped.add(index);unlocked=Math.max(unlocked,index+1);if(index===4){index++;save();showPartBreak();return;}index++;enter();};
 $('finishCore').onclick=()=>{let target=index+1;while(target<flow.length&&flow[target].optional){skipped.add(target);target++;}if(flow[index].optional)skipped.add(index);if(target>=flow.length)return;unlocked=Math.max(unlocked,target);index=target;enter();};
 $('referenceImage').onclick=()=>{$('analysis').onclick();};
 $('referenceImage').tabIndex=0;$('referenceImage').setAttribute('role','button');$('referenceImage').setAttribute('aria-label','Enlarge reference image');$('referenceImage').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('analysis').onclick();}};
@@ -235,15 +264,22 @@ function setMuted(value){muted=value;voice.muted=muted;music.muted=muted;if(play
 $('sound').onclick=()=>setMuted(!muted);
 $('resume').onclick=()=>{$('resume').hidden=true;if(activeMoment){speak(activeMoment);return;}if(phase==='watching'){resumeTogether();}else voice.play().catch(()=>{$('resume').hidden=false;});};
 function openMap(){
- player?.pause();voice.pause();$('mapItems').innerHTML='';let chapter='';
- flow.forEach((s,i)=>{
-  if(s.chapter!==chapter){chapter=s.chapter;const h=document.createElement('h3');h.textContent=chapter+(s.optional&&!/optional/i.test(chapter)?' · Optional':'');$('mapItems').append(h);}
-  const b=document.createElement('button');b.className='map-step'+(i===index?' current':'');b.disabled=false;
-  // Optional refinements can be bypassed only after the core drawing is finished.
-
-  if(s.frame){const img=document.createElement('img');img.src=s.frame;img.alt='';img.loading='lazy';b.append(img);}
-  const label=document.createElement('span');label.textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'')+(skipped.has(i)?' · Skipped':'');b.append(label);const check=document.createElement('b');check.textContent=completed.has(i)?'✓':skipped.has(i)?'↷':String(i+1);b.append(check);
-  b.onclick=()=>{$('map').close();jumpToStep(i);};$('mapItems').append(b);
+ player?.pause();voice.pause();$('mapItems').innerHTML='';
+ parts.forEach((part,n)=>{
+  const section=document.createElement('details');section.className='map-part';section.open=n===partFor(index);
+  const summary=document.createElement('summary');
+  summary.textContent=`Part ${n+1} · ${part.title} · Steps ${part.start+1}–${part.end+1}`;
+  if(partComplete(part))summary.textContent+=' ✓';
+  section.append(summary);
+  const steps=document.createElement('div');steps.className='map-part-steps';
+  for(let i=part.start;i<=part.end;i++){
+   const s=flow[i],b=document.createElement('button');b.className='map-step'+(i===index?' current':'');
+   if(s.frame){const img=document.createElement('img');img.src=s.frame;img.alt='';img.loading='lazy';b.append(img);}
+   const label=document.createElement('span');label.textContent=s.title+(s.optional&&!/optional/i.test(s.title)?' · Optional':'')+(skipped.has(i)?' · Skipped':'');b.append(label);
+   const check=document.createElement('b');check.textContent=completed.has(i)?'✓':skipped.has(i)?'↷':String(i+1);b.append(check);
+   b.onclick=()=>{$('map').close();jumpToStep(i);};steps.append(b);
+  }
+  section.append(steps);$('mapItems').append(section);
  });$('map').showModal();
 }
 $('mapButton').onclick=openMap;$('closeMap').onclick=()=>$('map').close();
