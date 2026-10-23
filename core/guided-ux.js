@@ -6,6 +6,45 @@ window.GuidedUX=(()=>{
  const esc=x=>String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function dots(label){return '<div class="completion-orbit" aria-label="Practice milestone"><svg viewBox="0 0 240 240" aria-hidden="true">'+Array.from({length:24},(_,i)=>{const a=(i*15-90)*Math.PI/180;return `<circle cx="${120+92*Math.cos(a)}" cy="${120+92*Math.sin(a)}" r="${4+i*.12}" style="--i:${i}"/>`;}).join('')+'</svg><span>'+esc(label)+'</span></div>';}
  function reset(s){current=s;spoken=null;last=-1;document.querySelectorAll('.teaching-tip,.analysis-stage').forEach(x=>x.remove());}
+ // #stage sizing (Oct 2026) -- #stage has no in-flow content of its own
+ // (its #media/#visual children are both position:absolute), so a pure
+ // CSS `aspect-ratio` + `width/height:auto` fix has nothing to resolve
+ // against and the box just collapses to ~0 (tried first; it did).
+ // `width:100%` alone works width-first but breaks the ratio whenever
+ // HEIGHT, not width, is the binding constraint -- short windows, and
+ // worst on iPad portrait (#stage rendered as a tall, narrow,
+ // letterboxed box instead of 16:9). A ResizeObserver on .stage-col is
+ // the only fully reliable fix: compute the actual largest 16:9 box
+ // that fits the real available space and set it directly. This block
+ // self-starts -- no per-lesson call site needed, every guided lesson
+ // gets it just by loading this file, which all ten already do.
+ function fitStage(col){
+  const stage=col.querySelector('#stage');if(!stage)return;
+  const controls=col.querySelector('#clipControls');
+  const controlsH=controls&&!controls.hidden?controls.getBoundingClientRect().height+8:0;
+  const availW=col.clientWidth,availH=col.clientHeight-controlsH;
+  if(availW<=0||availH<=0)return;
+  let w=availW,h=w*9/16;
+  if(h>availH){h=availH;w=h*16/9;}
+  stage.style.width=Math.floor(w)+'px';stage.style.height=Math.floor(h)+'px';
+ }
+ if(typeof ResizeObserver!=='undefined'){
+  // Observes .stage-col itself (viewport/layout changes) AND
+  // #clipControls (its hidden<->visible toggle during watch/pause
+  // doesn't change .stage-col's OWN box, since .stage-col's height
+  // comes from its flex parent, not its content -- so that toggle
+  // would never otherwise trigger a callback, yet it's exactly what
+  // changes how much room #stage actually has).
+  const stageRO=new ResizeObserver(entries=>{
+   for(const e of entries){const col=e.target.closest('.stage-col');if(col)fitStage(col);}
+  });
+  const startStageFit=()=>{
+   const col=document.querySelector('.stage-col');
+   if(col){stageRO.observe(col);const cc=col.querySelector('#clipControls');if(cc)stageRO.observe(cc);fitStage(col);}
+   else requestAnimationFrame(startStageFit);
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startStageFit);else startStageFit();
+ }
  function scene(s){
   if(s.materialScene){document.getElementById('visual').innerHTML=`<div class="material-canvas"><svg viewBox="0 0 1448 1086" role="img" aria-label="Pencils, eraser, tissue and artist tape on sketch paper"><image href="${tools}" width="1448" height="1086"/><rect id="materialFocus" x="980" y="100" width="315" height="800" rx="22"/></svg><strong id="materialLabel">Your tools</strong></div>`;}
   if(s.kind==='milestone'||s.kind==='badge'){

@@ -22,8 +22,28 @@
    definite to resolve against and the aspect-ratio box could grow
    past whatever room the footer actually had -- worst on a milestone's
    longer heading, which is what surfaced it. */
-.stage-col{display:flex;flex-direction:column;gap:8px;flex:0 1 77%;min-width:0;min-height:0;align-self:stretch}
-.stage-col #stage{flex:1 1 auto;min-height:0}
+/* #stage portrait-letterbox fix (Oct 2026) -- found while building
+   stage dots above, worst on iPad portrait: `flex:1 1 auto` made
+   #stage's HEIGHT grow to fill whatever vertical room .stage-col had
+   (a column flex item's main axis), while stretch (the flex default
+   for the cross axis) independently forced its WIDTH to .stage-col's
+   full width -- two unrelated sizes, neither derived from the other,
+   so aspect-ratio:16/9 (each lesson's own base CSS) lost outright and
+   #stage rendered as a tall, narrow, letterboxed box instead. Fix:
+   #stage no longer flex-grows at all, and sizes itself the way an
+   intrinsic-ratio image would (`width:auto;height:auto` + max-width/
+   max-height as the hard bound) so aspect-ratio actually gets to
+   decide the box, same "shrink to fit" spirit as object-fit:contain.
+   #stage has no in-flow content of its own to size against -- #media/
+   #visual are both position:absolute, which don't contribute to a
+   parent's auto size -- so width can't be `auto` too or the box
+   collapses to ~0 (tried that first; it did). width:100% gives
+   aspect-ratio a definite dimension to derive height from; max-height
+   is what actually stops the old runaway-tall bug. .stage-col centers
+   the result on the cross axis since it may no longer fill the full
+   column height. */
+.stage-col{display:flex;flex-direction:column;gap:8px;flex:0 1 77%;min-width:0;min-height:0;align-self:stretch;align-items:center;justify-content:center}
+.stage-col #stage{flex:0 0 auto;width:100%;height:auto;max-height:100%}
 #clipControls{position:static;display:flex;align-items:center;gap:12px;padding:8px 14px;border-radius:24px;background:#fffdf5ed;color:#17182D;box-shadow:0 2px 8px #17182D15;flex-shrink:0;width:100%;box-sizing:border-box}
 #clipControls button{padding:5px 12px;min-width:42px}
 #clipSeek{flex:1;min-width:30px;accent-color:#7560a7;cursor:pointer}
