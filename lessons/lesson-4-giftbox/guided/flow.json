@@ -402,8 +402,8 @@
     "id": "box-2-2",
     "title": "Place the lid and ribbon",
     "chapter": "Build the form",
-    "say": "Look for where the lid meets the box, then find the bands crossing its top and front. Let the ribbon follow the box edges instead of floating above them. Take your time. Continue when you are ready.",
-    "hint": "Ribbon follows the form.",
+    "say": "Let's build the shadow as we build the ribbon. The star sits in front, the bow lifts from the lid, and the box begins to show its light and dark planes. Watch how one layer affects the next. Draw along at your own pace.",
+    "hint": "Ribbon and shadow belong together.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-2-2.mp3",
@@ -411,14 +411,66 @@
     "start": 180,
     "clipEnd": 370,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/650be4e24c3b026de83c589413f9098f/thumbnails/thumbnail.jpg?time=369s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-shadow-family",
+        "time": 16,
+        "title": "Shadow belongs with the form",
+        "say": "The star and ribbon are in front, and their soft shadows travel with them. Shape and shadow are a family. Add a little shadow as you draw each part instead of saving it all for the end.",
+        "hint": "Shape and shadow grow together.",
+        "tip": "Notice the soft shadow beneath the star and ribbon.",
+        "audio": "audio/moment-gift-shadow-family.mp3",
+        "focus": "gift-shadow-family"
+      },
+      {
+        "id": "gift-near-far-shadow",
+        "time": 40,
+        "title": "Firm nearby, soft farther away",
+        "say": "Look at the shadow edge. It feels a little firmer close to the object and softer as it moves away. The photo is softer all around; the teacher strengthens a few edges to make the light easier to read. You can make that choice too.",
+        "hint": "Near: firmer. Far: softer.",
+        "tip": "Compare the drawn shadow with the softer edge in the reference photo.",
+        "audio": "audio/moment-gift-near-far-shadow.mp3",
+        "focus": "gift-near-far-shadow"
+      },
+      {
+        "id": "gift-lifted-ribbon",
+        "time": 104,
+        "title": "Lift the right ribbon",
+        "say": "The right ribbon turns up from the lid. Deepen the small shadow underneath that lifted part, and its thickness becomes much easier to see.",
+        "hint": "Dark beneath the lifted edge.",
+        "tip": "The shadow under the turned-up ribbon gives it thickness.",
+        "audio": "audio/moment-gift-lifted-ribbon.mp3",
+        "focus": "gift-lifted-ribbon"
+      },
+      {
+        "id": "gift-bow-arch",
+        "time": 117,
+        "title": "Let the bow arch forward",
+        "say": "Strengthen the dark line where the bow arches over itself. Then follow the smaller fold shadows inside the loops. Keep the bright parts open so the bow still feels soft.",
+        "hint": "Dark at the overlap; light on the raised fold.",
+        "tip": "Follow the overlap and the curved fold shadows inside the bow.",
+        "audio": "audio/moment-gift-bow-arch.mp3",
+        "focus": "gift-bow-arch"
+      },
+      {
+        "id": "gift-box-plane-turn",
+        "time": 160,
+        "title": "Turn to the box planes",
+        "say": "Now look at the box itself. The ribbon is in front, the lid sits behind it, and the body sits behind the lid. A gentle change in value at each turn helps us feel those layers.",
+        "hint": "Ribbon → lid → box body.",
+        "tip": "Watch the value boundary where the lid and box body turn.",
+        "audio": "audio/moment-gift-box-plane-turn.mp3",
+        "focus": "gift-box-plane-turn"
+      }
+    ]
   },
   {
     "id": "box-2-3",
     "title": "Shape the bow and star",
     "chapter": "Build the form",
-    "say": "Now the box can become this particular present. Observe the two bow loops, their overlap, and the little star. Add them after the structure is stable. Take your time. Continue when you are ready.",
-    "hint": "Big form first · small details second.",
+    "say": "The drawing is taking shape. Keep the front of the box calm and consistent while you separate the lid from the body. Then let the ribbon sit on top with a little thickness of its own. There is no rush; we're building it layer by layer.",
+    "hint": "Clean hatching · clear layers · a ribbon with thickness.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-2-3.mp3",
@@ -426,7 +478,59 @@
     "start": 370,
     "clipEnd": 571.4,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/650be4e24c3b026de83c589413f9098f/thumbnails/thumbnail.jpg?time=570s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-hatching-direction",
+        "time": 14,
+        "title": "Keep your hatching together",
+        "say": "Watch the pencil strokes on the box body. They mostly travel in one direction. You can shade across or down, but keeping a group of strokes consistent makes this plane feel clean and unified.",
+        "hint": "One clear direction for each value area.",
+        "tip": "Keep the front-face hatching calm and consistent.",
+        "audio": "audio/moment-gift-hatching-direction.mp3",
+        "focus": "gift-hatching-direction"
+      },
+      {
+        "id": "gift-lid-body-seam",
+        "time": 94,
+        "title": "Separate lid and body",
+        "say": "In the photograph, this seam is subtle. In the drawing, we can make the lid sit a little more clearly in front of the box body. Follow the edge and leave a slight value change beneath it.",
+        "hint": "The lid sits in front of the body.",
+        "tip": "Find the seam beneath the lid, then check it against the reference.",
+        "audio": "audio/moment-gift-lid-body-seam.mp3",
+        "focus": "gift-lid-body-seam"
+      },
+      {
+        "id": "gift-soft-distance",
+        "time": 146,
+        "title": "Let distant edges soften",
+        "say": "Some edges near us can be clearer. As the form turns away, let the marks become gentler. That near-to-far change helps the box feel like it has space around it.",
+        "hint": "Nearer edges clearer; farther edges softer.",
+        "tip": "Compare a near edge with the more distant box edge.",
+        "audio": "audio/moment-gift-soft-distance.mp3",
+        "focus": "gift-soft-distance"
+      },
+      {
+        "id": "gift-band-thickness",
+        "time": 165,
+        "title": "Give the band a little depth",
+        "say": "The band is not printed flat on the box. It wraps over the lid and has a little thickness, so a narrow shadow beside it helps show that it sits on top.",
+        "hint": "A small shadow makes the band feel raised.",
+        "tip": "Follow the ribbon band and its narrow cast shadow.",
+        "audio": "audio/moment-gift-band-thickness.mp3",
+        "focus": "gift-band-thickness"
+      },
+      {
+        "id": "gift-bow-small-detail",
+        "time": 185,
+        "title": "Details after the big form",
+        "say": "Now the larger values are in place, we can return to the bow's tiny folds. Choose only the details that help it look soft and three-dimensional.",
+        "hint": "Keep useful details; leave room for light.",
+        "tip": "Refine the bow folds after the box planes feel steady.",
+        "audio": "audio/moment-gift-bow-small-detail.mp3",
+        "focus": "gift-bow-small-detail"
+      }
+    ]
   },
   {
     "id": "break-2",
@@ -442,8 +546,8 @@
     "id": "box-3-1",
     "title": "Choose the light and dark faces",
     "chapter": "Light & shadow",
-    "say": "Remember the cube: each plane catches light differently. Compare the light top with the darker front and side. Keep each value family clear. Take your time. Continue when you are ready.",
-    "hint": "Three planes · three values.",
+    "say": "We're entering the deeper values. If you have a 6B pencil, you can try it for the very darkest accents. Begin gently at the little star and the bow, then let the contrast build in layers. This is a drawing to enjoy, not a race to finish.",
+    "hint": "Deep accents · gentle pressure · one layer at a time.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-3-1.mp3",
@@ -451,14 +555,46 @@
     "start": 0,
     "clipEnd": 180,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1a6b58d8b69cdb6c11f82f9cd682c495/thumbnails/thumbnail.jpg?time=179s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-sixb-dark-accents",
+        "time": 18,
+        "title": "Deep accents, light pressure",
+        "say": "A soft 6B pencil is useful for the deepest accents around the star's face and the folds. Keep the pressure light; the pencil is already dark. A sharper point can help beginners with tiny details, but it is a choice, not a rule.",
+        "hint": "6B can deepen the darkest accents gently.",
+        "tip": "Look at the small dark marks on the star and bow.",
+        "audio": "audio/moment-gift-sixb-dark-accents.mp3",
+        "focus": "gift-sixb-dark-accents"
+      },
+      {
+        "id": "gift-dark-control",
+        "time": 119,
+        "title": "Build contrast without pressing",
+        "say": "The bow is becoming more dimensional because the darks sit beside lighter folds. Add another soft layer where you need it. Try to enjoy watching the shape appear, rather than treating each mark as a task to finish.",
+        "hint": "Contrast grows in layers.",
+        "tip": "Keep the bright fold beside the darker bow interior.",
+        "audio": "audio/moment-gift-dark-control.mp3",
+        "focus": "gift-dark-control"
+      },
+      {
+        "id": "gift-bow-depth",
+        "time": 160,
+        "title": "See the bow lift from the lid",
+        "say": "Notice how the darker area under the bow makes its raised shape feel thicker. Leave a lighter ridge on top and let the shadow carry the depth.",
+        "hint": "Bright ridge above, darker fold below.",
+        "tip": "The bow gains volume from a light top and a darker underside.",
+        "audio": "audio/moment-gift-bow-depth.mp3",
+        "focus": "gift-bow-depth"
+      }
+    ]
   },
   {
     "id": "box-3-2",
     "title": "Give the ribbon its volume",
     "chapter": "Light & shadow",
-    "say": "The ribbon bends over edges and around the bow. Shade its folds gently and leave lighter places where the ribbon catches light. Take your time. Continue when you are ready.",
-    "hint": "Watch the fold, then the value.",
+    "say": "For the gentler gray areas, you can move back to a 2B pencil. Look closely at the real gift: where does the ribbon catch light, where does it turn gray, and where does reflected light return? There is room for your own observation here. Draw what you see, one calm layer at a time.",
+    "hint": "Observe the real light; make the gray values your own.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-3-2.mp3",
@@ -466,14 +602,36 @@
     "start": 180,
     "clipEnd": 350,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1a6b58d8b69cdb6c11f82f9cd682c495/thumbnails/thumbnail.jpg?time=349s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-twob-gray",
+        "time": 12,
+        "title": "Try the softer gray values",
+        "say": "You can use a 2B for these middle grays. A real ribbon does not follow one fixed formula: look at the reference, compare its light and shadow, and choose the marks that make sense to your eye.",
+        "hint": "2B is one useful choice for middle grays.",
+        "tip": "Find the ribbon’s gray side and the lighter fold beside it.",
+        "audio": "audio/moment-gift-twob-gray.mp3",
+        "focus": "gift-twob-gray"
+      },
+      {
+        "id": "gift-ribbon-texture",
+        "time": 151,
+        "title": "Watch the texture appear",
+        "say": "Look how the ribbon begins to feel soft. That comes from the highlight, the middle gray, the dark fold, and a touch of reflected light working together. Your observation can guide the balance.",
+        "hint": "Highlight + gray + dark + reflected light.",
+        "tip": "Compare the bow’s bright ridge, gray turn, and deeper fold.",
+        "audio": "audio/moment-gift-ribbon-texture.mp3",
+        "focus": "gift-ribbon-texture"
+      }
+    ]
   },
   {
     "id": "box-3-3",
     "title": "Set the box on the table",
     "chapter": "Light & shadow",
-    "say": "Look for the shadow beneath and beside the box. This contact shadow helps it sit on the surface. Pause and check the light direction before you continue. Take your time. Continue when you are ready.",
-    "hint": "Shadow grounds the gift box.",
+    "say": "Let's settle the gift box onto the table. Keep the first marks light, compare the two ribbon tails, and let the shadow grow darkest where the box touches the surface. We can use the pencil, eraser, and a little tissue gently. Pause whenever you need to look again.",
+    "hint": "Light marks · observe the tails · ground the box.",
     "kind": "draw",
     "image": "../../../assets/sketch-support/finals/box.jpg",
     "audio": "audio/box-3-3.mp3",
@@ -481,7 +639,69 @@
     "start": 350,
     "clipEnd": 524.69,
     "frame": "https://customer-a78os4oj56dr67ab.cloudflarestream.com/1a6b58d8b69cdb6c11f82f9cd682c495/thumbnails/thumbnail.jpg?time=523s&height=720",
-    "optional": false
+    "optional": false,
+    "moments": [
+      {
+        "id": "gift-light-hb",
+        "time": 40,
+        "title": "Float the pencil lightly",
+        "say": "See how lightly the pencil moves? If your hand tends to press hard, an HB or even 2H can help you begin these pale areas. The exact pencil is less important than keeping the touch gentle.",
+        "hint": "Try HB or 2H for a lighter start.",
+        "tip": "The pencil barely touches the lighter surface.",
+        "audio": "audio/moment-gift-light-hb.mp3",
+        "focus": "gift-light-hb"
+      },
+      {
+        "id": "gift-erase-tail-light",
+        "time": 47,
+        "title": "Which ribbon tail is brighter?",
+        "say": "The eraser is bringing back a light. Open the real gift photo and compare the two ribbon tails: which catches more light, and which turns darker? Lift graphite only where that light belongs.",
+        "hint": "Compare both tails before erasing.",
+        "tip": "Look at the two tails; lift the brighter one gently.",
+        "audio": "audio/moment-gift-erase-tail-light.mp3",
+        "focus": "gift-erase-tail-light"
+      },
+      {
+        "id": "gift-value-boundary",
+        "time": 75,
+        "title": "Find the value boundary",
+        "say": "Now you can try a 2B to strengthen the line where light turns toward shadow. Do not make every edge equally dark. Let the boundary help explain the form.",
+        "hint": "Darken the turn, not every outline.",
+        "tip": "Trace the light-to-shadow turn with a gentle darker mark.",
+        "audio": "audio/moment-gift-value-boundary.mp3",
+        "focus": "gift-value-boundary"
+      },
+      {
+        "id": "gift-straps-in-front",
+        "time": 90,
+        "title": "Who sits in front?",
+        "say": "Look at the layers: the band wraps around the box, so it comes forward. The lid sits behind that band, and the box body sits behind the lid. A few carefully placed edges can make that order clear.",
+        "hint": "Band → lid → box body.",
+        "tip": "Use the overlap to show which surface comes forward.",
+        "audio": "audio/moment-gift-straps-in-front.mp3",
+        "focus": "gift-straps-in-front"
+      },
+      {
+        "id": "gift-ground-shadow",
+        "time": 123,
+        "title": "Set the box on the table",
+        "say": "The ground shadow is deepest right beneath the box, then gradually softens outward. Notice its broad, slightly trapezoid shape. Build that shape lightly before deepening the contact edge.",
+        "hint": "Darkest at contact; softer away.",
+        "tip": "Follow the broad shadow beneath the base of the box.",
+        "audio": "audio/moment-gift-ground-shadow.mp3",
+        "focus": "gift-ground-shadow"
+      },
+      {
+        "id": "gift-tissue-soften",
+        "time": 154,
+        "title": "Blend with a feather-light touch",
+        "say": "A little tissue can soften the shadow, but keep your hand very light. Pressing hard can muddy the drawing. Pause, look back at the light areas, and blend only where you need a softer transition.",
+        "hint": "Gentle blending keeps the paper clean.",
+        "tip": "Use tissue softly along the fading edge of the table shadow.",
+        "audio": "audio/moment-gift-tissue-soften.mp3",
+        "focus": "gift-tissue-soften"
+      }
+    ]
   },
   {
     "id": "break-3",

@@ -58,7 +58,7 @@ function speak(step,done){
  stopVoice(); voiceDone=done||null;timedCaptions=step.captions||[];
  window.GuidedUX?.narrate(step);if(!step.audio){done?.();return;}
  captions=(step.say.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[step.say]).map(t=>t.trim());
- $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-3';voice.muted=muted;
+ $('caption').textContent=captions[0]||'';lastCaption='';voice.src=step.audio+(step.audio.includes('?')?'&':'?')+'v=ux-4';voice.muted=muted;
  const token=epoch;
  voice.onended=()=>{if(token!==epoch)return;$('caption').textContent='';const tip=document.querySelector('.teaching-tip strong');if(tip)tip.textContent=step.hint||step.title;const cb=voiceDone;voiceDone=null;cb?.();};
  voice.onerror=()=>{if(token!==epoch)return;$('notice').hidden=false;$('notice').textContent='Voice could not load. The guidance is available below; you can continue.';$('caption').textContent=step.say;if(phase==='watching'){watchVoiceActive=false;if(player)player.muted=true;}else{$('next').disabled=false;phase='waiting';}};
@@ -131,7 +131,28 @@ const momentArt={
  'star-shadow-start':'<path d="M206 112 Q219 128 236 116 M207 121 Q221 132 238 122"/><circle cx="223" cy="122" r="7"/>',
  'pencil-value-choice':'<path d="M151 103 Q155 110 154 119 M207 120 Q220 129 237 121"/><circle cx="152" cy="110" r="8"/><circle cx="222" cy="122" r="8"/>',
  'front-to-back':'<circle cx="222" cy="110" r="22"/><path d="M190 82 Q197 65 215 73 M235 80 Q251 69 271 86 M275 95 Q301 96 318 135"/>',
- 'bow-shadow-next':'<path d="M234 101 Q250 94 273 99 M234 106 Q252 103 274 105 M195 80 Q210 85 222 101"/><circle cx="260" cy="102" r="7"/>'
+ 'bow-shadow-next':'<path d="M234 101 Q250 94 273 99 M234 106 Q252 103 274 105 M195 80 Q210 85 222 101"/><circle cx="260" cy="102" r="7"/>',
+ 'gift-shadow-family':'<path d="M191 81 Q210 82 224 108 Q243 83 269 89 M200 119 Q219 129 239 119 M238 111 Q251 120 265 130"/><circle cx="223" cy="114" r="9"/>',
+ 'gift-near-far-shadow':'<path d="M157 158 Q233 151 311 139 M164 168 Q242 162 322 147"/><circle cx="169" cy="160" r="7"/>',
+ 'gift-lifted-ribbon':'<path d="M234 104 Q255 103 270 113 L262 136 Q248 119 235 118 M240 119 Q255 126 262 136"/><circle cx="258" cy="125" r="7"/>',
+ 'gift-bow-arch':'<path d="M186 84 Q206 70 222 104 M232 104 Q250 72 270 87 M195 94 Q211 100 220 110 M238 108 Q255 101 271 102"/><circle cx="224" cy="110" r="8"/>',
+ 'gift-box-plane-turn':'<path d="M150 139 L311 126 L311 147 L150 160 Z M150 160 L150 195 M311 147 L311 183"/><circle cx="241" cy="151" r="7"/>',
+ 'gift-hatching-direction':'<path d="M158 163 L158 189 M171 162 L171 190 M184 161 L184 190 M197 160 L197 191 M210 159 L210 191 M223 158 L223 191 M250 155 L250 188 M263 154 L263 187"/>',
+ 'gift-lid-body-seam':'<path d="M150 139 L311 126 M150 149 L311 138"/><circle cx="221" cy="144" r="8"/>',
+ 'gift-soft-distance':'<path d="M150 148 L150 191 M310 129 L310 174 M150 191 L310 174"/><circle cx="150" cy="181" r="7"/>',
+ 'gift-band-thickness':'<path d="M222 136 L243 134 L243 187 L222 190 Z M245 137 L248 186"/><circle cx="246" cy="161" r="7"/>',
+ 'gift-bow-small-detail':'<path d="M187 85 Q205 77 223 105 M235 104 Q252 82 269 90 M198 112 Q211 115 222 113 M234 115 Q247 117 258 131"/>',
+ 'gift-sixb-dark-accents':'<circle cx="223" cy="110" r="18"/><path d="M193 86 Q212 88 223 109 M235 108 Q249 92 269 92"/>',
+ 'gift-dark-control':'<path d="M188 84 Q207 77 223 107 M191 96 Q208 101 222 112 M235 107 Q252 86 269 91 M237 114 Q255 109 271 104"/>',
+ 'gift-bow-depth':'<path d="M188 83 Q207 76 222 104 M190 95 Q210 102 223 111 M235 108 Q252 83 268 91 M237 116 Q254 107 271 105"/><circle cx="227" cy="111" r="7"/>',
+ 'gift-twob-gray':'<path d="M190 84 Q209 75 222 103 M194 95 Q209 99 220 110 M235 108 Q250 84 269 90"/><circle cx="206" cy="91" r="7"/>',
+ 'gift-ribbon-texture':'<path d="M187 81 Q203 76 222 106 M189 96 Q209 106 223 111 M235 105 Q252 80 272 92 M237 115 Q252 104 270 104"/><circle cx="258" cy="98" r="7"/>',
+ 'gift-light-hb':'<path d="M195 110 Q218 116 239 110 M237 115 Q252 121 268 135"/><circle cx="235" cy="113" r="8"/>',
+ 'gift-erase-tail-light':'<path d="M202 112 L190 143 L213 132 M237 113 L268 132 L257 145"/><circle cx="201" cy="132" r="7"/><circle cx="258" cy="132" r="7"/>',
+ 'gift-value-boundary':'<path d="M190 97 Q208 107 220 112 M236 112 Q250 118 268 134 M150 148 L310 137"/><circle cx="236" cy="113" r="7"/>',
+ 'gift-straps-in-front':'<path d="M220 135 L242 133 L242 188 L220 191 Z M151 145 L311 132 M151 157 L311 144"/><circle cx="232" cy="146" r="7"/>',
+ 'gift-ground-shadow':'<path d="M175 218 L312 207 L347 223 Q269 240 175 231 Z"/><path d="M178 223 Q248 229 312 211"/>',
+ 'gift-tissue-soften':'<path d="M178 220 Q251 228 348 215 M182 232 Q264 240 353 224"/><circle cx="259" cy="228" r="9"/>'
 };
 function showMoment(moment){
  if(activeMoment||phase!=='watching')return;
@@ -292,7 +313,7 @@ window.addEventListener('pagehide',()=>{player?.pause();stopVoice();music.pause(
 $('start').onclick=()=>{$('welcome').close();enter();};
 $('welcome').addEventListener('cancel',e=>e.preventDefault());
 (async()=>{if(!await GuidedPlatform.allow('box'))return; $('welcome').showModal();
-fetch('flow.json?v=box-3').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
+fetch('flow.json?v=box-4').then(r=>{if(!r.ok)throw Error('Flow unavailable');return r.json();}).then(async data=>{
  flow=data;
  try{ const p=await GuidedPlatform.restore('box',KEY,flow.length,{classicStepMap:['welcome','cube-connection','reference-details','tools','observe','box-1-1','box-2-1','box-3-1','box-4-1','submit','optional','celebrate'].map(id=>flow.findIndex(s=>s.id===id)),classicCompletedAt:11});unlocked=Math.max(0,Math.min(flow.length-1,Number(p.unlocked)||0));index=Math.max(0,Math.min(unlocked,Number(p.index)||0));skipped=new Set(p.skipped||[]);completed=new Set((Array.isArray(p.completed)?p.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<flow.length));}catch{}
  $('start').disabled=false;$('start').textContent=index?'Continue your gift box →':'Let’s draw a gift box →';
