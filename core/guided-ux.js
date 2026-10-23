@@ -21,28 +21,132 @@ window.GuidedUX=(()=>{
   if(cue.zone!==undefined){const button=document.querySelector(`[data-zone="${cue.zone}"]`);button?.click();const ring=document.getElementById('zoneRing');if(ring){ring.classList.remove('cue-pulse');void ring.getBoundingClientRect();ring.classList.add('cue-pulse');}}
   if(cue.tool){const box=boxes[cue.tool],rect=document.getElementById('materialFocus');if(rect&&box){['x','y','width','height'].forEach((attr,i)=>rect.setAttribute(attr,box[i]));document.getElementById('materialLabel').textContent=cue.label||cue.tool;}}
  }
- // Visible end point (Oct 2026): a persistent "Step X of N · Chapter Y
- // of Z" line. Needed because the existing setMode() chapter/position
- // string in each lesson's own enter() is overwritten almost
- // immediately by a status line ("WATCH WITH YOUR TEACHER", "YOUR TURN
- // · TAKE YOUR TIME") -- students never actually got to read it. This
- // writes to its own #stepCounter element instead, which nothing else
- // touches, so it stays visible for the whole step. Called once per
- // lesson's own enter(), right where it already calls progress().
+ // Stages (Oct 2026): flat step lists of 30-60+ steps overwhelmed
+ // students ("dozens of steps at once"). Every guided lesson's flow
+ // already carries a `chapter` field per step, originally just a label
+ // -- this groups those chapters into STAGES of ~7-10 steps (never more
+ // than 15) and is the one place that grouping rule lives, so all ten
+ // lessons get it for free from their existing flow.json, no per-lesson
+ // re-authoring. Rule: merge consecutive same-kind chapters forward
+ // toward the target; a chapter boundary between non-drawing content
+ // (materials, welcome) and actual drawing is a hard break, since that's
+ // always the real teaching seam; tiny interstitial chapters (a single
+ // "A little encouragement" card, len<=2) never force a break on their
+ // own -- they're absorbed into whichever stage they land inside; any
+ // single chapter that alone exceeds the hard cap is split into even
+ // parts. Verified against all ten lessons' real flow.json data before
+ // shipping (see commit message) -- every resulting stage lands in
+ // [1,15] steps.
+ const FILLER_CHAPTERS=new Set(['a little encouragement','your progress','your work','look again','finish','your milestone','bonus polish','hand warm-up']);
+ let stagesCache=null,stagesCacheFlow=null;
+ function computeStages(flow,target=8,hardCap=15){
+  if(flow===stagesCacheFlow&&stagesCache)return stagesCache;
+  const runs=[];
+  flow.forEach(s=>{
+   const chapter=s.chapter||'Lesson',hasDraw=s.kind==='draw';
+   const last=runs[runs.length-1];
+   if(last&&last.chapter===chapter){last.len++;last.hasDraw=last.hasDraw||hasDraw;}
+   else runs.push({chapter,len:1,hasDraw});
+  });
+  runs.forEach(r=>{r.filler=FILLER_CHAPTERS.has(r.chapter.trim().toLowerCase())||r.len<=2;});
+  const split=[];
+  runs.forEach(r=>{
+   if(r.len>hardCap){
+    const parts=Math.ceil(r.len/target),base=Math.floor(r.len/parts),rem=r.len%parts;
+    for(let i=0;i<parts;i++)split.push({chapter:r.chapter,len:base+(i<rem?1:0),hasDraw:r.hasDraw,filler:false,part:i+1,parts});
+   }else split.push(r);
+  });
+  const stages=[];let cur=null;
+  split.forEach(r=>{
+   const wouldBe=(cur?cur.len:0)+r.len;
+   const hardBreak=!r.filler&&cur&&cur.hasDraw!=null&&cur.hasDraw!==r.hasDraw;
+   if(!cur)cur={chapters:[r],len:r.len,hasDraw:r.filler?null:r.hasDraw};
+   else if(hardBreak||(!r.filler&&(cur.len>=target||wouldBe>hardCap))||(r.filler&&wouldBe>hardCap)){
+    stages.push(cur);cur={chapters:[r],len:r.len,hasDraw:r.filler?null:r.hasDraw};
+   }else{cur.chapters.push(r);cur.len+=r.len;if(!r.filler)cur.hasDraw=r.hasDraw;}
+  });
+  if(cur)stages.push(cur);
+  let idx=0;
+  stages.forEach(st=>{
+   st.start=idx;idx+=st.len;st.end=idx;st.name=null;
+   for(const c of st.chapters){if(!c.filler){st.name=c.chapter+(c.parts?` (${c.part}/${c.parts})`:'');break;}}
+   if(!st.name)st.name=st.chapters[0].chapter;
+  });
+  stagesCache=stages;stagesCacheFlow=flow;
+  return stages;
+ }
+ function stageAt(flow,index){
+  const stages=computeStages(flow);
+  return stages.find(st=>index>=st.start&&index<st.end)||stages[stages.length-1]||{start:0,end:flow.length,name:'',len:flow.length};
+ }
+ // Lesson map grouping -- each lesson's own openMap() loop calls this
+ // instead of diffing raw `chapter` itself, so a map header always
+ // matches a stage, even where several small chapters were merged.
+ function mapStageGroups(flow){return computeStages(flow).map(st=>({name:st.name,start:st.start,end:st.end}));}
+ // Persistent "<Stage name> · N of M" line. Needed because the existing
+ // setMode() status text in each lesson's own enter() is overwritten
+ // almost immediately by "WATCH CLOSELY" / "YOUR TURN · TAKE YOUR TIME"
+ // -- students never actually got to read it. This writes to its own
+ // #stepCounter element instead, which nothing else touches, so it
+ // stays visible for the whole step. Deliberately never shows the
+ // lesson's grand total step count -- that's the whole point of stages.
  function stepCounter(flow,index){
   const el=document.getElementById('stepCounter');if(!el||!flow.length)return;
-  const chapter=flow[index]?.chapter||'';
-  const chapterSteps=flow.reduce((a,s,i)=>{if(s.chapter===chapter)a.push(i);return a;},[]);
-  const posInChapter=chapterSteps.indexOf(index)+1;
-  // Approximate time left in this chapter: real clip length for the
+  const st=stageAt(flow,index);
+  const pos=index-st.start+1;
+  // Approximate time left in this stage: real clip length for the
   // remaining draw steps (clipEnd-start), ignoring narration-only steps
   // -- a rough lower bound, not exact, but enough to see a finish line.
-  const remaining=chapterSteps.filter(i=>i>=index).reduce((sum,i)=>{
-   const s=flow[i];return sum+(s.kind==='draw'&&s.clipEnd!=null?Math.max(0,s.clipEnd-(s.start||0)):0);
-  },0);
+  let remaining=0;
+  for(let i=index;i<st.end;i++){const s=flow[i];if(s.kind==='draw'&&s.clipEnd!=null)remaining+=Math.max(0,s.clipEnd-(s.start||0));}
   const mins=Math.round(remaining/60);
   const timeLeft=remaining>20?` · ~${mins<1?'1':mins} min left`:'';
-  el.textContent=`Step ${index+1} of ${flow.length} · ${chapter} ${posInChapter} of ${chapterSteps.length}${timeLeft}`;
+  el.innerHTML=`<b>${esc(st.name)}</b> · ${pos} of ${st.len}${timeLeft}`;
+ }
+ // Top-of-page stage dots: one circle per stage for the whole lesson --
+ // filled for done, gently pulsing for current, empty outline for
+ // upcoming -- plus the plain current-stage name underneath. Reaching a
+ // milestone (always the last step of a stage) also shows the warm
+ // pause line here, once, the moment that stage first completes.
+ let glowedFor=-1;
+ function stageDots(flow,index,completed){
+  const el=document.getElementById('stageDots');if(!el||!flow.length)return;
+  const stages=computeStages(flow);
+  const curIdx=stages.findIndex(st=>index>=st.start&&index<st.end);
+  const circles=stages.map((st,i)=>{
+   const done=completed.has(st.end-1);
+   const cls=i===curIdx?'current':done?'done':'';
+   return `<span class="stage-dot${cls?' '+cls:''}"></span>`;
+  }).join('');
+  const cur=stages[curIdx]||stages[stages.length-1];
+  const justCompleted=index>0&&flow[index-1]?.kind==='milestone'&&completed.has(index-1)&&glowedFor!==index-1;
+  if(justCompleted)glowedFor=index-1;
+  const milestoneNote=flow[index]?.kind==='milestone'?'<div class="stage-milestone-note">Stage complete — take a short break. Continue whenever you’re ready.</div>':'';
+  el.innerHTML=`<div class="stage-dot-row">${circles}</div><div class="stage-name">${esc(cur?.name||'')}</div>${milestoneNote}`;
+  if(justCompleted){
+   const dot=el.querySelectorAll('.stage-dot.done')[curIdx-1]||el.querySelectorAll('.stage-dot.done')[el.querySelectorAll('.stage-dot.done').length-1];
+   if(dot){dot.classList.remove('glow-once');void dot.getBoundingClientRect();dot.classList.add('glow-once');}
+  }
+ }
+ // Footer step-jump row, scoped to only the current stage's own steps
+ // (never the whole lesson) -- this is what "dozens of steps at once"
+ // was actually about. `onJump` is the lesson's own jumpToStep(i).
+ function stageProgress(flow,index,completed,skipped,onJump){
+  const bar=document.getElementById('progress');if(!bar)return;
+  bar.innerHTML='';
+  const st=stageAt(flow,index);
+  const preview=document.getElementById('stepPreview');
+  for(let i=st.start;i<st.end;i++){
+   const step=flow[i],pos=i-st.start+1;
+   const b=document.createElement('button');b.type='button';
+   b.className='step-jump '+(i===index?'current':completed.has(i)?'done':skipped.has(i)?'skipped':'');
+   const label=`${pos}. ${step.title}${step.optional?' · Optional':''}`;
+   b.textContent=String(pos);b.title=label;b.setAttribute('aria-label','Jump to '+label);
+   if(i===index)b.setAttribute('aria-current','step');
+   b.onclick=()=>onJump(i);
+   if(preview){b.onmouseenter=b.onfocus=()=>{preview.textContent=label;};b.onmouseleave=b.onblur=()=>{preview.textContent='';};}
+   bar.append(b);
+  }
  }
  function pause(s){
   const stage=document.getElementById('visual');
@@ -54,5 +158,5 @@ window.GuidedUX=(()=>{
   card.querySelector('button').onclick=()=>card.remove();stage.append(card);
   const reference=document.getElementById('referenceImage');if(reference)reference.style.cursor='zoom-in';
  }
- return {reset,scene,narrate,tick,pause,dots,stepCounter};
+ return {reset,scene,narrate,tick,pause,dots,stepCounter,stageDots,stageProgress,mapStageGroups};
 })();
